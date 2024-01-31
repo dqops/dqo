@@ -103,7 +103,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-19"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -118,6 +118,7 @@ spec:
               - USD
               - GBP
               - EUR
+              top: 3
             error:
               max_missing: 0
             fatal:
@@ -158,7 +159,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -168,9 +169,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -234,7 +235,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -244,11 +245,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -276,7 +278,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -286,9 +288,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -352,7 +354,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -362,11 +364,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -395,7 +398,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -405,9 +408,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -471,7 +474,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -481,11 +484,12 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -514,7 +518,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -530,9 +534,9 @@ spec:
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -602,7 +606,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) top_values_rank
+                        ORDER BY top_col_values.total_values DESC) top_values_rank
                 FROM
                 (
                     SELECT
@@ -618,11 +622,12 @@ spec:
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -651,7 +656,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -661,9 +666,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -727,7 +732,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -737,11 +742,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -770,7 +776,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -785,11 +791,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -853,7 +859,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -868,12 +874,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -902,7 +909,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -912,9 +919,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -978,7 +985,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -988,11 +995,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1021,7 +1029,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1031,9 +1039,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1097,7 +1105,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -1107,11 +1115,12 @@ spec:
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1139,7 +1148,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1149,9 +1158,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1215,7 +1224,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -1225,11 +1234,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1258,7 +1268,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1268,7 +1278,7 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -1344,7 +1354,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -1354,10 +1364,11 @@ spec:
                         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ```
     ??? example "Trino"
@@ -1385,7 +1396,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1400,11 +1411,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1468,7 +1479,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -1483,12 +1494,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1501,7 +1513,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 31-36"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1525,6 +1537,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                   - USD
                   - GBP
                   - EUR
+                  top: 3
                 error:
                   max_missing: 0
                 fatal:
@@ -1567,7 +1580,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1577,9 +1590,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1644,7 +1657,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -1656,11 +1669,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1687,7 +1701,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1697,9 +1711,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1764,7 +1778,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -1776,11 +1790,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1808,7 +1823,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1818,9 +1833,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -1885,7 +1900,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -1897,11 +1912,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1929,7 +1945,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -1945,9 +1961,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2018,7 +2034,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2041,11 +2057,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2073,7 +2090,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2083,9 +2100,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2150,7 +2167,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2162,11 +2179,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2194,7 +2212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2209,11 +2227,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2278,7 +2296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2300,12 +2318,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2333,7 +2352,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2343,9 +2362,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2410,7 +2429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2422,11 +2441,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2454,7 +2474,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2464,9 +2484,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2531,7 +2551,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2543,11 +2563,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2574,7 +2595,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2584,9 +2605,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2651,7 +2672,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2663,11 +2684,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2695,7 +2717,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2705,7 +2727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -2780,7 +2802,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2792,10 +2814,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc, top_values.grouping_level_1, top_values.grouping_level_2
             ```
     ??? example "Trino"
@@ -2822,7 +2845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -2837,11 +2860,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -2906,7 +2929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -2928,12 +2951,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3032,7 +3056,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3048,6 +3072,7 @@ spec:
                 - USD
                 - GBP
                 - EUR
+                top: 3
               error:
                 max_missing: 0
               fatal:
@@ -3088,7 +3113,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3098,9 +3123,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3164,7 +3189,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3174,11 +3199,12 @@ spec:
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3206,7 +3232,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3216,9 +3242,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3282,7 +3308,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3292,11 +3318,12 @@ spec:
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3325,7 +3352,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3335,9 +3362,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3401,7 +3428,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3411,11 +3438,12 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3444,7 +3472,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3460,9 +3488,9 @@ spec:
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3532,7 +3560,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) top_values_rank
+                        ORDER BY top_col_values.total_values DESC) top_values_rank
                 FROM
                 (
                     SELECT
@@ -3548,11 +3576,12 @@ spec:
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3581,7 +3610,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3591,9 +3620,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3657,7 +3686,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3667,11 +3696,12 @@ spec:
                         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3700,7 +3730,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3715,11 +3745,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3783,7 +3813,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3798,12 +3828,13 @@ spec:
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3832,7 +3863,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3842,9 +3873,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -3908,7 +3939,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -3918,11 +3949,12 @@ spec:
                         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3951,7 +3983,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -3961,9 +3993,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4027,7 +4059,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -4037,11 +4069,12 @@ spec:
                         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4069,7 +4102,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4079,9 +4112,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4145,7 +4178,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -4155,11 +4188,12 @@ spec:
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4188,7 +4222,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4198,7 +4232,7 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -4274,7 +4308,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -4284,10 +4318,11 @@ spec:
                         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ```
     ??? example "Trino"
@@ -4315,7 +4350,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4330,11 +4365,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4398,7 +4433,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -4413,12 +4448,13 @@ spec:
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4431,7 +4467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4456,6 +4492,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
+                    top: 3
                   error:
                     max_missing: 0
                   fatal:
@@ -4498,7 +4535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4508,9 +4545,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4575,7 +4612,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -4587,11 +4624,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4618,7 +4656,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4628,9 +4666,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4695,7 +4733,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -4707,11 +4745,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4739,7 +4778,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4749,9 +4788,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4816,7 +4855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -4828,11 +4867,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4860,7 +4900,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -4876,9 +4916,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -4949,7 +4989,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -4972,11 +5012,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5004,7 +5045,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5014,9 +5055,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5081,7 +5122,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5093,11 +5134,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5125,7 +5167,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5140,11 +5182,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5209,7 +5251,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5231,12 +5273,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5264,7 +5307,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5274,9 +5317,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5341,7 +5384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5353,11 +5396,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5385,7 +5429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5395,9 +5439,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5462,7 +5506,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5474,11 +5518,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5505,7 +5550,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5515,9 +5560,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5582,7 +5627,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5594,11 +5639,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5626,7 +5672,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5636,7 +5682,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -5711,7 +5757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5723,10 +5769,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc, top_values.grouping_level_1, top_values.grouping_level_2
             ```
     ??? example "Trino"
@@ -5753,7 +5800,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -5768,11 +5815,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -5837,7 +5884,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -5859,12 +5906,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5963,7 +6011,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5979,6 +6027,7 @@ spec:
                 - USD
                 - GBP
                 - EUR
+                top: 3
               error:
                 max_missing: 0
               fatal:
@@ -6019,7 +6068,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6029,9 +6078,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6095,7 +6144,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6105,11 +6154,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6137,7 +6187,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6147,9 +6197,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6213,7 +6263,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6223,11 +6273,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6256,7 +6307,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6266,9 +6317,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6332,7 +6383,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6342,11 +6393,12 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6375,7 +6427,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6391,9 +6443,9 @@ spec:
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6463,7 +6515,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) top_values_rank
+                        ORDER BY top_col_values.total_values DESC) top_values_rank
                 FROM
                 (
                     SELECT
@@ -6479,11 +6531,12 @@ spec:
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6512,7 +6565,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6522,9 +6575,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6588,7 +6641,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6598,11 +6651,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6631,7 +6685,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6646,11 +6700,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6714,7 +6768,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6729,12 +6783,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6763,7 +6818,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6773,9 +6828,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6839,7 +6894,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6849,11 +6904,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -6882,7 +6938,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -6892,9 +6948,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -6958,7 +7014,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -6968,11 +7024,12 @@ spec:
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -7000,7 +7057,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7010,9 +7067,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7076,7 +7133,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -7086,11 +7143,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -7119,7 +7177,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7129,7 +7187,7 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -7205,7 +7263,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -7215,10 +7273,11 @@ spec:
                         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ```
     ??? example "Trino"
@@ -7246,7 +7305,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7261,11 +7320,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7329,7 +7388,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -7344,12 +7403,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -7362,7 +7422,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7387,6 +7447,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
+                    top: 3
                   error:
                     max_missing: 0
                   fatal:
@@ -7429,7 +7490,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7439,9 +7500,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7506,7 +7567,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -7518,11 +7579,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -7549,7 +7611,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7559,9 +7621,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7626,7 +7688,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -7638,11 +7700,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -7670,7 +7733,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7680,9 +7743,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7747,7 +7810,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -7759,11 +7822,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -7791,7 +7855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7807,9 +7871,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -7880,7 +7944,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -7903,11 +7967,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -7935,7 +8000,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -7945,9 +8010,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8012,7 +8077,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8024,11 +8089,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8056,7 +8122,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8071,11 +8137,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8140,7 +8206,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8162,12 +8228,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8195,7 +8262,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8205,9 +8272,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8272,7 +8339,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8284,11 +8351,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8316,7 +8384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8326,9 +8394,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8393,7 +8461,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8405,11 +8473,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8436,7 +8505,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8446,9 +8515,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8513,7 +8582,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8525,11 +8594,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8557,7 +8627,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8567,7 +8637,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -8642,7 +8712,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8654,10 +8724,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[country], analyzed_table.[state], analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc, top_values.grouping_level_1, top_values.grouping_level_2
             ```
     ??? example "Trino"
@@ -8684,7 +8755,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8699,11 +8770,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -8768,7 +8839,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -8790,12 +8861,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8894,7 +8966,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8915,6 +8987,7 @@ spec:
                 - USD
                 - GBP
                 - EUR
+                top: 3
               error:
                 max_missing: 0
               fatal:
@@ -8960,7 +9033,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -8970,9 +9043,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9036,7 +9109,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9046,11 +9119,12 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9078,7 +9152,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9088,9 +9162,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9154,7 +9228,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9164,11 +9238,12 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9197,7 +9272,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9207,9 +9282,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9273,7 +9348,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9283,11 +9358,12 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9316,7 +9392,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9332,9 +9408,9 @@ spec:
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9404,7 +9480,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) top_values_rank
+                        ORDER BY top_col_values.total_values DESC) top_values_rank
                 FROM
                 (
                     SELECT
@@ -9420,11 +9496,12 @@ spec:
                         TRUNC(CAST(additional_table."date_column" AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9453,7 +9530,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9463,9 +9540,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9529,7 +9606,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9539,11 +9616,12 @@ spec:
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9572,7 +9650,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9587,11 +9665,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9655,7 +9733,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9670,12 +9748,13 @@ spec:
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9704,7 +9783,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9714,9 +9793,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9780,7 +9859,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9790,11 +9869,12 @@ spec:
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9823,7 +9903,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9833,9 +9913,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -9899,7 +9979,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -9909,11 +9989,12 @@ spec:
                         TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -9941,7 +10022,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -9951,9 +10032,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10017,7 +10098,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -10027,11 +10108,12 @@ spec:
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -10060,7 +10142,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10070,7 +10152,7 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -10146,7 +10228,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -10156,10 +10238,11 @@ spec:
                         CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ```
     ??? example "Trino"
@@ -10187,7 +10270,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10202,11 +10285,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10270,7 +10353,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -10285,12 +10368,13 @@ spec:
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -10303,7 +10387,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 42-47"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -10333,6 +10417,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
+                    top: 3
                   error:
                     max_missing: 0
                   fatal:
@@ -10380,7 +10465,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10390,9 +10475,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10457,7 +10542,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -10469,11 +10554,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -10500,7 +10586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10510,9 +10596,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10577,7 +10663,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -10589,11 +10675,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -10621,7 +10708,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10631,9 +10718,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10698,7 +10785,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -10710,11 +10797,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -10742,7 +10830,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10758,9 +10846,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10831,7 +10919,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -10854,11 +10942,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(additional_table."date_column" AS DATE)) AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -10886,7 +10975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -10896,9 +10985,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -10963,7 +11052,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -10975,11 +11064,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11007,7 +11097,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11022,11 +11112,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11091,7 +11181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11113,12 +11203,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11146,7 +11237,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11156,9 +11247,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11223,7 +11314,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11235,11 +11326,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11267,7 +11359,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11277,9 +11369,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11344,7 +11436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11356,11 +11448,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11387,7 +11480,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11397,9 +11490,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11464,7 +11557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11476,11 +11569,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11508,7 +11602,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11518,7 +11612,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -11593,7 +11687,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11605,10 +11699,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc, top_values.grouping_level_1, top_values.grouping_level_2
             ```
     ??? example "Trino"
@@ -11635,7 +11730,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11650,11 +11745,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11719,7 +11814,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -11741,12 +11836,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -11845,7 +11941,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-25"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11866,6 +11962,7 @@ spec:
                 - USD
                 - GBP
                 - EUR
+                top: 3
               error:
                 max_missing: 0
               fatal:
@@ -11911,7 +12008,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -11921,9 +12018,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -11987,7 +12084,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -11997,11 +12094,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12029,7 +12127,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12039,9 +12137,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12105,7 +12203,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12115,11 +12213,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12148,7 +12247,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12158,9 +12257,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12224,7 +12323,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12234,11 +12333,12 @@ spec:
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12267,7 +12367,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12283,9 +12383,9 @@ spec:
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12355,7 +12455,7 @@ spec:
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) top_values_rank
+                        ORDER BY top_col_values.total_values DESC) top_values_rank
                 FROM
                 (
                     SELECT
@@ -12371,11 +12471,12 @@ spec:
                         TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12404,7 +12505,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12414,9 +12515,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12480,7 +12581,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12490,11 +12591,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12523,7 +12625,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12538,11 +12640,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12606,7 +12708,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12621,12 +12723,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12655,7 +12758,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12665,9 +12768,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12731,7 +12834,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12741,11 +12844,12 @@ spec:
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12774,7 +12878,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12784,9 +12888,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12850,7 +12954,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12860,11 +12964,12 @@ spec:
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -12892,7 +12997,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -12902,9 +13007,9 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -12968,7 +13073,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -12978,11 +13083,12 @@ spec:
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -13011,7 +13117,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13021,7 +13127,7 @@ spec:
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -13097,7 +13203,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -13107,10 +13213,11 @@ spec:
                         CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ```
     ??? example "Trino"
@@ -13138,7 +13245,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13153,11 +13260,11 @@ spec:
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13221,7 +13328,7 @@ spec:
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period
-                        ORDER BY top_col_values.total_values) as top_values_rank
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank
                 FROM
                 (
                     SELECT
@@ -13236,12 +13343,13 @@ spec:
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY time_period, time_period_utc, top_value
-                    ORDER BY time_period, time_period_utc, total_values
+                    ORDER BY time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -13254,7 +13362,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 42-47"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -13284,6 +13392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
+                    top: 3
                   error:
                     max_missing: 0
                   fatal:
@@ -13331,7 +13440,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13341,9 +13450,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13408,7 +13517,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -13420,11 +13529,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
                     FROM
                         `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13451,7 +13561,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13461,9 +13571,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13528,7 +13638,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -13540,11 +13650,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13572,7 +13683,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13582,9 +13693,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13649,7 +13760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -13661,11 +13772,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
                     FROM
                         `<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13693,7 +13805,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13709,9 +13821,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                         {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                         FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) top_col_values
             ) top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13782,7 +13894,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period time_period,
                     top_col_values.time_period_utc time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -13805,11 +13917,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS time_period,
                         CAST(TRUNC(CAST(additional_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                         FROM "<target_schema>"."<target_table>" additional_table) analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) top_col_values
             ) top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13837,7 +13950,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13847,9 +13960,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -13914,7 +14027,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -13926,11 +14039,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13958,7 +14072,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -13973,11 +14087,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -14042,7 +14156,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14064,12 +14178,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -14097,7 +14212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -14107,9 +14222,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -14174,7 +14289,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14186,11 +14301,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                     FROM
                         "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -14218,7 +14334,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -14228,9 +14344,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -14295,7 +14411,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14307,11 +14423,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
                     FROM
                         "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+                    WHERE analyzed_table."target_column" IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -14338,7 +14455,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -14348,9 +14465,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -14415,7 +14532,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14427,11 +14544,12 @@ Expand the *Configure with data grouping* section to see additional examples for
                         TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
                     FROM
                         `<target_schema>`.`<target_table>` AS analyzed_table
+                    WHERE analyzed_table.`target_column` IS NOT NULL
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -14459,7 +14577,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -14469,7 +14587,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
                     FROM
                         {{ lib.render_target_table() }} AS analyzed_table
-                    {{- lib.render_where_clause(indentation = '        ') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
                     {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                         {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
                     {%- else %}
@@ -14544,7 +14662,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14556,10 +14674,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
                     FROM
                         [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
+                    WHERE analyzed_table.[target_column] IS NOT NULL
                     GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0), analyzed_table.[target_column]
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY time_period, time_period_utc, top_values.grouping_level_1, top_values.grouping_level_2
             ```
     ??? example "Trino"
@@ -14586,7 +14705,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                        ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
                 FROM
                 (
                     SELECT
@@ -14601,11 +14720,11 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 {{- lib.render_data_grouping_projections('original_table') }}
                                 {{- lib.render_time_dimension_projection('original_table') }}
                             FROM {{ lib.render_target_table() }} original_table
-                            {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                            {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                         ) analyzed_table
                     {{- lib.render_where_clause(indentation = '        ') }}
                     {{- lib.render_group_by(indentation = '        ') }}, top_value
-                    {{- lib.render_order_by(indentation = '        ') }}, total_values
+                    {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
                 ) AS top_col_values
             ) AS top_values
             WHERE top_values_rank <= {{ parameters.top }}
@@ -14670,7 +14789,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     top_col_values.time_period as time_period,
                     top_col_values.time_period_utc as time_period_utc,
                     RANK() OVER(PARTITION BY top_col_values.time_period, top_col_values.grouping_level_1, top_col_values.grouping_level_2
-                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
+                        ORDER BY top_col_values.total_values DESC) as top_values_rank, top_col_values.grouping_level_1, top_col_values.grouping_level_2
                 FROM
                 (
                     SELECT
@@ -14692,12 +14811,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
                             FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
+            WHERE original_table."target_column" IS NOT NULL
                         ) analyzed_table
                     GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc, top_value
-                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values
+                    ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc, total_values DESC
                 ) AS top_col_values
             ) AS top_values
-            WHERE top_values_rank <= 
+            WHERE top_values_rank <= 3
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

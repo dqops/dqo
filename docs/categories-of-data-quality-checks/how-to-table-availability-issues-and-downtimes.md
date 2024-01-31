@@ -72,13 +72,13 @@ spec:
 ### User interface
 The table availability monitoring can be also enabled in the [check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 
-![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png)
+![Table availability detection configuration in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-check-detection-editor-min.png){ loading=lazy }
 
 ## Monitoring table availability on dashboards
 DQOps provides dedicated data quality dashboards for monitoring table availability issues.
 The dashboard shows a calendar for each day of month, when the table availability issue was detected.
 
-![Table availability tracking dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-issues-dashboard-min.png)
+![Table availability tracking dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-availability-issues-dashboard-min.png){ loading=lazy }
 
 ## Use cases
 | **Name of the example**                                                                               | **Description**                                                                                                                                                                                            |

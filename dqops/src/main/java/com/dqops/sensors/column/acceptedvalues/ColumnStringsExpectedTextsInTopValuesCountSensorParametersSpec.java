@@ -55,6 +55,7 @@ public class ColumnStringsExpectedTextsInTopValuesCountSensorParametersSpec exte
 
     @JsonPropertyDescription("The number of the most popular values (with the highest distinct count) that are analyzed to find the expected values.")
     @RequiredField
+    @SampleValues(values = { "3" })
     private Long top;
 
     /**

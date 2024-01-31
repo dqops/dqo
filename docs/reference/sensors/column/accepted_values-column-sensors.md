@@ -995,7 +995,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1005,9 +1005,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1073,7 +1073,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1083,9 +1083,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1152,7 +1152,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1162,9 +1162,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1231,7 +1231,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period time_period,
             top_col_values.time_period_utc time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1247,9 +1247,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
                 {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
                 FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) top_col_values
     ) top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1322,7 +1322,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1332,9 +1332,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1401,7 +1401,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1416,11 +1416,11 @@ The templates used to generate the SQL query for each data source supported by D
                         {{- lib.render_data_grouping_projections('original_table') }}
                         {{- lib.render_time_dimension_projection('original_table') }}
                     FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                 ) analyzed_table
             {{- lib.render_where_clause(indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1487,7 +1487,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1497,9 +1497,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1566,7 +1566,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1576,9 +1576,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1644,7 +1644,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1654,9 +1654,9 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1723,7 +1723,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1733,7 +1733,7 @@ The templates used to generate the SQL query for each data source supported by D
                 {{- lib.render_time_dimension_projection('analyzed_table', indentation = '            ') }}
             FROM
                 {{ lib.render_target_table() }} AS analyzed_table
-            {{- lib.render_where_clause(indentation = '        ') }}
+            {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
             {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) or (lib.time_series.mode is not none and lib.time_series.mode != 'current_time') -%}
                 {{- lib.render_group_by(indentation = '        ') }}, {{ lib.render_target_column('analyzed_table') }}
             {%- else %}
@@ -1813,7 +1813,7 @@ The templates used to generate the SQL query for each data source supported by D
             top_col_values.time_period as time_period,
             top_col_values.time_period_utc as time_period_utc,
             RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-                ORDER BY top_col_values.total_values) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+                ORDER BY top_col_values.total_values DESC) as top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
         FROM
         (
             SELECT
@@ -1828,11 +1828,11 @@ The templates used to generate the SQL query for each data source supported by D
                         {{- lib.render_data_grouping_projections('original_table') }}
                         {{- lib.render_time_dimension_projection('original_table') }}
                     FROM {{ lib.render_target_table() }} original_table
-                    {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+                    {{- lib.render_where_clause(extra_filter = lib.render_target_column('original_table') ~ ' IS NOT NULL', table_alias_prefix='original_table') }}
                 ) analyzed_table
             {{- lib.render_where_clause(indentation = '        ') }}
             {{- lib.render_group_by(indentation = '        ') }}, top_value
-            {{- lib.render_order_by(indentation = '        ') }}, total_values
+            {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
         ) AS top_col_values
     ) AS top_values
     WHERE top_values_rank <= {{ parameters.top }}
@@ -1924,14 +1924,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -1960,14 +1960,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -1996,14 +1996,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2032,14 +2032,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2078,13 +2078,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT(*)
+              )/COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2109,14 +2109,14 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2155,13 +2155,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT(*)
+              )/COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2190,13 +2190,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT(*)
+              )/COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2221,14 +2221,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2261,13 +2261,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT_BIG(*)
+              )/COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN NULL
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2292,14 +2292,14 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2373,14 +2373,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2413,14 +2413,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2454,14 +2454,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2495,14 +2495,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2541,14 +2541,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2582,14 +2582,14 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2630,14 +2630,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2671,14 +2671,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2711,14 +2711,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2752,14 +2752,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}
@@ -2793,14 +2793,14 @@ The templates used to generate the SQL query for each data source supported by D
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}

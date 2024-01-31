@@ -5,6 +5,67 @@ The data quality checks are configured in the `accepted_values` category in DQOp
 ## Accepted values category
 Data quality checks that are detecting issues related to accepted values are listed below.
 
+![Column profiling result with most popular values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-column-values-min.png){ loading=lazy }
+
+![Enabling text in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-data-quality-check-editor-min.png){ loading=lazy }
+
+![Adding a list of expected values in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/expected-values-list-popup-data-quality-check-min.png){ loading=lazy }
+
+
+
+``` { .yaml linenums="1" hl_lines="12-15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+      monitoring_checks:
+        daily:
+          accepted_values:
+            daily_text_found_in_set_percent:
+              parameters:
+                expected_values:
+                - TRAVIS
+                - WILLIAMSON
+                - HAYS
+                - BASTROP
+              error:
+                min_percent: 100.0
+```
+
+![Adding data dictionary CSV file in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/add-data-dictionary-editor-min.png){ loading=lazy }
+
+![Data dictionary list screen for data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-dictionary-list-screen-min.png){ loading=lazy }
+
+![Referencing data dictionary in a text found in set percent data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/daily-text-found-in-set-percent-check-reference-dictionary-min.png){ loading=lazy }
+
+``` { .yaml linenums="1" hl_lines="12-15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+      monitoring_checks:
+        daily:
+          accepted_values:
+            daily_text_found_in_set_percent:
+              parameters:
+                expected_values:
+                - "${dictionary://cities.csv}"
+              error:
+                min_percent: 100.0
+```
+
+
+![Asserting that all expected text values are present in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/all-expected-column-values-are-in-use-data-quality-check-min.png){ loading=lazy }
+
+![Detecting expected values that are missing in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-found-vs-text-values-in-use-min.png){ loading=lazy }
+
+![Top values in a column to assert in a data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-profiling-result-top-two-column-values-min.png){ width="619px"; loading=lazy }
+
+
+![Asserting that expected values are in the top of most popular values in a column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-values-in-top-most-popular-min.png){ loading=lazy }
+
 ## Detecting accepted values issues
 How to detect accepted values data quality issues.
 

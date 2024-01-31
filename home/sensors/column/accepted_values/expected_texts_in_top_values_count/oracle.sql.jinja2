@@ -18,7 +18,7 @@ FROM
         top_col_values.time_period time_period,
         top_col_values.time_period_utc time_period_utc,
         RANK() OVER(PARTITION BY top_col_values.time_period {{- render_data_grouping('top_col_values', indentation = ' ') }}
-            ORDER BY top_col_values.total_values) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
+            ORDER BY top_col_values.total_values DESC) top_values_rank  {{- render_data_grouping('top_col_values', indentation = ' ') }}
     FROM
     (
         SELECT
@@ -34,9 +34,9 @@ FROM
             {{- lib.render_data_grouping_projections('additional_table', indentation = '            ') }}
             {{- lib.render_time_dimension_projection('additional_table', indentation = '            ') }}
             FROM {{ lib.render_target_table() }} additional_table) analyzed_table
-        {{- lib.render_where_clause(indentation = '        ') }}
+        {{- lib.render_where_clause(extra_filter = lib.render_target_column('analyzed_table') ~ ' IS NOT NULL', indentation = '        ') }}
         {{- lib.render_group_by(indentation = '        ') }}, top_value
-        {{- lib.render_order_by(indentation = '        ') }}, total_values
+        {{- lib.render_order_by(indentation = '        ') }}, total_values DESC
     ) top_col_values
 ) top_values
 WHERE top_values_rank <= {{ parameters.top }}
