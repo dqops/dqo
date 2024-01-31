@@ -87,7 +87,7 @@ const TableColumns = ({
   );
   const detectedDatatypeVar = statistics?.column_statistics?.map((x) =>
     x.statistics
-      ?.filter((item) => item.collector === 'string_datatype_detect')
+      ?.filter((item) => item.collector === 'text_datatype_detect')
       .map((item) => item.result)
   );
 
