@@ -86,7 +86,7 @@ public class ImportTablesQueueJobResult {
         public ImportTablesQueueJobResult createSample() {
             return new ImportTablesQueueJobResult() {{
                 setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
-                setStatus(DqoJobStatus.succeeded);
+                setStatus(DqoJobStatus.finished);
                 setResult(new ImportTablesResult.ImportTablesResultSampleFactory().createSample());
             }};
         }

@@ -229,7 +229,7 @@ const CheckDetails = ({
 
   useEffect(() => {
     if (
-      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      currentJob?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       currentJob?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       refetch(filters.month, filters.dataGroup);

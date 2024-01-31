@@ -85,7 +85,7 @@ public class CollectStatisticsQueueJobResult {
         public CollectStatisticsQueueJobResult createSample() {
             return new CollectStatisticsQueueJobResult() {{
                 setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
-                setStatus(DqoJobStatus.succeeded);
+                setStatus(DqoJobStatus.finished);
                 setResult(new CollectStatisticsResult() {{
                     setExecutedStatisticsCollectors(3);
                     setColumnsAnalyzed(1);

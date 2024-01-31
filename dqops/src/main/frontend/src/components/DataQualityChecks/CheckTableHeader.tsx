@@ -337,7 +337,7 @@ const TableHeader = ({
           <div className="flex space-x-1 items-center">
             <span className="mr-1">Data quality check</span>
             {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
               isDefaultEditing !== true && (
                 <CategoryMenu

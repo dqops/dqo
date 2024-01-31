@@ -30,7 +30,7 @@ Job status of a job on the queue.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|queued<br/>running<br/>waiting<br/>succeeded<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
+|string|queued<br/>running<br/>waiting<br/>finished<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
 
 ___
 

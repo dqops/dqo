@@ -63,7 +63,7 @@ export default function TableColumnsBody({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded && jobId != lastRefreshedJobId) {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished && jobId != lastRefreshedJobId) {
       setLastRefreshedJobId(jobId);
       refreshListFunc();
     }

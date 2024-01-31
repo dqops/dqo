@@ -109,7 +109,7 @@ The tracking task will now Fail on detection of a data quality issue blocking th
 
 An issue becomes visible in the Airflow Web UI. One of the recent task circles became red in the DAG.
 The failure is shown in the DAG details. The _load new data_ task has not been started due to an issue.
-The default value "all_success" of the _trigger_rule_ parameter of the operator demands all directly upstream tasks have succeeded.
+The default value "all_success" of the _trigger_rule_ parameter of the operator demands all directly upstream tasks have finished.
 
 ![airflow-3](https://dqops.com/docs/images/integrations/airflow/run-checks-use-case/airflow-3.png)
 
