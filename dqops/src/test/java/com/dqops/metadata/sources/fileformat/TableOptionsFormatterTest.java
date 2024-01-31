@@ -1,0 +1,102 @@
+package com.dqops.metadata.sources.fileformat;
+
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+class TableOptionsFormatterTest {
+
+    @Test
+    void formatFilePaths_forOneFile_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv'
+                )""",
+                output);
+    }
+
+    @Test
+    void formatFilePaths_forTwoFiles_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv", "file_two.csv"));
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  ['file_one.csv', 'file_two.csv']
+                )""",
+                output);
+    }
+
+    @Test
+    void formatValueWhenSet_booleanValueIsTrue_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        tableOptionsFormatter.formatValueWhenSet("bool_field", true);
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv',
+                  bool_field = true
+                )""", output);
+    }
+
+    @Test
+    void formatValueWhenSet_longValueIsGiven_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        tableOptionsFormatter.formatValueWhenSet("long_field", 3L);
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv',
+                  long_field = 3
+                )""", output);
+    }
+
+    @Test
+    void formatBooleanWhenSet_valueIsNotSet_boolIsNotAdded() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        tableOptionsFormatter.formatValueWhenSet("bool_field", null);
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv'
+                )""", output);
+    }
+
+    @Test
+    void formatStringWhenSet_valueIsGiven_formatsIt() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        tableOptionsFormatter.formatStringWhenSet("string_field", "text value");
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv',
+                  string_field = 'text value'
+                )""",
+                output);
+    }
+
+}

@@ -7,13 +7,14 @@ import java.util.Map;
 
 public class TableOptionsFormatter {
 
-    StringBuilder sourceTable;
+    private final StringBuilder sourceTable;
+    private final String commaNewLine = ",\n  ";
 
     public TableOptionsFormatter(String methodName, List<String> filePathList) {
         this.sourceTable = new StringBuilder();
         sourceTable.append(methodName);
-        sourceTable.append("(");
-        sourceTable.append(formatFilePaths(filePathList));
+        sourceTable.append("(\n");
+        sourceTable.append("  ").append(formatFilePaths(filePathList));
     }
 
     private String formatFilePaths(List<String> filePaths){
@@ -23,28 +24,25 @@ public class TableOptionsFormatter {
 
         StringBuilder sb = new StringBuilder();
         sb.append("[");
-        filePaths.forEach(tableName -> {
-            sb.append("'").append(tableName).append("',");
+        sb.append("'").append(filePaths.get(0)).append("'");
+        filePaths.stream().skip(1).forEach(filePath -> {
+            sb.append(", '").append(filePath).append("'");
         });
         sb.append("]");
         return sb.toString();
     }
 
-    public void formatBooleanWhenSet(String fieldName, Boolean value){
+    public <T> void formatValueWhenSet(String fieldName, T value){
         if(value != null){
-            sourceTable.append(",").append(makeSnakeCase(fieldName)).append(" = ").append(value);
+            sourceTable.append(commaNewLine)
+                    .append(makeSnakeCase(fieldName)).append(" = ").append(value);
         }
     }
 
     public void formatStringWhenSet(String fieldName, String value){
         if(value != null){
-            sourceTable.append(",").append(makeSnakeCase(fieldName)).append(" = '").append(value).append("'");
-        }
-    }
-
-    public void formatLongWhenSet(String fieldName, Long value){
-        if(value != null){
-            sourceTable.append(",").append(makeSnakeCase(fieldName)).append(" = ").append(value);
+            sourceTable.append(commaNewLine)
+                    .append(makeSnakeCase(fieldName)).append(" = '").append(value).append("'");
         }
     }
 
@@ -65,7 +63,7 @@ public class TableOptionsFormatter {
 
     @Override
     public String toString() {
-        sourceTable.append(")");
+        sourceTable.append("\n)");
         return sourceTable.toString();
     }
 }

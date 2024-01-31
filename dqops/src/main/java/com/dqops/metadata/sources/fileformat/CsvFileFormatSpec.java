@@ -52,22 +52,22 @@ public class CsvFileFormatSpec extends AbstractSpec {
      */
     public String buildSourceTableOptionsString(List<String> filePathList){
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_csv", filePathList);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.allVarchar, allVarchar);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.autoDetect, autoDetect);
+        tableOptionsFormatter.formatValueWhenSet(Fields.allVarchar, allVarchar);
+        tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
+        tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
         tableOptionsFormatter.formatMapWhenSet(Fields.columns, columns);
         tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
         tableOptionsFormatter.formatStringWhenSet(Fields.decimalSeparator, decimalSeparator);
         tableOptionsFormatter.formatStringWhenSet(Fields.delim, delim);
         tableOptionsFormatter.formatStringWhenSet(Fields.escape, escape);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.filename, filename);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.header, header);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.hivePartitioning, hivePartitioning);
-        tableOptionsFormatter.formatBooleanWhenSet(Fields.ignoreErrors, ignoreErrors);
+        tableOptionsFormatter.formatValueWhenSet(Fields.filename, filename);
+        tableOptionsFormatter.formatValueWhenSet(Fields.header, header);
+        tableOptionsFormatter.formatValueWhenSet(Fields.hivePartitioning, hivePartitioning);
+        tableOptionsFormatter.formatValueWhenSet(Fields.ignoreErrors, ignoreErrors);
         tableOptionsFormatter.formatStringWhenSet(Fields.newLine, newLine);
         tableOptionsFormatter.formatStringWhenSet(Fields.quote, quote);
-        tableOptionsFormatter.formatLongWhenSet(Fields.skip, skip);
+        tableOptionsFormatter.formatValueWhenSet(Fields.skip, skip);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
         return tableOptionsFormatter.toString();
     }
