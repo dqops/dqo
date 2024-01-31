@@ -7,7 +7,7 @@ class DqoJobStatus(str, Enum):
     FAILED = "failed"
     QUEUED = "queued"
     RUNNING = "running"
-    SUCCEEDED = "succeeded"
+    FINISHED = "finished"
     WAITING = "waiting"
 
     def __str__(self) -> str:

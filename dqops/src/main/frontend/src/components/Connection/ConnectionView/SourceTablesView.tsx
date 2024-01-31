@@ -110,7 +110,7 @@ const SourceTablesView = () => {
   };
 
   useEffect(() => {
-    if (jobId !== 0 && jobId !== undefined && job?.status === 'succeeded') {
+    if (jobId !== 0 && jobId !== undefined && job?.status === 'finished') {
       fetchSourceTables();
     }
   }, [job?.status]);

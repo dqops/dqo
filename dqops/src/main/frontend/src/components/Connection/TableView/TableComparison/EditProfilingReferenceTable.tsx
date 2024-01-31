@@ -399,13 +399,13 @@ export const EditProfilingReferenceTable = ({
 
   const disabled =
     job &&
-    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.finished &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.cancelled;
 
   useEffect(() => {
     if (
-      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       getResultsData();

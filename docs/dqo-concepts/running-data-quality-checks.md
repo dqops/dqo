@@ -598,7 +598,7 @@ data quality issue severity level. In the following example, the most severe iss
     "fatals" : 0,
     "execution_errors" : 0
   },
-  "status" : "succeeded"
+  "status" : "finished"
 }
 ```
 

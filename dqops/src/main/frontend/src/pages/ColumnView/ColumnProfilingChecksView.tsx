@@ -199,7 +199,7 @@ const ColumnProfilingChecksView = ({
   }, [job]);
 
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       getColumnStatistics();
       getTableStatistics();
     }
