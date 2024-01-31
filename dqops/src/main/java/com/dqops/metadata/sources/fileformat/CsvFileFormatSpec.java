@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Csv file format specification.
+ * Csv file format specification for querying data in the csv format files.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

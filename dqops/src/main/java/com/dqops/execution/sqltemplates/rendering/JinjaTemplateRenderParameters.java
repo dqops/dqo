@@ -142,7 +142,7 @@ public class JinjaTemplateRenderParameters {
             setActualValueAlias(sensorRunParameters.getActualValueAlias());
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
             setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
-            setTableFromFiles(sensorRunParameters.getTable().getFileFormat().getTableOptionsString());
+            setTableFromFiles(sensorRunParameters.getTable().getFileFormat().buildTableOptionsString());
         }};
 
         return result;

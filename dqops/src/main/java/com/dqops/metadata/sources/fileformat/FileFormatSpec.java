@@ -6,6 +6,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -13,7 +14,9 @@ import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
 
-// todo: description
+/**
+ * File format specification for data loaded from the physical files of one of supported formats.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
@@ -28,22 +31,22 @@ public class FileFormatSpec extends AbstractSpec {
         }
     };
 
-    // todo  JsonPropertyDescription
+    @JsonPropertyDescription("Csv file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CsvFileFormatSpec csvFileFormat;
 
-    // todo  JsonPropertyDescription
+    @JsonPropertyDescription("Json file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private JsonFileFormatSpec jsonFileFormat;
 
-    // todo  JsonPropertyDescription
+    @JsonPropertyDescription("Parquet file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquetFileFormat;
 
-    // todo  JsonPropertyDescription
+    @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FilePathListSpec filePathList;
@@ -54,69 +57,93 @@ public class FileFormatSpec extends AbstractSpec {
         }};
     }
 
-    // todo
+    /**
+     * Returns the csv file format specification.
+     * @return Csv file format specification.
+     */
     public CsvFileFormatSpec getCsvFileFormat() {
         return csvFileFormat;
     }
 
-    // todo
+    /**
+     * Sets the csv file format specification.
+     * @param csvFileFormat Csv file format specification.
+     */
     public void setCsvFileFormat(CsvFileFormatSpec csvFileFormat) {
         setDirtyIf(!Objects.equals(this.csvFileFormat, csvFileFormat));
         this.csvFileFormat = csvFileFormat;
         propagateHierarchyIdToField(csvFileFormat, "csv_file_format");
     }
 
-    // todo
+    /**
+     * Returns the json file format specification.
+     * @return Json file format specification.
+     */
     public JsonFileFormatSpec getJsonFileFormat() {
         return jsonFileFormat;
     }
 
-    // todo
+    /**
+     * Sets the json file format specification.
+     * @param jsonFileFormat Json file format specification.
+     */
     public void setJsonFileFormat(JsonFileFormatSpec jsonFileFormat) {
         setDirtyIf(!Objects.equals(this.jsonFileFormat, jsonFileFormat));
         this.jsonFileFormat = jsonFileFormat;
         propagateHierarchyIdToField(jsonFileFormat, "json_file_format");
     }
 
-
-    // todo
+    /**
+     * Returns the parquet file format specification.
+     * @return Parquet file format specification.
+     */
     public ParquetFileFormatSpec getParquetFileFormat() {
         return parquetFileFormat;
     }
 
-    // todo
+    /**
+     * Sets the parquet file format specification.
+     * @param parquetFileFormat Parquet file format specification.
+     */
     public void setParquetFileFormat(ParquetFileFormatSpec parquetFileFormat) {
         setDirtyIf(!Objects.equals(this.parquetFileFormat, parquetFileFormat));
         this.parquetFileFormat = parquetFileFormat;
         propagateHierarchyIdToField(parquetFileFormat, "parquet_file_format");
     }
 
-    // todo
+    /**
+     * Returns the list of paths to files with data that are used as a source.
+     * @return List with file paths.
+     */
     public FilePathListSpec getFilePaths() {
         return filePathList;
     }
 
-    // todo
+    /**
+     * Sets the list of paths to files with data that are used as a source.
+     * @param filePathList List with file paths.
+     */
     public void setFilePaths(FilePathListSpec filePathList) {
         setDirtyIf(!Objects.equals(this.filePathList, filePathList));
         this.filePathList = filePathList;
     }
 
-    public String getTableOptionsString(){
+    /**
+     * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
+     * @return Table options string.
+     */
+    public String buildTableOptionsString(){
         if(csvFileFormat != null){
             return csvFileFormat.buildSourceTableOptionsString(filePathList);
         }
-
-        // todo
-//        if(jsonFileFormat != null){
+//        if(jsonFileFormat != null){   // todo
 //
 //        }
-//
-//        if(parquetFileFormat != null){
+//        if(parquetFileFormat != null){    // todo
 //
 //        }
 
-        throw new RuntimeException("Cant create table string.");
+        throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
 
     @Override

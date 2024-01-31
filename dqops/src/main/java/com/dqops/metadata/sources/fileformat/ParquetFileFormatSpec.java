@@ -9,7 +9,9 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-// todo: description
+/**
+ * Parquet file format specification for querying data in the parquet format files.
+ */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
@@ -20,7 +22,7 @@ public class ParquetFileFormatSpec extends AbstractSpec {
         }
     };
 
-    // todo: csv specific fields
+    // todo: parquet specific fields
 
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
