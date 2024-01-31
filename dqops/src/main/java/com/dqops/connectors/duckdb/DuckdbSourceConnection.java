@@ -26,6 +26,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -42,11 +43,14 @@ import java.util.Properties;
 /**
  * DuckDB source connection.
  */
+@Slf4j
 @Component("duckdb-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
+    private final static Object registerLock = new Object();
+    private static boolean extensionsRegistered = false;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -153,27 +157,37 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     private void registerExtensions(){
+        if(extensionsRegistered){
+            return;
+        }
+        try {
+            synchronized (registerLock) {
+                StringBuilder setCustomRepository = new StringBuilder();
+                setCustomRepository.append("SET extension_directory = ");
+                setCustomRepository.append("'");
+                setCustomRepository.append(homeLocationFindService.getDqoHomePath());
+                setCustomRepository.append("/bin/duckdb");
+                setCustomRepository.append("'");
 
-        StringBuilder setCustomRepository = new StringBuilder();
-        setCustomRepository.append("SET extension_directory = ");
-        setCustomRepository.append("'");
-        setCustomRepository.append(homeLocationFindService.getDqoHomePath());
-        setCustomRepository.append("/bin/duckdb");
-        setCustomRepository.append("'");
+                this.executeCommand(setCustomRepository.toString(), JobCancellationToken.createDummyJobCancellationToken());
 
-        this.executeCommand(setCustomRepository.toString(), JobCancellationToken.createDummyJobCancellationToken());
+                List<String> availableExtensionList = getAvailableExtensions();
 
-        List<String> availableExtensionList = getAvailableExtensions();
-
-        availableExtensionList.stream().forEach(extensionName -> {
-            // todo: some try catch when extension is not available
-            String installExtensionQuery = "INSTALL " + extensionName;
-            this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-            String loadExtensionQuery = "LOAD " + extensionName;
-            this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
-        });
-
+                availableExtensionList.stream().forEach(extensionName -> {
+                    try {
+                        String installExtensionQuery = "INSTALL " + extensionName;
+                        this.executeCommand(installExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                        String loadExtensionQuery = "LOAD " + extensionName;
+                        this.executeCommand(loadExtensionQuery, JobCancellationToken.createDummyJobCancellationToken());
+                    } catch (Exception exception) {
+                        log.error("Extension " + extensionName + " cannot be loaded.");
+                        log.error(exception.getMessage());
+                    }
+                });
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     private List<String> getAvailableExtensions(){
