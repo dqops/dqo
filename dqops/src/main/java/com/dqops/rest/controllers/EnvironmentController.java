@@ -155,7 +155,7 @@ public class EnvironmentController {
      * @return The local API key issued for the calling user.
      */
     @GetMapping(value = "/issueapikey", produces = "application/json")
-    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. " +
+    @ApiOperation(value = "issueApiKey", notes = "Issues a local API Key for the calling user. This API Key can be used to authenticate using the DQOps REST API client. " +
             "This API Key should be passed in the \"Authorization\" HTTP header in the format \"Authorization: Bearer <api_key>\".",
             response = String.class,
             authorizations = {

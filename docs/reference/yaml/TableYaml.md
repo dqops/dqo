@@ -49,7 +49,7 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`disabled`</span>|Disables all data quality checks on the table. Data quality checks will not be executed.|*boolean*| | | |
 |<span class="no-wrap-code ">`stage`</span>|Stage name.|*string*| | | |
-|<span class="no-wrap-code ">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*| | | |
+|<span class="no-wrap-code ">`priority`</span>|Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.|*integer*| | | |
 |<span class="no-wrap-code ">`filter`</span>|SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.|*string*| | | |
 |<span class="no-wrap-code ">[`timestamp_columns`](./TableYaml.md#timestampcolumnsspec)</span>|Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).|*[TimestampColumnsSpec](./TableYaml.md#timestampcolumnsspec)*| | | |
 |<span class="no-wrap-code ">[`incremental_time_window`](./TableYaml.md#partitionincrementaltimewindowspec)</span>|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|*[PartitionIncrementalTimeWindowSpec](./TableYaml.md#partitionincrementaltimewindowspec)*| | | |
@@ -1232,7 +1232,7 @@ ___
 
 ## ColumnRangeMinValueSensorParametersSpec
 Column level sensor that finds the minimum value. It works on any data type that supports the MIN functions.
- The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
+ The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
 
 
 
@@ -1319,7 +1319,7 @@ ___
 
 ## ColumnRangeMaxValueSensorParametersSpec
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
- The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
+ The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
 
 
 
