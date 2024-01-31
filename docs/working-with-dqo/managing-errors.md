@@ -6,7 +6,7 @@ Read this guide to learn how to manage log errors and data quality check executi
 ### **Location of the logging folder**
 Errors logs are stored locally in the *.logs* folder located in the **DQOps User Home** folder.
 The files in the *.logs* folder are rotated to save space. If an error occurs while running DQOps, 
-pleases send the content of the folder to the DQOps support. 
+please send the content of the folder to the DQOps support. 
 
 Follow the link, to [learn more about DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md). 
 
