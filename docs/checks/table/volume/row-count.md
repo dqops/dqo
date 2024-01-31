@@ -1,6 +1,6 @@
 # row count data quality checks
 
-A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
+A table-level check that ensures that the tested table has at least a minimum accepted number of rows. Using the default configuration, detects empty tables.
  The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
 
 

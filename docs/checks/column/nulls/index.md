@@ -70,9 +70,9 @@ A column-level check that ensures that the null percent value in a monitored col
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#profile-nulls-percent-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-nulls-percent-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-partition-nulls-percent-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
+|[<span class="no-wrap-code">`profile_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#profile-nulls-percent-anomaly)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-nulls-percent-anomaly)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
+|[<span class="no-wrap-code">`daily_partition_nulls_percent_anomaly`</span>](./nulls-percent-anomaly.md#daily-partition-nulls-percent-anomaly)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.|:material-check-bold:|
 
 
 
