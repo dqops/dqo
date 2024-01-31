@@ -105,7 +105,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
-    @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
+    @JsonPropertyDescription("Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of more and less important tables during a data quality improvement project, when the data quality issues on higher priority tables are fixed before data quality issues on less important tables.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Integer priority;
 

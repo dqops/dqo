@@ -36,7 +36,7 @@ $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
 |-----------------------------------------------|-------------|:-----------------:|-----------------|
-{{#each options}}|{{#each names}}<div id="{{qualifiedName}}{{this}}">`{{this}}`</div>{{/each}}|{{#each description}}{{this}}<br/>This parameter could be also configured by setting the {{#each names}}*{{upper (replace (replace (replace this "--" "") "." "_") "-" "_")}}*{{/each}} environment variable.{{/each}}|{{checkmark required}}|{{#each acceptedValues}}*{{this}}*<br/>{{/each}}|
+{{#each options}}|{{#each names}}<div id="{{qualifiedName}}{{this}}">`{{this}}`</div>{{/each}}|{{#each description}}{{this}}<br/>This parameter can also be configured by setting the {{#each names}}*{{upper (replace (replace (replace this "--" "") "." "_") "-" "_")}}*{{/each}} environment variable.{{/each}}|{{checkmark required}}|{{#each acceptedValues}}*{{this}}*<br/>{{/each}}|
 {{else}}
 {{/each}}
 {{else}}

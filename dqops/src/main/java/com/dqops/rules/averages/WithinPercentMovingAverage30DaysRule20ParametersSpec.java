@@ -46,7 +46,7 @@ public class WithinPercentMovingAverage30DaysRule20ParametersSpec extends Abstra
     public WithinPercentMovingAverage30DaysRule20ParametersSpec() {
     }
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @JsonPropertyDescription("The maximum percentage (e.g., 3%) by which the current sensor readout can be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
     @RequiredField
     private Double maxPercentWithin = 20.0;
 

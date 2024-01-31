@@ -9815,7 +9815,7 @@ paths:
       tags:
       - "DataSources"
       summary: "testConnection"
-      description: "Checks if the given remote connection could be opened and the\
+      description: "Checks if the given remote connection can be opened and if the\
         \ credentials are valid"
       operationId: "testConnection"
       consumes:
@@ -10602,7 +10602,7 @@ paths:
       tags:
       - "Environment"
       summary: "issueApiKey"
-      description: "Issues a local API Key for the calling user. This API Key could\
+      description: "Issues a local API Key for the calling user. This API Key can\
         \ be used to authenticate using the DQOps REST API client. This API Key should\
         \ be passed in the \"Authorization\" HTTP header in the format \"Authorization:\
         \ Bearer <api_key>\"."
@@ -11201,7 +11201,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, only the job id is returned without the results.\
-          \ The default timeout is 120 seconds, but could be reconfigured (see the\
+          \ The default timeout is 120 seconds, but it can be reconfigured (see the\
           \ 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11261,7 +11261,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, only the job id is returned without the results.\
-          \ The default timeout is 120 seconds, but could be reconfigured (see the\
+          \ The default timeout is 120 seconds, but it can be reconfigured (see the\
           \ 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11321,7 +11321,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the delete stored data job is still running, only the job id is returned\
-          \ without the results. The default timeout is 120 seconds, but could be\
+          \ without the results. The default timeout is 120 seconds, but it can be\
           \ reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11378,7 +11378,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the import tables job is still running, only the job id is returned without\
-          \ the results. The default timeout is 120 seconds, but could be reconfigured\
+          \ the results. The default timeout is 120 seconds, but it can be reconfigured\
           \ (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11530,7 +11530,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, the method returns the job model that is not\
           \ yet finished and has no results. The default timeout is 120 seconds, but\
-          \ could be reconfigured (see the 'dqo' cli command documentation)."
+          \ it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -11589,7 +11589,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the checks are still running, only the job id is returned without the\
-          \ results. The default timeout is 120 seconds, but could be reconfigured\
+          \ results. The default timeout is 120 seconds, but it can be reconfigured\
           \ (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11635,7 +11635,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, the method returns the job model that is not\
           \ yet finished and has no results. The default timeout is 120 seconds, but\
-          \ could be reconfigured (see the 'dqo' cli command documentation)."
+          \ it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -11762,7 +11762,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the synchronization with the DQOps Cloud is still running, only the job\
           \ id is returned without the results. The default timeout is 120 seconds,\
-          \ but could be reconfigured (see the 'dqo' cli command documentation)."
+          \ but it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -14228,7 +14228,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14310,7 +14310,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14392,7 +14392,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14474,7 +14474,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14556,7 +14556,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15041,7 +15041,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15102,7 +15102,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15252,7 +15252,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15314,7 +15314,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15418,7 +15418,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15479,7 +15479,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15795,7 +15795,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15865,7 +15865,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15935,7 +15935,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16169,7 +16169,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16239,7 +16239,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16360,7 +16360,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16935,7 +16935,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17014,7 +17014,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17128,7 +17128,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17290,7 +17290,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17367,7 +17367,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17433,7 +17433,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17494,7 +17494,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17555,7 +17555,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17616,7 +17616,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17677,7 +17677,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17738,7 +17738,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17799,7 +17799,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17860,7 +17860,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17921,7 +17921,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17982,7 +17982,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18043,7 +18043,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18104,7 +18104,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18165,7 +18165,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18226,7 +18226,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18287,7 +18287,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18348,7 +18348,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18410,7 +18410,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18472,7 +18472,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18539,7 +18539,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18600,7 +18600,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18705,7 +18705,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18803,7 +18803,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18930,7 +18930,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18991,7 +18991,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19052,7 +19052,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19113,7 +19113,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19174,7 +19174,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19235,7 +19235,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19380,7 +19380,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19441,7 +19441,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19502,7 +19502,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19563,7 +19563,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19624,7 +19624,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19685,7 +19685,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19746,7 +19746,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19807,7 +19807,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19868,7 +19868,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19929,7 +19929,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19990,7 +19990,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20051,7 +20051,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20112,7 +20112,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20173,7 +20173,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20234,7 +20234,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20295,7 +20295,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20356,7 +20356,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20417,7 +20417,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20644,7 +20644,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20705,7 +20705,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20766,7 +20766,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20827,7 +20827,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20888,7 +20888,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20949,7 +20949,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21010,7 +21010,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21071,7 +21071,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21132,7 +21132,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21193,7 +21193,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21254,7 +21254,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21315,7 +21315,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21622,7 +21622,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21750,7 +21750,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21812,7 +21812,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21874,7 +21874,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21936,7 +21936,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21998,7 +21998,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -22066,7 +22066,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23515,7 +23515,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23576,7 +23576,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23637,7 +23637,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23698,7 +23698,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23759,7 +23759,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23820,7 +23820,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23889,7 +23889,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23958,7 +23958,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24027,7 +24027,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24096,7 +24096,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24348,7 +24348,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24409,7 +24409,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24611,7 +24611,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24672,7 +24672,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24762,7 +24762,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24886,7 +24886,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25005,7 +25005,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25081,7 +25081,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25161,7 +25161,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25241,7 +25241,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25420,7 +25420,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25481,7 +25481,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25542,7 +25542,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25603,7 +25603,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25664,7 +25664,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25725,7 +25725,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25786,7 +25786,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26064,7 +26064,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26132,7 +26132,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26194,7 +26194,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26256,7 +26256,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26318,7 +26318,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26380,7 +26380,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26442,7 +26442,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26504,7 +26504,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26566,7 +26566,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26627,7 +26627,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26688,7 +26688,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26966,7 +26966,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27027,7 +27027,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27088,7 +27088,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27150,7 +27150,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27211,7 +27211,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27273,7 +27273,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27432,7 +27432,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27494,7 +27494,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27740,7 +27740,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27802,7 +27802,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27864,7 +27864,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27925,7 +27925,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28382,7 +28382,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28443,7 +28443,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28504,7 +28504,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28981,7 +28981,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -31607,9 +31607,9 @@ definitions:
       type:
         type: "string"
         description: "Credential type that is based on the detected format of the\
-          \ file. If the file could be parsed as a valid utf-8 string then it is assumed\
-          \ that the credential is a text. Otherwise it is a binary file that could\
-          \ be retrieved only as a base64 value."
+          \ file. If the file can be parsed as a valid utf-8 string, then it is assumed\
+          \ that the credential is a text. Otherwise, it is a binary file that can\
+          \ only be retrieved as a base64 value."
         enum:
         - "text"
         - "binary"
@@ -32134,7 +32134,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32211,7 +32211,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32378,7 +32378,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32486,7 +32486,7 @@ definitions:
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
     description: "Model that contains the basic information about a table comparison\
-      \ configuration that specifies how the current table could be compared to another\
+      \ configuration that specifies how the current table can be compared with another\
       \ table that is a source of truth for comparison."
   TableComparisonConfigurationSpec:
     type: "object"
@@ -32813,7 +32813,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33205,7 +33205,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33266,7 +33266,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33327,7 +33327,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33413,7 +33413,7 @@ definitions:
       priority:
         type: "integer"
         format: "int32"
-        description: "Table priority (1, 2, 3, 4, ...). The tables could be assigned\
+        description: "Table priority (1, 2, 3, 4, ...). The tables can be assigned\
           \ a priority level. The table priority is copied into each data quality\
           \ check result and a sensor result, enabling efficient grouping of more\
           \ and less important tables during a data quality improvement project, when\
@@ -33643,7 +33643,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33794,7 +33794,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33855,7 +33855,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33916,7 +33916,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33977,7 +33977,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34038,7 +34038,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34099,7 +34099,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34160,7 +34160,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34221,7 +34221,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34282,7 +34282,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34353,7 +34353,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34414,7 +34414,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34475,7 +34475,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34656,7 +34656,7 @@ definitions:
       priority:
         type: "integer"
         format: "int32"
-        description: "Table priority (1, 2, 3, 4, ...). The tables could be assigned\
+        description: "Table priority (1, 2, 3, 4, ...). The tables can be assigned\
           \ a priority level. The table priority is copied into each data quality\
           \ check result and a sensor result, enabling efficient grouping of more\
           \ and less important tables during a data quality improvement project, when\
@@ -34809,7 +34809,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34884,7 +34884,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34962,7 +34962,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -35040,7 +35040,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:

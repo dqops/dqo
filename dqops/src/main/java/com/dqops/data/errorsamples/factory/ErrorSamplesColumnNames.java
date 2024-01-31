@@ -77,7 +77,7 @@ public class ErrorSamplesColumnNames {
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
-     * The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: "landing", "staging", "cleansing", etc.
+     * The stage name of the table. This is a free-form text configured at the table level that can identify  the layers of the data warehouse or a data lake, for example: "landing", "staging", "cleansing", etc.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
 

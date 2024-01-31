@@ -258,7 +258,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*integer_in_range_percent*](./column/numeric-column-sensors.md#integer-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).|
+|[*integer_in_range_percent*](./column/numeric-column-sensors.md#integer-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).|
 |[*invalid_latitude_count*](./column/numeric-column-sensors.md#invalid-latitude-count)|Column level sensor that counts invalid latitude in a column.|
 |[*invalid_longitude_count*](./column/numeric-column-sensors.md#invalid-longitude-count)|Column level sensor that counts invalid longitude in a column.|
 |[*mean*](./column/numeric-column-sensors.md#mean)|Column level sensor that counts the average (mean) of values in a column.|
@@ -270,7 +270,7 @@
 |[*number_above_max_value_percent*](./column/numeric-column-sensors.md#number-above-max-value-percent)|Column level sensor that calculates the percentage of values that are above than a given value in a column.|
 |[*number_below_min_value_count*](./column/numeric-column-sensors.md#number-below-min-value-count)|Column level sensor that calculates the count of values that are below than a given value in a column.|
 |[*number_below_min_value_percent*](./column/numeric-column-sensors.md#number-below-min-value-percent)|Column level sensor that calculates the percentage of values that are below than a given value in a column.|
-|[*number_in_range_percent*](./column/numeric-column-sensors.md#number-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).|
+|[*number_in_range_percent*](./column/numeric-column-sensors.md#number-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).|
 |[*percentile*](./column/numeric-column-sensors.md#percentile)|Column level sensor that finds the median in a given column.|
 |[*population_stddev*](./column/numeric-column-sensors.md#population-stddev)|Column level sensor that calculates population standard deviation in a given column.|
 |[*population_variance*](./column/numeric-column-sensors.md#population-variance)|Column level sensor that calculates population variance in a given column.|

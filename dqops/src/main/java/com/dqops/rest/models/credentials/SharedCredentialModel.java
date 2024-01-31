@@ -42,7 +42,7 @@ public class SharedCredentialModel {
     /**
      * Credential type.
      */
-    @JsonPropertyDescription("Credential type that is based on the detected format of the file. If the file could be parsed as a valid utf-8 string then it is assumed that the credential is a text. Otherwise it is a binary file that could be retrieved only as a base64 value.")
+    @JsonPropertyDescription("Credential type that is based on the detected format of the file. If the file can be parsed as a valid utf-8 string, then it is assumed that the credential is a text. Otherwise, it is a binary file that can only be retrieved as a base64 value.")
     private CredentialType type;
 
     /**
