@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Copyright © 2021 DQOps (support@dqops.com)
+# Copyright © 2021-2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ if [ -f $(dirname $0)/set-dqo-envs.sh ]; then
 
     returnedValue=$?
     if [ $returnedValue -ne 0 ]; then
-        echo "DQO cannot be started"
+        echo "DQOps cannot be started"
         exit $returnedValue
     fi
 fi
@@ -32,7 +32,7 @@ fi
 . $(dirname $0)/find-dqo-home.sh
 returnedValue=$?
 if [ $returnedValue -ne 0 ]; then
-    echo "DQO cannot be started"
+    echo "DQOps cannot be started"
     exit $returnedValue
 fi
 
@@ -41,7 +41,7 @@ fi
 
 returnedValue=$?
 if [ $returnedValue -ne 0 ]; then
-    echo "DQO cannot be started"
+    echo "DQOps cannot be started"
     exit $returnedValue
 fi
 
