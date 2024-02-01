@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Copyright © 2021-2024 DQOps (support@dqops.com)
 #
