@@ -257,7 +257,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 ___
 ## test_connection
-Checks if the given remote connection could be opened and the credentials are valid
+Checks if the given remote connection can be opened and if the credentials are valid
 
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/data_sources/test_connection.py) to see the source code on GitHub.
 

@@ -76,7 +76,7 @@ public class ScheduledChecksSearchFilters {
 
     /**
      * Returns an optional schedule group (daily, monthly, profiling) to filter check root nodes.
-     * The schedule group could be null to return all checks or when the search root object is an abstract check that has an individual schedule.
+     * The schedule group can have a null value to return all checks or when the search root object is an abstract check that has an individual schedule.
      * @return Optional schedule group.
      */
     public CheckRunScheduleGroup getScheduleGroup() {

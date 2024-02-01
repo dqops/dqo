@@ -145,7 +145,7 @@ Rest API controller that operates on data sources that are not yet imported, tes
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`get_remote_data_source_schemas`</span>](./data_sources.md#get_remote_data_source_schemas)|GET|Introspects a list of schemas inside a remote data source, identified by an already imported connection.|
 |<span class="no-wrap-code">[`get_remote_data_source_tables`</span>](./data_sources.md#get_remote_data_source_tables)|GET|Introspects the list of columns inside a schema on a remote data source that is identified by a connection that was added to DQOps.|
-|<span class="no-wrap-code">[`test_connection`</span>](./data_sources.md#test_connection)|POST|Checks if the given remote connection could be opened and the credentials are valid|
+|<span class="no-wrap-code">[`test_connection`</span>](./data_sources.md#test_connection)|POST|Checks if the given remote connection can be opened and if the credentials are valid|
 
 
 ## defaults
@@ -191,7 +191,7 @@ DQOps environment and configuration controller, provides access to the DQOps con
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`get_dqo_settings`</span>](./environment.md#get_dqo_settings)|GET|Returns all effective DQOps configuration settings.|
 |<span class="no-wrap-code">[`get_user_profile`</span>](./environment.md#get_user_profile)|GET|Returns the profile of the current user.|
-|<span class="no-wrap-code">[`issue_api_key`</span>](./environment.md#issue_api_key)|GET|Issues a local API Key for the calling user. This API Key could be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.|
+|<span class="no-wrap-code">[`issue_api_key`</span>](./environment.md#issue_api_key)|GET|Issues a local API Key for the calling user. This API Key can be used to authenticate using the DQOps REST API client. This API Key should be passed in the &quot;Authorization&quot; HTTP header in the format &quot;Authorization: Bearer &lt;api_key&gt;&quot;.|
 
 
 ## errors
@@ -236,7 +236,7 @@ Jobs management controller that supports starting new jobs, such as running sele
 |----------------|------|---------------------------------|
 |<span class="no-wrap-code">[`cancel_job`</span>](./jobs.md#cancel_job)|DELETE|Cancels a running job|
 |<span class="no-wrap-code">[`collect_statistics_on_data_groups`</span>](./jobs.md#collect_statistics_on_data_groups)|POST|Starts a new background job that will run selected data statistics collectors on tables, calculating separate metric for each data grouping|
-|<span class="no-wrap-code">[`collect_statistics_on_table`</span>](./jobs.md#collect_statistics_on_table)|POST|Starts a new background job that will run selected data statistics collectors on a whole table|
+|<span class="no-wrap-code">[`collect_statistics_on_table`</span>](./jobs.md#collect_statistics_on_table)|POST|Starts a new background job that will run selected data statistics collectors for the entire table|
 |<span class="no-wrap-code">[`delete_stored_data`</span>](./jobs.md#delete_stored_data)|POST|Starts a new background job that will delete stored data about check results, sensor readouts etc.|
 |<span class="no-wrap-code">[`get_all_jobs`</span>](./jobs.md#get_all_jobs)|GET|Retrieves a list of all queued and recently finished jobs.|
 |<span class="no-wrap-code">[`get_job`</span>](./jobs.md#get_job)|GET|Retrieves the current status of a single job, identified by a job id.|

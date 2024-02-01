@@ -18,8 +18,8 @@ class RuleParametersModel:
     severity level (low, medium, high).
 
         Attributes:
-            rule_name (Union[Unset, str]): Full rule name. This field is for information purposes and could be used to
-                create additional custom checks that are reusing the same data quality rule.
+            rule_name (Union[Unset, str]): Full rule name. This field is for information purposes and can be used to create
+                additional custom checks that reuse the same data quality rule.
             rule_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the rule parameters like
                 thresholds.
             disabled (Union[Unset, bool]): Disable the rule. The rule will not be evaluated. The sensor will also not be

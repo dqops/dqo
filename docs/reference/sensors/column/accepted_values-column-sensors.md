@@ -944,7 +944,7 @@ Column level sensor that counts how many expected string values are among the TO
  The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This sensor will return the number of expected values that were found within the &#x27;top&#x27; most popular column values.
- This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ This sensor is useful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
  The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.
 
 **Sensor summary**
@@ -1920,7 +1920,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
         CASE
@@ -1956,7 +1956,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
         CASE
@@ -1992,7 +1992,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
         CASE
@@ -2028,7 +2028,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
         CASE
@@ -2105,7 +2105,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE
@@ -2217,7 +2217,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         0.0
         {%- else -%}
         CASE
@@ -2288,7 +2288,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro actual_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-        {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+        {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
         CAST(0.0 AS DOUBLE)
         {%- else -%}
         CASE

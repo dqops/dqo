@@ -19,14 +19,14 @@ class DqoUserProfileModel:
         license_type (Union[Unset, str]): DQOps Cloud license type.
         trial_period_expires_at (Union[Unset, str]): The date and time when the trial period of a PERSONAL DQOps license
             expires and the account is downgraded to a FREE license.
-        connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the
-            DQOps Cloud data quality warehouse.
-        users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQOps environment.
-        months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that could
-            be synchronized to the DQOps Cloud data quality warehouse.
-        connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that could be
+        connections_limit (Union[Unset, int]): Limit of the number of connections that can be synchronized to the DQOps
+            Cloud data quality warehouse.
+        users_limit (Union[Unset, int]): Limit of the number of users that can be added to a DQOps environment.
+        months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that can be
             synchronized to the DQOps Cloud data quality warehouse.
-        tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQOps
+        connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that can be
+            synchronized to the DQOps Cloud data quality warehouse.
+        tables_limit (Union[Unset, int]): Limit of the total number of tables that can be synchronized to the DQOps
             Cloud data quality warehouse.
         jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQOps can run in parallel
             on this instance.

@@ -35,7 +35,7 @@ import java.util.Objects;
  * The sensor will first count the number of occurrences of each column's value and will pick the TOP X most popular values (configurable by the 'top' parameter).
  * Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  * This sensor will return the number of expected values that were found within the 'top' most popular column values.
- * This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ * This sensor is useful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
  * The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)

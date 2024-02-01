@@ -6,7 +6,7 @@ This is a list of custom_sql column data quality checks supported by DQOps and a
 
 
 ## column-level custom_sql checks
-Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
 ### [sql condition failed on column](./sql-condition-failed-on-column.md)
 A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.

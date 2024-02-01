@@ -92,7 +92,7 @@ To start DQOps in a server mode follow the steps below.
    - The `-m` parameter configures the memory size for the container. We are advising to allocate at least 2 GB of memory for the DQOps
      container, which is configured by `-m=2g`. DQOps container runs one Java JVM process and several small Python processes (two per core)
      that are running the rules. DQOps runtime allocates 80% of the container memory for the JVM heap. The memory is used for caching
-     YAML and parquet files in memory. The memory size could be changed by passing the `DQO_JAVA_OPTS`
+     YAML and parquet files in memory. The memory size can be changed by passing the `DQO_JAVA_OPTS`
      environment variable to the container using the following docker run parameter: `-e DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0`
    - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud account](https://cloud.dqops.com/registration).
    - The `run` command at the end will run the [run CLI command](../command-line-interface/run.md) command and activate a server mode

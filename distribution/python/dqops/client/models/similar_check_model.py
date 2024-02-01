@@ -20,7 +20,7 @@ class SimilarCheckModel:
         check_type (Union[Unset, CheckType]):
         time_scale (Union[Unset, CheckTimeScale]):
         category (Union[Unset, str]): The check's category.
-        check_name (Union[Unset, str]): The similar check name in another category.
+        check_name (Union[Unset, str]): Similar check name in another category.
     """
 
     check_target: Union[Unset, CheckTarget] = UNSET

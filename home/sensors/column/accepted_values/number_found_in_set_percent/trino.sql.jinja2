@@ -6,7 +6,7 @@
 
 {%- macro actual_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+    {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
     CAST(0.0 AS DOUBLE)
     {%- else -%}
     CASE

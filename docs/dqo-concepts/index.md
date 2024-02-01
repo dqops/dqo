@@ -147,7 +147,7 @@ The most important data quality dimensions supported by DQOps are:
 
 
 ### **[Auditing time periods](auditing-data-quality-with-time-periods.md)**
-DQOps captures the time period for which the data quality result is valid. It could be an end-of-day data quality status
+DQOps captures the time period for which the data quality result is valid. This can be the data quality status at the end of the day
 in *[daily monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)*.
 Learn how DQOps captures the local timezone of monitored data sources, even if monitoring databases are located
 in different countries, regions and continents.

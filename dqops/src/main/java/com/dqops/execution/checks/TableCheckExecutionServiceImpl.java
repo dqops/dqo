@@ -737,7 +737,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
     /**
      * Executes prepared sensors.
-     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that can be merged together.
      * @param executionContext Execution context - to access sensor definitions.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.

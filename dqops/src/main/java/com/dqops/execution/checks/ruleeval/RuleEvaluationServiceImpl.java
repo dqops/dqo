@@ -116,7 +116,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
             HistoricDataPointsGrouping historicDataPointGrouping = ruleTimeWindowSettings != null ? ruleTimeWindowSettings.getHistoricDataPointGrouping() : null;
             TimePeriodGradient timeGradient = historicDataPointGrouping != null ? historicDataPointGrouping.toTimePeriodGradient() : TimePeriodGradient.day;
             if (timeGradient == null) {
-                timeGradient = TimePeriodGradient.day; // timeGradient could be null for rules that require a continuous array of any results, we will use days as a fallback to define the time window
+                timeGradient = TimePeriodGradient.day; // timeGradient can be null for rules that require a continuous array of any results, we will use days as a fallback to define the time window
             }
 
             ZoneId defaultTimeZoneId = this.defaultTimeZoneProvider.getDefaultTimeZoneId();

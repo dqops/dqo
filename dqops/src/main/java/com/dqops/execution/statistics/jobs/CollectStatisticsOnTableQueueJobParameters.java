@@ -42,10 +42,10 @@ public class CollectStatisticsOnTableQueueJobParameters implements Cloneable {
     private String connection;
 
     /**
-     * The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * Null value means that there are no limits applied.
      */
-    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.")
+    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.")
     private Integer maxJobsPerConnection;
 
     /**
@@ -61,9 +61,9 @@ public class CollectStatisticsOnTableQueueJobParameters implements Cloneable {
     private StatisticsCollectorSearchFilters statisticsCollectorSearchFilters;
 
     /**
-     * The target scope of collecting statistics. Statistics could be collected on a whole table or for each data stream separately.
+     * The target scope of collecting statistics. Statistics can be collected for the entire or for each data stream separately.
      */
-    @JsonPropertyDescription("The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.")
+    @JsonPropertyDescription("The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.")
     private StatisticsDataScope dataScope = StatisticsDataScope.table;
 
     /**
@@ -91,7 +91,7 @@ public class CollectStatisticsOnTableQueueJobParameters implements Cloneable {
     /**
      * Creates statistics collection run parameters.
      * @param connection The name of the target connection.
-     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * @param table The full physical name (schema.table) of the target table.
      * @param statisticsCollectorSearchFilters Statistics collector search filters.
      * @param progressListener Progress listener to receive events during the statistics collector execution.
@@ -131,7 +131,7 @@ public class CollectStatisticsOnTableQueueJobParameters implements Cloneable {
     }
 
     /**
-     * Returns the limit of concurrent jobs (collect statistics on table) that could be executed in parallel on this connection.
+     * Returns the limit of concurrent jobs (collect statistics on table) that can be executed in parallel on this connection.
      * @return Maximum number of concurrent statistics collection executions on this connection.
      */
     public Integer getMaxJobsPerConnection() {
@@ -139,7 +139,7 @@ public class CollectStatisticsOnTableQueueJobParameters implements Cloneable {
     }
 
     /**
-     * Sets the limit of concurrent jobs (collect statistics on table) that could be executed in parallel on this connection.
+     * Sets the limit of concurrent jobs (collect statistics on table) that can be executed in parallel on this connection.
      * @param maxJobsPerConnection Maximum number of concurrent statistics collection executions on this connection.
      */
     public void setMaxJobsPerConnection(Integer maxJobsPerConnection) {

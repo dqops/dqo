@@ -26,9 +26,9 @@ class ProviderSensorDefinitionSpec:
             that support a GROUP BY condition can capture separate data quality scores for each data group. The default
             value is true, because most of the data quality sensor support grouping.
         supports_partitioned_checks (Union[Unset, bool]): The sensor supports grouping by a partition date, using the
-            GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition
-            checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true,
-            because most of the data quality sensor support partitioned checks.
+            GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column can be used for partition checks,
+            calculating separate data quality metrics for each daily/monthly partition. The default value is true, because
+            most of the data quality sensor support partitioned checks.
         parameters (Union[Unset, ProviderSensorDefinitionSpecParameters]): Additional provider specific sensor
             parameters
         disable_merging_queries (Union[Unset, bool]): Disables merging this sensor's SQL with other sensors. When this

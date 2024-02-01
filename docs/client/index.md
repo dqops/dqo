@@ -247,7 +247,7 @@ RunChecksQueueJobResult(
 
 ### **Collect statistics on tables**
 
-Starts a new background job that will run selected data statistics collectors on a whole table
+Starts a new background job that will run selected data statistics collectors for the entire table
 
 ```python
 from dqops import client

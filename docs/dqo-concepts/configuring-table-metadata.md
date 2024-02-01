@@ -146,7 +146,7 @@ spec:
 1.  The column dictionary node. The nodes below it are the column names.
 2.  The configuration and captured metadata of the first column *cumulative_confirmed*.
 3.  Data type snapshot contains the last imported physical data type of the column. DQOps uses these data types
-    to decide if some data type specific data quality checks could be activated on the column.
+    to decide if certain data type specific data quality checks can be activated on a column.
 4.  The data type of the column, it is a physical data type introspected from the monitored table.
 
 The node for each column contains a [type snapshot](../reference/yaml/TableYaml.md#columntypesnapshotspec) object

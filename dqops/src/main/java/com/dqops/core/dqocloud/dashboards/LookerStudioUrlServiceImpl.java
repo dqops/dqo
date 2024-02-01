@@ -107,7 +107,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     }
 
     /**
-     * Returns a looker studio access token that could be sent to the connector to speed up setting up a connection to the quality data warehouse.
+     * Returns a looker studio access token that can be sent to the connector to speed up configuration of the connection to the quality data warehouse.
      * @param userPrincipal Calling user principal, identifies the data domain.
      * @return Looker studio access token model.
      */
