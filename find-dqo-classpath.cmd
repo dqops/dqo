@@ -18,7 +18,7 @@
 if exist "%~dp0dqops\pom.xml" (
     "%JAVA_HOME%\bin\javac" --version > nul  2> nul
     if ERRORLEVEL 1 (
-        echo Java JDK is not installed. Make sure that your JAVA_HOME points to a JDK 11 or never installation. Java JRE is not enough to compile DQO
+        echo Java JDK is not installed. Make sure that your JAVA_HOME points to a JDK 11 or never installation. Java JRE is not enough to compile DQOps
         exit /b 1
     )
 
