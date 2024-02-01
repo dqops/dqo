@@ -132,7 +132,7 @@ public class TableDataSnapshot {
     }
 
     /**
-     * Returns an optional list of column names that should be loaded. Only read-only snapshot could use a subset of named columns.
+     * Returns an optional list of column names that should be loaded. Only read-only snapshot can use a subset of named columns.
      * When the array of column names is null then all columns are loaded.
      * @return Array of column names to load in read-only snapshots.
      */
@@ -309,9 +309,9 @@ public class TableDataSnapshot {
     /**
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
-     * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
-     * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
-     * @return true when additional months were loaded, false when all months in the requested range were already loaded
+     * @param start Start date of the month. This can be any date in the month, as the entire month is always loaded.
+     * @param end End date of the month. This can be any date in the month, as the entire month is always loaded.
+     * @return true when additional months have been loaded, false when all months in the requested range have already been loaded
      */
     public boolean ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);

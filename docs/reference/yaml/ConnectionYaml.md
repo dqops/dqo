@@ -548,8 +548,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*enum*|*tag*<br/>*column_value*<br/>| | |
-|<span class="no-wrap-code ">`tag`</span>|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*string*| | | |
+|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default source of the grouping dimension is a tag. The tag should be assigned when there are many similar tables that store the same data for different areas (countries, etc.). It can be the name of the country if the table or partition stores information for that country.|*enum*|*tag*<br/>*column_value*<br/>| | |
+|<span class="no-wrap-code ">`tag`</span>|The value assigned to the data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hard-coded (static) value to the data grouping dimension (tag) when there are multiple similar tables storing the same data for different areas (countries, etc.). This can be the name of the country if the table or partition stores information for that country.|*string*| | | |
 |<span class="no-wrap-code ">`column`</span>|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|*string*| | | |
 |<span class="no-wrap-code ">`name`</span>|Data grouping dimension name.|*string*| | | |
 
@@ -567,7 +567,7 @@ ___
 ## DefaultSchedulesSpec
 Container of all monitoring schedules (cron expressions) for each type of checks.
  Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
- Each group of checks could be divided additionally by time scale (daily, monthly, etc).
+ Each group of checks can be further divided by time scale (daily, monthly, etc).
  Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
  These schedules are defined in this object.
 
@@ -667,7 +667,7 @@ ___
 
 
 ## LabelSetSpec
-Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
+A collection of unique labels assigned to items (tables, columns, checks) that can be targeted for a data quality check execution.
 
 
 

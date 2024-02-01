@@ -48,9 +48,9 @@ public class SimilarCheckModel {
     private CheckType checkType;
 
     /**
-     * The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).
+     * The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).
      */
-    @JsonPropertyDescription("The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).")
+    @JsonPropertyDescription("The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).")
     private CheckTimeScale timeScale;
 
     /**
@@ -62,7 +62,7 @@ public class SimilarCheckModel {
     /**
      * The similar check name in another category.
      */
-    @JsonPropertyDescription("The similar check name in another category.")
+    @JsonPropertyDescription("Similar check name in another category.")
     private String checkName;
 
     /**

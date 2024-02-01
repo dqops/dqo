@@ -69,7 +69,7 @@ public class ColumnSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
-    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
+    @JsonPropertyDescription("SQL expression used for calculated fields or when additional column value transformation is required before the column can be used for analysis with data quality checks (data type conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of the table under analysis, or {column} to replace the content with the analyzed column name. An example of extracting a value from a string column storing JSON in PostgreSQL: \"{column}::json->'address'->'zip'\".")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private String sqlExpression;
 

@@ -44,7 +44,7 @@ public class DqoCacheConfigurationProperties implements Cloneable {
     private long fileListsLimit = 1000000;
 
     /**
-     * The maximum fraction of the JVM heap memory (configured using the -Xmx java parameter) that is used to cache parquet files in memory. The default value 0.6 means that up to 50% of the JVM heap memory could be used for caching files.
+     * The maximum fraction of the JVM heap memory (configured using the -Xmx java parameter) that is used to cache parquet files in memory. The default value of 0.6 means that up to 50% of the JVM heap memory can be used for caching files.
      * The value of the reserved-heap-memory-bytes is subtracted from the total memory size (-Xmx parameter value) before the memory fraction is calculated.
      */
     private double parquetCacheMemoryFraction = 0.6;

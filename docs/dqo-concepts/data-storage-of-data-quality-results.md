@@ -339,7 +339,7 @@ to a different location, using the user's owned S3 buckets, Storage Accounts, or
 Because the files are organized as a Hive-compatible data lake, it is possible to synchronize the data files
 to any on-premise or cloud hosted data lake. The data files for each table should be registered as external tables.
 This architecture will allow you to build a private Data Quality Data Warehouse with custom data quality dashboards
-using any SQL engine that can query Hive-compatible external tables. To be precise, the files could be queried
+using any SQL engine that can query Hive-compatible external tables. To be precise, the files can be queried
 using Apache Hive, Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server, Azure Synapse, Snowflake,
 AWS Athena, and AWS Redshift Spectrum.
 

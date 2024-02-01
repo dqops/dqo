@@ -42,11 +42,11 @@ The model that describes the current user and his access rights.
 |<span class="no-wrap-code">`tenant`</span>|DQOps Cloud tenant.|*string*|
 |<span class="no-wrap-code">`license_type`</span>|DQOps Cloud license type.|*string*|
 |<span class="no-wrap-code">`trial_period_expires_at`</span>|The date and time when the trial period of a PERSONAL DQOps license expires and the account is downgraded to a FREE license.|*string*|
-|<span class="no-wrap-code">`connections_limit`</span>|Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
-|<span class="no-wrap-code">`users_limit`</span>|Limit of the number of users that could be added to a DQOps environment.|*integer*|
-|<span class="no-wrap-code">`months_limit`</span>|Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
-|<span class="no-wrap-code">`connection_tables_limit`</span>|Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
-|<span class="no-wrap-code">`tables_limit`</span>|Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
+|<span class="no-wrap-code">`connections_limit`</span>|Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
+|<span class="no-wrap-code">`users_limit`</span>|Limit of the number of users that can be added to a DQOps environment.|*integer*|
+|<span class="no-wrap-code">`months_limit`</span>|Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
+|<span class="no-wrap-code">`connection_tables_limit`</span>|Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
+|<span class="no-wrap-code">`tables_limit`</span>|Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.|*integer*|
 |<span class="no-wrap-code">`jobs_limit`</span>|Limit of the number of supported concurrent jobs that DQOps can run in parallel on this instance.|*integer*|
 |<span class="no-wrap-code">[`account_role`](#dqouserrole)</span>|User role that limits possible operations that the current user can perform.|*[DqoUserRole](#dqouserrole)*|
 |<span class="no-wrap-code">`data_quality_data_warehouse_enabled`</span>|True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.|*boolean*|

@@ -134,19 +134,19 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataGroupingConfigurationSpecMap groupings = new DataGroupingConfigurationSpecMap();
 
-    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to " +
+    @JsonPropertyDescription("Dictionary of data comparison configurations. Data comparison configurations are used for comparisons between data sources to " +
                              "compare this table (called the compared table) with other reference tables (the source of truth). " +
-                             "The reference table's metadata must be imported into DQOps, but the reference table could be located on a different data source. " +
-                             "DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
-                             "The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. " +
-                             "DQOps will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), " +
-                             "comparing the measures (sensor readouts) captured from both the tables.")
+                             "The reference table's metadata must be imported into DQOps, but the reference table may be located in another data source. " +
+                             "DQOps will compare metrics calculated for groups of rows (using the GROUP BY clause). For each comparison, the user must specify a name of a data grouping. " +
+                             "The number of data grouping dimensions in the parent table and the reference table defined in the selected data grouping configurations must match. " +
+                             "DQOps will run the same data quality sensors on both the parent table (table under test) and the reference table (the source of truth), " +
+                             "comparing the measures (sensor readouts) captured from both tables.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableComparisonConfigurationSpecMap tableComparisons = new TableComparisonConfigurationSpecMap();
 
-    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will " +
-            "override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.")
+    @JsonPropertyDescription("Incident grouping configuration with the overridden configuration at a table level. The configured field value in this object will " +
+            "override the default configuration from the connection level. Incident grouping level can be changed or incident creation can be disabled.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableIncidentGroupingSpec incidentGrouping;
@@ -764,7 +764,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be a profiling check container, one of monitoring check containers or one of partitioned check containers.
+     * The object can be a profiling check container, one of monitoring check containers or one of partitioned check containers.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -983,7 +983,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
 
     /**
      * Stores a physical table name in a temporary hierarchy id, using a fake connection name.
-     * This method could be called only for a new table specification that is not yet attached to a parent node.
+     * This method can be called only for a new table specification that is not yet attached to a parent node.
      * @param physicalTableName Physical table name to store.
      */
     @JsonIgnore

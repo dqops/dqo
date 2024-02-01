@@ -42,7 +42,7 @@ Detailed results for a single check. Represent one row in the check results tabl
 ___
 
 ## CheckResultSortOrder
-Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.
+Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that can be sorted.
 
 
 **The structure of this object is described below**

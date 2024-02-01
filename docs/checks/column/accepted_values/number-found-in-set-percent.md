@@ -147,7 +147,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -205,7 +205,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -263,7 +263,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -321,7 +321,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -449,7 +449,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -635,7 +635,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -749,7 +749,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -871,7 +871,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -929,7 +929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -987,7 +987,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1045,7 +1045,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1178,7 +1178,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -1369,7 +1369,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1489,7 +1489,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -1693,7 +1693,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1751,7 +1751,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1809,7 +1809,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1867,7 +1867,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -1995,7 +1995,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -2181,7 +2181,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -2295,7 +2295,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -2418,7 +2418,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -2476,7 +2476,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -2534,7 +2534,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -2592,7 +2592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -2725,7 +2725,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -2916,7 +2916,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3036,7 +3036,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -3240,7 +3240,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3298,7 +3298,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3356,7 +3356,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3414,7 +3414,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3542,7 +3542,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -3728,7 +3728,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -3842,7 +3842,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -3965,7 +3965,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4023,7 +4023,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4081,7 +4081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4139,7 +4139,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4272,7 +4272,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -4463,7 +4463,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4583,7 +4583,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -4797,7 +4797,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4855,7 +4855,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4913,7 +4913,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -4971,7 +4971,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5099,7 +5099,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -5285,7 +5285,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5403,7 +5403,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -5536,7 +5536,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5594,7 +5594,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5652,7 +5652,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5710,7 +5710,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -5843,7 +5843,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -6034,7 +6034,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6152,7 +6152,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -6366,7 +6366,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6424,7 +6424,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6482,7 +6482,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6540,7 +6540,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6668,7 +6668,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -6854,7 +6854,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -6972,7 +6972,7 @@ spec:
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -7105,7 +7105,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -7163,7 +7163,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -7221,7 +7221,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -7279,7 +7279,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -7412,7 +7412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE
@@ -7603,7 +7603,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 0.0
                 {%- else -%}
                 CASE
@@ -7721,7 +7721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {%- macro actual_value() -%}
                 {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-                {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+                {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
                 CAST(0.0 AS DOUBLE)
                 {%- else -%}
                 CASE

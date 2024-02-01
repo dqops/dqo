@@ -434,7 +434,7 @@ public class StatisticsResultsNormalizedResult {
     }
 
     /**
-     * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined on a whole table level.
+     * Returns a tablesaw column that stores the column name. The column with "column names" may contain nulls when checks are defined for the entire table level.
      * @return Column name tablesaw column.
      */
     public TextColumn getColumnNameColumn() {

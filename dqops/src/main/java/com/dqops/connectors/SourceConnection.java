@@ -36,7 +36,7 @@ public interface SourceConnection extends Closeable {
 
     /**
      * Opens a connection before it can be used for executing any statements.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     void open(SecretValueLookupContext secretValueLookupContext);
 

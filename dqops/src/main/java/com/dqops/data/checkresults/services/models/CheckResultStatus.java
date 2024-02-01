@@ -16,7 +16,7 @@
 package com.dqops.data.checkresults.services.models;
 
 /**
- * Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.
+ * Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.
  */
 public enum CheckResultStatus {
     valid(0),

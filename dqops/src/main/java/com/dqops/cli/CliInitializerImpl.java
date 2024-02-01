@@ -80,7 +80,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param jobQueueMonitoringService DQOps job queue monitoring service that tracks the statuses of jobs.
      * @param dqoJobQueue Job queue service, used to start the job queue when the application starts.
      * @param parentDqoJobQueue Job queue service that queues and executes only parent jobs, must be started when the application starts.
-     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service, compares the dates, sizes and existence of all files that could be synchronized to DQOps Cloud with the index of previously synchronized files.
+     * @param fileSynchronizationChangeDetectionService File synchronization changes detection service compares the dates, sizes and existence of all files that can be synchronized to the DQOps Cloud with an index of previously synchronized files.
      * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
      * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
      * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.

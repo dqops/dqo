@@ -93,12 +93,12 @@ public class CheckCategoryDocumentationIndex {
         put("text", "Validates that the data in a text column has a valid range, or can be parsed to other data types.");
         put("patterns", "Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.");
         put("blanks", "Detects text columns that contain blank values, or values that are used as placeholders for missing values: 'n/a', 'None', etc.");
-        put("datatype", "Analyzes all values in a text column to detect if all values could be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.");
+        put("datatype", "Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.");
         put("accepted_values", "Verifies if all values in the column are from a set of known values, such as country codes.");
         put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
         put("datetime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
-        put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
-        put("custom_sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.");
+        put("custom_sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.");
         put("bool", "Calculates the percentage of data in boolean columns.");
         put("integrity", "Checks the referential integrity of a column against a column in another table.");
         put("anomaly", "Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.");

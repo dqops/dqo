@@ -4,7 +4,7 @@ A column-level check that counts how many expected text values are among the TOP
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
- This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
 
 
 ___

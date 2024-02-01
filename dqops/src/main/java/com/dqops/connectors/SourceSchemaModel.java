@@ -44,7 +44,7 @@ public class SourceSchemaModel {
     }
 
     /**
-     * Returns a schema name in the source database. It could be also a dataset in BigQuery or a database in oracle/mysql/...
+     * Returns a schema name in the source database. It can also be a dataset in BigQuery or a database in oracle/mysql/...
      * @return Physical schema name.
      */
     public String getSchemaName() {

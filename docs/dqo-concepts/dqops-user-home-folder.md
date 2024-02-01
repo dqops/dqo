@@ -172,7 +172,7 @@ The [.dqotable.yaml](../reference/yaml/TableYaml.md) files are named as the *&lt
 
 Storing the configuration of the data quality checks in a file named after the table name simplifies migration
 of the table versions or between environments. When a similar table is present in another data source
-or within the current data source, the whole *.dqotable.yaml* file could be easily copied and renamed.
+or within the current data source, the whole *.dqotable.yaml* file can be easily copied and renamed.
 
 The following scenarios are supported by copying the *.dqotable.yaml* file manually:
 
@@ -407,7 +407,7 @@ The folder names on the folder tree are:
 
 - The name of an existing check category within the built-in check structure. The folder structure is shown within
   the reference of the data quality [checks](../checks/index.md) in this documentation.
-  A custom check could be appended to an existing category of checks or added to the category named *custom*.
+  A custom check can be appended to an existing category of checks or added to the category named *custom*.
 
 The following example shows two custom data quality checks. One in the *custom* category and another appended
 to an existing *volume* category.

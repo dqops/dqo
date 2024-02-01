@@ -5,9 +5,9 @@ class DqoJobStatus(str, Enum):
     CANCELLED = "cancelled"
     CANCEL_REQUESTED = "cancel_requested"
     FAILED = "failed"
+    FINISHED = "finished"
     QUEUED = "queued"
     RUNNING = "running"
-    FINISHED = "finished"
     WAITING = "waiting"
 
     def __str__(self) -> str:

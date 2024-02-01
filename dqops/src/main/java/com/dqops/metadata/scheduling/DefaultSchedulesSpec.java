@@ -37,7 +37,7 @@ import java.util.Objects;
 /**
  * Container of all monitoring schedules (cron expressions) for each type of checks.
  * Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
- * Each group of checks could be divided additionally by time scale (daily, monthly, etc).
+ * Each group of checks can be further divided by time scale (daily, monthly, etc).
  * Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
  * These schedules are defined in this object.
  */

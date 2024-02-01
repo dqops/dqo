@@ -43,10 +43,10 @@ public class MultiplyMovingStdevWithin30DaysRuleParametersSpec extends AbstractR
 
 
     @JsonPropertyDescription("How many multiples of the estimated standard deviation within the moving average" +
-            " the current sensor readout could be, with regards to the time window. Set" +
+            " can the current sensor readout be with regard to the time window. Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 30 time periods (days, etc.) time window," +
-            " but at least 10 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a time window of 30 periods (days, etc.)," +
+            " but there must be at least 10 readouts to run the calculation.")
     @SampleValues(values = "1.5")
     @RequiredField
     private Double multiplyStdev;

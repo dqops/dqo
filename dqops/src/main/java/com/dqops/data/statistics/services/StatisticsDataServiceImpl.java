@@ -61,7 +61,7 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
      * @param connectionName Connection name.
      * @param physicalTableName Full table name (schema and table).
      * @param dataGroup Data group name.
-     * @param includeColumnLevelStatistics True when column level statistics should be also included.
+     * @param includeColumnLevelStatistics True when column level statistics should also be included.
      * @param userDomainIdentity User identity, with the data domain.
      * @return Statistics results for the given table.
      */

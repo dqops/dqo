@@ -82,7 +82,7 @@ public class ErrorSamplesColumnNames {
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
 
     /**
-     * The table priority value copied from the table's definition. The table priority could be used for sorting tables by their importance.
+     * The table priority value copied from the table's definition. The table priority can be used to sort tables according to their importance.
      */
     public static final String TABLE_PRIORITY_COLUMN_NAME = CommonColumnNames.TABLE_PRIORITY_COLUMN_NAME;
 

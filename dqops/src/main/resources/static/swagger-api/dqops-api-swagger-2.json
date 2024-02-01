@@ -13305,7 +13305,7 @@
       "post" : {
         "tags" : [ "Jobs" ],
         "summary" : "collectStatisticsOnTable",
-        "description" : "Starts a new background job that will run selected data statistics collectors on a whole table",
+        "description" : "Starts a new background job that will run selected data statistics collectors for the entire table",
         "operationId" : "collectStatisticsOnTable",
         "consumes" : [ "application/json" ],
         "produces" : [ "application/json" ],
@@ -15545,7 +15545,7 @@
         },
         "sensor_name" : {
           "type" : "string",
-          "description" : "Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor."
+          "description" : "Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor."
         },
         "quality_dimension" : {
           "type" : "string",
@@ -15626,7 +15626,7 @@
         },
         "configuration_requirements_errors" : {
           "type" : "array",
-          "description" : "List of configuration errors that must be fixed before the data quality check could be executed.",
+          "description" : "List of configuration errors that must be fixed before the data quality check can be executed.",
           "items" : {
             "type" : "string"
           }
@@ -16112,7 +16112,7 @@
         "max_jobs_per_connection" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs."
+          "description" : "The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs."
         },
         "table" : {
           "description" : "The full physical name (schema.table) of the target table.",
@@ -16124,7 +16124,7 @@
         },
         "data_scope" : {
           "type" : "string",
-          "description" : "The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.",
+          "description" : "The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.",
           "enum" : [ "table", "data_group" ]
         },
         "dummy_sensor_execution" : {
@@ -16146,7 +16146,7 @@
         },
         "data_scope" : {
           "type" : "string",
-          "description" : "The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.",
+          "description" : "The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.",
           "enum" : [ "table", "data_group" ]
         },
         "dummy_sensor_execution" : {
@@ -26443,7 +26443,7 @@
         },
         "sql_expression" : {
           "type" : "string",
-          "description" : "SQL expression used for calculated fields or when additional column value transformation is required before the column could be used analyzed in data quality checks (data type conversion, transformation). It should be an SQL expression using the SQL language of the analyzed database type. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name. An example to extract a value from a string column that stores a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\"."
+          "description" : "SQL expression used for calculated fields or when additional column value transformation is required before the column can be used for analysis with data quality checks (data type conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of the table under analysis, or {column} to replace the content with the analyzed column name. An example of extracting a value from a string column storing JSON in PostgreSQL: \"{column}::json->'address'->'zip'\"."
         },
         "type_snapshot" : {
           "description" : "Column data type that was retrieved when the table metadata was imported.",
@@ -26546,7 +26546,7 @@
         },
         "sql_expression" : {
           "type" : "string",
-          "description" : "SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name."
+          "description" : "SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or within a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name."
         }
       }
     },
@@ -30472,12 +30472,12 @@
       "properties" : {
         "source" : {
           "type" : "string",
-          "description" : "The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.",
+          "description" : "The source of the data grouping dimension value. The default source of the grouping dimension is a tag. The tag should be assigned when there are many similar tables that store the same data for different areas (countries, etc.). It can be the name of the country if the table or partition stores information for that country.",
           "enum" : [ "tag", "column_value" ]
         },
         "tag" : {
           "type" : "string",
-          "description" : "The value assigned to a data quality grouping dimension when the source is 'tag'. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country."
+          "description" : "The value assigned to the data quality grouping dimension when the source is 'tag'. Assign a hard-coded (static) value to the data grouping dimension (tag) when there are multiple similar tables storing the same data for different areas (countries, etc.). This can be the name of the country if the table or partition stores information for that country."
         },
         "column" : {
           "type" : "string",
@@ -30889,27 +30889,27 @@
         "connections_limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse."
+          "description" : "Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse."
         },
         "users_limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Limit of the number of users that could be added to a DQOps environment."
+          "description" : "Limit of the number of users that can be added to a DQOps environment."
         },
         "months_limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse."
+          "description" : "Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse."
         },
         "connection_tables_limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse."
+          "description" : "Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse."
         },
         "tables_limit" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse."
+          "description" : "Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse."
         },
         "jobs_limit" : {
           "type" : "integer",
@@ -31990,20 +31990,20 @@
         "daily_partitioning_recent_days" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Number of recent days that are analyzed by daily partitioned checks in incremental mode. The default value is 7 days back."
+          "description" : "The number of recent days analyzed by daily partition checks in incremental mode. The default value is 7 last days."
         },
         "daily_partitioning_include_today" : {
           "type" : "boolean",
-          "description" : "Analyze also today's data by daily partitioned checks in incremental mode. The default value is false, which means that the today's and the future partitions are not analyzed, only yesterday's partition and earlier daily partitions are analyzed because today's data could be still incomplete. Change the value to 'true' if the current day should be also analyzed. The change may require configuring the schedule for daily checks correctly, to run after the data load."
+          "description" : "Analyze also today's data by daily partition checks in incremental mode. The default value is false, which means that the today's and the future partitions are not analyzed. Only yesterday's partition and previous daily partitions are analyzed because today's data may still be incomplete. Change the value to 'true' if the current day should also be analyzed. This change may require you to configure the schedule for daily checks correctly. The checks must run after the data load."
         },
         "monthly_partitioning_recent_months" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "Number of recent months that are analyzed by monthly partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar month."
+          "description" : "The number of recent days analyzed by monthly partition checks in incremental mode. The default value is the previous calendar month."
         },
         "monthly_partitioning_include_current_month" : {
           "type" : "boolean",
-          "description" : "Analyze also this month's data by monthly partitioned checks in incremental mode. The default value is false, which means that the current month is not analyzed and future data is also filtered out because the current month could be incomplete. Set the value to 'true' if the current month should be analyzed before the end of the month. The schedule for running monthly checks should be also configured to run more frequently (daily, hourly, etc.)."
+          "description" : "Analyze also this month's data by monthly partition checks in incremental mode. The default value is false, which means that the current month is not analyzed. Future data is also filtered out because the current month may be incomplete. Change the value to 'true' if the current month should also be analyzed before the end of the month. This change may require you to configure the schedule to run monthly checks more frequently (daily, hourly, etc.)."
         }
       }
     },
@@ -32111,7 +32111,7 @@
         },
         "supports_partitioned_checks" : {
           "type" : "boolean",
-          "description" : "The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks."
+          "description" : "The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column can be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks."
         },
         "parameters" : {
           "type" : "object",
@@ -32425,7 +32425,7 @@
       "properties" : {
         "rule_name" : {
           "type" : "string",
-          "description" : "Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule."
+          "description" : "Full rule name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality rule."
         },
         "rule_parameters" : {
           "type" : "array",
@@ -32493,7 +32493,7 @@
         "max_jobs_per_connection" : {
           "type" : "integer",
           "format" : "int32",
-          "description" : "The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs."
+          "description" : "The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs."
         },
         "table" : {
           "description" : "The full physical name (schema.table) of the target table.",
@@ -32942,7 +32942,7 @@
         },
         "type" : {
           "type" : "string",
-          "description" : "Credential type that is based on the detected format of the file. If the file could be parsed as a valid utf-8 string then it is assumed that the credential is a text. Otherwise it is a binary file that could be retrieved only as a base64 value.",
+          "description" : "Credential type that is based on the detected format of the file. If the file can be parsed as a valid utf-8 string, it is assumed that the credential is a text. Otherwise, it is a binary file that can only be retrieved as a base64 value.",
           "enum" : [ "text", "binary" ]
         },
         "can_edit" : {
@@ -32994,7 +32994,7 @@
         },
         "time_scale" : {
           "type" : "string",
-          "description" : "The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).",
+          "description" : "The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).",
           "enum" : [ "daily", "monthly" ]
         },
         "category" : {
@@ -33003,7 +33003,7 @@
         },
         "check_name" : {
           "type" : "string",
-          "description" : "The similar check name in another category."
+          "description" : "Similar check name in another category."
         }
       },
       "description" : "Model that identifies a similar check in another category or another type of check (monitoring, partition)."
@@ -35816,13 +35816,13 @@
         },
         "table_comparisons" : {
           "type" : "object",
-          "description" : "Dictionary of data comparison configurations. Data comparison configurations are used for cross data-source comparisons to compare this table (called the compared table) with other reference tables (the source of truth). The reference table's metadata must be imported into DQOps, but the reference table could be located on a different data source. DQOps will compare metrics calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions on the parent table and the reference table defined in selected data grouping configurations must match. DQOps will run the same data quality sensors on both the parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both the tables.",
+          "description" : "Dictionary of data comparison configurations. Data comparison configurations are used for comparisons between data sources to compare this table (called the compared table) with other reference tables (the source of truth). The reference table's metadata must be imported into DQOps, but the reference table may be located in another data source. DQOps will compare metrics calculated for groups of rows (using the GROUP BY clause). For each comparison, the user must specify a name of a data grouping. The number of data grouping dimensions in the parent table and the reference table defined in the selected data grouping configurations must match. DQOps will run the same data quality sensors on both the parent table (table under test) and the reference table (the source of truth), comparing the measures (sensor readouts) captured from both tables.",
           "additionalProperties" : {
             "$ref" : "#/definitions/TableComparisonConfigurationSpec"
           }
         },
         "incident_grouping" : {
-          "description" : "Incident grouping configuration with the overridden configuration at a table level. The field value in this object that are configured will override the default configuration from the connection level. The incident grouping level could be changed or incident creation could be disabled.",
+          "description" : "Incident grouping configuration with the overridden configuration at a table level. The configured field value in this object will override the default configuration from the connection level. Incident grouping level can be changed or incident creation can be disabled.",
           "$ref" : "#/definitions/TableIncidentGroupingSpec"
         },
         "owner" : {
@@ -35937,7 +35937,7 @@
         },
         "sql_expression" : {
           "type" : "string",
-          "description" : "SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use a {table} placeholder that is replaced with a full table name."
+          "description" : "SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated for the entire table or within a GROUP BY clause for daily partitions and/or data groups. The expression can use a {table} placeholder that is replaced with a full table name."
         }
       }
     },

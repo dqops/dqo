@@ -44,16 +44,16 @@ public class MultiplyMovingStdev60DaysRuleParametersSpec extends AbstractRulePar
     @JsonPropertyDescription("How many multiples of the estimated standard deviation can the current" +
             " sensor readout be above the moving average within the time window? Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 60 time periods (days, etc.) time window," +
-            " but at least 20 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a time window of 60 periods (days, etc.)," +
+            " but there must be at least 20 readouts to run the calculation.")
     @SampleValues(values = "1.5")
     private Double multiplyStdevAbove;
 
     @JsonPropertyDescription("How many multiples of the estimated standard deviation can the current" +
             " sensor readout be below the moving average within the time window? Set" +
             " the time window at the threshold level for all severity levels (warning, error," +
-            " fatal) at once. The default is a 60 time periods (days, etc.) time window," +
-            " but at least 20 readouts must exist to run the calculation.")
+            " fatal) at once. The default is a time window of 60 periods (days, etc.)," +
+            " but there must be at least 20 readouts to run the calculation.")
     @SampleValues(values = "2.5")
     private Double multiplyStdevBelow;
 

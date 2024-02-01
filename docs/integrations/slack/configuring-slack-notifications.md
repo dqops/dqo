@@ -106,9 +106,9 @@ To configure webhooks on a connection level in DQOps, follow the steps below.
 Each notification type has a slightly different message.
 
 ### **New incident message example**
-The notifications about a new data quality incident should be published to a dedicated Slack channel visible 
-to the support team that is monitoring and assessing new data quality incidents. It could be the data quality team
-or a 2nd level support team.
+Notifications of new data quality incident should be published to a dedicated Slack channel visible 
+to the support team that monitors and assessing new data quality incidents. This may be a data quality team
+or a second level support team.
 
 This type of notification should be configured in the **A new incident was opened (detected)** field on
 the [webhook configuration](../webhooks/index.md) page. The Slack webhook URL for this parameter should

@@ -280,7 +280,7 @@ public class JobsController {
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping(value = "/collectstatistics/table", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors on a whole table",
+    @ApiOperation(value = "collectStatisticsOnTable", notes = "Starts a new background job that will run selected data statistics collectors for the entire table",
             response = CollectStatisticsQueueJobResult.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
