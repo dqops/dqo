@@ -51,10 +51,8 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FilePathListSpec filePathList;
 
-    public FileFormatSpec(String filePaths) {
-        this.filePathList = new FilePathListSpec(){{
-            add(filePaths);
-        }};
+    public FileFormatSpec() {
+        this.filePathList = new FilePathListSpec();
     }
 
     /**

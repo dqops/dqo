@@ -37,6 +37,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -240,8 +241,7 @@ public class SampleTableMetadataObjectMother {
      * @return Sample table metadata.
      */
     public static SampleTableMetadata createSampleTableMetadataForLocalCsvFile(String csvFileName,
-                                                                               ConnectionSpec connectionSpecRaw,
-                                                                               FileFormatSpec fileFormatSpec) {
+                                                                               ConnectionSpec connectionSpecRaw) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
@@ -249,6 +249,7 @@ public class SampleTableMetadataObjectMother {
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
 
         TableSpec tableSpec = new TableSpec();
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(csvFileName);
         tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
 
