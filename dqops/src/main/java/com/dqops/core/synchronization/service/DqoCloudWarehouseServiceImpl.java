@@ -88,6 +88,7 @@ public class DqoCloudWarehouseServiceImpl implements DqoCloudWarehouseService {
             refreshTableRequest.setPartitions(new ArrayList<>(targetTableModifiedPartitions.getAffectedPartitions()));
         }
 
-        tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest);
+        String targetTableName = targetTableModifiedPartitions.getTargetTable().toString();
+        tenantDataWarehouseApi.refreshNativeTable(refreshTableRequest, userIdentity.getTenantOwner(), userIdentity.getTenantId(), targetTableName);
     }
 }
