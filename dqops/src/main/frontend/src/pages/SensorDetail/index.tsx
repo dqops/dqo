@@ -37,20 +37,8 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.bigquery
   },
   {
-    label: 'Snowflake',
-    value: ProviderSensorModelProviderTypeEnum.snowflake
-  },
-  {
-    label: 'Postgresql',
-    value: ProviderSensorModelProviderTypeEnum.postgresql
-  },
-  {
-    label: 'Redshift',
-    value: ProviderSensorModelProviderTypeEnum.redshift
-  },
-  {
-    label: 'SQL Server',
-    value: ProviderSensorModelProviderTypeEnum.sqlserver
+    label: 'Databricks',
+    value: ProviderSensorModelProviderTypeEnum.databricks
   },
   {
     label: 'MySQL',
@@ -61,16 +49,28 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.oracle
   },
   {
-    label: 'Spark',
-    value: ProviderSensorModelProviderTypeEnum.spark
-  },
-  {
-    label: 'Databricks',
-    value: ProviderSensorModelProviderTypeEnum.databricks
+    label: 'Postgresql',
+    value: ProviderSensorModelProviderTypeEnum.postgresql
   },
   {
     label: 'Presto',
     value: ProviderSensorModelProviderTypeEnum.presto
+  },
+  {
+    label: 'Redshift',
+    value: ProviderSensorModelProviderTypeEnum.redshift
+  },
+  {
+    label: 'Snowflake',
+    value: ProviderSensorModelProviderTypeEnum.snowflake
+  },
+  {
+    label: 'Spark',
+    value: ProviderSensorModelProviderTypeEnum.spark
+  },
+  {
+    label: 'SQL Server',
+    value: ProviderSensorModelProviderTypeEnum.sqlserver
   },
   {
     label: 'Trino',
