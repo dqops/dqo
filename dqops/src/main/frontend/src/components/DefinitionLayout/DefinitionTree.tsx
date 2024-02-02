@@ -251,7 +251,7 @@ export const DefinitionTree = () => {
         } else if (tabs[i]?.url?.includes('checks')) {
           configuration[2].isOpen = true;
           const arrayOfElemsToToggle = (
-            tabs[i].state.fullCheckName as string
+            tabs[i].state.full_check_name as string
           )?.split('/');
           if (arrayOfElemsToToggle) {
             toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
@@ -270,7 +270,7 @@ export const DefinitionTree = () => {
     } else {
       dispatch(toggleFirstLevelFolder(configuration));
     }
-  }, []);
+  }, [activeTab]);
 
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,
