@@ -25,8 +25,8 @@ import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
 import DefaultCheckDetail from '../../pages/DefaultChecksDetail'
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
-import { useDashboard } from '../../contexts/dashboardContext';
 import LeftView from './LeftView';
+import { useDefinition } from '../../contexts/definitionContext';
 
 interface LayoutProps {
   route: string
@@ -102,7 +102,7 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
-  const { sidebarWidth } = useDashboard(); 
+  const { sidebarWidth } = useDefinition(); 
   return (
     <div className="flex min-h-screen overflow-hidden z-30">
       <Header />

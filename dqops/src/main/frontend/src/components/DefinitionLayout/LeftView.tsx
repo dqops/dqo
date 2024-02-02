@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { useDashboard } from '../../contexts/dashboardContext';
 import DefinitionTree from './DefinitionTree';
+import { useDefinition } from '../../contexts/definitionContext';
 
 export default function LeftView() {
-    const { setSidebarWidth, sidebarWidth } = useDashboard()
+    const { setSidebarWidth, sidebarWidth } = useDefinition()
     const sidebarRef = useRef<HTMLDivElement>(null);
     const [isResizing, setIsResizing] = useState(false);
 
