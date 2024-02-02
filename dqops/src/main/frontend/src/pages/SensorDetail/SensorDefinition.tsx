@@ -93,7 +93,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
         </div>
       </div>
 
-      <SectionWrapper title="Sensor Fields">
+      <SectionWrapper title="Sensor fields">
         <RuleFields
           isReadOnly={sensor?.built_in || userProfile.can_manage_definitions !== true}
           fields={sensor?.sensor_definition_spec?.fields || []}
@@ -108,7 +108,7 @@ export const SensorDefinition = ({ sensor }: SensorDefinitionProps) => {
           onAdd={onAdd}
         />
       </SectionWrapper>
-      <SectionWrapper className="mt-8" title="Sensor Parameters">
+      <SectionWrapper className="mt-8" title="Sensor parameters">
         <RuleParameters
           parameters={sensor?.sensor_definition_spec?.parameters}
           onChange={(parameters) =>
