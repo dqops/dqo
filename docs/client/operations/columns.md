@@ -39,7 +39,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
@@ -50,7 +52,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -99,8 +105,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -150,7 +160,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -203,7 +217,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -256,7 +274,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -297,7 +315,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
@@ -305,7 +325,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "jobId" : 123456789,
+	  "createdAt" : "2007-10-11T13:42:00Z"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -324,8 +359,23 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -345,7 +395,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -368,7 +433,22 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -391,7 +471,18 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
 
 
 
@@ -432,7 +523,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
@@ -440,7 +533,43 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "spec" : {
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "profiling_checks" : {
+	      "nulls" : {
+	        "profile_nulls_count" : {
+	          "error" : {
+	            "max_count" : 0
+	          }
+	        }
+	      }
+	    }
+	  },
+	  "can_edit" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -460,8 +589,48 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		spec=ColumnSpec(
+			disabled=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			profiling_checks=ColumnProfilingCheckCategoriesSpec(
+				nulls=ColumnNullsProfilingChecksSpec(
+					profile_nulls_count=ColumnNullsCountCheckSpec(
+						parameters=ColumnNullsNullsCountSensorParametersSpec(),
+						error=MaxCountRule0ErrorParametersSpec(max_count=0),
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False
+					)
+				),
+				comparisons=ColumnComparisonProfilingChecksSpecMap()
+			)
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -482,7 +651,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		spec=ColumnSpec(
+			disabled=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			profiling_checks=ColumnProfilingCheckCategoriesSpec(
+				nulls=ColumnNullsProfilingChecksSpec(
+					profile_nulls_count=ColumnNullsCountCheckSpec(
+						parameters=ColumnNullsNullsCountSensorParametersSpec(),
+						error=MaxCountRule0ErrorParametersSpec(max_count=0),
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False
+					)
+				),
+				comparisons=ColumnComparisonProfilingChecksSpecMap()
+			)
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -506,7 +715,47 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		spec=ColumnSpec(
+			disabled=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			profiling_checks=ColumnProfilingCheckCategoriesSpec(
+				nulls=ColumnNullsProfilingChecksSpec(
+					profile_nulls_count=ColumnNullsCountCheckSpec(
+						parameters=ColumnNullsNullsCountSensorParametersSpec(),
+						error=MaxCountRule0ErrorParametersSpec(max_count=0),
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False
+					)
+				),
+				comparisons=ColumnComparisonProfilingChecksSpecMap()
+			)
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -530,7 +779,43 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		spec=ColumnSpec(
+			disabled=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			profiling_checks=ColumnProfilingCheckCategoriesSpec(
+				nulls=ColumnNullsProfilingChecksSpec(
+					profile_nulls_count=ColumnNullsCountCheckSpec(
+						parameters=ColumnNullsNullsCountSensorParametersSpec(),
+						error=MaxCountRule0ErrorParametersSpec(max_count=0),
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False
+					)
+				),
+				comparisons=ColumnComparisonProfilingChecksSpecMap()
+			)
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -571,7 +856,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic^
@@ -579,7 +866,37 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -599,8 +916,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnListModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -621,7 +971,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnListModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -645,7 +1028,40 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnListModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -669,7 +1085,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnListModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -710,7 +1155,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments^
@@ -718,7 +1165,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -738,8 +1209,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -760,7 +1259,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -784,7 +1311,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -808,7 +1363,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -849,7 +1428,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels^
@@ -857,7 +1438,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -877,8 +1470,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -899,7 +1508,23 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -923,7 +1548,23 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -947,7 +1588,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
 
 
 
@@ -989,7 +1642,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/model/basic^
@@ -997,7 +1652,54 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1019,8 +1721,62 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1043,7 +1799,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1069,7 +1879,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1095,7 +1959,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1136,7 +2050,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily^
@@ -1144,7 +2060,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "nulls" : {
+	    "daily_nulls_count" : {
+	      "error" : {
+	        "max_count" : 0
+	      }
+	    }
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1164,8 +2100,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsDailyMonitoringChecksSpec(
+			daily_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1186,7 +2145,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsDailyMonitoringChecksSpec(
+			daily_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1210,7 +2192,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsDailyMonitoringChecksSpec(
+			daily_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1234,7 +2239,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsDailyMonitoringChecksSpec(
+			daily_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1276,7 +2300,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/model^
@@ -1284,7 +2310,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1306,8 +2367,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1330,7 +2433,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1356,7 +2501,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1382,7 +2569,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1426,7 +2651,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/model/filter/sample_category/sample_check^
@@ -1434,7 +2661,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1458,8 +2720,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1484,7 +2788,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1512,7 +2858,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1540,7 +2928,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1581,7 +3007,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly^
@@ -1589,7 +3017,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "nulls" : {
+	    "monthly_nulls_count" : {
+	      "error" : {
+	        "max_count" : 0
+	      }
+	    }
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1609,8 +3057,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+			monthly_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1631,7 +3102,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+			monthly_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1655,7 +3149,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+			monthly_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1679,7 +3196,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyMonitoringCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyMonitoringChecksSpec(
+			monthly_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1721,7 +3257,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/model/basic^
@@ -1729,7 +3267,54 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1751,8 +3336,62 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1775,7 +3414,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1801,7 +3494,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1827,7 +3574,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1868,7 +3665,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily^
@@ -1876,7 +3675,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "nulls" : {
+	    "daily_partition_nulls_count" : {
+	      "error" : {
+	        "max_count" : 0
+	      }
+	    }
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1896,8 +3715,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsDailyPartitionedChecksSpec(
+			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1918,7 +3760,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsDailyPartitionedChecksSpec(
+			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1942,7 +3807,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsDailyPartitionedChecksSpec(
+			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1966,7 +3854,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnDailyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsDailyPartitionedChecksSpec(
+			daily_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2008,7 +3915,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/model^
@@ -2016,7 +3925,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2038,8 +3982,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2062,7 +4048,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2088,7 +4116,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2114,7 +4184,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2158,7 +4266,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/model/filter/sample_category/sample_check^
@@ -2166,7 +4276,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2190,8 +4335,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2216,7 +4403,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2244,7 +4473,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2272,7 +4543,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2313,7 +4622,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly^
@@ -2321,7 +4632,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "nulls" : {
+	    "monthly_partition_nulls_count" : {
+	      "error" : {
+	        "max_count" : 0
+	      }
+	    }
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2341,8 +4672,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2363,7 +4717,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2387,7 +4764,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2411,7 +4811,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnMonthlyPartitionedCheckCategoriesSpec(
+		nulls=ColumnNullsMonthlyPartitionedChecksSpec(
+			monthly_partition_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2452,7 +4871,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling^
@@ -2460,7 +4881,27 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "nulls" : {
+	    "profile_nulls_count" : {
+	      "error" : {
+	        "max_count" : 0
+	      }
+	    }
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2480,8 +4921,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnProfilingCheckCategoriesSpec(
+		nulls=ColumnNullsProfilingChecksSpec(
+			profile_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonProfilingChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2502,7 +4966,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnProfilingCheckCategoriesSpec(
+		nulls=ColumnNullsProfilingChecksSpec(
+			profile_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonProfilingChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2526,7 +5013,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnProfilingCheckCategoriesSpec(
+		nulls=ColumnNullsProfilingChecksSpec(
+			profile_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonProfilingChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2550,7 +5060,26 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnProfilingCheckCategoriesSpec(
+		nulls=ColumnNullsProfilingChecksSpec(
+			profile_nulls_count=ColumnNullsCountCheckSpec(
+				parameters=ColumnNullsNullsCountSensorParametersSpec(),
+				error=MaxCountRule0ErrorParametersSpec(max_count=0),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=ColumnComparisonProfilingChecksSpecMap()
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2591,7 +5120,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/basic^
@@ -2599,7 +5130,54 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "checks" : [ {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_1",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_2",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_1",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  }, {
+	    "check_category" : "sample_category_2",
+	    "check_name" : "sample_check_3",
+	    "help_text" : "Sample help text",
+	    "configured" : true
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2619,8 +5197,62 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2641,7 +5273,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2665,7 +5351,61 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2689,7 +5429,57 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2730,7 +5520,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model^
@@ -2738,7 +5530,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2758,8 +5585,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2780,7 +5649,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2804,7 +5715,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2828,7 +5781,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2871,7 +5862,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model/filter/sample_category/sample_check^
@@ -2879,7 +5872,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2901,8 +5929,50 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2925,7 +5995,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2951,7 +6063,49 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -2977,7 +6131,45 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -3018,7 +6210,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/statistics^
@@ -3026,7 +6220,70 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "statistics" : [ {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 4372,
+	    "collectedAt" : "2007-10-11T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 9624,
+	    "collectedAt" : "2007-10-12T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 1575,
+	    "collectedAt" : "2007-10-13T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 5099,
+	    "collectedAt" : "2007-10-14T18:00:00"
+	  }, {
+	    "category" : "sample_category",
+	    "collector" : "sample_collector",
+	    "resultDataType" : "integer",
+	    "result" : 9922,
+	    "collectedAt" : "2007-10-15T18:00:00"
+	  } ],
+	  "collect_column_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "columnNames" : [ "sample_column" ]
+	  },
+	  "can_collect_statistics" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3046,8 +6303,80 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		statistics=[
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=4372,
+				collected_at=Some date/time value: [2007-10-11T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9624,
+				collected_at=Some date/time value: [2007-10-12T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=1575,
+				collected_at=Some date/time value: [2007-10-13T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=5099,
+				collected_at=Some date/time value: [2007-10-14T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9922,
+				collected_at=Some date/time value: [2007-10-15T18:00]
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3068,7 +6397,79 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		statistics=[
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=4372,
+				collected_at=Some date/time value: [2007-10-11T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9624,
+				collected_at=Some date/time value: [2007-10-12T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=1575,
+				collected_at=Some date/time value: [2007-10-13T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=5099,
+				collected_at=Some date/time value: [2007-10-14T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9922,
+				collected_at=Some date/time value: [2007-10-15T18:00]
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3092,7 +6493,79 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		statistics=[
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=4372,
+				collected_at=Some date/time value: [2007-10-11T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9624,
+				collected_at=Some date/time value: [2007-10-12T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=1575,
+				collected_at=Some date/time value: [2007-10-13T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=5099,
+				collected_at=Some date/time value: [2007-10-14T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9922,
+				collected_at=Some date/time value: [2007-10-15T18:00]
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3116,7 +6589,75 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ColumnStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_name='sample_column',
+		disabled=False,
+		has_any_configured_checks=True,
+		type_snapshot=ColumnTypeSnapshotSpec(
+			column_type='string',
+			nullable=False,
+			length=256
+		),
+		statistics=[
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=4372,
+				collected_at=Some date/time value: [2007-10-11T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9624,
+				collected_at=Some date/time value: [2007-10-12T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=1575,
+				collected_at=Some date/time value: [2007-10-13T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=5099,
+				collected_at=Some date/time value: [2007-10-14T18:00]
+			),
+			StatisticsMetricModel(
+				category='sample_category',
+				collector='sample_collector',
+				result_data_type=StatisticsResultDataType.INTEGER,
+				result=9922,
+				collected_at=Some date/time value: [2007-10-15T18:00]
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -3156,7 +6697,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns^
@@ -3164,7 +6707,73 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_name" : "sample_column",
+	  "has_any_configured_checks" : true,
+	  "has_any_configured_profiling_checks" : true,
+	  "type_snapshot" : {
+	    "column_type" : "string",
+	    "nullable" : false,
+	    "length" : 256
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3183,8 +6792,87 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3204,7 +6892,86 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3227,7 +6994,86 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3250,7 +7096,82 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ColumnListModel(
+			connection_name='sample_connection',
+			table=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			column_name='sample_column',
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			type_snapshot=ColumnTypeSnapshotSpec(
+				column_type='string',
+				nullable=False,
+				length=256
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -3290,7 +7211,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/statistics^
@@ -3298,7 +7221,136 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "table" : {
+	    "schema_name" : "sample_schema",
+	    "table_name" : "sample_table"
+	  },
+	  "column_statistics" : [ {
+	    "connection_name" : "sample_connection",
+	    "table" : {
+	      "schema_name" : "sample_schema",
+	      "table_name" : "sample_table"
+	    },
+	    "column_name" : "sample_column",
+	    "has_any_configured_checks" : true,
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "statistics" : [ {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 4372,
+	      "collectedAt" : "2007-10-11T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9624,
+	      "collectedAt" : "2007-10-12T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 1575,
+	      "collectedAt" : "2007-10-13T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 5099,
+	      "collectedAt" : "2007-10-14T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9922,
+	      "collectedAt" : "2007-10-15T18:00:00"
+	    } ],
+	    "collect_column_statistics_job_template" : {
+	      "connection" : "sample_connection",
+	      "fullTableName" : "sample_schema.sample_table",
+	      "enabled" : true,
+	      "columnNames" : [ "sample_column" ]
+	    },
+	    "can_collect_statistics" : true
+	  }, {
+	    "connection_name" : "sample_connection",
+	    "table" : {
+	      "schema_name" : "sample_schema",
+	      "table_name" : "sample_table"
+	    },
+	    "column_name" : "sample_column_1",
+	    "has_any_configured_checks" : true,
+	    "type_snapshot" : {
+	      "column_type" : "string",
+	      "nullable" : false,
+	      "length" : 256
+	    },
+	    "statistics" : [ {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 4372,
+	      "collectedAt" : "2007-10-11T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9624,
+	      "collectedAt" : "2007-10-12T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 1575,
+	      "collectedAt" : "2007-10-13T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 5099,
+	      "collectedAt" : "2007-10-14T18:00:00"
+	    }, {
+	      "category" : "sample_category",
+	      "collector" : "sample_collector",
+	      "resultDataType" : "integer",
+	      "result" : 9922,
+	      "collectedAt" : "2007-10-15T18:00:00"
+	    } ],
+	    "collect_column_statistics_job_template" : {
+	      "connection" : "sample_connection",
+	      "fullTableName" : "sample_schema.sample_table",
+	      "enabled" : true,
+	      "columnNames" : [ "sample_column" ]
+	    },
+	    "can_collect_statistics" : true
+	  } ],
+	  "collect_column_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "fullTableName" : "sample_schema.sample_table",
+	    "enabled" : true,
+	    "columnNames" : [ "sample_column" ],
+	    "collectorCategory" : "sample_category"
+	  },
+	  "can_collect_statistics" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3317,8 +7369,160 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableColumnsStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_statistics=[
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			),
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column_1',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			collector_category='sample_category',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3338,7 +7542,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    TableColumnsStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_statistics=[
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			),
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column_1',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			collector_category='sample_category',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3361,7 +7717,159 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    TableColumnsStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_statistics=[
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			),
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column_1',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			collector_category='sample_category',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3384,7 +7892,155 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    TableColumnsStatisticsModel(
+		connection_name='sample_connection',
+		table=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		column_statistics=[
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			),
+			ColumnStatisticsModel(
+				connection_name='sample_connection',
+				table=PhysicalTableName(
+					schema_name='sample_schema',
+					table_name='sample_table'
+				),
+				column_name='sample_column_1',
+				disabled=False,
+				has_any_configured_checks=True,
+				type_snapshot=ColumnTypeSnapshotSpec(
+					column_type='string',
+					nullable=False,
+					length=256
+				),
+				statistics=[
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=4372,
+						collected_at=Some date/time value: [2007-10-11T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9624,
+						collected_at=Some date/time value: [2007-10-12T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=1575,
+						collected_at=Some date/time value: [2007-10-13T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=5099,
+						collected_at=Some date/time value: [2007-10-14T18:00]
+					),
+					StatisticsMetricModel(
+						category='sample_category',
+						collector='sample_collector',
+						result_data_type=StatisticsResultDataType.INTEGER,
+						result=9922,
+						collected_at=Some date/time value: [2007-10-15T18:00]
+					)
+				],
+				collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+					column_names=[
+						'sample_column'
+					],
+					connection='sample_connection',
+					full_table_name='sample_schema.sample_table',
+					enabled=True
+				),
+				can_collect_statistics=True
+			)
+		],
+		collect_column_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+				'sample_column'
+			],
+			collector_category='sample_category',
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		can_collect_statistics=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -3425,7 +8081,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column^
@@ -3436,7 +8094,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3485,8 +8147,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3536,7 +8202,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3589,7 +8259,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3642,7 +8316,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -3683,7 +8357,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/basic^
@@ -3694,7 +8370,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3740,8 +8420,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3788,7 +8472,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3838,7 +8526,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3888,7 +8580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -3929,7 +8621,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/comments^
@@ -3940,7 +8634,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -3979,8 +8677,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4020,7 +8722,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4063,7 +8769,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4106,7 +8816,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -4147,7 +8857,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/labels^
@@ -4158,7 +8870,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4184,8 +8900,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4212,7 +8932,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4242,7 +8966,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4272,7 +9000,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -4313,7 +9041,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily^
@@ -4324,7 +9054,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4363,8 +9097,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4404,7 +9142,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4447,7 +9189,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4490,7 +9236,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -4532,7 +9278,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/model^
@@ -4543,7 +9291,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4601,8 +9353,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4661,7 +9417,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4723,7 +9483,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4785,7 +9549,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -4826,7 +9590,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/monthly^
@@ -4837,7 +9603,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4876,8 +9646,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4917,7 +9691,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -4960,7 +9738,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5003,7 +9785,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -5044,7 +9826,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily^
@@ -5055,7 +9839,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5094,8 +9882,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5135,7 +9927,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5178,7 +9974,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5221,7 +10021,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -5263,7 +10063,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/model^
@@ -5274,7 +10076,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5332,8 +10138,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5392,7 +10202,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5454,7 +10268,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5516,7 +10334,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -5557,7 +10375,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/monthly^
@@ -5568,7 +10388,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5607,8 +10431,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5648,7 +10476,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5691,7 +10523,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5734,7 +10570,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -5775,7 +10611,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling^
@@ -5786,7 +10624,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5825,8 +10667,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5866,7 +10712,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5909,7 +10759,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5952,7 +10806,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -5993,7 +10847,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/model^
@@ -6004,7 +10860,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6060,8 +10920,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6118,7 +10982,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6178,7 +11046,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6238,7 +11110,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 

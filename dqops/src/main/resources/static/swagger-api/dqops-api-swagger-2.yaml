@@ -12621,6 +12621,17 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
+  BetweenPercentRuleParametersSpec:
+    type: "object"
+    properties:
+      min_percent:
+        type: "number"
+        format: "double"
+        description: "Minimum accepted percentage of rows passing the check (inclusive)."
+      max_percent:
+        type: "number"
+        format: "double"
+        description: "Maximum accepted percentage of rows passing the check (inclusive)."
   BigQueryParametersSpec:
     type: "object"
     properties:
@@ -18554,15 +18565,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of false value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
   ColumnIntegerInRangePercentCheckSpec:
     type: "object"
     properties:
@@ -27941,15 +27952,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of true value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
   ColumnTypeSnapshotSpec:
     type: "object"
     properties:

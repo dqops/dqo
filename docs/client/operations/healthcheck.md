@@ -29,7 +29,9 @@ http://localhost:8888/api/ishealthy
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/ishealthy^
@@ -37,7 +39,19 @@ http://localhost:8888/api/ishealthy
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    "sample_string_value"
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -53,8 +67,20 @@ http://localhost:8888/api/ishealthy
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    'sample_string_value'
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +97,19 @@ http://localhost:8888/api/ishealthy
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    'sample_string_value'
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -91,7 +129,19 @@ http://localhost:8888/api/ishealthy
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    'sample_string_value'
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +161,15 @@ http://localhost:8888/api/ishealthy
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    'sample_string_value'
+    ```
+    
+    
+    
 
 
 

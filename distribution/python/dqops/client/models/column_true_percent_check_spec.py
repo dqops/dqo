@@ -6,19 +6,13 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.between_percent_rule_parameters_spec import (
+        BetweenPercentRuleParametersSpec,
+    )
     from ..models.column_bool_true_percent_sensor_parameters_spec import (
         ColumnBoolTruePercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_percent_rule_95_parameters_spec import (
-        MinPercentRule95ParametersSpec,
-    )
-    from ..models.min_percent_rule_100_error_parameters_spec import (
-        MinPercentRule100ErrorParametersSpec,
-    )
-    from ..models.min_percent_rule_100_warning_parameters_spec import (
-        MinPercentRule100WarningParametersSpec,
-    )
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -51,9 +45,9 @@ class ColumnTruePercentCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnBoolTruePercentSensorParametersSpec]):
-        warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
-        error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
-        fatal (Union[Unset, MinPercentRule95ParametersSpec]):
+        warning (Union[Unset, BetweenPercentRuleParametersSpec]):
+        error (Union[Unset, BetweenPercentRuleParametersSpec]):
+        fatal (Union[Unset, BetweenPercentRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -65,9 +59,9 @@ class ColumnTruePercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnBoolTruePercentSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
-    error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinPercentRule95ParametersSpec"] = UNSET
+    warning: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    error: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "BetweenPercentRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -137,19 +131,13 @@ class ColumnTruePercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.between_percent_rule_parameters_spec import (
+            BetweenPercentRuleParametersSpec,
+        )
         from ..models.column_bool_true_percent_sensor_parameters_spec import (
             ColumnBoolTruePercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_percent_rule_95_parameters_spec import (
-            MinPercentRule95ParametersSpec,
-        )
-        from ..models.min_percent_rule_100_error_parameters_spec import (
-            MinPercentRule100ErrorParametersSpec,
-        )
-        from ..models.min_percent_rule_100_warning_parameters_spec import (
-            MinPercentRule100WarningParametersSpec,
-        )
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
@@ -189,25 +177,25 @@ class ColumnTruePercentCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinPercentRule100WarningParametersSpec]
+        warning: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinPercentRule100WarningParametersSpec.from_dict(_warning)
+            warning = BetweenPercentRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinPercentRule100ErrorParametersSpec]
+        error: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinPercentRule100ErrorParametersSpec.from_dict(_error)
+            error = BetweenPercentRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinPercentRule95ParametersSpec]
+        fatal: Union[Unset, BetweenPercentRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
+            fatal = BetweenPercentRuleParametersSpec.from_dict(_fatal)
 
         column_true_percent_check_spec = cls(
             schedule_override=schedule_override,

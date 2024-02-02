@@ -25,6 +25,7 @@ from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters
 from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
+from .between_percent_rule_parameters_spec import BetweenPercentRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
 from .big_query_jobs_create_project import BigQueryJobsCreateProject
 from .big_query_parameters_spec import BigQueryParametersSpec
@@ -1878,6 +1879,7 @@ __all__ = (
     "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
+    "BetweenPercentRuleParametersSpec",
     "BigQueryAuthenticationMode",
     "BigQueryJobsCreateProject",
     "BigQueryParametersSpec",

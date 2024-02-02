@@ -1,12 +1,58 @@
-# Detecting data quality issues with bool
-Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to bool.
-The data quality checks are configured in the `bool` category in DQOps.
+# Measuring the percentage of true and false values
+Read this guide to learn how to measure the percentage of true and false boolean values and how to set up data quality checks that assert the valid range.
 
-## Bool category
-Data quality checks that are detecting issues related to bool are listed below.
+The data quality checks for bool columns are configured in the `bool` category in DQOps.
 
-## Detecting bool issues
-How to detect bool data quality issues.
+## Boolean statistics
+Boolean columns are easy to analyze for data quality issues. They can have only three values: *true*, *false*, and *null*. 
+DQOps has data quality checks for measuring the percentage of *true* and *false* values.
+The measure (the percentage) is verified with a range data quality check.
+
+The profile of a sample *bool* column is shown below. The tested column has ~201M false values and ~5M true values.
+The percentage of true values is 2.43%.
+
+![Bool column profiling statistics in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/bool-column-profile-min.png){ loading=lazy }
+
+## Bool data quality checks
+DQOps has two similar data quality checks for analyzing bool values.
+
+- [*true_percent*](../checks/column/bool/true-percent.md) validates the percentage of `true` values
+
+- [*false_percent*](../checks/column/bool/false-percent.md) validates the percentage of `false` values
+
+Both bool checks accept two optional rule parameters, which set the valid percentage range of true or false values.
+
+- `min_percent` is the minimum accepted percentage, the value is between 0.0 and 100.0 (inclusive)
+
+- `max_percent` is the maximum accepted percentage, the value is between 0.0 and 100.0 (inclusive)
+
+### Enable bool checks in UI
+[DQOps check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor) shows the bool checks in the `Bool` category.
+
+![Configure data quality check to measure the percentage of true values in a bool column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/boolean-true-percent-check-editor-warning-min.png){ loading=lazy }
+
+### Enable bool checks in YAML
+Bool checks are configured in the `bool` category node.
+
+``` { .yaml linenums="1" hl_lines="13-16" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    is_coinbase:
+      type_snapshot:
+        column_type: BOOL
+        nullable: true
+      monitoring_checks:
+        daily:
+          bool:
+            daily_true_percent:
+              warning:
+                min_percent: 1.0
+                max_percent: 3.0
+```
+
 
 ## Use case
 | **Name of the example**                                                                            | **Description**                                                                                                                                                         |

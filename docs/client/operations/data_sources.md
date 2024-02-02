@@ -36,7 +36,9 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas^
@@ -44,7 +46,25 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -61,8 +81,24 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -80,7 +116,23 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -101,7 +153,23 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -122,7 +190,19 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False),
+		SchemaRemoteModel(already_imported=False)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -161,7 +241,9 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas/sample_schema/tables^
@@ -169,7 +251,25 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	}, {
+	  "alreadyImported" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -187,8 +287,24 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -207,7 +323,23 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -229,7 +361,23 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -251,7 +399,19 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False),
+		RemoteTableListModel(already_imported=False)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -296,7 +456,9 @@ http://localhost:8888/api/datasource/testconnection
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/datasource/testconnection^
@@ -307,7 +469,19 @@ http://localhost:8888/api/datasource/testconnection
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -380,8 +554,20 @@ http://localhost:8888/api/datasource/testconnection
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    ConnectionTestModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -455,7 +641,19 @@ http://localhost:8888/api/datasource/testconnection
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ConnectionTestModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -532,7 +730,19 @@ http://localhost:8888/api/datasource/testconnection
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    ConnectionTestModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -609,7 +819,15 @@ http://localhost:8888/api/datasource/testconnection
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    ConnectionTestModel()
+    ```
+    
+    
+    
 
 
 

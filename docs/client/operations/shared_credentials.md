@@ -29,7 +29,9 @@ http://localhost:8888/api/credentials
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/credentials^
@@ -40,7 +42,11 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -64,8 +70,12 @@ http://localhost:8888/api/credentials
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -90,7 +100,11 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -118,7 +132,11 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -146,7 +164,7 @@ http://localhost:8888/api/credentials
 	
     ```
 
-
+    
 
 
 
@@ -177,7 +195,9 @@ http://localhost:8888/api/credentials/{credentialName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/credentials/sample_credential^
@@ -185,7 +205,11 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -201,8 +225,12 @@ http://localhost:8888/api/credentials/{credentialName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -219,7 +247,11 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -239,7 +271,11 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -259,7 +295,7 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
-
+    
 
 
 
@@ -290,7 +326,9 @@ http://localhost:8888/api/credentials/{credentialName}/download
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential/download^
@@ -298,7 +336,11 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -315,8 +357,12 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -334,7 +380,11 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -355,7 +405,11 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -376,7 +430,7 @@ http://localhost:8888/api/credentials/{credentialName}/download
 	
     ```
 
-
+    
 
 
 
@@ -407,7 +461,9 @@ http://localhost:8888/api/credentials
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/credentials^
@@ -415,7 +471,28 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	}, {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	}, {
+	  "can_edit" : false,
+	  "can_access_credential" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -431,8 +508,33 @@ http://localhost:8888/api/credentials
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -449,7 +551,32 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -469,7 +596,32 @@ http://localhost:8888/api/credentials
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -489,7 +641,28 @@ http://localhost:8888/api/credentials
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		),
+		SharedCredentialListModel(
+			can_edit=False,
+			can_access_credential=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -527,7 +700,9 @@ http://localhost:8888/api/credentials/{credentialName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/credentials/sample_credential^
@@ -535,7 +710,23 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "credential_name" : "sample_credential",
+	  "type" : "text",
+	  "text_value" : "sample_credential_text_value"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -552,8 +743,24 @@ http://localhost:8888/api/credentials/{credentialName}
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.TEXT,
+		text_value='sample_credential_text_value'
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -571,7 +778,23 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.TEXT,
+		text_value='sample_credential_text_value'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -592,7 +815,23 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.TEXT,
+		text_value='sample_credential_text_value'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -613,7 +852,19 @@ http://localhost:8888/api/credentials/{credentialName}
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    SharedCredentialModel(
+		credential_name='sample_credential',
+		type=CredentialType.TEXT,
+		text_value='sample_credential_text_value'
+	)
+    ```
+    
+    
+    
 
 
 
@@ -651,7 +902,9 @@ http://localhost:8888/api/credential/{credentialName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/credential/sample_credential^
@@ -662,7 +915,11 @@ http://localhost:8888/api/credential/{credentialName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -687,8 +944,12 @@ http://localhost:8888/api/credential/{credentialName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -714,7 +975,11 @@ http://localhost:8888/api/credential/{credentialName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -743,7 +1008,11 @@ http://localhost:8888/api/credential/{credentialName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -772,7 +1041,7 @@ http://localhost:8888/api/credential/{credentialName}
 	
     ```
 
-
+    
 
 
 
