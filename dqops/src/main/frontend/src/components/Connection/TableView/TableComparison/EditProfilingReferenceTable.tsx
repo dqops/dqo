@@ -147,16 +147,37 @@ export const EditProfilingReferenceTable = ({
           severity.fatal;
       }
     }
-    if (reference?.compare_row_count === undefined) {
-      onChange({
-        compare_row_count: reference?.default_compare_thresholds
-      });
+
+    if (type === 'row') {
+      if (disabled === true) {
+        if (reference?.compare_row_count !== undefined) {
+          onChange({
+            compare_row_count: undefined
+          });
+        }
+      } else if (disabled == false) {
+        if (reference?.compare_row_count === undefined) {
+          onChange({
+            compare_row_count: reference?.default_compare_thresholds
+          });
+        }      
+      }
+    } else {
+      if (disabled === true) {
+        if (reference?.compare_column_count !== undefined) {
+          onChange({
+            compare_column_count: undefined
+          });
+        }
+      } else if (disabled == false) {
+        if (reference?.compare_column_count === undefined) {
+          onChange({
+            compare_column_count: reference?.default_compare_thresholds
+          });
+        }      
+      }
     }
-    if (reference?.compare_column_count === undefined) {
-      onChange({
-        compare_column_count: reference?.default_compare_thresholds
-      });
-    }
+
     setIsUpdated(true);
   };
 
@@ -254,7 +275,7 @@ export const EditProfilingReferenceTable = ({
           }
         });
       } else {
-        onChange({ compare_row_count: reference?.default_compare_thresholds });
+        onChange({ compare_row_count: undefined });
       }
       if (columnCountElem?.configured === true) {
         onChange({
@@ -269,7 +290,7 @@ export const EditProfilingReferenceTable = ({
         });
       } else {
         onChange({
-          compare_column_count: reference?.default_compare_thresholds
+          compare_column_count: undefined
         });
       }
       //cCompareThreshholdsModel in java fatal returns null
