@@ -58,7 +58,9 @@ export const HistogramChart = ({
   }, [connection, year, month, incidentId]);
 
   useEffect(() => {
-    onChangeFilter({ days: days });
+    if (histogramFilter !== undefined) {
+      onChangeFilter({ days: days });
+    }
   }, [days]);
 
   useEffect(() => {
