@@ -136,6 +136,7 @@ const CheckEditor = ({
                 onChangeStandard(value); setIsUpdated(true);
               }}
               disabled={custom === false ? true : false}
+              className={custom === false ? 'cursor-default' : ''}
               label="Standard data quality check, always shown in the editor"
             />
           </div>
@@ -159,6 +160,7 @@ const CheckEditor = ({
                 }}
                 disableIcon={custom === false ? true : false}
                 className="w-1/2"
+                triggerClassName={(custom === false || canEditDefinitions === false) ? "cursor-default" : ""}
               />
               <Button
                 label="Show definition"
@@ -188,6 +190,7 @@ const CheckEditor = ({
                 }}
                 disableIcon={custom === false ? true : false}
                 className="w-1/2"
+                triggerClassName={(custom === false || canEditDefinitions === false) ? "cursor-default" : ""}
               />
               <Button
                 label="Show definition"
