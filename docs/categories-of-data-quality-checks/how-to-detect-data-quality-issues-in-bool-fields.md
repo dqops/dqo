@@ -54,6 +54,31 @@ spec:
 ```
 
 
+## Analyze boolean values in other column types
+DQOps can also analyze bool values in non-bool columns. Bool values in landing zone tables are often stored in text columns. 
+The text values for *true* and *false* can take any form. DQOps supports [calculated columns](../dqo-concepts/configuring-table-metadata.md#calculated-columns). 
+A computed column is defined as an SQL expression that converts a raw value to an expected data type.
+
+The following YAML file shows a calculated column tested with a bool data quality check.
+
+``` { .yaml linenums="1" hl_lines="7 11-14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    approved_boolean:
+      sql_expression: "CASE WHEN {alias}.version = 'approved' THEN TRUE WHEN {alias}.version = 'rejected' THEN FALSE ELSE NULL END" 
+      monitoring_checks:
+        daily:
+          bool:
+            daily_true_percent:
+              warning:
+                min_percent: 1.0
+                max_percent: 3.0
+```
+
+
 ## Use case
 | **Name of the example**                                                                            | **Description**                                                                                                                                                         |
 |:---------------------------------------------------------------------------------------------------|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
