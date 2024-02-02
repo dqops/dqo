@@ -322,6 +322,10 @@ export const EditProfilingReferenceTable = ({
   }, [showColumnCount, showRowCount]);
 
   const getResultsData = async () => {
+    if (selectedReference === undefined || selectedReference === '') {
+      return;
+    }
+
     if (checkTypes === 'profiling') {
       await TableComparisonResultsApi.getTableComparisonProfilingResults(
         connection,

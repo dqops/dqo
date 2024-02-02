@@ -221,7 +221,7 @@ export default function FirstLineNameConfiguration({
         </div>
         <Input
           className={clsx(
-            'flex-1',
+            'flex-1 w-64',
             editConfigurationParameters.name &&
               editConfigurationParameters?.name?.length > 0
               ? ''
