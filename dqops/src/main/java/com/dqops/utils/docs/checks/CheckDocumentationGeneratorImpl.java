@@ -20,7 +20,6 @@ import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.github.jknack.handlebars.Template;
-import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -122,8 +121,8 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         for (CheckCategoryDocumentationModel checkCategoryModel : checkCategoryDocumentationModels) {
             String renderedCategoryContent = HandlebarsDocumentationUtilities.renderTemplate(checkCategoryTemplate, checkCategoryModel);
             String categoryFileName =
-                    CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
-                            CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
+                    CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
+                            CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
                     "how-to-detect-" + checkCategoryModel.getCategoryName().replace('_', '-') + "-data-quality-issues.md";
             String categoryNameWithSpaces = checkCategoryModel.getCategoryName().replace('_', ' ');
             String listOfTableChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a table level";
@@ -163,8 +162,8 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                 }
             }
 
-            String categoryNameLink = CheckCategoryDocumentationIndex.CATEGORY_LINK_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
-                    CheckCategoryDocumentationIndex.CATEGORY_LINK_NAMES.get(checkCategoryModel.getCategoryName()) :
+            String categoryNameLink = CheckCategoryDocumentationConstants.CATEGORY_LINK_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
+                    CheckCategoryDocumentationConstants.CATEGORY_LINK_NAMES.get(checkCategoryModel.getCategoryName()) :
                     checkCategoryModel.getCategoryName().substring(0, 1).toUpperCase(Locale.ROOT) +
                     checkCategoryModel.getCategoryName().substring(1).replace('_', ' ');
             newCategoryFileContent.setLinkName(categoryNameLink);

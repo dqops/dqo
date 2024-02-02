@@ -196,7 +196,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarTableChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationIndex.TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationConstants.TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
         resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
@@ -217,7 +217,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks();
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
-        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationIndex.COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
+        List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, CheckCategoryDocumentationConstants.COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
 
         resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
@@ -310,7 +310,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setCheckName(checkModel.getCheckName());
         String checkTypeName = similarCheckModel.getCheckType().getDisplayName();
         checkDocumentationModel.setCheckType(checkTypeName);
-        checkDocumentationModel.setCheckTypeConceptPage(CheckCategoryDocumentationIndex.CHECK_TYPE_PAGES.get(checkTypeName));
+        checkDocumentationModel.setCheckTypeConceptPage(CheckCategoryDocumentationConstants.CHECK_TYPE_PAGES.get(checkTypeName));
 
         checkDocumentationModel.setStandard(checkModel.isStandard());
         checkDocumentationModel.setTimeScale(similarCheckModel.getTimeScale() != null ? similarCheckModel.getTimeScale().name() : null);
@@ -328,7 +328,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setTarget(similarCheckModel.getCheckTarget().toString());
         String checkCategoryName = similarCheckModel.getCategory();
         checkDocumentationModel.setCategory(checkCategoryName);
-        String categoryPageName = CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryName);
+        String categoryPageName = CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(checkCategoryName);
         if (categoryPageName == null) {
             categoryPageName =  "how-to-detect-" + checkCategoryName.replace('_', '-') + "-data-quality-issues.md";
         }

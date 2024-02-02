@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * This class contains constants used in generating the documentation for check categories.
  */
-public class CheckCategoryDocumentationIndex {
+public class CheckCategoryDocumentationConstants {
     /**
      * Alternative file names for check categories.
      */
@@ -50,20 +50,20 @@ public class CheckCategoryDocumentationIndex {
      */
     public static final Map<String, String> CATEGORY_LINK_NAMES = new LinkedHashMap<>() {{
         put("timeliness", "Timeliness and freshness");
-        put("schema", "Table schema changes");
+        put("schema", "Table schema drifts");
         put("pii", "PII values");
         put("integrity", "Data integrity");
-        put("comparisons", "Compare tables");
+        put("comparisons", "Comparing tables");
         put("blanks", "Blanks and whitespaces");
         put("patterns", "Text patterns");
         put("datatype", "Data type detection");
-        put("anomaly", "Numeric anomalies");
+        put("anomaly", "Anomalies");
         put("availability", "Table availability");
-        put("bool", "Bool values");
-        put("numeric", "Numeric values");
-        put("datetime", "Date and time values");
-        put("text", "Text values");
-        put("nulls", "Null values");
+        put("bool", "Booleans");
+        put("numeric", "Numerics");
+        put("datetime", "Dates");
+        put("text", "Text statistics");
+        put("nulls", "Nulls");
         put("accuracy", "Data accuracy");
         put("custom_sql", "Custom SQL and multi-column checks");
         put("volume", "Data volume");
