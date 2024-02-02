@@ -125,7 +125,7 @@ const SensorReadoutsTab = ({
         </div>
       </div>
       {sensorReadouts.length === 0 && (
-        <div className="text-gray-700 mt-5">No Data</div>
+        <div className="text-gray-700 mt-5 text-sm">No Data</div>
       )}
       {sensorReadouts.map((result, index) => (
         <div key={index}>
