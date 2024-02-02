@@ -52,16 +52,11 @@ export const HistogramChart = ({
         connection,
         year,
         month,
-        incidentId
+        incidentId,
+        days
       })
     );
-  }, [connection, year, month, incidentId]);
-
-  useEffect(() => {
-    if (histogramFilter !== undefined) {
-      onChangeFilter({ days: days });
-    }
-  }, [days]);
+  }, [connection, year, month, incidentId, days]);
 
   useEffect(() => {
     if (!histogramFilter) return;

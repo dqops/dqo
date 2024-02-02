@@ -175,12 +175,12 @@ export const IncidentDetail = () => {
     );
   };
 
-  useEffect(() => {
-    onChangeFilter({
-      filter: debouncedSearchTerm,
-      page: 1
-    });
-  }, [debouncedSearchTerm]);
+  // useEffect(() => {
+  //   onChangeFilter({
+  //     filter: debouncedSearchTerm,
+  //     page: 1
+  //   });
+  // }, [debouncedSearchTerm]);
 
   const getWarnings = (minimumSeverity?: number) => {
     if (!minimumSeverity) return 'No warnings';
