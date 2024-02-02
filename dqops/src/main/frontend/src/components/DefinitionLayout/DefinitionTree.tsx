@@ -604,10 +604,10 @@ export const DefinitionTree = () => {
       {definitionFirstLevelFolder?.map((x, index) => (
         <div
           key={index}
-          className="mt-2 mb-2 text-sm font-regular cursor-pointer"
+          className="text-[13px] cursor-pointer"
         >
           <div
-            className="flex items-center mb-2"
+            className="flex items-center mb-1 gap-x-1"
             onClick={() => {
               const updatedRootTree = [...definitionFirstLevelFolder];
               updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
@@ -675,7 +675,7 @@ export const DefinitionTree = () => {
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="userprofile" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Manage users
         </div>
       </div>
@@ -684,7 +684,7 @@ export const DefinitionTree = () => {
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="clock" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Default schedules
         </div>
       </div>
@@ -693,7 +693,7 @@ export const DefinitionTree = () => {
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="webhooks" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Default webhooks
         </div>
       </div>
@@ -702,7 +702,7 @@ export const DefinitionTree = () => {
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="definitionsrules" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Shared credentials
         </div>
       </div>
@@ -711,7 +711,7 @@ export const DefinitionTree = () => {
         className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
       >
         <SvgIcon name="datadictionary" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
           Data dictionaries
         </div>
       </div>

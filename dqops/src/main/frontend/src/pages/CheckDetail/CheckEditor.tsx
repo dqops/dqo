@@ -202,7 +202,7 @@ const CheckEditor = ({
             <div className="flex items-center gap-x-4 pt-2 w-1/2">
               <textarea
                 value={helpText}
-                className="focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 font-regular h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full  rounded"
+                className="font-regular text-sm focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full leading-1.5 rounded"
                 onChange={(e) => {
                   onChangeHelpText(e), setIsUpdated(true);
                 }}
