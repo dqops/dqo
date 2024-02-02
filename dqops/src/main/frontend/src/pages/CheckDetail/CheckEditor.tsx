@@ -140,7 +140,7 @@ const CheckEditor = ({
             />
           </div>
           <div className="pb-4 gap-2">
-            Sensor Name:
+            Sensor name:
             <div className="flex items-center gap-x-4 pt-2">
               <Select
                 placeholder={selectedSensor}
