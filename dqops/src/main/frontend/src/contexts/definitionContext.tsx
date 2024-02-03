@@ -261,22 +261,14 @@ function DefinitionProvider(props: any) {
       value={{
         sidebarWidth,
         setSidebarWidth,
-        toggleTree,
         openCheckDefaultFirstLevelTab,
         openCheckFirstLevelTab,
-        openDataDictionaryFirstLevelTab,
         openRuleFirstLevelTab,
-        opendataQualityChecksFolderTree,
-        openSharedCredentialsFirstLevelTab,
-
         openSensorFirstLevelTab,
-        toggleDataQualityChecksFolder,
-        toggleFirstLevelFolder,
-        toggleRuleFolder,
-        toggleRuleFolderTree,
+        toggleTree,
         toggleSensorFolder,
-        toggleSensorFolderTree,
-        toggleFolderRecursively,
+        toggleRuleFolder,
+        toggleDataQualityChecksFolder,
         nodes
       }}
       {...props}
