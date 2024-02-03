@@ -2,31 +2,20 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  addFirstLevelTab,
   getSensorFolderTree,
-  toggleSensorFolderTree,
-  openRuleFolderTree,
   getRuleFolderTree,
-  toggleRuleFolderTree,
   toggleFirstLevelFolder,
-  openSensorFolderTree,
-  getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
+  getdataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
   CheckDefinitionFolderModel,
   RuleFolderModel,
-  RuleListModel,
-  SensorFolderModel,
-  SensorListModel,
-  CheckDefinitionListModel
+  SensorFolderModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import clsx from 'clsx';
-import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import DataQualityContextMenu from './DataQualityContextMenu';
@@ -58,16 +47,16 @@ export const DefinitionTree = () => {
   } = useSelector((state: IRootState) => state.definition);
 
   const {
-    openAllUsersFirstLevelTab,
     openCheckDefaultFirstLevelTab,
     openCheckFirstLevelTab,
-    openDataDictionaryFirstLevelTab,
-    openDefaultSchedulesFirstLevelTab,
-    openDefaultWebhooksFirstLevelTab,
     openRuleFirstLevelTab,
-    openSharedCredentialsFirstLevelTab,
     openSensorFirstLevelTab,
-  } = useDefinition()
+    toggleTree,
+    nodes,
+    toggleSensorFolder,
+    toggleRuleFolder,
+    toggleDataQualityChecksFolder
+  } = useDefinition();
 
   useEffect(() => {
     dispatch(getSensorFolderTree());
@@ -81,100 +70,13 @@ export const DefinitionTree = () => {
     dispatch(getdataQualityChecksFolderTree());
   }, [refreshChecksTreeIndicator]);
 
-  const toggleSensorFolder = (key: string) => {
-    dispatch(toggleSensorFolderTree(key));
-  };
-
-  const openSensorFolder = (key: string) => {
-    dispatch(openSensorFolderTree(key));
-  };
-
-  const toggleRuleFolder = (key: string) => {
-    dispatch(toggleRuleFolderTree(key));
-  };
-
-  const openRuleFolder = (key: string) => {
-    dispatch(openRuleFolderTree(key));
-  };
-
-  const toggleDataQualityChecksFolder = (fullPath: string) => {
-    dispatch(toggledataQualityChecksFolderTree(fullPath));
-  };
-  const openDataQualityChecksFolder = (fullPath: string) => {
-    dispatch(opendataQualityChecksFolderTree(fullPath));
-  };
-
-  const toggleFolderRecursively = (
-    elements: string[],
-    index = 0,
-    type: string
-  ) => {
-    if (index >= elements.length - 1) {
-      return;
-    }
-    const path = elements.slice(0, index + 1).join('/');
-    if (index === 0) {
-      if (type === 'checks') {
-        openDataQualityChecksFolder('undefined/' + path);
-      } else if (type === 'rules') {
-        openRuleFolder('undefined/' + path);
-      } else {
-        openSensorFolder('undefined/' + path);
-      }
-    } else {
-      if (type === 'checks') {
-        openDataQualityChecksFolder(path);
-      } else if (type === 'rules') {
-        openRuleFolder(path);
-      } else {
-        openSensorFolder(path);
-      }
-    }
-    toggleFolderRecursively(elements, index + 1, type);
-  };
-
   useEffect(() => {
-    const configuration = [
-      { category: 'Sensors', isOpen: false },
-      { category: 'Rules', isOpen: false },
-      { category: 'Data quality checks', isOpen: false },
-      { category: 'Default checks configuration', isOpen: false }
-    ];
-    if (tabs && tabs.length !== 0) {
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('default_checks')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i]?.url?.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-        } else if (tabs[i]?.url?.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_check_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i]?.url?.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
-        }
-        dispatch(toggleFirstLevelFolder(configuration));
-      }
-    } else {
-      dispatch(toggleFirstLevelFolder(configuration));
-    }
+    toggleTree(tabs);
   }, [activeTab]);
+
+  const highlightedNode = activeTab
+    ?.split('/')
+    .at(activeTab?.split('/').length - 1);
 
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,
@@ -503,13 +405,34 @@ export const DefinitionTree = () => {
     );
   };
 
+  const NodeComponent = ({
+    onClick,
+    icon,
+    text
+  }: {
+    onClick: () => void;
+    icon: string;
+    text: string;
+  }) => (
+    <div
+      onClick={onClick}
+      className={clsx(
+        'cursor-pointer flex space-x-1 items-center mb-1 h-5 hover:bg-gray-300',
+        highlightedNode === text.toLowerCase().replace(' ', '-') &&
+          'bg-gray-300'
+      )}
+    >
+      <SvgIcon name={icon} className="w-4 h-4 min-w-4 " />
+      <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        {text}
+      </div>
+    </div>
+  );
+
   return (
     <div className="overflow-hidden w-80 p-4 pt-4 bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
-        <div
-          key={index}
-          className="text-[13px] cursor-pointer"
-        >
+        <div key={index} className="text-[13px] cursor-pointer">
           <div
             className="flex items-center mb-1 gap-x-1"
             onClick={() => {
@@ -574,51 +497,9 @@ export const DefinitionTree = () => {
             )}
         </div>
       ))}
-      <div
-        onClick={openAllUsersFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="userprofile" className="w-4 h-4 min-w-4 " />
-        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Manage users
-        </div>
-      </div>
-      <div
-        onClick={openDefaultSchedulesFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="clock" className="w-4 h-4 min-w-4 " />
-        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Default schedules
-        </div>
-      </div>
-      <div
-        onClick={openDefaultWebhooksFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="webhooks" className="w-4 h-4 min-w-4 " />
-        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Default webhooks
-        </div>
-      </div>
-      <div
-        onClick={openSharedCredentialsFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="definitionsrules" className="w-4 h-4 min-w-4 " />
-        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Shared credentials
-        </div>
-      </div>
-      <div
-        onClick={openDataDictionaryFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="datadictionary" className="w-4 h-4 min-w-4 " />
-        <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Data dictionaries
-        </div>
-      </div>
+      {(nodes as any[]).map((tab, index) => (
+        <NodeComponent key={index} {...tab} />
+      ))}
     </div>
   );
 };

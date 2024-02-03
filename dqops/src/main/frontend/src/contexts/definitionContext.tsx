@@ -1,7 +1,20 @@
 import React, { useState } from 'react';
 import { useActionDispatch } from '../hooks/useActionDispatch';
-import { addFirstLevelTab, openRuleFolderTree, openSensorFolderTree, opendataQualityChecksFolderTree, toggleFirstLevelFolder, toggleRuleFolderTree, toggleSensorFolderTree, toggledataQualityChecksFolderTree } from '../redux/actions/definition.actions';
-import { SensorListModel, RuleListModel, CheckDefinitionListModel } from '../api';
+import {
+  addFirstLevelTab,
+  openRuleFolderTree,
+  openSensorFolderTree,
+  opendataQualityChecksFolderTree,
+  toggleFirstLevelFolder,
+  toggleRuleFolderTree,
+  toggleSensorFolderTree,
+  toggledataQualityChecksFolderTree
+} from '../redux/actions/definition.actions';
+import {
+  SensorListModel,
+  RuleListModel,
+  CheckDefinitionListModel
+} from '../api';
 import { ROUTES } from '../shared/routes';
 import { urlencodeEncoder } from '../utils';
 import { INestTab } from '../redux/reducers/source.reducer';
@@ -9,7 +22,7 @@ import { INestTab } from '../redux/reducers/source.reducer';
 const DefinitionContext = React.createContext({} as any);
 
 function DefinitionProvider(props: any) {
-    const dispatch = useActionDispatch();
+  const dispatch = useActionDispatch();
   const [sidebarWidth, setSidebarWidth] = useState(310);
   const toggleSensorFolder = (key: string) => {
     dispatch(toggleSensorFolderTree(key));
@@ -174,46 +187,74 @@ function DefinitionProvider(props: any) {
 
   const toggleTree = (tabs: INestTab[]) => {
     const configuration = [
-        { category: 'Sensors', isOpen: false },
-        { category: 'Rules', isOpen: false },
-        { category: 'Data quality checks', isOpen: false },
-        { category: 'Default checks configuration', isOpen: false }
-      ];
-      if (tabs && tabs.length !== 0) {
-        for (let i = 0; i < tabs.length; i++) {
-          if (tabs[i].url?.includes('default_checks')) {
-            configuration[3].isOpen = true;
-          } else if (tabs[i]?.url?.includes('sensors')) {
-            configuration[0].isOpen = true;
-            const arrayOfElemsToToggle = (
-              tabs[i].state.full_sensor_name as string
-            )?.split('/');
-            if (arrayOfElemsToToggle) {
-              toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-            }
-          } else if (tabs[i]?.url?.includes('checks')) {
-            configuration[2].isOpen = true;
-            const arrayOfElemsToToggle = (
-              tabs[i].state.full_check_name as string
-            )?.split('/');
-            if (arrayOfElemsToToggle) {
-              toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-            }
-          } else if (tabs[i]?.url?.includes('rules')) {
-            configuration[1].isOpen = true;
-            const arrayOfElemsToToggle = (
-              tabs[i].state.full_rule_name as string
-            )?.split('/');
-            if (arrayOfElemsToToggle) {
-              toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-            }
+      { category: 'Sensors', isOpen: false },
+      { category: 'Rules', isOpen: false },
+      { category: 'Data quality checks', isOpen: false },
+      { category: 'Default checks configuration', isOpen: false }
+    ];
+    if (tabs && tabs.length !== 0) {
+      for (let i = 0; i < tabs.length; i++) {
+        if (tabs[i].url?.includes('default_checks')) {
+          configuration[3].isOpen = true;
+        } else if (tabs[i]?.url?.includes('sensors')) {
+          configuration[0].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_sensor_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
           }
-          dispatch(toggleFirstLevelFolder(configuration));
+        } else if (tabs[i]?.url?.includes('checks')) {
+          configuration[2].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_check_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+          }
+        } else if (tabs[i]?.url?.includes('rules')) {
+          configuration[1].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_rule_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
+          }
         }
-      } else {
         dispatch(toggleFirstLevelFolder(configuration));
       }
-  }
+    } else {
+      dispatch(toggleFirstLevelFolder(configuration));
+    }
+  };
+
+  const nodes = [
+    {
+      onClick: openAllUsersFirstLevelTab,
+      icon: 'userprofile',
+      text: 'Manage users'
+    },
+    {
+      onClick: openDefaultSchedulesFirstLevelTab,
+      icon: 'clock',
+      text: 'Default schedules'
+    },
+    {
+      onClick: openDefaultWebhooksFirstLevelTab,
+      icon: 'webhooks',
+      text: 'Default webhooks'
+    },
+    {
+      onClick: openSharedCredentialsFirstLevelTab,
+      icon: 'definitionsrules',
+      text: 'Shared credentials'
+    },
+    {
+      onClick: openDataDictionaryFirstLevelTab,
+      icon: 'datadictionary',
+      text: 'Data Dictionary'
+    }
+  ];
 
   return (
     <DefinitionContext.Provider
@@ -221,16 +262,10 @@ function DefinitionProvider(props: any) {
         sidebarWidth,
         setSidebarWidth,
         toggleTree,
-        openAllUsersFirstLevelTab,
         openCheckDefaultFirstLevelTab,
         openCheckFirstLevelTab,
         openDataDictionaryFirstLevelTab,
-        openDataQualityChecksFolder,
-        openDefaultSchedulesFirstLevelTab,
-        openDefaultWebhooksFirstLevelTab,
         openRuleFirstLevelTab,
-        openRuleFolder,
-        openRuleFolderTree,
         opendataQualityChecksFolderTree,
         openSharedCredentialsFirstLevelTab,
 
@@ -240,8 +275,9 @@ function DefinitionProvider(props: any) {
         toggleRuleFolder,
         toggleRuleFolderTree,
         toggleSensorFolder,
-        toggleSensorFolderTree
-
+        toggleSensorFolderTree,
+        toggleFolderRecursively,
+        nodes
       }}
       {...props}
     />
