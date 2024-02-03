@@ -1,7 +1,6 @@
 import React, { ReactNode, useEffect, useMemo } from 'react';
 
 import Header from '../Header';
-import DefinitionTree from './DefinitionTree';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import PageTabs from '../PageTabs';
@@ -26,6 +25,8 @@ import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
 import DefaultCheckDetail from '../../pages/DefaultChecksDetail'
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
+import LeftView from './LeftView';
+import { useDefinition } from '../../contexts/definitionContext';
 
 interface LayoutProps {
   route: string
@@ -101,17 +102,17 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
   };
 
   const renderComponent: ReactNode = getComponent();
-
+  const { sidebarWidth } = useDefinition(); 
   return (
-    <div className="flex min-h-screen overflow-hidden">
+    <div className="flex min-h-screen overflow-hidden z-30">
       <Header />
-      <DefinitionTree />
+      <LeftView />
       <div className="flex flex-1">
         <div
           className="mt-16 p-5 flex-1 overflow-auto"
           style={{
-            marginLeft: 320,
-            maxWidth: `calc(100vw - 320px)`
+            marginLeft: sidebarWidth,
+            maxWidth: `calc(100vw - ${sidebarWidth}px)`
           }}
         >
           <div className="flex-1 h-full flex flex-col">
