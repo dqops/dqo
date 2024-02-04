@@ -29,7 +29,7 @@ function ErrorProvider({ children }: any) {
         return; // handled elsewhere
       }
 
-      if (response && response?.status !== 503) {
+      if (response && response?.status !== 503 && response?.status !== 504) {
         const newError : IError = {
           name: response?.data?.error,
           message: response?.data?.trace,
