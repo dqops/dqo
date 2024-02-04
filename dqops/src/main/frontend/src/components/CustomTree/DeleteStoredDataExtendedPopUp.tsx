@@ -47,7 +47,7 @@ const DeleteStoredDataExtendedPopUp = ({
     deleteStatistics: true,
     deleteCheckResults: true,
     deleteSensorReadouts: true,
-    checkType: checkTypes === 'sources' ? 'profiling' : checkTypes
+    checkType: checkTypes === 'sources' ? undefined : checkTypes
   });
   const [allChecks, setAllChecks] = useState<CheckDefinitionFolderModel>();
   const [filteredStatistics, setFilteredStatistics] = useState<
@@ -109,13 +109,13 @@ const DeleteStoredDataExtendedPopUp = ({
       allChecks.folders?.table?.folders?.[
         (params.checkType ??
           CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
-      ].folders;
+      ]?.folders;
 
     const mainColumnFolder =
       allChecks.folders?.column?.folders?.[
         (params.checkType ??
           CheckTypes.PROFILING) as keyof CheckDefinitionFolderModel
-      ].folders;
+      ]?.folders;
 
     let tableCategories = {};
     let columnCategories = {};
@@ -124,11 +124,11 @@ const DeleteStoredDataExtendedPopUp = ({
       params.checkType === CheckTypes.PARTITIONED
     ) {
       if (params.timeGradient === 'monthly') {
-        tableCategories = mainTableFolder?.monthly.folders ?? {};
-        columnCategories = mainColumnFolder?.monthly.folders ?? {};
+        tableCategories = mainTableFolder?.monthly?.folders ?? {};
+        columnCategories = mainColumnFolder?.monthly?.folders ?? {};
       } else {
-        tableCategories = mainTableFolder?.daily.folders ?? {};
-        columnCategories = mainColumnFolder?.daily.folders ?? {};
+        tableCategories = mainTableFolder?.daily?.folders ?? {};
+        columnCategories = mainColumnFolder?.daily?.folders ?? {};
       }
     } else {
       tableCategories = mainTableFolder ?? {};
@@ -221,14 +221,19 @@ const DeleteStoredDataExtendedPopUp = ({
           <div className="flex w-full gap-4 px-4 py-4 text-gray-700 pl-12 border-b border-gray-300">
             <SelectInput
               className="w-1/3"
-              options={['', ...Object.values(CheckTypes)]
+              options={['All check types', ...Object.values(CheckTypes)]
                 .map((x) => ({ label: x, value: x }))
                 .filter((_, index) => index !== 2)}
               label="Check type (profiling, monitoring, partitioned)"
-              value={params.checkType}
+              value={
+                params.checkType !== undefined
+                  ? params.checkType
+                  : 'All check types'
+              }
               onChange={(value) =>
                 onChangeParams({
-                  checkType: String(value).length !== 0 ? value : undefined,
+                  checkType:
+                    String(value) !== 'All check types' ? value : undefined,
                   checkCategory: undefined,
                   checkName: undefined
                 })
