@@ -216,7 +216,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*string_datatype_detect*](./column/datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|
+|[*string_datatype_detect*](./column/datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.|
 
 
 

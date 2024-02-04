@@ -16,7 +16,7 @@ spec:
     - integers
     - floats
     - dates
-    - timestamps
+    - datetimes
     - booleans
     - texts
     - mixed

@@ -598,7 +598,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ## detected datatype equals
 Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
- The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
 
 **Rule summary**
 
@@ -615,7 +615,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*timestamps*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
+|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
 
 
 

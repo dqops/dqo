@@ -6,7 +6,7 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 
 ## string datatype detect
 Column level sensor that analyzes all values in a text column and detects the data type of the values.
- The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
 
 **Sensor summary**
 
@@ -78,7 +78,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -94,8 +94,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -156,7 +156,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -172,8 +172,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -233,7 +233,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -249,8 +249,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -311,7 +311,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -327,8 +327,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -394,7 +394,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -410,8 +410,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -472,7 +472,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -488,8 +488,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -557,7 +557,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -573,8 +573,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -635,7 +635,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -651,8 +651,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -713,7 +713,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -729,8 +729,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -798,7 +798,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -814,8 +814,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -877,7 +877,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -893,8 +893,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
