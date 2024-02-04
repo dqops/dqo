@@ -1,12 +1,253 @@
-# Detecting data quality issues with volume
-Read this guide to learn what types of data quality checks are supported in DQOps to detect issues related to volume.
-The data quality checks are configured in the `volume` category in DQOps.
+# Monitoring data volume and detecting empty tables
+Read this guide to learn how to monitor the number of rows in tables, detect empty tables, and detect unexpected increases or decreases in the volume.
 
-## Volume category
-Data quality checks that are detecting issues related to volume are listed below.
+The table volume monitoring checks are configured in the `volume` category in DQOps.
 
-## Detecting volume issues
-How to detect volume data quality issues.
+## What is data volume
+The data volume refers to the size of the dataset stored by an organization. 
+The data volume of a table has two measures.
+
+- A **logical volume** is the number of rows in the table.
+
+- A **physical volume** is a physical storage size (in megabytes, gigabytes, terabytes) occupied by the table on disk.
+
+DQOps measures a logical volume, running a row count queries on monitored tables. 
+Monitoring the physical volume is possible by creating a custom data quality check that pulls the physical statistics of the table.
+
+
+## Data volume issues
+Usually, unexpected data volume changes are caused by problems in the data pipeline or changes in the source system.
+
+The problems in the data pipeline:
+
+- A batch was missed and not loaded into the target table.
+
+- A batch was loaded twice, also generating duplicate rows.
+
+- The data pipeline is stopped.
+
+- The data pipeline uses outdated credentials and cannot process the data.
+
+The source system can also cause volume issues:
+
+- The source system or table was decommissioned. The data pipeline does not receive any new data.
+
+- The usage of the source system has changed. More or less users are accessing the source platform.
+
+- The content of the table was corrupted during a maintenance operation.
+
+All these issues will affect the table volume. 
+We can notice them by asserting a **minimum row count** or by detecting **row count anomalies**.
+
+## Data volume monitoring by DQOps
+DQOps supports several methods of detecting data volume issues.
+
+### Empty tables
+We can detect empty tables. The [*row_count*](../checks/table/volume/row-count.md) check in DQOps has a *min_count* parameter. 
+An empty table does not pass the data quality check because it has less than 1 row. W
+hen a new table is imported into DQOps using the user interface, 
+DQOps activates the [*row_count*](../checks/table/volume/row-count.md) check
+configured to raise a data quality issue at a [warning severity level](../dqo-concepts/definition-of-data-quality-checks/index.md#warning).
+
+This configuration is included in the default settings of the [data observability checks](../dqo-concepts/data-observability.md).
+
+### Minimum row count
+We can also detect incomplete tables. An incomplete table has fewer records than the minimum number that makes sense.
+For example, we can monitor that the *dim_products* table has at least 100 records.
+DQOps detects too small tables using the [*row_count*](../checks/table/volume/row-count.md) check configured
+with a *min_count* parameter set to the minimum accepted value.
+
+### Row count change anomaly
+DQOps detects unexpected increases or decreases in the row count day-to-day using anomaly detection checks. 
+Because the row count is a slowly growing measure, 
+DQOps can detect changes by detecting bigger-than-average increases or decreases in the row count.
+
+DQOps converts the historical row count values into a differential sequence of values.
+Instead of analyzing row counts for each day that could differ slightly, DQOps analyzes row count differences between following days.
+Let's see how DQOps calculates a differential sequence from the sequence of daily row counts.
+
+| Date       | Row count | Difference   |
+|------------|-----------|--------------|
+| 2024-01-01 | 45.600    | _(none)_     |
+| 2024-01-02 | 45.650    | _+50_        |
+| 2024-01-03 | 45.680    | _+30_        |
+| 2024-01-04 | 45.660    | _-20_        |
+| 2024-01-05 | 55.660    | **_+10000_** |
+
+Please read the description of [anomalies supported by DQOps](how-to-detect-anomaly-data-quality-issues.md)
+to learn how anomaly detection works in DQOps. 
+The anomaly detection for numeric values and table volume obeys the same rules.
+
+### Daily/weekly/monthly row count change
+DQOps can monitor row count changes compared to a relative past date. 
+We can avoid the influence of seasonability issues by comparing the current row count to the row count of 7 or 30 days ago. 
+Comparing the row count on Monday to the row count on Sunday may lead to false-positive volume issues,
+especially when no data was loaded during the weekend.
+
+The following table shows how DQOps calculates the row count increase in percent since a reference point seven days ago.
+
+
+| Date           | Row count  | Reference point                  |
+|----------------|------------|----------------------------------|
+| 2024-01-01     | **45.600** | <─┐                              |
+| 2024-01-02     | 45.650     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| 2024-01-03     | 45.680     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| 2024-01-04     | 45.660     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| 2024-01-05     | 45.690     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| 2024-01-06     | 45.720     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| 2024-01-07     | 45.750     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
+| **2024-01-08** | **45.780** | ──┘  _(+180 rows or **+0.39%**)_ |
+
+The data quality checks that compare a value (a row count) to a reference value in the past are described in the
+[Compare to a reference point](how-to-detect-anomaly-data-quality-issues.md#compare-to-a-reference-point) section 
+of the [anomaly detection article](how-to-detect-anomaly-data-quality-issues.md).
+
+### Minimum partition row count
+The [*row_count*](../checks/table/volume/row-count.md) check is also applicable to partition checks in DQOps. 
+The [*daily_partition_row_count*](../checks/table/volume/row-count.md#daily-partition-row-count) and
+[*monthly_partition_row_count*](../checks/table/volume/row-count.md#monthly-partition-row-count)
+checks measure the row count of daily or monthly partitions.
+When partitioned checks are applied to time-oriented tables not physically partitioned by the date column, 
+DQOps measures the number of rows for a daily or monthly period.
+
+### Partition row count anomaly
+Data volume anomaly detection also works for partitions.
+A daily partitioned variant [*daily_partition_row_count*](../checks/table/volume/row-count.md#daily-partition-row-count) of
+the *row_count* check detects anomalies by comparing the size of daily partitions.
+Anomalous partitions are smaller or bigger than the average partition size.
+
+## Daily table volume monitoring
+The [*daily_row_count*](../checks/table/volume/row-count.md#daily-row-count) data quality check is a table-level check
+in the *volume* category.
+
+### Detect empty tables in UI
+The default configuration of the [*daily_row_count*](../checks/table/volume/row-count.md#daily-row-count)
+check sets the value of the *min_count* parameter to 1. 
+This configuration asserts that the table is not empty, having at least one row.
+
+![Detecting empty tables with daily monitoring checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-non-empty-tables-with-row-count-check-initial-min.png){ loading=lazy }
+
+### Detect too small tables in UI
+We can also set a higher value of the *min_count* parameter, which is the desired minimum size of the table.
+
+![Monitoring minimum accepted table row count](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-minimum-table-row-count-min.png){ loading=lazy }
+
+### Configuring row count check in YAML
+The row count check is straightforward to configure in the table YAML file.
+
+``` { .yaml linenums="1" hl_lines="10 12" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count:
+          warning:
+            min_count: 1790000
+          error:
+            min_count: 1
+```
+
+### Reviewing empty or incomplete tables on the dashboard
+The **empty or too small tables** dashboard shows data volume issues identified by the
+[*daily_row_count*](../checks/table/volume/row-count.md#daily-row-count) check.
+The dashboard presented below shows issues detected by daily monitoring checks. There is also a data profiling version
+of the dashboard in the *profiling* folder of the data quality dashboard tree.
+
+![Empty or too small tables data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/empty-or-too-small-table-dashboard-with-warning-min.png){ loading=lazy; width="600px" }
+
+*(click to expand)*
+
+
+## Monitoring partition's row count
+Monitoring partition sizes (row counts) is similar to tracking the row count of the whole table in the
+[*Monitoring checks*](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md) section.
+
+The [*daily_partition_row_count*](../checks/table/volume/row-count.md#daily-partition-row-count) check is a variant of
+the [*row_count*](../checks/table/volume/row-count.md)check that applies a `GROUP BY <partition_by_column>`
+condition to the row count SQL query.
+
+### Measure minimum partition size in UI
+DQOps shows the row counts of daily or monthly partitions when a partitioned version of the check is run. 
+Partitions that are below a minimum size are highlighted.
+
+![Minimum partition row count results](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-results-min.png){ loading=lazy }
+
+### Partition sizes chart
+The view of the partition sizes can be switched from a table view to a chart view.
+
+The chart shows too small daily partitions on the yellow part of the chart, below the minimum row count threshold line.
+
+![Minimum partition row count chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/monitoring-daily-partition-mininum-row-count-chart-min.png){ loading=lazy }
+
+### Configuring partition volume check in YAML
+The configuration of the partition row count check requires a proper configuration of the *partition_by_column* column name. 
+Please follow the documentation of [*partitioned checks*](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md#configure-partitioning-column-in-the-yaml-file)
+to learn how to activate partitioned checks.
+The configuration of the partitioning column is shown below for reference.
+
+``` { .yaml linenums="1" hl_lines="13-15" .annotate }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  timestamp_columns:
+    partition_by_column: created_date # (1)!
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  partitioned_checks:
+    daily:
+      volume:
+        daily_partition_row_count:
+          error:
+            min_count: 10
+```
+
+1.  The configuration of the *partition_by_column* column required by partition checks.
+
+### Identifying too small partitions on dashboards
+The *daily partitions row count* dashboard shows the list of partitioned tables. The row count for each day is shown in a pivot table.
+
+![Daily partition row count monitoring data quality dashboard](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/table-partition-row-count-dashboard-min.png){ loading=lazy; width="600px" }
+
+*(click to expand)*
+
+
+## Detecting volume anomalies
+Anomaly detection for the data volume uses the same concept as detecting numeric anomalies.
+
+### Row count anomaly checks
+The [*row_count_anomaly*](../checks/table/volume/row-count-anomaly.md) data quality check detects volume anomalies in two modes:
+
+- A *daily monitoring* check [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
+  calculates the row count difference since the previous day. The anomalous values are abnormal increases or decreases in the data volume.
+
+- A *daily partition* check [*daily_partition_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)
+  check detects volume anomalies by detecting bigger or smaller daily partitions. 
+  The difference in row count between the following days is not analyzed.
+
+
+### Row count anomaly chart
+The following example shows a chart view of the  [*daily_partition_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)
+for daily partitions. 
+
+The chart is the same for a daily monitoring check [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
+that measures the whole table and detects daily row count increases/decreases.
+
+The anomalous partition is highlighted for the purpose of this manual.
+
+![Partition row count anomaly issue on a chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partitition-row-count-anomaly-chart-min.png){ loading=lazy }
+
+### Detecting anomalies at multiple severity levels
+The chart below shows how DQOps presents a row count anomaly check with different values of the *anomaly_percent* parameters
+at various [issue severity levels](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels)
+(*warning*, *error*, *fatal*).
+
+![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy }
+
 
 ## Use cases
 | **Name of the example**                                                                                 | **Description**                                                                                                                                                             |
