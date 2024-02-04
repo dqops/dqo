@@ -88,7 +88,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
 
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
             String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud(),
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             synchronized (this.lock) {
                 DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
@@ -128,7 +128,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             apiClient.getAuthentication("api_key");
             AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
             TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken(
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
             try {

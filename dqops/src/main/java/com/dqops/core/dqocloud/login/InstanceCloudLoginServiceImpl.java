@@ -150,7 +150,7 @@ public class InstanceCloudLoginServiceImpl implements InstanceCloudLoginService 
                 ticketGrantingTicketRequest.setUrl(returnBaseUrl);
 
                 String signedTicketGrantingTicket = refreshTokenIssueApi.issueLoginTicketGrantingTicketToken(ticketGrantingTicketRequest,
-                        userPrincipalForAdministrator.getApiKeyPayload().getSubject(), userPrincipalForAdministrator.getApiKeyPayload().getTenantId());
+                        userPrincipalForAdministrator.getDataDomainIdentity().getTenantOwner(), userPrincipalForAdministrator.getDataDomainIdentity().getTenantId());
                 this.grantingTicketPayloadSignedObject = this.signatureService.decodeSignedMessageHexNoValidate(
                         UserLoginTicketGrantingTicketPayload.class, signedTicketGrantingTicket);
             }

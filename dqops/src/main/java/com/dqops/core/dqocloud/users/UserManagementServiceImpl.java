@@ -69,7 +69,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             List<DqoUserModel> cloudUserList = accountUsersApi.listAccountUsers(
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             List<DqoCloudUserModel> users =
                     cloudUserList.stream()
@@ -107,7 +107,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             DqoUserModel cloudUserModel = accountUsersApi.getAccountUser(email,
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             DqoCloudUserModel dqoCloudUserModel = new DqoCloudUserModel() {{
                 setEmail(cloudUserModel.getEmail());
@@ -153,7 +153,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }};
 
             accountUsersApi.createAccountUser(dqoUserModel,
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
             throw ex;
@@ -193,7 +193,7 @@ public class UserManagementServiceImpl implements UserManagementService {
             }};
 
             accountUsersApi.updateAccountUser(userModel.getEmail(), dqoUserModel,
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
             throw ex;
@@ -228,7 +228,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.deleteAccountUser(email,
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
             throw ex;
@@ -267,7 +267,7 @@ public class UserManagementServiceImpl implements UserManagementService {
 
             AccountUsersApi accountUsersApi = new AccountUsersApi(authenticatedClient);
             accountUsersApi.changeAccountUserPassword(email, newPassword,
-                    userPrincipal.getApiKeyPayload().getSubject(), userPrincipal.getApiKeyPayload().getTenantId());
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
         }
         catch (DqoCloudInvalidKeyException ex) {
             throw ex;
