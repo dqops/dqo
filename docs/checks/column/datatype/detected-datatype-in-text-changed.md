@@ -19,7 +19,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3774,7 +3774,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -7531,7 +7531,7 @@ Detects that the data type of texts stored in a text column has changed since th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -11288,7 +11288,7 @@ Detects that the data type of texts stored in a text column has changed when com
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -15065,7 +15065,7 @@ Detects that the data type of texts stored in a text column has changed when com
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 

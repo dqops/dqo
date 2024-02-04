@@ -35,6 +35,7 @@ public class CheckCategoryDocumentationConstants {
         put("bool", "how-to-detect-data-quality-issues-in-bool-fields.md");
         put("numeric", "how-to-detect-data-quality-issues-in-numeric-fields.md");
         put("datetime", "how-to-detect-data-quality-issues-in-dates.md");
+        put("datatype", "how-to-detect-data-type-changes.md");
         put("integrity", "how-to-detect-data-referential-integrity-issues.md");
         put("blanks", "how-to-detect-blank-and-whitespace-values.md");
         put("availability", "how-to-table-availability-issues-and-downtimes.md");

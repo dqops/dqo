@@ -71,7 +71,7 @@ nav:
     - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
     - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
     - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
-    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md'
+    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
     - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
     - Dates: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md'
     - Nulls: 'categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
