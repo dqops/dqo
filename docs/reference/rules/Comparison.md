@@ -342,15 +342,14 @@ The rule definition YAML file *comparison/between_percent.dqorule.yaml* with the
       java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
       mode: current_value
       fields:
-      - field_name: from
-        display_name: from
-        help_text: Minimum accepted value for the actual_value returned by the sensor
-          (inclusive).
+      - field_name: min_percent
+        display_name: min_percent
+        help_text: Minimum accepted percentage of rows passing the check (inclusive).
         data_type: double
-      - field_name: to
-        display_name: to
-        help_text: Maximum accepted value for the actual_value returned by the sensor
-          (inclusive).
+        default_value: 100.0
+      - field_name: max_percent
+        display_name: max_percent
+        help_text: Maximum accepted percentage of rows passing the check (inclusive).
         data_type: double
     ```
 

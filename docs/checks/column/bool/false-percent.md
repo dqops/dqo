@@ -44,7 +44,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_false_percent --enable-warning
-                            -Wfrom=value
+                            -Wmin_percent=value
         ```
 
 
@@ -67,7 +67,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=profile_false_percent --enable-error
-                            -Efrom=value
+                            -Emin_percent=value
         ```
 
 
@@ -1265,7 +1265,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_false_percent --enable-warning
-                            -Wfrom=value
+                            -Wmin_percent=value
         ```
 
 
@@ -1288,7 +1288,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_false_percent --enable-error
-                            -Efrom=value
+                            -Emin_percent=value
         ```
 
 
@@ -2488,7 +2488,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_false_percent --enable-warning
-                            -Wfrom=value
+                            -Wmin_percent=value
         ```
 
 
@@ -2511,7 +2511,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_false_percent --enable-error
-                            -Efrom=value
+                            -Emin_percent=value
         ```
 
 
@@ -3711,7 +3711,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_false_percent --enable-warning
-                            -Wfrom=value
+                            -Wmin_percent=value
         ```
 
 
@@ -3734,7 +3734,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=daily_partition_false_percent --enable-error
-                            -Efrom=value
+                            -Emin_percent=value
         ```
 
 
@@ -4956,7 +4956,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_false_percent --enable-warning
-                            -Wfrom=value
+                            -Wmin_percent=value
         ```
 
 
@@ -4979,7 +4979,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 
         ```
         dqo> check activate -c=connection_name -t=schema_prefix*.fact_* -col=column_name -ch=monthly_partition_false_percent --enable-error
-                            -Efrom=value
+                            -Emin_percent=value
         ```
 
 
