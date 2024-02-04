@@ -30,6 +30,48 @@ Data type detection prevents issues in the data pipelines.
     [table schema drift checks](how-to-detect-table-schema-changes.md) in the `schema` category.    
 
 
+### Mixed data type issues
+The following example shows an issue related to storing mixed data types in a text column.
+The tested column is *street_name*. 
+We assume that all values are integer values, allowing us to use an *INTEGER* data type instead of a *STRING* type. 
+The column statistics show that the most common street numbers are integers, 
+but DQOps detected that the column contains mixed data types.
+
+![Mixed data types detected in column that has mostly numeric values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/mixed-data-types-example-with-numeric-values-min.png){ loading=lazy }
+
+We can change the table filter to return only rows containing non-numeric values
+that failed to be converted to an *INTEGER* data type.
+
+![Configure table filter for data profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/setting-table-filter-to-rerun-profiling-min.png){ loading=lazy }
+
+The SQL filter that we used is shown below.
+
+```sql
+{alias}.street_number IS NOT NULL AND safe_cast({alias}.street_number AS INTEGER) IS NULL
+```
+
+After capturing statistics for the column again, the only column value samples that were captured were non-numeric values.
+
+![Data profiling results showing non numeric values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-profiling-result-not-numeric-values-min.png){ loading=lazy; width="300px" }
+
+### Data sample
+The following sample of the column values shows both integer and non-integer values.
+
+| street_number |
+|---------------|
+| 1520          |
+| 500           |
+| 1500          |
+| 600           |
+| **915 1/2**   |
+
+
+## Data type detections by DQOps
+DQOps has two dedicated data quality checks for detecting data types in text columns. 
+The SQL queries in these checks try to convert all values in a column to all supported data types. 
+If all values are convertible to the same data type, DQOps returns the category code of that type.
+Otherwise, DQOps returns a special data type category code that identifies a mixed data type.
+
 ### Detected data types
 DQOps detects the following categories of data types.
 
@@ -42,6 +84,93 @@ DQOps detects the following categories of data types.
 | booleans           | 6                                         | Placeholders of a *true* and *false* values                                 | true, false, TRUE, FALSE, yes, no, YES, NO, y, n, Y, N, t, f, T, F |
 | texts              | 7                                         | Text values that are not numbers, dates or boolean placeholders             | New York, Austin, TX                                               |
 | mixed              | 8                                         | The values found in the column are mixed including values of multiple types | 1, 43.11, 2020-04-01, true, Austin                                 |
+
+
+## Data type detection checks
+DQOps has two data quality checks for data type detection. An assertion check that verifies
+if all values in a column match a given data type.
+And a data type change detection that detects if new rows contain values of a different data type.
+
+## Assert data type check
+The [*detected_datatype_in_text*](../checks/column/datatype/detected-datatype-in-text.md) data quality check
+analyzes all values in a column and asserts that all values are of an expected data type.
+
+### Configure detection check in UI
+The [*detected_datatype_in_text*](../checks/column/datatype/detected-datatype-in-text.md) data quality check
+is easy to activate. The parameter of the rule is the expected data type.
+
+![Configure data type detection check in UI](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/assert-data-type-in-text-column-street-number-check-min.png){ loading=lazy }
+
+### Configure detection check in YAML
+The [*detected_datatype_in_text*](../checks/column/datatype/detected-datatype-in-text.md)
+check uses the *data type category* names listed in the table above.
+
+``` { .yaml linenums="1" hl_lines="15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    street_number:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          datatype:
+            daily_detected_datatype_in_text:
+              error:
+                expected_datatype: integers
+```
+
+## Detect type changed check
+The data type change detection check
+[*detected_datatype_in_text_changed*](../checks/column/datatype/detected-datatype-in-text-changed.md) 
+monitors changes to the data type, comparing the detected data type to the last known detected data type. 
+DQOps uses the historical data quality results for change detection.
+
+### Configure type change check in UI
+The [*detected_datatype_in_text_changed*](../checks/column/datatype/detected-datatype-in-text-changed.md)
+check uses parameterless data quality rules to select the severity level for reported issues.
+
+![Detect data type changed in text column data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-data-type-changed-check-min.png){ loading=lazy }
+
+The example above shows the first execution of the check when historical results are not yet present. 
+Hence, the *expected_value* is missing. 
+When DQOps reruns this check the next day, the *expected_value* will be the value of the *actual_value* from the previous day.
+
+### Configure type change check in YAML
+The [*detected_datatype_in_text_changed*](../checks/column/datatype/detected-datatype-in-text-changed.md)
+check uses [parameterless rules](../dqo-concepts/configuring-data-quality-checks-and-rules.md#rules-without-parameters) 
+to activate the desired [alerting severity level](../dqo-concepts/definition-of-data-quality-checks/index.md#issue-severity-levels).
+
+``` { .yaml linenums="1" hl_lines="13-14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    street_number:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          datatype:
+            daily_detected_datatype_in_text_changed:
+              error: {}
+```
+
+## Detecting data types across partitions
+The data type detection checks also work on partitioned data.
+A partitioned variant of the check is enabled in the [*Partitioned Checks*](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)
+section. DQOps will analyze rows for each daily or monthly partition.
+By using a partitioned version of the data type detection checks, it is possible to detect data type drifts between partitions.
+
+The following example shows that the last five daily partitions contained only integer values in the *street_number* column, 
+and the detected data type has not changed day-to-day.
+
+![Data type detection in daily partitions](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/data-type-detection-in-partitioned-data-min.png){ loading=lazy }
 
 
 ## List of datatype checks at a column level
