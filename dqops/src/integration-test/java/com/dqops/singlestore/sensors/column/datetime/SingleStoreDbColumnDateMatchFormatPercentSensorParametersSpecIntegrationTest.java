@@ -16,7 +16,7 @@
 package com.dqops.singlestore.sensors.column.datetime;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.datetime.ColumnDatetimeDateMatchFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
 import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
 import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
 import org.junit.jupiter.api.Assertions;
@@ -41,9 +41,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
-    private ColumnDatetimeDateMatchFormatPercentSensorParametersSpec sut;
+    private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec checkSpec;
+    private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -52,14 +52,14 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnDatetimeDateMatchFormatPercentSensorParametersSpec();
-        this.checkSpec = new ColumnDatetimeDateMatchFormatPercentCheckSpec();
+        this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
+        this.checkSpec = new ColumnTextMatchDateFormatPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_text", this.checkSpec);
@@ -74,7 +74,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
@@ -89,7 +89,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
@@ -104,7 +104,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
@@ -119,7 +119,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");

@@ -424,448 +424,6 @@ ___
 
 
 
-## date match format percent
-Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
-
-**Sensor summary**
-
-The date match format percent sensor is documented below.
-
-| Target | Category | Full sensor name | Source code on GitHub |
-|--------|----------|------------------|-----------------------|
-| column | datetime | <span class="no-wrap-code">`column/datetime/date_match_format_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
-
-
-**Sensor parameters**
-
-| Field name | Description | Allowed data type | Required | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`date_formats`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
-
-
-
-
-
-
-**Jinja2 SQL templates**
-
-The templates used to generate the SQL query for each data source supported by DQOps is shown below.
-
-=== "BigQuery"
-
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_formats(parameters.date_formats)}}) IS NOT FALSE
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Databricks"
-
-    ```sql+jinja
-    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_formats(parameters.date_formats)}}) IS NOT FALSE
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "MySQL"
-
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    {% macro render_regex(column, regex_pattern) %}
-        {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
-        {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(CASE
-                  WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
-                     THEN 1
-                  ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Oracle"
-
-    ```sql+jinja
-    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
-      {% macro render_date_formats(date_formats) %}
-      {%- if date_formats == 'DD/MM/YYYY'-%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-      {%- elif date_formats == 'DD-MM-YYYY' -%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-      {%- elif date_formats == 'DD.MM.YYYY' -%}
-      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-      {%- elif date_formats == 'YYYY-MM-DD' -%}
-      '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-      {%- endif -%}
-      {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(CASE
-                  WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
-                     THEN 1
-                  ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "PostgreSQL"
-
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_formats(parameters.date_formats)}} IS NOT NULL
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Presto"
-
-    ```sql+jinja
-    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE CAST(100.0 * SUM(
-                CASE
-                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Redshift"
-
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ {{render_date_formats(parameters.date_formats)}})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Snowflake"
-
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Spark"
-
-    ```sql+jinja
-    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_formats(parameters.date_formats)}}) IS NOT FALSE
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "SQL Server"
-
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_formats(parameters.date_formats)}} ESCAPE '~'
-                        THEN 1
-                    ELSE 0
-                END
-            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Trino"
-
-    ```sql+jinja
-    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_formats(date_formats) %}
-        {%- if date_formats == 'DD/MM/YYYY'-%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
-        {%- elif date_formats == 'DD-MM-YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
-        {%- elif date_formats == 'DD.MM.YYYY' -%}
-            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
-        {%- elif date_formats == 'YYYY-MM-DD' -%}
-            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
-        {%- endif -%}
-    {% endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE CAST(100.0 * SUM(
-                CASE
-                    WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_formats(parameters.date_formats)}})
-                        THEN 1
-                    ELSE 0
-                END
-            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-
-
 ## date values in future percent
 Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
 
@@ -1407,6 +965,459 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 {{ render_value_in_future() }}
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
+## text match date format percent
+Column level sensor that calculates the percentage of text values that match an expected date format.
+
+**Sensor summary**
+
+The text match date format percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | datetime | <span class="no-wrap-code">`column/datetime/text_match_date_format_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+
+
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`date_format`</span>|Desired date format. Sensor will try to parse the column records and cast the data using this format.|*enum*|:material-check-bold:|*DD/MM/YYYY*<br/>*DD-MM-YYYY*<br/>*DD.MM.YYYY*<br/>*YYYY-MM-DD*<br/>|
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$"
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r{{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    {% macro render_regex(column, regex_pattern) %}
+        {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+        {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(CASE
+                  WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                       {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
+                     THEN 1
+                  ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+      {% macro render_date_format(date_format) %}
+      {%- if date_format == 'DD/MM/YYYY'-%}
+      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+      {%- elif date_format == 'DD-MM-YYYY' -%}
+      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+      {%- elif date_format == 'DD.MM.YYYY' -%}
+      '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+      {%- elif date_format == 'YYYY-MM-DD' -%}
+      '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+      {%- endif -%}
+      {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(CASE
+                  WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                       REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                     THEN 1
+                  ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         {{lib.render_target_column('analyzed_table')}} ~ {{render_date_format(parameters.date_format)}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])/(0[1-9]|1[0-2])/([1-9][0-9]{3})$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])-(0[1-9]|1[0-2])-([1-9][0-9]{3})$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         {{ lib.render_target_column('analyzed_table') }} LIKE {{render_date_format(parameters.date_format)}} ESCAPE '~'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format(date_format) %}
+        {%- if date_format == 'DD/MM/YYYY'-%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+        {%- elif date_format == 'DD-MM-YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+        {%- elif date_format == 'DD.MM.YYYY' -%}
+            '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+        {%- elif date_format == 'YYYY-MM-DD' -%}
+            '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                         REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), {{render_date_format(parameters.date_format)}})
+                        THEN 1
+                    ELSE 0
+                END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

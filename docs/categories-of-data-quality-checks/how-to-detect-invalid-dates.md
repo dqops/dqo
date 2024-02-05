@@ -25,14 +25,14 @@ The following example shows profiling results of a *delivered_at* column for an 
 The most recent (maximum) date is after the current time when the table was profiled.
 It indicates that the delivery date is in the future.
 
-![Example of a date in the future in a datetime column](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/datetime-column-statistics-date-in-the-future-min.png){ loading=lazy }
+![Example of a date in the future in a datetime column revealed by profiling](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/datetime-column-statistics-date-in-the-future-min.png){ loading=lazy }
 
 ### Detecting future dates in UI
 The [*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md) data quality check finds dates in the future
 and measures the percentage of rows having future dates.
 The *max_percent* parameter controls the maximum accepted percentage of invalid rows.
 
-![Date in the future invalid date example](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-the-future-percent-check-editor-min.png){ loading=lazy }
+![Date in the future invalid date example](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-future-found-check-editor-min.png){ loading=lazy }
 
 ### Detecting future dates in YAML
 The [*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md) check is easy to enable. 
@@ -74,17 +74,118 @@ The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-
 This check detects rows with corrupted or fake dates, such as 1900-01-01 or 2099-12-31.
 
 ### Configure date in range check in UI
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) checks needs 
+The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check is configured with three parameters.
 
-## Detecting datetime issues
-How to detect datetime data quality issues.
+- **min_date** parameter that is the earliest accepted date inclusive. 
+  The default value is *1900-01-02* to exclude a common placeholder date *1900-01-01*.
+
+- **max_date** parameter that is the latest accepted date inclusive.
+  The default value is *2099-12-30* to exclude a common placeholder date *2099-12-31*.
+
+- **min_percent** parameter that is the minimum percentage of valid dates. The default value is *100%*. 
+  DQOps measures only the percentage of not null date values. 
+  If only two rows store not null values and one value is out of range, the calculated percentage is 50% independent of the table size.
+
+![Date in range percent data quality check with valid date ranges](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-range-percent-check-min.png){ loading=lazy }
+
+### Configure date in range check in YAML
+The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check requires the configuration of the parameters described before.
+
+``` { .yaml linenums="1" hl_lines="13-18" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    delivered_at:
+      type_snapshot:
+        column_type: TIMESTAMP
+        nullable: true
+      monitoring_checks:
+        daily:
+          datetime:
+            daily_date_in_range_percent:
+              parameters:
+                min_date: 1900-01-02
+                max_date: 2099-12-30
+              error:
+                min_percent: 100.0
+```
+
+
+## Text column match date format
+Text columns in the landing zone tables are often loaded as raw tables with only text columns. 
+The data pipeline parses text values to a desired data type. Parsing integer or numeric values is simple, 
+not generating confusion about the data format.
+But date values must match one of the popular formats. 
+We cannot let the transformation engine detect the date format because the date detection logic cannot distinguish
+"*01/02/2024*" between *February 1st, 2024*, and *January 2nd, 2024*, leading to loading invalid dates.
+We can prevent these errors by asserting that all values match the same expected date format.
+
+The following sample shows an extract from a text column that contains dates in mixed formats. The last row is different.
+
+| Text column that should be a date |
+|-----------------------------------|
+| 2024-02-01                        |
+| 2024-02-02                        |
+| 2024-02-03                        |
+| 2024-02-04                        |
+| **02/05/2024**                    |
+
+### Asserting date formats in UI
+We will use a sample column that contains dates in the ISO 8601 format. The profiling result shows some samples from the column.
+
+![Text column profiling result with valid ISO 8601 date](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-column-profile-statistics-min.png){ loading=lazy; width="300px" }
+
+The [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) 
+examines text columns (char, varchar, string, etc.), trying to match all column values to an expected date format.
+The parameters of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) check are:
+
+- **date_format** parameter accepts one of the date formats supported by DQOps.
+
+- **min_percent** is the rule parameter to decide how many percent of non-null column values must match the expected format.
+
+
+![Text column match an expected date format data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-match-date-format-percent-check-min.png){ loading=lazy }
+
+### Asserting date formats in YAML
+The configuration of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) 
+check uses a list of date formats supported by DQOps.
+
+| Date format constant | Sample date  |
+|----------------------|--------------|
+| YYYY-MM-DD           | 2023-12-31   |
+| DD/MM/YYYY           | 31/12/2023   |
+| DD-MM-YYYY           | 31-12-2024   |
+| DD.MM.YYYY           | 31.12.2024   |
+
+The configuration of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)
+check in YAML is shown below.
+
+``` { .yaml linenums="1" hl_lines="10-14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    delivered_at_text:
+      monitoring_checks:
+        daily:
+          datetime:
+            daily_text_match_date_format_percent:
+              parameters:
+                date_format: YYYY-MM-DD
+              error:
+                min_percent: 100.0 
+```
+
 
 ## List of datetime checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
 |[*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md)|Validity|A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.|:material-check-bold:|
 |[*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md)|Validity|A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid|:material-check-bold:|
-|[*date_match_format_percent*](../checks/column/datetime/date-match-format-percent.md)|Validity|A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats. It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format. The default value 100.0 (percent) verifies that all values match a given date format.|:material-check-bold:|
+|[*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)|Validity|A column-level check that validates the values in text columns match one of predefined date formats. It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format. The default value 100.0 (percent) verifies that all values match an expected format.|:material-check-bold:|
 
 
 **Reference and samples**

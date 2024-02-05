@@ -342,7 +342,7 @@ nav:
         - 'checks/column/datetime/index.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - date in range percent: 'checks/column/datetime/date-in-range-percent.md'
-        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
+        - text match date format percent: 'checks/column/datetime/text-match-date-format-percent.md'
       - integrity:
         - 'checks/column/integrity/index.md'
         - lookup key not found: 'checks/column/integrity/lookup-key-not-found.md'

@@ -450,12 +450,6 @@ from .column_datetime_daily_partitioned_checks_spec import (
 from .column_datetime_daily_partitioned_checks_spec_custom_checks import (
     ColumnDatetimeDailyPartitionedChecksSpecCustomChecks,
 )
-from .column_datetime_date_match_format_percent_check_spec import (
-    ColumnDatetimeDateMatchFormatPercentCheckSpec,
-)
-from .column_datetime_date_match_format_percent_sensor_parameters_spec import (
-    ColumnDatetimeDateMatchFormatPercentSensorParametersSpec,
-)
 from .column_datetime_date_values_in_future_percent_sensor_parameters_spec import (
     ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec,
 )
@@ -1097,6 +1091,12 @@ from .column_text_length_below_min_length_percent_check_spec import (
 )
 from .column_text_length_in_range_percent_check_spec import (
     ColumnTextLengthInRangePercentCheckSpec,
+)
+from .column_text_match_date_format_percent_check_spec import (
+    ColumnTextMatchDateFormatPercentCheckSpec,
+)
+from .column_text_match_date_format_percent_sensor_parameters_spec import (
+    ColumnTextMatchDateFormatPercentSensorParametersSpec,
 )
 from .column_text_matching_date_pattern_percent_check_spec import (
     ColumnTextMatchingDatePatternPercentCheckSpec,
@@ -2049,8 +2049,6 @@ __all__ = (
     "ColumnDatetimeDailyMonitoringChecksSpecCustomChecks",
     "ColumnDatetimeDailyPartitionedChecksSpec",
     "ColumnDatetimeDailyPartitionedChecksSpecCustomChecks",
-    "ColumnDatetimeDateMatchFormatPercentCheckSpec",
-    "ColumnDatetimeDateMatchFormatPercentSensorParametersSpec",
     "ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec",
     "ColumnDatetimeMonthlyMonitoringChecksSpec",
     "ColumnDatetimeMonthlyMonitoringChecksSpecCustomChecks",
@@ -2306,6 +2304,8 @@ __all__ = (
     "ColumnTextLengthBelowMinLengthCheckSpec",
     "ColumnTextLengthBelowMinLengthPercentCheckSpec",
     "ColumnTextLengthInRangePercentCheckSpec",
+    "ColumnTextMatchDateFormatPercentCheckSpec",
+    "ColumnTextMatchDateFormatPercentSensorParametersSpec",
     "ColumnTextMatchingDatePatternPercentCheckSpec",
     "ColumnTextMatchingNamePatternPercentCheckSpec",
     "ColumnTextMaxLengthCheckSpec",

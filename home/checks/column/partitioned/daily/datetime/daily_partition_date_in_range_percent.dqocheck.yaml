@@ -7,3 +7,4 @@ spec:
   help_text: Verifies that the percentage of date values in the range defined by the
     user in a column does not exceed the maximum accepted percentage. Stores a separate
     data quality check result for each daily partition.
+  standard: true

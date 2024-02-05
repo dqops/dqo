@@ -1,13 +1,13 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
-{% macro render_date_formats(date_formats) %}
-    {%- if date_formats == 'DD/MM/YYYY'-%}
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
         '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
-    {%- elif date_formats == 'DD-MM-YYYY' -%}
+    {%- elif date_format == 'DD-MM-YYYY' -%}
         '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
-    {%- elif date_formats == 'DD.MM.YYYY' -%}
+    {%- elif date_format == 'DD.MM.YYYY' -%}
         '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
-    {%- elif date_formats == 'YYYY-MM-DD' -%}
+    {%- elif date_format == 'YYYY-MM-DD' -%}
         '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
     {%- endif -%}
 {% endmacro -%}
@@ -17,7 +17,8 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE 100.0 * SUM(
             CASE
-                WHEN CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_formats(parameters.date_formats)}} IS NOT NULL
+                WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                     CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{render_date_format(parameters.date_format)}} IS NOT NULL
                     THEN 1
                 ELSE 0
             END

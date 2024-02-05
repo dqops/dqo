@@ -85,8 +85,8 @@
 | Sensor name | Description |
 |-------------|-------------|
 |[*date_in_range_percent*](./datetime-column-sensors.md#date-in-range-percent)|Column level sensor that finds the percentage of date values that are outside an accepted range. This sensor detects presence of fake or corrupted dates such as 1900-01-01 or 2099-12-31.|
-|[*date_match_format_percent*](./datetime-column-sensors.md#date-match-format-percent)|Column level sensor that calculates the percentage of values that does fit a given date regex in a column.|
 |[*date_values_in_future_percent*](./datetime-column-sensors.md#date-values-in-future-percent)|Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.|
+|[*text_match_date_format_percent*](./datetime-column-sensors.md#text-match-date-format-percent)|Column level sensor that calculates the percentage of text values that match an expected date format.|
 
 
 

@@ -12,11 +12,11 @@ if TYPE_CHECKING:
     from ..models.column_date_values_in_future_percent_check_spec import (
         ColumnDateValuesInFuturePercentCheckSpec,
     )
-    from ..models.column_datetime_date_match_format_percent_check_spec import (
-        ColumnDatetimeDateMatchFormatPercentCheckSpec,
-    )
     from ..models.column_datetime_monthly_partitioned_checks_spec_custom_checks import (
         ColumnDatetimeMonthlyPartitionedChecksSpecCustomChecks,
+    )
+    from ..models.column_text_match_date_format_percent_check_spec import (
+        ColumnTextMatchDateFormatPercentCheckSpec,
     )
 
 
@@ -32,7 +32,7 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_date_values_in_future_percent (Union[Unset, ColumnDateValuesInFuturePercentCheckSpec]):
         monthly_partition_date_in_range_percent (Union[Unset, ColumnDateInRangePercentCheckSpec]):
-        monthly_partition_date_match_format_percent (Union[Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec]):
+        monthly_partition_text_match_date_format_percent (Union[Unset, ColumnTextMatchDateFormatPercentCheckSpec]):
     """
 
     custom_checks: Union[
@@ -44,8 +44,8 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
     monthly_partition_date_in_range_percent: Union[
         Unset, "ColumnDateInRangePercentCheckSpec"
     ] = UNSET
-    monthly_partition_date_match_format_percent: Union[
-        Unset, "ColumnDatetimeDateMatchFormatPercentCheckSpec"
+    monthly_partition_text_match_date_format_percent: Union[
+        Unset, "ColumnTextMatchDateFormatPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -68,12 +68,12 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
                 self.monthly_partition_date_in_range_percent.to_dict()
             )
 
-        monthly_partition_date_match_format_percent: Union[
+        monthly_partition_text_match_date_format_percent: Union[
             Unset, Dict[str, Any]
         ] = UNSET
-        if not isinstance(self.monthly_partition_date_match_format_percent, Unset):
-            monthly_partition_date_match_format_percent = (
-                self.monthly_partition_date_match_format_percent.to_dict()
+        if not isinstance(self.monthly_partition_text_match_date_format_percent, Unset):
+            monthly_partition_text_match_date_format_percent = (
+                self.monthly_partition_text_match_date_format_percent.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -89,10 +89,10 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
             field_dict[
                 "monthly_partition_date_in_range_percent"
             ] = monthly_partition_date_in_range_percent
-        if monthly_partition_date_match_format_percent is not UNSET:
+        if monthly_partition_text_match_date_format_percent is not UNSET:
             field_dict[
-                "monthly_partition_date_match_format_percent"
-            ] = monthly_partition_date_match_format_percent
+                "monthly_partition_text_match_date_format_percent"
+            ] = monthly_partition_text_match_date_format_percent
 
         return field_dict
 
@@ -104,11 +104,11 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
         from ..models.column_date_values_in_future_percent_check_spec import (
             ColumnDateValuesInFuturePercentCheckSpec,
         )
-        from ..models.column_datetime_date_match_format_percent_check_spec import (
-            ColumnDatetimeDateMatchFormatPercentCheckSpec,
-        )
         from ..models.column_datetime_monthly_partitioned_checks_spec_custom_checks import (
             ColumnDatetimeMonthlyPartitionedChecksSpecCustomChecks,
+        )
+        from ..models.column_text_match_date_format_percent_check_spec import (
+            ColumnTextMatchDateFormatPercentCheckSpec,
         )
 
         d = src_dict.copy()
@@ -155,18 +155,18 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
                 )
             )
 
-        _monthly_partition_date_match_format_percent = d.pop(
-            "monthly_partition_date_match_format_percent", UNSET
+        _monthly_partition_text_match_date_format_percent = d.pop(
+            "monthly_partition_text_match_date_format_percent", UNSET
         )
-        monthly_partition_date_match_format_percent: Union[
-            Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec
+        monthly_partition_text_match_date_format_percent: Union[
+            Unset, ColumnTextMatchDateFormatPercentCheckSpec
         ]
-        if isinstance(_monthly_partition_date_match_format_percent, Unset):
-            monthly_partition_date_match_format_percent = UNSET
+        if isinstance(_monthly_partition_text_match_date_format_percent, Unset):
+            monthly_partition_text_match_date_format_percent = UNSET
         else:
-            monthly_partition_date_match_format_percent = (
-                ColumnDatetimeDateMatchFormatPercentCheckSpec.from_dict(
-                    _monthly_partition_date_match_format_percent
+            monthly_partition_text_match_date_format_percent = (
+                ColumnTextMatchDateFormatPercentCheckSpec.from_dict(
+                    _monthly_partition_text_match_date_format_percent
                 )
             )
 
@@ -174,7 +174,7 @@ class ColumnDatetimeMonthlyPartitionedChecksSpec:
             custom_checks=custom_checks,
             monthly_partition_date_values_in_future_percent=monthly_partition_date_values_in_future_percent,
             monthly_partition_date_in_range_percent=monthly_partition_date_in_range_percent,
-            monthly_partition_date_match_format_percent=monthly_partition_date_match_format_percent,
+            monthly_partition_text_match_date_format_percent=monthly_partition_text_match_date_format_percent,
         )
 
         column_datetime_monthly_partitioned_checks_spec.additional_properties = d

@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
@@ -45,7 +45,7 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
         {
             put("daily_date_values_in_future_percent", o -> o.dailyDateValuesInFuturePercent);
             put("daily_date_in_range_percent", o -> o.dailyDateInRangePercent);
-            put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
+            put("daily_text_match_date_format_percent", o -> o.dailyTextMatchDateFormatPercent);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
     private ColumnDateInRangePercentCheckSpec dailyDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
+    private ColumnTextMatchDateFormatPercentCheckSpec dailyTextMatchDateFormatPercent;
 
     /**
      * Returns a date values in future percent check specification.
@@ -98,18 +98,18 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getDailyDateMatchFormatPercent() {
-        return dailyDateMatchFormatPercent;
+    public ColumnTextMatchDateFormatPercentCheckSpec getDailyTextMatchDateFormatPercent() {
+        return dailyTextMatchDateFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param dailyDateMatchFormatPercent Date match format percentage check.
+     * @param dailyTextMatchDateFormatPercent Date match format percentage check.
      */
-    public void setDailyDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyDateMatchFormatPercent, dailyDateMatchFormatPercent));
-        this.dailyDateMatchFormatPercent = dailyDateMatchFormatPercent;
-        propagateHierarchyIdToField(dailyDateMatchFormatPercent, "daily_date_match_format_percent");
+    public void setDailyTextMatchDateFormatPercent(ColumnTextMatchDateFormatPercentCheckSpec dailyTextMatchDateFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextMatchDateFormatPercent, dailyTextMatchDateFormatPercent));
+        this.dailyTextMatchDateFormatPercent = dailyTextMatchDateFormatPercent;
+        propagateHierarchyIdToField(dailyTextMatchDateFormatPercent, "daily_text_match_date_format_percent");
     }
 
     /**

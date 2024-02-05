@@ -26,13 +26,13 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
+ * Column level sensor that calculates the percentage of text values that match an expected date format.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDateMatchFormatPercentSensorParametersSpec> FIELDS =
+public class ColumnTextMatchDateFormatPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMatchDateFormatPercentSensorParametersSpec> FIELDS =
             new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
@@ -40,23 +40,23 @@ public class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec extends Ab
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
     @RequiredField
-    private DatetimeBuiltInDateFormats dateFormats = DatetimeBuiltInDateFormats.DaySlashMonthSlashYear;
+    private DatetimeBuiltInDateFormats dateFormat = DatetimeBuiltInDateFormats.DaySlashMonthSlashYear;
 
     /**
      * Returns a desired format to parse the date.
      * @return Date format.
      */
-    public DatetimeBuiltInDateFormats getDateFormats() {
-        return dateFormats;
+    public DatetimeBuiltInDateFormats getDateFormat() {
+        return dateFormat;
     }
 
     /**
      * Sets a desired format to parse the date.
-     * @param dateFormats Date format.
+     * @param dateFormat Date format.
      */
-    public void setDateFormats(DatetimeBuiltInDateFormats dateFormats) {
-        this.setDirtyIf(this.dateFormats != dateFormats);
-        this.dateFormats = dateFormats;
+    public void setDateFormat(DatetimeBuiltInDateFormats dateFormat) {
+        this.setDirtyIf(this.dateFormat != dateFormat);
+        this.dateFormat = dateFormat;
     }
 
     /**
@@ -76,7 +76,7 @@ public class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec extends Ab
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/datetime/date_match_format_percent";
+        return "column/datetime/text_match_date_format_percent";
     }
 }
 

@@ -6,8 +6,8 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_datetime_date_match_format_percent_sensor_parameters_spec import (
-        ColumnDatetimeDateMatchFormatPercentSensorParametersSpec,
+    from ..models.column_text_match_date_format_percent_sensor_parameters_spec import (
+        ColumnTextMatchDateFormatPercentSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
     from ..models.min_percent_rule_95_parameters_spec import (
@@ -22,11 +22,11 @@ if TYPE_CHECKING:
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
-T = TypeVar("T", bound="ColumnDatetimeDateMatchFormatPercentCheckSpec")
+T = TypeVar("T", bound="ColumnTextMatchDateFormatPercentCheckSpec")
 
 
 @_attrs_define
-class ColumnDatetimeDateMatchFormatPercentCheckSpec:
+class ColumnTextMatchDateFormatPercentCheckSpec:
     """
     Attributes:
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
@@ -50,7 +50,7 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
-        parameters (Union[Unset, ColumnDatetimeDateMatchFormatPercentSensorParametersSpec]):
+        parameters (Union[Unset, ColumnTextMatchDateFormatPercentSensorParametersSpec]):
         warning (Union[Unset, MinPercentRule100WarningParametersSpec]):
         error (Union[Unset, MinPercentRule100ErrorParametersSpec]):
         fatal (Union[Unset, MinPercentRule95ParametersSpec]):
@@ -65,7 +65,7 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[
-        Unset, "ColumnDatetimeDateMatchFormatPercentSensorParametersSpec"
+        Unset, "ColumnTextMatchDateFormatPercentSensorParametersSpec"
     ] = UNSET
     warning: Union[Unset, "MinPercentRule100WarningParametersSpec"] = UNSET
     error: Union[Unset, "MinPercentRule100ErrorParametersSpec"] = UNSET
@@ -139,8 +139,8 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_datetime_date_match_format_percent_sensor_parameters_spec import (
-            ColumnDatetimeDateMatchFormatPercentSensorParametersSpec,
+        from ..models.column_text_match_date_format_percent_sensor_parameters_spec import (
+            ColumnTextMatchDateFormatPercentSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
         from ..models.min_percent_rule_95_parameters_spec import (
@@ -182,16 +182,12 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
         data_grouping = d.pop("data_grouping", UNSET)
 
         _parameters = d.pop("parameters", UNSET)
-        parameters: Union[
-            Unset, ColumnDatetimeDateMatchFormatPercentSensorParametersSpec
-        ]
+        parameters: Union[Unset, ColumnTextMatchDateFormatPercentSensorParametersSpec]
         if isinstance(_parameters, Unset):
             parameters = UNSET
         else:
-            parameters = (
-                ColumnDatetimeDateMatchFormatPercentSensorParametersSpec.from_dict(
-                    _parameters
-                )
+            parameters = ColumnTextMatchDateFormatPercentSensorParametersSpec.from_dict(
+                _parameters
             )
 
         _warning = d.pop("warning", UNSET)
@@ -215,7 +211,7 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
         else:
             fatal = MinPercentRule95ParametersSpec.from_dict(_fatal)
 
-        column_datetime_date_match_format_percent_check_spec = cls(
+        column_text_match_date_format_percent_check_spec = cls(
             schedule_override=schedule_override,
             comments=comments,
             disabled=disabled,
@@ -230,8 +226,8 @@ class ColumnDatetimeDateMatchFormatPercentCheckSpec:
             fatal=fatal,
         )
 
-        column_datetime_date_match_format_percent_check_spec.additional_properties = d
-        return column_datetime_date_match_format_percent_check_spec
+        column_text_match_date_format_percent_check_spec.additional_properties = d
+        return column_text_match_date_format_percent_check_spec
 
     @property
     def additional_keys(self) -> List[str]:

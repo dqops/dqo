@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
@@ -45,7 +45,7 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
         {
             put("monthly_partition_date_values_in_future_percent", o -> o.monthlyPartitionDateValuesInFuturePercent);
             put("monthly_partition_date_in_range_percent", o -> o.monthlyPartitionDateInRangePercent);
-            put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
+            put("monthly_partition_text_match_date_format_percent", o -> o.monthlyPartitionTextMatchDateFormatPercent);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     private ColumnDateInRangePercentCheckSpec monthlyPartitionDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
+    private ColumnTextMatchDateFormatPercentCheckSpec monthlyPartitionTextMatchDateFormatPercent;
 
     /**
      * Returns a date values in future percentage check.
@@ -98,18 +98,18 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getMonthlyPartitionDateMatchFormatPercent() {
-        return monthlyPartitionDateMatchFormatPercent;
+    public ColumnTextMatchDateFormatPercentCheckSpec getMonthlyPartitionTextMatchDateFormatPercent() {
+        return monthlyPartitionTextMatchDateFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param monthlyPartitionDateMatchFormatPercent Date match format percentage check.
+     * @param monthlyPartitionTextMatchDateFormatPercent Date match format percentage check.
      */
-    public void setMonthlyPartitionDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateMatchFormatPercent, monthlyPartitionDateMatchFormatPercent));
-        this.monthlyPartitionDateMatchFormatPercent = monthlyPartitionDateMatchFormatPercent;
-        propagateHierarchyIdToField(monthlyPartitionDateMatchFormatPercent, "monthly_partition_date_match_format_percent");
+    public void setMonthlyPartitionTextMatchDateFormatPercent(ColumnTextMatchDateFormatPercentCheckSpec monthlyPartitionTextMatchDateFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMatchDateFormatPercent, monthlyPartitionTextMatchDateFormatPercent));
+        this.monthlyPartitionTextMatchDateFormatPercent = monthlyPartitionTextMatchDateFormatPercent;
+        propagateHierarchyIdToField(monthlyPartitionTextMatchDateFormatPercent, "monthly_partition_text_match_date_format_percent");
     }
 
     /**

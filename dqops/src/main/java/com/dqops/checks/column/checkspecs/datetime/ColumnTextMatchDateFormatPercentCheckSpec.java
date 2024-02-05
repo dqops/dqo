@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MinPercentRule95ParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100ErrorParametersSpec;
 import com.dqops.rules.comparison.MinPercentRule100WarningParametersSpec;
-import com.dqops.sensors.column.datetime.ColumnDatetimeDateMatchFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -35,16 +35,16 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+ * A column-level check that validates the values in text columns match one of predefined date formats.
  * It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- * The default value 100.0 (percent) verifies that all values match a given date format.
+ * The default value 100.0 (percent) verifies that all values match an expected format.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnDatetimeDateMatchFormatPercentCheckSpec
-        extends AbstractCheckSpec<ColumnDatetimeDateMatchFormatPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDateMatchFormatPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnTextMatchDateFormatPercentCheckSpec
+        extends AbstractCheckSpec<ColumnTextMatchDateFormatPercentSensorParametersSpec, MinPercentRule100WarningParametersSpec, MinPercentRule100ErrorParametersSpec, MinPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMatchDateFormatPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -52,7 +52,7 @@ public class ColumnDatetimeDateMatchFormatPercentCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDatetimeDateMatchFormatPercentSensorParametersSpec parameters = new ColumnDatetimeDateMatchFormatPercentSensorParametersSpec();
+    private ColumnTextMatchDateFormatPercentSensorParametersSpec parameters = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -74,7 +74,7 @@ public class ColumnDatetimeDateMatchFormatPercentCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnDatetimeDateMatchFormatPercentSensorParametersSpec getParameters() {
+    public ColumnTextMatchDateFormatPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -82,7 +82,7 @@ public class ColumnDatetimeDateMatchFormatPercentCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnDatetimeDateMatchFormatPercentSensorParametersSpec parameters) {
+    public void setParameters(ColumnTextMatchDateFormatPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

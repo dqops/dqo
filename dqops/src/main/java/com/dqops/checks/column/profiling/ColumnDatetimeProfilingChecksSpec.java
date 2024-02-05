@@ -20,7 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -45,7 +45,7 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
         {
             put("profile_date_values_in_future_percent", o -> o.profileDateValuesInFuturePercent);
             put("profile_date_in_range_percent", o -> o.profileDateInRangePercent);
-            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
+            put("profile_text_match_date_format_percent", o -> o.profileTextMatchDateFormatPercent);
         }
     };
 
@@ -56,7 +56,7 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
     private ColumnDateInRangePercentCheckSpec profileDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
+    private ColumnTextMatchDateFormatPercentCheckSpec profileTextMatchDateFormatPercent;
 
 
     /**
@@ -99,18 +99,18 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
-        return profileDateMatchFormatPercent;
+    public ColumnTextMatchDateFormatPercentCheckSpec getProfileTextMatchDateFormatPercent() {
+        return profileTextMatchDateFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param profileDateMatchFormatPercent Date match format percentage check.
+     * @param profileTextMatchDateFormatPercent Date match format percentage check.
      */
-    public void setProfileDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
-        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
-        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
+    public void setProfileTextMatchDateFormatPercent(ColumnTextMatchDateFormatPercentCheckSpec profileTextMatchDateFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextMatchDateFormatPercent, profileTextMatchDateFormatPercent));
+        this.profileTextMatchDateFormatPercent = profileTextMatchDateFormatPercent;
+        propagateHierarchyIdToField(profileTextMatchDateFormatPercent, "profile_text_match_date_format_percent");
     }
 
     /**

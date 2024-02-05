@@ -19104,9 +19104,9 @@
           "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDateInRangePercentCheckSpec"
         },
-        "daily_date_match_format_percent" : {
+        "daily_text_match_date_format_percent" : {
           "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
         }
       }
     },
@@ -19128,79 +19128,9 @@
           "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnDateInRangePercentCheckSpec"
         },
-        "daily_partition_date_match_format_percent" : {
+        "daily_partition_text_match_date_format_percent" : {
           "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
-        }
-      }
-    },
-    "ColumnDatetimeDateMatchFormatPercentCheckSpec" : {
-      "type" : "object",
-      "properties" : {
-        "schedule_override" : {
-          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
-          "$ref" : "#/definitions/MonitoringScheduleSpec"
-        },
-        "comments" : {
-          "type" : "array",
-          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
-          "items" : {
-            "$ref" : "#/definitions/CommentSpec"
-          }
-        },
-        "disabled" : {
-          "type" : "boolean",
-          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
-        },
-        "exclude_from_kpi" : {
-          "type" : "boolean",
-          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
-        },
-        "include_in_sla" : {
-          "type" : "boolean",
-          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
-        },
-        "quality_dimension" : {
-          "type" : "string",
-          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
-        },
-        "display_name" : {
-          "type" : "string",
-          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
-        },
-        "data_grouping" : {
-          "type" : "string",
-          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
-        },
-        "parameters" : {
-          "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentSensorParametersSpec"
-        },
-        "warning" : {
-          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
-          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
-        },
-        "error" : {
-          "description" : "Default alerting threshold for a maximum percentage of rows with matching date format in a column that raises a data quality error (alert).",
-          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
-        },
-        "fatal" : {
-          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
-          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
-        }
-      }
-    },
-    "ColumnDatetimeDateMatchFormatPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        },
-        "date_formats" : {
-          "type" : "string",
-          "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
-          "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
         }
       }
     },
@@ -19231,9 +19161,9 @@
           "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnDateInRangePercentCheckSpec"
         },
-        "monthly_date_match_format_percent" : {
+        "monthly_text_match_date_format_percent" : {
           "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
         }
       }
     },
@@ -19255,9 +19185,9 @@
           "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnDateInRangePercentCheckSpec"
         },
-        "monthly_partition_date_match_format_percent" : {
+        "monthly_partition_text_match_date_format_percent" : {
           "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
         }
       }
     },
@@ -19279,9 +19209,9 @@
           "description" : "Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnDateInRangePercentCheckSpec"
         },
-        "profile_date_match_format_percent" : {
+        "profile_text_match_date_format_percent" : {
           "description" : "Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
         }
       }
     },
@@ -27764,6 +27694,76 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
+    "ColumnTextMatchDateFormatPercentCheckSpec" : {
+      "type" : "object",
+      "properties" : {
+        "schedule_override" : {
+          "description" : "Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.",
+          "$ref" : "#/definitions/MonitoringScheduleSpec"
+        },
+        "comments" : {
+          "type" : "array",
+          "description" : "Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).",
+          "items" : {
+            "$ref" : "#/definitions/CommentSpec"
+          }
+        },
+        "disabled" : {
+          "type" : "boolean",
+          "description" : "Disables the data quality check. Only enabled data quality checks and monitorings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration."
+        },
+        "exclude_from_kpi" : {
+          "type" : "boolean",
+          "description" : "Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation."
+        },
+        "include_in_sla" : {
+          "type" : "boolean",
+          "description" : "Marks the data quality check as part of a data quality SLA (Data Contract). The data quality SLA is a set of critical data quality checks that must always pass and are considered as a Data Contract for the dataset."
+        },
+        "quality_dimension" : {
+          "type" : "string",
+          "description" : "Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.)."
+        },
+        "display_name" : {
+          "type" : "string",
+          "description" : "Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name."
+        },
+        "data_grouping" : {
+          "type" : "string",
+          "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
+        },
+        "parameters" : {
+          "description" : "Data quality check parameters",
+          "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentSensorParametersSpec"
+        },
+        "warning" : {
+          "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
+          "$ref" : "#/definitions/MinPercentRule100WarningParametersSpec"
+        },
+        "error" : {
+          "description" : "Default alerting threshold for a maximum percentage of rows with matching date format in a column that raises a data quality error (alert).",
+          "$ref" : "#/definitions/MinPercentRule100ErrorParametersSpec"
+        },
+        "fatal" : {
+          "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
+          "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
+    "ColumnTextMatchDateFormatPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        },
+        "date_format" : {
+          "type" : "string",
+          "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
+          "enum" : [ "DD/MM/YYYY", "DD-MM-YYYY", "DD.MM.YYYY", "YYYY-MM-DD" ]
         }
       }
     },

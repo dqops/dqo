@@ -6,35 +6,35 @@ from attrs import field as _attrs_field
 from ..models.datetime_built_in_date_formats import DatetimeBuiltInDateFormats
 from ..types import UNSET, Unset
 
-T = TypeVar("T", bound="ColumnDatetimeDateMatchFormatPercentSensorParametersSpec")
+T = TypeVar("T", bound="ColumnTextMatchDateFormatPercentSensorParametersSpec")
 
 
 @_attrs_define
-class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec:
+class ColumnTextMatchDateFormatPercentSensorParametersSpec:
     """
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        date_formats (Union[Unset, DatetimeBuiltInDateFormats]):
+        date_format (Union[Unset, DatetimeBuiltInDateFormats]):
     """
 
     filter_: Union[Unset, str] = UNSET
-    date_formats: Union[Unset, DatetimeBuiltInDateFormats] = UNSET
+    date_format: Union[Unset, DatetimeBuiltInDateFormats] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
         filter_ = self.filter_
-        date_formats: Union[Unset, str] = UNSET
-        if not isinstance(self.date_formats, Unset):
-            date_formats = self.date_formats.value
+        date_format: Union[Unset, str] = UNSET
+        if not isinstance(self.date_format, Unset):
+            date_format = self.date_format.value
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
         if filter_ is not UNSET:
             field_dict["filter"] = filter_
-        if date_formats is not UNSET:
-            field_dict["date_formats"] = date_formats
+        if date_format is not UNSET:
+            field_dict["date_format"] = date_format
 
         return field_dict
 
@@ -43,22 +43,22 @@ class ColumnDatetimeDateMatchFormatPercentSensorParametersSpec:
         d = src_dict.copy()
         filter_ = d.pop("filter", UNSET)
 
-        _date_formats = d.pop("date_formats", UNSET)
-        date_formats: Union[Unset, DatetimeBuiltInDateFormats]
-        if isinstance(_date_formats, Unset):
-            date_formats = UNSET
+        _date_format = d.pop("date_format", UNSET)
+        date_format: Union[Unset, DatetimeBuiltInDateFormats]
+        if isinstance(_date_format, Unset):
+            date_format = UNSET
         else:
-            date_formats = DatetimeBuiltInDateFormats(_date_formats)
+            date_format = DatetimeBuiltInDateFormats(_date_format)
 
-        column_datetime_date_match_format_percent_sensor_parameters_spec = cls(
+        column_text_match_date_format_percent_sensor_parameters_spec = cls(
             filter_=filter_,
-            date_formats=date_formats,
+            date_format=date_format,
         )
 
-        column_datetime_date_match_format_percent_sensor_parameters_spec.additional_properties = (
+        column_text_match_date_format_percent_sensor_parameters_spec.additional_properties = (
             d
         )
-        return column_datetime_date_match_format_percent_sensor_parameters_spec
+        return column_text_match_date_format_percent_sensor_parameters_spec
 
     @property
     def additional_keys(self) -> List[str]:
