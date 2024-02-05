@@ -34,7 +34,7 @@ public class CheckCategoryDocumentationConstants {
         put("text", "how-to-detect-data-quality-issues-in-text-fields.md");
         put("bool", "how-to-detect-data-quality-issues-in-bool-fields.md");
         put("numeric", "how-to-detect-data-quality-issues-in-numeric-fields.md");
-        put("datetime", "how-to-detect-data-quality-issues-in-dates.md");
+        put("datetime", "how-to-detect-invalid-dates.md");
         put("datatype", "how-to-detect-data-type-changes.md");
         put("integrity", "how-to-detect-data-referential-integrity-issues.md");
         put("blanks", "how-to-detect-blank-and-whitespace-values.md");
@@ -62,7 +62,7 @@ public class CheckCategoryDocumentationConstants {
         put("availability", "Table availability");
         put("bool", "Booleans");
         put("numeric", "Numerics");
-        put("datetime", "Dates");
+        put("datetime", "Invalid dates");
         put("text", "Text statistics");
         put("nulls", "Nulls");
         put("accuracy", "Data accuracy");

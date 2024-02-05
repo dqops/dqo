@@ -73,7 +73,7 @@ nav:
     - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
     - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
     - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
-    - Dates: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md'
+    - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
     - Nulls: 'categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
     - Numerics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
     - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
