@@ -20,7 +20,7 @@ SELECT
                  THEN 1
               ELSE 0
             END
-        ) / COUNT(*)
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

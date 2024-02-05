@@ -34,7 +34,7 @@ import com.dqops.rules.comparison.MinCountRule1ParametersSpec;
 import com.dqops.sensors.column.acceptedvalues.ColumnNumericExpectedNumbersInUseCountSensorParametersSpec;
 import com.dqops.sensors.column.text.ColumnTextTextLengthInRangePercentSensorParametersSpec;
 import com.dqops.sensors.column.text.TextBuiltInDateFormats;
-import com.dqops.sensors.column.datetime.ColumnDatetimeValueInRangeDatePercentSensorParametersSpec;
+import com.dqops.sensors.column.datetime.ColumnDateInRangePercentSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -342,7 +342,7 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void makeFieldInfo_whenFieldIsLocalDate_thenReturnsFieldInfoWithLocalDateType() throws Exception {
-        Field field = ColumnDatetimeValueInRangeDatePercentSensorParametersSpec.class.getDeclaredField("minValue");
+        Field field = ColumnDateInRangePercentSensorParametersSpec.class.getDeclaredField("minValue");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());

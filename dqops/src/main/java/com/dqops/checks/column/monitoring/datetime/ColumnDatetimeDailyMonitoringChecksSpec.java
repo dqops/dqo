@@ -21,7 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_date_values_in_future_percent", o -> o.dailyDateValuesInFuturePercent);
-            put("daily_datetime_value_in_range_date_percent", o -> o.dailyDatetimeValueInRangeDatePercent);
+            put("daily_date_in_range_percent", o -> o.dailyDateInRangePercent);
             put("daily_date_match_format_percent", o -> o.dailyDateMatchFormatPercent);
         }
     };
@@ -53,7 +53,7 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
     private ColumnDateValuesInFuturePercentCheckSpec dailyDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec dailyDatetimeValueInRangeDatePercent;
+    private ColumnDateInRangePercentCheckSpec dailyDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.")
     private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyDateMatchFormatPercent;
@@ -80,18 +80,18 @@ public class ColumnDatetimeDailyMonitoringChecksSpec extends AbstractCheckCatego
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDailyDatetimeValueInRangeDatePercent() {
-        return dailyDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getDailyDateInRangePercent() {
+        return dailyDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param dailyDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param dailyDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setDailyDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec dailyDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyDatetimeValueInRangeDatePercent, dailyDatetimeValueInRangeDatePercent));
-        this.dailyDatetimeValueInRangeDatePercent = dailyDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(dailyDatetimeValueInRangeDatePercent, "daily_datetime_value_in_range_date_percent");
+    public void setDailyDateInRangePercent(ColumnDateInRangePercentCheckSpec dailyDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyDateInRangePercent, dailyDateInRangePercent));
+        this.dailyDateInRangePercent = dailyDateInRangePercent;
+        propagateHierarchyIdToField(dailyDateInRangePercent, "daily_date_in_range_percent");
     }
 
     /**

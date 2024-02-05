@@ -21,7 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_date_values_in_future_percent", o -> o.dailyPartitionDateValuesInFuturePercent);
-            put("daily_partition_datetime_value_in_range_date_percent", o -> o.dailyPartitionDatetimeValueInRangeDatePercent);
+            put("daily_partition_date_in_range_percent", o -> o.dailyPartitionDateInRangePercent);
             put("daily_partition_date_match_format_percent", o -> o.dailyPartitionDateMatchFormatPercent);
         }
     };
@@ -53,7 +53,7 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
     private ColumnDateValuesInFuturePercentCheckSpec dailyPartitionDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec dailyPartitionDatetimeValueInRangeDatePercent;
+    private ColumnDateInRangePercentCheckSpec dailyPartitionDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyPartitionDateMatchFormatPercent;
@@ -80,18 +80,18 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDailyPartitionDatetimeValueInRangeDatePercent() {
-        return dailyPartitionDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getDailyPartitionDateInRangePercent() {
+        return dailyPartitionDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param dailyPartitionDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param dailyPartitionDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setDailyPartitionDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec dailyPartitionDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDatetimeValueInRangeDatePercent, dailyPartitionDatetimeValueInRangeDatePercent));
-        this.dailyPartitionDatetimeValueInRangeDatePercent = dailyPartitionDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(dailyPartitionDatetimeValueInRangeDatePercent, "daily_partition_datetime_value_in_range_date_percent");
+    public void setDailyPartitionDateInRangePercent(ColumnDateInRangePercentCheckSpec dailyPartitionDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDateInRangePercent, dailyPartitionDateInRangePercent));
+        this.dailyPartitionDateInRangePercent = dailyPartitionDateInRangePercent;
+        propagateHierarchyIdToField(dailyPartitionDateInRangePercent, "daily_partition_date_in_range_percent");
     }
 
     /**

@@ -336,8 +336,8 @@ A column-level check that ensures that there are no more than a set percentage o
 
 
 
-### [datetime value in range date percent](./datetime/datetime-value-in-range-date-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
+### [date in range percent](./datetime/date-in-range-percent.md)
+A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
 
 
 

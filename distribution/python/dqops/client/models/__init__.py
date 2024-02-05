@@ -431,6 +431,10 @@ from .column_datatype_string_datatype_changed_check_spec import (
 from .column_datatype_string_datatype_detect_sensor_parameters_spec import (
     ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
 )
+from .column_date_in_range_percent_check_spec import ColumnDateInRangePercentCheckSpec
+from .column_date_in_range_percent_sensor_parameters_spec import (
+    ColumnDateInRangePercentSensorParametersSpec,
+)
 from .column_date_values_in_future_percent_check_spec import (
     ColumnDateValuesInFuturePercentCheckSpec,
 )
@@ -470,12 +474,6 @@ from .column_datetime_monthly_partitioned_checks_spec_custom_checks import (
 from .column_datetime_profiling_checks_spec import ColumnDatetimeProfilingChecksSpec
 from .column_datetime_profiling_checks_spec_custom_checks import (
     ColumnDatetimeProfilingChecksSpecCustomChecks,
-)
-from .column_datetime_value_in_range_date_percent_check_spec import (
-    ColumnDatetimeValueInRangeDatePercentCheckSpec,
-)
-from .column_datetime_value_in_range_date_percent_sensor_parameters_spec import (
-    ColumnDatetimeValueInRangeDatePercentSensorParametersSpec,
 )
 from .column_detected_datatype_in_text_check_spec import (
     ColumnDetectedDatatypeInTextCheckSpec,
@@ -2045,6 +2043,8 @@ __all__ = (
     "ColumnDatatypeProfilingChecksSpecCustomChecks",
     "ColumnDatatypeStringDatatypeChangedCheckSpec",
     "ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
+    "ColumnDateInRangePercentCheckSpec",
+    "ColumnDateInRangePercentSensorParametersSpec",
     "ColumnDatetimeDailyMonitoringChecksSpec",
     "ColumnDatetimeDailyMonitoringChecksSpecCustomChecks",
     "ColumnDatetimeDailyPartitionedChecksSpec",
@@ -2058,8 +2058,6 @@ __all__ = (
     "ColumnDatetimeMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnDatetimeProfilingChecksSpec",
     "ColumnDatetimeProfilingChecksSpecCustomChecks",
-    "ColumnDatetimeValueInRangeDatePercentCheckSpec",
-    "ColumnDatetimeValueInRangeDatePercentSensorParametersSpec",
     "ColumnDateValuesInFuturePercentCheckSpec",
     "ColumnDetectedDatatypeInTextCheckSpec",
     "ColumnDistinctCountAnomalyDifferencingCheckSpec",

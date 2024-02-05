@@ -21,7 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class ColumnDatetimeMonthlyMonitoringChecksSpec extends AbstractCheckCate
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_date_values_in_future_percent", o -> o.monthlyDateValuesInFuturePercent);
-            put("monthly_datetime_value_in_range_date_percent", o -> o.monthlyDatetimeValueInRangeDatePercent);
+            put("monthly_date_in_range_percent", o -> o.monthlyDateInRangePercent);
             put("monthly_date_match_format_percent", o -> o.monthlyDateMatchFormatPercent);
         }
     };
@@ -53,7 +53,7 @@ public class ColumnDatetimeMonthlyMonitoringChecksSpec extends AbstractCheckCate
     private ColumnDateValuesInFuturePercentCheckSpec monthlyDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyDatetimeValueInRangeDatePercent;
+    private ColumnDateInRangePercentCheckSpec monthlyDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.")
     private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyDateMatchFormatPercent;
@@ -80,18 +80,18 @@ public class ColumnDatetimeMonthlyMonitoringChecksSpec extends AbstractCheckCate
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getMonthlyDatetimeValueInRangeDatePercent() {
-        return monthlyDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getMonthlyDateInRangePercent() {
+        return monthlyDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param monthlyDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param monthlyDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setMonthlyDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyDatetimeValueInRangeDatePercent, monthlyDatetimeValueInRangeDatePercent));
-        this.monthlyDatetimeValueInRangeDatePercent = monthlyDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(monthlyDatetimeValueInRangeDatePercent, "monthly_datetime_value_in_range_date_percent");
+    public void setMonthlyDateInRangePercent(ColumnDateInRangePercentCheckSpec monthlyDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyDateInRangePercent, monthlyDateInRangePercent));
+        this.monthlyDateInRangePercent = monthlyDateInRangePercent;
+        propagateHierarchyIdToField(monthlyDateInRangePercent, "monthly_date_in_range_percent");
     }
 
     /**

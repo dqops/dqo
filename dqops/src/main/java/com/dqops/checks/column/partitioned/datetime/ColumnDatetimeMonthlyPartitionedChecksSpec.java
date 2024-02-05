@@ -21,7 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,7 +44,7 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("monthly_partition_date_values_in_future_percent", o -> o.monthlyPartitionDateValuesInFuturePercent);
-            put("monthly_partition_datetime_value_in_range_date_percent", o -> o.monthlyPartitionDatetimeValueInRangeDatePercent);
+            put("monthly_partition_date_in_range_percent", o -> o.monthlyPartitionDateInRangePercent);
             put("monthly_partition_date_match_format_percent", o -> o.monthlyPartitionDateMatchFormatPercent);
         }
     };
@@ -53,7 +53,7 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     private ColumnDateValuesInFuturePercentCheckSpec monthlyPartitionDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyPartitionDatetimeValueInRangeDatePercent;
+    private ColumnDateInRangePercentCheckSpec monthlyPartitionDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnDatetimeDateMatchFormatPercentCheckSpec monthlyPartitionDateMatchFormatPercent;
@@ -80,18 +80,18 @@ public class ColumnDatetimeMonthlyPartitionedChecksSpec extends AbstractCheckCat
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getMonthlyPartitionDatetimeValueInRangeDatePercent() {
-        return monthlyPartitionDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getMonthlyPartitionDateInRangePercent() {
+        return monthlyPartitionDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param monthlyPartitionDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param monthlyPartitionDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setMonthlyPartitionDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec monthlyPartitionDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDatetimeValueInRangeDatePercent, monthlyPartitionDatetimeValueInRangeDatePercent));
-        this.monthlyPartitionDatetimeValueInRangeDatePercent = monthlyPartitionDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(monthlyPartitionDatetimeValueInRangeDatePercent, "monthly_partition_datetime_value_in_range_date_percent");
+    public void setMonthlyPartitionDateInRangePercent(ColumnDateInRangePercentCheckSpec monthlyPartitionDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionDateInRangePercent, monthlyPartitionDateInRangePercent));
+        this.monthlyPartitionDateInRangePercent = monthlyPartitionDateInRangePercent;
+        propagateHierarchyIdToField(monthlyPartitionDateInRangePercent, "monthly_partition_date_in_range_percent");
     }
 
     /**

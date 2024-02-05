@@ -4,6 +4,426 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 ---
 
 
+## date in range percent
+Column level sensor that finds the percentage of date values that are outside an accepted range. This sensor detects presence of fake or corrupted dates such as 1900-01-01 or 2099-12-31.
+
+**Sensor summary**
+
+The date in range percent sensor is documented below.
+
+| Target | Category | Full sensor name | Source code on GitHub |
+|--------|----------|------------------|-----------------------|
+| column | datetime | <span class="no-wrap-code">`column/datetime/date_in_range_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
+
+
+**Sensor parameters**
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`min_date`</span>|The earliest accepted date.|*date*| ||
+|<span class="no-wrap-code">`max_date`</span>|The latest accepted date.|*date*| ||
+
+
+
+
+
+
+**Jinja2 SQL templates**
+
+The templates used to generate the SQL query for each data source supported by DQOps is shown below.
+
+=== "BigQuery"
+
+    ```sql+jinja
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Databricks"
+
+    ```sql+jinja
+    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "MySQL"
+
+    ```sql+jinja
+    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Oracle"
+
+    ```sql+jinja
+    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "PostgreSQL"
+
+    ```sql+jinja
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Presto"
+
+    ```sql+jinja
+    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Redshift"
+
+    ```sql+jinja
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Snowflake"
+
+    ```sql+jinja
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Spark"
+
+    ```sql+jinja
+    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "SQL Server"
+
+    ```sql+jinja
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {% macro render_ordering_column_names() %}
+        {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
+            ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
+        {%- elif (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) %}
+            {{ ', ' }}
+        {% endif %}
+        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
+            {%- for attribute in lib.data_groupings -%}
+                {%- if not loop.first -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    {{ attribute }}
+            {%- endfor -%}
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
+                ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- render_ordering_column_names() -}}
+    ```
+=== "Trino"
+
+    ```sql+jinja
+    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
+                ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+    FROM (
+        SELECT
+            original_table.*
+            {{- lib.render_data_grouping_projections('original_table') }}
+            {{- lib.render_time_dimension_projection('original_table') }}
+        FROM {{ lib.render_target_table() }} original_table
+        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
+    ) analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+
+
 ## date match format percent
 Column level sensor that calculates the percentage of values that does fit a given date regex in a column.
 
@@ -57,7 +477,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -92,7 +512,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -132,7 +552,7 @@ The templates used to generate the SQL query for each data source supported by D
                      THEN 1
                   ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -166,7 +586,7 @@ The templates used to generate the SQL query for each data source supported by D
                      THEN 1
                   ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -207,7 +627,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -242,7 +662,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -285,7 +705,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -321,7 +741,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -356,7 +776,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -391,7 +811,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -426,7 +846,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -502,10 +922,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -549,10 +969,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -596,10 +1016,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -643,10 +1063,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -696,10 +1116,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -743,10 +1163,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -797,10 +1217,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -843,10 +1263,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -890,10 +1310,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -937,10 +1357,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -984,430 +1404,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) AS DOUBLE) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-___
-
-
-
-## value in range date percent
-Column level sensor that calculates the percent of non-negative values in a column.
-
-**Sensor summary**
-
-The value in range date percent sensor is documented below.
-
-| Target | Category | Full sensor name | Source code on GitHub |
-|--------|----------|------------------|-----------------------|
-| column | datetime | <span class="no-wrap-code">`column/datetime/value_in_range_date_percent`</span> | [*sensors/column/datetime*](https://github.com/dqops/dqo/tree/develop/home/sensors/column/datetime/) |
-
-
-**Sensor parameters**
-
-| Field name | Description | Allowed data type | Required | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`min_value`</span>|Lower bound range variable.|*date*| ||
-|<span class="no-wrap-code">`max_value`</span>|Upper bound range variable.|*date*| ||
-
-
-
-
-
-
-**Jinja2 SQL templates**
-
-The templates used to generate the SQL query for each data source supported by DQOps is shown below.
-
-=== "BigQuery"
-
-    ```sql+jinja
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Databricks"
-
-    ```sql+jinja
-    {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "MySQL"
-
-    ```sql+jinja
-    {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Oracle"
-
-    ```sql+jinja
-    {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "PostgreSQL"
-
-    ```sql+jinja
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Presto"
-
-    ```sql+jinja
-    {% import '/dialects/presto.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE CAST(100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                ELSE 0
-                END
-            ) AS DOUBLE) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
-    FROM (
-        SELECT
-            original_table.*
-            {{- lib.render_data_grouping_projections('original_table') }}
-            {{- lib.render_time_dimension_projection('original_table') }}
-        FROM {{ lib.render_target_table() }} original_table
-        {{- lib.render_where_clause(table_alias_prefix='original_table') }}
-    ) analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Redshift"
-
-    ```sql+jinja
-    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast()%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Snowflake"
-
-    ```sql+jinja
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "Spark"
-
-    ```sql+jinja
-    {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "SQL Server"
-
-    ```sql+jinja
-    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    {% macro render_ordering_column_names() %}
-        {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
-            ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
-        {%- elif (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) %}
-            {{ ', ' }}
-        {% endif %}
-        {%- if (lib.data_groupings is not none and (lib.data_groupings | length()) > 0) -%}
-            {%- for attribute in lib.data_groupings -%}
-                {%- if not loop.first -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ attribute }}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
-                ELSE 0
-                END
-            ) / COUNT(*)
-        END AS actual_value
-        {{- lib.render_data_grouping_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- lib.render_where_clause() -}}
-    {{- lib.render_group_by() -}}
-    {{- render_ordering_column_names() -}}
-    ```
-=== "Trino"
-
-    ```sql+jinja
-    {% import '/dialects/trino.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_format_cast() -%}
-        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        {{ lib.render_target_column('analyzed_table') }}
-        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- endif -%}
-    {%- endmacro -%}
-    
-    SELECT
-        CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE CAST(100.0 * SUM(
-                CASE
-                    WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_value) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_value) }} AS TIMESTAMP) THEN 1
-                ELSE 0
-                END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

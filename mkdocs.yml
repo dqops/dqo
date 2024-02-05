@@ -341,7 +341,7 @@ nav:
       - datetime:
         - 'checks/column/datetime/index.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
-        - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
+        - date in range percent: 'checks/column/datetime/date-in-range-percent.md'
         - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
       - integrity:
         - 'checks/column/integrity/index.md'
