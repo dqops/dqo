@@ -8,6 +8,7 @@ import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import TextArea from '../TextArea';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -68,10 +69,11 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
             />
           </div>
           <div>
-            <Input
+            <TextArea
               label="SQL expression for a calculated column"
               value={sqlExpression}
               onChange={(e) => setSqlExpression(e.target.value)}
+              className='min-h-25'
             />
           </div>
         </div>
