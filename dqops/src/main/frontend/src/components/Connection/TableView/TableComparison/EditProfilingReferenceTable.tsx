@@ -160,7 +160,7 @@ export const EditProfilingReferenceTable = ({
           onChange({
             compare_row_count: reference?.default_compare_thresholds
           });
-        }      
+        }
       }
     } else {
       if (disabled === true) {
@@ -174,7 +174,7 @@ export const EditProfilingReferenceTable = ({
           onChange({
             compare_column_count: reference?.default_compare_thresholds
           });
-        }      
+        }
       }
     }
 

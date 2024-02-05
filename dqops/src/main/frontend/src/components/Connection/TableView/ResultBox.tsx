@@ -53,79 +53,95 @@ const ResultBox = ({
 
   return (
     <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
-      {bool === true && (
-        <td className="h-42">
-          {' '}
-          <div className="block mb-5 mt-3 h-20">
-            <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.columns?.at(index)?.[checkName!]
-                    ?.warning_difference_percent
-                }
-                onChange={(e) => {
-                  onChangeCompare(
-                    {
-                      warning_difference_percent:
-                        String(e.target.value).length === 0
-                          ? undefined
-                          : Number(e.target.value)
-                    },
-                    checkName
-                  );
-                }}
-              />
-              %
-            </div>
-            <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.columns?.at(index)?.[checkName!]
-                    ?.error_difference_percent
-                }
-                onChange={(e) => {
-                  onChangeCompare(
-                    {
-                      error_difference_percent:
-                        String(e.target.value).length === 0
-                          ? undefined
-                          : Number(e.target.value)
-                    },
-                    checkName
-                  );
-                }}
-              />
-              %
-            </div>
-            <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
-              <Input
-                className="max-w-30 !min-w-initial"
-                type="number"
-                value={
-                  reference?.columns?.at(index)?.[checkName!]
-                    ?.fatal_difference_percent
-                }
-                onChange={(e) => {
-                  onChangeCompare(
-                    {
-                      fatal_difference_percent:
-                        String(e.target.value).length === 0
-                          ? undefined
-                          : Number(e.target.value)
-                    },
-                    checkName
-                  );
-                }}
-              />
-              %
-            </div>
+      <td className="h-42">
+        {' '}
+        <div className="block mb-5 mt-3 h-20">
+          <div
+            className={clsx(
+              ' px-4 py-2 flex items-center gap-2',
+              bool ? 'bg-yellow-100' : 'bg-gray-400'
+            )}
+          >
+            <Input
+              className="max-w-30 !min-w-initial"
+              type="number"
+              value={
+                reference?.columns?.at(index)?.[checkName!]
+                  ?.warning_difference_percent
+              }
+              onChange={(e) => {
+                onChangeCompare(
+                  {
+                    warning_difference_percent:
+                      String(e.target.value).length === 0
+                        ? undefined
+                        : Number(e.target.value)
+                  },
+                  checkName
+                );
+              }}
+              disabled={!bool}
+            />
+            %
           </div>
-        </td>
-      )}
+          <div
+            className={clsx(
+              ' px-4 py-2 flex items-center gap-2',
+              bool ? 'bg-orange-100' : 'bg-gray-50'
+            )}
+          >
+            <Input
+              className="max-w-30 !min-w-initial"
+              type="number"
+              value={
+                reference?.columns?.at(index)?.[checkName!]
+                  ?.error_difference_percent
+              }
+              onChange={(e) => {
+                onChangeCompare(
+                  {
+                    error_difference_percent:
+                      String(e.target.value).length === 0
+                        ? undefined
+                        : Number(e.target.value)
+                  },
+                  checkName
+                );
+              }}
+              disabled={!bool}
+            />
+            %
+          </div>
+          <div
+            className={clsx(
+              ' px-4 py-2 flex items-center gap-2',
+              bool ? 'bg-red-100' : 'bg-gray-300'
+            )}
+          >
+            <Input
+              className="max-w-30 !min-w-initial"
+              type="number"
+              value={
+                reference?.columns?.at(index)?.[checkName!]
+                  ?.fatal_difference_percent
+              }
+              onChange={(e) => {
+                onChangeCompare(
+                  {
+                    fatal_difference_percent:
+                      String(e.target.value).length === 0
+                        ? undefined
+                        : Number(e.target.value)
+                  },
+                  checkName
+                );
+              }}
+              disabled={!bool}
+            />
+            %
+          </div>
+        </div>
+      </td>
       {secondBool && (
         <>
           <td className="flex justify-between w-2/3 ">

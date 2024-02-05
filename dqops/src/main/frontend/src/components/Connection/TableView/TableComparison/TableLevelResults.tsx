@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 
 type TTableLevelResults = {
@@ -10,7 +11,7 @@ export default function TableLevelResults({
   type
 }: TTableLevelResults) {
   return (
-    <div className="gap-y-3">
+    <div className="gap-y-3 h-35">
       Results:
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Valid:</th>
@@ -34,6 +35,37 @@ export default function TableLevelResults({
             ?.warnings
         }
       </td>
+      {type.includes('row') ? (
+        <td>
+          <a className="group relative text-blue-300 underline whitespace-nowrap cursor-pointer">
+            Show mismatches
+            <section
+              className={clsx(
+                'hidden group-hover:grid grid-cols-2 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline',
+                tableComparisonResults?.table_comparison_results?.[type ?? '']
+                  ?.not_matching_data_groups
+                  ? 'w-60 h-60 '
+                  : 'w-40 h-10'
+              )}
+              style={{ right: '-8px' }}
+            >
+              {tableComparisonResults?.table_comparison_results?.[type ?? '']
+                ?.not_matching_data_groups ? (
+                (
+                  tableComparisonResults?.table_comparison_results?.[type ?? '']
+                    ?.not_matching_data_groups as string[]
+                ).map((x, index) => (
+                  <span key={index}>
+                    {x.replace(/./, (c) => c.toUpperCase())}
+                  </span>
+                ))
+              ) : (
+                <span>Whole table</span>
+              )}
+            </section>
+          </a>
+        </td>
+      ) : null}
     </div>
   );
 }
