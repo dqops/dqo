@@ -70,7 +70,7 @@ const CreateConnection = () => {
       }
       case ConnectionModelProviderTypeEnum.mysql: {
         copiedDatabase.mysql = {
-          port: '3306',
+          port: nameOfDatabase?.toLowerCase() === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb ? undefined : '3306',
           mysql_engine_type: (nameOfDatabase?.toLowerCase() === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb
             ? MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb : MysqlParametersSpecMysqlEngineTypeEnum.mysql),
           single_store_db_parameters_spec: {
@@ -93,10 +93,7 @@ const CreateConnection = () => {
         break;
       }
     }
-    setDatabase((prev) => ({
-      ...prev,
-      ...copiedDatabase
-    }))
+    setDatabase(copiedDatabase)
   }
 
   const onPrev = () => {
