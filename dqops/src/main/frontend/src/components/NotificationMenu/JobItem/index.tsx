@@ -103,7 +103,9 @@ const JobItem = ({
           <div className="flex space-x-1 items-center">
             <div>
               {job.jobType !== undefined && String(job.jobType).length !== 0
-                ? job.jobType.replace(/_/g, ' ')
+                ? job.jobType
+                    .replace(/_/g, ' ')
+                    .replace(/./, (c) => c.toUpperCase())
                 : 'Error'}
             </div>
           </div>
