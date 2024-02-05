@@ -135,6 +135,7 @@ nav:
       - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
       - User and access management: "working-with-dqo/access-management.md"
       - Managing errors: "working-with-dqo/managing-errors.md"
+      - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
   - Integrations:
       - "integrations/index.md"
