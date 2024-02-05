@@ -40,8 +40,14 @@ import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
 import com.dqops.sampledata.files.SampleTableFromCsv;
+import com.dqops.sampledata.files.csv.CsvFileProvider;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.columns.Column;
+
+import java.util.Arrays;
+import java.util.SortedMap;
+import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 /**
  * Object mother that creates metadata ({@link ConnectionSpec} and {@link TableSpec}) for sample tables
@@ -259,7 +265,40 @@ public class SampleTableMetadataObjectMother {
 
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
-        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+    }
+
+    // todo
+    public static SampleTableMetadata createSampleTableMetadataForLocalCsvFiles(String csvFilesFolder,
+                                                                                ConnectionSpec connectionSpecRaw) {
+        ProviderType providerType = connectionSpecRaw.getProviderType();
+        String connectionName = getConnectionNameForProvider(providerType);
+        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
+        ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
+        SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTableForFiles(csvFilesFolder);
+
+        SortedMap<String, String> header = new TreeMap<>();
+        Arrays.asList(sampleTable.getTable().columnArray())
+                .forEach(column -> {
+                        header.put(column.name(), column.type().toString());
+                });
+
+        TableSpec tableSpec = new TableSpec();
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFiles(
+                CsvFileProvider.getFiles(csvFilesFolder).stream()
+                        .map(file -> file.toString()).collect(Collectors.toList()),
+                header
+        );
+        tableSpec.setFileFormat(fileFormatSpec);
+        tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
+
+        DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
+        tableSpec.getGroupings().put(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME, dataGroupingConfigurationSpec);
+        tableSpec.setDefaultGroupingName(DataGroupingConfigurationSpecMap.DEFAULT_CONFIGURATION_NAME);
+
+        fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
+
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
     }
 
     /**
