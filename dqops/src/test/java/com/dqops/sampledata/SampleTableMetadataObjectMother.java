@@ -20,6 +20,7 @@ import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
@@ -268,9 +269,16 @@ public class SampleTableMetadataObjectMother {
         return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
     }
 
-    // todo
-    public static SampleTableMetadata createSampleTableMetadataForLocalCsvFiles(String csvFilesFolder,
-                                                                                ConnectionSpec connectionSpecRaw) {
+    /**
+     * Creates a sample table metadata adapted for the tested connection spec.
+     * The physical table name will match the desired name for a table in a tested database.
+     * The method allows to test e.g. different database versions.
+     * @param csvFilesFolder Sample data CSV file name (a file name in the dqo/sampledata folder).
+     * @param connectionSpecRaw Target connection spec.
+     * @return Sample table metadata.
+     */
+    public static SampleTableMetadata createSampleTableMetadataForLocalMultipleCsvFiles(String csvFilesFolder,
+                                                                                        ConnectionSpec connectionSpecRaw) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
@@ -280,7 +288,14 @@ public class SampleTableMetadataObjectMother {
         SortedMap<String, String> header = new TreeMap<>();
         Arrays.asList(sampleTable.getTable().columnArray())
                 .forEach(column -> {
+                    if(DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.containsKey(column.type())){
                         header.put(column.name(), column.type().toString());
+                    } else {
+                        header.put(
+                                column.name(),
+                                DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.get(column.type().toString())
+                        );
+                    }
                 });
 
         TableSpec tableSpec = new TableSpec();

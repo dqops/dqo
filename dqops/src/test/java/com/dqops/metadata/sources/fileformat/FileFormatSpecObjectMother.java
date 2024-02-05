@@ -25,11 +25,18 @@ public class FileFormatSpecObjectMother {
         }};
     }
 
-    // todo: description
+    /**
+     * Creates a FileFormatSpec for a folder with multiple csv files.
+     * @param csvFileNames List with names of csv files.
+     * @param headerNameTypeMap A header of the data.
+     * @return FileFormatSpec
+     */
     public static FileFormatSpec createForCsvFiles(List<String> csvFileNames, SortedMap<String, String> headerNameTypeMap) {
 
         FilePathListSpec filePathListSpec = new FilePathListSpec();
-        csvFileNames.forEach(fileName -> filePathListSpec.add(fileName));
+        csvFileNames.stream()
+                .filter(s -> !s.contains("header.csv"))
+                .forEach(fileName -> filePathListSpec.add(fileName));
 
         return new FileFormatSpec() {{
             setCsvFileFormat( new CsvFileFormatSpec(){{
