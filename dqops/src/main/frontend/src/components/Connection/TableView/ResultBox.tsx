@@ -52,7 +52,7 @@ const ResultBox = ({
   };
 
   return (
-    <tr className="flex flex-col text-xs font-light justify-start items-start  absolute top-0">
+    <tr className="flex flex-col text-sm font-light justify-start items-start  absolute top-0">
       <td className="h-42">
         {' '}
         <div className="block mb-5 mt-3 h-20">
@@ -145,6 +145,9 @@ const ResultBox = ({
       {secondBool && (
         <>
           <td className="flex justify-between w-2/3 ">
+            <th className="text-sm font-light">Results:</th>
+          </td>
+          <td className="flex justify-between w-2/3 ">
             <th className="text-xs font-light">Valid:</th>
             {item.valid_results}
           </td>
@@ -165,7 +168,7 @@ const ResultBox = ({
               Show mismatches
               <section
                 className={clsx(
-                  'hidden group-hover:grid grid-cols-2 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline',
+                  'hidden group-hover:grid grid-cols-2 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light',
                   item.not_matching_data_groups ? 'w-60 h-60 ' : 'w-40 h-10'
                 )}
                 style={{ right: '-8px' }}

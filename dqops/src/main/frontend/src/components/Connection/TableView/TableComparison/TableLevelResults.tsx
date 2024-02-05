@@ -12,7 +12,9 @@ export default function TableLevelResults({
 }: TTableLevelResults) {
   return (
     <div className="gap-y-3 h-35">
-      Results:
+      <td className="flex justify-between w-2/3 ">
+        <th className="text-sm font-light">Results:</th>
+      </td>
       <td className="flex justify-between w-2/3 ">
         <th className="text-xs font-light">Valid:</th>
         {
