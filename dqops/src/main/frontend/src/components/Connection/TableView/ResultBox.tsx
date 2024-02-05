@@ -167,11 +167,13 @@ const ResultBox = ({
             <a className="group relative text-blue-300 underline whitespace-nowrap cursor-pointer">
               Show mismatches
               <section
-                className={clsx(
-                  'hidden group-hover:grid grid-cols-2 absolute top-4 right-0 px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light',
-                  item.not_matching_data_groups ? 'w-60 h-60 ' : 'w-40 h-10'
-                )}
-                style={{ right: '-8px' }}
+                className="hidden group-hover:grid grid-cols-1 absolute px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light"
+                style={{
+                  minWidth: '200px',
+                  width: 'max-content',
+                  whiteSpace: 'nowrap',
+                  minHeight: '30px'
+                }}
               >
                 {item.not_matching_data_groups ? (
                   item.not_matching_data_groups.map((x, index) => (
