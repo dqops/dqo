@@ -26,6 +26,9 @@ import com.dqops.data.statistics.factory.StatisticsDataScope;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
+import com.dqops.metadata.definitions.sensors.SensorDefinitionWrapper;
+import com.dqops.metadata.dqohome.DqoHome;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
@@ -145,6 +148,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
     /**
      * Creates a sensor parameters object for a statistics collector. The sensor parameter object contains cloned, truncated and expanded (parameter expansion)
      * specifications for the target connection, table, column, check.
+     * @param dqoHome DQO home.
      * @param userHome User home used to look up credentials.
      * @param connection Connection specification.
      * @param table Table specification.
@@ -156,7 +160,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @return Sensor execution run parameters.
      */
     @Override
-    public SensorExecutionRunParameters createStatisticsSensorParameters(UserHome userHome,
+    public SensorExecutionRunParameters createStatisticsSensorParameters(DqoHome dqoHome,
+                                                                         UserHome userHome,
                                                                          ConnectionSpec connection,
                                                                          TableSpec table,
                                                                          ColumnSpec column,
@@ -175,8 +180,18 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 expandedTable.getDefaultDataGroupingConfiguration();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        String sensorDefinitionName = statisticsCollectorSpec.getParameters().getSensorDefinitionName();
         EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
-                statisticsCollectorSpec.getParameters().getSensorDefinitionName(), null);
+                sensorDefinitionName, null);
+        SensorDefinitionWrapper sensorDefinitionWrapper = dqoHome.getSensors().getByObjectName(sensorDefinitionName, true);
+        if (sensorDefinitionWrapper == null) {
+            return null;
+        }
+
+        ProviderSensorDefinitionWrapper providerSpecificSensor = sensorDefinitionWrapper.getProviderSensors().getByObjectName(connection.getProviderType(), true);
+        if (providerSpecificSensor == null) {
+            return null; // not supported on this data source (percentile on mysql for example)
+        }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
                 null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
@@ -198,8 +213,12 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
             TableSpec tableSpec,
             TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
             TimeWindowFilterParameters userTimeWindowFilters) {
+        if (userTimeWindowFilters != null && userTimeWindowFilters.hasAnyParametersApplied()) {
+            return userTimeWindowFilters;
+        }
+
         if (timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.current_time) {
-            return userTimeWindowFilters != null ? userTimeWindowFilters : new TimeWindowFilterParameters();
+            return new TimeWindowFilterParameters();
         }
 
         PartitionIncrementalTimeWindowSpec tableTimeWindowSpec = tableSpec.getIncrementalTimeWindow();

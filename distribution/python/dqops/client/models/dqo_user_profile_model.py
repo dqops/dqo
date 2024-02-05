@@ -19,18 +19,21 @@ class DqoUserProfileModel:
         license_type (Union[Unset, str]): DQOps Cloud license type.
         trial_period_expires_at (Union[Unset, str]): The date and time when the trial period of a PERSONAL DQOps license
             expires and the account is downgraded to a FREE license.
-        connections_limit (Union[Unset, int]): Limit of the number of connections that could be synchronized to the
-            DQOps Cloud data quality warehouse.
-        users_limit (Union[Unset, int]): Limit of the number of users that could be added to a DQOps environment.
-        months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that could
-            be synchronized to the DQOps Cloud data quality warehouse.
-        connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that could be
+        connections_limit (Union[Unset, int]): Limit of the number of connections that can be synchronized to the DQOps
+            Cloud data quality warehouse.
+        users_limit (Union[Unset, int]): Limit of the number of users that can be added to a DQOps environment.
+        months_limit (Union[Unset, int]): Limit of the number of recent months (excluding the current month) that can be
             synchronized to the DQOps Cloud data quality warehouse.
-        tables_limit (Union[Unset, int]): Limit of the total number of tables that could be synchronized to the DQOps
+        connection_tables_limit (Union[Unset, int]): Limit of the number of tables inside each connection that can be
+            synchronized to the DQOps Cloud data quality warehouse.
+        tables_limit (Union[Unset, int]): Limit of the total number of tables that can be synchronized to the DQOps
             Cloud data quality warehouse.
         jobs_limit (Union[Unset, int]): Limit of the number of supported concurrent jobs that DQOps can run in parallel
             on this instance.
         account_role (Union[Unset, DqoUserRole]):
+        data_quality_data_warehouse_enabled (Union[Unset, bool]): True when the account has access to the DQOps Cloud's
+            data quality data lake and data warehouse, allowing to synchronize files and use the data quality data
+            warehouse.
         can_manage_account (Union[Unset, bool]): User is the administrator of the account and can perform security
             related actions, such as managing users.
         can_view_any_object (Union[Unset, bool]): User can view any object and view all results.
@@ -51,6 +54,8 @@ class DqoUserProfileModel:
             access rights, reset passwords.
         can_manage_and_view_shared_credentials (Union[Unset, bool]): User can manage shared credentials and view (or
             download) already defined shared credentials.
+        can_change_own_password (Union[Unset, bool]): User can change his own password in DQOps Cloud, because the DQOps
+            Cloud Pairing API Key is valid and synchronization is enabled.
     """
 
     user: Union[Unset, str] = UNSET
@@ -64,6 +69,7 @@ class DqoUserProfileModel:
     tables_limit: Union[Unset, int] = UNSET
     jobs_limit: Union[Unset, int] = UNSET
     account_role: Union[Unset, DqoUserRole] = UNSET
+    data_quality_data_warehouse_enabled: Union[Unset, bool] = UNSET
     can_manage_account: Union[Unset, bool] = UNSET
     can_view_any_object: Union[Unset, bool] = UNSET
     can_manage_scheduler: Union[Unset, bool] = UNSET
@@ -79,6 +85,7 @@ class DqoUserProfileModel:
     can_compare_tables: Union[Unset, bool] = UNSET
     can_manage_users: Union[Unset, bool] = UNSET
     can_manage_and_view_shared_credentials: Union[Unset, bool] = UNSET
+    can_change_own_password: Union[Unset, bool] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -96,6 +103,7 @@ class DqoUserProfileModel:
         if not isinstance(self.account_role, Unset):
             account_role = self.account_role.value
 
+        data_quality_data_warehouse_enabled = self.data_quality_data_warehouse_enabled
         can_manage_account = self.can_manage_account
         can_view_any_object = self.can_view_any_object
         can_manage_scheduler = self.can_manage_scheduler
@@ -113,6 +121,7 @@ class DqoUserProfileModel:
         can_manage_and_view_shared_credentials = (
             self.can_manage_and_view_shared_credentials
         )
+        can_change_own_password = self.can_change_own_password
 
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
@@ -139,6 +148,10 @@ class DqoUserProfileModel:
             field_dict["jobs_limit"] = jobs_limit
         if account_role is not UNSET:
             field_dict["account_role"] = account_role
+        if data_quality_data_warehouse_enabled is not UNSET:
+            field_dict[
+                "data_quality_data_warehouse_enabled"
+            ] = data_quality_data_warehouse_enabled
         if can_manage_account is not UNSET:
             field_dict["can_manage_account"] = can_manage_account
         if can_view_any_object is not UNSET:
@@ -171,6 +184,8 @@ class DqoUserProfileModel:
             field_dict[
                 "can_manage_and_view_shared_credentials"
             ] = can_manage_and_view_shared_credentials
+        if can_change_own_password is not UNSET:
+            field_dict["can_change_own_password"] = can_change_own_password
 
         return field_dict
 
@@ -204,6 +219,10 @@ class DqoUserProfileModel:
         else:
             account_role = DqoUserRole(_account_role)
 
+        data_quality_data_warehouse_enabled = d.pop(
+            "data_quality_data_warehouse_enabled", UNSET
+        )
+
         can_manage_account = d.pop("can_manage_account", UNSET)
 
         can_view_any_object = d.pop("can_view_any_object", UNSET)
@@ -236,6 +255,8 @@ class DqoUserProfileModel:
             "can_manage_and_view_shared_credentials", UNSET
         )
 
+        can_change_own_password = d.pop("can_change_own_password", UNSET)
+
         dqo_user_profile_model = cls(
             user=user,
             tenant=tenant,
@@ -248,6 +269,7 @@ class DqoUserProfileModel:
             tables_limit=tables_limit,
             jobs_limit=jobs_limit,
             account_role=account_role,
+            data_quality_data_warehouse_enabled=data_quality_data_warehouse_enabled,
             can_manage_account=can_manage_account,
             can_view_any_object=can_view_any_object,
             can_manage_scheduler=can_manage_scheduler,
@@ -263,6 +285,7 @@ class DqoUserProfileModel:
             can_compare_tables=can_compare_tables,
             can_manage_users=can_manage_users,
             can_manage_and_view_shared_credentials=can_manage_and_view_shared_credentials,
+            can_change_own_password=can_change_own_password,
         )
 
         dqo_user_profile_model.additional_properties = d

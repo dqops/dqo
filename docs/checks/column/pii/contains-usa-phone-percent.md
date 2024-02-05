@@ -17,7 +17,7 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_contains_usa_phone_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -228,12 +228,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -249,12 +259,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -422,7 +435,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -699,7 +712,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -853,12 +866,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -873,12 +896,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1058,7 +1084,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1346,7 +1372,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1364,7 +1390,7 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_contains_usa_phone_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1576,12 +1602,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -1597,12 +1633,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -1770,7 +1809,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2047,7 +2086,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2202,12 +2241,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2222,12 +2271,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -2407,7 +2459,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2695,7 +2747,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2713,7 +2765,7 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_contains_usa_phone_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2925,12 +2977,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -2946,12 +3008,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3119,7 +3184,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3396,7 +3461,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3551,12 +3616,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -3571,12 +3646,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -3756,7 +3834,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4044,7 +4122,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4062,7 +4140,7 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4284,12 +4362,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4305,12 +4393,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -4478,7 +4569,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4759,7 +4850,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4924,12 +5015,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -4944,12 +5045,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5129,7 +5233,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5415,7 +5519,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5433,7 +5537,7 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>|[pii](../../../dqo-concepts/types-of-data-quality-checks.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>|[pii](../../../categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*contains_usa_phone_percent*](../../../reference/sensors/column/pii-column-sensors.md#contains-usa-phone-percent)|[*max_percent*](../../../reference/rules/Comparison.md#max-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5655,12 +5759,22 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -5676,12 +5790,15 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -5849,7 +5966,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6130,7 +6247,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6295,12 +6412,22 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
+            
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}
+                    replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', '') RLIKE {{ lib.make_text_constant(regex_pattern) }}
+                {%- else -%}
+                    REGEXP_LIKE(replace(replace(replace(replace({{column}}, '+', ''), '(', ''), ')', ''), '-', ''), {{ lib.make_text_constant(regex_pattern) }})
+                {%- endif -%}
+            {% endmacro %}
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN {{ render_regex(lib.render_target_column('analyzed_table'), '[0-9]{10,}' ) }}
                                 THEN 1
                             ELSE 0
                         END
@@ -6315,12 +6442,15 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', '') , '\\d{10}\\d?')
+                            WHEN REGEXP_LIKE(replace(replace(replace(replace(analyzed_table.`target_column`, '+', ''), '(', ''), ')', ''), '-', ''), '[0-9]{10,}')
                                 THEN 1
                             ELSE 0
                         END
@@ -6500,7 +6630,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6786,7 +6916,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

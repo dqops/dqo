@@ -98,7 +98,7 @@ public class DqoAuthenticationTokenFactoryImpl implements DqoAuthenticationToken
 
         List<GrantedAuthority> grantedPrivileges = DqoPermissionGrantedAuthorities.getPrivilegesForRole(effectiveRole);
         DqoUserPrincipal dqoUserPrincipal = new DqoUserPrincipal(userTokenPayload.getUser(), userTokenPayload.getAccountRole(),
-                grantedPrivileges, userTokenPayload, dataDomainFolderName, effectiveCloudDataDomainName);
+                grantedPrivileges, userTokenPayload, dataDomainFolderName, effectiveCloudDataDomainName, userTokenPayload.getTenantId());
 
         UsernamePasswordAuthenticationToken apiKeyAuthenticationToken = new UsernamePasswordAuthenticationToken(
                 dqoUserPrincipal, userTokenPayload, dqoUserPrincipal.getPrivileges());

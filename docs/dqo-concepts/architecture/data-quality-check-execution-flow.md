@@ -278,9 +278,9 @@ The following list describes the role of each internal component.
        any other `run checks on table` job on the same data source finishes. If a job is put aside in a `waiting` status,
        DQOps may try to run another `run checks on table` job on a different data source that is not yet capacity limited.
      
-     - `succeeded` is a status for a job that has finished without any DQOps engine bugs. Even if all data quality checks failed
+     - `finished` is a status for a job that has finished without any DQOps engine bugs. Even if all data quality checks failed
        or all data quality checks cannot be executed due to execution errors in invalid Jinja2 templates or exceptions raised
-       by the Python rules, DQOps will still return a `succeeded` status.
+       by the Python rules, DQOps will still return a `finished` status.
        The only correct way to detect data quality issues identified during a data quality check execution queued by the
        [run checks](../../client/operations/jobs.md#run_checks) operation is to verify the highest severity status
        found in the [RunChecksQueueJobResult](../../client/models/jobs.md#runchecksqueuejobresult) object,

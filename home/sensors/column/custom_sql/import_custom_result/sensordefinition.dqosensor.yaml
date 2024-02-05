@@ -1,0 +1,18 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: sql_query
+    display_name: sql_query
+    help_text: "A custom SELECT statement that queries a logging table with custom\
+      \ results of data quality checks executed by the data pipeline. The query must\
+      \ return a result column named *severity*. The values of the *severity* column\
+      \ must be: 0 - data quality check passed, 1 - warning issue, 2 - error severity\
+      \ issue, 3 - fatal severity issue. The query can return *actual_value* and *expected_value*\
+      \ results that are imported into DQOps data lake. The query can use a {table_name}\
+      \ placeholder that is replaced with a table name for which the results are imported,\
+      \ and a {column_name} placeholder replaced with the column name."
+    data_type: string
+    display_hint: textarea
+    required: true

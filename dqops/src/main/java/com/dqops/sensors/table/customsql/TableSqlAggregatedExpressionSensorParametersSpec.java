@@ -43,7 +43,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpec extends AbstractSe
         }
     };
 
-    @JsonPropertyDescription("SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} placeholder that is replaced with a full table name.")
+    @JsonPropertyDescription("SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated for the entire table or within a GROUP BY clause for daily partitions and/or data groups. The expression can use a {table} placeholder that is replaced with a full table name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ControlDisplayHint(DisplayHint.textarea)
     @SampleValues(values = { "SUM(col_net_price) + SUM(col_tax)" })

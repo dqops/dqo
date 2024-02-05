@@ -58,8 +58,8 @@ public class ErrorsNormalizedResult extends SensorReadoutsNormalizedResult {
     }
 
     /**
-     * Returns the error with a unique ID of the sensor readout. There could be multiple rows with the same readout_id, especially for monitoring and partitioned checks.
-     * @return Column with the readout ID that is the same ID that would be used as the "ID" column in sensor_readouts or rule_results.
+     * Returns an error with a unique ID of the sensor readout. There may be multiple rows with the same readout_id, especially for monitoring and partitioned checks.
+     * @return A column with a readout ID that is the same ID that would be used as the "ID" column in sensor_readouts or rule_results.
      */
     public TextColumn getReadoutIdColumn() {
         return readoutIdColumn;

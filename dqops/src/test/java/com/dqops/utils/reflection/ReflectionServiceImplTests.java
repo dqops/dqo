@@ -22,6 +22,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -200,7 +201,7 @@ public class ReflectionServiceImplTests extends BaseTest {
         Assertions.assertEquals("maxPercentAbove", fieldInfo.getClassFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getYamlFieldName());
         Assertions.assertEquals("max_percent_above", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
+        Assertions.assertEquals("The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue()); // the field is nullable
@@ -422,6 +423,16 @@ public class ReflectionServiceImplTests extends BaseTest {
         //@JsonIgnore
         public CheckTimeScale getCheckTimeScale() {
             return null;
+        }
+
+        /**
+         * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+         *
+         * @return Array of supported data type categories.
+         */
+        @Override
+        public DataTypeCategory[] getSupportedDataTypeCategories() {
+            return DataTypeCategory.ANY;
         }
     }
 

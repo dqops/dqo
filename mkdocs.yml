@@ -1,10 +1,12 @@
 site_name: DQOps Data Quality Operations Center Documentation
 site_url: https://dqops.com/docs/
 repo_url: https://github.com/dqops/dqo
+site_description: DQOps is an open-source data quality platform for data quality and DataOps teams, providing customizable data quality checks and data quality dashboards.
 
 # Docs navigation
 nav:
   - What is DQOps?: "index.md"
+  - Documentation guide: "documentation-guide.md"
   - Getting started:
       - "getting-started/index.md"
       - Installation: "getting-started/installation.md"
@@ -16,35 +18,11 @@ nav:
       - What is a data quality check:
           - "dqo-concepts/definition-of-data-quality-checks/index.md"
           - Data profiling checks: "dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md"
-          - Data observability monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
+          - Data monitoring checks: "dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md"
           - Partition checks: "dqo-concepts/definition-of-data-quality-checks/partition-checks.md"
       - Configuring data sources: "dqo-concepts/configuring-data-sources.md"
       - Configuring table metadata: "dqo-concepts/configuring-table-metadata.md"
       - Configuring data quality checks: "dqo-concepts/configuring-data-quality-checks-and-rules.md"
-########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
-      - Categories of checks:
-        - 'dqo-concepts/types-of-data-quality-checks/index.md'
-        - Data accuracy: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
-        - Table availability: 'dqo-concepts/types-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
-        - Compare tables: 'dqo-concepts/types-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
-        - Custom SQL and multi column checks: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
-        - Table schema changes: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md'
-        - Timeliness and freshness: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
-        - Data volume: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
-        - Accepted values: 'dqo-concepts/types-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
-        - Numeric anomalies: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
-        - Blanks and whitespaces: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
-        - Bool values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
-        - Data type detection: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md'
-        - Date and time values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md'
-        - Data integrity: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-integrity-issues.md'
-        - Null values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
-        - Numeric values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
-        - Text patterns: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
-        - PII values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-pii-data-quality-issues.md'
-        - Text values: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
-        - Uniqueness and duplicates: 'dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
-########## END INCLUDE TYPES OF CHECKS REFERENCE
       - Running data quality checks: "dqo-concepts/running-data-quality-checks.md"
       - Data observability: "dqo-concepts/data-observability.md"
       - DQOps user home: "dqo-concepts/dqops-user-home-folder.md"
@@ -52,6 +30,7 @@ nav:
       - Data quality rules: "dqo-concepts/definition-of-data-quality-rules.md"
       - Data quality dashboards: "dqo-concepts/types-of-data-quality-dashboards.md"
       - Data quality dimensions: "dqo-concepts/data-quality-dimensions.md"
+      - Auditing time periods: "dqo-concepts/auditing-data-quality-with-time-periods.md"
       - Data grouping: "dqo-concepts/measuring-data-quality-with-data-grouping.md"
       - Data quality KPIs: "dqo-concepts/definition-of-data-quality-kpis.md"
       - Incremental data quality monitoring: "dqo-concepts/incremental-data-quality-monitoring.md"
@@ -61,7 +40,7 @@ nav:
       - Storing data quality results: "dqo-concepts/data-storage-of-data-quality-results.md"
       - Deployment architecture: "dqo-concepts/architecture/dqops-architecture.md"
       - Quality check execution flow: "dqo-concepts/architecture/data-quality-check-execution-flow.md"
-  - Installing DQOps:
+  - Installation guide:
       - "dqops-installation/index.md"
       - Download DQOps using PIP: "dqops-installation/install-dqops-using-pip.md"
       - Run DQOps in Docker: "dqops-installation/run-dqops-as-docker-container.md"
@@ -77,11 +56,36 @@ nav:
       - PostgreSQL: "data-sources/postgresql.md"
       - Presto: "data-sources/presto.md"
       - Redshift: "data-sources/redshift.md"
+      - SingleStoreDB: "data-sources/single-store.md"
       - Snowflake: "data-sources/snowflake.md"
       - Spark: "data-sources/spark.md"
       - SQL Server: "data-sources/sql-server.md"
       - Trino: "data-sources/trino.md"
-  - Use cases:
+########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
+  - Categories of checks:
+    - 'categories-of-data-quality-checks/index.md'
+    - Accepted values: 'categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
+    - Anomalies: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
+    - Blanks and whitespaces: 'categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
+    - Booleans: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
+    - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
+    - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
+    - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
+    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
+    - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
+    - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
+    - Nulls: 'categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
+    - Numerics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
+    - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
+    - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
+    - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
+    - Table schema drifts: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
+    - Text patterns: 'categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
+    - Text statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
+    - Timeliness and freshness: 'categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
+    - Uniqueness and duplicates: 'categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
+########## END INCLUDE TYPES OF CHECKS REFERENCE
+  - Use cases and examples:
       - "examples/index.md"
       - Data accuracy:
           - Integrity check between columns in different tables: "examples/data-accuracy/integrity-check-between-columns-in-different-tables.md"
@@ -117,7 +121,7 @@ nav:
       - "working-with-dqo/index.md"
       - Daily monitoring of data quality: "working-with-dqo/daily-monitoring-of-data-quality.md"
       - Basic data statistics: "working-with-dqo/collecting-basic-data-statistics.md"
-      - Run data quality checks: "working-with-dqo/run-data-quality-checks.md"
+      - Running data quality checks: "working-with-dqo/run-data-quality-checks.md"
       - Review the data quality results on dashboards: "working-with-dqo/review-the-data-quality-results-on-dashboards.md"
       - Delete data quality results: "working-with-dqo/delete-data-quality-results.md"
       - Schedules:
@@ -130,6 +134,7 @@ nav:
       - Set up data grouping: "working-with-dqo/set-up-data-grouping-for-data-quality-checks.md"
       - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
       - User and access management: "working-with-dqo/access-management.md"
+      - Managing errors: "working-with-dqo/managing-errors.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
   - Integrations:
       - "integrations/index.md"
@@ -181,6 +186,7 @@ nav:
       - dashboards: 'client/models/dashboards.md'
       - data_grouping_configurations: 'client/models/data_grouping_configurations.md'
       - data_sources: 'client/models/data_sources.md'
+      - dictionaries: 'client/models/dictionaries.md'
       - environment: 'client/models/environment.md'
       - errors: 'client/models/errors.md'
       - incidents: 'client/models/incidents.md'
@@ -206,6 +212,7 @@ nav:
       - data_grouping_configurations: 'client/operations/data_grouping_configurations.md'
       - data_sources: 'client/operations/data_sources.md'
       - defaults: 'client/operations/defaults.md'
+      - dictionaries: 'client/operations/dictionaries.md'
       - environment: 'client/operations/environment.md'
       - errors: 'client/operations/errors.md'
       - healthcheck: 'client/operations/healthcheck.md'
@@ -243,6 +250,7 @@ nav:
         - sql condition failed on table: 'checks/table/custom_sql/sql-condition-failed-on-table.md'
         - sql condition passed percent on table: 'checks/table/custom_sql/sql-condition-passed-percent-on-table.md'
         - sql aggregate expression on table: 'checks/table/custom_sql/sql-aggregate-expression-on-table.md'
+        - import custom result on table: 'checks/table/custom_sql/import-custom-result-on-table.md'
       - schema:
         - 'checks/table/schema/index.md'
         - column count: 'checks/table/schema/column-count.md'
@@ -285,6 +293,8 @@ nav:
         - sum anomaly: 'checks/column/anomaly/sum-anomaly.md'
         - mean anomaly: 'checks/column/anomaly/mean-anomaly.md'
         - median anomaly: 'checks/column/anomaly/median-anomaly.md'
+        - min anomaly: 'checks/column/anomaly/min-anomaly.md'
+        - max anomaly: 'checks/column/anomaly/max-anomaly.md'
         - mean change: 'checks/column/anomaly/mean-change.md'
         - mean change 1 day: 'checks/column/anomaly/mean-change-1-day.md'
         - mean change 7 days: 'checks/column/anomaly/mean-change-7-days.md'
@@ -322,6 +332,7 @@ nav:
         - sql condition failed on column: 'checks/column/custom_sql/sql-condition-failed-on-column.md'
         - sql condition passed percent on column: 'checks/column/custom_sql/sql-condition-passed-percent-on-column.md'
         - sql aggregate expression on column: 'checks/column/custom_sql/sql-aggregate-expression-on-column.md'
+        - import custom result on column: 'checks/column/custom_sql/import-custom-result-on-column.md'
       - datatype:
         - 'checks/column/datatype/index.md'
         - detected datatype in text: 'checks/column/datatype/detected-datatype-in-text.md'
@@ -567,12 +578,10 @@ plugins:
       min_length: 50
       max_length: 160
       trim: true
-#  - search
-# replace above search with below commented section on update mkdocs-material to 9.4 at least
-#  - group:
-#      enabled: !ENV ENABLE_SEARCH
-#      plugins:
-#        - search
+  - group:
+      enabled: !ENV ENABLE_SEARCH
+      plugins:
+        - search
 # Markdown extensions
 markdown_extensions:
   - pymdownx.snippets
@@ -593,8 +602,8 @@ markdown_extensions:
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
   - pymdownx.emoji:
-      emoji_index: !!python/name:materialx.emoji.twemoji
-      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
   - meta
 extra:
   analytics:
@@ -619,4 +628,4 @@ extra:
       link: https://hub.docker.com/r/dqops/dqo
     - icon: fontawesome/brands/facebook
       link: https://www.facebook.com/dqops
-copyright: Copyright &copy; 2021 - 2024 DQOps
+copyright: Copyright &copy; 2021 - 2024 DQOps by Documati

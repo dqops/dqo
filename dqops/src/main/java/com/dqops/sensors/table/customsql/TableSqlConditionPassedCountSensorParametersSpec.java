@@ -43,7 +43,7 @@ public class TableSqlConditionPassedCountSensorParametersSpec extends AbstractSe
         }
     };
 
-    @JsonPropertyDescription("SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} placeholder that is replaced with a full table name.")
+    @JsonPropertyDescription("SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use a {table} placeholder that is replaced with a full table name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @ControlDisplayHint(DisplayHint.textarea)
     @SampleValues(values = { "SUM(col_total_impressions) > SUM(col_total_clicks)" })

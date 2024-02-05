@@ -5,6 +5,7 @@ Operations related to manage the metadata of imported tables, and managing the c
 ___
 ## create_table
 Creates a new table (adds a table metadata)
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/create_table.py) to see the source code on GitHub.
 
 
@@ -37,18 +38,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
 	
     ```
+
+    
+
 
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -80,8 +87,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -111,8 +117,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -144,8 +154,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -176,7 +185,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -211,8 +224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -243,7 +255,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -278,8 +294,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -310,13 +325,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## delete_table
 Deletes a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/delete_table.py) to see the source code on GitHub.
 
 
@@ -349,7 +365,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
@@ -357,107 +375,167 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import delete_table
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/'
-	)
-	
-	call_result = delete_table.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import delete_table
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/'
-	)
-	
-	call_result = await delete_table.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import delete_table
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token
-	)
-	
-	call_result = delete_table.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import delete_table
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token
-	)
-	
-	call_result = await delete_table.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
-	  "jobId" : 10832,
+	  "jobId" : 123456789,
 	  "createdAt" : "2007-10-11T13:42:00Z"
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import delete_table
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = delete_table.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import delete_table
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/'
+	)
+	
+	call_result = await delete_table.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import delete_table
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = delete_table.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import delete_table
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token
+	)
+	
+	call_result = await delete_table.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table
 Return the table specification
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table.py) to see the source code on GitHub.
 
 
@@ -490,7 +568,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
@@ -498,110 +578,158 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "can_edit" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableModel(can_edit=False)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableModel(can_edit=False)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableModel(can_edit=False)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableModel(can_edit=False)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_basic
 Return the basic table information
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_basic.py) to see the source code on GitHub.
 
 
@@ -634,7 +762,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/basic^
@@ -642,100 +772,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_basic
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_basic.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_basic
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_basic.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_basic
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_basic.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_basic
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_basic.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "connection_name" : "sample_connection",
@@ -783,11 +823,341 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_basic
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_basic.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableListModel(
+		connection_name='sample_connection',
+		table_hash=2314522140819107818,
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		partitioning_configuration_missing=False,
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=True,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_basic
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_basic.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableListModel(
+		connection_name='sample_connection',
+		table_hash=2314522140819107818,
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		partitioning_configuration_missing=False,
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=True,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_basic
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_basic.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableListModel(
+		connection_name='sample_connection',
+		table_hash=2314522140819107818,
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		partitioning_configuration_missing=False,
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=True,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_basic
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_basic.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableListModel(
+		connection_name='sample_connection',
+		table_hash=2314522140819107818,
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		disabled=False,
+		has_any_configured_checks=True,
+		has_any_configured_profiling_checks=True,
+		has_any_configured_monitoring_checks=False,
+		has_any_configured_partition_checks=False,
+		partitioning_configuration_missing=False,
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			full_table_name='sample_schema.sample_table',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=True,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_columns_monitoring_checks_model
 Return a UI friendly model of configurations for column-level data quality monitoring checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -828,7 +1198,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/monitoring/daily/model^
@@ -836,104 +1208,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -949,11 +1227,245 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_columns_partitioned_checks_model
 Return a UI friendly model of configurations for column-level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -994,7 +1506,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/partitioned/daily/model^
@@ -1002,104 +1516,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -1115,11 +1535,245 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_columns_profiling_checks_model
 Return a UI friendly model of configurations for column-level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_columns_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -1159,7 +1813,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columnchecks/profiling/model^
@@ -1167,100 +1823,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_profiling_checks_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_profiling_checks_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_profiling_checks_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_columns_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_columns_profiling_checks_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_columns_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -1276,11 +1842,237 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_profiling_checks_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_profiling_checks_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_profiling_checks_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_columns_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_columns_profiling_checks_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_columns_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_comments
 Return the list of comments added to a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_comments.py) to see the source code on GitHub.
 
 
@@ -1313,7 +2105,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/comments^
@@ -1321,100 +2115,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_comments
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_comments.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_comments
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_comments.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_comments
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_comments.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_comments
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_comments.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "date" : "2007-12-03T10:15:30",
@@ -1430,11 +2134,213 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "comment" : "Sample comment"
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_comments
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_comments.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_comments
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_comments.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_comments
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_comments.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_comments
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_comments.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_daily_monitoring_checks
 Return the configuration of daily table level data quality monitoring on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_monitoring_checks.py) to see the source code on GitHub.
 
 
@@ -1467,7 +2373,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily^
@@ -1475,100 +2383,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_monitoring_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_daily_monitoring_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_monitoring_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_daily_monitoring_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_monitoring_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_daily_monitoring_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_monitoring_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_daily_monitoring_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "volume" : {
@@ -1580,11 +2398,193 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_monitoring_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_daily_monitoring_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeDailyMonitoringChecksSpec(
+			daily_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_monitoring_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_daily_monitoring_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeDailyMonitoringChecksSpec(
+			daily_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_monitoring_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_daily_monitoring_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeDailyMonitoringChecksSpec(
+			daily_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_monitoring_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_daily_monitoring_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeDailyMonitoringChecksSpec(
+			daily_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_daily_partitioned_checks
 Return the configuration of daily table level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_daily_partitioned_checks.py) to see the source code on GitHub.
 
 
@@ -1617,7 +2617,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily^
@@ -1625,100 +2627,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_partitioned_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_daily_partitioned_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_partitioned_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_daily_partitioned_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_partitioned_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_daily_partitioned_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_daily_partitioned_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_daily_partitioned_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "volume" : {
@@ -1730,11 +2642,193 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_partitioned_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_daily_partitioned_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeDailyPartitionedChecksSpec(
+			daily_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_partitioned_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_daily_partitioned_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeDailyPartitionedChecksSpec(
+			daily_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_partitioned_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_daily_partitioned_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeDailyPartitionedChecksSpec(
+			daily_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_daily_partitioned_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_daily_partitioned_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableDailyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeDailyPartitionedChecksSpec(
+			daily_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonDailyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_default_grouping_configuration
 Return the default data grouping configuration for a table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -1767,7 +2861,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/defaultgroupingconfiguration^
@@ -1775,100 +2871,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_default_grouping_configuration
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_default_grouping_configuration.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_default_grouping_configuration
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_default_grouping_configuration.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_default_grouping_configuration
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_default_grouping_configuration.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_default_grouping_configuration
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_default_grouping_configuration.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "level_3" : {
@@ -1877,11 +2883,169 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_default_grouping_configuration
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_default_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_default_grouping_configuration
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_default_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_default_grouping_configuration
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_default_grouping_configuration.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_default_grouping_configuration
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_default_grouping_configuration.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_incident_grouping
 Return the configuration of incident grouping on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -1914,7 +3078,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/incidentgrouping^
@@ -1922,100 +3088,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_incident_grouping
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_incident_grouping.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_incident_grouping
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_incident_grouping.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_incident_grouping
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_incident_grouping.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_incident_grouping
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_incident_grouping.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "grouping_level" : "table_dimension",
@@ -2024,11 +3100,169 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "disabled" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_incident_grouping
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_incident_grouping.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_group=True,
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_incident_grouping
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_incident_grouping.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_group=True,
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_incident_grouping
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_incident_grouping.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_group=True,
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_incident_grouping
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_incident_grouping.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_group=True,
+		disabled=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_labels
 Return the list of labels assigned to a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_labels.py) to see the source code on GitHub.
 
 
@@ -2061,7 +3295,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/labels^
@@ -2069,108 +3305,172 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_labels
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_labels.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_labels
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_labels.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_labels
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_labels.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_labels
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_labels.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ "sampleString_1", "sampleString_2", "sampleString_3" ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_labels
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_labels.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_labels
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_labels.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_labels
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_labels.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_labels
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_labels.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_basic_model
 Return a simplistic UI friendly model of table level data quality monitoring on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -2204,7 +3504,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/model/basic^
@@ -2212,104 +3514,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "checks" : [ {
@@ -2348,11 +3556,325 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_model
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -2386,7 +3908,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/model^
@@ -2394,104 +3918,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -2518,11 +3948,277 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_model_filter
 Return a UI friendly model of configurations for table level data quality monitoring on a table for a given time scale, filtered by category and check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -2558,7 +4254,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/model/filter/sample_category/sample_check^
@@ -2566,112 +4264,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -2698,11 +4294,285 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_monthly
 Return the configuration of monthly table level data quality monitoring on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -2735,7 +4605,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/monthly^
@@ -2743,100 +4615,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_monthly
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_monthly.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_monthly
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_monthly.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_monthly
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_monthly.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_monthly
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_monthly.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "volume" : {
@@ -2848,11 +4630,193 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_monthly
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_monthly.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeMonthlyMonitoringChecksSpec(
+			monthly_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_monthly
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_monthly.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeMonthlyMonitoringChecksSpec(
+			monthly_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_monthly
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_monthly.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeMonthlyMonitoringChecksSpec(
+			monthly_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_monthly
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_monthly.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyMonitoringCheckCategoriesSpec(
+		volume=TableVolumeMonthlyMonitoringChecksSpec(
+			monthly_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyMonitoringChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_monitoring_checks_templates.py) to see the source code on GitHub.
 
 
@@ -2888,7 +4852,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/monitoring/daily^
@@ -2896,104 +4862,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_monitoring_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -3003,11 +4875,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_monitoring_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_basic_model
 Return a simplistic UI friendly model of table level data quality partitioned checks on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -3041,7 +5123,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/model/basic^
@@ -3049,104 +5133,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "checks" : [ {
@@ -3185,11 +5175,325 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_basic_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_model
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -3223,7 +5527,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/model^
@@ -3231,104 +5537,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -3355,11 +5567,277 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_model_filter
 Return a UI friendly model of configurations for table level data quality partitioned checks on a table for a given time scale, filtered by category and check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -3395,7 +5873,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/model/filter/sample_category/sample_check^
@@ -3403,112 +5883,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -3535,11 +5913,285 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_model_filter
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_monthly
 Return the configuration of monthly table level data quality partitioned checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -3572,7 +6224,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/monthly^
@@ -3580,100 +6234,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_monthly
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_monthly.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_monthly
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_monthly.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_monthly
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_monthly.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_monthly
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_monthly.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "volume" : {
@@ -3685,11 +6249,193 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_monthly
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_monthly.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeMonthlyPartitionedChecksSpec(
+			monthly_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_monthly
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_monthly.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeMonthlyPartitionedChecksSpec(
+			monthly_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_monthly
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_monthly.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeMonthlyPartitionedChecksSpec(
+			monthly_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_monthly
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_monthly.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableMonthlyPartitionedCheckCategoriesSpec(
+		volume=TableVolumeMonthlyPartitionedChecksSpec(
+			monthly_partition_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		),
+		comparisons=TableComparisonMonthlyPartitionedChecksSpecMap()
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioned_checks_templates.py) to see the source code on GitHub.
 
 
@@ -3725,7 +6471,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/partitioned/daily^
@@ -3733,104 +6481,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioned_checks_templates
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -3840,11 +6494,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioned_checks_templates
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioning
 Return the table partitioning information
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_partitioning.py) to see the source code on GitHub.
 
 
@@ -3877,7 +6741,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioning^
@@ -3885,100 +6751,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioning
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioning.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioning
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioning.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioning
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioning.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_partitioning
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioning.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "connection_name" : "sample_connection",
@@ -3993,16 +6769,222 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  },
 	  "incremental_time_window" : {
 	    "daily_partitioning_recent_days" : 7,
-	    "monthly_partitioning_recent_months" : 1
+	    "daily_partitioning_include_today" : true
 	  },
 	  "can_edit" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioning
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioning.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TablePartitioningModel(
+		connection_name='sample_connection',
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		timestamp_columns=TimestampColumnsSpec(
+			event_timestamp_column='col1',
+			ingestion_timestamp_column='col2',
+			partition_by_column='col3'
+		),
+		incremental_time_window=PartitionIncrementalTimeWindowSpec(
+			daily_partitioning_recent_days=7,
+			daily_partitioning_include_today=True,
+			monthly_partitioning_include_current_month=False
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioning
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioning.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TablePartitioningModel(
+		connection_name='sample_connection',
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		timestamp_columns=TimestampColumnsSpec(
+			event_timestamp_column='col1',
+			ingestion_timestamp_column='col2',
+			partition_by_column='col3'
+		),
+		incremental_time_window=PartitionIncrementalTimeWindowSpec(
+			daily_partitioning_recent_days=7,
+			daily_partitioning_include_today=True,
+			monthly_partitioning_include_current_month=False
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioning
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioning.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TablePartitioningModel(
+		connection_name='sample_connection',
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		timestamp_columns=TimestampColumnsSpec(
+			event_timestamp_column='col1',
+			ingestion_timestamp_column='col2',
+			partition_by_column='col3'
+		),
+		incremental_time_window=PartitionIncrementalTimeWindowSpec(
+			daily_partitioning_recent_days=7,
+			daily_partitioning_include_today=True,
+			monthly_partitioning_include_current_month=False
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_partitioning
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioning.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TablePartitioningModel(
+		connection_name='sample_connection',
+		target=PhysicalTableName(
+			schema_name='sample_schema',
+			table_name='sample_table'
+		),
+		timestamp_columns=TimestampColumnsSpec(
+			event_timestamp_column='col1',
+			ingestion_timestamp_column='col2',
+			partition_by_column='col3'
+		),
+		incremental_time_window=PartitionIncrementalTimeWindowSpec(
+			daily_partitioning_recent_days=7,
+			daily_partitioning_include_today=True,
+			monthly_partitioning_include_current_month=False
+		),
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks
 Return the configuration of table level data quality checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -4035,7 +7017,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling^
@@ -4043,100 +7027,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "volume" : {
@@ -4148,11 +7042,189 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableProfilingCheckCategoriesSpec(
+		volume=TableVolumeProfilingChecksSpec(
+			profile_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableProfilingCheckCategoriesSpec(
+		volume=TableVolumeProfilingChecksSpec(
+			profile_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableProfilingCheckCategoriesSpec(
+		volume=TableVolumeProfilingChecksSpec(
+			profile_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		)
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableProfilingCheckCategoriesSpec(
+		volume=TableVolumeProfilingChecksSpec(
+			profile_row_count=TableRowCountCheckSpec(
+				parameters=TableVolumeRowCountSensorParametersSpec(),
+				error=MinCountRule1ParametersSpec(min_count=1),
+				disabled=False,
+				exclude_from_kpi=False,
+				include_in_sla=False
+			)
+		)
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks_basic_model
 Return a simplistic UI friendly model of all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_basic_model.py) to see the source code on GitHub.
 
 
@@ -4185,7 +7257,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model/basic^
@@ -4193,100 +7267,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_basic_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_basic_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_basic_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_basic_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_basic_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_basic_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "checks" : [ {
@@ -4325,11 +7309,317 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_basic_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_basic_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_basic_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_basic_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_basic_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_basic_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerListModel(
+		checks=[
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_1',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_2',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_1',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			),
+			CheckListModel(
+				check_category='sample_category_2',
+				check_name='sample_check_3',
+				help_text='Sample help text',
+				configured=True
+			)
+		],
+		can_edit=False,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks_model
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -4362,7 +7652,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model^
@@ -4370,100 +7662,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -4490,11 +7692,269 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks_model_filter
 Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_model_filter.py) to see the source code on GitHub.
 
 
@@ -4529,7 +7989,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model/filter/sample_category/sample_check^
@@ -4537,108 +7999,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model_filter
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model_filter
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model_filter
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_model_filter.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_model_filter
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_model_filter.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_category',
-	    'sample_check',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "categories" : [ {
@@ -4665,11 +8029,277 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model_filter
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model_filter
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model_filter
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_model_filter.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_model_filter
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_model_filter.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_category',
+	    'sample_check',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks_templates
 Return available data quality checks on a requested table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_profiling_checks_templates.py) to see the source code on GitHub.
 
 
@@ -4704,7 +8334,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/bulkenable/profiling^
@@ -4712,100 +8344,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_templates
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_templates
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_templates
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_profiling_checks_templates
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -4815,11 +8357,213 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_templates
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_templates
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_templates
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_profiling_checks_templates
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_scheduling_group_override
 Return the schedule override configuration for a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_scheduling_group_override.py) to see the source code on GitHub.
 
 
@@ -4853,7 +8597,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/schedulesoverride/partitioned_daily^
@@ -4861,114 +8607,178 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_scheduling_group_override
-	from dqops.client.models import CheckRunScheduleGroup
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_scheduling_group_override.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckRunScheduleGroup.partitioned_daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_scheduling_group_override
-	from dqops.client.models import CheckRunScheduleGroup
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_scheduling_group_override.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckRunScheduleGroup.partitioned_daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_scheduling_group_override
-	from dqops.client.models import CheckRunScheduleGroup
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_scheduling_group_override.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckRunScheduleGroup.partitioned_daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_scheduling_group_override
-	from dqops.client.models import CheckRunScheduleGroup
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_scheduling_group_override.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckRunScheduleGroup.partitioned_daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "cron_expression" : "0 12 1 * *"
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_scheduling_group_override
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_scheduling_group_override.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_scheduling_group_override
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_scheduling_group_override.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_scheduling_group_override
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_scheduling_group_override.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_scheduling_group_override
+	from dqops.client.models import CheckRunScheduleGroup
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_scheduling_group_override.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckRunScheduleGroup.partitioned_daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_statistics
 Returns a list of the profiler (statistics) metrics on a chosen table captured during the most recent statistics collection.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_table_statistics.py) to see the source code on GitHub.
 
 
@@ -5001,7 +8811,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/statistics^
@@ -5009,110 +8821,158 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_statistics
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_statistics.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_statistics
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_statistics.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_statistics
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_statistics.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_table_statistics
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_statistics.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "can_collect_statistics" : false
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_statistics
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_statistics.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableStatisticsModel(can_collect_statistics=False)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_statistics
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_statistics.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableStatisticsModel(can_collect_statistics=False)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_statistics
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_statistics.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableStatisticsModel(can_collect_statistics=False)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_table_statistics
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_statistics.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableStatisticsModel(can_collect_statistics=False)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_tables
 Returns a list of tables inside a connection/schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/get_tables.py) to see the source code on GitHub.
 
 
@@ -5144,7 +9004,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables^
@@ -5152,96 +9014,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_tables
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_tables.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_tables
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_tables.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_tables
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_tables.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.tables import get_tables
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_tables.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "connection_name" : "sample_connection",
@@ -5377,11 +9153,737 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "can_delete_data" : true
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_tables
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_tables.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.tables import get_tables
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_tables.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		TableListModel(
+			connection_name='sample_connection',
+			table_hash=2314522140819107818,
+			target=PhysicalTableName(
+				schema_name='sample_schema',
+				table_name='sample_table'
+			),
+			disabled=False,
+			has_any_configured_checks=True,
+			has_any_configured_profiling_checks=True,
+			has_any_configured_monitoring_checks=False,
+			has_any_configured_partition_checks=False,
+			partitioning_configuration_missing=False,
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				full_table_name='sample_schema.sample_table',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=True,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## update_table
 Updates an existing table specification, changing all the fields
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table.py) to see the source code on GitHub.
 
 
@@ -5414,18 +9916,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
+		"{\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"profiling_checks\":{\"volume\":{\"profile_row_count\":{\"error\":{\"min_count\":1}}}},\"columns\":{}}"
 	
     ```
+
+    
+
 
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5457,8 +9965,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5488,8 +9995,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5521,8 +10032,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5553,7 +10063,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5588,8 +10102,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5620,7 +10133,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5655,8 +10172,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		groupings=DataGroupingConfigurationSpecMap(),
@@ -5687,13 +10203,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_basic
 Updates the basic field of an existing table, changing only the most important fields.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_basic.py) to see the source code on GitHub.
 
 
@@ -5726,7 +10243,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/basic^
@@ -5737,7 +10256,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5764,30 +10287,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5810,8 +10333,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5838,30 +10365,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5885,7 +10412,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5915,30 +10446,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -5962,7 +10493,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -5992,30 +10527,30 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		has_any_configured_monitoring_checks=False,
 		has_any_configured_partition_checks=False,
 		partitioning_configuration_missing=False,
-		run_checks_job_template=TableListModel(
+		run_checks_job_template=CheckSearchFilters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_profiling_checks_job_template=TableListModel(
-			check_type=CheckType.profiling,
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_monitoring_checks_job_template=TableListModel(
-			check_type=CheckType.monitoring,
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		run_partition_checks_job_template=TableListModel(
-			check_type=CheckType.partitioned,
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			enabled=True
 		),
-		data_clean_job_template=TableListModel(
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
 			connection='sample_connection',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
@@ -6039,13 +10574,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_comments
 Updates the list of comments on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_comments.py) to see the source code on GitHub.
 
 
@@ -6078,7 +10614,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/comments^
@@ -6089,7 +10627,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6127,8 +10669,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6167,7 +10713,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6209,7 +10759,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6251,13 +10805,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_daily_monitoring_checks
 Updates the list of daily table level data quality monitoring on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_daily_monitoring_checks.py) to see the source code on GitHub.
 
 
@@ -6290,7 +10845,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily^
@@ -6301,7 +10858,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6339,8 +10900,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6379,7 +10944,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6421,7 +10990,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6463,13 +11036,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_default_grouping_configuration
 Updates the default data grouping configuration at a table level.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_default_grouping_configuration.py) to see the source code on GitHub.
 
 
@@ -6502,7 +11076,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/defaultgroupingconfiguration^
@@ -6513,7 +11089,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6528,7 +11108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6542,8 +11122,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6558,7 +11142,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6573,7 +11157,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6591,7 +11179,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6606,7 +11194,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6624,7 +11216,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
 	request_body = DataGroupingConfigurationSpec(
 		level_3=DataGroupingDimensionSpec(
-			source=DataGroupingDimensionSource.column_value,
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
 			column='sample_column'
 		)
 	)
@@ -6639,13 +11231,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_incident_grouping
 Updates the configuration of incident grouping on a table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_incident_grouping.py) to see the source code on GitHub.
 
 
@@ -6678,7 +11271,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/incidentgrouping^
@@ -6689,7 +11284,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6703,8 +11302,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6718,8 +11317,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6733,8 +11336,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6749,7 +11352,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6766,8 +11373,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6782,7 +11389,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -6799,8 +11410,8 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
 	request_body = TableIncidentGroupingSpec(
-		grouping_level=IncidentGroupingLevel.table_dimension,
-		minimum_severity=MinimumGroupingSeverityLevel.warning,
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
 		divide_by_data_group=True,
 		disabled=False
 	)
@@ -6815,13 +11426,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_labels
 Updates the list of assigned labels of an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_labels.py) to see the source code on GitHub.
 
 
@@ -6854,7 +11466,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/labels^
@@ -6865,12 +11479,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6891,13 +11508,16 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -6919,12 +11539,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6949,12 +11572,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.tables import update_table_labels
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -6979,13 +11605,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_monitoring_checks_model
 Updates the data quality monitoring from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -7019,7 +11646,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/model^
@@ -7030,7 +11659,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7087,8 +11720,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7146,7 +11783,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7207,7 +11848,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7268,13 +11913,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_monitoring_checks_monthly
 Updates the list of monthly table level data quality monitoring on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_monitoring_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -7307,7 +11953,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/monthly^
@@ -7318,7 +11966,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7356,8 +12008,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7396,7 +12052,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7438,7 +12098,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7480,13 +12144,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_partitioned_checks_daily
 Updates the list of daily table level data quality partitioned checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_daily.py) to see the source code on GitHub.
 
 
@@ -7519,7 +12184,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily^
@@ -7530,7 +12197,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7568,8 +12239,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7608,7 +12283,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7650,7 +12329,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7692,13 +12375,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_partitioned_checks_model
 Updates the data quality partitioned checks from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -7732,7 +12416,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/model^
@@ -7743,7 +12429,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7800,8 +12490,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7859,7 +12553,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7920,7 +12618,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -7981,13 +12683,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_partitioned_checks_monthly
 Updates the list of monthly table level data quality partitioned checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioned_checks_monthly.py) to see the source code on GitHub.
 
 
@@ -8020,7 +12723,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/monthly^
@@ -8031,7 +12736,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8069,8 +12778,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8109,7 +12822,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8151,7 +12868,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8193,13 +12914,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_partitioning
 Updates the table partitioning configuration of an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_partitioning.py) to see the source code on GitHub.
 
 
@@ -8232,18 +12954,24 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioning^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection_name\":\"sample_connection\",\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"monthly_partitioning_recent_months\":1},\"can_edit\":true}"
+		"{\"connection_name\":\"sample_connection\",\"target\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"timestamp_columns\":{\"event_timestamp_column\":\"col1\",\"ingestion_timestamp_column\":\"col2\",\"partition_by_column\":\"col3\"},\"incremental_time_window\":{\"daily_partitioning_recent_days\":7,\"daily_partitioning_include_today\":true},\"can_edit\":true}"
 	
     ```
+
+    
+
 
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8270,8 +12998,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8286,8 +13013,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8314,8 +13045,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8331,7 +13061,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8361,8 +13095,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8378,7 +13111,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8408,8 +13145,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 		),
 		incremental_time_window=PartitionIncrementalTimeWindowSpec(
 			daily_partitioning_recent_days=7,
-			daily_partitioning_include_today=False,
-			monthly_partitioning_recent_months=1,
+			daily_partitioning_include_today=True,
 			monthly_partitioning_include_current_month=False
 		),
 		can_edit=True
@@ -8425,13 +13161,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_profiling_checks
 Updates the list of table level data quality profiling checks on an existing table.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks.py) to see the source code on GitHub.
 
 
@@ -8464,7 +13201,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling^
@@ -8475,7 +13214,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8511,8 +13254,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8549,7 +13296,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8589,7 +13340,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8629,13 +13384,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_profiling_checks_model
 Updates the data quality profiling checks from a model that contains a patch with changes.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -8668,7 +13424,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/model^
@@ -8679,7 +13437,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8734,8 +13496,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8791,7 +13557,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8850,7 +13620,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8909,13 +13683,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
 ___
 ## update_table_scheduling_group_override
 Updates the overridden schedule configuration of an existing table for a named schedule group (named schedule for checks using the same time scale).
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/tables/update_table_scheduling_group_override.py) to see the source code on GitHub.
 
 
@@ -8949,7 +13724,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/schedulesoverride/partitioned_daily^
@@ -8960,7 +13737,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -8987,8 +13768,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -9016,7 +13801,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -9047,7 +13836,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -9078,7 +13871,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 

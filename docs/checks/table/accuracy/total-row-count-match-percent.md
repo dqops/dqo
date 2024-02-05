@@ -18,7 +18,7 @@ Verifies that the total row count of the tested table matches the total row coun
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_total_row_count_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -109,7 +109,7 @@ spec:
     accuracy:
       profile_total_row_count_match_percent:
         parameters:
-          referenced_table: dim_customer
+          referenced_table: landing_zone.customer_raw
         warning:
           max_diff_percent: 0.0
         error:
@@ -156,7 +156,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -191,7 +191,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -226,7 +226,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -261,7 +261,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -296,10 +296,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -331,7 +331,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -366,7 +366,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -401,7 +401,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -436,7 +436,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -450,7 +450,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -471,10 +471,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -489,7 +489,7 @@ Verifies the total ow count of a tested table and compares it to a row count of 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_total_row_count_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -581,7 +581,7 @@ spec:
       accuracy:
         daily_total_row_count_match_percent:
           parameters:
-            referenced_table: dim_customer
+            referenced_table: landing_zone.customer_raw
           warning:
             max_diff_percent: 0.0
           error:
@@ -628,7 +628,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -663,7 +663,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -698,7 +698,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -733,7 +733,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -768,10 +768,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -803,7 +803,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -838,7 +838,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -873,7 +873,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -908,7 +908,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -922,7 +922,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -943,10 +943,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -961,7 +961,7 @@ Verifies the total row count of a tested table and compares it to a row count of
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_total_row_count_match_percent`</span>|[accuracy](../../../dqo-concepts/types-of-data-quality-checks.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_total_row_count_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_row_count_match_percent*](../../../reference/sensors/table/accuracy-table-sensors.md#total-row-count-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1053,7 +1053,7 @@ spec:
       accuracy:
         monthly_total_row_count_match_percent:
           parameters:
-            referenced_table: dim_customer
+            referenced_table: landing_zone.customer_raw
           warning:
             max_diff_percent: 0.0
           error:
@@ -1100,7 +1100,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1135,7 +1135,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1170,7 +1170,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1205,7 +1205,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1240,10 +1240,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -1275,7 +1275,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1310,7 +1310,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1345,7 +1345,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1380,7 +1380,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1394,7 +1394,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -1415,10 +1415,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___

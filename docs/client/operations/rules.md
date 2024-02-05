@@ -5,6 +5,7 @@ Operations for managing custom data quality rule definitions in DQOps. The custo
 ___
 ## create_rule
 Creates (adds) a new custom rule given the rule definition.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/create_rule.py) to see the source code on GitHub.
 
 
@@ -35,7 +36,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -46,7 +49,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -61,9 +68,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -76,8 +83,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -92,9 +103,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -108,7 +119,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -126,9 +141,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -142,7 +157,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -160,9 +179,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -176,13 +195,14 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 
 ___
 ## delete_rule
 Deletes a custom rule definition
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/delete_rule.py) to see the source code on GitHub.
 
 
@@ -206,7 +226,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -214,12 +236,15 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -231,13 +256,16 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -250,12 +278,15 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -271,12 +302,15 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.rules import delete_rule
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -292,13 +326,14 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 
 ___
 ## get_all_rules
 Returns a flat list of all rules available in DQOps, both built-in rules and user defined or customized rules.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_all_rules.py) to see the source code on GitHub.
 
 
@@ -322,7 +357,9 @@ http://localhost:8888/api/rules
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules^
@@ -330,88 +367,10 @@ http://localhost:8888/api/rules
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_all_rules
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_all_rules.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_all_rules
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_all_rules.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_all_rules
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_all_rules.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_all_rules
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_all_rules.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "rule_name" : "sample_rule",
@@ -433,11 +392,225 @@ http://localhost:8888/api/rules
 	  "can_edit" : true
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_all_rules.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_all_rules.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_all_rules.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_all_rules
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_all_rules.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_rule
 Returns a rule definition
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule.py) to see the source code on GitHub.
 
 
@@ -468,7 +641,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -476,92 +651,10 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_rule.sync(
-	    'sample_target/sample_category/sample_rule',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_rule.asyncio(
-	    'sample_target/sample_category/sample_rule',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_rule.sync(
-	    'sample_target/sample_category/sample_rule',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_rule.asyncio(
-	    'sample_target/sample_category/sample_rule',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "rule_name" : "sample_rule",
@@ -573,11 +666,173 @@ http://localhost:8888/api/rules/{fullRuleName}
 	  "can_edit" : true
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_rule.sync(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_rule.asyncio(
+	    'sample_target/sample_category/sample_rule',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_rule_folder_tree
 Returns a tree of all rules available in DQOps, both built-in rules and user defined or customized rules.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/get_rule_folder_tree.py) to see the source code on GitHub.
 
 
@@ -601,7 +856,9 @@ http://localhost:8888/api/definitions/rules
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/rules^
@@ -609,88 +866,10 @@ http://localhost:8888/api/definitions/rules
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule_folder_tree
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_rule_folder_tree.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule_folder_tree
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_rule_folder_tree.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule_folder_tree
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_rule_folder_tree.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.rules import get_rule_folder_tree
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_rule_folder_tree.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "rules" : [ {
@@ -745,11 +924,273 @@ http://localhost:8888/api/definitions/rules
 	  } ]
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_rule_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_rule_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_rule_folder_tree.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.rules import get_rule_folder_tree
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_rule_folder_tree.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## update_rule
 Updates an existing rule, making a custom rule definition if it is not present
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/rules/update_rule.py) to see the source code on GitHub.
 
 
@@ -780,7 +1221,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -791,7 +1234,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -806,9 +1253,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -821,8 +1268,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -837,9 +1288,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -853,7 +1304,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -871,9 +1326,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -887,7 +1342,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -905,9 +1364,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
 	request_body = RuleModel(
 		rule_name='sample_rule',
-		type=RuleRunnerType.python,
+		type=RuleRunnerType.PYTHON,
 		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
-		mode=RuleTimeWindowMode.current_value,
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
 		custom=False,
 		built_in=False,
 		can_edit=True
@@ -921,7 +1380,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 

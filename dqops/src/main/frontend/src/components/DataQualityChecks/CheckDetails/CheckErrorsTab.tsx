@@ -91,7 +91,7 @@ const CheckErrorsTab = ({
           />
         </div>
       </div>
-      {errors.length === 0 && <div className="text-gray-700 mt-5">No Data</div>}
+      {errors.length === 0 && <div className="text-gray-700 mt-5 text-sm">No Data</div>}
       {errors.map((result, index) => (
         <div key={index} className="mb-4">
           <Table

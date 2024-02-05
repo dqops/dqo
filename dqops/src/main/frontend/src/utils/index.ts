@@ -1,6 +1,4 @@
 import moment from "moment/moment";
-import { TABLE_LEVEL_TABS } from "../shared/constants";
-import { CheckTypes } from "../shared/routes";
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -47,15 +45,15 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'DATETIME';
   }
   if (Number(numberForFile) === 4) {
-    return 'TIMESTAMP';
-  }
-  if (Number(numberForFile) === 5) {
-    return 'BOOLEAN';
+    return 'DATETIME';
   }
   if (Number(numberForFile) === 6) {
-    return 'STRING';
+    return 'BOOLEAN';
   }
   if (Number(numberForFile) === 7) {
+    return 'STRING';
+  }
+  if (Number(numberForFile) === 8) {
     return 'Mixed data type';
   }
 };

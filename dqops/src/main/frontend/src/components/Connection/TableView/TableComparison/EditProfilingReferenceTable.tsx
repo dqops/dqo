@@ -86,67 +86,6 @@ export const EditProfilingReferenceTable = ({
       ...obj
     }));
   };
-  const checkIfRowAndColumnCountClicked = () => {
-    let values: string | any[] = [];
-    if (!checksUI) {
-      return;
-    }
-    values = Object.values(checksUI);
-
-    if (values.length === 0 || !Array.isArray(values[0])) {
-      return;
-    }
-    const comparisonCategory = values[0].find(
-      (x) => x && x.category === `comparisons/${selectedReference}`
-    );
-    if (!comparisonCategory || !comparisonCategory.checks) {
-      return;
-    }
-
-    const rowCountElem = comparisonCategory.checks.find((c: any) =>
-      c.check_name.includes('row_count_match')
-    );
-
-    const columnCountElem = comparisonCategory.checks.find((c: any) =>
-      c.check_name.includes('column_count_match')
-    );
-
-    if (rowCountElem) {
-      setShowRowCount(!!rowCountElem.configured);
-    }
-    if (columnCountElem) {
-      setShowColumnCount(!!columnCountElem.configured);
-    }
-    if (rowCountElem?.configured === true) {
-      onChange({
-        compare_row_count: {
-          warning_difference_percent:
-            rowCountElem.rule.warning.rule_parameters[0].double_value,
-          error_difference_percent:
-            rowCountElem.rule.error.rule_parameters[0].double_value,
-          fatal_difference_percent:
-            rowCountElem.rule.fatal.rule_parameters[0].double_value
-        }
-      });
-    } else {
-      onChange({ compare_row_count: reference?.default_compare_thresholds });
-    }
-    if (columnCountElem?.configured === true) {
-      onChange({
-        compare_column_count: {
-          warning_difference_percent:
-            columnCountElem.rule.warning.rule_parameters[0].double_value,
-          error_difference_percent:
-            columnCountElem.rule.error.rule_parameters[0].double_value,
-          fatal_difference_percent:
-            columnCountElem.rule.fatal.rule_parameters[0].double_value
-        }
-      });
-    } else {
-      onChange({ compare_column_count: reference?.default_compare_thresholds });
-    }
-    //cCompareThreshholdsModel in java fatal returns null
-  };
 
   const handleChange = async (value: CheckContainerModel) => {
     return new Promise<void>((resolve) => {
@@ -208,16 +147,37 @@ export const EditProfilingReferenceTable = ({
           severity.fatal;
       }
     }
-    if (reference?.compare_row_count === undefined) {
-      onChange({
-        compare_row_count: reference?.default_compare_thresholds
-      });
+
+    if (type === 'row') {
+      if (disabled === true) {
+        if (reference?.compare_row_count !== undefined) {
+          onChange({
+            compare_row_count: undefined
+          });
+        }
+      } else if (disabled == false) {
+        if (reference?.compare_row_count === undefined) {
+          onChange({
+            compare_row_count: reference?.default_compare_thresholds
+          });
+        }
+      }
+    } else {
+      if (disabled === true) {
+        if (reference?.compare_column_count !== undefined) {
+          onChange({
+            compare_column_count: undefined
+          });
+        }
+      } else if (disabled == false) {
+        if (reference?.compare_column_count === undefined) {
+          onChange({
+            compare_column_count: reference?.default_compare_thresholds
+          });
+        }
+      }
     }
-    if (reference?.compare_column_count === undefined) {
-      onChange({
-        compare_column_count: reference?.default_compare_thresholds
-      });
-    }
+
     setIsUpdated(true);
   };
 
@@ -268,9 +228,76 @@ export const EditProfilingReferenceTable = ({
           ).then(callback);
         }
       }
-      checkIfRowAndColumnCountClicked();
     }
   }, [selectedReference]);
+
+  useEffect(() => {
+    const checkIfRowAndColumnCountClicked = () => {
+      let values: string | any[] = [];
+      if (!checksUI) {
+        return;
+      }
+      values = Object.values(checksUI);
+
+      if (values.length === 0 || !Array.isArray(values[0])) {
+        return;
+      }
+      const comparisonCategory = values[0].find(
+        (x) => x && x.category === `comparisons/${selectedReference}`
+      );
+      if (!comparisonCategory || !comparisonCategory.checks) {
+        return;
+      }
+
+      const rowCountElem = comparisonCategory.checks.find((c: any) =>
+        c.check_name.includes('row_count_match')
+      );
+
+      const columnCountElem = comparisonCategory.checks.find((c: any) =>
+        c.check_name.includes('column_count_match')
+      );
+
+      if (rowCountElem) {
+        setShowRowCount(!!rowCountElem.configured);
+      }
+      if (columnCountElem) {
+        setShowColumnCount(!!columnCountElem.configured);
+      }
+      if (rowCountElem?.configured === true) {
+        onChange({
+          compare_row_count: {
+            warning_difference_percent:
+              rowCountElem.rule.warning.rule_parameters[0].double_value,
+            error_difference_percent:
+              rowCountElem.rule.error.rule_parameters[0].double_value,
+            fatal_difference_percent:
+              rowCountElem.rule.fatal.rule_parameters[0].double_value
+          }
+        });
+      } else {
+        onChange({ compare_row_count: undefined });
+      }
+      if (columnCountElem?.configured === true) {
+        onChange({
+          compare_column_count: {
+            warning_difference_percent:
+              columnCountElem.rule.warning.rule_parameters[0].double_value,
+            error_difference_percent:
+              columnCountElem.rule.error.rule_parameters[0].double_value,
+            fatal_difference_percent:
+              columnCountElem.rule.fatal.rule_parameters[0].double_value
+          }
+        });
+      } else {
+        onChange({
+          compare_column_count: undefined
+        });
+      }
+      //cCompareThreshholdsModel in java fatal returns null
+    };
+    getResultsData();
+    checkIfRowAndColumnCountClicked();
+  }, [selectedReference, checksUI]);
 
   const onChange = (obj: Partial<TableComparisonModel>): void => {
     setReference({
@@ -316,6 +343,10 @@ export const EditProfilingReferenceTable = ({
   }, [showColumnCount, showRowCount]);
 
   const getResultsData = async () => {
+    if (selectedReference === undefined || selectedReference === '') {
+      return;
+    }
+
     if (checkTypes === 'profiling') {
       await TableComparisonResultsApi.getTableComparisonProfilingResults(
         connection,
@@ -393,13 +424,13 @@ export const EditProfilingReferenceTable = ({
 
   const disabled =
     job &&
-    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.finished &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.failed &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.cancelled;
 
   useEffect(() => {
     if (
-      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       getResultsData();
@@ -609,7 +640,9 @@ export const EditProfilingReferenceTable = ({
                           checksUI={checksUI}
                           type="row"
                         />
-                      ) : <div className='h-39'></div>}
+                      ) : (
+                        <div className="h-39"></div>
+                      )}
                       {rowKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}
@@ -631,7 +664,9 @@ export const EditProfilingReferenceTable = ({
                           checksUI={checksUI}
                           type="column"
                         />
-                      ) : <div className='h-39'></div>}
+                      ) : (
+                        <div className="h-39"></div>
+                      )}
                       {columnKey ? (
                         <TableLevelResults
                           tableComparisonResults={tableComparisonResults}

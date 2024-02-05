@@ -17,3 +17,4 @@ spec:
       \ table."
     data_type: long
     required: true
+    default_value: 0

@@ -135,7 +135,7 @@ public class FieldModel implements Cloneable {
                 return;
 
             case datetime_type:
-                this.datetimeValue =LocalDateTime.parse(sampleValues.get(0));
+                this.datetimeValue = LocalDateTime.parse(sampleValues.get(0));
                 return;
 
             case date_type:

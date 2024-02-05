@@ -218,6 +218,8 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DICTIONARIES));
+
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
             if (!Files.exists(gitIgnorePath)) {
@@ -283,25 +285,25 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
 
             if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
-                Path defaultGcpCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultGcpCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                         .resolve(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
                 if (!Files.exists(defaultGcpCredentialsPath)) {
                     Files.writeString(defaultGcpCredentialsPath, DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAwsCredentialsPath)) {
                     Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsConfigPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsConfigPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
                 if (!Files.exists(defaultAwsConfigPath)) {
                     Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
                 }
 
-                Path defaultAzureCredentialsPath = userHomeMarkerPath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAzureCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                         .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAzureCredentialsPath)) {
                     Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);

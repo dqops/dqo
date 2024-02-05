@@ -78,7 +78,7 @@ public class ChildDqoQueueJobsContainer<T> {
         Throwable firstJobFailure = null;
         for (DqoQueueJob<T> childJob : this.childJobsSet) {
             DqoJobCompletionStatus childJobCompletionStatus = childJob.getCompletionStatus();
-            if (childJobCompletionStatus == DqoJobCompletionStatus.SUCCEEDED) {
+            if (childJobCompletionStatus == DqoJobCompletionStatus.FINISHED) {
                 T childJobResult = childJob.getResult();
                 childJobsResults.add(childJobResult);
             } else if (childJobCompletionStatus == DqoJobCompletionStatus.FAILED) {

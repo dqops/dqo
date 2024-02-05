@@ -343,7 +343,40 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`password`</span>|MySQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|MySQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${MYSQL_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`sslmode`</span>|SslMode MySQL connection parameter.|*enum*|*DISABLED*<br/>*PREFERRED*<br/>*REQUIRED*<br/>*VERIFY_CA*<br/>*VERIFY_IDENTITY*<br/>| | |
+|<span class="no-wrap-code ">[`single_store_db_parameters_spec`](./ConnectionYaml.md#singlestoredbparametersspec)</span>|Single Store DB parameters spec.|*[SingleStoreDbParametersSpec](./ConnectionYaml.md#singlestoredbparametersspec)*| | | |
+|<span class="no-wrap-code ">`mysql_engine_type`</span>|MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.|*enum*|*mysql*<br/>*singlestoredb*<br/>| | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## SingleStoreDbParametersSpec
+Single Store DB connection parameters.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`load_balancing_mode`</span>|SingleStoreDB Failover and Load-Balancing Modes for Single Store DB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*none*<br/>*sequential*<br/>*loadbalance*<br/>| | |
+|<span class="no-wrap-code ">`host_descriptions`</span>|SingleStoreDB Host descriptions. Supports also a ${SINGLE_STORE_HOST_DESCRIPTIONS} configuration with a custom environment variable.|*List[string]*| | | |
+|<span class="no-wrap-code ">`schema`</span>|SingleStoreDB database/schema name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
+|<span class="no-wrap-code ">`use_ssl`</span>|Force enables SSL/TLS on the connection. Supports also a ${SINGLE_STORE_USE_SSL} configuration with a custom environment variable.|*boolean*| | | |
 
 
 
@@ -515,8 +548,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default grouping dimension source is a tag. Assign a tag when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*enum*|*tag*<br/>*column_value*<br/>| | |
-|<span class="no-wrap-code ">`tag`</span>|The value assigned to a data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that store the same data for different areas (countries, etc.). This could be a country name if a table or partition stores information for that country.|*string*| | | |
+|<span class="no-wrap-code ">`source`</span>|The source of the data grouping dimension value. The default source of the grouping dimension is a tag. The tag should be assigned when there are many similar tables that store the same data for different areas (countries, etc.). It can be the name of the country if the table or partition stores information for that country.|*enum*|*tag*<br/>*column_value*<br/>| | |
+|<span class="no-wrap-code ">`tag`</span>|The value assigned to the data quality grouping dimension when the source is &#x27;tag&#x27;. Assign a hard-coded (static) value to the data grouping dimension (tag) when there are multiple similar tables storing the same data for different areas (countries, etc.). This can be the name of the country if the table or partition stores information for that country.|*string*| | | |
 |<span class="no-wrap-code ">`column`</span>|Column name that contains a dynamic data grouping dimension value (for dynamic data-driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will be tracked for each value.|*string*| | | |
 |<span class="no-wrap-code ">`name`</span>|Data grouping dimension name.|*string*| | | |
 
@@ -532,9 +565,9 @@ ___
 
 
 ## DefaultSchedulesSpec
-Container of all monitoring schedules (cron expressions) for each type of check.
+Container of all monitoring schedules (cron expressions) for each type of checks.
  Data quality checks are grouped by type (profiling, whole table checks, time period partitioned checks).
- Each group of checks could be divided additionally by time scale (daily, monthly, etc).
+ Each group of checks can be further divided by time scale (daily, monthly, etc).
  Each time scale has a different monitoring schedule used by the job scheduler to run the checks.
  These schedules are defined in this object.
 
@@ -634,7 +667,7 @@ ___
 
 
 ## LabelSetSpec
-Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
+A collection of unique labels assigned to items (tables, columns, checks) that can be targeted for a data quality check execution.
 
 
 

@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>0.4.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.0.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -316,6 +316,11 @@
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.3.1</version>
+		</dependency>
+		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
 			<version>5.0.1</version>
@@ -501,6 +506,90 @@
 			<version>1.14.2</version>
 		</dependency>
 		<dependency>
+			<groupId>com.microsoft.identity</groupId>
+			<artifactId>common</artifactId>
+			<version>17.0.0</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>androidx.appcompat</groupId>
+					<artifactId>appcompat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.annotation</groupId>
+					<artifactId>annotation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.legacy</groupId>
+					<artifactId>legacy-support-v4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.constraintlayout</groupId>
+					<artifactId>constraintlayout</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.datastore</groupId>
+					<artifactId>datastore-preferences</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.microsoft.device.display</groupId>
+					<artifactId>display-mask</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.browser</groupId>
+					<artifactId>browser</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>com.yubico.yubikit</groupId>
+					<artifactId>android</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.fragment</groupId>
+					<artifactId>fragment</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.lifecycle</groupId>
+					<artifactId>lifecycle-runtime-ktx</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.credentials</groupId>
+					<artifactId>credentials</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.credentials</groupId>
+					<artifactId>credentials-play-services-auth</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.aad</groupId>
+			<artifactId>adal</artifactId>
+			<version>4.7.1</version>
+			<type>pom</type>
+			<exclusions>
+				<exclusion>
+					<groupId>com.microsoft.identity</groupId>
+				    <artifactId>common</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.appcompat</groupId>
+					<artifactId>appcompat</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.annotation</groupId>
+					<artifactId>annotation</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.legacy</groupId>
+					<artifactId>legacy-support-v4</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>androidx.constraintlayout</groupId>
+					<artifactId>constraintlayout</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
 			<groupId>org.apache.hive</groupId>
 			<artifactId>hive-jdbc</artifactId>
 			<version>3.1.3</version>
@@ -555,6 +644,12 @@
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
 			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.singlestore</groupId>
+			<artifactId>singlestore-jdbc-client</artifactId>
+			<version>1.2.1</version>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- test dependencies -->

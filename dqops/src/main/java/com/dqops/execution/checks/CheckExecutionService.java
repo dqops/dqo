@@ -80,7 +80,7 @@ public interface CheckExecutionService {
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param jobCancellationToken Job cancellation token.
-     * @return Check summary table with the count of alerts, checks and rules for each table, but having only one row for the target table. The result could be empty if the table was not found.
+     * @return Check summary table with the count of alerts, checks and rules for each table, but containing only one row for the target table. The result may be empty if the table was not found.
      */
     CheckExecutionSummary executeSelectedChecksOnTable(ExecutionContext executionContext,
                                                        String connectionName,

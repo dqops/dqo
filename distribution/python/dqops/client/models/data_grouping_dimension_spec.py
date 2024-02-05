@@ -14,10 +14,10 @@ class DataGroupingDimensionSpec:
     """
     Attributes:
         source (Union[Unset, DataGroupingDimensionSource]):
-        tag (Union[Unset, str]): The value assigned to a data quality grouping dimension when the source is 'tag'.
-            Assign a hardcoded (static) data grouping dimension value (tag) when there are multiple similar tables that
-            store the same data for different areas (countries, etc.). This could be a country name if a table or partition
-            stores information for that country.
+        tag (Union[Unset, str]): The value assigned to the data quality grouping dimension when the source is 'tag'.
+            Assign a hard-coded (static) value to the data grouping dimension (tag) when there are multiple similar tables
+            storing the same data for different areas (countries, etc.). This can be the name of the country if the table or
+            partition stores information for that country.
         column (Union[Unset, str]): Column name that contains a dynamic data grouping dimension value (for dynamic data-
             driven data groupings). Sensor queries will be extended with a GROUP BY {data group level colum name}, sensors
             (and alerts) will be calculated for each unique value of the specified column. Also a separate time series will

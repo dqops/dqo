@@ -5,6 +5,7 @@ Data quality incidents controller that supports reading and updating data qualit
 ___
 ## find_connection_incident_stats
 Returns a list of connection names with incident statistics - the count of recent open incidents.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_connection_incident_stats.py) to see the source code on GitHub.
 
 
@@ -28,7 +29,9 @@ http://localhost:8888/api/incidentstat
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidentstat^
@@ -36,88 +39,10 @@ http://localhost:8888/api/incidentstat
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_connection_incident_stats
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = find_connection_incident_stats.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_connection_incident_stats
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await find_connection_incident_stats.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_connection_incident_stats
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = find_connection_incident_stats.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_connection_incident_stats
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await find_connection_incident_stats.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "openIncidents" : 0
@@ -127,11 +52,153 @@ http://localhost:8888/api/incidentstat
 	  "openIncidents" : 0
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_connection_incident_stats.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_connection_incident_stats.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_connection_incident_stats.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_connection_incident_stats
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_connection_incident_stats.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## find_recent_incidents_on_connection
 Returns a list of recent data quality incidents.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/find_recent_incidents_on_connection.py) to see the source code on GitHub.
 
 
@@ -172,7 +239,9 @@ http://localhost:8888/api/incidents/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection^
@@ -180,96 +249,10 @@ http://localhost:8888/api/incidents/{connectionName}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_recent_incidents_on_connection
-	from dqops.client.models import IncidentSortOrder, \
-	                                SortDirection
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = find_recent_incidents_on_connection.sync(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_recent_incidents_on_connection
-	from dqops.client.models import IncidentSortOrder, \
-	                                SortDirection
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await find_recent_incidents_on_connection.asyncio(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_recent_incidents_on_connection
-	from dqops.client.models import IncidentSortOrder, \
-	                                SortDirection
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = find_recent_incidents_on_connection.sync(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import find_recent_incidents_on_connection
-	from dqops.client.models import IncidentSortOrder, \
-	                                SortDirection
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await find_recent_incidents_on_connection.asyncio(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "year" : 0,
@@ -291,11 +274,237 @@ http://localhost:8888/api/incidents/{connectionName}
 	  "failedChecksCount" : 0
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_recent_incidents_on_connection.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_recent_incidents_on_connection.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = find_recent_incidents_on_connection.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import find_recent_incidents_on_connection
+	from dqops.client.models import IncidentSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await find_recent_incidents_on_connection.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_incident
 Return a single data quality incident&#x27;s details.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident.py) to see the source code on GitHub.
 
 
@@ -329,7 +538,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
@@ -337,104 +548,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "year" : 0,
@@ -444,11 +561,177 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	  "failedChecksCount" : 0
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_incident_histogram
 Generates histograms of data quality issues for each day, returning the number of data quality issues on that day. The other histograms are by a column name and by a check name.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_histogram.py) to see the source code on GitHub.
 
 
@@ -487,7 +770,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
@@ -495,104 +780,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_histogram
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident_histogram.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_histogram
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident_histogram.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_histogram
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident_histogram.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_histogram
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident_histogram.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "hasProfilingIssues" : false,
@@ -603,11 +794,205 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	  "checks" : { }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident_histogram.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident_histogram.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident_histogram.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_histogram
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident_histogram.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_incident_issues
 Return a paged list of failed data quality check results that are related to an incident.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/get_incident_issues.py) to see the source code on GitHub.
 
 
@@ -650,7 +1035,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
@@ -658,108 +1045,10 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_issues
-	from dqops.client.models import CheckResultSortOrder, \
-	                                SortDirection
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident_issues.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_issues
-	from dqops.client.models import CheckResultSortOrder, \
-	                                SortDirection
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident_issues.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_issues
-	from dqops.client.models import CheckResultSortOrder, \
-	                                SortDirection
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_incident_issues.sync(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.incidents import get_incident_issues
-	from dqops.client.models import CheckResultSortOrder, \
-	                                SortDirection
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_incident_issues.asyncio(
-	    'sample_connection',
-	    2007,
-	    10,
-	    'sample_incident',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "id" : "3854372",
@@ -844,11 +1133,501 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	  "sensorName" : "sample_target/sample_category/sample_sensor"
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident_issues.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident_issues.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_incident_issues.sync(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.incidents import get_incident_issues
+	from dqops.client.models import CheckResultSortOrder, \
+	                                SortDirection
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_incident_issues.asyncio(
+	    'sample_connection',
+	    2007,
+	    10,
+	    'sample_incident',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## set_incident_issue_url
 Changes the incident&#x27;s issueUrl to a new status.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_issue_url.py) to see the source code on GitHub.
 
 
@@ -876,7 +1655,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
@@ -884,12 +1665,15 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -904,13 +1688,16 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -926,12 +1713,15 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -950,12 +1740,15 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.incidents import set_incident_issue_url
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -974,13 +1767,14 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
 
 
 
 ___
 ## set_incident_status
 Changes the incident&#x27;s status to a new status.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/incidents/set_incident_status.py) to see the source code on GitHub.
 
 
@@ -1008,7 +1802,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
@@ -1016,7 +1812,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1036,8 +1836,12 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1058,7 +1862,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1082,7 +1890,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -1106,7 +1918,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
 
 
 

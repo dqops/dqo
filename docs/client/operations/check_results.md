@@ -5,6 +5,7 @@ Returns all the data quality check results of executed checks on tables and colu
 ___
 ## get_column_monitoring_checks_results
 Returns a complete view of the recent column level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_monitoring_checks_results.py) to see the source code on GitHub.
 
 
@@ -46,7 +47,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/results^
@@ -54,108 +57,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_monitoring_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_monitoring_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_monitoring_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_monitoring_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -507,11 +412,1629 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_monitoring_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_monitoring_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_monitoring_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_monitoring_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_column_partitioned_checks_results
 Returns an overview of the most recent column level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_partitioned_checks_results.py) to see the source code on GitHub.
 
 
@@ -553,7 +2076,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/results^
@@ -561,108 +2086,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_partitioned_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_partitioned_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_partitioned_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_partitioned_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -1014,11 +2441,1629 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_partitioned_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_partitioned_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_partitioned_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_partitioned_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_column_profiling_checks_results
 Returns an overview of the most recent check executions for all column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_column_profiling_checks_results.py) to see the source code on GitHub.
 
 
@@ -1059,7 +4104,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/results^
@@ -1067,104 +4114,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_profiling_checks_results
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_profiling_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_profiling_checks_results
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_profiling_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_profiling_checks_results
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_profiling_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_column_profiling_checks_results
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_profiling_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -1516,11 +4469,1621 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_profiling_checks_results
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_profiling_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_profiling_checks_results
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_profiling_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_profiling_checks_results
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_profiling_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_column_profiling_checks_results
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_profiling_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_data_quality_status
 Read the most recent results of executed data quality checks on the table and return the current table&#x27;s data quality status - the number of failed data quality checks if the table has active data quality issues. Also returns the names of data quality checks that did not pass most recently. This operation verifies only the status of the most recently executed data quality checks. Previous data quality issues are not counted.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_data_quality_status.py) to see the source code on GitHub.
 
 
@@ -1564,7 +6127,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/status^
@@ -1572,100 +6137,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_data_quality_status
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_data_quality_status.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_data_quality_status
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_data_quality_status.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_data_quality_status
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_data_quality_status.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_data_quality_status
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_data_quality_status.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "connection_name" : "sample_connection",
@@ -1776,11 +6251,581 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  }
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_data_quality_status
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_data_quality_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableCurrentDataQualityStatusModel(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_name='sample_table',
+		current_severity=RuleSeverityLevel.WARNING,
+		highest_historical_severity=RuleSeverityLevel.FATAL,
+		last_check_executed_at='2007-10-14T16:42:42Z',
+		executed_checks=8,
+		valid_results=3,
+		warnings=5,
+		errors=0,
+		fatals=0,
+		execution_errors=0,
+		checks={
+			'table_sample_check_1': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:13:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			),
+			'table_sample_check_2': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.VALID,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:39:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			)
+		},
+		columns={
+			'sample_column_1': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			),
+			'sample_column_2': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			)
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_data_quality_status
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_data_quality_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableCurrentDataQualityStatusModel(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_name='sample_table',
+		current_severity=RuleSeverityLevel.WARNING,
+		highest_historical_severity=RuleSeverityLevel.FATAL,
+		last_check_executed_at='2007-10-14T16:42:42Z',
+		executed_checks=8,
+		valid_results=3,
+		warnings=5,
+		errors=0,
+		fatals=0,
+		execution_errors=0,
+		checks={
+			'table_sample_check_1': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:13:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			),
+			'table_sample_check_2': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.VALID,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:39:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			)
+		},
+		columns={
+			'sample_column_1': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			),
+			'sample_column_2': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			)
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_data_quality_status
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_data_quality_status.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableCurrentDataQualityStatusModel(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_name='sample_table',
+		current_severity=RuleSeverityLevel.WARNING,
+		highest_historical_severity=RuleSeverityLevel.FATAL,
+		last_check_executed_at='2007-10-14T16:42:42Z',
+		executed_checks=8,
+		valid_results=3,
+		warnings=5,
+		errors=0,
+		fatals=0,
+		execution_errors=0,
+		checks={
+			'table_sample_check_1': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:13:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			),
+			'table_sample_check_2': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.VALID,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:39:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			)
+		},
+		columns={
+			'sample_column_1': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			),
+			'sample_column_2': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			)
+		}
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_data_quality_status
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_data_quality_status.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    TableCurrentDataQualityStatusModel(
+		connection_name='sample_connection',
+		schema_name='sample_schema',
+		table_name='sample_table',
+		current_severity=RuleSeverityLevel.WARNING,
+		highest_historical_severity=RuleSeverityLevel.FATAL,
+		last_check_executed_at='2007-10-14T16:42:42Z',
+		executed_checks=8,
+		valid_results=3,
+		warnings=5,
+		errors=0,
+		fatals=0,
+		execution_errors=0,
+		checks={
+			'table_sample_check_1': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:13:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			),
+			'table_sample_check_2': CheckCurrentDataQualityStatusModel(
+				current_severity=CheckResultStatus.VALID,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_executed_at='2007-10-14T14:39:42Z',
+				check_type=CheckType.PROFILING,
+				category='sample_category',
+				quality_dimension='sample_quality_dimension'
+			)
+		},
+		columns={
+			'sample_column_1': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			),
+			'sample_column_2': ColumnCurrentDataQualityStatusModel(
+				current_severity=RuleSeverityLevel.WARNING,
+				highest_historical_severity=RuleSeverityLevel.ERROR,
+				last_check_executed_at='2007-10-14T16:42:42Z',
+				executed_checks=3,
+				valid_results=1,
+				warnings=2,
+				errors=0,
+				fatals=0,
+				execution_errors=0,
+				checks={
+					'sample_check_1': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:13:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_2': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.VALID,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T14:45:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					),
+					'sample_check_3': CheckCurrentDataQualityStatusModel(
+						current_severity=CheckResultStatus.WARNING,
+						highest_historical_severity=RuleSeverityLevel.ERROR,
+						last_executed_at='2007-10-14T16:42:42Z',
+						check_type=CheckType.PROFILING,
+						category='sample_category',
+						quality_dimension='sample_quality_dimension'
+					)
+				}
+			)
+		}
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_checks_results
 Returns the complete results of the most recent table level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_monitoring_checks_results.py) to see the source code on GitHub.
 
 
@@ -1821,7 +6866,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/results^
@@ -1829,104 +6876,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_monitoring_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -2278,11 +7231,1625 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_monitoring_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_checks_results
 Returns a complete view of the recent table level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_partitioned_checks_results.py) to see the source code on GitHub.
 
 
@@ -2323,7 +8890,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/results^
@@ -2331,104 +8900,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_partitioned_checks_results
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -2780,11 +9255,1625 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_partitioned_checks_results
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_checks_results
 Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/check_results/get_table_profiling_checks_results.py) to see the source code on GitHub.
 
 
@@ -2824,7 +10913,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/results^
@@ -2832,100 +10923,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_profiling_checks_results
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_profiling_checks_results
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_profiling_checks_results
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_checks_results.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.check_results import get_table_profiling_checks_results
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_checks_results.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "checkHash" : 0,
@@ -3277,5 +11278,1610 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  } ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_profiling_checks_results
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_profiling_checks_results
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_profiling_checks_results
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_checks_results.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.check_results import get_table_profiling_checks_results
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_checks_results.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		),
+		CheckResultsListModel(
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			data_group='sample_data_grouping',
+			check_result_entries=[
+				CheckResultEntryModel(
+					id='3854372',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=100.0,
+					expected_value=110.0,
+					warning_lower_bound=105.0,
+					warning_upper_bound=115.0,
+					error_lower_bound=95.0,
+					error_upper_bound=125.0,
+					fatal_lower_bound=85.0,
+					fatal_upper_bound=135.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T14:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T14:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='-8597741925434587255',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=110.0,
+					expected_value=120.0,
+					warning_lower_bound=115.0,
+					warning_upper_bound=125.0,
+					error_lower_bound=105.0,
+					error_upper_bound=135.0,
+					fatal_lower_bound=95.0,
+					fatal_upper_bound=145.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T15:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T15:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='8520797026624525526',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=120.0,
+					expected_value=130.0,
+					warning_lower_bound=125.0,
+					warning_upper_bound=135.0,
+					error_lower_bound=115.0,
+					error_upper_bound=145.0,
+					fatal_lower_bound=105.0,
+					fatal_upper_bound=155.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T16:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T16:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				),
+				CheckResultEntryModel(
+					id='879763789071004098',
+					check_hash=0,
+					check_category='sample_category',
+					check_name='sample_check',
+					check_display_name='sample_target/sample_category/sample_check',
+					check_type=CheckType.PROFILING,
+					actual_value=130.0,
+					expected_value=140.0,
+					warning_lower_bound=135.0,
+					warning_upper_bound=145.0,
+					error_lower_bound=125.0,
+					error_upper_bound=155.0,
+					fatal_lower_bound=115.0,
+					fatal_upper_bound=165.0,
+					severity=2,
+					column_name='sample_column',
+					data_group='sample_data_grouping',
+					duration_ms=142,
+					executed_at='2023-10-01T17:00:00Z',
+					time_gradient=TimePeriodGradient.HOUR,
+					time_period=Some date/time value: [2023-10-01T17:00],
+					include_in_kpi=True,
+					include_in_sla=True,
+					provider='BigQuery',
+					quality_dimension='sample_quality_dimension',
+					sensor_name='sample_target/sample_category/sample_sensor'
+				)
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 

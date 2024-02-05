@@ -29,7 +29,7 @@ interface SelectInputProps {
 const SelectInput = ({
   label,
   options = [],
-  placeholder = 'Select Option',
+  placeholder = 'Select option',
   value,
   onChange,
   className,

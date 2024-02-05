@@ -3,238 +3,191 @@
 This is a list of data quality checks supported by DQOps, broken down by a category and a brief description of what data quality issues they detect.
 
 
-## Table checks
 
 
-### **accuracy**
+## table-level accuracy checks
 Compares the tested table with another (reference) table.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_row_count_match_percent`</span>](./table/accuracy/total-row-count-match-percent.md#profile-total-row-count-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table matches the total row count of another (reference) table.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_row_count_match_percent`</span>](./table/accuracy/total-row-count-match-percent.md#daily-total-row-count-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies the total ow count of a tested table and compares it to a row count of a reference table. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_row_count_match_percent`</span>](./table/accuracy/total-row-count-match-percent.md#monthly-total-row-count-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies the total row count of a tested table and compares it to a row count of a reference table. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+### [total row count match percent](./table/accuracy/total-row-count-match-percent.md)
+A table-level check that compares the row count of the current (tested) table with the row count of another table that is referenced. This check ensures that the difference between the row counts is below the maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 
 
 
 
-### **availability**
+## table-level availability checks
 Checks whether the table is accessible and available for use.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_table_availability`</span>](./table/availability/table-availability.md#profile-table-availability)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies availability of a table in a monitored database using a simple query.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_table_availability`</span>](./table/availability/table-availability.md#daily-table-availability)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_table_availability`</span>](./table/availability/table-availability.md#monthly-table-availability)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies availability of a table in a monitored database using a simple query. Stores the most recent table availability status for each month when the data quality check was evaluated.|:material-check-bold:|
+### [table availability](./table/availability/table-availability.md)
+A table-level check that ensures a query can be successfully executed on a table without server errors. It also verifies that the table exists and is accessible (queryable).
+ The actual value (the result of the check) indicates the number of failures. If the table is accessible and a simple query can be executed without errors, the result will be 0.0.
+ A sensor result (the actual value) of 1.0 indicates that there is a failure. Any value greater than 1.0 is stored only in the check result table and represents the number of consecutive failures in the following days.
 
 
 
 
 
 
-### **comparisons**
+## table-level comparisons checks
 Compares the table (the row count, and the column count) to another table in a different data source.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_match`</span>](./table/comparisons/row-count-match.md#profile-row-count-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_row_count_match`</span>](./table/comparisons/row-count-match.md#daily-row-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_row_count_match`</span>](./table/comparisons/row-count-match.md#monthly-row-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_row_count_match`</span>](./table/comparisons/row-count-match.md#daily-partition-row-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_row_count_match`</span>](./table/comparisons/row-count-match.md#monthly-partition-row-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.|:material-check-bold:|
+### [row count match](./table/comparisons/row-count-match.md)
+Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_count_match`</span>](./table/comparisons/column-count-match.md#profile-column-count-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_column_count_match`</span>](./table/comparisons/column-count-match.md#daily-column-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_column_count_match`</span>](./table/comparisons/column-count-match.md#monthly-column-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the column count of the tested (parent) table matches the column count of the reference table. Only one comparison result is returned, without data grouping. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
+### [column count match](./table/comparisons/column-count-match.md)
+Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.
 
 
 
 
 
 
-### **custom_sql**
+## table-level custom_sql checks
 Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_condition_failed_on_table`</span>](./table/custom_sql/sql-condition-failed-on-table.md#profile-sql-condition-failed-on-table)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_sql_condition_failed_on_table`</span>](./table/custom_sql/sql-condition-failed-on-table.md#daily-sql-condition-failed-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores the most recent count of failed rows for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_sql_condition_failed_on_table`</span>](./table/custom_sql/sql-condition-failed-on-table.md#monthly-sql-condition-failed-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores the most recent count of failed rows for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_sql_condition_failed_on_table`</span>](./table/custom_sql/sql-condition-failed-on-table.md#daily-partition-sql-condition-failed-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_sql_condition_failed_on_table`</span>](./table/custom_sql/sql-condition-failed-on-table.md#monthly-partition-sql-condition-failed-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [sql condition failed on table](./table/custom_sql/sql-condition-failed-on-table.md)
+A table-level check that uses a custom SQL expression on each row to verify (assert) that all rows pass a custom condition defined as an SQL condition.
+ Use the {alias} token to reference the tested table. This data quality check can be used to compare columns on the same table.
+ For example, the condition can verify that the value in the *col_price* column is higher than the *col_tax* column using an SQL expression: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;.
+ Use an SQL expression that returns a *true* value for valid values and a *false* one for invalid values, because it is an assertion.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_table`</span>](./table/custom_sql/sql-condition-passed-percent-on-table.md#profile-sql-condition-passed-percent-on-table)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between columns: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;.| |
-|[<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_table`</span>](./table/custom_sql/sql-condition-passed-percent-on-table.md#daily-sql-condition-passed-percent-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores the most recent captured percentage for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_table`</span>](./table/custom_sql/sql-condition-passed-percent-on-table.md#monthly-sql-condition-passed-percent-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_table`</span>](./table/custom_sql/sql-condition-passed-percent-on-table.md#daily-partition-sql-condition-passed-percent-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_table`</span>](./table/custom_sql/sql-condition-passed-percent-on-table.md#monthly-partition-sql-condition-passed-percent-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current table by using tokens, for example: &#x60;{alias}.col_price &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.| |
+### [sql condition passed percent on table](./table/custom_sql/sql-condition-passed-percent-on-table.md)
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_aggregate_expression_on_table`</span>](./table/custom_sql/sql-aggregate-expression-on-table.md#profile-sql-aggregate-expression-on-table)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_sql_aggregate_expression_on_table`</span>](./table/custom_sql/sql-aggregate-expression-on-table.md#daily-sql-aggregate-expression-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sql_aggregate_expression_on_table`</span>](./table/custom_sql/sql-aggregate-expression-on-table.md#monthly-sql-aggregate-expression-on-table)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sql_aggregate_expression_on_table`</span>](./table/custom_sql/sql-aggregate-expression-on-table.md#daily-partition-sql-aggregate-expression-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sql_aggregate_expression_on_table`</span>](./table/custom_sql/sql-aggregate-expression-on-table.md#monthly-partition-sql-aggregate-expression-on-table)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [sql aggregate expression on table](./table/custom_sql/sql-aggregate-expression-on-table.md)
+A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+
+
+
+### [import custom result on table](./table/custom_sql/import-custom-result-on-table.md)
+A table-level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check that was hardcoded
+ in the data pipeline, and the result was stored in a separate table. The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated table (created by the data engineers) that stores the results of custom data quality checks.
+ The SQL query must return a *severity* column with values: 0 - data quality check passed, 1 - warning issue, 2 - error severity issue, 3 - fatal severity issue.
 
 
 
 
 
 
-### **schema**
+## table-level schema checks
 Detects schema drifts such as columns added, removed, reordered or the data types of columns have changed.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_count`</span>](./table/schema/column-count.md#profile-column-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns).|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_column_count`</span>](./table/schema/column-count.md#daily-column-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_column_count`</span>](./table/schema/column-count.md#monthly-column-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if the number of column matches an expected number. Retrieves the metadata of the monitored table, counts the number of columns and compares it to an expected value (an expected number of columns). Stores the most recent column count for each month when the data quality check was evaluated.|:material-check-bold:|
+### [column count](./table/schema/column-count.md)
+A table-level check that retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_count_changed`</span>](./table/schema/column-count-changed.md#profile-column-count-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects if the count of columns has changed. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_column_count_changed`</span>](./table/schema/column-count-changed.md#daily-column-count-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if the count of columns has changed since the most recent day. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_column_count_changed`</span>](./table/schema/column-count-changed.md#monthly-column-count-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if the count of columns has changed since the last month. Retrieves the metadata of the monitored table, counts the number of columns and compares it the last known column count that was captured when this data quality check was executed the last time. Stores the most recent column count for each month when the data quality check was evaluated.|:material-check-bold:|
+### [column count changed](./table/schema/column-count-changed.md)
+A table-level check that detects if the number of columns in the table has changed since the last time the check (checkpoint) was run.
+ This check retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to the last known number of columns
+ that was captured and is stored in the data quality check results database.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_list_changed`</span>](./table/schema/column-list-changed.md#profile-column-list-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects if new columns were added or existing columns were removed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.| |
-|[<span class="no-wrap-code">`daily_column_list_changed`</span>](./table/schema/column-list-changed.md#daily-column-list-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added or existing columns were removed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.| |
-|[<span class="no-wrap-code">`monthly_column_list_changed`</span>](./table/schema/column-list-changed.md#monthly-column-list-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added or existing columns were removed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns.| |
+### [column list changed](./table/schema/column-list-changed.md)
+A table-level check that detects if the list of columns has changed since the last time the check was run.
+ This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will not depend on the order of columns, only on the column names.
+ A data quality issue will be detected if new columns were added or columns that existed during the previous test were dropped.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_list_or_order_changed`</span>](./table/schema/column-list-or-order-changed.md#profile-column-list-or-order-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects if new columns were added, existing columns were removed or the columns were reordered. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.| |
-|[<span class="no-wrap-code">`daily_column_list_or_order_changed`</span>](./table/schema/column-list-or-order-changed.md#daily-column-list-or-order-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added, existing columns were removed or the columns were reordered since the most recent day. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.| |
-|[<span class="no-wrap-code">`monthly_column_list_or_order_changed`</span>](./table/schema/column-list-or-order-changed.md#monthly-column-list-or-order-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added, existing columns were removed or the columns were reordered since the last month. Retrieves the metadata of the monitored table and calculates an ordered hash of the column names. Compares the current hash to the previously known hash to detect any changes to the list of columns or their order.| |
+### [column list or order changed](./table/schema/column-list-or-order-changed.md)
+A table-level check that detects if the list of columns and the order of columns have changed since the last time the check was run.
+ This check will retrieve the metadata of a tested table and calculate a hash of the column names. The hash will depend on the order of columns.
+ A data quality issue will be detected if new columns were added, columns that existed during the previous test were dropped or the columns were reordered.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_types_changed`</span>](./table/schema/column-types-changed.md#profile-column-types-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects if new columns were added, removed or their data types have changed. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.| |
-|[<span class="no-wrap-code">`daily_column_types_changed`</span>](./table/schema/column-types-changed.md#daily-column-types-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added, removed or their data types have changed since the most recent day. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.| |
-|[<span class="no-wrap-code">`monthly_column_types_changed`</span>](./table/schema/column-types-changed.md#monthly-column-types-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects if new columns were added, removed or their data types have changed since the last month. Retrieves the metadata of the monitored table and calculates an unordered hash of the column names and the data types (including the length, scale, precision, nullability). Compares the current hash to the previously known hash to detect any changes to the list of columns or their types.| |
+### [column types changed](./table/schema/column-types-changed.md)
+A table-level check that detects if the column names or column types have changed since the last time the check was run.
+ This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long
+ as all columns are still present and the data types match since the last time they were tested.
 
 
 
 
 
 
-### **timeliness**
+## table-level timeliness checks
 Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_freshness`</span>](./table/timeliness/data-freshness.md#profile-data-freshness)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_data_freshness`</span>](./table/timeliness/data-freshness.md#daily-data-freshness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_data_freshness`</span>](./table/timeliness/data-freshness.md#monthly-data-freshness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_data_freshness`</span>](./table/timeliness/data-freshness.md#daily-partition-data-freshness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the number of days since the most recent event timestamp (freshness)|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_data_freshness`</span>](./table/timeliness/data-freshness.md#monthly-partition-data-freshness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the number of days since the most recent event (freshness)|:material-check-bold:|
+### [data freshness](./table/timeliness/data-freshness.md)
+A table-level check that calculates the time difference between the most recent row in the table and the current time.
+ The timestamp column that is used for comparison is defined as the timestamp_columns.event_timestamp_column on the table configuration.
+ This check is also known as &quot;Data Freshness&quot;.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_staleness`</span>](./table/timeliness/data-staleness.md#profile-data-staleness)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`daily_data_staleness`</span>](./table/timeliness/data-staleness.md#daily-data-staleness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`monthly_data_staleness`</span>](./table/timeliness/data-staleness.md#monthly-data-staleness)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`daily_partition_data_staleness`</span>](./table/timeliness/data-staleness.md#daily-partition-data-staleness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)| |
-|[<span class="no-wrap-code">`monthly_partition_data_staleness`</span>](./table/timeliness/data-staleness.md#monthly-partition-data-staleness)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the current date and the most recent data data ingestion timestamp (staleness)| |
+### [data staleness](./table/timeliness/data-staleness.md)
+A table-level check that calculates the time difference between the last timestamp when any data was loaded into a table and the current time.
+ This check can only be use when a data pipeline, ETL process, or trigger in the data warehouse is filling an extra column with the timestamp when the data loading job was loaded.
+ The ingestion column used for comparison is defined as the timestamp_columns.ingestion_timestamp_column on the table configuration.
+ This check is also known as &quot;Data Staleness&quot;.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_data_ingestion_delay`</span>](./table/timeliness/data-ingestion-delay.md#profile-data-ingestion-delay)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Calculates the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`daily_data_ingestion_delay`</span>](./table/timeliness/data-ingestion-delay.md#daily-data-ingestion-delay)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`monthly_data_ingestion_delay`</span>](./table/timeliness/data-ingestion-delay.md#monthly-data-ingestion-delay)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Monthly monitoring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`daily_partition_data_ingestion_delay`</span>](./table/timeliness/data-ingestion-delay.md#daily-partition-data-ingestion-delay)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
-|[<span class="no-wrap-code">`monthly_partition_data_ingestion_delay`</span>](./table/timeliness/data-ingestion-delay.md#monthly-partition-data-ingestion-delay)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp| |
+### [data ingestion delay](./table/timeliness/data-ingestion-delay.md)
+A table-level check that calculates the time difference between the most recent row in the table and the most recent timestamp when the last row was loaded into the data warehouse or data lake.
+ To identify the most recent row, the check finds the maximum value of the timestamp column that should contain the last modification timestamp from the source.
+ The timestamp when the row was loaded is identified by the most recent (maximum) value a timestamp column that was filled by the data pipeline, for example: &quot;loaded_at&quot;, &quot;updated_at&quot;, etc.
+ This check requires that the data pipeline is filling an extra column with the timestamp when the data loading job has been executed.
+ The names of both columns used for comparison should be specified in the &quot;timestamp_columns&quot; configuration entry on the table.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#daily-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be load| |
-|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./table/timeliness/reload-lag.md#monthly-partition-reload-lag)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be load| |
+### [reload lag](./table/timeliness/reload-lag.md)
+A table-level check that calculates the maximum difference in days between ingestion timestamp and event timestamp values on any row.
+ This check should be executed only as a partitioned check because this check finds the longest delay between the time that the row was created
+ in the data source and the timestamp when the row was loaded into its daily or monthly partition.
+ This check detects that a daily or monthly partition was reloaded, setting also the most recent timestamps in the created_at, loaded_at, inserted_at or other similar columns
+ filled by the data pipeline or an ETL process during data loading.
 
 
 
 
 
 
-### **volume**
+## table-level volume checks
 Evaluates the overall quality of the table by verifying the number of rows.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count`</span>](./table/volume/row-count.md#profile-row-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_row_count`</span>](./table/volume/row-count.md#daily-row-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_row_count`</span>](./table/volume/row-count.md#monthly-row-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_row_count`</span>](./table/volume/row-count.md#daily-partition-row-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_row_count`</span>](./table/volume/row-count.md#monthly-partition-row-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.|:material-check-bold:|
+### [row count](./table/volume/row-count.md)
+A table-level check that ensures that the tested table has at least a minimum accepted number of rows. Using the default configuration, detects empty tables.
+ The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_anomaly`</span>](./table/volume/row-count-anomaly.md#profile-row-count-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.| |
-|[<span class="no-wrap-code">`daily_row_count_anomaly`</span>](./table/volume/row-count-anomaly.md#daily-row-count-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>](./table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.| |
+### [row count anomaly](./table/volume/row-count-anomaly.md)
+A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_change`</span>](./table/volume/row-count-change.md#profile-row-count-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_row_count_change`</span>](./table/volume/row-count-change.md#daily-row-count-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.| |
-|[<span class="no-wrap-code">`monthly_row_count_change`</span>](./table/volume/row-count-change.md#monthly-row-count-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last month.| |
-|[<span class="no-wrap-code">`daily_partition_row_count_change`</span>](./table/volume/row-count-change.md#daily-partition-row-count-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_row_count_change`</span>](./table/volume/row-count-change.md#monthly-partition-row-count-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.| |
+### [row count change](./table/volume/row-count-change.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_change_1_day`</span>](./table/volume/row-count-change-1-day.md#profile-row-count-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_row_count_change_1_day`</span>](./table/volume/row-count-change-1-day.md#daily-row-count-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_partition_row_count_change_1_day`</span>](./table/volume/row-count-change-1-day.md#daily-partition-row-count-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.| |
+### [row count change 1 day](./table/volume/row-count-change-1-day.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_change_7_days`</span>](./table/volume/row-count-change-7-days.md#profile-row-count-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_row_count_change_7_days`</span>](./table/volume/row-count-change-7-days.md#daily-row-count-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_partition_row_count_change_7_days`</span>](./table/volume/row-count-change-7-days.md#daily-partition-row-count-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.| |
+### [row count change 7 days](./table/volume/row-count-change-7-days.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_row_count_change_30_days`</span>](./table/volume/row-count-change-30-days.md#profile-row-count-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_row_count_change_30_days`</span>](./table/volume/row-count-change-30-days.md#daily-row-count-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.| |
-|[<span class="no-wrap-code">`daily_partition_row_count_change_30_days`</span>](./table/volume/row-count-change-30-days.md#daily-partition-row-count-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.| |
+### [row count change 30 days](./table/volume/row-count-change-30-days.md)
+A table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
 
 
 
@@ -293,7 +246,6 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
-## Column checks
 
 
 
@@ -317,1368 +269,827 @@ Evaluates the overall quality of the table by verifying the number of rows.
 
 
 
-### **accepted_values**
+## column-level accepted_values checks
 Verifies if all values in the column are from a set of known values, such as country codes.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_found_in_set_percent`</span>](./column/accepted_values/text-found-in-set-percent.md#profile-text-found-in-set-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_text_found_in_set_percent`</span>](./column/accepted_values/text-found-in-set-percent.md#daily-text-found-in-set-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_text_found_in_set_percent`</span>](./column/accepted_values/text-found-in-set-percent.md#monthly-text-found-in-set-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_text_found_in_set_percent`</span>](./column/accepted_values/text-found-in-set-percent.md#daily-partition-text-found-in-set-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_text_found_in_set_percent`</span>](./column/accepted_values/text-found-in-set-percent.md#monthly-partition-text-found-in-set-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [text found in set percent](./column/accepted_values/text-found-in-set-percent.md)
+A column-level check that calculates the percentage of rows for which the tested text column contains a value from a set of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
+ is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ This data quality check is useful for checking text columns that have a small number of unique values, and all the values should come from a set of expected values.
+ For example, testing country, state, currency, gender, type, and department columns whose expected values are known.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_found_in_set_percent`</span>](./column/accepted_values/number-found-in-set-percent.md#profile-number-found-in-set-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_number_found_in_set_percent`</span>](./column/accepted_values/number-found-in-set-percent.md#daily-number-found-in-set-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_number_found_in_set_percent`</span>](./column/accepted_values/number-found-in-set-percent.md#monthly-number-found-in-set-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_number_found_in_set_percent`</span>](./column/accepted_values/number-found-in-set-percent.md#daily-partition-number-found-in-set-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_number_found_in_set_percent`</span>](./column/accepted_values/number-found-in-set-percent.md#monthly-partition-number-found-in-set-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of rows whose value in a tested column is one of values from a list of expected values or the column value is null. Verifies that the percentage of rows having a valid column value does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [number found in set percent](./column/accepted_values/number-found-in-set-percent.md)
+A column-level check that calculates the percentage of rows for which the tested numeric column contains a value from a set of expected values.
+ Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value).
+ The check raises a data quality issue when the percentage of rows with a not null column value that is not expected (not one of the values in the expected_values set)
+ is below the expected threshold. For example, 99% of rows should have values from the defined domain.
+ This data quality check is useful for checking numeric columns that store numeric codes (such as status codes) to see if the only values found in the column are from the set of expected values.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_expected_text_values_in_use_count`</span>](./column/accepted_values/expected-text-values-in-use-count.md#profile-expected-text-values-in-use-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).| |
-|[<span class="no-wrap-code">`daily_expected_text_values_in_use_count`</span>](./column/accepted_values/expected-text-values-in-use-count.md#daily-expected-text-values-in-use-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_expected_text_values_in_use_count`</span>](./column/accepted_values/expected-text-values-in-use-count.md#monthly-expected-text-values-in-use-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_expected_text_values_in_use_count`</span>](./column/accepted_values/expected-text-values-in-use-count.md#daily-partition-expected-text-values-in-use-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_expected_text_values_in_use_count`</span>](./column/accepted_values/expected-text-values-in-use-count.md#monthly-partition-expected-text-values-in-use-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected string values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.| |
+### [expected text values in use count](./column/accepted_values/expected-text-values-in-use-count.md)
+A column-level check that counts unique values in a text column and counts how many values out of a list of expected string values were found in the column.
+ The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
+ This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_expected_texts_in_top_values_count`</span>](./column/accepted_values/expected-texts-in-top-values-count.md#profile-expected-texts-in-top-values-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values.| |
-|[<span class="no-wrap-code">`daily_expected_texts_in_top_values_count`</span>](./column/accepted_values/expected-texts-in-top-values-count.md#daily-expected-texts-in-top-values-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_expected_texts_in_top_values_count`</span>](./column/accepted_values/expected-texts-in-top-values-count.md#monthly-expected-texts-in-top-values-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_expected_texts_in_top_values_count`</span>](./column/accepted_values/expected-texts-in-top-values-count.md#daily-partition-expected-texts-in-top-values-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_expected_texts_in_top_values_count`</span>](./column/accepted_values/expected-texts-in-top-values-count.md#monthly-partition-expected-texts-in-top-values-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the top X most popular column values contain all values from a list of expected values. Stores a separate data quality check result for each monthly partition.| |
+### [expected texts in top values count](./column/accepted_values/expected-texts-in-top-values-count.md)
+A column-level check that counts how many expected text values are among the TOP most popular values in the column.
+ The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
+ Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
+ This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
+ This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_expected_numbers_in_use_count`</span>](./column/accepted_values/expected-numbers-in-use-count.md#profile-expected-numbers-in-use-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).| |
-|[<span class="no-wrap-code">`daily_expected_numbers_in_use_count`</span>](./column/accepted_values/expected-numbers-in-use-count.md#daily-expected-numbers-in-use-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_expected_numbers_in_use_count`</span>](./column/accepted_values/expected-numbers-in-use-count.md#monthly-expected-numbers-in-use-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_expected_numbers_in_use_count`</span>](./column/accepted_values/expected-numbers-in-use-count.md#daily-partition-expected-numbers-in-use-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_expected_numbers_in_use_count`</span>](./column/accepted_values/expected-numbers-in-use-count.md#monthly-partition-expected-numbers-in-use-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.| |
+### [expected numbers in use count](./column/accepted_values/expected-numbers-in-use-count.md)
+A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
+ The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
+ This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
 
 
 
 
 
 
-### **accuracy**
+## column-level accuracy checks
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_sum_match_percent`</span>](./column/accuracy/total-sum-match-percent.md#profile-total-sum-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_sum_match_percent`</span>](./column/accuracy/total-sum-match-percent.md#daily-total-sum-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_sum_match_percent`</span>](./column/accuracy/total-sum-match-percent.md#monthly-total-sum-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total sum of a column in a table and total sum of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-
-
-
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_min_match_percent`</span>](./column/accuracy/total-min-match-percent.md#profile-total-min-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_min_match_percent`</span>](./column/accuracy/total-min-match-percent.md#daily-total-min-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_min_match_percent`</span>](./column/accuracy/total-min-match-percent.md#monthly-total-min-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total min of a column in a table and total min of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+### [total sum match percent](./column/accuracy/total-sum-match-percent.md)
+A column-level check that ensures that the difference between the sum of all values in the tested column and the sum of values in another column in a referenced table is below a maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_max_match_percent`</span>](./column/accuracy/total-max-match-percent.md#profile-total-max-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_max_match_percent`</span>](./column/accuracy/total-max-match-percent.md#daily-total-max-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_max_match_percent`</span>](./column/accuracy/total-max-match-percent.md#monthly-total-max-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total max of a column in a table and total max of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+### [total min match percent](./column/accuracy/total-min-match-percent.md)
+A column-level check that ensures that the difference between the minimum value in the tested column and the minimum value in another column in a referenced table is below a maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_average_match_percent`</span>](./column/accuracy/total-average-match-percent.md#profile-total-average-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_average_match_percent`</span>](./column/accuracy/total-average-match-percent.md#daily-total-average-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_average_match_percent`</span>](./column/accuracy/total-average-match-percent.md#monthly-total-average-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total average of a column in a table and total average of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+### [total max match percent](./column/accuracy/total-max-match-percent.md)
+A column-level check that ensures that the difference between the maximum value in the tested column and the maximum value in another column in a referenced table is below a maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_total_not_null_count_match_percent`</span>](./column/accuracy/total-not-null-count-match-percent.md#profile-total-not-null-count-match-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_total_not_null_count_match_percent`</span>](./column/accuracy/total-not-null-count-match-percent.md#daily-total-not-null-count-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_total_not_null_count_match_percent`</span>](./column/accuracy/total-not-null-count-match-percent.md#monthly-total-not-null-count-match-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of difference in total not null count of a column in a table and total not null count of a column of another table does not exceed the set number. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
+### [total average match percent](./column/accuracy/total-average-match-percent.md)
+A column-level check that ensures that the difference between the average value in the tested column and the average value of another column in the referenced table is below the maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
+
+
+
+### [total not null count match percent](./column/accuracy/total-not-null-count-match-percent.md)
+A column-level check that ensures that the difference between the count of null values in the tested column and the count of null values in another column in a referenced table is below a maximum accepted percentage of difference.
+ This check runs an SQL query with an INNER JOIN clause to join another (referenced) table that must be defined in the same database.
 
 
 
 
 
 
-### **anomaly**
+## column-level anomaly checks
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_anomaly`</span>](./column/anomaly/sum-anomaly.md#profile-sum-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_sum_anomaly`</span>](./column/anomaly/sum-anomaly.md#daily-sum-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_sum_anomaly`</span>](./column/anomaly/sum-anomaly.md#daily-partition-sum-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
+### [sum anomaly](./column/anomaly/sum-anomaly.md)
+A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_anomaly`</span>](./column/anomaly/mean-anomaly.md#profile-mean-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_mean_anomaly`</span>](./column/anomaly/mean-anomaly.md#daily-mean-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changes in a rate within a percentile boundary during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_mean_anomaly`</span>](./column/anomaly/mean-anomaly.md#daily-partition-mean-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.|:material-check-bold:|
+### [mean anomaly](./column/anomaly/mean-anomaly.md)
+A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_anomaly`</span>](./column/anomaly/median-anomaly.md#profile-median-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_median_anomaly`</span>](./column/anomaly/median-anomaly.md#daily-median-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_median_anomaly`</span>](./column/anomaly/median-anomaly.md#daily-partition-median-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column is within a percentile from measurements made during the last 90 days.| |
+### [median anomaly](./column/anomaly/median-anomaly.md)
+A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_change`</span>](./column/anomaly/mean-change.md#profile-mean-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_mean_change`</span>](./column/anomaly/mean-change.md#daily-mean-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_mean_change`</span>](./column/anomaly/mean-change.md#monthly-mean-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_mean_change`</span>](./column/anomaly/mean-change.md#daily-partition-mean-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_mean_change`</span>](./column/anomaly/mean-change.md#monthly-partition-mean-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
+### [min anomaly](./column/anomaly/min-anomaly.md)
+A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_change_1_day`</span>](./column/anomaly/mean-change-1-day.md#profile-mean-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_mean_change_1_day`</span>](./column/anomaly/mean-change-1-day.md#daily-mean-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_mean_change_1_day`</span>](./column/anomaly/mean-change-1-day.md#daily-partition-mean-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from yesterday.| |
+### [max anomaly](./column/anomaly/max-anomaly.md)
+A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_change_7_days`</span>](./column/anomaly/mean-change-7-days.md#profile-mean-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.| |
-|[<span class="no-wrap-code">`daily_mean_change_7_days`</span>](./column/anomaly/mean-change-7-days.md#daily-mean-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from last week.| |
-|[<span class="no-wrap-code">`daily_partition_mean_change_7_days`</span>](./column/anomaly/mean-change-7-days.md#daily-partition-mean-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last week.| |
+### [mean change](./column/anomaly/mean-change.md)
+A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_change_30_days`</span>](./column/anomaly/mean-change-30-days.md#profile-mean-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.| |
-|[<span class="no-wrap-code">`daily_mean_change_30_days`</span>](./column/anomaly/mean-change-30-days.md#daily-mean-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout from last month.| |
-|[<span class="no-wrap-code">`daily_partition_mean_change_30_days`</span>](./column/anomaly/mean-change-30-days.md#daily-partition-mean-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout from the last month.| |
+### [mean change 1 day](./column/anomaly/mean-change-1-day.md)
+A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_change`</span>](./column/anomaly/median-change.md#profile-median-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_median_change`</span>](./column/anomaly/median-change.md#daily-median-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_median_change`</span>](./column/anomaly/median-change.md#monthly-median-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_median_change`</span>](./column/anomaly/median-change.md#daily-partition-median-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_median_change`</span>](./column/anomaly/median-change.md#monthly-partition-median-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
+### [mean change 7 days](./column/anomaly/mean-change-7-days.md)
+A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_change_1_day`</span>](./column/anomaly/median-change-1-day.md#profile-median-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_median_change_1_day`</span>](./column/anomaly/median-change-1-day.md#daily-median-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_median_change_1_day`</span>](./column/anomaly/median-change-1-day.md#daily-partition-median-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from yesterday.| |
+### [mean change 30 days](./column/anomaly/mean-change-30-days.md)
+A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_change_7_days`</span>](./column/anomaly/median-change-7-days.md#profile-median-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
-|[<span class="no-wrap-code">`daily_median_change_7_days`</span>](./column/anomaly/median-change-7-days.md#daily-median-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
-|[<span class="no-wrap-code">`daily_partition_median_change_7_days`</span>](./column/anomaly/median-change-7-days.md#daily-partition-median-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last week.| |
+### [median change](./column/anomaly/median-change.md)
+A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_change_30_days`</span>](./column/anomaly/median-change-30-days.md#profile-median-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
-|[<span class="no-wrap-code">`daily_median_change_30_days`</span>](./column/anomaly/median-change-30-days.md#daily-median-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
-|[<span class="no-wrap-code">`daily_partition_median_change_30_days`</span>](./column/anomaly/median-change-30-days.md#daily-partition-median-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout from the last month.| |
+### [median change 1 day](./column/anomaly/median-change-1-day.md)
+A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_change`</span>](./column/anomaly/sum-change.md#profile-sum-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_sum_change`</span>](./column/anomaly/sum-change.md#daily-sum-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_sum_change`</span>](./column/anomaly/sum-change.md#monthly-sum-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_sum_change`</span>](./column/anomaly/sum-change.md#daily-partition-sum-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_sum_change`</span>](./column/anomaly/sum-change.md#monthly-partition-sum-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
+### [median change 7 days](./column/anomaly/median-change-7-days.md)
+A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_change_1_day`</span>](./column/anomaly/sum-change-1-day.md#profile-sum-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_sum_change_1_day`</span>](./column/anomaly/sum-change-1-day.md#daily-sum-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_sum_change_1_day`</span>](./column/anomaly/sum-change-1-day.md#daily-partition-sum-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from yesterday.| |
+### [median change 30 days](./column/anomaly/median-change-30-days.md)
+A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_change_7_days`</span>](./column/anomaly/sum-change-7-days.md#profile-sum-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from last week.| |
-|[<span class="no-wrap-code">`daily_sum_change_7_days`</span>](./column/anomaly/sum-change-7-days.md#daily-sum-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.| |
-|[<span class="no-wrap-code">`daily_partition_sum_change_7_days`</span>](./column/anomaly/sum-change-7-days.md#daily-partition-sum-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last week.| |
+### [sum change](./column/anomaly/sum-change.md)
+A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_change_30_days`</span>](./column/anomaly/sum-change-30-days.md#profile-sum-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from last month.| |
-|[<span class="no-wrap-code">`daily_sum_change_30_days`</span>](./column/anomaly/sum-change-30-days.md#daily-sum-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.| |
-|[<span class="no-wrap-code">`daily_partition_sum_change_30_days`</span>](./column/anomaly/sum-change-30-days.md#daily-partition-sum-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout from the last month.| |
+### [sum change 1 day](./column/anomaly/sum-change-1-day.md)
+A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+
+
+
+### [sum change 7 days](./column/anomaly/sum-change-7-days.md)
+A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.
+
+
+
+### [sum change 30 days](./column/anomaly/sum-change-30-days.md)
+A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 
 
 
 
-### **blanks**
+## column-level blanks checks
 Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_empty_text_found`</span>](./column/blanks/empty-text-found.md#profile-empty-text-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that empty strings in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_empty_text_found`</span>](./column/blanks/empty-text-found.md#daily-empty-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_empty_text_found`</span>](./column/blanks/empty-text-found.md#monthly-empty-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_empty_text_found`</span>](./column/blanks/empty-text-found.md#daily-partition-empty-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_empty_text_found`</span>](./column/blanks/empty-text-found.md#monthly-partition-empty-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [empty text found](./column/blanks/empty-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_whitespace_text_found`</span>](./column/blanks/whitespace-text-found.md#profile-whitespace-text-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_whitespace_text_found`</span>](./column/blanks/whitespace-text-found.md#daily-whitespace-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_whitespace_text_found`</span>](./column/blanks/whitespace-text-found.md#monthly-whitespace-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_whitespace_text_found`</span>](./column/blanks/whitespace-text-found.md#daily-partition-whitespace-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_whitespace_text_found`</span>](./column/blanks/whitespace-text-found.md#monthly-partition-whitespace-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [whitespace text found](./column/blanks/whitespace-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_null_placeholder_text_found`</span>](./column/blanks/null-placeholder-text-found.md#profile-null-placeholder-text-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_null_placeholder_text_found`</span>](./column/blanks/null-placeholder-text-found.md#daily-null-placeholder-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_null_placeholder_text_found`</span>](./column/blanks/null-placeholder-text-found.md#monthly-null-placeholder-text-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_null_placeholder_text_found`</span>](./column/blanks/null-placeholder-text-found.md#daily-partition-null-placeholder-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_null_placeholder_text_found`</span>](./column/blanks/null-placeholder-text-found.md#monthly-partition-null-placeholder-text-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [null placeholder text found](./column/blanks/null-placeholder-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_empty_text_percent`</span>](./column/blanks/empty-text-percent.md#profile-empty-text-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_empty_text_percent`</span>](./column/blanks/empty-text-percent.md#daily-empty-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_empty_text_percent`</span>](./column/blanks/empty-text-percent.md#monthly-empty-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_empty_text_percent`</span>](./column/blanks/empty-text-percent.md#daily-partition-empty-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_empty_text_percent`</span>](./column/blanks/empty-text-percent.md#monthly-partition-empty-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [empty text percent](./column/blanks/empty-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_whitespace_text_percent`</span>](./column/blanks/whitespace-text-percent.md#profile-whitespace-text-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_whitespace_text_percent`</span>](./column/blanks/whitespace-text-percent.md#daily-whitespace-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_whitespace_text_percent`</span>](./column/blanks/whitespace-text-percent.md#monthly-whitespace-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_whitespace_text_percent`</span>](./column/blanks/whitespace-text-percent.md#daily-partition-whitespace-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_whitespace_text_percent`</span>](./column/blanks/whitespace-text-percent.md#monthly-partition-whitespace-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.| |
+### [whitespace text percent](./column/blanks/whitespace-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_null_placeholder_text_percent`</span>](./column/blanks/null-placeholder-text-percent.md#profile-null-placeholder-text-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_null_placeholder_text_percent`</span>](./column/blanks/null-placeholder-text-percent.md#daily-null-placeholder-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_null_placeholder_text_percent`</span>](./column/blanks/null-placeholder-text-percent.md#monthly-null-placeholder-text-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_null_placeholder_text_percent`</span>](./column/blanks/null-placeholder-text-percent.md#daily-partition-null-placeholder-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_null_placeholder_text_percent`</span>](./column/blanks/null-placeholder-text-percent.md#monthly-partition-null-placeholder-text-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [null placeholder text percent](./column/blanks/null-placeholder-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
 
 
 
 
 
 
-### **bool**
+## column-level bool checks
 Calculates the percentage of data in boolean columns.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_true_percent`</span>](./column/bool/true-percent.md#profile-true-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_true_percent`</span>](./column/bool/true-percent.md#daily-true-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_true_percent`</span>](./column/bool/true-percent.md#monthly-true-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_true_percent`</span>](./column/bool/true-percent.md#daily-partition-true-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_true_percent`</span>](./column/bool/true-percent.md#monthly-partition-true-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [true percent](./column/bool/true-percent.md)
+A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_false_percent`</span>](./column/bool/false-percent.md#profile-false-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_false_percent`</span>](./column/bool/false-percent.md#daily-false-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_false_percent`</span>](./column/bool/false-percent.md#monthly-false-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_false_percent`</span>](./column/bool/false-percent.md#daily-partition-false-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_false_percent`</span>](./column/bool/false-percent.md#monthly-partition-false-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [false percent](./column/bool/false-percent.md)
+A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.
 
 
 
 
 
 
-### **comparisons**
+## column-level comparisons checks
 Compares the columns in a table to another column in another table that is in a different data source.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_match`</span>](./column/comparisons/sum-match.md#profile-sum-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_sum_match`</span>](./column/comparisons/sum-match.md#daily-sum-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_sum_match`</span>](./column/comparisons/sum-match.md#monthly-sum-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_sum_match`</span>](./column/comparisons/sum-match.md#daily-partition-sum-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_sum_match`</span>](./column/comparisons/sum-match.md#monthly-partition-sum-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the sum of values in a tested column in a parent table and the sum of a values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [sum match](./column/comparisons/sum-match.md)
+A column-level check that ensures that compares the sum of the values in the tested column to the sum of values in a reference column from the reference table.
+ Compares the sum of values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_min_match`</span>](./column/comparisons/min-match.md#profile-min-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_min_match`</span>](./column/comparisons/min-match.md#daily-min-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_min_match`</span>](./column/comparisons/min-match.md#monthly-min-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_min_match`</span>](./column/comparisons/min-match.md#daily-partition-min-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_min_match`</span>](./column/comparisons/min-match.md#monthly-partition-min-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the minimum value in a tested column in a parent table and the minimum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [min match](./column/comparisons/min-match.md)
+A column-level check that ensures that compares the minimum value in the tested column to the minimum value in a reference column from the reference table.
+ Compares the minimum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_max_match`</span>](./column/comparisons/max-match.md#profile-max-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_max_match`</span>](./column/comparisons/max-match.md#daily-max-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_max_match`</span>](./column/comparisons/max-match.md#monthly-max-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_max_match`</span>](./column/comparisons/max-match.md#daily-partition-max-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_max_match`</span>](./column/comparisons/max-match.md#monthly-partition-max-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the maximum value in a tested column in a parent table and the maximum value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [max match](./column/comparisons/max-match.md)
+A column-level check that ensures that compares the maximum value in the tested column to maximum value in a reference column from the reference table.
+ Compares the maximum values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_match`</span>](./column/comparisons/mean-match.md#profile-mean-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_mean_match`</span>](./column/comparisons/mean-match.md#daily-mean-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_mean_match`</span>](./column/comparisons/mean-match.md#monthly-mean-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_mean_match`</span>](./column/comparisons/mean-match.md#daily-partition-mean-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_mean_match`</span>](./column/comparisons/mean-match.md#monthly-partition-mean-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the mean (average) value in a tested column in a parent table and the mean (average) value in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [mean match](./column/comparisons/mean-match.md)
+A column-level check that ensures that compares the mean (average) of the values in the tested column to the mean (average) of values in a reference column from the reference table.
+ Compares the mean (average) value for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_not_null_count_match`</span>](./column/comparisons/not-null-count-match.md#profile-not-null-count-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_not_null_count_match`</span>](./column/comparisons/not-null-count-match.md#daily-not-null-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_not_null_count_match`</span>](./column/comparisons/not-null-count-match.md#monthly-not-null-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_not_null_count_match`</span>](./column/comparisons/not-null-count-match.md#daily-partition-not-null-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_not_null_count_match`</span>](./column/comparisons/not-null-count-match.md#monthly-partition-not-null-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the count of not null values in a tested column in a parent table and the count of not null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [not null count match](./column/comparisons/not-null-count-match.md)
+A column-level check that ensures that compares the count of not null values in the tested column to the count of not null values in a reference column from the reference table.
+ Compares the count of not null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_null_count_match`</span>](./column/comparisons/null-count-match.md#profile-null-count-match)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_null_count_match`</span>](./column/comparisons/null-count-match.md#daily-null-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_null_count_match`</span>](./column/comparisons/null-count-match.md#monthly-null-count-match)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_null_count_match`</span>](./column/comparisons/null-count-match.md#daily-partition-null-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each daily partition (each day of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_null_count_match`</span>](./column/comparisons/null-count-match.md#monthly-partition-null-count-match)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that percentage of the difference between the count of null values in a tested column in a parent table and the count of null values in a column in the reference table. The difference must be below defined percentage thresholds. Compares each monthly partition (each month of data) between the compared table and the reference table (the source of truth).|:material-check-bold:|
+### [null count match](./column/comparisons/null-count-match.md)
+A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.
+ Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
 
 
 
 
 
 
-### **custom_sql**
-Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+## column-level custom_sql checks
+Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_condition_failed_on_column`</span>](./column/custom_sql/sql-condition-failed-on-column.md#profile-sql-condition-failed-on-column)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; col_tax&#x60;.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_sql_condition_failed_on_column`</span>](./column/custom_sql/sql-condition-failed-on-column.md#daily-sql-condition-failed-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; col_tax&#x60;. Stores the most recent captured count of failed rows for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_sql_condition_failed_on_column`</span>](./column/custom_sql/sql-condition-failed-on-column.md#monthly-sql-condition-failed-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores the most recent captured count of failed rows for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_sql_condition_failed_on_column`</span>](./column/custom_sql/sql-condition-failed-on-column.md#daily-partition-sql-condition-failed-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_sql_condition_failed_on_column`</span>](./column/custom_sql/sql-condition-failed-on-column.md#monthly-partition-sql-condition-failed-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom SQL expression is met for each row. Counts the number of rows where the expression is not satisfied, and raises an issue if too many failures were detected. This check is used also to compare values between the current column and another column: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [sql condition failed on column](./column/custom_sql/sql-condition-failed-on-column.md)
+A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
+ Use the {alias} token to reference the tested table, and the {column} to reference the column that is tested. This data quality check can be used to compare columns on the same table.
+ For example, when this check is applied on a *col_price* column, the condition can verify that the *col_price* is higher than the *col_tax* using an SQL expression: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;
+ Use an SQL expression that returns a *true* value for valid values and *false* for invalid values, because it is an assertion.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_condition_passed_percent_on_column`</span>](./column/custom_sql/sql-condition-passed-percent-on-column.md#profile-sql-condition-passed-percent-on-column)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;.| |
-|[<span class="no-wrap-code">`daily_sql_condition_passed_percent_on_column`</span>](./column/custom_sql/sql-condition-passed-percent-on-column.md#daily-sql-condition-passed-percent-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sql_condition_passed_percent_on_column`</span>](./column/custom_sql/sql-condition-passed-percent-on-column.md#monthly-sql-condition-passed-percent-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;.  Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sql_condition_passed_percent_on_column`</span>](./column/custom_sql/sql-condition-passed-percent-on-column.md#daily-partition-sql-condition-passed-percent-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sql_condition_passed_percent_on_column`</span>](./column/custom_sql/sql-condition-passed-percent-on-column.md#monthly-partition-sql-condition-passed-percent-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a minimum percentage of rows passed a custom SQL condition (expression). Reference the current column by using tokens, for example: &#x60;{alias}.{column} &gt; {alias}.col_tax&#x60;. Stores a separate data quality check result for each monthly partition.| |
+### [sql condition passed percent on column](./column/custom_sql/sql-condition-passed-percent-on-column.md)
+A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sql_aggregate_expression_on_column`</span>](./column/custom_sql/sql-aggregate-expression-on-column.md#profile-sql-aggregate-expression-on-column)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_sql_aggregate_expression_on_column`</span>](./column/custom_sql/sql-aggregate-expression-on-column.md#daily-sql-aggregate-expression-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sql_aggregate_expression_on_column`</span>](./column/custom_sql/sql-aggregate-expression-on-column.md#monthly-sql-aggregate-expression-on-column)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sql_aggregate_expression_on_column`</span>](./column/custom_sql/sql-aggregate-expression-on-column.md#daily-partition-sql-aggregate-expression-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sql_aggregate_expression_on_column`</span>](./column/custom_sql/sql-aggregate-expression-on-column.md#monthly-partition-sql-aggregate-expression-on-column)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [sql aggregate expression on column](./column/custom_sql/sql-aggregate-expression-on-column.md)
+A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+
+
+
+### [import custom result on column](./column/custom_sql/import-custom-result-on-column.md)
+Column level check that uses a custom SQL SELECT statement to retrieve a result of running a custom data quality check on a column by a custom
+ data quality check, hardcoded in the data pipeline. The result is retrieved by querying a separate **logging table**, whose schema is not fixed.
+ The logging table should have columns that identify a table and a column for which they store custom data quality check results, and a *severity* column of the data quality issue.
+ The SQL query that is configured in this external data quality results importer must be
+ a complete SELECT statement that queries a dedicated logging table, created by the data engineering team.
 
 
 
 
 
 
-### **datatype**
-Analyzes all values in a text column to detect if all values could be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
+## column-level datatype checks
+Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>](./column/datatype/detected-datatype-in-text.md#profile-detected-datatype-in-text)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>](./column/datatype/detected-datatype-in-text.md#daily-detected-datatype-in-text)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>](./column/datatype/detected-datatype-in-text.md#monthly-detected-datatype-in-text)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>](./column/datatype/detected-datatype-in-text.md#daily-partition-detected-datatype-in-text)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>](./column/datatype/detected-datatype-in-text.md#monthly-partition-detected-datatype-in-text)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [detected datatype in text](./column/datatype/detected-datatype-in-text.md)
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_detected_datatype_in_text_changed`</span>](./column/datatype/detected-datatype-in-text-changed.md#profile-detected-datatype-in-text-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_detected_datatype_in_text_changed`</span>](./column/datatype/detected-datatype-in-text-changed.md#daily-detected-datatype-in-text-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_detected_datatype_in_text_changed`</span>](./column/datatype/detected-datatype-in-text-changed.md#monthly-detected-datatype-in-text-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_detected_datatype_in_text_changed`</span>](./column/datatype/detected-datatype-in-text-changed.md#daily-partition-detected-datatype-in-text-changed)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text_changed`</span>](./column/datatype/detected-datatype-in-text-changed.md#monthly-partition-detected-datatype-in-text-changed)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [detected datatype in text changed](./column/datatype/detected-datatype-in-text-changed.md)
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 
 
 
 
 
-### **datetime**
+## column-level datetime checks
 Validates that the data in a date or time column is in the expected format and within predefined ranges.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_date_values_in_future_percent`</span>](./column/datetime/date-values-in-future-percent.md#profile-date-values-in-future-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_date_values_in_future_percent`</span>](./column/datetime/date-values-in-future-percent.md#daily-date-values-in-future-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_date_values_in_future_percent`</span>](./column/datetime/date-values-in-future-percent.md#monthly-date-values-in-future-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_date_values_in_future_percent`</span>](./column/datetime/date-values-in-future-percent.md#daily-partition-date-values-in-future-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_date_values_in_future_percent`</span>](./column/datetime/date-values-in-future-percent.md#monthly-partition-date-values-in-future-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [date values in future percent](./column/datetime/date-values-in-future-percent.md)
+A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_datetime_value_in_range_date_percent`</span>](./column/datetime/datetime-value-in-range-date-percent.md#profile-datetime-value-in-range-date-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_datetime_value_in_range_date_percent`</span>](./column/datetime/datetime-value-in-range-date-percent.md#daily-datetime-value-in-range-date-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_datetime_value_in_range_date_percent`</span>](./column/datetime/datetime-value-in-range-date-percent.md#monthly-datetime-value-in-range-date-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_datetime_value_in_range_date_percent`</span>](./column/datetime/datetime-value-in-range-date-percent.md#daily-partition-datetime-value-in-range-date-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_datetime_value_in_range_date_percent`</span>](./column/datetime/datetime-value-in-range-date-percent.md#monthly-partition-datetime-value-in-range-date-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [datetime value in range date percent](./column/datetime/datetime-value-in-range-date-percent.md)
+A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_date_match_format_percent`</span>](./column/datetime/date-match-format-percent.md#profile-date-match-format-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_date_match_format_percent`</span>](./column/datetime/date-match-format-percent.md#daily-date-match-format-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily monitoring.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_date_match_format_percent`</span>](./column/datetime/date-match-format-percent.md#monthly-date-match-format-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly monitoring.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>](./column/datetime/date-match-format-percent.md#daily-partition-date-match-format-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>](./column/datetime/date-match-format-percent.md#monthly-partition-date-match-format-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [date match format percent](./column/datetime/date-match-format-percent.md)
+A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+ It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
+ The default value 100.0 (percent) verifies that all values match a given date format.
 
 
 
 
 
 
-### **integrity**
+## column-level integrity checks
 Checks the referential integrity of a column against a column in another table.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_lookup_key_not_found`</span>](./column/integrity/lookup-key-not-found.md#profile-lookup-key-not-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_lookup_key_not_found`</span>](./column/integrity/lookup-key-not-found.md#daily-lookup-key-not-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>](./column/integrity/lookup-key-not-found.md#monthly-lookup-key-not-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>](./column/integrity/lookup-key-not-found.md#daily-partition-lookup-key-not-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>](./column/integrity/lookup-key-not-found.md#monthly-partition-lookup-key-not-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [lookup key not found](./column/integrity/lookup-key-not-found.md)
+A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_lookup_key_found_percent`</span>](./column/integrity/lookup-key-found-percent.md#profile-lookup-key-found-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.| |
-|[<span class="no-wrap-code">`daily_lookup_key_found_percent`</span>](./column/integrity/lookup-key-found-percent.md#daily-lookup-key-found-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_lookup_key_found_percent`</span>](./column/integrity/lookup-key-found-percent.md#monthly-lookup-key-found-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_lookup_key_found_percent`</span>](./column/integrity/lookup-key-found-percent.md#daily-partition-lookup-key-found-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_lookup_key_found_percent`</span>](./column/integrity/lookup-key-found-percent.md#monthly-partition-lookup-key-found-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.| |
+### [lookup key found percent](./column/integrity/lookup-key-found-percent.md)
+A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
 
 
 
 
 
 
-### **nulls**
+## column-level nulls checks
 Checks for the presence of null or missing values in a column.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_count`</span>](./column/nulls/nulls-count.md#profile-nulls-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_nulls_count`</span>](./column/nulls/nulls-count.md#daily-nulls-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_nulls_count`</span>](./column/nulls/nulls-count.md#monthly-nulls-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_nulls_count`</span>](./column/nulls/nulls-count.md#daily-partition-nulls-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_nulls_count`</span>](./column/nulls/nulls-count.md#monthly-partition-nulls-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [nulls count](./column/nulls/nulls-count.md)
+A column-level check that ensures that there are no more than a set number of null values in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent`</span>](./column/nulls/nulls-percent.md#profile-nulls-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_nulls_percent`</span>](./column/nulls/nulls-percent.md#daily-nulls-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_nulls_percent`</span>](./column/nulls/nulls-percent.md#monthly-nulls-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent`</span>](./column/nulls/nulls-percent.md#daily-partition-nulls-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_nulls_percent`</span>](./column/nulls/nulls-percent.md#monthly-partition-nulls-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [nulls percent](./column/nulls/nulls-percent.md)
+A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_not_nulls_count`</span>](./column/nulls/not-nulls-count.md#profile-not-nulls-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_not_nulls_count`</span>](./column/nulls/not-nulls-count.md#daily-not-nulls-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_not_nulls_count`</span>](./column/nulls/not-nulls-count.md#monthly-not-nulls-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>](./column/nulls/not-nulls-count.md#daily-partition-not-nulls-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>](./column/nulls/not-nulls-count.md#monthly-partition-not-nulls-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [not nulls count](./column/nulls/not-nulls-count.md)
+A column-level check that ensures that there are no more than a set number of null values in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_not_nulls_percent`</span>](./column/nulls/not-nulls-percent.md#profile-not-nulls-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_not_nulls_percent`</span>](./column/nulls/not-nulls-percent.md#daily-not-nulls-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_not_nulls_percent`</span>](./column/nulls/not-nulls-percent.md#monthly-not-nulls-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_not_nulls_percent`</span>](./column/nulls/not-nulls-percent.md#daily-partition-not-nulls-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_not_nulls_percent`</span>](./column/nulls/not-nulls-percent.md#monthly-partition-not-nulls-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [not nulls percent](./column/nulls/not-nulls-percent.md)
+A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_anomaly`</span>](./column/nulls/nulls-percent-anomaly.md#profile-nulls-percent-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_anomaly`</span>](./column/nulls/nulls-percent-anomaly.md#daily-nulls-percent-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_anomaly`</span>](./column/nulls/nulls-percent-anomaly.md#daily-partition-nulls-percent-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.| |
+### [nulls percent anomaly](./column/nulls/nulls-percent-anomaly.md)
+A column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_change`</span>](./column/nulls/nulls-percent-change.md#profile-nulls-percent-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_change`</span>](./column/nulls/nulls-percent-change.md#daily-nulls-percent-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_change`</span>](./column/nulls/nulls-percent-change.md#daily-partition-nulls-percent-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout.| |
+### [nulls percent change](./column/nulls/nulls-percent-change.md)
+A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_change_1_day`</span>](./column/nulls/nulls-percent-change-1-day.md#profile-nulls-percent-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_change_1_day`</span>](./column/nulls/nulls-percent-change-1-day.md#daily-nulls-percent-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_1_day`</span>](./column/nulls/nulls-percent-change-1-day.md#daily-partition-nulls-percent-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from yesterday.| |
+### [nulls percent change 1 day](./column/nulls/nulls-percent-change-1-day.md)
+A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_change_7_days`</span>](./column/nulls/nulls-percent-change-7-days.md#profile-nulls-percent-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last week.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_change_7_days`</span>](./column/nulls/nulls-percent-change-7-days.md#daily-nulls-percent-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_7_days`</span>](./column/nulls/nulls-percent-change-7-days.md#daily-partition-nulls-percent-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last week.| |
+### [nulls percent change 7 days](./column/nulls/nulls-percent-change-7-days.md)
+A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_nulls_percent_change_30_days`</span>](./column/nulls/nulls-percent-change-30-days.md#profile-nulls-percent-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since last readout from last month.| |
-|[<span class="no-wrap-code">`daily_nulls_percent_change_30_days`</span>](./column/nulls/nulls-percent-change-30-days.md#daily-nulls-percent-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.| |
-|[<span class="no-wrap-code">`daily_partition_nulls_percent_change_30_days`</span>](./column/nulls/nulls-percent-change-30-days.md#daily-partition-nulls-percent-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the null percent value in a column changed in a fixed rate since the last readout from the last month.| |
+### [nulls percent change 30 days](./column/nulls/nulls-percent-change-30-days.md)
+A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from the last month.
 
 
 
 
 
 
-### **numeric**
+## column-level numeric checks
 Validates that the data in a numeric column is in the expected format or within predefined ranges.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_below_min_value`</span>](./column/numeric/number-below-min-value.md#profile-number-below-min-value)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_number_below_min_value`</span>](./column/numeric/number-below-min-value.md#daily-number-below-min-value)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_number_below_min_value`</span>](./column/numeric/number-below-min-value.md#monthly-number-below-min-value)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_number_below_min_value`</span>](./column/numeric/number-below-min-value.md#daily-partition-number-below-min-value)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_number_below_min_value`</span>](./column/numeric/number-below-min-value.md#monthly-partition-number-below-min-value)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [number below min value](./column/numeric/number-below-min-value.md)
+A column-level check that ensures that the number of values in the monitored column with a value below a user-defined value as a parameter does not exceed set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_above_max_value`</span>](./column/numeric/number-above-max-value.md#profile-number-above-max-value)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of values in the column that is above the value defined by the user as a parameter.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_number_above_max_value`</span>](./column/numeric/number-above-max-value.md#daily-number-above-max-value)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_number_above_max_value`</span>](./column/numeric/number-above-max-value.md#monthly-number-above-max-value)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_number_above_max_value`</span>](./column/numeric/number-above-max-value.md#daily-partition-number-above-max-value)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_number_above_max_value`</span>](./column/numeric/number-above-max-value.md#monthly-partition-number-above-max-value)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [number above max value](./column/numeric/number-above-max-value.md)
+A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_negative_values`</span>](./column/numeric/negative-values.md#profile-negative-values)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_negative_values`</span>](./column/numeric/negative-values.md#daily-negative-values)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_negative_values`</span>](./column/numeric/negative-values.md#monthly-negative-values)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_negative_values`</span>](./column/numeric/negative-values.md#daily-partition-negative-values)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_negative_values`</span>](./column/numeric/negative-values.md#monthly-partition-negative-values)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [negative values](./column/numeric/negative-values.md)
+A column-level check that ensures that there are no more than a set number of negative values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_negative_values_percent`</span>](./column/numeric/negative-values-percent.md#profile-negative-values-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_negative_values_percent`</span>](./column/numeric/negative-values-percent.md#daily-negative-values-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_negative_values_percent`</span>](./column/numeric/negative-values-percent.md#monthly-negative-values-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_negative_values_percent`</span>](./column/numeric/negative-values-percent.md#daily-partition-negative-values-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_negative_values_percent`</span>](./column/numeric/negative-values-percent.md#monthly-partition-negative-values-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [negative values percent](./column/numeric/negative-values-percent.md)
+A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_below_min_value_percent`</span>](./column/numeric/number-below-min-value-percent.md#profile-number-below-min-value-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter.| |
-|[<span class="no-wrap-code">`daily_number_below_min_value_percent`</span>](./column/numeric/number-below-min-value-percent.md#daily-number-below-min-value-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_number_below_min_value_percent`</span>](./column/numeric/number-below-min-value-percent.md#monthly-number-below-min-value-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_number_below_min_value_percent`</span>](./column/numeric/number-below-min-value-percent.md#daily-partition-number-below-min-value-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_number_below_min_value_percent`</span>](./column/numeric/number-below-min-value-percent.md#monthly-partition-number-below-min-value-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.| |
+### [number below min value percent](./column/numeric/number-below-min-value-percent.md)
+A column-level check that ensures that the percentage of values in the monitored column with a value below a user-defined value as a parameter does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_above_max_value_percent`</span>](./column/numeric/number-above-max-value-percent.md#profile-number-above-max-value-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the percentage of values in the column that is above the value defined by the user as a parameter.| |
-|[<span class="no-wrap-code">`daily_number_above_max_value_percent`</span>](./column/numeric/number-above-max-value-percent.md#daily-number-above-max-value-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_number_above_max_value_percent`</span>](./column/numeric/number-above-max-value-percent.md#monthly-number-above-max-value-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_number_above_max_value_percent`</span>](./column/numeric/number-above-max-value-percent.md#daily-partition-number-above-max-value-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_number_above_max_value_percent`</span>](./column/numeric/number-above-max-value-percent.md#monthly-partition-number-above-max-value-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.| |
+### [number above max value percent](./column/numeric/number-above-max-value-percent.md)
+A column-level check that ensures that the percentage of values in the monitored column with a value above a user-defined value as a parameter does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_number_in_range_percent`</span>](./column/numeric/number-in-range-percent.md#profile-number-in-range-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_number_in_range_percent`</span>](./column/numeric/number-in-range-percent.md#daily-number-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_number_in_range_percent`</span>](./column/numeric/number-in-range-percent.md#monthly-number-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_number_in_range_percent`</span>](./column/numeric/number-in-range-percent.md#daily-partition-number-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_number_in_range_percent`</span>](./column/numeric/number-in-range-percent.md#monthly-partition-number-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [number in range percent](./column/numeric/number-in-range-percent.md)
+A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_integer_in_range_percent`</span>](./column/numeric/integer-in-range-percent.md#profile-integer-in-range-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_integer_in_range_percent`</span>](./column/numeric/integer-in-range-percent.md#daily-integer-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_integer_in_range_percent`</span>](./column/numeric/integer-in-range-percent.md#monthly-integer-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_integer_in_range_percent`</span>](./column/numeric/integer-in-range-percent.md#daily-partition-integer-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_integer_in_range_percent`</span>](./column/numeric/integer-in-range-percent.md#monthly-partition-integer-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [integer in range percent](./column/numeric/integer-in-range-percent.md)
+A column-level check that ensures that there are no more than a set number of values from range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_min_in_range`</span>](./column/numeric/min-in-range.md#profile-min-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the minimum value in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_min_in_range`</span>](./column/numeric/min-in-range.md#daily-min-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the minimum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_min_in_range`</span>](./column/numeric/min-in-range.md#monthly-min-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the minimum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_min_in_range`</span>](./column/numeric/min-in-range.md#daily-partition-min-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_min_in_range`</span>](./column/numeric/min-in-range.md#monthly-partition-min-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [min in range](./column/numeric/min-in-range.md)
+A column-level check that ensures that the minimum values are within the expected range in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_max_in_range`</span>](./column/numeric/max-in-range.md#profile-max-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the maximum value in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_max_in_range`</span>](./column/numeric/max-in-range.md#daily-max-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the maximum value in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_max_in_range`</span>](./column/numeric/max-in-range.md#monthly-max-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the maximum value in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_max_in_range`</span>](./column/numeric/max-in-range.md#daily-partition-max-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_max_in_range`</span>](./column/numeric/max-in-range.md#monthly-partition-max-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the maximum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [max in range](./column/numeric/max-in-range.md)
+A column-level check that ensures that the maximum values are within the expected range in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sum_in_range`</span>](./column/numeric/sum-in-range.md#profile-sum-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_sum_in_range`</span>](./column/numeric/sum-in-range.md#daily-sum-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sum_in_range`</span>](./column/numeric/sum-in-range.md#monthly-sum-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sum_in_range`</span>](./column/numeric/sum-in-range.md#daily-partition-sum-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sum_in_range`</span>](./column/numeric/sum-in-range.md#monthly-partition-sum-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [sum in range](./column/numeric/sum-in-range.md)
+A column-level check that ensures that the sum value in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_mean_in_range`</span>](./column/numeric/mean-in-range.md#profile-mean-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the average (mean) of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_mean_in_range`</span>](./column/numeric/mean-in-range.md#daily-mean-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the average (mean) of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_mean_in_range`</span>](./column/numeric/mean-in-range.md#monthly-mean-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the average (mean) of all values in a column does not exceed the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_mean_in_range`</span>](./column/numeric/mean-in-range.md#daily-partition-mean-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_mean_in_range`</span>](./column/numeric/mean-in-range.md#monthly-partition-mean-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the average (mean) of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [mean in range](./column/numeric/mean-in-range.md)
+A column-level check that ensures that the average (mean) value in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_median_in_range`</span>](./column/numeric/median-in-range.md#profile-median-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_median_in_range`</span>](./column/numeric/median-in-range.md#daily-median-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_median_in_range`</span>](./column/numeric/median-in-range.md#monthly-median-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_median_in_range`</span>](./column/numeric/median-in-range.md#daily-partition-median-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_median_in_range`</span>](./column/numeric/median-in-range.md#monthly-partition-median-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [median in range](./column/numeric/median-in-range.md)
+A column-level check that ensures that the median value in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_percentile_in_range`</span>](./column/numeric/percentile-in-range.md#profile-percentile-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_percentile_in_range`</span>](./column/numeric/percentile-in-range.md#daily-percentile-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_percentile_in_range`</span>](./column/numeric/percentile-in-range.md#monthly-percentile-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_percentile_in_range`</span>](./column/numeric/percentile-in-range.md#daily-partition-percentile-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_percentile_in_range`</span>](./column/numeric/percentile-in-range.md#monthly-partition-percentile-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [percentile in range](./column/numeric/percentile-in-range.md)
+A column-level check that ensures that the percentile of values in a monitored columnis within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_percentile_10_in_range`</span>](./column/numeric/percentile-10-in-range.md#profile-percentile-10-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_percentile_10_in_range`</span>](./column/numeric/percentile-10-in-range.md#daily-percentile-10-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_percentile_10_in_range`</span>](./column/numeric/percentile-10-in-range.md#monthly-percentile-10-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_percentile_10_in_range`</span>](./column/numeric/percentile-10-in-range.md#daily-partition-percentile-10-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_percentile_10_in_range`</span>](./column/numeric/percentile-10-in-range.md#monthly-partition-percentile-10-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [percentile 10 in range](./column/numeric/percentile-10-in-range.md)
+A column-level check that ensures that the 10th percentile of values in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_percentile_25_in_range`</span>](./column/numeric/percentile-25-in-range.md#profile-percentile-25-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 25 of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_percentile_25_in_range`</span>](./column/numeric/percentile-25-in-range.md#daily-percentile-25-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_percentile_25_in_range`</span>](./column/numeric/percentile-25-in-range.md#monthly-percentile-25-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_percentile_25_in_range`</span>](./column/numeric/percentile-25-in-range.md#daily-partition-percentile-25-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_percentile_25_in_range`</span>](./column/numeric/percentile-25-in-range.md#monthly-partition-percentile-25-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 25 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [percentile 25 in range](./column/numeric/percentile-25-in-range.md)
+A column-level check that ensures that the 25th percentile of values in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_percentile_75_in_range`</span>](./column/numeric/percentile-75-in-range.md#profile-percentile-75-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_percentile_75_in_range`</span>](./column/numeric/percentile-75-in-range.md#daily-percentile-75-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_percentile_75_in_range`</span>](./column/numeric/percentile-75-in-range.md#monthly-percentile-75-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_percentile_75_in_range`</span>](./column/numeric/percentile-75-in-range.md#daily-partition-percentile-75-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_percentile_75_in_range`</span>](./column/numeric/percentile-75-in-range.md#monthly-partition-percentile-75-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [percentile 75 in range](./column/numeric/percentile-75-in-range.md)
+A column-level check that ensures that the 75th percentile of values in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_percentile_90_in_range`</span>](./column/numeric/percentile-90-in-range.md#profile-percentile-90-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 90 of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_percentile_90_in_range`</span>](./column/numeric/percentile-90-in-range.md#daily-percentile-90-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_percentile_90_in_range`</span>](./column/numeric/percentile-90-in-range.md#monthly-percentile-90-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_percentile_90_in_range`</span>](./column/numeric/percentile-90-in-range.md#daily-partition-percentile-90-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_percentile_90_in_range`</span>](./column/numeric/percentile-90-in-range.md#monthly-partition-percentile-90-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 90 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [percentile 90 in range](./column/numeric/percentile-90-in-range.md)
+A column-level check that ensures that the 90th percentile of values in the monitored column is within the expected range.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sample_stddev_in_range`</span>](./column/numeric/sample-stddev-in-range.md#profile-sample-stddev-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_sample_stddev_in_range`</span>](./column/numeric/sample-stddev-in-range.md#daily-sample-stddev-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sample_stddev_in_range`</span>](./column/numeric/sample-stddev-in-range.md#monthly-sample-stddev-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sample_stddev_in_range`</span>](./column/numeric/sample-stddev-in-range.md#daily-partition-sample-stddev-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sample_stddev_in_range`</span>](./column/numeric/sample-stddev-in-range.md#monthly-partition-sample-stddev-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [sample stddev in range](./column/numeric/sample-stddev-in-range.md)
+A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_population_stddev_in_range`</span>](./column/numeric/population-stddev-in-range.md#profile-population-stddev-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the population standard deviation of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_population_stddev_in_range`</span>](./column/numeric/population-stddev-in-range.md#daily-population-stddev-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_population_stddev_in_range`</span>](./column/numeric/population-stddev-in-range.md#monthly-population-stddev-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_population_stddev_in_range`</span>](./column/numeric/population-stddev-in-range.md#daily-partition-population-stddev-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_population_stddev_in_range`</span>](./column/numeric/population-stddev-in-range.md#monthly-partition-population-stddev-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the population standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [population stddev in range](./column/numeric/population-stddev-in-range.md)
+A column-level check that ensures that the population standard deviationis within the expected range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_sample_variance_in_range`</span>](./column/numeric/sample-variance-in-range.md#profile-sample-variance-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_sample_variance_in_range`</span>](./column/numeric/sample-variance-in-range.md#daily-sample-variance-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_sample_variance_in_range`</span>](./column/numeric/sample-variance-in-range.md#monthly-sample-variance-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_sample_variance_in_range`</span>](./column/numeric/sample-variance-in-range.md#daily-partition-sample-variance-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_sample_variance_in_range`</span>](./column/numeric/sample-variance-in-range.md#monthly-partition-sample-variance-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [sample variance in range](./column/numeric/sample-variance-in-range.md)
+A column-level check that ensures the sample varianceis within the expected range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_population_variance_in_range`</span>](./column/numeric/population-variance-in-range.md#profile-population-variance-in-range)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the population variance of all values in a column is not outside the expected range.| |
-|[<span class="no-wrap-code">`daily_population_variance_in_range`</span>](./column/numeric/population-variance-in-range.md#daily-population-variance-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the population variance of all values in a column is not outside the expected range. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_population_variance_in_range`</span>](./column/numeric/population-variance-in-range.md#monthly-population-variance-in-range)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the population variance of all values in a column is not outside the expected range. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_population_variance_in_range`</span>](./column/numeric/population-variance-in-range.md#daily-partition-population-variance-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_population_variance_in_range`</span>](./column/numeric/population-variance-in-range.md#monthly-partition-population-variance-in-range)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the population variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
+### [population variance in range](./column/numeric/population-variance-in-range.md)
+A column-level check that ensures that the population varianceis within the expected range in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_latitude`</span>](./column/numeric/invalid-latitude.md#profile-invalid-latitude)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_invalid_latitude`</span>](./column/numeric/invalid-latitude.md#daily-invalid-latitude)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_invalid_latitude`</span>](./column/numeric/invalid-latitude.md#monthly-invalid-latitude)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_invalid_latitude`</span>](./column/numeric/invalid-latitude.md#daily-partition-invalid-latitude)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_invalid_latitude`</span>](./column/numeric/invalid-latitude.md#monthly-partition-invalid-latitude)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
+### [invalid latitude](./column/numeric/invalid-latitude.md)
+A column-level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_valid_latitude_percent`</span>](./column/numeric/valid-latitude-percent.md#profile-valid-latitude-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_valid_latitude_percent`</span>](./column/numeric/valid-latitude-percent.md#daily-valid-latitude-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_valid_latitude_percent`</span>](./column/numeric/valid-latitude-percent.md#monthly-valid-latitude-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_valid_latitude_percent`</span>](./column/numeric/valid-latitude-percent.md#daily-partition-valid-latitude-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_valid_latitude_percent`</span>](./column/numeric/valid-latitude-percent.md#monthly-partition-valid-latitude-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid latitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [valid latitude percent](./column/numeric/valid-latitude-percent.md)
+A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_longitude`</span>](./column/numeric/invalid-longitude.md#profile-invalid-longitude)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_invalid_longitude`</span>](./column/numeric/invalid-longitude.md#daily-invalid-longitude)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_invalid_longitude`</span>](./column/numeric/invalid-longitude.md#monthly-invalid-longitude)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_invalid_longitude`</span>](./column/numeric/invalid-longitude.md#daily-partition-invalid-longitude)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_invalid_longitude`</span>](./column/numeric/invalid-longitude.md#monthly-partition-invalid-longitude)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
+### [invalid longitude](./column/numeric/invalid-longitude.md)
+A column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_valid_longitude_percent`</span>](./column/numeric/valid-longitude-percent.md#profile-valid-longitude-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_valid_longitude_percent`</span>](./column/numeric/valid-longitude-percent.md#daily-valid-longitude-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_valid_longitude_percent`</span>](./column/numeric/valid-longitude-percent.md#monthly-valid-longitude-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_valid_longitude_percent`</span>](./column/numeric/valid-longitude-percent.md#daily-partition-valid-longitude-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_valid_longitude_percent`</span>](./column/numeric/valid-longitude-percent.md#monthly-partition-valid-longitude-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [valid longitude percent](./column/numeric/valid-longitude-percent.md)
+A column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_non_negative_values`</span>](./column/numeric/non-negative-values.md#profile-non-negative-values)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_non_negative_values`</span>](./column/numeric/non-negative-values.md#daily-non-negative-values)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_non_negative_values`</span>](./column/numeric/non-negative-values.md#monthly-non-negative-values)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_non_negative_values`</span>](./column/numeric/non-negative-values.md#daily-partition-non-negative-values)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_non_negative_values`</span>](./column/numeric/non-negative-values.md#monthly-partition-non-negative-values)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
+### [non negative values](./column/numeric/non-negative-values.md)
+A column-level check that ensures that there are no more than a maximum number of non-negative values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_non_negative_values_percent`</span>](./column/numeric/non-negative-values-percent.md#profile-non-negative-values-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_non_negative_values_percent`</span>](./column/numeric/non-negative-values-percent.md#daily-non-negative-values-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_non_negative_values_percent`</span>](./column/numeric/non-negative-values-percent.md#monthly-non-negative-values-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_non_negative_values_percent`</span>](./column/numeric/non-negative-values-percent.md#daily-partition-non-negative-values-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_non_negative_values_percent`</span>](./column/numeric/non-negative-values-percent.md#monthly-partition-non-negative-values-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [non negative values percent](./column/numeric/non-negative-values-percent.md)
+A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
 
 
 
 
 
 
-### **patterns**
+## column-level patterns checks
 Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_not_matching_regex_found`</span>](./column/patterns/text-not-matching-regex-found.md#profile-text-not-matching-regex-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_text_not_matching_regex_found`</span>](./column/patterns/text-not-matching-regex-found.md#daily-text-not-matching-regex-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_text_not_matching_regex_found`</span>](./column/patterns/text-not-matching-regex-found.md#monthly-text-not-matching-regex-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_text_not_matching_regex_found`</span>](./column/patterns/text-not-matching-regex-found.md#daily-partition-text-not-matching-regex-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_text_not_matching_regex_found`</span>](./column/patterns/text-not-matching-regex-found.md#monthly-partition-text-not-matching-regex-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
+### [text not matching regex found](./column/patterns/text-not-matching-regex-found.md)
+A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_texts_matching_regex_percent`</span>](./column/patterns/texts-matching-regex-percent.md#profile-texts-matching-regex-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_texts_matching_regex_percent`</span>](./column/patterns/texts-matching-regex-percent.md#daily-texts-matching-regex-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_texts_matching_regex_percent`</span>](./column/patterns/texts-matching-regex-percent.md#monthly-texts-matching-regex-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_texts_matching_regex_percent`</span>](./column/patterns/texts-matching-regex-percent.md#daily-partition-texts-matching-regex-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_texts_matching_regex_percent`</span>](./column/patterns/texts-matching-regex-percent.md#monthly-partition-texts-matching-regex-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of strings matching the custom regular expression pattern does not fall below the minimum accepted percentage.|:material-check-bold:|
+### [texts matching regex percent](./column/patterns/texts-matching-regex-percent.md)
+A column-level that calculates the percentage of values that match the custom regex in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_email_format_found`</span>](./column/patterns/invalid-email-format-found.md#profile-invalid-email-format-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_invalid_email_format_found`</span>](./column/patterns/invalid-email-format-found.md#daily-invalid-email-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_invalid_email_format_found`</span>](./column/patterns/invalid-email-format-found.md#monthly-invalid-email-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_invalid_email_format_found`</span>](./column/patterns/invalid-email-format-found.md#daily-partition-invalid-email-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_invalid_email_format_found`</span>](./column/patterns/invalid-email-format-found.md#monthly-partition-invalid-email-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
+### [invalid email format found](./column/patterns/invalid-email-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid emails in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_not_matching_date_pattern_found`</span>](./column/patterns/text-not-matching-date-pattern-found.md#profile-text-not-matching-date-pattern-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_text_not_matching_date_pattern_found`</span>](./column/patterns/text-not-matching-date-pattern-found.md#daily-text-not-matching-date-pattern-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_text_not_matching_date_pattern_found`</span>](./column/patterns/text-not-matching-date-pattern-found.md#monthly-text-not-matching-date-pattern-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_partition_text_not_matching_date_pattern_found`</span>](./column/patterns/text-not-matching-date-pattern-found.md#daily-partition-text-not-matching-date-pattern-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_partition_text_not_matching_date_pattern_found`</span>](./column/patterns/text-not-matching-date-pattern-found.md#monthly-partition-text-not-matching-date-pattern-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of texts not matching the date format regular expression does not exceed the maximum accepted count.| |
+### [text not matching date pattern found](./column/patterns/text-not-matching-date-pattern-found.md)
+A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_matching_date_pattern_percent`</span>](./column/patterns/text-matching-date-pattern-percent.md#profile-text-matching-date-pattern-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_text_matching_date_pattern_percent`</span>](./column/patterns/text-matching-date-pattern-percent.md#daily-text-matching-date-pattern-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_text_matching_date_pattern_percent`</span>](./column/patterns/text-matching-date-pattern-percent.md#monthly-text-matching-date-pattern-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_partition_text_matching_date_pattern_percent`</span>](./column/patterns/text-matching-date-pattern-percent.md#daily-partition-text-matching-date-pattern-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_partition_text_matching_date_pattern_percent`</span>](./column/patterns/text-matching-date-pattern-percent.md#monthly-partition-text-matching-date-pattern-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
+### [text matching date pattern percent](./column/patterns/text-matching-date-pattern-percent.md)
+A column-level check that calculates the percentage of values that match the date regex in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_matching_name_pattern_percent`</span>](./column/patterns/text-matching-name-pattern-percent.md#profile-text-matching-name-pattern-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_text_matching_name_pattern_percent`</span>](./column/patterns/text-matching-name-pattern-percent.md#daily-text-matching-name-pattern-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_text_matching_name_pattern_percent`</span>](./column/patterns/text-matching-name-pattern-percent.md#monthly-text-matching-name-pattern-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_partition_text_matching_name_pattern_percent`</span>](./column/patterns/text-matching-name-pattern-percent.md#daily-partition-text-matching-name-pattern-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_partition_text_matching_name_pattern_percent`</span>](./column/patterns/text-matching-name-pattern-percent.md#monthly-partition-text-matching-name-pattern-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the name regular expression does not fall below the minimum accepted percentage.| |
+### [text matching name pattern percent](./column/patterns/text-matching-name-pattern-percent.md)
+A column-level that calculates the percentage of values that match the name regex in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_uuid_format_found`</span>](./column/patterns/invalid-uuid-format-found.md#profile-invalid-uuid-format-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_invalid_uuid_format_found`</span>](./column/patterns/invalid-uuid-format-found.md#daily-invalid-uuid-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_invalid_uuid_format_found`</span>](./column/patterns/invalid-uuid-format-found.md#monthly-invalid-uuid-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_partition_invalid_uuid_format_found`</span>](./column/patterns/invalid-uuid-format-found.md#daily-partition-invalid-uuid-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_partition_invalid_uuid_format_found`</span>](./column/patterns/invalid-uuid-format-found.md#monthly-partition-invalid-uuid-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
+### [invalid uuid format found](./column/patterns/invalid-uuid-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_valid_uuid_format_percent`</span>](./column/patterns/valid-uuid-format-percent.md#profile-valid-uuid-format-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_valid_uuid_format_percent`</span>](./column/patterns/valid-uuid-format-percent.md#daily-valid-uuid-format-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_valid_uuid_format_percent`</span>](./column/patterns/valid-uuid-format-percent.md#monthly-valid-uuid-format-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_partition_valid_uuid_format_percent`</span>](./column/patterns/valid-uuid-format-percent.md#daily-partition-valid-uuid-format-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`monthly_partition_valid_uuid_format_percent`</span>](./column/patterns/valid-uuid-format-percent.md#monthly-partition-valid-uuid-format-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid UUID in a text column does not fall below the minimum accepted percentage.| |
+### [valid uuid format percent](./column/patterns/valid-uuid-format-percent.md)
+A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_ip4_address_format_found`</span>](./column/patterns/invalid-ip4-address-format-found.md#profile-invalid-ip4-address-format-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_invalid_ip4_address_format_found`</span>](./column/patterns/invalid-ip4-address-format-found.md#daily-invalid-ip4-address-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_invalid_ip4_address_format_found`</span>](./column/patterns/invalid-ip4-address-format-found.md#monthly-invalid-ip4-address-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_partition_invalid_ip4_address_format_found`</span>](./column/patterns/invalid-ip4-address-format-found.md#daily-partition-invalid-ip4-address-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_partition_invalid_ip4_address_format_found`</span>](./column/patterns/invalid-ip4-address-format-found.md#monthly-partition-invalid-ip4-address-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
+### [invalid ip4 address format found](./column/patterns/invalid-ip4-address-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_invalid_ip6_address_format_found`</span>](./column/patterns/invalid-ip6-address-format-found.md#profile-invalid-ip6-address-format-found)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_invalid_ip6_address_format_found`</span>](./column/patterns/invalid-ip6-address-format-found.md#daily-invalid-ip6-address-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_invalid_ip6_address_format_found`</span>](./column/patterns/invalid-ip6-address-format-found.md#monthly-invalid-ip6-address-format-found)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`daily_partition_invalid_ip6_address_format_found`</span>](./column/patterns/invalid-ip6-address-format-found.md#daily-partition-invalid-ip6-address-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.| |
-|[<span class="no-wrap-code">`monthly_partition_invalid_ip6_address_format_found`</span>](./column/patterns/invalid-ip6-address-format-found.md#monthly-partition-invalid-ip6-address-format-found)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP6 addresses in a text column does not exceed the maximum accepted count.| |
+### [invalid ip6 address format found](./column/patterns/invalid-ip6-address-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
 
 
 
 
 
 
-### **pii**
-Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
+## column-level pii checks
+Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_contains_usa_phone_percent`</span>](./column/pii/contains-usa-phone-percent.md#profile-contains-usa-phone-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_contains_usa_phone_percent`</span>](./column/pii/contains-usa-phone-percent.md#daily-contains-usa-phone-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_contains_usa_phone_percent`</span>](./column/pii/contains-usa-phone-percent.md#monthly-contains-usa-phone-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_contains_usa_phone_percent`</span>](./column/pii/contains-usa-phone-percent.md#daily-partition-contains-usa-phone-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_contains_usa_phone_percent`</span>](./column/pii/contains-usa-phone-percent.md#monthly-partition-contains-usa-phone-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [contains usa phone percent](./column/pii/contains-usa-phone-percent.md)
+Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_contains_email_percent`</span>](./column/pii/contains-email-percent.md#profile-contains-email-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_contains_email_percent`</span>](./column/pii/contains-email-percent.md#daily-contains-email-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_contains_email_percent`</span>](./column/pii/contains-email-percent.md#monthly-contains-email-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_contains_email_percent`</span>](./column/pii/contains-email-percent.md#daily-partition-contains-email-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_contains_email_percent`</span>](./column/pii/contains-email-percent.md#monthly-partition-contains-email-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [contains email percent](./column/pii/contains-email-percent.md)
+Column check that calculates the percentage of rows that contains valid email values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_contains_usa_zipcode_percent`</span>](./column/pii/contains-usa-zipcode-percent.md#profile-contains-usa-zipcode-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_contains_usa_zipcode_percent`</span>](./column/pii/contains-usa-zipcode-percent.md#daily-contains-usa-zipcode-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_contains_usa_zipcode_percent`</span>](./column/pii/contains-usa-zipcode-percent.md#monthly-contains-usa-zipcode-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_contains_usa_zipcode_percent`</span>](./column/pii/contains-usa-zipcode-percent.md#daily-partition-contains-usa-zipcode-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_contains_usa_zipcode_percent`</span>](./column/pii/contains-usa-zipcode-percent.md#monthly-partition-contains-usa-zipcode-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [contains usa zipcode percent](./column/pii/contains-usa-zipcode-percent.md)
+Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_contains_ip4_percent`</span>](./column/pii/contains-ip4-percent.md#profile-contains-ip4-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_contains_ip4_percent`</span>](./column/pii/contains-ip4-percent.md#daily-contains-ip4-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_contains_ip4_percent`</span>](./column/pii/contains-ip4-percent.md#monthly-contains-ip4-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_contains_ip4_percent`</span>](./column/pii/contains-ip4-percent.md#daily-partition-contains-ip4-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_contains_ip4_percent`</span>](./column/pii/contains-ip4-percent.md#monthly-partition-contains-ip4-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [contains ip4 percent](./column/pii/contains-ip4-percent.md)
+Column check that calculates the percentage of rows that contains valid IP4 address values in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_contains_ip6_percent`</span>](./column/pii/contains-ip6-percent.md#profile-contains-ip6-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_contains_ip6_percent`</span>](./column/pii/contains-ip6-percent.md#daily-contains-ip6-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_contains_ip6_percent`</span>](./column/pii/contains-ip6-percent.md#monthly-contains-ip6-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_contains_ip6_percent`</span>](./column/pii/contains-ip6-percent.md#daily-partition-contains-ip6-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_contains_ip6_percent`</span>](./column/pii/contains-ip6-percent.md#monthly-partition-contains-ip6-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
+### [contains ip6 percent](./column/pii/contains-ip6-percent.md)
+Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
 
 
 
 
 
 
-### **schema**
+## column-level schema checks
 Detects schema drifts such as a column is missing or the data type has changed.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_exists`</span>](./column/schema/column-exists.md#profile-column-exists)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Checks the metadata of the monitored table and verifies if the column exists.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_column_exists`</span>](./column/schema/column-exists.md#daily-column-exists)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_column_exists`</span>](./column/schema/column-exists.md#monthly-column-exists)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Checks the metadata of the monitored table and verifies if the column exists. Stores the most recent value for each month when the data quality check was evaluated.|:material-check-bold:|
+### [column exists](./column/schema/column-exists.md)
+A column-level check that reads the metadata of the monitored table and verifies if the column still exists in the data source.
+ The data quality sensor returns a value of 1.0 when the column is found or 0.0 when the column is not found.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_column_type_changed`</span>](./column/schema/column-type-changed.md#profile-column-type-changed)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_column_type_changed`</span>](./column/schema/column-type-changed.md#daily-column-type-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last day. Stores the most recent hash for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_column_type_changed`</span>](./column/schema/column-type-changed.md#monthly-column-type-changed)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Checks the metadata of the monitored column and detects if the data type (including the length, precision, scale, nullability) has changed since the last month. Stores the most recent hash for each month when the data quality check was evaluated.|:material-check-bold:|
+### [column type changed](./column/schema/column-type-changed.md)
+A column-level check that detects if the data type of the column has changed since the last retrieval.
+ This check calculates the hash of all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
+ A data quality issue will be detected if the hash of the column&#x27;s data types has changed.
 
 
 
 
 
 
-### **text**
+## column-level text checks
 Validates that the data in a text column has a valid range, or can be parsed to other data types.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_max_length`</span>](./column/text/text-max-length.md#profile-text-max-length)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_text_max_length`</span>](./column/text/text-max-length.md#daily-text-max-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_text_max_length`</span>](./column/text/text-max-length.md#monthly-text-max-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_text_max_length`</span>](./column/text/text-max-length.md#daily-partition-text-max-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_text_max_length`</span>](./column/text/text-max-length.md#monthly-partition-text-max-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|:material-check-bold:|
+### [text max length](./column/text/text-max-length.md)
+A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_min_length`</span>](./column/text/text-min-length.md#profile-text-min-length)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the length of a text in a column does not fall below the minimum accepted length|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_text_min_length`</span>](./column/text/text-min-length.md#daily-text-min-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_text_min_length`</span>](./column/text/text-min-length.md#monthly-text-min-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_text_min_length`</span>](./column/text/text-min-length.md#daily-partition-text-min-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_text_min_length`</span>](./column/text/text-min-length.md#monthly-partition-text-min-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|:material-check-bold:|
+### [text min length](./column/text/text-min-length.md)
+A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_mean_length`</span>](./column/text/text-mean-length.md#profile-text-mean-length)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length| |
-|[<span class="no-wrap-code">`daily_text_mean_length`</span>](./column/text/text-mean-length.md#daily-text-mean-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_mean_length`</span>](./column/text/text-mean-length.md#monthly-text-mean-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_mean_length`</span>](./column/text/text-mean-length.md#daily-partition-text-mean-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_mean_length`</span>](./column/text/text-mean-length.md#monthly-partition-text-mean-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text mean length](./column/text/text-mean-length.md)
+A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_length_below_min_length`</span>](./column/text/text-length-below-min-length.md#profile-text-length-below-min-length)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of text values in the column that is below the length defined by the user as a parameter| |
-|[<span class="no-wrap-code">`daily_text_length_below_min_length`</span>](./column/text/text-length-below-min-length.md#daily-text-length-below-min-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_length_below_min_length`</span>](./column/text/text-length-below-min-length.md#monthly-text-length-below-min-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_length_below_min_length`</span>](./column/text/text-length-below-min-length.md#daily-partition-text-length-below-min-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_length_below_min_length`</span>](./column/text/text-length-below-min-length.md#monthly-partition-text-length-below-min-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text length below min length](./column/text/text-length-below-min-length.md)
+A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_length_below_min_length_percent`</span>](./column/text/text-length-below-min-length-percent.md#profile-text-length-below-min-length-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter| |
-|[<span class="no-wrap-code">`daily_text_length_below_min_length_percent`</span>](./column/text/text-length-below-min-length-percent.md#daily-text-length-below-min-length-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_length_below_min_length_percent`</span>](./column/text/text-length-below-min-length-percent.md#monthly-text-length-below-min-length-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_length_below_min_length_percent`</span>](./column/text/text-length-below-min-length-percent.md#daily-partition-text-length-below-min-length-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_length_below_min_length_percent`</span>](./column/text/text-length-below-min-length-percent.md#monthly-partition-text-length-below-min-length-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text length below min length percent](./column/text/text-length-below-min-length-percent.md)
+A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_length_above_max_length`</span>](./column/text/text-length-above-max-length.md#profile-text-length-above-max-length)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of text values in the column that is above the length defined by the user as a parameter| |
-|[<span class="no-wrap-code">`daily_text_length_above_max_length`</span>](./column/text/text-length-above-max-length.md#daily-text-length-above-max-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_length_above_max_length`</span>](./column/text/text-length-above-max-length.md#monthly-text-length-above-max-length)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_length_above_max_length`</span>](./column/text/text-length-above-max-length.md#daily-partition-text-length-above-max-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that is above the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_length_above_max_length`</span>](./column/text/text-length-above-max-length.md#monthly-partition-text-length-above-max-length)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that is above the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text length above max length](./column/text/text-length-above-max-length.md)
+A column-level check that ensures that the number of text values in the monitored column with a length above the length defined by the user as a parameter does not exceed set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_length_above_max_length_percent`</span>](./column/text/text-length-above-max-length-percent.md#profile-text-length-above-max-length-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter| |
-|[<span class="no-wrap-code">`daily_text_length_above_max_length_percent`</span>](./column/text/text-length-above-max-length-percent.md#daily-text-length-above-max-length-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_length_above_max_length_percent`</span>](./column/text/text-length-above-max-length-percent.md#monthly-text-length-above-max-length-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_length_above_max_length_percent`</span>](./column/text/text-length-above-max-length-percent.md#daily-partition-text-length-above-max-length-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_length_above_max_length_percent`</span>](./column/text/text-length-above-max-length-percent.md#monthly-partition-text-length-above-max-length-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text length above max length percent](./column/text/text-length-above-max-length-percent.md)
+A column-level check that ensures that the percentage of text values in the monitored column with a length above the length defined by the user as a parameter does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_length_in_range_percent`</span>](./column/text/text-length-in-range-percent.md#profile-text-length-in-range-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of those text values with length in the range provided by the user in the column| |
-|[<span class="no-wrap-code">`daily_text_length_in_range_percent`</span>](./column/text/text-length-in-range-percent.md#daily-text-length-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_length_in_range_percent`</span>](./column/text/text-length-in-range-percent.md#monthly-text-length-in-range-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_length_in_range_percent`</span>](./column/text/text-length-in-range-percent.md#daily-partition-text-length-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_length_in_range_percent`</span>](./column/text/text-length-in-range-percent.md#monthly-partition-text-length-in-range-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text length in range percent](./column/text/text-length-in-range-percent.md)
+Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_parsable_to_boolean_percent`</span>](./column/text/text-parsable-to-boolean-percent.md#profile-text-parsable-to-boolean-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.| |
-|[<span class="no-wrap-code">`daily_text_parsable_to_boolean_percent`</span>](./column/text/text-parsable-to-boolean-percent.md#daily-text-parsable-to-boolean-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_parsable_to_boolean_percent`</span>](./column/text/text-parsable-to-boolean-percent.md#monthly-text-parsable-to-boolean-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_parsable_to_boolean_percent`</span>](./column/text/text-parsable-to-boolean-percent.md#daily-partition-text-parsable-to-boolean-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_parsable_to_boolean_percent`</span>](./column/text/text-parsable-to-boolean-percent.md#monthly-partition-text-parsable-to-boolean-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text parsable to boolean percent](./column/text/text-parsable-to-boolean-percent.md)
+A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_parsable_to_integer_percent`</span>](./column/text/text-parsable-to-integer-percent.md#profile-text-parsable-to-integer-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_parsable_to_integer_percent`</span>](./column/text/text-parsable-to-integer-percent.md#daily-text-parsable-to-integer-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_parsable_to_integer_percent`</span>](./column/text/text-parsable-to-integer-percent.md#monthly-text-parsable-to-integer-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_parsable_to_integer_percent`</span>](./column/text/text-parsable-to-integer-percent.md#daily-partition-text-parsable-to-integer-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_parsable_to_integer_percent`</span>](./column/text/text-parsable-to-integer-percent.md#monthly-partition-text-parsable-to-integer-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text parsable to integer percent](./column/text/text-parsable-to-integer-percent.md)
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_parsable_to_float_percent`</span>](./column/text/text-parsable-to-float-percent.md#profile-text-parsable-to-float-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_parsable_to_float_percent`</span>](./column/text/text-parsable-to-float-percent.md#daily-text-parsable-to-float-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_parsable_to_float_percent`</span>](./column/text/text-parsable-to-float-percent.md#monthly-text-parsable-to-float-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_parsable_to_float_percent`</span>](./column/text/text-parsable-to-float-percent.md#daily-partition-text-parsable-to-float-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_parsable_to_float_percent`</span>](./column/text/text-parsable-to-float-percent.md#monthly-partition-text-parsable-to-float-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text parsable to float percent](./column/text/text-parsable-to-float-percent.md)
+A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_parsable_to_date_percent`</span>](./column/text/text-parsable-to-date-percent.md#profile-text-parsable-to-date-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression| |
-|[<span class="no-wrap-code">`daily_text_parsable_to_date_percent`</span>](./column/text/text-parsable-to-date-percent.md#daily-text-parsable-to-date-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_parsable_to_date_percent`</span>](./column/text/text-parsable-to-date-percent.md#monthly-text-parsable-to-date-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_parsable_to_date_percent`</span>](./column/text/text-parsable-to-date-percent.md#daily-partition-text-parsable-to-date-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_parsable_to_date_percent`</span>](./column/text/text-parsable-to-date-percent.md#monthly-partition-text-parsable-to-date-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text parsable to date percent](./column/text/text-parsable-to-date-percent.md)
+A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>](./column/text/text-surrounded-by-whitespace.md#profile-text-surrounded-by-whitespace)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table| |
-|[<span class="no-wrap-code">`daily_text_surrounded_by_whitespace`</span>](./column/text/text-surrounded-by-whitespace.md#daily-text-surrounded-by-whitespace)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace`</span>](./column/text/text-surrounded-by-whitespace.md#monthly-text-surrounded-by-whitespace)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>](./column/text/text-surrounded-by-whitespace.md#daily-partition-text-surrounded-by-whitespace)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>](./column/text/text-surrounded-by-whitespace.md#monthly-partition-text-surrounded-by-whitespace)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text surrounded by whitespace](./column/text/text-surrounded-by-whitespace.md)
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_surrounded_by_whitespace_percent`</span>](./column/text/text-surrounded-by-whitespace-percent.md#profile-text-surrounded-by-whitespace-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_surrounded_by_whitespace_percent`</span>](./column/text/text-surrounded-by-whitespace-percent.md#daily-text-surrounded-by-whitespace-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace_percent`</span>](./column/text/text-surrounded-by-whitespace-percent.md#monthly-text-surrounded-by-whitespace-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace_percent`</span>](./column/text/text-surrounded-by-whitespace-percent.md#daily-partition-text-surrounded-by-whitespace-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace_percent`</span>](./column/text/text-surrounded-by-whitespace-percent.md#monthly-partition-text-surrounded-by-whitespace-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text surrounded by whitespace percent](./column/text/text-surrounded-by-whitespace-percent.md)
+A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_valid_country_code_percent`</span>](./column/text/text-valid-country-code-percent.md#profile-text-valid-country-code-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_valid_country_code_percent`</span>](./column/text/text-valid-country-code-percent.md#daily-text-valid-country-code-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_valid_country_code_percent`</span>](./column/text/text-valid-country-code-percent.md#monthly-text-valid-country-code-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_valid_country_code_percent`</span>](./column/text/text-valid-country-code-percent.md#daily-partition-text-valid-country-code-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_valid_country_code_percent`</span>](./column/text/text-valid-country-code-percent.md#monthly-partition-text-valid-country-code-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text valid country code percent](./column/text/text-valid-country-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_valid_currency_code_percent`</span>](./column/text/text-valid-currency-code-percent.md#profile-text-valid-currency-code-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_valid_currency_code_percent`</span>](./column/text/text-valid-currency-code-percent.md#daily-text-valid-currency-code-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_valid_currency_code_percent`</span>](./column/text/text-valid-currency-code-percent.md#monthly-text-valid-currency-code-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_valid_currency_code_percent`</span>](./column/text/text-valid-currency-code-percent.md#daily-partition-text-valid-currency-code-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_valid_currency_code_percent`</span>](./column/text/text-valid-currency-code-percent.md#monthly-partition-text-valid-currency-code-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+### [text valid currency code percent](./column/text/text-valid-currency-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
 
 
 
 
 
 
-### **uniqueness**
+## column-level uniqueness checks
 Counts the number or percent of duplicate or unique values in a column.
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count`</span>](./column/uniqueness/distinct-count.md#profile-distinct-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_distinct_count`</span>](./column/uniqueness/distinct-count.md#daily-distinct-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_distinct_count`</span>](./column/uniqueness/distinct-count.md#monthly-distinct-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_distinct_count`</span>](./column/uniqueness/distinct-count.md#daily-partition-distinct-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_distinct_count`</span>](./column/uniqueness/distinct-count.md#monthly-partition-distinct-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [distinct count](./column/uniqueness/distinct-count.md)
+A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent`</span>](./column/uniqueness/distinct-percent.md#profile-distinct-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_distinct_percent`</span>](./column/uniqueness/distinct-percent.md#daily-distinct-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_distinct_percent`</span>](./column/uniqueness/distinct-percent.md#monthly-distinct-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_distinct_percent`</span>](./column/uniqueness/distinct-percent.md#daily-partition-distinct-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_distinct_percent`</span>](./column/uniqueness/distinct-percent.md#monthly-partition-distinct-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [distinct percent](./column/uniqueness/distinct-percent.md)
+A column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_duplicate_count`</span>](./column/uniqueness/duplicate-count.md#profile-duplicate-count)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_duplicate_count`</span>](./column/uniqueness/duplicate-count.md#daily-duplicate-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_duplicate_count`</span>](./column/uniqueness/duplicate-count.md#monthly-duplicate-count)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_duplicate_count`</span>](./column/uniqueness/duplicate-count.md#daily-partition-duplicate-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
-|[<span class="no-wrap-code">`monthly_partition_duplicate_count`</span>](./column/uniqueness/duplicate-count.md#monthly-partition-duplicate-count)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
+### [duplicate count](./column/uniqueness/duplicate-count.md)
+A column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_duplicate_percent`</span>](./column/uniqueness/duplicate-percent.md#profile-duplicate-percent)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.| |
-|[<span class="no-wrap-code">`daily_duplicate_percent`</span>](./column/uniqueness/duplicate-percent.md#daily-duplicate-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_duplicate_percent`</span>](./column/uniqueness/duplicate-percent.md#monthly-duplicate-percent)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of duplicate values in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_duplicate_percent`</span>](./column/uniqueness/duplicate-percent.md#daily-partition-duplicate-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_duplicate_percent`</span>](./column/uniqueness/duplicate-percent.md#monthly-partition-duplicate-percent)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percent of duplicate values in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.| |
+### [duplicate percent](./column/uniqueness/duplicate-percent.md)
+A column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count_anomaly`</span>](./column/uniqueness/distinct-count-anomaly.md#profile-distinct-count-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_distinct_count_anomaly`</span>](./column/uniqueness/distinct-count-anomaly.md#daily-distinct-count-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.|:material-check-bold:|
-|[<span class="no-wrap-code">`daily_partition_distinct_count_anomaly`</span>](./column/uniqueness/distinct-count-anomaly.md#daily-partition-distinct-count-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
+### [distinct count anomaly](./column/uniqueness/distinct-count-anomaly.md)
+A column-level check that ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent_anomaly`</span>](./column/uniqueness/distinct-percent-anomaly.md#profile-distinct-percent-anomaly)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_distinct_percent_anomaly`</span>](./column/uniqueness/distinct-percent-anomaly.md#daily-distinct-percent-anomaly)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_percent_anomaly`</span>](./column/uniqueness/distinct-percent-anomaly.md#daily-partition-distinct-percent-anomaly)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.| |
+### [distinct percent anomaly](./column/uniqueness/distinct-percent-anomaly.md)
+A column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count_change`</span>](./column/uniqueness/distinct-count-change.md#profile-distinct-count-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_distinct_count_change`</span>](./column/uniqueness/distinct-count-change.md#daily-distinct-count-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_distinct_count_change`</span>](./column/uniqueness/distinct-count-change.md#monthly-distinct-count-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_count_change`</span>](./column/uniqueness/distinct-count-change.md#daily-partition-distinct-count-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_distinct_count_change`</span>](./column/uniqueness/distinct-count-change.md#monthly-partition-distinct-count-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout.| |
+### [distinct count change](./column/uniqueness/distinct-count-change.md)
+A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count_change_1_day`</span>](./column/uniqueness/distinct-count-change-1-day.md#profile-distinct-count-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_distinct_count_change_1_day`</span>](./column/uniqueness/distinct-count-change-1-day.md#daily-distinct-count-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_count_change_1_day`</span>](./column/uniqueness/distinct-count-change-1-day.md#daily-partition-distinct-count-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+### [distinct count change 1 day](./column/uniqueness/distinct-count-change-1-day.md)
+A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count_change_7_days`</span>](./column/uniqueness/distinct-count-change-7-days.md#profile-distinct-count-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[<span class="no-wrap-code">`daily_distinct_count_change_7_days`</span>](./column/uniqueness/distinct-count-change-7-days.md#daily-distinct-count-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_count_change_7_days`</span>](./column/uniqueness/distinct-count-change-7-days.md#daily-partition-distinct-count-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last week.| |
+### [distinct count change 7 days](./column/uniqueness/distinct-count-change-7-days.md)
+A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_count_change_30_days`</span>](./column/uniqueness/distinct-count-change-30-days.md#profile-distinct-count-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[<span class="no-wrap-code">`daily_distinct_count_change_30_days`</span>](./column/uniqueness/distinct-count-change-30-days.md#daily-distinct-count-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_count_change_30_days`</span>](./column/uniqueness/distinct-count-change-30-days.md#daily-partition-distinct-count-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct count in a monitored column has changed by a fixed rate since the last readout from the last month.| |
+### [distinct count change 30 days](./column/uniqueness/distinct-count-change-30-days.md)
+A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent_change`</span>](./column/uniqueness/distinct-percent-change.md#profile-distinct-percent-change)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_distinct_percent_change`</span>](./column/uniqueness/distinct-percent-change.md#daily-distinct-percent-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_distinct_percent_change`</span>](./column/uniqueness/distinct-percent-change.md#monthly-distinct-percent-change)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_percent_change`</span>](./column/uniqueness/distinct-percent-change.md#daily-partition-distinct-percent-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_distinct_percent_change`</span>](./column/uniqueness/distinct-percent-change.md#monthly-partition-distinct-percent-change)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout.| |
+### [distinct percent change](./column/uniqueness/distinct-percent-change.md)
+A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent_change_1_day`</span>](./column/uniqueness/distinct-percent-change-1-day.md#profile-distinct-percent-change-1-day)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_distinct_percent_change_1_day`</span>](./column/uniqueness/distinct-percent-change-1-day.md#daily-distinct-percent-change-1-day)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_1_day`</span>](./column/uniqueness/distinct-percent-change-1-day.md#daily-partition-distinct-percent-change-1-day)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.| |
+### [distinct percent change 1 day](./column/uniqueness/distinct-percent-change-1-day.md)
+A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent_change_7_days`</span>](./column/uniqueness/distinct-percent-change-7-days.md#profile-distinct-percent-change-7-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[<span class="no-wrap-code">`daily_distinct_percent_change_7_days`</span>](./column/uniqueness/distinct-percent-change-7-days.md#daily-distinct-percent-change-7-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_7_days`</span>](./column/uniqueness/distinct-percent-change-7-days.md#daily-partition-distinct-percent-change-7-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last week.| |
+### [distinct percent change 7 days](./column/uniqueness/distinct-percent-change-7-days.md)
+A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
 
 
 
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_distinct_percent_change_30_days`</span>](./column/uniqueness/distinct-percent-change-30-days.md#profile-distinct-percent-change-30-days)|[profiling](../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[<span class="no-wrap-code">`daily_distinct_percent_change_30_days`</span>](./column/uniqueness/distinct-percent-change-30-days.md#daily-distinct-percent-change-30-days)|[monitoring](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.| |
-|[<span class="no-wrap-code">`daily_partition_distinct_percent_change_30_days`</span>](./column/uniqueness/distinct-percent-change-30-days.md#daily-partition-distinct-percent-change-30-days)|[partitioned](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the distinct percent in a monitored column has changed by a fixed rate since the last readout from the last month.| |
+### [distinct percent change 30 days](./column/uniqueness/distinct-percent-change-30-days.md)
+A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
 
 
 

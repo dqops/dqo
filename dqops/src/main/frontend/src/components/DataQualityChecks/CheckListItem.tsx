@@ -237,7 +237,7 @@ const CheckListItem = ({
 
   useEffect(() => {
     if (
-      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       getCheckOverview();
@@ -407,7 +407,7 @@ const CheckListItem = ({
             </Tooltip>
             }
             {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
               isDefaultEditing !== true && isAlreadyDeleted !== true && (
                 <Tooltip

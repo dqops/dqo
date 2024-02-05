@@ -37,20 +37,8 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.bigquery
   },
   {
-    label: 'Snowflake',
-    value: ProviderSensorModelProviderTypeEnum.snowflake
-  },
-  {
-    label: 'Postgresql',
-    value: ProviderSensorModelProviderTypeEnum.postgresql
-  },
-  {
-    label: 'Redshift',
-    value: ProviderSensorModelProviderTypeEnum.redshift
-  },
-  {
-    label: 'SQL Server',
-    value: ProviderSensorModelProviderTypeEnum.sqlserver
+    label: 'Databricks',
+    value: ProviderSensorModelProviderTypeEnum.databricks
   },
   {
     label: 'MySQL',
@@ -61,16 +49,28 @@ const tabs = [
     value: ProviderSensorModelProviderTypeEnum.oracle
   },
   {
-    label: 'Spark',
-    value: ProviderSensorModelProviderTypeEnum.spark
-  },
-  {
-    label: 'Databricks',
-    value: ProviderSensorModelProviderTypeEnum.databricks
+    label: 'Postgresql',
+    value: ProviderSensorModelProviderTypeEnum.postgresql
   },
   {
     label: 'Presto',
     value: ProviderSensorModelProviderTypeEnum.presto
+  },
+  {
+    label: 'Redshift',
+    value: ProviderSensorModelProviderTypeEnum.redshift
+  },
+  {
+    label: 'Snowflake',
+    value: ProviderSensorModelProviderTypeEnum.snowflake
+  },
+  {
+    label: 'Spark',
+    value: ProviderSensorModelProviderTypeEnum.spark
+  },
+  {
+    label: 'SQL Server',
+    value: ProviderSensorModelProviderTypeEnum.sqlserver
   },
   {
     label: 'Trino',
@@ -97,7 +97,7 @@ export const SensorDetail = () => {
   );
 
   useEffect(() => {
-    if (!sensorDetail && (type !== 'create' || copied === true)) {
+    if (full_sensor_name !== undefined && !sensorDetail && (type !== 'create' || copied === true)) {
       dispatch(getSensor(full_sensor_name));
     }
   }, [full_sensor_name, sensorDetail, type]);
@@ -105,11 +105,13 @@ export const SensorDetail = () => {
     if (type === 'create' && copied !== true) {
       setSensorName('');
     } else {
-      setSensorName(
-        String(full_sensor_name).split('/')[
-          String(full_sensor_name).split('/').length - 1
-        ] + '_copy'
-      );
+      if (full_sensor_name !== undefined) {
+        setSensorName(
+          String(full_sensor_name).split('/')[
+            String(full_sensor_name).split('/').length - 1
+          ] + '_copy'
+        );
+      }
     }
   }, [type, copied]);
 
@@ -267,7 +269,7 @@ export const SensorDetail = () => {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       <div className="relative">
         <SensorActionGroup
           onSave={onCreateSensor}
@@ -337,7 +339,7 @@ export const SensorDetail = () => {
         onConfirm={onDelete}
         message={`Are you sure you want to delete the sensor ${full_sensor_name}`}
       />
-    </DefinitionLayout>
+    </>
   );
 };
 

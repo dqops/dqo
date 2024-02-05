@@ -5,9 +5,12 @@ This is a list of datetime column data quality checks supported by DQOps and a b
 
 
 
-
-## **datetime**
+## column-level datetime checks
 Validates that the data in a date or time column is in the expected format and within predefined ranges.
+
+### [date values in future percent](./date-values-in-future-percent.md)
+A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -19,6 +22,10 @@ Validates that the data in a date or time column is in the expected format and w
 
 
 
+### [datetime value in range date percent](./datetime-value-in-range-date-percent.md)
+A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_datetime_value_in_range_date_percent`</span>](./datetime-value-in-range-date-percent.md#profile-datetime-value-in-range-date-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.|:material-check-bold:|
@@ -27,6 +34,12 @@ Validates that the data in a date or time column is in the expected format and w
 |[<span class="no-wrap-code">`daily_partition_datetime_value_in_range_date_percent`</span>](./datetime-value-in-range-date-percent.md#daily-partition-datetime-value-in-range-date-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_datetime_value_in_range_date_percent`</span>](./datetime-value-in-range-date-percent.md#monthly-partition-datetime-value-in-range-date-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [date match format percent](./date-match-format-percent.md)
+A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+ It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
+ The default value 100.0 (percent) verifies that all values match a given date format.
 
 
 | Data quality check name | Check type | Description | Standard |

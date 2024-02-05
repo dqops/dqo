@@ -16,6 +16,7 @@
 package com.dqops.connectors.mysql;
 
 import com.dqops.connectors.ConnectionProviderSpecificParameters;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbParametersSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -73,6 +74,14 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SslMode MySQL connection parameter.")
     private MySqlSslMode sslmode;
 
+    @CommandLine.Option(names = {"--single-store-parameters-spec"}, description = "Single Store DB parameters spec.")
+    @JsonPropertyDescription("Single Store DB parameters spec.")
+    private SingleStoreDbParametersSpec singleStoreDbParametersSpec;
+
+    @CommandLine.Option(names = {"--mysql-engine"}, description = "MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
+    @JsonPropertyDescription("MySQL engine type. Supports also a ${MYSQL_ENGINE} configuration with a custom environment variable.")
+    private MysqlEngineType mysqlEngineType;
+
     @CommandLine.Option(names = {"-M"}, description = "MySQL additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -117,7 +126,11 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * @return Physical database name.
      */
     public String getDatabase() {
-        return database;
+        if (mysqlEngineType == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
+        } else {
+            return database;
+        }
     }
 
     /**
@@ -215,6 +228,41 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the SingleStoreDbParametersSpec
+     * @return SingleStoreDbParametersSpec
+     */
+    public SingleStoreDbParametersSpec getSingleStoreDbParametersSpec() {
+        return singleStoreDbParametersSpec;
+    }
+
+    /**
+     * Sets a SingleStoreDbParametersSpec
+     * @param singleStoreDbParametersSpec SingleStoreDbParametersSpec
+     */
+    public void setSingleStoreDbParametersSpec(SingleStoreDbParametersSpec singleStoreDbParametersSpec) {
+        setDirtyIf(!Objects.equals(this.singleStoreDbParametersSpec, singleStoreDbParametersSpec));
+        this.singleStoreDbParametersSpec = singleStoreDbParametersSpec;
+    }
+
+
+    /**
+     * Returns the MySQL engine type.
+     * @return MySQL engine type.
+     */
+    public MysqlEngineType getMysqlEngineType() {
+        return mysqlEngineType;
+    }
+
+    /**
+     * Sets a MySQL engine type.
+     * @param mysqlEngineType MySQL engine type.
+     */
+    public void setMysqlEngineType(MysqlEngineType mysqlEngineType) {
+        setDirtyIf(!Objects.equals(this.mysqlEngineType, mysqlEngineType));
+        this.mysqlEngineType = mysqlEngineType;
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -248,6 +296,10 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
+
+        if (cloned.singleStoreDbParametersSpec != null) {
+            cloned.singleStoreDbParametersSpec = cloned.singleStoreDbParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
+        }
 
         return cloned;
     }

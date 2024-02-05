@@ -38,7 +38,8 @@ public class HistoricDataPointObjectMother {
     public static HistoricDataPoint[] fillHistoricReadouts(RuleTimeWindowSettingsSpec timeWindowSettingsSpec,
                                                            TimePeriodGradient gradient,
                                                            LocalDateTime readoutTimestamp,
-                                                           Double... values) {
+                                                           Double[] values,
+                                                           Double[] expectedValues) {
         HistoricDataPoint[] historicDataPoints = new HistoricDataPoint[timeWindowSettingsSpec.getPredictionTimeWindow()];
 
         for( int i = values.length - 1; i >= 0; i--) {
@@ -50,7 +51,8 @@ public class HistoricDataPointObjectMother {
             LocalDateTime dataPointLocalDateTime = LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                     readoutTimestamp, dataPointBackIndex, gradient);
             Instant dataPointInstant = dataPointLocalDateTime.toInstant(ZoneOffset.UTC);
-            HistoricDataPoint dataPoint = new HistoricDataPoint(dataPointInstant, dataPointLocalDateTime, dataPointBackIndex, values[i]);
+            Double expectedValue = expectedValues != null ? expectedValues[i] : null;
+            HistoricDataPoint dataPoint = new HistoricDataPoint(dataPointInstant, dataPointLocalDateTime, dataPointBackIndex, values[i], expectedValue);
             historicDataPoints[historicDataPoints.length - values.length + i] = dataPoint;
         }
 

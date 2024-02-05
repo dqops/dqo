@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_anomaly_profiling_checks_spec_custom_checks import (
         ColumnAnomalyProfilingChecksSpecCustomChecks,
     )
+    from ..models.column_max_anomaly_differencing_check_spec import (
+        ColumnMaxAnomalyDifferencingCheckSpec,
+    )
     from ..models.column_mean_anomaly_stationary_check_spec import (
         ColumnMeanAnomalyStationaryCheckSpec,
     )
@@ -35,6 +38,9 @@ if TYPE_CHECKING:
         ColumnMedianChange30DaysCheckSpec,
     )
     from ..models.column_median_change_check_spec import ColumnMedianChangeCheckSpec
+    from ..models.column_min_anomaly_differencing_check_spec import (
+        ColumnMinAnomalyDifferencingCheckSpec,
+    )
     from ..models.column_sum_anomaly_differencing_check_spec import (
         ColumnSumAnomalyDifferencingCheckSpec,
     )
@@ -61,6 +67,8 @@ class ColumnAnomalyProfilingChecksSpec:
         profile_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         profile_mean_anomaly (Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]):
         profile_median_anomaly (Union[Unset, ColumnMedianAnomalyStationaryCheckSpec]):
+        profile_min_anomaly (Union[Unset, ColumnMinAnomalyDifferencingCheckSpec]):
+        profile_max_anomaly (Union[Unset, ColumnMaxAnomalyDifferencingCheckSpec]):
         profile_mean_change (Union[Unset, ColumnMeanChangeCheckSpec]):
         profile_median_change (Union[Unset, ColumnMedianChangeCheckSpec]):
         profile_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
@@ -81,6 +89,8 @@ class ColumnAnomalyProfilingChecksSpec:
     profile_median_anomaly: Union[
         Unset, "ColumnMedianAnomalyStationaryCheckSpec"
     ] = UNSET
+    profile_min_anomaly: Union[Unset, "ColumnMinAnomalyDifferencingCheckSpec"] = UNSET
+    profile_max_anomaly: Union[Unset, "ColumnMaxAnomalyDifferencingCheckSpec"] = UNSET
     profile_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
     profile_median_change: Union[Unset, "ColumnMedianChangeCheckSpec"] = UNSET
     profile_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
@@ -115,6 +125,14 @@ class ColumnAnomalyProfilingChecksSpec:
         profile_median_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_median_anomaly, Unset):
             profile_median_anomaly = self.profile_median_anomaly.to_dict()
+
+        profile_min_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_min_anomaly, Unset):
+            profile_min_anomaly = self.profile_min_anomaly.to_dict()
+
+        profile_max_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_max_anomaly, Unset):
+            profile_max_anomaly = self.profile_max_anomaly.to_dict()
 
         profile_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_mean_change, Unset):
@@ -175,6 +193,10 @@ class ColumnAnomalyProfilingChecksSpec:
             field_dict["profile_mean_anomaly"] = profile_mean_anomaly
         if profile_median_anomaly is not UNSET:
             field_dict["profile_median_anomaly"] = profile_median_anomaly
+        if profile_min_anomaly is not UNSET:
+            field_dict["profile_min_anomaly"] = profile_min_anomaly
+        if profile_max_anomaly is not UNSET:
+            field_dict["profile_max_anomaly"] = profile_max_anomaly
         if profile_mean_change is not UNSET:
             field_dict["profile_mean_change"] = profile_mean_change
         if profile_median_change is not UNSET:
@@ -207,6 +229,9 @@ class ColumnAnomalyProfilingChecksSpec:
         from ..models.column_anomaly_profiling_checks_spec_custom_checks import (
             ColumnAnomalyProfilingChecksSpecCustomChecks,
         )
+        from ..models.column_max_anomaly_differencing_check_spec import (
+            ColumnMaxAnomalyDifferencingCheckSpec,
+        )
         from ..models.column_mean_anomaly_stationary_check_spec import (
             ColumnMeanAnomalyStationaryCheckSpec,
         )
@@ -233,6 +258,9 @@ class ColumnAnomalyProfilingChecksSpec:
             ColumnMedianChange30DaysCheckSpec,
         )
         from ..models.column_median_change_check_spec import ColumnMedianChangeCheckSpec
+        from ..models.column_min_anomaly_differencing_check_spec import (
+            ColumnMinAnomalyDifferencingCheckSpec,
+        )
         from ..models.column_sum_anomaly_differencing_check_spec import (
             ColumnSumAnomalyDifferencingCheckSpec,
         )
@@ -282,6 +310,24 @@ class ColumnAnomalyProfilingChecksSpec:
         else:
             profile_median_anomaly = ColumnMedianAnomalyStationaryCheckSpec.from_dict(
                 _profile_median_anomaly
+            )
+
+        _profile_min_anomaly = d.pop("profile_min_anomaly", UNSET)
+        profile_min_anomaly: Union[Unset, ColumnMinAnomalyDifferencingCheckSpec]
+        if isinstance(_profile_min_anomaly, Unset):
+            profile_min_anomaly = UNSET
+        else:
+            profile_min_anomaly = ColumnMinAnomalyDifferencingCheckSpec.from_dict(
+                _profile_min_anomaly
+            )
+
+        _profile_max_anomaly = d.pop("profile_max_anomaly", UNSET)
+        profile_max_anomaly: Union[Unset, ColumnMaxAnomalyDifferencingCheckSpec]
+        if isinstance(_profile_max_anomaly, Unset):
+            profile_max_anomaly = UNSET
+        else:
+            profile_max_anomaly = ColumnMaxAnomalyDifferencingCheckSpec.from_dict(
+                _profile_max_anomaly
             )
 
         _profile_mean_change = d.pop("profile_mean_change", UNSET)
@@ -395,6 +441,8 @@ class ColumnAnomalyProfilingChecksSpec:
             profile_sum_anomaly=profile_sum_anomaly,
             profile_mean_anomaly=profile_mean_anomaly,
             profile_median_anomaly=profile_median_anomaly,
+            profile_min_anomaly=profile_min_anomaly,
+            profile_max_anomaly=profile_max_anomaly,
             profile_mean_change=profile_mean_change,
             profile_median_change=profile_median_change,
             profile_sum_change=profile_sum_change,

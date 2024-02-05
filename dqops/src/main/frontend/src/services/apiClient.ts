@@ -41,7 +41,8 @@ import {
   TableComparisonResultsApiFactory,
   DefaultsApiFactory,
   UsersApiFactory,
-  SharedCredentialsApiFactory
+  SharedCredentialsApiFactory,
+  DictionariesApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -140,3 +141,5 @@ export const SettingsApi = DefaultsApiFactory(new Configuration(), '', axios);
 export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
 
 export const SharedCredentialsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);
+
+export const DataDictionaryApiClient = DictionariesApiFactory(new Configuration(), '', axios);

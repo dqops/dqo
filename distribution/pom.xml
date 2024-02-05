@@ -11,7 +11,7 @@
 
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-distribution</artifactId>
-    <version>0.4.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.0.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<name>dqo-distribution</name>
 	<description>DQOps Data Quality Operations Center final assembly</description>
 	<packaging>pom</packaging>
@@ -19,6 +19,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<license.licenseName>apache_v2</license.licenseName>
+		<compressZip>false</compressZip>
 	</properties>
 
 	<licenses>
@@ -69,7 +70,7 @@
 								<descriptor>zip.xml</descriptor>
 							</descriptors>
 							<archiverConfig>
-								<compress>false</compress>
+								<compress>${compressZip}</compress>
 							</archiverConfig>
 						</configuration>
 					</execution>

@@ -9,3 +9,4 @@ spec:
       values with the highest count (the most popular).
     data_type: integer
     required: true
+    default_value: 10

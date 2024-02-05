@@ -5,9 +5,12 @@ This is a list of text column data quality checks supported by DQOps and a brief
 
 
 
-
-## **text**
+## column-level text checks
 Validates that the data in a text column has a valid range, or can be parsed to other data types.
+
+### [text max length](./text-max-length.md)
+A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_max_length`</span>](./text-max-length.md#daily-partition-text-max-length)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_text_max_length`</span>](./text-max-length.md#monthly-partition-text-max-length)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|:material-check-bold:|
 
+
+
+### [text min length](./text-min-length.md)
+A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +36,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text mean length](./text-mean-length.md)
+A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_mean_length`</span>](./text-mean-length.md#profile-text-mean-length)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length| |
@@ -37,6 +48,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_mean_length`</span>](./text-mean-length.md#daily-partition-text-mean-length)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_mean_length`</span>](./text-mean-length.md#monthly-partition-text-mean-length)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text length below min length](./text-length-below-min-length.md)
+A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -49,6 +64,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text length below min length percent](./text-length-below-min-length-percent.md)
+A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_length_below_min_length_percent`</span>](./text-length-below-min-length-percent.md#profile-text-length-below-min-length-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter| |
@@ -57,6 +76,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_length_below_min_length_percent`</span>](./text-length-below-min-length-percent.md#daily-partition-text-length-below-min-length-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_length_below_min_length_percent`</span>](./text-length-below-min-length-percent.md#monthly-partition-text-length-below-min-length-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text length above max length](./text-length-above-max-length.md)
+A column-level check that ensures that the number of text values in the monitored column with a length above the length defined by the user as a parameter does not exceed set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -69,6 +92,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text length above max length percent](./text-length-above-max-length-percent.md)
+A column-level check that ensures that the percentage of text values in the monitored column with a length above the length defined by the user as a parameter does not fall below set thresholds.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_length_above_max_length_percent`</span>](./text-length-above-max-length-percent.md#profile-text-length-above-max-length-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter| |
@@ -77,6 +104,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_length_above_max_length_percent`</span>](./text-length-above-max-length-percent.md#daily-partition-text-length-above-max-length-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_length_above_max_length_percent`</span>](./text-length-above-max-length-percent.md#monthly-partition-text-length-above-max-length-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text length in range percent](./text-length-in-range-percent.md)
+Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -89,6 +120,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text parsable to boolean percent](./text-parsable-to-boolean-percent.md)
+A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_parsable_to_boolean_percent`</span>](./text-parsable-to-boolean-percent.md#profile-text-parsable-to-boolean-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.| |
@@ -97,6 +132,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_parsable_to_boolean_percent`</span>](./text-parsable-to-boolean-percent.md#daily-partition-text-parsable-to-boolean-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_parsable_to_boolean_percent`</span>](./text-parsable-to-boolean-percent.md#monthly-partition-text-parsable-to-boolean-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text parsable to integer percent](./text-parsable-to-integer-percent.md)
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -109,6 +148,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text parsable to float percent](./text-parsable-to-float-percent.md)
+A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_parsable_to_float_percent`</span>](./text-parsable-to-float-percent.md#profile-text-parsable-to-float-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage| |
@@ -117,6 +160,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_parsable_to_float_percent`</span>](./text-parsable-to-float-percent.md#daily-partition-text-parsable-to-float-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_parsable_to_float_percent`</span>](./text-parsable-to-float-percent.md#monthly-partition-text-parsable-to-float-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text parsable to date percent](./text-parsable-to-date-percent.md)
+A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -129,6 +176,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text surrounded by whitespace](./text-surrounded-by-whitespace.md)
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#profile-text-surrounded-by-whitespace)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table| |
@@ -137,6 +188,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#daily-partition-text-surrounded-by-whitespace)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#monthly-partition-text-surrounded-by-whitespace)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text surrounded by whitespace percent](./text-surrounded-by-whitespace-percent.md)
+A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -149,6 +204,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 
 
 
+### [text valid country code percent](./text-valid-country-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#profile-text-valid-country-code-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage| |
@@ -157,6 +216,10 @@ Validates that the data in a text column has a valid range, or can be parsed to 
 |[<span class="no-wrap-code">`daily_partition_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#daily-partition-text-valid-country-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#monthly-partition-text-valid-country-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
+
+
+### [text valid currency code percent](./text-valid-currency-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |

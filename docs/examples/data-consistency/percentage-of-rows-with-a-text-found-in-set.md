@@ -27,7 +27,7 @@ The SQL query that will be executed use will use the following IN SQL clause:
 SELECT
       100.0 * SUM(
             CASE
-                WHEN analyzed_table.`Fjob` IN (`services`, `at_home`, `teacher`)
+                WHEN analyzed_table.`Fjob` IN ('services', 'at_home', 'teacher')
                     THEN 1
                 ELSE 0
             END

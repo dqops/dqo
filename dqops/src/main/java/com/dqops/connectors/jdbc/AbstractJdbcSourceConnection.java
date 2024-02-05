@@ -64,14 +64,14 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     public abstract HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Opens a connection before it can be used for executing any statements.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {

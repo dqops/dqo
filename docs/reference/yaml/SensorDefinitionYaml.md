@@ -100,7 +100,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`display_hint`</span>|UI control display hint.|*enum*|*textarea*<br/>| | |
 |<span class="no-wrap-code ">`required`</span>|True when the value for the parameter must be provided.|*boolean*| | | |
 |<span class="no-wrap-code ">`allowed_values`</span>|List of allowed values for a field that is of an enum type.|*List[string]*| | | |
-|<span class="no-wrap-code ">`sample_values`</span>|List of sample values. The sample values are used in the documentation or help messages.|*List[string]*| | | |
+|<span class="no-wrap-code ">`default_value`</span>|The default value for a parameter in a custom check or a custom rule.|*string*| | | |
 
 
 

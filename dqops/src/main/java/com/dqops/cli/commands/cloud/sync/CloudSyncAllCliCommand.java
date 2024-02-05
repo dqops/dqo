@@ -161,6 +161,12 @@ public class CloudSyncAllCliCommand extends BaseCommand implements ICommand {
                 return synchronizeCredentialsResult;
             }
 
+            int synchronizeDictionariesResult = this.cloudSynchronizationCliService.synchronizeRoot(
+                    DqoRoot.dictionaries, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
+            if (synchronizeDictionariesResult < 0) {
+                return synchronizeDictionariesResult;
+            }
+
             int synchronizeReadoutsResult = this.cloudSynchronizationCliService.synchronizeRoot(
                     DqoRoot.data_sensor_readouts, this.mode, this.direction, this.forceRefreshNativeTable, this.isHeadless(), true, principal);
             if (synchronizeReadoutsResult < 0) {

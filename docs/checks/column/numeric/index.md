@@ -5,9 +5,12 @@ This is a list of numeric column data quality checks supported by DQOps and a br
 
 
 
-
-## **numeric**
+## column-level numeric checks
 Validates that the data in a numeric column is in the expected format or within predefined ranges.
+
+### [number below min value](./number-below-min-value.md)
+A column-level check that ensures that the number of values in the monitored column with a value below a user-defined value as a parameter does not exceed set thresholds.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_number_below_min_value`</span>](./number-below-min-value.md#daily-partition-number-below-min-value)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_number_below_min_value`</span>](./number-below-min-value.md#monthly-partition-number-below-min-value)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [number above max value](./number-above-max-value.md)
+A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +36,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [negative values](./negative-values.md)
+A column-level check that ensures that there are no more than a set number of negative values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_negative_values`</span>](./negative-values.md#profile-negative-values)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count.|:material-check-bold:|
@@ -37,6 +48,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_negative_values`</span>](./negative-values.md#daily-partition-negative-values)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_negative_values`</span>](./negative-values.md#monthly-partition-negative-values)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [negative values percent](./negative-values-percent.md)
+A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -49,6 +64,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [number below min value percent](./number-below-min-value-percent.md)
+A column-level check that ensures that the percentage of values in the monitored column with a value below a user-defined value as a parameter does not fall below set thresholds.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_number_below_min_value_percent`</span>](./number-below-min-value-percent.md#profile-number-below-min-value-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter.| |
@@ -57,6 +76,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_number_below_min_value_percent`</span>](./number-below-min-value-percent.md#daily-partition-number-below-min-value-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_number_below_min_value_percent`</span>](./number-below-min-value-percent.md#monthly-partition-number-below-min-value-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [number above max value percent](./number-above-max-value-percent.md)
+A column-level check that ensures that the percentage of values in the monitored column with a value above a user-defined value as a parameter does not fall below set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -69,6 +92,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [number in range percent](./number-in-range-percent.md)
+A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_number_in_range_percent`</span>](./number-in-range-percent.md#profile-number-in-range-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.| |
@@ -77,6 +104,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_number_in_range_percent`</span>](./number-in-range-percent.md#daily-partition-number-in-range-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_number_in_range_percent`</span>](./number-in-range-percent.md#monthly-partition-number-in-range-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [integer in range percent](./integer-in-range-percent.md)
+A column-level check that ensures that there are no more than a set number of values from range in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -89,6 +120,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [min in range](./min-in-range.md)
+A column-level check that ensures that the minimum values are within the expected range in the monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_min_in_range`</span>](./min-in-range.md#profile-min-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the minimum value in a column is not outside the expected range.| |
@@ -97,6 +132,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_min_in_range`</span>](./min-in-range.md#daily-partition-min-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_min_in_range`</span>](./min-in-range.md#monthly-partition-min-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the minimum value in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [max in range](./max-in-range.md)
+A column-level check that ensures that the maximum values are within the expected range in the monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -109,6 +148,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [sum in range](./sum-in-range.md)
+A column-level check that ensures that the sum value in the monitored column is within the expected range.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sum_in_range`</span>](./sum-in-range.md#profile-sum-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum of all values in a column is not outside the expected range.| |
@@ -117,6 +160,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_sum_in_range`</span>](./sum-in-range.md#daily-partition-sum-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_sum_in_range`</span>](./sum-in-range.md#monthly-partition-sum-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [mean in range](./mean-in-range.md)
+A column-level check that ensures that the average (mean) value in the monitored column is within the expected range.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -129,6 +176,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [median in range](./median-in-range.md)
+A column-level check that ensures that the median value in the monitored column is within the expected range.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_median_in_range`</span>](./median-in-range.md#profile-median-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median of all values in a column is not outside the expected range.| |
@@ -137,6 +188,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_median_in_range`</span>](./median-in-range.md#daily-partition-median-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_median_in_range`</span>](./median-in-range.md#monthly-partition-median-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [percentile in range](./percentile-in-range.md)
+A column-level check that ensures that the percentile of values in a monitored columnis within the expected range.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -149,6 +204,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [percentile 10 in range](./percentile-10-in-range.md)
+A column-level check that ensures that the 10th percentile of values in the monitored column is within the expected range.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_percentile_10_in_range`</span>](./percentile-10-in-range.md#profile-percentile-10-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range.| |
@@ -157,6 +216,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_percentile_10_in_range`</span>](./percentile-10-in-range.md#daily-partition-percentile-10-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_percentile_10_in_range`</span>](./percentile-10-in-range.md#monthly-partition-percentile-10-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 10 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [percentile 25 in range](./percentile-25-in-range.md)
+A column-level check that ensures that the 25th percentile of values in the monitored column is within the expected range.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -169,6 +232,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [percentile 75 in range](./percentile-75-in-range.md)
+A column-level check that ensures that the 75th percentile of values in the monitored column is within the expected range.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_percentile_75_in_range`</span>](./percentile-75-in-range.md#profile-percentile-75-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range.| |
@@ -177,6 +244,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_percentile_75_in_range`</span>](./percentile-75-in-range.md#daily-partition-percentile-75-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_percentile_75_in_range`</span>](./percentile-75-in-range.md#monthly-partition-percentile-75-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentile 75 of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [percentile 90 in range](./percentile-90-in-range.md)
+A column-level check that ensures that the 90th percentile of values in the monitored column is within the expected range.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -189,6 +260,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [sample stddev in range](./sample-stddev-in-range.md)
+A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sample_stddev_in_range`</span>](./sample-stddev-in-range.md#profile-sample-stddev-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range.| |
@@ -197,6 +272,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_sample_stddev_in_range`</span>](./sample-stddev-in-range.md#daily-partition-sample-stddev-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_sample_stddev_in_range`</span>](./sample-stddev-in-range.md#monthly-partition-sample-stddev-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample standard deviation of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [population stddev in range](./population-stddev-in-range.md)
+A column-level check that ensures that the population standard deviationis within the expected range in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -209,6 +288,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [sample variance in range](./sample-variance-in-range.md)
+A column-level check that ensures the sample varianceis within the expected range in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sample_variance_in_range`</span>](./sample-variance-in-range.md#profile-sample-variance-in-range)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range.| |
@@ -217,6 +300,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_sample_variance_in_range`</span>](./sample-variance-in-range.md#daily-partition-sample-variance-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_sample_variance_in_range`</span>](./sample-variance-in-range.md#monthly-partition-sample-variance-in-range)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sample variance of all values in a column is not outside the expected range. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [population variance in range](./population-variance-in-range.md)
+A column-level check that ensures that the population varianceis within the expected range in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -229,6 +316,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [invalid latitude](./invalid-latitude.md)
+A column-level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_invalid_latitude`</span>](./invalid-latitude.md#profile-invalid-latitude)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.| |
@@ -237,6 +328,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_invalid_latitude`</span>](./invalid-latitude.md#daily-partition-invalid-latitude)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_invalid_latitude`</span>](./invalid-latitude.md#monthly-partition-invalid-latitude)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [valid latitude percent](./valid-latitude-percent.md)
+A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -249,6 +344,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [invalid longitude](./invalid-longitude.md)
+A column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_invalid_longitude`</span>](./invalid-longitude.md#profile-invalid-longitude)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.| |
@@ -257,6 +356,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_invalid_longitude`</span>](./invalid-longitude.md#daily-partition-invalid-longitude)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_invalid_longitude`</span>](./invalid-longitude.md#monthly-partition-invalid-longitude)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [valid longitude percent](./valid-longitude-percent.md)
+A column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -269,6 +372,10 @@ Validates that the data in a numeric column is in the expected format or within 
 
 
 
+### [non negative values](./non-negative-values.md)
+A column-level check that ensures that there are no more than a maximum number of non-negative values in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_non_negative_values`</span>](./non-negative-values.md#profile-non-negative-values)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count.| |
@@ -277,6 +384,10 @@ Validates that the data in a numeric column is in the expected format or within 
 |[<span class="no-wrap-code">`daily_partition_non_negative_values`</span>](./non-negative-values.md#daily-partition-non-negative-values)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_non_negative_values`</span>](./non-negative-values.md#monthly-partition-non-negative-values)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.| |
 
+
+
+### [non negative values percent](./non-negative-values-percent.md)
+A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |

@@ -87,7 +87,8 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             }
 
             LookerStudioKeyRequestApi lookerStudioKeyRequestApi = new LookerStudioKeyRequestApi(authenticatedClient);
-            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud());
+            String queryApiKey = lookerStudioKeyRequestApi.issueLookerStudioApiKey(userPrincipal.getDataDomainIdentity().getDataDomainCloud(),
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             synchronized (this.lock) {
                 DqoCloudApiKey decodedApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(queryApiKey);
@@ -107,7 +108,7 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
     }
 
     /**
-     * Returns a looker studio access token that could be sent to the connector to speed up setting up a connection to the quality data warehouse.
+     * Returns a looker studio access token that can be sent to the connector to speed up configuration of the connection to the quality data warehouse.
      * @param userPrincipal Calling user principal, identifies the data domain.
      * @return Looker studio access token model.
      */
@@ -126,7 +127,8 @@ public class LookerStudioUrlServiceImpl implements LookerStudioUrlService {
             apiClient.setApiKey(lookerStudioQueryApiKey);
             apiClient.getAuthentication("api_key");
             AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(apiClient);
-            TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken();
+            TenantQueryAccessTokenModel tenantQueryAccessTokenModel = accessTokenIssueApi.issueTenantDataROQueryAccessToken(
+                    userPrincipal.getDataDomainIdentity().getTenantOwner(), userPrincipal.getDataDomainIdentity().getTenantId());
 
             Instant expiresAt = Instant.now().plus(1, ChronoUnit.HOURS);
             try {

@@ -16,7 +16,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*RuleThresholdsModel*](./common.md#rulethresholdsmodel)|Model that returns the form definition and the form data to edit a single rule with all three threshold levels (low, medium, high).|
 |[*MonitoringScheduleSpec*](./common.md#monitoringschedulespec)|Monitoring job schedule specification.|
 |[*CheckRunScheduleGroup*](./common.md#checkrunschedulegroup)|The run check scheduling group (profiling, daily checks, monthly checks, etc), which identifies the configuration of a schedule (cron expression) used schedule these checks on the job scheduler.|
-|[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule could be configured.|
+|[*EffectiveScheduleLevelModel*](./common.md#effectiveschedulelevelmodel)|Enumeration of possible levels at which a schedule can be configured.|
 |[*EffectiveScheduleModel*](./common.md#effectiveschedulemodel)|Model of a configured schedule (on connection or table) or schedule override (on check). Describes the CRON expression and the time of the upcoming execution, as well as the duration until this time.|
 |[*ScheduleEnabledStatusModel*](./common.md#scheduleenabledstatusmodel)|Enumeration of possible ways a schedule can be configured.|
 |[*CommentSpec*](./common.md#commentspec)|Comment entry. Comments are added when a change was made and the change should be recorded in a persisted format.|
@@ -40,7 +40,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |------------|---------------------------------|
 |[*CheckResultsListModel*](./check_results.md#checkresultslistmodel)|Check detailed results. Returned in the context of a single data group, with a supplied list of other data groups.|
 |[*RuleSeverityLevel*](./check_results.md#ruleseveritylevel)|Rule severity levels. Matches the severity level name (warning - 1, alert - 2, fatal - 3) with a numeric level.|
-|[*CheckResultStatus*](./check_results.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.|
+|[*CheckResultStatus*](./check_results.md#checkresultstatus)|Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.|
 |[*CheckCurrentDataQualityStatusModel*](./check_results.md#checkcurrentdataqualitystatusmodel)|The most recent data quality status for a single data quality check. If data grouping is enabled, this model will return the highest data quality issue status from all data quality results for all data groups.|
 |[*ColumnCurrentDataQualityStatusModel*](./check_results.md#columncurrentdataqualitystatusmodel)|The column validity status. It is a summary of the results of the most recently executed data quality checks on the column.|
 |[*TableCurrentDataQualityStatusModel*](./check_results.md#tablecurrentdataqualitystatusmodel)|The table validity status. It is a summary of the results of the most recently executed data quality checks on the table.|
@@ -124,6 +124,14 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*SchemaRemoteModel*](./data_sources.md#schemaremotemodel)|Schema model returned from REST API. Describes a schema on the source database with established connection.|
 
 
+## dictionaries
+
+|&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
+|------------|---------------------------------|
+|[*DataDictionaryListModel*](./dictionaries.md#datadictionarylistmodel)|Data dictionary CSV file list model with the basic information about the dictionary.|
+|[*DataDictionaryModel*](./dictionaries.md#datadictionarymodel)|Data dictionary CSV full model used to create and update the dictionary file. Contains the content of the CSV file as a text field.|
+
+
 ## environment
 
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
@@ -147,7 +155,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |&nbsp;Class&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |------------|---------------------------------|
 |[*CheckResultEntryModel*](./incidents.md#checkresultentrymodel)|Detailed results for a single check. Represent one row in the check results table.|
-|[*CheckResultSortOrder*](./incidents.md#checkresultsortorder)|Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that could be sorted.|
+|[*CheckResultSortOrder*](./incidents.md#checkresultsortorder)|Enumeration of columns names on a {@link CheckResultEntryModel CheckResultEntryModel} that can be sorted.|
 |[*IncidentDailyIssuesCount*](./incidents.md#incidentdailyissuescount)|A model that stores a daily number of incidents.|
 |[*IncidentIssueHistogramModel*](./incidents.md#incidentissuehistogrammodel)|Model that returns histograms of the data quality issue occurrences related to a data quality incident. The dates in the daily histogram are using the default timezone of the DQOps server.|
 |[*IncidentStatus*](./incidents.md#incidentstatus)|Enumeration of the statuses used in the &quot;status&quot; field of the &quot;incidents&quot; table.|
@@ -190,13 +198,14 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |[*DqoJobEntryParametersModel*](./jobs.md#dqojobentryparametersmodel)|Model object returned to UI that has typed fields for each supported job parameter type.|
 |[*DqoJobHistoryEntryModel*](./jobs.md#dqojobhistoryentrymodel)|Model of a single job that was scheduled or has finished. It is stored in the job monitoring service on the history list.|
 |[*DqoJobChangeModel*](./jobs.md#dqojobchangemodel)|Describes a change to the job status or the job queue (such as a new job was added).|
-|[*FolderSynchronizationStatus*](./jobs.md#foldersynchronizationstatus)|Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.|
+|[*FolderSynchronizationStatus*](./jobs.md#foldersynchronizationstatus)|Enumeration of statuses identifying the synchronization status for each folder that can be synchronized with the DQOps cloud.|
 |[*CloudSynchronizationFoldersStatusModel*](./jobs.md#cloudsynchronizationfoldersstatusmodel)|Model that describes the current synchronization status for each folder.|
 |[*DqoJobQueueIncrementalSnapshotModel*](./jobs.md#dqojobqueueincrementalsnapshotmodel)|Job history snapshot model that returns only changes after a given change sequence.|
 |[*DqoJobQueueInitialSnapshotModel*](./jobs.md#dqojobqueueinitialsnapshotmodel)|Returns the current snapshot of running jobs.|
 |[*ImportTablesResult*](./jobs.md#importtablesresult)|Result object from the {@link ImportTablesQueueJob ImportTablesQueueJob} table import job that returns list of tables that have been imported.|
 |[*ImportTablesQueueJobResult*](./jobs.md#importtablesqueuejobresult)|Object returned from the operation that queues a &quot;import tables&quot; job. The result contains the job id that was started and optionally can also contain the result of importing tables if the operation was started with wait&#x3D;true parameter to wait for the &quot;import tables&quot; job to finish.|
 |[*RunChecksQueueJobResult*](./jobs.md#runchecksqueuejobresult)||
+|[*SpringErrorPayload*](./jobs.md#springerrorpayload)|Object mapped to the default spring error payload (key/values).|
 |[*SynchronizeMultipleFoldersQueueJobResult*](./jobs.md#synchronizemultiplefoldersqueuejobresult)|Object returned from the operation that queues a &quot;synchronize multiple folders&quot; job. The result contains the job id that was started and optionally can also contain the job finish status if the operation was started with wait&#x3D;true parameter to wait for the &quot;synchronize multiple folders&quot; job to finish.|
 
 
@@ -270,7 +279,7 @@ This is a list of the models in DQOps REST API Python client broken down by indi
 |------------|---------------------------------|
 |[*CheckType*](./table_comparisons.md#checktype)|Enumeration of data quality check types: profiling, monitoring, partitioned.|
 |[*TableComparisonGroupingColumnPairModel*](./table_comparisons.md#tablecomparisongroupingcolumnpairmodel)|Model that identifies a pair of column names used for grouping the data on both the compared table and the reference table. The groups are then matched (joined) by DQOps to compare aggregated results.|
-|[*TableComparisonConfigurationModel*](./table_comparisons.md#tablecomparisonconfigurationmodel)|Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.|
+|[*TableComparisonConfigurationModel*](./table_comparisons.md#tablecomparisonconfigurationmodel)|Model that contains the basic information about a table comparison configuration that specifies how the current table can be compared with another table that is a source of truth for comparison.|
 |[*CompareThresholdsModel*](./table_comparisons.md#comparethresholdsmodel)|Model with the custom compare threshold levels for raising data quality issues at different severity levels when the difference between the compared (tested) table and the reference table (the source of truth) exceed given thresholds as a percentage of difference between the actual value and the expected value from the reference table.|
 |[*ColumnComparisonModel*](./table_comparisons.md#columncomparisonmodel)|The column to column comparison model used to select which measures (min, max, sum, mean, null count, not nul count) are compared for this column between the compared (tested) column and the reference column from the reference table.|
 |[*TableComparisonModel*](./table_comparisons.md#tablecomparisonmodel)|Model that contains the all editable information about a table-to-table comparison defined on a compared table.|

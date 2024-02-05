@@ -21,6 +21,7 @@ import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
+import com.dqops.connectors.mysql.singlestore.SingleStoreDbSourceConnection;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -116,11 +117,30 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override
     public HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext) {
+        MysqlParametersSpec mysqlParametersSpec = this.getConnectionSpec().getMysql();
+
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.createHikariConfig(
+                    secretValueLookupContext,
+                    mysqlParametersSpec,
+                    this.getSecretValueProvider());
+        } else {
+            return createHikariConfigForMysql(secretValueLookupContext);
+        }
+    }
+
+    /**
+     * Creates a hikari connection pool config for the connection specification for mysql.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
+     * @return Hikari config.
+     */
+    private HikariConfig createHikariConfigForMysql(SecretValueLookupContext secretValueLookupContext) {
+
         HikariConfig hikariConfig = new HikariConfig();
         ConnectionSpec connectionSpec = this.getConnectionSpec();
         MysqlParametersSpec mysqlParametersSpec = connectionSpec.getMysql();
@@ -191,4 +211,18 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Creates an SQL for listing columns in the given tables.
+     * @param schemaName Schema name (bigquery dataset name).
+     * @param tableNames Table names to list.
+     * @return SQL of the INFORMATION_SCHEMA query.
+     */
+    public String buildListColumnsSql(String schemaName, List<String> tableNames) {
+        MysqlParametersSpec mysqlParametersSpec = getConnectionSpec().getMysql();
+        if (mysqlParametersSpec.getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbSourceConnection.buildListColumnsSql(getConnectionSpec(), schemaName, tableNames, this.getInformationSchemaName());
+        } else {
+            return super.buildListColumnsSql(schemaName, tableNames);
+        }
+    }
 }

@@ -9,8 +9,7 @@ spec:
   - field_name: expected_value
     display_name: expected_value
     help_text: Expected value for the actual_value returned by the sensor. It must
-      be an integer value.
+      be an integer value. The default value is 1.
     data_type: long
     required: true
-    sample_values:
-    - 1
+    default_value: 1

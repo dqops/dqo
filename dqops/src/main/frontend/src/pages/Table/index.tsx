@@ -42,7 +42,7 @@ const initTabs = [
     value: 'labels'
   },
   {
-    label: 'Data Groupings',
+    label: 'Data groupings',
     value: 'data-groupings'
   },
   {
@@ -50,7 +50,7 @@ const initTabs = [
     value: 'timestamps'
   },
   {
-    label: 'Incident Configuration',
+    label: 'Incident configuration',
     value: 'incident_configuration'
   }
 ];
@@ -235,7 +235,7 @@ const TablePage = () => {
   ]);
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="relative h-full min-h-full flex flex-col">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
           <div className="flex items-center space-x-2 max-w-full">
@@ -271,7 +271,7 @@ const TablePage = () => {
           </>
         )}
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

@@ -47,12 +47,14 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL: (defaultCheck: string) => `/definitions/default_checks/${urlencodeDecoder(defaultCheck)}`,
   INCIDENT_CONNECTION: (name: string) => `/incidents/${urlencodeDecoder(name)}`,
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${urlencodeDecoder(name)}/${year}/${month}/${urlencodeDecoder(id)}`,
-  USERS_LIST_DETAIL: () => '/definitions/users/all',
+  USERS_LIST_DETAIL: () => '/definitions/manage-users',
   USER_DETAIL: (email: string) => `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-webhooks',
   SHARED_CREDENTIALS_LIST_DETAIL: () => '/definitions/shared-credentials',
   SHARED_CREDENTIALS_DETAIL: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
+  DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionary',
+  DATA_DICTIONARY_DETAIL: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}/schema/${urlencodeDecoder(schema)}`,
@@ -72,12 +74,14 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL_VALUE: (defaultCheck: string) => `/definitions/default_checks/${urlencodeDecoder(defaultCheck)}`,
   INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${urlencodeDecoder(name)}`,
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${urlencodeDecoder(name)}/${year}/${month}/${urlencodeDecoder(id)}`,
-  USERS_LIST_DETAIL_VALUE: () => '/definitions/users/all',
+  USERS_LIST_DETAIL_VALUE: () => '/definitions/manage-users',
   USER_DETAIL_VALUE: (email: string) => `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-webhooks',
   SHARED_CREDENTIALS_LIST_DETAIL_VALUE: () => '/definitions/shared-credentials',
   SHARED_CREDENTIALS_DETAIL_VALUE: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
+  DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionary',
+  DATA_DICTIONARY_VALUE: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
 
   PATTERNS: {
     INDEX: '/',
@@ -115,11 +119,13 @@ export const ROUTES = {
     CHECK_DEFAULT_DETAIL: '/definitions/default_checks/:defaultCheck',
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
-    USERS_LIST_DETAIL: '/definitions/users/all',
+    USERS_LIST_DETAIL: '/definitions/manage-users',
     USER_DETAIL: '/definitions/user/:email',
     SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
     WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-webhooks',
     SHARED_CREDENTIALS_LIST_DETAIL: '/definitions/shared-credentials',
     SHARED_CREDENTIALS_DETAIL: '/definitions/shared-credential/:credential',
+    DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionary',
+    DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`
   }
 };

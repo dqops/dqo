@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQOps (support@dqops.com)
+@REM Copyright © 2021-2024 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
 @REM limitations under the License.
 @REM
 
-set DQO_VERSION=0.4.1
+set DQO_VERSION=1.0.1
 
 rem Configure local development environment overrides
 if exist "%~dp0set-dqo-envs.cmd" (
     call "%~dp0set-dqo-envs.cmd"
     if ERRORLEVEL 1 (
-       echo DQO cannot be started
+       echo DQOps cannot be started
        exit /b 1
     )
 )
@@ -29,7 +29,7 @@ if exist "%~dp0set-dqo-envs.cmd" (
 rem Figure out where DQO is installed
 call "%~dp0find-dqo-home.cmd"
 if ERRORLEVEL 1 (
-   echo DQO cannot be started
+   echo DQOps cannot be started
    exit /b 1
 )
 
@@ -37,7 +37,7 @@ rem Configure class paths
 call "%~dp0find-dqo-classpath.cmd"
 
 if ERRORLEVEL 1 (
-   echo DQO cannot be started
+   echo DQOps cannot be started
    exit /b 1
 )
 

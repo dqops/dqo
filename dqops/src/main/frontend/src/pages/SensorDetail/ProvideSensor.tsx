@@ -107,7 +107,7 @@ const ProvideSensor = ({
       </div>
 
 
-      <SectionWrapper className="mt-8 mb-4" title="Sensor Parameters">
+      <SectionWrapper className="mt-8 mb-4" title="Sensor parameters">
         <RuleParameters
           parameters={providerSensor?.providerSensorDefinitionSpec?.parameters}
           onChange={(parameters) => handleChange({

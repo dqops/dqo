@@ -5,6 +5,7 @@ Operations for listing imported schemas from monitored data sources. Also provid
 ___
 ## get_schema_monitoring_checks_model
 Return a UI friendly model of configurations for data quality monitoring checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_model.py) to see the source code on GitHub.
 
 
@@ -46,7 +47,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/daily/model^
@@ -54,104 +57,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_monitoring_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_monitoring_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -167,11 +76,245 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_monitoring_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_monitoring_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schema_monitoring_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_monitoring_checks_templates.py) to see the source code on GitHub.
 
 
@@ -207,7 +350,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/daily^
@@ -215,104 +360,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_monitoring_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_monitoring_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_monitoring_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_monitoring_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -322,11 +373,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_monitoring_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_monitoring_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_monitoring_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_monitoring_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_monitoring_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schema_partitioned_checks_model
 Return a UI friendly model of configurations for data quality partitioned checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_model.py) to see the source code on GitHub.
 
 
@@ -368,7 +629,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/daily/model^
@@ -376,104 +639,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_partitioned_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_model
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_partitioned_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -489,11 +658,245 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_partitioned_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_model
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_partitioned_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schema_partitioned_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_partitioned_checks_templates.py) to see the source code on GitHub.
 
 
@@ -529,7 +932,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/daily^
@@ -537,104 +942,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_partitioned_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_partitioned_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_partitioned_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
-	from dqops.client.models import CheckTarget, \
-	                                CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_partitioned_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -644,11 +955,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_partitioned_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_partitioned_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_partitioned_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_partitioned_checks_templates
+	from dqops.client.models import CheckTarget, \
+	                                CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_partitioned_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schema_profiling_checks_model
 Return a flat list of configurations for profiling checks on a schema
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_model.py) to see the source code on GitHub.
 
 
@@ -689,7 +1210,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
@@ -697,96 +1220,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_model
-	from dqops.client.models import CheckTarget
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_model
-	from dqops.client.models import CheckTarget
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_model
-	from dqops.client.models import CheckTarget
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_profiling_checks_model.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_model
-	from dqops.client.models import CheckTarget
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_profiling_checks_model.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters" : [ ],
@@ -802,11 +1239,237 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	  "configured" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_model
+	from dqops.client.models import CheckTarget
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_model
+	from dqops.client.models import CheckTarget
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_model
+	from dqops.client.models import CheckTarget
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_profiling_checks_model.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_model
+	from dqops.client.models import CheckTarget
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_profiling_checks_model.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schema_profiling_checks_templates
 Return available data quality checks on a requested schema.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schema_profiling_checks_templates.py) to see the source code on GitHub.
 
 
@@ -841,7 +1504,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling^
@@ -849,96 +1514,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_templates
-	from dqops.client.models import CheckTarget
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_profiling_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_templates
-	from dqops.client.models import CheckTarget
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_profiling_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_templates
-	from dqops.client.models import CheckTarget
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schema_profiling_checks_templates.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schema_profiling_checks_templates
-	from dqops.client.models import CheckTarget
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schema_profiling_checks_templates.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "sensor_parameters_definitions" : [ ]
@@ -948,11 +1527,213 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	  "sensor_parameters_definitions" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_templates
+	from dqops.client.models import CheckTarget
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_profiling_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_templates
+	from dqops.client.models import CheckTarget
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_profiling_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_templates
+	from dqops.client.models import CheckTarget
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schema_profiling_checks_templates.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schema_profiling_checks_templates
+	from dqops.client.models import CheckTarget
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schema_profiling_checks_templates.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_schemas
 Returns a list of schemas inside a connection
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/schemas/get_schemas.py) to see the source code on GitHub.
 
 
@@ -983,7 +1764,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas^
@@ -991,92 +1774,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schemas
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schemas.sync(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schemas
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schemas.asyncio(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schemas
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_schemas.sync(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.schemas import get_schemas
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_schemas.asyncio(
-	    'sample_connection',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "can_edit" : false,
@@ -1095,5 +1796,210 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	  "can_delete_data" : false
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schemas
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schemas.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schemas
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schemas.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schemas
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_schemas.sync(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.schemas import get_schemas
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_schemas.asyncio(
+	    'sample_connection',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 

@@ -39,6 +39,7 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private long retryBackoffMillis = 10;
     private boolean startWithoutApiKey;
     private boolean authenticateWithDqoCloud;
+    private long idleTimeoutSeconds = 30;
 
     /**
      * Returns the DQOps Cloud API Key that was configured in an environment variable or in a configuration file.
@@ -261,5 +262,21 @@ public class DqoCloudConfigurationProperties implements Cloneable {
         catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    /**
+     * Returns the timeout of idle connections to DQOps cloud that are closed.
+     * @return Idle connection timeout in seconds.
+     */
+    public long getIdleTimeoutSeconds() {
+        return idleTimeoutSeconds;
+    }
+
+    /**
+     * Sets the timeout when idle connections are closed.
+     * @param idleTimeoutSeconds Idle connections timeout.
+     */
+    public void setIdleTimeoutSeconds(long idleTimeoutSeconds) {
+        this.idleTimeoutSeconds = idleTimeoutSeconds;
     }
 }

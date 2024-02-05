@@ -20,7 +20,6 @@ import com.dqops.utils.docs.HandlebarsDocumentationUtilities;
 import com.dqops.utils.docs.files.DocumentationFolder;
 import com.dqops.utils.docs.files.DocumentationMarkdownFile;
 import com.github.jknack.handlebars.Template;
-import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
@@ -108,13 +107,12 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         }
 
         Template checkCategoryTemplate = HandlebarsDocumentationUtilities.compileTemplate("checks/check_category_index");
-        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("dqo-concepts/types-of-data-quality-checks");
+        DocumentationFolder typesOfChecksFolder = new DocumentationFolder("categories-of-data-quality-checks");
         typesOfChecksFolder.setLinkName("Categories of checks");
         typesOfChecksFolder.setDirectPath(projectRootPath.resolve("../docs")
                 .resolve(typesOfChecksFolder.getFolderName()).toAbsolutePath().normalize());
 
-        DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("dqo-concepts")
-                .getFolderByName("types-of-data-quality-checks");
+        DocumentationFolder currentTypesOfChecksFolder = currentRootFolder.getFolderByName("categories-of-data-quality-checks");
 
         DocumentationMarkdownFile newCategoryIndexFile = typesOfChecksFolder.addNestedFile("index.md");
         DocumentationMarkdownFile currentCategoryIndexFile = currentTypesOfChecksFolder.getFileByName("index.md");
@@ -123,8 +121,8 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         for (CheckCategoryDocumentationModel checkCategoryModel : checkCategoryDocumentationModels) {
             String renderedCategoryContent = HandlebarsDocumentationUtilities.renderTemplate(checkCategoryTemplate, checkCategoryModel);
             String categoryFileName =
-                    CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
-                            CheckCategoryDocumentationIndex.CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
+                    CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
+                            CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
                     "how-to-detect-" + checkCategoryModel.getCategoryName().replace('_', '-') + "-data-quality-issues.md";
             String categoryNameWithSpaces = checkCategoryModel.getCategoryName().replace('_', ' ');
             String listOfTableChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a table level";
@@ -155,17 +153,17 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                             listOfColumnChecksBeginMarker + "\n" +
                             "\n" +
                             "## What's next\n" +
-                            "- Learn how to [run data quality checks](../running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n" +
-                            "- Learn how to [configure data quality checks](../configuring-data-quality-checks-and-rules.md) and apply alerting rules\n" +
-                            "- Read the definition of [data quality dimensions](../data-quality-dimensions.md) used by DQOps\n"
+                            "- Learn how to [run data quality checks](../dqo-concepts/running-data-quality-checks.md#targeting-a-category-of-checks) filtering by a check category name\n" +
+                            "- Learn how to [configure data quality checks](../dqo-concepts/configuring-data-quality-checks-and-rules.md) and apply alerting rules\n" +
+                            "- Read the definition of [data quality dimensions](../dqo-concepts/data-quality-dimensions.md) used by DQOps\n"
                             );
                 } else {
                     newCategoryFileContent.setFileContent(oldCategoryFileContent.getFileContent());
                 }
             }
 
-            String categoryNameLink = CheckCategoryDocumentationIndex.CATEGORY_LINK_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
-                    CheckCategoryDocumentationIndex.CATEGORY_LINK_NAMES.get(checkCategoryModel.getCategoryName()) :
+            String categoryNameLink = CheckCategoryDocumentationConstants.CATEGORY_LINK_NAMES.containsKey(checkCategoryModel.getCategoryName()) ?
+                    CheckCategoryDocumentationConstants.CATEGORY_LINK_NAMES.get(checkCategoryModel.getCategoryName()) :
                     checkCategoryModel.getCategoryName().substring(0, 1).toUpperCase(Locale.ROOT) +
                     checkCategoryModel.getCategoryName().substring(1).replace('_', ' ');
             newCategoryFileContent.setLinkName(categoryNameLink);

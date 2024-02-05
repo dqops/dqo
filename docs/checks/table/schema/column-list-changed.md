@@ -19,7 +19,7 @@ Detects if new columns were added or existing columns were removed. Retrieves th
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`profile_column_list_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
@@ -121,7 +121,7 @@ Detects if new columns were added or existing columns were removed since the mos
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`daily_column_list_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 
@@ -224,7 +224,7 @@ Detects if new columns were added or existing columns were removed since the las
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_list_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
+|<span class="no-wrap-code">`monthly_column_list_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_list_unordered_hash*](../../../reference/sensors/table/schema-table-sensors.md#column-list-unordered-hash)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)| |
 
 **Command-line examples**
 

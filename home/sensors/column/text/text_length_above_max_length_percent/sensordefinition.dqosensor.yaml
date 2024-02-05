@@ -10,3 +10,4 @@ spec:
       \ not defined by user then default length is 0"
     data_type: integer
     required: true
+    default_value: 100

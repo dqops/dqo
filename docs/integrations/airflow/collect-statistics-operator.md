@@ -82,7 +82,7 @@ The status details will appear in a one line as an info level log from the opera
     'total_collected_results': 186, 
     'source_table_specs': []
   }, 
-  'status': 'succeeded'
+  'status': 'finished'
 }
 ```
 
@@ -128,7 +128,7 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **failed**: The job has failed with an execution error.
 - **queued**: The job is queued.
 - **running**: The job is now running.
-- **succeeded**: The job has finished successfully.
+- **finished**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
 
 ## What's next

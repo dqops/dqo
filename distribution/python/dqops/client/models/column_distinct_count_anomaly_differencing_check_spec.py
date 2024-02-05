@@ -6,14 +6,14 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-        AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec,
     )
-    from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
-        AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec,
     )
-    from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
-        AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
+    from ..models.anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+        AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
     )
     from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
         ColumnUniquenessDistinctCountSensorParametersSpec,
@@ -44,16 +44,16 @@ class ColumnDistinctCountAnomalyDifferencingCheckSpec:
             Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnUniquenessDistinctCountSensorParametersSpec]):
-        warning (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec]):
-        error (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec]):
-        fatal (Union[Unset, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec]):
+        warning (Union[Unset, AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec]):
+        error (Union[Unset, AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec]):
+        fatal (Union[Unset, AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -68,13 +68,13 @@ class ColumnDistinctCountAnomalyDifferencingCheckSpec:
         Unset, "ColumnUniquenessDistinctCountSensorParametersSpec"
     ] = UNSET
     warning: Union[
-        Unset, "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        Unset, "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
     ] = UNSET
     error: Union[
-        Unset, "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        Unset, "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
     ] = UNSET
     fatal: Union[
-        Unset, "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        Unset, "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -145,14 +145,14 @@ class ColumnDistinctCountAnomalyDifferencingCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-            AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec,
         )
-        from ..models.anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
-            AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec,
         )
-        from ..models.anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
-            AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
+        from ..models.anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+            AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
         )
         from ..models.column_uniqueness_distinct_count_sensor_parameters_spec import (
             ColumnUniquenessDistinctCountSensorParametersSpec,
@@ -198,36 +198,37 @@ class ColumnDistinctCountAnomalyDifferencingCheckSpec:
 
         _warning = d.pop("warning", UNSET)
         warning: Union[
-            Unset, AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec
+            Unset,
+            AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
         ]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = (
-                AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec.from_dict(
-                    _warning
-                )
+            warning = AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec.from_dict(
+                _warning
             )
 
         _error = d.pop("error", UNSET)
         error: Union[
-            Unset, AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec
+            Unset,
+            AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec,
         ]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec.from_dict(
+            error = AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec.from_dict(
                 _error
             )
 
         _fatal = d.pop("fatal", UNSET)
         fatal: Union[
-            Unset, AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec
+            Unset,
+            AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec,
         ]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec.from_dict(
+            fatal = AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec.from_dict(
                 _fatal
             )
 

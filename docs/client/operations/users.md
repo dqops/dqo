@@ -5,6 +5,7 @@ Operations for managing access for DQOps users in a multi-user installations. Us
 ___
 ## change_caller_password
 Changes the password of the calling user. When the user is identified by the DQOps local API key, it is the user whose email is stored in the DQOps API Key.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_caller_password.py) to see the source code on GitHub.
 
 
@@ -28,7 +29,9 @@ http://localhost:8888/api/mypassword
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/mypassword^
@@ -39,12 +42,15 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -58,13 +64,16 @@ http://localhost:8888/api/mypassword
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -79,12 +88,15 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -102,12 +114,15 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_caller_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -125,13 +140,14 @@ http://localhost:8888/api/mypassword
 	
     ```
 
-
+    
 
 
 
 ___
 ## change_user_password
 Changes the password of a user identified by the email.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/change_user_password.py) to see the source code on GitHub.
 
 
@@ -162,7 +178,9 @@ http://localhost:8888/api/users/{email}/password
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password^
@@ -173,12 +191,15 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -193,13 +214,16 @@ http://localhost:8888/api/users/{email}/password
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -215,12 +239,15 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -239,12 +266,15 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import change_user_password
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -263,13 +293,14 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
-
+    
 
 
 
 ___
 ## create_user
 Creates (adds) a new user to a multi-user account.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/create_user.py) to see the source code on GitHub.
 
 
@@ -293,7 +324,9 @@ http://localhost:8888/api/users
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/users^
@@ -304,7 +337,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -327,8 +364,12 @@ http://localhost:8888/api/users
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -352,7 +393,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -379,7 +424,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -406,13 +455,14 @@ http://localhost:8888/api/users
 	
     ```
 
-
+    
 
 
 
 ___
 ## delete_user
 Deletes a user from a multi-user account.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/delete_user.py) to see the source code on GitHub.
 
 
@@ -436,7 +486,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com^
@@ -444,12 +496,15 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -461,13 +516,16 @@ http://localhost:8888/api/users/{email}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	dqops_client = client.Client(
 	    'http://localhost:8888/'
@@ -480,12 +538,15 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -501,12 +562,15 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
 	from dqops.client.api.users import delete_user
-	
 	
 	token = 's4mp13_4u7h_70k3n'
 	
@@ -522,13 +586,14 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-
+    
 
 
 
 ___
 ## get_all_users
 Returns a list of all users.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_all_users.py) to see the source code on GitHub.
 
 
@@ -552,7 +617,9 @@ http://localhost:8888/api/users
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/users^
@@ -560,88 +627,10 @@ http://localhost:8888/api/users
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_all_users
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_all_users.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_all_users
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_all_users.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_all_users
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_all_users.sync(
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_all_users
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_all_users.asyncio(
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "email" : "sample_user@mail.com",
@@ -654,11 +643,189 @@ http://localhost:8888/api/users
 	  "accountRole" : "operator"
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_all_users
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_all_users.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_all_users
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_all_users.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_all_users
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_all_users.sync(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_all_users
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_all_users.asyncio(
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_user
 Returns the user model that describes the role of a user identified by an email
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/get_user.py) to see the source code on GitHub.
 
 
@@ -689,7 +856,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/users/sample_user@mail.com^
@@ -697,103 +866,163 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_user
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_user.sync(
-	    'sample_user@mail.com',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_user
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_user.asyncio(
-	    'sample_user@mail.com',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_user
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_user.sync(
-	    'sample_user@mail.com',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.users import get_user
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_user.asyncio(
-	    'sample_user@mail.com',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     {
 	  "email" : "sample_user@mail.com",
 	  "accountRole" : "operator"
 	}
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_user
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_user.sync(
+	    'sample_user@mail.com',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_user
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_user.asyncio(
+	    'sample_user@mail.com',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_user
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_user.sync(
+	    'sample_user@mail.com',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.users import get_user
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_user.asyncio(
+	    'sample_user@mail.com',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
 
 
 ___
 ## update_user
 Updates a user in a multi-user account. The user&#x27;s email cannot be changed.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/users/update_user.py) to see the source code on GitHub.
 
 
@@ -824,7 +1053,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com^
@@ -835,7 +1066,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -859,8 +1094,12 @@ http://localhost:8888/api/users/{email}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -885,7 +1124,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -913,7 +1156,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -941,7 +1188,7 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-
+    
 
 
 

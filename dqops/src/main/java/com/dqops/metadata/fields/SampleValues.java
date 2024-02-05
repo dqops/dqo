@@ -29,7 +29,7 @@ import java.lang.annotation.Target;
 public @interface SampleValues {
     /**
      * Array of sample values that could be used on a field.
-     * It could be a single value or an array of values. Numeric values should be also specified as strings.
+     * It could be a single value or an array of values. Numeric values should also be specified as strings.
      * @return Array of sample values.
      */
     String[] values() default {};

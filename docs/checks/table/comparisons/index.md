@@ -5,9 +5,12 @@ This is a list of comparisons table data quality checks supported by DQOps and a
 
 
 
-
-## **comparisons**
+## table-level comparisons checks
 Compares the table (the row count, and the column count) to another table in a different data source.
+
+### [row count match](./row-count-match.md)
+Table level comparison check that compares the row count of the current (parent) table with the row count of the reference table.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Compares the table (the row count, and the column count) to another table in a d
 |[<span class="no-wrap-code">`daily_partition_row_count_match`</span>](./row-count-match.md#daily-partition-row-count-match)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table. Compares each group of data with a GROUP BY clause on the time period (the daily partition) and all other data grouping columns. Stores the most recent captured value for each daily partition that was analyzed.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_row_count_match`</span>](./row-count-match.md#monthly-partition-row-count-match)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the row count of the tested (parent) table matches the row count of the reference table, for each monthly partition (grouping rows by the time period, truncated to the month). Compares each group of data with a GROUP BY clause. Stores the most recent captured value for each monthly partition and optionally data groups.|:material-check-bold:|
 
+
+
+### [column count match](./column-count-match.md)
+Table level comparison check that compares the column count of the current (parent) table with the column count of the reference table.
 
 
 | Data quality check name | Check type | Description | Standard |

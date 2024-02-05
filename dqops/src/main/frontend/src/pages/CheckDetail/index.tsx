@@ -256,7 +256,7 @@ export const SensorDetail = () => {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       <div className="relative">
         <div className="flex space-x-4 items-center absolute right-2 top-2">
           {custom !== false && isCreating === false && (
@@ -352,7 +352,7 @@ export const SensorDetail = () => {
         onConfirm={onDeleteCheck}
         message={`Are you sure you want to delete the check ${full_check_name}`}
       />
-    </DefinitionLayout>
+    </>
   );
 };
 

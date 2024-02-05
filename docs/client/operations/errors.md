@@ -5,6 +5,7 @@ Operations that return the execution errors captured when data quality checks we
 ___
 ## get_column_monitoring_errors
 Returns errors related to the recent column level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_monitoring_errors.py) to see the source code on GitHub.
 
 
@@ -46,7 +47,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/errors^
@@ -54,108 +57,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_monitoring_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_monitoring_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_monitoring_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_monitoring_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -165,11 +70,225 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_monitoring_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_monitoring_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_monitoring_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_monitoring_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_column_partitioned_errors
 Returns the errors related to the recent column level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_partitioned_errors.py) to see the source code on GitHub.
 
 
@@ -211,7 +330,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/errors^
@@ -219,108 +340,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_partitioned_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_partitioned_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_partitioned_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_partitioned_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -330,11 +353,225 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_partitioned_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_partitioned_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_partitioned_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_partitioned_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_column_profiling_errors
 Returns the errors related to the recent check executions for all column level data quality profiling checks on a column
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_column_profiling_errors.py) to see the source code on GitHub.
 
 
@@ -375,7 +612,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/errors^
@@ -383,104 +622,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_profiling_errors
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_profiling_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_profiling_errors
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_profiling_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_profiling_errors
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_column_profiling_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_column_profiling_errors
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_column_profiling_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    'sample_column',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -490,11 +635,217 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_profiling_errors
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_profiling_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_profiling_errors
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_profiling_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_profiling_errors
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_column_profiling_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_column_profiling_errors
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_column_profiling_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    'sample_column',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_monitoring_errors
 Returns the errors related to the most recent table level monitoring executions for the monitoring at a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_monitoring_errors.py) to see the source code on GitHub.
 
 
@@ -535,7 +886,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/errors^
@@ -543,104 +896,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_monitoring_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_monitoring_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_monitoring_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -650,11 +909,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_monitoring_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_monitoring_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_monitoring_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_partitioned_errors
 Returns errors related to the recent table level partitioned checks executions for a requested time scale
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_partitioned_errors.py) to see the source code on GitHub.
 
 
@@ -695,7 +1164,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/errors^
@@ -703,104 +1174,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_partitioned_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_partitioned_errors
-	from dqops.client.models import CheckTimeScale
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_partitioned_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    CheckTimeScale.daily,
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -810,11 +1187,221 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_partitioned_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_partitioned_errors
+	from dqops.client.models import CheckTimeScale
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_partitioned_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    CheckTimeScale.daily,
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 
 ___
 ## get_table_profiling_errors
 Returns the errors related to the most recent check executions for all table level data quality profiling checks on a table
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/errors/get_table_profiling_errors.py) to see the source code on GitHub.
 
 
@@ -854,7 +1441,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/errors^
@@ -862,100 +1451,10 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-=== "Python sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_profiling_errors
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_profiling_errors
-	
-	
-	dqops_client = client.Client(
-	    'http://localhost:8888/',
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth sync client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_profiling_errors
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = get_table_profiling_errors.sync(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-=== "Python auth async client"
-
-    ```python
-    from dqops import client
-	from dqops.client.api.errors import get_table_profiling_errors
-	
-	
-	token = 's4mp13_4u7h_70k3n'
-	
-	dqops_client = client.AuthenticatedClient(
-	    'http://localhost:8888/',
-	    token=token,
-	    raise_on_unexpected_status=True
-	)
-	
-	call_result = await get_table_profiling_errors.asyncio(
-	    'sample_connection',
-	    'sample_schema',
-	    'sample_table',
-	    client=dqops_client
-	)
-	
-    ```
-
-
-
-
-??? "Return value sample"
+    
+    ### **Return value sample**
+    
+    
     ```js
     [ {
 	  "errorEntries" : [ ]
@@ -965,5 +1464,206 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	  "errorEntries" : [ ]
 	} ]
     ```
+    
+    
+
+
+=== "Python sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_profiling_errors
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_profiling_errors
+	
+	dqops_client = client.Client(
+	    'http://localhost:8888/',
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth sync client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_profiling_errors
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = get_table_profiling_errors.sync(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
+=== "Python auth async client"
+    ### **Execution**
+
+    ```python
+    from dqops import client
+	from dqops.client.api.errors import get_table_profiling_errors
+	
+	token = 's4mp13_4u7h_70k3n'
+	
+	dqops_client = client.AuthenticatedClient(
+	    'http://localhost:8888/',
+	    token=token,
+	    raise_on_unexpected_status=True
+	)
+	
+	call_result = await get_table_profiling_errors.asyncio(
+	    'sample_connection',
+	    'sample_schema',
+	    'sample_table',
+	    client=dqops_client
+	)
+	
+    ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		),
+		ErrorsListModel(
+			error_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 

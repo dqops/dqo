@@ -47,7 +47,7 @@ the [DQOps user home](../../dqo-concepts/dqops-user-home-folder.md) folder.
 | [Table schema](../../reference/yaml/TableYaml.md)                                           | *sources/&lt;connection&gt;/\*.dqotable.yaml*              | [https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json)                                           |
 | [Custom dashboard list](../../reference/yaml/DashboardYaml.md)                              | *settings/dashboardslist.dqodashboards.yaml*               | [https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/DashboardYaml-schema.json)                                   |
 | [Default notification webhooks](../../reference/yaml/DefaultNotificationsYaml.md)           | *settings/defaultnotifications.dqonotifications.yaml*      | [https://cloud.dqops.com/dqo-yaml-schema/DefaultNotificationsYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/DefaultNotificationsYaml-schema.json)             |
-| [Default data observability checks](../../reference/yaml/DefaultObservabilityChecksYaml.md) | *settings/defaultchecks.dqochecks.yaml*                    | [https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json) |
+| [Default data observability checks](../../reference/yaml/DefaultObservabilityChecksYaml.md) | *settings/default.dqodefaultchecks.yaml*                    | [https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/DefaultObservabilityChecksYaml-schema.json) |
 | [Default CRON schedules](../../reference/yaml/DefaultSchedulesYaml.md)                      | *settings/defaultschedules.dqoschedules.yaml*              | [https://cloud.dqops.com/dqo-yaml-schema/DefaultSchedulesYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/DefaultSchedulesYaml-schema.json)                     |
 | [Local settings](../../reference/yaml/LocalSettingsYaml.md)                                 | *.localsettings.dqosettings.yaml*                          | [https://cloud.dqops.com/dqo-yaml-schema/LocalSettingsYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/LocalSettingsYaml-schema.json)                           |
 | [Sensor definition](../../reference/yaml/SensorDefinitionYaml.md)                           | *sensors/\*\*/\*.dqosensor.yaml*                           | [https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json](https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json)                     |
@@ -158,7 +158,7 @@ The following elements are supported, not including the data quality issue thres
   checks have parameters and the node does not need to be configured.
 - `quality_dimension` is a text field used to override the default value of the [data quality dimension](../../dqo-concepts/data-quality-dimensions.md)
   stored in the parquet tables. Changing the default data quality dimension name allows to report some issues under a different dimension.
-- `schedule_override` is a configuration of the CRON schedule for a single data quality check. The check could be configured
+- `schedule_override` is a configuration of the CRON schedule for a single data quality check. The check can be configured
   to run using its own schedule, more or less frequently than the default scheduling configuration at the table or connection levels. 
 
 

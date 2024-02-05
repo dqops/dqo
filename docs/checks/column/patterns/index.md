@@ -5,9 +5,12 @@ This is a list of patterns column data quality checks supported by DQOps and a b
 
 
 
-
-## **patterns**
+## column-level patterns checks
 Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.
+
+### [text not matching regex found](./text-not-matching-regex-found.md)
+A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Validates if a text column matches predefined patterns (such as an email address
 |[<span class="no-wrap-code">`daily_partition_text_not_matching_regex_found`</span>](./text-not-matching-regex-found.md#daily-partition-text-not-matching-regex-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_text_not_matching_regex_found`</span>](./text-not-matching-regex-found.md#monthly-partition-text-not-matching-regex-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of text values not matching the custom regular expression pattern does not exceed the maximum accepted count.|:material-check-bold:|
 
+
+
+### [texts matching regex percent](./texts-matching-regex-percent.md)
+A column-level that calculates the percentage of values that match the custom regex in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -29,6 +36,10 @@ Validates if a text column matches predefined patterns (such as an email address
 
 
 
+### [invalid email format found](./invalid-email-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid emails in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_invalid_email_format_found`</span>](./invalid-email-format-found.md#profile-invalid-email-format-found)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
@@ -37,6 +48,10 @@ Validates if a text column matches predefined patterns (such as an email address
 |[<span class="no-wrap-code">`daily_partition_invalid_email_format_found`</span>](./invalid-email-format-found.md#daily-partition-invalid-email-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_invalid_email_format_found`</span>](./invalid-email-format-found.md#monthly-partition-invalid-email-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid emails in a text column does not exceed the maximum accepted count.|:material-check-bold:|
 
+
+
+### [text not matching date pattern found](./text-not-matching-date-pattern-found.md)
+A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -49,6 +64,10 @@ Validates if a text column matches predefined patterns (such as an email address
 
 
 
+### [text matching date pattern percent](./text-matching-date-pattern-percent.md)
+A column-level check that calculates the percentage of values that match the date regex in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_text_matching_date_pattern_percent`</span>](./text-matching-date-pattern-percent.md#profile-text-matching-date-pattern-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
@@ -57,6 +76,10 @@ Validates if a text column matches predefined patterns (such as an email address
 |[<span class="no-wrap-code">`daily_partition_text_matching_date_pattern_percent`</span>](./text-matching-date-pattern-percent.md#daily-partition-text-matching-date-pattern-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
 |[<span class="no-wrap-code">`monthly_partition_text_matching_date_pattern_percent`</span>](./text-matching-date-pattern-percent.md#monthly-partition-text-matching-date-pattern-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of texts matching the date format regular expression in a column does not fall below the minimum accepted percentage.| |
 
+
+
+### [text matching name pattern percent](./text-matching-name-pattern-percent.md)
+A column-level that calculates the percentage of values that match the name regex in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -69,6 +92,10 @@ Validates if a text column matches predefined patterns (such as an email address
 
 
 
+### [invalid uuid format found](./invalid-uuid-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_invalid_uuid_format_found`</span>](./invalid-uuid-format-found.md#profile-invalid-uuid-format-found)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
@@ -77,6 +104,10 @@ Validates if a text column matches predefined patterns (such as an email address
 |[<span class="no-wrap-code">`daily_partition_invalid_uuid_format_found`</span>](./invalid-uuid-format-found.md#daily-partition-invalid-uuid-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
 |[<span class="no-wrap-code">`monthly_partition_invalid_uuid_format_found`</span>](./invalid-uuid-format-found.md#monthly-partition-invalid-uuid-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid UUIDs in a text column does not exceed the maximum accepted count.| |
 
+
+
+### [valid uuid format percent](./valid-uuid-format-percent.md)
+A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -89,6 +120,10 @@ Validates if a text column matches predefined patterns (such as an email address
 
 
 
+### [invalid ip4 address format found](./invalid-ip4-address-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
+
+
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_invalid_ip4_address_format_found`</span>](./invalid-ip4-address-format-found.md#profile-invalid-ip4-address-format-found)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
@@ -97,6 +132,10 @@ Validates if a text column matches predefined patterns (such as an email address
 |[<span class="no-wrap-code">`daily_partition_invalid_ip4_address_format_found`</span>](./invalid-ip4-address-format-found.md#daily-partition-invalid-ip4-address-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
 |[<span class="no-wrap-code">`monthly_partition_invalid_ip4_address_format_found`</span>](./invalid-ip4-address-format-found.md#monthly-partition-invalid-ip4-address-format-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of invalid IP4 addresses in a text column does not exceed the maximum accepted count.| |
 
+
+
+### [invalid ip6 address format found](./invalid-ip6-address-format-found.md)
+A column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
 
 
 | Data quality check name | Check type | Description | Standard |

@@ -6,18 +6,18 @@
 
 {%- macro actual_value() -%}
     {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
-    {#- Two approaches could be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
+    {#- Two approaches can be taken here. What if COUNT(*) = 0 AND value set is empty? This solution is the most convenient. -#}
     CAST(0.0 AS DOUBLE)
     {%- else -%}
     CASE
-        WHEN COUNT(*) = 0 THEN 100.0
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE CAST(100.0 * SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                     THEN 1
                 ELSE 0
             END
-        ) AS DOUBLE) / COUNT(*)
+        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END
     {%- endif -%}
 {% endmacro -%}

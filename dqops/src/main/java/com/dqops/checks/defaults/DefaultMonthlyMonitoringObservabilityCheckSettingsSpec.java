@@ -116,21 +116,4 @@ public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends Abst
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
-
-    /**
-     * Applies the checks on a target table.
-     * @param targetTable Target table.
-     * @param dialectSettings Dialect settings, to decide if the checks are applicable.
-     */
-    public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
-        if (this.table != null && !this.table.isDefault()) {
-            this.table.applyOnTable(targetTable, dialectSettings);
-        }
-
-        if (this.column != null && !this.column.isDefault()) {
-            for (ColumnSpec columnSpec : targetTable.getColumns().values()) {
-                this.column.applyOnColumn(columnSpec, dialectSettings);
-            }
-        }
-    }
 }

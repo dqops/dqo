@@ -5,9 +5,12 @@ This is a list of integrity column data quality checks supported by DQOps and a 
 
 
 
-
-## **integrity**
+## column-level integrity checks
 Checks the referential integrity of a column against a column in another table.
+
+### [lookup key not found](./lookup-key-not-found.md)
+A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Checks the referential integrity of a column against a column in another table.
 |[<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>](./lookup-key-not-found.md#daily-partition-lookup-key-not-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>](./lookup-key-not-found.md#monthly-partition-lookup-key-not-found)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [lookup key found percent](./lookup-key-found-percent.md)
+A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
 
 
 | Data quality check name | Check type | Description | Standard |

@@ -1,0 +1,4 @@
+{% import '/dialects/trino.sql.jinja2' as lib with context -%}
+{{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                        | replace('{schema_name}', target_table.schema_name)
+                        | replace('{column_name}', column_name) }}

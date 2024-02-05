@@ -91,9 +91,9 @@ const ColumnStatisticsView = ({columnStatisticsProp, tableStatisticsProp} : TCol
       "Top most common values": Array(0)
     };
     const table_statistics_array : TStatistics[] = []
-    if(fetchedColumnsStatistics.statistics && fetchedColumnsStatistics?.statistics.length > 0) {
+    if(fetchedColumnsStatistics.statistics) {
       fetchedColumnsStatistics.statistics?.flatMap((item: StatisticsMetricModel) => {
-        if (item.collector !== "string_datatype_detect") {
+        if (item.collector !== "text_datatype_detect") {
           const key = Object.keys(column_statistics_dictionary).find((x) => x.toLowerCase() === String(item.category))
           if (key) {
               if(column_statistics_dictionary[key].find((y) => y.type?.toLowerCase().replace(/\s/g, "_") === item.collector)){

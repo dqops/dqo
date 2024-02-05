@@ -9,6 +9,9 @@ if TYPE_CHECKING:
     from ..models.column_anomaly_daily_monitoring_checks_spec_custom_checks import (
         ColumnAnomalyDailyMonitoringChecksSpecCustomChecks,
     )
+    from ..models.column_max_anomaly_differencing_check_spec import (
+        ColumnMaxAnomalyDifferencingCheckSpec,
+    )
     from ..models.column_mean_anomaly_stationary_check_spec import (
         ColumnMeanAnomalyStationaryCheckSpec,
     )
@@ -35,6 +38,9 @@ if TYPE_CHECKING:
         ColumnMedianChange30DaysCheckSpec,
     )
     from ..models.column_median_change_check_spec import ColumnMedianChangeCheckSpec
+    from ..models.column_min_anomaly_differencing_check_spec import (
+        ColumnMinAnomalyDifferencingCheckSpec,
+    )
     from ..models.column_sum_anomaly_differencing_check_spec import (
         ColumnSumAnomalyDifferencingCheckSpec,
     )
@@ -61,6 +67,8 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         daily_sum_anomaly (Union[Unset, ColumnSumAnomalyDifferencingCheckSpec]):
         daily_mean_anomaly (Union[Unset, ColumnMeanAnomalyStationaryCheckSpec]):
         daily_median_anomaly (Union[Unset, ColumnMedianAnomalyStationaryCheckSpec]):
+        daily_min_anomaly (Union[Unset, ColumnMinAnomalyDifferencingCheckSpec]):
+        daily_max_anomaly (Union[Unset, ColumnMaxAnomalyDifferencingCheckSpec]):
         daily_mean_change (Union[Unset, ColumnMeanChangeCheckSpec]):
         daily_median_change (Union[Unset, ColumnMedianChangeCheckSpec]):
         daily_sum_change (Union[Unset, ColumnSumChangeCheckSpec]):
@@ -81,6 +89,8 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
     daily_sum_anomaly: Union[Unset, "ColumnSumAnomalyDifferencingCheckSpec"] = UNSET
     daily_mean_anomaly: Union[Unset, "ColumnMeanAnomalyStationaryCheckSpec"] = UNSET
     daily_median_anomaly: Union[Unset, "ColumnMedianAnomalyStationaryCheckSpec"] = UNSET
+    daily_min_anomaly: Union[Unset, "ColumnMinAnomalyDifferencingCheckSpec"] = UNSET
+    daily_max_anomaly: Union[Unset, "ColumnMaxAnomalyDifferencingCheckSpec"] = UNSET
     daily_mean_change: Union[Unset, "ColumnMeanChangeCheckSpec"] = UNSET
     daily_median_change: Union[Unset, "ColumnMedianChangeCheckSpec"] = UNSET
     daily_sum_change: Union[Unset, "ColumnSumChangeCheckSpec"] = UNSET
@@ -113,6 +123,14 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         daily_median_anomaly: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_median_anomaly, Unset):
             daily_median_anomaly = self.daily_median_anomaly.to_dict()
+
+        daily_min_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_min_anomaly, Unset):
+            daily_min_anomaly = self.daily_min_anomaly.to_dict()
+
+        daily_max_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_max_anomaly, Unset):
+            daily_max_anomaly = self.daily_max_anomaly.to_dict()
 
         daily_mean_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_mean_change, Unset):
@@ -173,6 +191,10 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
             field_dict["daily_mean_anomaly"] = daily_mean_anomaly
         if daily_median_anomaly is not UNSET:
             field_dict["daily_median_anomaly"] = daily_median_anomaly
+        if daily_min_anomaly is not UNSET:
+            field_dict["daily_min_anomaly"] = daily_min_anomaly
+        if daily_max_anomaly is not UNSET:
+            field_dict["daily_max_anomaly"] = daily_max_anomaly
         if daily_mean_change is not UNSET:
             field_dict["daily_mean_change"] = daily_mean_change
         if daily_median_change is not UNSET:
@@ -205,6 +227,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         from ..models.column_anomaly_daily_monitoring_checks_spec_custom_checks import (
             ColumnAnomalyDailyMonitoringChecksSpecCustomChecks,
         )
+        from ..models.column_max_anomaly_differencing_check_spec import (
+            ColumnMaxAnomalyDifferencingCheckSpec,
+        )
         from ..models.column_mean_anomaly_stationary_check_spec import (
             ColumnMeanAnomalyStationaryCheckSpec,
         )
@@ -231,6 +256,9 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
             ColumnMedianChange30DaysCheckSpec,
         )
         from ..models.column_median_change_check_spec import ColumnMedianChangeCheckSpec
+        from ..models.column_min_anomaly_differencing_check_spec import (
+            ColumnMinAnomalyDifferencingCheckSpec,
+        )
         from ..models.column_sum_anomaly_differencing_check_spec import (
             ColumnSumAnomalyDifferencingCheckSpec,
         )
@@ -282,6 +310,24 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
         else:
             daily_median_anomaly = ColumnMedianAnomalyStationaryCheckSpec.from_dict(
                 _daily_median_anomaly
+            )
+
+        _daily_min_anomaly = d.pop("daily_min_anomaly", UNSET)
+        daily_min_anomaly: Union[Unset, ColumnMinAnomalyDifferencingCheckSpec]
+        if isinstance(_daily_min_anomaly, Unset):
+            daily_min_anomaly = UNSET
+        else:
+            daily_min_anomaly = ColumnMinAnomalyDifferencingCheckSpec.from_dict(
+                _daily_min_anomaly
+            )
+
+        _daily_max_anomaly = d.pop("daily_max_anomaly", UNSET)
+        daily_max_anomaly: Union[Unset, ColumnMaxAnomalyDifferencingCheckSpec]
+        if isinstance(_daily_max_anomaly, Unset):
+            daily_max_anomaly = UNSET
+        else:
+            daily_max_anomaly = ColumnMaxAnomalyDifferencingCheckSpec.from_dict(
+                _daily_max_anomaly
             )
 
         _daily_mean_change = d.pop("daily_mean_change", UNSET)
@@ -393,6 +439,8 @@ class ColumnAnomalyDailyMonitoringChecksSpec:
             daily_sum_anomaly=daily_sum_anomaly,
             daily_mean_anomaly=daily_mean_anomaly,
             daily_median_anomaly=daily_median_anomaly,
+            daily_min_anomaly=daily_min_anomaly,
+            daily_max_anomaly=daily_max_anomaly,
             daily_mean_change=daily_mean_change,
             daily_median_change=daily_median_change,
             daily_sum_change=daily_sum_change,

@@ -27,7 +27,7 @@ public enum DqoJobCompletionStatus {
     /**
      * The job has finishes successfully.
      */
-    SUCCEEDED,
+    FINISHED,
 
     /**
      * The job failed with an exception.
@@ -46,8 +46,8 @@ public enum DqoJobCompletionStatus {
      */
     public DqoJobStatus toJobStatus() {
         switch (this) {
-            case SUCCEEDED:
-                return DqoJobStatus.succeeded;
+            case FINISHED:
+                return DqoJobStatus.finished;
             case FAILED:
                 return DqoJobStatus.failed;
             case CANCELLED:

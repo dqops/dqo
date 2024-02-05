@@ -60,15 +60,13 @@ class AzureCredentialsProviderTest extends BaseTest {
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
 
-        if (!Files.exists(defaultAwsCredentialsPath)) {
-            Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
+        Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
-            String credentialFileContent = DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT
-                    .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_OR_CLIENT_ID", "my_username")
-                    .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_PASSWORD_OR_CLIENT_SECRET", "my_password");
+        String credentialFileContent = DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_OR_CLIENT_ID", "my_username")
+                .replace("PLEASE_REPLACE_WITH_YOUR_AZURE_USER_PASSWORD_OR_CLIENT_SECRET", "my_password");
 
-            Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
-        }
+        Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
 
         Optional<AzureCredential> azureCredential = this.sut.provideCredentials(secretValueLookupContext);
 

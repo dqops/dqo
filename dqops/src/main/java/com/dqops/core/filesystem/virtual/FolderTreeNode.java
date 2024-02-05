@@ -100,7 +100,7 @@ public class FolderTreeNode implements Cloneable {
      * List all folders and deeply nested subfolders (at any depth) that contain any file with a given file extension.
      * Every folder (also deeply nested) that has at least one file whose name ends with the fileNameExtension is returned.
      * @param fileNameExtension File extension pattern, should be like ".dqoconn.yaml".
-     * @param includeCurrentFolder True when the current folder should be also added to the results if it has files with a matching pattern.
+     * @param includeCurrentFolder True when the current folder should also be added to the results if it has files with a matching pattern.
      * @return List of subfolders with a file that match the file name extension.
      */
     public List<FolderTreeNode> findNestedSubFoldersWithFiles(String fileNameExtension, boolean includeCurrentFolder) {
@@ -231,19 +231,29 @@ public class FolderTreeNode implements Cloneable {
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CREDENTIALS)) {
                     return FolderKind.CREDENTIALS;
                 }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.DICTIONARIES)) {
+                    return FolderKind.DICTIONARIES;
+                }
                 return FolderKind.FOREIGN;
             case CHECKS:
+            case CHECK_SUBFOLDER:
                 return FolderKind.CHECK_SUBFOLDER;
             case SOURCES:
                 return FolderKind.SOURCE;
             case SOURCE:
+            case SOURCE_SUBFOLDER:
                 return FolderKind.SOURCE_SUBFOLDER;
             case RULES:
+            case RULES_SUBFOLDER:
                 return FolderKind.RULES_SUBFOLDER;
             case SETTINGS:
                 return FolderKind.SETTINGS_SUBFOLDER;
             case CREDENTIALS:
+            case CREDENTIALS_SUBFOLDER:
                 return FolderKind.CREDENTIALS_SUBFOLDER;
+            case DICTIONARIES:
+            case DICTIONARIES_SUBFOLDER:
+                return FolderKind.DICTIONARIES_SUBFOLDER;
             default:
                 return FolderKind.UNKNOWN;
         }

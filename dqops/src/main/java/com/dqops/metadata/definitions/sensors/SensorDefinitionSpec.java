@@ -147,7 +147,7 @@ public class SensorDefinitionSpec extends AbstractSpec implements InvalidYamlSta
     }
 
     /**
-     * Returns the default value that is used when the sensor does not return any result (no rows returned due to a GROUP BY clause on a whole table).
+     * Returns the default value that is used when the sensor does not return any result (no rows returned due to a GROUP BY clause for the entire table).
      * @return Default value to return.
      */
     public Double getDefaultValue() {

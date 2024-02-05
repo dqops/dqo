@@ -207,6 +207,7 @@ const FieldControl = ({
             handleChange({ string_list_value: value })
           }
           onSave={onSave}
+          disabled={disabled}
         />
       )}
       {field?.definition?.data_type ===
@@ -218,6 +219,7 @@ const FieldControl = ({
           onChange={(value: number[]) =>
             handleChange({ integer_list_value: value })
           }
+          disabled={disabled}
         />
       )}
       {field?.definition?.data_type ===

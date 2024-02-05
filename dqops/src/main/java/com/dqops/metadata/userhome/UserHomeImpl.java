@@ -23,6 +23,7 @@ import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionListImpl;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionListImpl;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.fileindices.FileIndexListImpl;
 import com.dqops.metadata.id.*;
@@ -46,6 +47,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("checks", o -> o.checks);
             put("settings", o -> o.settings);
             put("credentials", o -> o.credentials);
+            put("dictionaries", o -> o.dictionaries);
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
@@ -63,6 +65,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
     private CheckDefinitionListImpl checks;
     private SettingsWrapperImpl settings;
     private SharedCredentialListImpl credentials;
+    private DictionaryListImpl dictionaries;
     private FileIndexList fileIndices;
     private DashboardFolderListSpecWrapperImpl dashboards;
 
@@ -97,6 +100,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
         this.setCredentials(new SharedCredentialListImpl());
+        this.setDictionaries(new DictionaryListImpl());
         this.setFileIndices(new FileIndexListImpl());
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
@@ -114,6 +118,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param checks Collection of custom check definitions.
      * @param settings User local settings.
      * @param credentials Collection of shared credentials.
+     * @param dictionaries Collection of data dictionaries.
      * @param fileIndices File synchronization indexes.
      * @param dashboards Custom dashboards wrapper.
      * @param schedules Default monitoring schedules wrapper.
@@ -126,6 +131,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         CheckDefinitionListImpl checks,
                         SettingsWrapperImpl settings,
                         SharedCredentialListImpl credentials,
+                        DictionaryListImpl dictionaries,
                         FileIndexListImpl fileIndices,
                         DashboardFolderListSpecWrapperImpl dashboards,
                         MonitoringSchedulesWrapperImpl schedules,
@@ -138,6 +144,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setChecks(checks);
         this.setSettings(settings);
         this.setCredentials(credentials);
+        this.setDictionaries(dictionaries);
         this.setFileIndices(fileIndices);
         this.setDashboards(dashboards);
         this.setDefaultSchedules(schedules);
@@ -286,6 +293,28 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns a collection of data dictionary CSV files.
+     * @return Collection of data dictionaries.
+     */
+    @Override
+    public DictionaryListImpl getDictionaries() {
+        return dictionaries;
+    }
+
+    /**
+     * Sets a reference to the collection of data dictionaries.
+     * @param dictionaries Collection of data dictionaries.
+     */
+    public void setDictionaries(DictionaryListImpl dictionaries) {
+        this.dictionaries = dictionaries;
+        if (dictionaries != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "dictionaries");
+            dictionaries.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("dictionaries").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns a collection of file indices in the user home folder.
      * @return Collection of file indices.
      */
@@ -420,6 +449,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getChecks().flush();
         this.getSettings().flush();
         this.getCredentials().flush();
+        this.getDictionaries().flush();
         this.getFileIndices().flush();
         this.getDashboards().flush();
         this.getDefaultSchedules().flush();
@@ -642,6 +672,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
             }
             if (cloned.credentials != null) {
                 cloned.credentials = (SharedCredentialListImpl) cloned.credentials.deepClone();
+            }
+            if (cloned.dictionaries != null) {
+                cloned.dictionaries = (DictionaryListImpl) cloned.dictionaries.deepClone();
             }
             if (cloned.dashboards != null) {
                 cloned.dashboards = (DashboardFolderListSpecWrapperImpl) cloned.dashboards.deepClone();

@@ -205,7 +205,7 @@ const LeftView = () => {
       ref={sidebarRef}
       style={{ width: sidebarWidth }}
     >
-      <div className="w-full h-12 flex items-left gap-x-4 text-sm">
+      <div className="w-full h-10 flex items-left gap-x-4 text-sm">
         <Switch
           checked={showAdvanced}
           onChange={showAdvancedChanged}

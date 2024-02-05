@@ -19,7 +19,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_date_match_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -253,21 +253,27 @@ spec:
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -283,11 +289,13 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -488,7 +496,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -788,7 +796,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -965,21 +973,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -994,11 +1008,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -1211,7 +1227,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1522,7 +1538,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1540,7 +1556,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_date_match_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1775,21 +1791,27 @@ spec:
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -1805,11 +1827,13 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -2010,7 +2034,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2310,7 +2334,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2488,21 +2512,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -2517,11 +2547,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -2734,7 +2766,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3045,7 +3077,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3063,7 +3095,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_date_match_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3298,21 +3330,27 @@ spec:
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -3328,11 +3366,13 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -3533,7 +3573,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3833,7 +3873,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4011,21 +4051,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -4040,11 +4086,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -4257,7 +4305,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4568,7 +4616,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4586,7 +4634,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_date_match_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4831,21 +4879,27 @@ spec:
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -4861,11 +4915,13 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -5066,7 +5122,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5370,7 +5426,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5558,21 +5614,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -5587,11 +5649,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -5804,7 +5868,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6113,7 +6177,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6131,7 +6195,7 @@ Verifies that the percentage of date values matching the given format in a text 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>|[datetime](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_date_match_format_percent`</span>|[datetime](../../../categories-of-data-quality-checks/how-to-detect-invalid-dates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Validity|[*date_match_format_percent*](../../../reference/sensors/column/datetime-column-sensors.md#date-match-format-percent)|[*min_percent*](../../../reference/rules/Comparison.md#min-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -6376,21 +6440,27 @@ spec:
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -6406,11 +6476,13 @@ spec:
         === "Rendered SQL for MySQL"
 
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -6611,7 +6683,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6915,7 +6987,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -7103,21 +7175,27 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             {% macro render_date_formats(date_formats) %}
                 {%- if date_formats == 'DD/MM/YYYY'-%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$'
                 {%- elif date_formats == 'DD-MM-YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})$'
                 {%- elif date_formats == 'DD.MM.YYYY' -%}
-                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
+                    '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_formats == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
                 {%- endif -%}
             {% endmacro -%}
             
+            {% macro render_regex(column, regex_pattern) %}
+                {%- if lib.engine_type == 'singlestoredb' %}{{ column }} RLIKE {{ regex_pattern }}
+                {%- else -%}REGEXP_LIKE({{ column }}, {{ regex_pattern }})
+                {%- endif -%}
+            {% endmacro %}
+            
             SELECT
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                          WHEN {{ render_regex(lib.render_target_column('analyzed_table'), render_date_formats(parameters.date_formats) ) }}
                              THEN 1
                           ELSE 0
                         END
@@ -7132,11 +7210,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```
         === "Rendered SQL for MySQL"
             ```sql
+            
+            
             SELECT
                 CASE
                     WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
                     ELSE 100.0 * SUM(CASE
-                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
+                          WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
                              THEN 1
                           ELSE 0
                         END
@@ -7349,7 +7429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7658,7 +7738,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

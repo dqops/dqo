@@ -16,6 +16,7 @@
 package com.dqops.core.jobqueue.jobs.table;
 
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import tech.tablesaw.api.Table;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -82,5 +84,14 @@ public class ImportTablesResult {
      */
     public void setSourceTableSpecs(List<TableSpec> sourceTableSpecs) {
         this.sourceTableSpecs = sourceTableSpecs;
+    }
+
+    public static class ImportTablesResultSampleFactory implements SampleValueFactory<ImportTablesResult> {
+        @Override
+        public ImportTablesResult createSample() {
+            Table importedTables = Table.create();
+            List<TableSpec> sourceTablesSpecs = List.of(new TableSpec.TableSpecSampleFactory().createSample());
+            return new ImportTablesResult(importedTables, sourceTablesSpecs);
+        }
     }
 }

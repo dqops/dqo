@@ -17,7 +17,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_distinct_count_change_1_day`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`profile_distinct_count_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -111,13 +111,13 @@ spec:
           profile_distinct_count_change_1_day:
             warning:
               max_percent: 10.0
-              exact_day: false
+              exact_day: true
             error:
               max_percent: 20.0
-              exact_day: false
+              exact_day: true
             fatal:
               max_percent: 50.0
-              exact_day: false
+              exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -329,7 +329,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -490,7 +490,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -525,13 +525,13 @@ Expand the *Configure with data grouping* section to see additional examples for
               profile_distinct_count_change_1_day:
                 warning:
                   max_percent: 10.0
-                  exact_day: false
+                  exact_day: true
                 error:
                   max_percent: 20.0
-                  exact_day: false
+                  exact_day: true
                 fatal:
                   max_percent: 50.0
-                  exact_day: false
+                  exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -756,7 +756,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -928,7 +928,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -946,7 +946,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_distinct_count_change_1_day`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_distinct_count_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1041,13 +1041,13 @@ spec:
             daily_distinct_count_change_1_day:
               warning:
                 max_percent: 10.0
-                exact_day: false
+                exact_day: true
               error:
                 max_percent: 20.0
-                exact_day: false
+                exact_day: true
               fatal:
                 max_percent: 50.0
-                exact_day: false
+                exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
 
@@ -1259,7 +1259,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1420,7 +1420,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1456,13 +1456,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 daily_distinct_count_change_1_day:
                   warning:
                     max_percent: 10.0
-                    exact_day: false
+                    exact_day: true
                   error:
                     max_percent: 20.0
-                    exact_day: false
+                    exact_day: true
                   fatal:
                     max_percent: 50.0
-                    exact_day: false
+                    exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         country:
@@ -1687,7 +1687,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1859,7 +1859,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1877,7 +1877,7 @@ Verifies that the distinct count in a monitored column has changed by a fixed ra
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_distinct_count_change_1_day`</span>|[uniqueness](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
+|<span class="no-wrap-code">`daily_partition_distinct_count_change_1_day`</span>|[uniqueness](../../../categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*distinct_count*](../../../reference/sensors/column/uniqueness-column-sensors.md#distinct-count)|[*change_percent_1_day*](../../../reference/rules/Change.md#change-percent-1-day)| |
 
 **Command-line examples**
 
@@ -1977,13 +1977,13 @@ spec:
             daily_partition_distinct_count_change_1_day:
               warning:
                 max_percent: 10.0
-                exact_day: false
+                exact_day: true
               error:
                 max_percent: 20.0
-                exact_day: false
+                exact_day: true
               fatal:
                 max_percent: 50.0
-                exact_day: false
+                exact_day: true
       labels:
       - This is the column that is analyzed for data quality issues
     date_column:
@@ -2200,7 +2200,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2365,7 +2365,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2406,13 +2406,13 @@ Expand the *Configure with data grouping* section to see additional examples for
                 daily_partition_distinct_count_change_1_day:
                   warning:
                     max_percent: 10.0
-                    exact_day: false
+                    exact_day: true
                   error:
                     max_percent: 20.0
-                    exact_day: false
+                    exact_day: true
                   fatal:
                     max_percent: 50.0
-                    exact_day: false
+                    exact_day: true
           labels:
           - This is the column that is analyzed for data quality issues
         date_column:
@@ -2642,7 +2642,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2812,7 +2812,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

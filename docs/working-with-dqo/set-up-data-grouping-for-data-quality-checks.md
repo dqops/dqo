@@ -23,9 +23,16 @@ table that will be used in the **GROUP BY** clause to identify each group of dat
 
 ## Set up data grouping using the user interface
 
-### **Set up data grouping at the data source level**
+### **Set up the default data grouping for a data source**
 
 To set up the default data grouping configuration template at the **data source level**, follow the steps below.
+
+!!! warning "Data grouping configuration on data sources is effective only for new tables"
+   
+    The default data grouping configuration added at the data source level will be copied to the data grouping configuration of all the 
+    tables that will be **imported in the future**. Note that this configuration does not affect tables that have already been imported,
+    or tables were registered manually by adding [.dqotable.yaml](../reference/yaml/TableYaml.md) files.
+
 
 1. In the DQOps user interface, go to the **Data Source** section, select the data source of interest in the tree view on the left,
     and select the **Default grouping template** tab.
@@ -38,9 +45,6 @@ To set up the default data grouping configuration template at the **data source 
     ![Adding data grouping](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/adding-data-grouping.png)
 
 3. Once you have set the data grouping configuration, click on the **Save** button to save your changes.
-
-The default data grouping configuration added at the data source level will be copied to the data grouping configuration of all the 
-tables that will be **imported in the future**. Note that this configuration does not affect tables that have already been imported.
 
 ### **Set up data grouping at the table level**
 
@@ -60,18 +64,21 @@ To set up data grouping configuration at the **table level**:
 
 4. Once you have set the data grouping configuration, click on the **Save** button to save your changes.
 
-5. After adding the new data grouping configuration you can select the default data grouping using radiobutton. 
-    
-    You will get a warning window when you select a new data grouping. Data grouping is an advanced functionality of DQOps
-    that requires planning. DQOps will add a GROUP BY clause to every data quality check query, generating a lot of data
-    quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality 
-    check results tracked by DQOps and will impact data quality KPIs.
 
-    For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
+### **Switching the active data grouping configuration**
+The table registered in DQOps has multiple configurations of data groupings. To make a data grouping configuration active, 
+use the radiobutton to switch to the configuration that was created in the previous step. 
 
-    ![Select default data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/select-default-data-grouping-configuration.png)
-    
-    On this screen you can also edit or delete data grouping configurations using Action buttons. 
+You will get a warning window when you select a new data grouping. Data grouping is an advanced functionality of DQOps
+that requires planning. DQOps will add a GROUP BY clause to every data quality check query, generating a lot of data
+quality results. The number of rows returned by a GROUP BY clause in SQL will increase the number of data quality 
+check results tracked by DQOps and will impact data quality KPIs.
+
+For more information about data grouping, see [data grouping in the DQOps concepts section](../dqo-concepts/measuring-data-quality-with-data-grouping.md).
+
+![Select default data grouping configuration](https://dqops.com/docs/images/working-with-dqo/set-up-data-grouping/select-default-data-grouping-configuration.png)
+
+On this screen you can also edit or delete data grouping configurations using Action buttons. 
 
 
 ## Set up data grouping configuration using the DQOps Shell

@@ -5,9 +5,12 @@ This is a list of bool column data quality checks supported by DQOps and a brief
 
 
 
-
-## **bool**
+## column-level bool checks
 Calculates the percentage of data in boolean columns.
+
+### [true percent](./true-percent.md)
+A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.
+
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
@@ -17,6 +20,10 @@ Calculates the percentage of data in boolean columns.
 |[<span class="no-wrap-code">`daily_partition_true_percent`</span>](./true-percent.md#daily-partition-true-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.|:material-check-bold:|
 |[<span class="no-wrap-code">`monthly_partition_true_percent`</span>](./true-percent.md#monthly-partition-true-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|:material-check-bold:|
 
+
+
+### [false percent](./false-percent.md)
+A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.
 
 
 | Data quality check name | Check type | Description | Standard |

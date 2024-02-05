@@ -22,6 +22,7 @@ import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
+import com.dqops.metadata.dictionaries.DictionaryList;
 import com.dqops.metadata.fileindices.FileIndexList;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNode;
@@ -80,6 +81,12 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of shared credentials.
      */
     SharedCredentialList getCredentials();
+
+    /**
+     * Returns a collection of data dictionary CSV files.
+     * @return Collection of data dictionaries.
+     */
+    DictionaryList getDictionaries();
 
     /**
      * Returns a list of file indexes.

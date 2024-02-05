@@ -25,7 +25,7 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   };
 
   const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
@@ -45,25 +45,31 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
     await JobApiClient.cancelJob(jobId.toString());
   };
 
+  if (!job.jobType) return null;
+
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
         <div className="flex flex-wrap justify-between items-center text-sm w-full text-gray-700">
           <div className="flex flex-wrap space-x-1 items-center">
-            <div className="px-2">{job.jobType} </div>
+            <div className="px-2">
+              {job.jobType
+                .replace(/_/g, ' ')
+                .replace(/./, (c) => c.toUpperCase())}
+            </div>
           </div>
           <div className="flex items-center gap-x-2">
             {job.status === DqoJobHistoryEntryModelStatusEnum.running ? (
               <div
-              onClick={() =>
-                cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
-              }
+                onClick={() =>
+                  cancelJob(job.jobId?.jobId ? Number(job.jobId?.jobId) : 0)
+                }
               >
                 <SvgIcon name="canceljobs" />
               </div>
             ) : (
               <div></div>
-              )}
+            )}
             <div className="group relative">
               <div className="flex items-center gap-x-2">
                 {renderStatus()}
@@ -86,8 +92,9 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
                 {job.errorMessage &&
                   job.errorMessage.includes('dqocloud.accesskey') && (
                     <span className="px-2 text-red-500">
-                      (Cloud DQOps Api Key is invalid. Your trial period has expired or a new version of DQOps was released.{' '}
-                       Please run {"'"}cloud login{"'"} from DQOps shell)
+                      (Cloud DQOps Api Key is invalid. Your trial period has
+                      expired or a new version of DQOps was released. Please run{' '}
+                      {"'"}cloud login{"'"} from DQOps shell)
                     </span>
                   )}
               </td>

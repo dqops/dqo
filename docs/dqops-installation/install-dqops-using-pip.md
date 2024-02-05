@@ -45,11 +45,23 @@ To use DQOps you need:
 
 DQOps is available on [PyPi repository](https://pypi.org/project/dqops/). 
 
-1. Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
-   DQOps will store the metadata of imported data sources, the configuration of activated data quality checks, and the
-   data quality results.
+1.  Create an empty folder where you want to create your `DQOps User Home`. `DQOps User Home` is a folder where
+    DQOps will store the metadata of imported data sources, the configuration of activated data quality checks, and the
+    data quality results.
 
-2. Open a terminal, change the current folder to the created directory, and install DQOps via pip manager
+    !!! danger "Starting DQOps in an empty folder is required"
+
+        Please do not go directly to the next step. First, create an empty folder, then change the current folder
+        to this new new directory that we are calling `DQOps User Home`. During the first run, DQOps will create
+        the folder structure described in the [DQOps user home folder concept](../dqo-concepts/dqops-user-home-folder.md),
+        creating DQOps files in an empty folder is advised.
+
+         ```bash
+         mkdir dqouserhome
+         cd dqouserhome
+         ```
+
+2.  <span id="install-step-2">Open a terminal</span>, change the current folder to the created directory, and install DQOps via pip manager
 
     ```bash
     python -m pip install --user dqops
@@ -64,29 +76,88 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
         python -m pip install --upgrade --user dqops
         ```
 
+3.  Verify if the installation was successful. 
+
+    You should see a message that confirms a successful installation of the `dqops` package.
+
+    ```asc
+    Successfully installed dqops-1.0.0
+    ```
+
+    <span id="add-python-scripts-to-path">If</span> you see additional two warning (shown in yellow on Microsoft Windows) that the default location
+    where scripts are added is not included in the `PATH` environment variable, copy the path
+    shown in the window (it was *C:\Users\&lt;yourlogin&gt;\AppData\Roaming\Python\Python39\Scripts* it the example below),
+    and add it to the default `$PATH` environment variable. After changing the environment variables, you will need to open
+    a new Command Prompt window that uses the new configuration.
+
+    ``` { .asc hl_lines="1-2" }
+    WARNING: The script dqo.exe is installed in 'C:\Users\<yourlogin>\AppData\Roaming\Python\Python39\Scripts' which is not on PATH.
+    Consider adding this directory to PATH or, if you prefer to suppress this warning, use --no-warn-script-location.
+    Successfully installed dqops-1.0.0
+    ```
+
+    After adding the Python's Scrips folder to the path, you will be able to run DQOps simply by typing `dqo` from the command line. 
+
+
+## Solving certificate issues
+You may receive an issue that the `dqops` package was not found, as shown below.
+
+```
+ERROR: Could not find a version that satisfies the requirement dqops (from version: none)
+ERROR: No matching distribution found for dqops
+```
+
+The problem is related to an outdated configuration of root certificates that are bundled with Python.
+Use the following command to add the host names of download locations to the list of trusted hosts.
+
+```bash
+python -m pip config set global.trusted-host "pypi.org files.pythonhosted.org pypi.python.org"
+```
+
+After adding the *PyPi* host names to the list of trusted locations, repeat the installation from the [2. step](#install-step-2).
+
 
 ## Start DQOps application
 
-1. Run DQOps to finalize the installation. This process may take some time as the DQOps package must download a full DQOps
-   distribution and also install Java JRE 17.
+1.  Run DQOps to finalize the installation. This process may take some time as the DQOps package must download a full DQOps
+    distribution (~400 MB zip file) and install Java JRE 17 during the first start.
 
     ```bash
     python -m dqops
     ```
 
+    DQOps will download the full [DQOps release package](install-dqops-from-release-package.md)
+    from GitHub, or some alternative mirrors.
+
+    When the download of the DQOps distribution starts (a ~400MB zip file), you should see the progress.
+
+    ![dqops starts downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-started-min.png)
+
+    After the distribution is downloaded and unzipped, DQOps will also download and install Java JRE 17.
+    Once it is done, you should see the following screen.
+
+    ![dqops finishes downloading full distribution](https://dqops.com/docs/images/getting-started/dqops-download-by-pip-finished-min.png) 
+
+    In case that download stops due to network issues, DQOps will retry the download, or use an alternative mirror.
+
     !!! note "Start DQOps using a startup script"
 
         DQOps package registers also a `dqo` script on the *PATH*. You can start DQOps simply by running a `dqo` command,
-        if the Python location is correctly configured on the *PATH* variable. Certain installations of Python in Microsoft Windows
-        may not be configured correctly, especially if Python was installed from Microsoft Store.
+        if the Python location is correctly configured on the *PATH* environment variable.
 
-        If you are lucky to have a proper Python installation, you can start DQOps simply from the command line as shown below.
+        If you are lucky to have a [proper Python installation](#add-python-scripts-to-path), you can start DQOps simply from the command line as shown below.
 
-        ```bash
-        $ dqo
-        ```
+        === "Windows"
+            ```
+            c:\users\<yourlogin>\dqouserhome> dqo
+            ```
 
-2. Initialize DQOps `DQOps User Home` folder.
+        === "MacOS/Linux"
+            ```
+            /home/<yourlogin>/dqouserhome$ dqo
+            ```
+
+2.  Initialize DQOps `DQOps User Home` folder.
 
     After installation, you will be asked whether to initialize the DQOps `DQOps User Home` folder in the default location.
     Type Y to initialize the folder content.  
@@ -95,7 +166,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
     ![Initializing DQOps user home folder](https://dqops.com/docs/images/getting-started/initializing-user-home-folder2.png)
 
-3. Login to DQOps Cloud.
+3.  Login to DQOps Cloud.
    
     To use all DQOps features, such as storing data quality definitions and results in the cloud and the data quality dashboards, you
     must create a DQOps Cloud account.
@@ -114,7 +185,7 @@ DQOps is available on [PyPi repository](https://pypi.org/project/dqops/).
 
     ![DQOps API Key retrieved](https://dqops.com/docs/images/getting-started/dqops-api-key-retrieved.png)
 
-4. Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
+4.  Open the DQOps User Interface Console in your browser by CTRL-clicking on the link displayed on the command line (for example http://localhost:8888) 
     or by copying the link. You will see the welcome screen as shown below.
 
     ![DQOps user interface](https://dqops.com/docs/images/getting-started/dqops-user-interface.png)

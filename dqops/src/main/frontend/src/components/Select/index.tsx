@@ -40,7 +40,7 @@ export interface SelectProps {
 const Select = ({
   label,
   options = [],
-  placeholder = 'Select Option',
+  placeholder = 'Select option',
   value,
   onChange,
   className,

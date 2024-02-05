@@ -8,6 +8,8 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum, 
   ConnectionModel, 
   ConnectionModelProviderTypeEnum,
+  MysqlParametersSpecMysqlEngineTypeEnum,
+  SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
   TrinoParametersSpecTrinoEngineTypeEnum } from '../../api';
 import { BigQueryAuthenticationMode } from '../../shared/enums/bigquery.enum';
@@ -41,15 +43,15 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.redshift: {
-        copiedDatabase.redshift =  {port: '5439'};
+        copiedDatabase.redshift = {port: '5439'};
         break;
       }
       case ConnectionModelProviderTypeEnum.sqlserver: {
-        copiedDatabase.sqlserver =  {port: '1433'};
+        copiedDatabase.sqlserver = {port: '1433'};
         break;
       }
       case ConnectionModelProviderTypeEnum.presto: {
-        copiedDatabase.presto =  {port: '8080'};
+        copiedDatabase.presto = {port: '8080'};
         break;
       }
       case ConnectionModelProviderTypeEnum.trino: {
@@ -67,29 +69,38 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.mysql: {
-        copiedDatabase.mysql =  {port: '3306'};
+        if (nameOfDatabase?.toLowerCase() === MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb) {
+          copiedDatabase.mysql = {
+            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.singlestoredb,
+            single_store_db_parameters_spec: {
+              load_balancing_mode: SingleStoreDbParametersSpecLoadBalancingModeEnum.none,
+              use_ssl: true
+            }
+          }
+        } else {
+          copiedDatabase.mysql = {
+            port: '3306',
+            mysql_engine_type: MysqlParametersSpecMysqlEngineTypeEnum.mysql
+          }
+        }
+
         break;
       }
       case ConnectionModelProviderTypeEnum.oracle: {
-        copiedDatabase.oracle =  {port: '1521'};
+        copiedDatabase.oracle = {port: '1521'};
         break;
       }
       case ConnectionModelProviderTypeEnum.spark: {
-        copiedDatabase.spark =  {port: '10000'};
+        copiedDatabase.spark = {port: '10000'};
         break;
       }
       case ConnectionModelProviderTypeEnum.databricks: {
-        copiedDatabase.databricks =  {port: '443'};
+        copiedDatabase.databricks = {port: '443'};
         break;
       }
-      default: return;
     }
-    setDatabase((prev) => ({
-      ...prev,
-      ...copiedDatabase
-    }))
+    setDatabase(copiedDatabase)
   }
-
 
   const onPrev = () => {
     if (step > 0) {

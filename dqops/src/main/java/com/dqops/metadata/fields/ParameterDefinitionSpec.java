@@ -19,6 +19,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -72,11 +73,14 @@ public class ParameterDefinitionSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private List<String> allowedValues;
 
+    @JsonPropertyDescription("The default value for a parameter in a custom check or a custom rule.")
+    private String defaultValue;
+
     /**
      * List of sample values for a field. Sample values are used when generating example YAML files for the documentation.
      */
     @JsonPropertyDescription("List of sample values. The sample values are used in the documentation or help messages.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonIgnore
     private List<String> sampleValues;
 
     /**
@@ -196,6 +200,23 @@ public class ParameterDefinitionSpec extends AbstractSpec {
     public void setAllowedValues(List<String> allowedValues) {
         this.setDirtyIf(!Objects.equals(this.allowedValues, allowedValues));
         this.allowedValues = allowedValues != null ? Collections.unmodifiableList(allowedValues) : null;
+    }
+
+    /**
+     * Returns the default value.
+     * @return Default value.
+     */
+    public String getDefaultValue() {
+        return defaultValue;
+    }
+
+    /**
+     * Sets the default value.
+     * @param defaultValue Default value.
+     */
+    public void setDefaultValue(String defaultValue) {
+        this.setDirtyIf(!Objects.equals(this.defaultValue, defaultValue));
+        this.defaultValue = defaultValue;
     }
 
     /**

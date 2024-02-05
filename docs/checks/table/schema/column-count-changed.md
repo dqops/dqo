@@ -19,7 +19,7 @@ Detects if the count of columns has changed. Retrieves the metadata of the monit
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_column_count_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_column_count_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -121,7 +121,7 @@ Detects if the count of columns has changed since the most recent day. Retrieves
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_column_count_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_column_count_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -224,7 +224,7 @@ Detects if the count of columns has changed since the last month. Retrieves the 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_column_count_changed`</span>|[schema](../../../dqo-concepts/types-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_column_count_changed`</span>|[schema](../../../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*column_count*](../../../reference/sensors/table/schema-table-sensors.md#column-count)|[*value_changed*](../../../reference/rules/Comparison.md#value-changed)|:material-check-bold:|
 
 **Command-line examples**
 

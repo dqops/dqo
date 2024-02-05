@@ -24,7 +24,8 @@ const TableColumns = ({
   setLevelsData,
   setNumberOfSelected,
   statistics,
-  onChangeSelectedColumns
+  onChangeSelectedColumns,
+  refreshListFunc
 }: ITableColumnsProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedColumn, setSelectedColumn] = useState<ColumnStatisticsModel>();
@@ -86,7 +87,7 @@ const TableColumns = ({
   );
   const detectedDatatypeVar = statistics?.column_statistics?.map((x) =>
     x.statistics
-      ?.filter((item) => item.collector === 'string_datatype_detect')
+      ?.filter((item) => item.collector === 'text_datatype_detect')
       .map((item) => item.result)
   );
 
@@ -245,6 +246,7 @@ const TableColumns = ({
           rewriteData={rewriteData}
           showDataStreamButtonFunc={showDataStreamButtonFunc}
           handleButtonClick={handleButtonClick}
+          refreshListFunc={refreshListFunc}
         />
       </table>
       <ConfirmDialog

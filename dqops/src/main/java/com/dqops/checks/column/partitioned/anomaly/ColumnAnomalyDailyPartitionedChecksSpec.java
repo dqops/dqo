@@ -20,6 +20,7 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.anomaly.*;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -44,6 +45,8 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_sum_anomaly", o -> o.dailyPartitionSumAnomaly);
             put("daily_partition_mean_anomaly", o -> o.dailyPartitionMeanAnomaly);
             put("daily_partition_median_anomaly", o -> o.dailyPartitionMedianAnomaly);
+            put("daily_partition_min_anomaly", o -> o.dailyPartitionMinAnomaly);
+            put("daily_partition_max_anomaly", o -> o.dailyPartitionMaxAnomaly);
 
             put("daily_partition_mean_change", o -> o.dailyPartitionMeanChange);
             put("daily_partition_mean_change_1_day", o -> o.dailyPartitionMeanChange1Day);
@@ -62,14 +65,24 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 90 days.")
+    @JsonPropertyDescription("Verifies that the sum in a column is within a percentile from measurements made during the last 90 days. Calculates the sum of each daily partition and detect anomalies between daily partitions.")
     private ColumnSumAnomalyStationaryPartitionCheckSpec dailyPartitionSumAnomaly;
 
-    @JsonPropertyDescription("Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days.")
+    @JsonPropertyDescription("Verifies that the mean value in a column is within a percentile from measurements made during the last 90 days. Calculates the mean (average) of each daily partition and detect anomalies between daily partitions.")
     private ColumnMeanAnomalyStationaryCheckSpec dailyPartitionMeanAnomaly;
 
-    @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 90 days.")
+    @JsonPropertyDescription("Verifies that the median in a column is within a percentile from measurements made during the last 90 days. Calculates the median of each daily partition and detect anomalies between daily partitions.")
     private ColumnMedianAnomalyStationaryCheckSpec dailyPartitionMedianAnomaly;
+
+    @JsonPropertyDescription("Detects new outliers, which are new minimum values, much below the last known minimum value. " +
+            "If the minimum value is constantly changing, detects outliers as the biggest change of the minimum value during the last 90 days. " +
+            "Finds the minimum value of each daily partition and detect anomalies between daily partitions.")
+    private ColumnMinAnomalyStationaryCheckSpec dailyPartitionMinAnomaly;
+
+    @JsonPropertyDescription("Detects new outliers, which are new maximum values, much above the last known maximum value. " +
+            "If the maximum value is constantly changing, detects outliers as the biggest change of the maximum value during the last 90 days. " +
+            "Finds the maximum value of each daily partition and detect anomalies between daily partitions.")
+    private ColumnMaxAnomalyStationaryCheckSpec dailyPartitionMaxAnomaly;
 
     @JsonPropertyDescription("Verifies that the mean value in a column changed in a fixed rate since last readout.")
     private ColumnMeanChangeCheckSpec dailyPartitionMeanChange;
@@ -168,6 +181,42 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianAnomaly, dailyPartitionMedianAnomaly));
         this.dailyPartitionMedianAnomaly = dailyPartitionMedianAnomaly;
         propagateHierarchyIdToField(dailyPartitionMedianAnomaly, "daily_partition_median_anomaly");
+    }
+
+    /**
+     * Returns a min anomaly for the last 90 days.
+     * @return Min anomaly for the last 90 days.
+     */
+    public ColumnMinAnomalyStationaryCheckSpec getDailyPartitionMinAnomaly() {
+        return dailyPartitionMinAnomaly;
+    }
+
+    /**
+     * Sets a new minimum anomaly for the last 90 days.
+     * @param dailyPartitionMinAnomaly New minimum anomaly.
+     */
+    public void setDailyPartitionMinAnomaly(ColumnMinAnomalyStationaryCheckSpec dailyPartitionMinAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMinAnomaly, dailyPartitionMinAnomaly));
+        this.dailyPartitionMinAnomaly = dailyPartitionMinAnomaly;
+        propagateHierarchyIdToField(dailyPartitionMinAnomaly, "daily_partition_min_anomaly");
+    }
+
+    /**
+     * Returns a max anomaly for the last 90 days.
+     * @return Max anomaly for the last 90 days.
+     */
+    public ColumnMaxAnomalyStationaryCheckSpec getDailyPartitionMaxAnomaly() {
+        return dailyPartitionMaxAnomaly;
+    }
+
+    /**
+     * Sets a new maximum anomaly for the last 90 days.
+     * @param dailyPartitionMaxAnomaly New maximum anomaly.
+     */
+    public void setDailyPartitionMaxAnomaly(ColumnMaxAnomalyStationaryCheckSpec dailyPartitionMaxAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMaxAnomaly, dailyPartitionMaxAnomaly));
+        this.dailyPartitionMaxAnomaly = dailyPartitionMaxAnomaly;
+        propagateHierarchyIdToField(dailyPartitionMaxAnomaly, "daily_partition_max_anomaly");
     }
 
     /**
@@ -427,5 +476,16 @@ public class ColumnAnomalyDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.NUMERIC;
     }
 }

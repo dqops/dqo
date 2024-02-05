@@ -79,15 +79,15 @@ export default function UserListDetail() {
 
     if (loading) {
         return(
-        <DefinitionLayout>
+        <>
             <div className='w-full h-screen flex items-center justify-center'>
              <SvgIcon name='sync' className='w-6 h-6 animate-spin'/>
             </div>
-        </DefinitionLayout>
+        </>
     )}
 
   return (
-    <DefinitionLayout>
+    <>
         <table className='w-full '>
             <thead className='border-b w-full border-b-gray-400 relative flex items-center'>
                 <th className="px-6 py-4 text-left block w-100">User email</th>
@@ -133,6 +133,6 @@ export default function UserListDetail() {
         </table>
         <ConfirmDialog open={selectedEmailToDelete.length!==0} onClose={() => setSelectedEmailToDelete('')} onConfirm={deleteDqoCloudUser} message={`Are you sure you want to delete ${selectedEmailToDelete} user?`}/>
         <ChangeUserPasswordDialog open={selectedEmailToChangePassword.length!==0} onClose={() => setSelectedEmailToChangePassword('')} handleSubmit={userProfile.user !== selectedEmailToChangePassword ? changeDqoCloudUserPassword : changePrincipalPassword}  />
-    </DefinitionLayout>
+    </>
   )
 }

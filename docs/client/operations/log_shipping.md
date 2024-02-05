@@ -5,6 +5,7 @@ Log shipping controller that accepts logs sent from a web application or externa
 ___
 ## log_debug
 Logs an information message in the server&#x27;s logs as a debug severity log entry.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_debug.py) to see the source code on GitHub.
 
 
@@ -28,7 +29,9 @@ http://localhost:8888/api/logs/debug
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/debug^
@@ -39,7 +42,11 @@ http://localhost:8888/api/logs/debug
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -61,8 +68,12 @@ http://localhost:8888/api/logs/debug
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -85,7 +96,11 @@ http://localhost:8888/api/logs/debug
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +126,11 @@ http://localhost:8888/api/logs/debug
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -137,13 +156,14 @@ http://localhost:8888/api/logs/debug
 	
     ```
 
-
+    
 
 
 
 ___
 ## log_error
 Logs an information message in the server&#x27;s logs as an error severity log entry.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_error.py) to see the source code on GitHub.
 
 
@@ -167,7 +187,9 @@ http://localhost:8888/api/logs/error
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/error^
@@ -178,7 +200,11 @@ http://localhost:8888/api/logs/error
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -200,8 +226,12 @@ http://localhost:8888/api/logs/error
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -224,7 +254,11 @@ http://localhost:8888/api/logs/error
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -250,7 +284,11 @@ http://localhost:8888/api/logs/error
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -276,13 +314,14 @@ http://localhost:8888/api/logs/error
 	
     ```
 
-
+    
 
 
 
 ___
 ## log_info
 Logs an information message in the server&#x27;s logs as an info severity log entry.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_info.py) to see the source code on GitHub.
 
 
@@ -306,7 +345,9 @@ http://localhost:8888/api/logs/info
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/info^
@@ -317,7 +358,11 @@ http://localhost:8888/api/logs/info
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -339,8 +384,12 @@ http://localhost:8888/api/logs/info
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -363,7 +412,11 @@ http://localhost:8888/api/logs/info
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -389,7 +442,11 @@ http://localhost:8888/api/logs/info
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -415,13 +472,14 @@ http://localhost:8888/api/logs/info
 	
     ```
 
-
+    
 
 
 
 ___
 ## log_warn
 Logs an information message in the server&#x27;s logs as a warn severity log entry.
+
 Follow the [link](https://github.com/dqops/dqo/blob/develop/distribution/python/dqops/client/api/log_shipping/log_warn.py) to see the source code on GitHub.
 
 
@@ -445,7 +503,9 @@ http://localhost:8888/api/logs/warn
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/warn^
@@ -456,7 +516,11 @@ http://localhost:8888/api/logs/warn
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -478,8 +542,12 @@ http://localhost:8888/api/logs/warn
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -502,7 +570,11 @@ http://localhost:8888/api/logs/warn
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -528,7 +600,11 @@ http://localhost:8888/api/logs/warn
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -554,7 +630,7 @@ http://localhost:8888/api/logs/warn
 	
     ```
 
-
+    
 
 
 

@@ -16,9 +16,22 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
+import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
+import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
+import com.dqops.metadata.definitions.rules.RuleDefinitionList;
+import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionList;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
+import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -143,5 +156,161 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
         }
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
+    }
+
+    /**
+     * Accepts a configuration of default observability checks to enable on new tables and columns.
+     *
+     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
+     * @param parameter                             Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of sensor definitions for different providers.
+     *
+     * @param providerSensorDefinitionList List of sensor definitions per provider.
+     * @param parameter                    Target object where found hierarchy nodes, dimensions and labels should be added.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ProviderSensorDefinitionList providerSensorDefinitionList, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a custom rule definition wrapper list that stores a list of custom rules.
+     *
+     * @param ruleDefinitionList Custom rule list.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(RuleDefinitionList ruleDefinitionList, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a settings specific specification.
+     *
+     * @param localSettingsSpec Settings specific configuration.
+     * @param parameter         Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(LocalSettingsSpec localSettingsSpec, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of dashboards list.
+     *
+     * @param dashboardDefinitionWrapper List of dashboards list.
+     * @param parameter                  Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DashboardFolderListSpecWrapperImpl dashboardDefinitionWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of custom checks.
+     *
+     * @param checkDefinitionWrappers Custom check list.
+     * @param parameter               Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CheckDefinitionListImpl checkDefinitionWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of reference table comparisons.
+     *
+     * @param tableComparisonConfigurationSpecMap Dictionary of reference table comparisons.
+     * @param parameter                           Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonConfigurationSpecMap tableComparisonConfigurationSpecMap, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a list of a pair of column names that are used for joining and grouping.
+     *
+     * @param tableComparisonGroupingColumnsPairSpecs A list of a pairs of columns used for grouping and joining in table comparison checks.
+     * @param parameter                               Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableComparisonGroupingColumnsPairsListSpec tableComparisonGroupingColumnsPairSpecs, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a shared credential list.
+     *
+     * @param sharedCredentialWrappers Shared credentials list.
+     * @param parameter                Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(SharedCredentialList sharedCredentialWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default monitoring schedule wrapper instance.
+     *
+     * @param monitoringSchedulesWrapper Default monitoring schedule wrapper instance.
+     * @param parameter                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default incident webhook notification wrapper instance.
+     *
+     * @param defaultIncidentWebhookNotificationsWrapper Default incident webhook notification wrapper instance.
+     * @param parameter                                  Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default observability check wrapper instance.
+     *
+     * @param defaultObservabilityCheckWrapper Default observability check wrapper instance.
+     * @param parameter                        Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a data dictionary list.
+     *
+     * @param dictionaryWrappers Data dictionary list.
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(DictionaryListImpl dictionaryWrappers, FoundResultsCollector<ScheduleRootResult> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }

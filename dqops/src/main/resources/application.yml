@@ -77,6 +77,7 @@ dqo:
     home: .
     has-local-home: true
     initialize-user-home: false
+    initialize-default-cloud-credentials: true
   logging:
     enable-user-home-logging: true
     max-history: 7

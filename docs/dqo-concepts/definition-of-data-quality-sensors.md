@@ -124,16 +124,28 @@ The sensor's query results are called **sensor readouts** in DQOps. The results 
 in a [sensor_readouts](../reference/parquetfiles/sensor_readouts.md) parquet table as described in
 the [data quality results storage](data-storage-of-data-quality-results.md) concept.
 
-## Configure sensors in DQOps
 
+## Configure sensors in UI
 You can easily configure sensors in DQOps using the **Configuration** section of the user interface.
 
+### **Sensor definition screen**
 Below is an example of screens with the definition for the [text_length_in_range_percent](../reference/sensors/column/text-column-sensors.md) sensor
 and the Jinja template for the PostgreSQL database which can be modified.
 
+The first tab named the *Sensor definition* is responsible for editing the specification files for
+a custom data quality sensor
+stored in the [*$DQO_USER_HOME/sensors/\*\*/\*.dqosensor.yaml*](../reference/yaml/SensorDefinitionYaml.md) files.
 
 ![Sensor definition configuration](https://dqops.com/docs/images/concepts/sensor-definition-configuration.png)
 
+### **Database specific SQL query template**
+The Jinja2 query templates are edited on the tabs named as the [data sources](../data-sources/index.md).
+The configuration for each data source is stored in two files:
+
+- [*sensors/\*\*/&lt;data_source_type&gt;.dqoprovidersensor.yaml*](../reference/yaml/ProviderSensorYaml.md)
+  specification file with additional configuration for that data source type.
+
+- Jinja2 file stored in the *sensors/\*\*/&lt;data_source_type&gt;.sql.jinja2* file.
 
 ![PostgreSQL template](https://dqops.com/docs/images/concepts/sensor-postgresql-jinja-template.png)
 

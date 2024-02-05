@@ -69,9 +69,9 @@ const CreateCheckDialog = ({
           <div className="text-2xl text-gray-700 text-center whitespace-normal break-all">
          Create a custom check
           </div>
-          Check Name:
+          Check name:
           <Input value={nameOfCheck} onChange={onChangeNameOfCheck}/>
-          Sensor Name: 
+          Sensor name:
           <Select
            placeholder='Sensor'
             options={memoizedData.rules && memoizedData.rules.map((x) => ({

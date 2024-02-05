@@ -113,14 +113,14 @@ The biggest challenge that each data team faces when introducing data quality pr
 The management expects to see the progress and a proof of success. Sharing the data quality KPI with the upper management
 is the best way to gain secure financing for data projects.
 
-!!! tip "Reaching 100% data quality KPI"
+!!! tip "Reaching 100% data quality KPI score"
 
     ![A step-by-step guide to improve data quality](../images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ width="300"; align=left }
 
     DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
-    The eBook desribes a full data quality improvement process that allows to reach ~100% data quality KPI within 6-12 months.
+    The eBook desribes a full data quality improvement process that allows to reach ~100% data quality KPI score within 6-12 months.
 
     The process described below is a simplified version of the full process described in the eBook.
 
@@ -168,8 +168,8 @@ The profiling KPI scorecard dashboard is shown below. The dashboard can be found
 
 ![Data quality profiling initial KPI scorecard](https://dqops.com/docs/images/working-with-dqo/data-quality-dashboards/kpis-scorecard-dashboards.png){ loading=lazy }
 
-Once you finish the data profiling, you will know which data quality issues are real issues, and which failed profiling checks
-should not be measured because some columns could be incomplete. The selected list of profiling checks should be activated
+Once the data profiling is complete, it will be clear which data quality issues are real issues, and which failed profiling checks
+should not be measured, since some columns may be incomplete. The selected list of profiling checks should be activated
 as [monitoring](definition-of-data-quality-checks/data-observability-monitoring-checks.md) and [partitioned](definition-of-data-quality-checks/partition-checks.md) checks.
 
 ### **Activate monitoring checks**
@@ -241,7 +241,7 @@ The level of compliance can be measured with a data quality KPI that proves that
 data is compliant, and the data consumer reviewed the compliance with data quality checks to ensure that the data has not been corrupted on the way.
 
 DQOps data quality checks that are defined in [.dqotable.yaml](../reference/yaml/TableYaml.md#tableyaml) files are a simple way
-to define the data contract that could be shared between the data publisher and the data consumer, also ensuring the compliance with KPIs. 
+to define the data contract that can be shared between the data publisher and the data consumer, also ensuring compliance with KPIs. 
 
 ### **Sharing data**
 DQOps can be used by the data publisher to proof that the data quality was verified for every batch of data, and the data quality
@@ -323,9 +323,9 @@ as shown in the following table.
 ### **By groups of rows**
 Additionally, data quality KPIs can be calculated for each [data group](measuring-data-quality-with-data-grouping.md). 
 
-Tracking data quality for groups of rows identified by a discriminator column enables to identify data received from different
-data sources, but finally aggregated into a single table. The discriminator column could be a country name, state name, vendor name,
-or a supplier name.
+Tracking the data quality for groups of rows identified by the discriminator column makes it possible to identify data received from different
+data sources, but ultimately aggregated into a single table. The discriminator column can be a country name, state name, vendor name,
+or supplier name.
 
 DQOps supports running data quality checks as SQL queries with a **GROUP BY** clause. Please read about data segmentation
 in [the concept of data grouping](measuring-data-quality-with-data-grouping.md) article.

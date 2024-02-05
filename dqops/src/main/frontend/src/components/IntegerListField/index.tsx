@@ -11,13 +11,15 @@ interface IIntegerListFieldProps {
   value: number[];
   tooltipText?: string;
   onChange: (value: number[]) => void;
+  disabled?: boolean;
 }
 
 const IntegerListField = ({
   label,
   value,
   tooltipText,
-  onChange
+  onChange,
+  disabled
 }: IIntegerListFieldProps) => {
   const [open, setOpen] = useState(false);
 
@@ -48,7 +50,7 @@ const IntegerListField = ({
         <SvgIcon
           name="edit"
           className="w-4 h-4 text-gray-700 cursor-pointer"
-          onClick={() => setOpen(true)}
+          onClick={() => !disabled && setOpen(true)}
         />
       </div>
       <Dialog open={open} handler={() => setOpen(false)}>

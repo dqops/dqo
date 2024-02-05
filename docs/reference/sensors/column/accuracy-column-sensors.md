@@ -20,8 +20,8 @@ The total average match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -300,8 +300,8 @@ The total max match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -576,8 +576,8 @@ The total min match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -853,8 +853,8 @@ The total not null count match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -1130,8 +1130,8 @@ The total sum match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 

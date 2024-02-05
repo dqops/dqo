@@ -8,11 +8,12 @@ import Button from '../../components/Button';
 import AddTableDialog from '../../components/CustomTree/AddTableDialog';
 import { SchemaTables } from './SchemaTables';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
-import { setActiveFirstLevelTab, setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
+import { setActiveFirstLevelUrl } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { MultiChecks } from './MultiCheck/MultiChecks';
 import { getFirstLevelActiveTab } from '../../redux/selectors';
+import SourceTablesView from '../../components/Connection/ConnectionView/SourceTablesView';
 
 const SchemaPage = () => {
   const {
@@ -46,7 +47,7 @@ const SchemaPage = () => {
               value: 'multiple_checks'
             }
           ]
-        : [])
+        : [{ label: 'Import Tables', value: 'import-tables' }])
     ],
     [checkTypes]
   );
@@ -63,63 +64,48 @@ const SchemaPage = () => {
     history.push(ROUTES.SCHEMA_LEVEL_PAGE(checkTypes, connection, schema, tab));
   };
 
-  const onImportMoreTables = () => {
-    dispatch(
-      setActiveFirstLevelTab(
-        checkTypes,
-        ROUTES.CONNECTION_LEVEL_VALUE(checkTypes, connection)
-      )
-    );
-    history.push(
-      `${ROUTES.CONNECTION_DETAIL(
-        checkTypes,
-        connection,
-        'schemas'
-      )}?import_schema=true&import_table=true&schema=${schema}`
-    );
-  };
   return (
-    <ConnectionLayout>
+    <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="schema" className="w-5 h-5 shrink-0" />
           <div className="text-xl font-semibold truncate">{`${connection}.${schema}`}</div>
         </div>
-        {isSourceScreen && (
-        <div className="flex gap-4 items-center">
-          <Button
-            className="!h-10"
-            color={
-              !(userProfile.can_manage_data_sources !== true)
-                ? 'primary'
-                : 'secondary'
-            }
-            variant={
-              !(userProfile.can_manage_data_sources !== true)
-                ? 'outlined'
-                : 'contained'
-            }
-            label="Import more tables"
-            onClick={onImportMoreTables}
-            disabled={userProfile.can_manage_data_sources !== true}
-          />
-          <Button
-            className="!h-10"
-            color={
-              !(userProfile.can_manage_data_sources !== true)
-                ? 'primary'
-                : 'secondary'
-            }
-            variant={
-              !(userProfile.can_manage_data_sources !== true)
-                ? 'outlined'
-                : 'contained'
-            }
-            label="Add Table"
-            onClick={() => setAddTableDialogOpen(true)}
-            disabled={userProfile.can_manage_data_sources !== true}
-          />
-        </div>
+        {isSourceScreen && activeTab === 'tables' && (
+          <div className="flex gap-4 items-center">
+            <Button
+              className="!h-10"
+              color={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'primary'
+                  : 'secondary'
+              }
+              variant={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'outlined'
+                  : 'contained'
+              }
+              label="Import more tables"
+              onClick={() => onChangeTab('import-tables')}
+              disabled={userProfile.can_manage_data_sources !== true}
+            />
+            <Button
+              className="!h-10"
+              color={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'primary'
+                  : 'secondary'
+              }
+              variant={
+                !(userProfile.can_manage_data_sources !== true)
+                  ? 'outlined'
+                  : 'contained'
+              }
+              label="Add Table"
+              onClick={() => setAddTableDialogOpen(true)}
+              disabled={userProfile.can_manage_data_sources !== true}
+            />
+          </div>
         )}
       </div>
       <div className="border-b border-gray-300">
@@ -130,6 +116,7 @@ const SchemaPage = () => {
           <SchemaTables />
         </div>
       )}
+      {activeTab === 'import-tables' && <SourceTablesView />}
       {checkTypes !== CheckTypes.SOURCES && activeTab === 'multiple_checks' && (
         <MultiChecks />
       )}
@@ -137,7 +124,7 @@ const SchemaPage = () => {
         open={addTableDialogOpen}
         onClose={() => setAddTableDialogOpen(false)}
       />
-    </ConnectionLayout>
+    </>
   );
 };
 

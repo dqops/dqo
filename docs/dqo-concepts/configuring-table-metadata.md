@@ -6,6 +6,14 @@ The configuration of every monitored table is stored in [\*.dqotable.yaml](../re
 are stored in the *$DQO_USER_HOME/sources/{data_source_name}/* folder of the data source.
 The [\*.dqotable.yaml](../reference/yaml/TableYaml.md) files are placed directly in the folder, not organized into folders by the database schema name.
 
+!!! tip "Importing table metadata from the DQOps user interface"
+
+    If you are not interested in the details of configuring data sources and you want to use the user interface,
+    go back to the *getting started* section and read the 
+    [import metadata using the user interface](../getting-started/add-data-source-connection.md#import-metadata-using-the-user-interface)
+    section.
+
+
 ## Table metadata files
 The location and schema of [.dqotable.yaml](../reference/yaml/TableYaml.md) files are described below.
 
@@ -80,7 +88,7 @@ spec: # (2)!
 The main nodes found created by default in the [.dqotable.yaml](../reference/yaml/TableYaml.md) file when a table is imported into DQOps are listed below.
 
 - `timestamp_columns` node stores the names of *date*, *datetime* or *timestamp* columns that are used for
-  [timeliness and freshness](types-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) checks,
+  [timeliness and freshness](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) checks,
   and to configure the date column used for [partition checks](definition-of-data-quality-checks/partition-checks.md).
 
 - `incremental_time_window` node configures the time window for running [partition checks](definition-of-data-quality-checks/partition-checks.md)
@@ -138,7 +146,7 @@ spec:
 1.  The column dictionary node. The nodes below it are the column names.
 2.  The configuration and captured metadata of the first column *cumulative_confirmed*.
 3.  Data type snapshot contains the last imported physical data type of the column. DQOps uses these data types
-    to decide if some data type specific data quality checks could be activated on the column.
+    to decide if certain data type specific data quality checks can be activated on a column.
 4.  The data type of the column, it is a physical data type introspected from the monitored table.
 
 The node for each column contains a [type snapshot](../reference/yaml/TableYaml.md#columntypesnapshotspec) object

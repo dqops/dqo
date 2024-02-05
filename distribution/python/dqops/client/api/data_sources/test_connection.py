@@ -64,7 +64,7 @@ def sync_detailed(
 ) -> Response[ConnectionTestModel]:
     """testConnection
 
-     Checks if the given remote connection could be opened and the credentials are valid
+     Checks if the given remote connection can be opened and if the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
@@ -99,7 +99,7 @@ def sync(
 ) -> Optional[ConnectionTestModel]:
     """testConnection
 
-     Checks if the given remote connection could be opened and the credentials are valid
+     Checks if the given remote connection can be opened and if the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
@@ -129,7 +129,7 @@ async def asyncio_detailed(
 ) -> Response[ConnectionTestModel]:
     """testConnection
 
-     Checks if the given remote connection could be opened and the credentials are valid
+     Checks if the given remote connection can be opened and if the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):
@@ -162,7 +162,7 @@ async def asyncio(
 ) -> Optional[ConnectionTestModel]:
     """testConnection
 
-     Checks if the given remote connection could be opened and the credentials are valid
+     Checks if the given remote connection can be opened and if the credentials are valid
 
     Args:
         verify_name_uniqueness (Union[Unset, None, bool]):

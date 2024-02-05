@@ -17,6 +17,8 @@ package com.dqops.core.secrets;
 
 import com.dqops.core.secrets.credentials.SharedCredentialPropertySource;
 import com.dqops.core.secrets.gcp.GcpSecretManagerPropertySource;
+import com.dqops.metadata.dictionaries.DictionaryList;
+import com.dqops.metadata.dictionaries.DictionaryWrapper;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 import org.apache.parquet.Strings;
@@ -27,12 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.env.ConfigurableEnvironment;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -130,5 +129,53 @@ public class SecretValueProviderImpl implements SecretValueProvider {
         }
 
         return Collections.unmodifiableMap(expanded);
+    }
+
+    /**
+     * Expands entries in a given list. Returns a cloned instance with all entry values expanded.
+     *
+     * @param list Entries list to expand.
+     * @param lookupContext Lookup context with the user home used to look up credentials.
+     * @return Expanded entries.
+     */
+    public List<String> expandList(List<String> list,
+                                   SecretValueLookupContext lookupContext){
+        if (list == null) {
+            return null;
+        }
+
+        if (list.size() == 0) {
+            return list;
+        }
+
+        List<Object> expanded = new ArrayList<>();
+        for (Object element : list) {
+            if (element instanceof String) {
+                String stringElement = (String) element;
+                if (stringElement.startsWith(DICTIONARY_EXTRACT_TOKEN_PREFIX) && stringElement.endsWith(DICTIONARY_EXTRACT_TOKEN_SUFFIX)) {
+                    String dictionaryName = stringElement.substring(
+                            DICTIONARY_EXTRACT_TOKEN_PREFIX.length(),
+                            stringElement.length() - DICTIONARY_EXTRACT_TOKEN_SUFFIX.length());
+
+                    if (lookupContext.getUserHome() != null && lookupContext.getUserHome().getDictionaries() != null) {
+                        DictionaryList dictionaries = lookupContext.getUserHome().getDictionaries();
+                        DictionaryWrapper dictionaryWrapper = dictionaries.getByObjectName(dictionaryName, true);
+                        if (dictionaryWrapper != null && dictionaryWrapper.getObject() != null) {
+                            List<String> dictionaryEntries = dictionaryWrapper.getDictionaryEntries();
+                            expanded.addAll(dictionaryEntries);
+                        } else {
+                            expanded.add(element);
+                        }
+                    } else {
+                        expanded.add(element);
+                    }
+                } else {
+                    expanded.add(expandValue(stringElement, lookupContext));
+                }
+            } else {
+                expanded.add(element);
+            }
+        }
+        return Collections.synchronizedList((List<String>)(List<?>)expanded);
     }
 }

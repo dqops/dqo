@@ -65,10 +65,10 @@ const Tree = () => {
       const key = (job?.jobId?.jobId || 0).toString();
       const str = localStorage.getItem(key);
       if (
-        str !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
-        job.status == DqoJobHistoryEntryModelStatusEnum.succeeded
+        str !== DqoJobHistoryEntryModelStatusEnum.finished &&
+        job.status == DqoJobHistoryEntryModelStatusEnum.finished
       ) {
-        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.succeeded);
+        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.finished);
 
         const id = [
           job.parameters?.importTableParameters?.connectionName,

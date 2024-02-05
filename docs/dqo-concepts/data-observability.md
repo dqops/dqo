@@ -6,7 +6,7 @@ DQOps maintains a configuration of the [default data quality checks](dqops-user-
 that are applied on the tables and columns when the tables are imported into DQOps.
 
 The default observability checks are configured in the
-*[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)* file
+*[$DQO_USER_HOME/settings/default.dqodefaultchecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)* file
 in the [DQOps user home](dqops-user-home-folder.md).
 
 ??? info "Click to see a full *.dqotable.yaml* file with all default data observability checks activated"
@@ -155,7 +155,7 @@ the left side. Afterward, you can modify the default check configuration for **P
 and **Monitoring monthly** in the workspace on the right side.
 
 The default configuration can be also changed by editing the 
-*[$DQO_USER_HOME/settings/defaultchecks.dqochecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)* 
+*[$DQO_USER_HOME/settings/default.dqodefaultchecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)* 
 file directly, using Visual Studio Code.
 
 ## Next steps

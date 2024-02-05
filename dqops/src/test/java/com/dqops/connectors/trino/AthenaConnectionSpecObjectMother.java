@@ -21,23 +21,15 @@ import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.utils.BeanFactoryObjectMother;
 import org.springframework.beans.factory.BeanFactory;
-import org.testcontainers.containers.TrinoContainer;
 
 /**
  * Object mother for a testable Athena connection spec that provides access to the sandbox database.
  */
 public class AthenaConnectionSpecObjectMother {
 
-    private static TrinoContainer sharedContainer;
-
     /**
-     * Connection name to Athena.
-     */
-    public static final String CONNECTION_NAME = "trino_connection";
-
-    /**
-     * Creates a default connection spec to a sandbox trino database.
-     * @return Connection spec to a sandbox environment.
+     * Creates a default connection spec to athena database.
+     * @return Connection spec to a cloud environment.
      */
     public static ConnectionSpec create() {
 

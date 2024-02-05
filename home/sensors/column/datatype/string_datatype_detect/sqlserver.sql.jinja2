@@ -54,7 +54,7 @@ SELECT
                     ELSE 0
                     END
             )
-            THEN 5
+            THEN 6
         WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
             SUM(
                 CASE
@@ -70,8 +70,8 @@ SELECT
                     ELSE 0
                 END
             )
-            THEN 6
-        ELSE 7
+            THEN 7
+        ELSE 8
     END AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
