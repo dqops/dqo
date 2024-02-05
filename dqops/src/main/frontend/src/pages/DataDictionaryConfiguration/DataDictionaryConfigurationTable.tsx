@@ -3,12 +3,15 @@ import { DataDictionaryListModel } from '../../api';
 import Button from '../../components/Button';
 import SvgIcon from '../../components/SvgIcon';
 import { DataDictionaryApiClient } from '../../services/apiClient';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
 import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
+import { IRootState } from '../../redux/reducers';
 
 export default function DataDictionaryConfigurationTable() {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const [loading, setLoading] = useState(false);
   const [dictionaries, setDictionaries] = useState<DataDictionaryListModel[]>(
     []
@@ -76,6 +79,7 @@ export default function DataDictionaryConfigurationTable() {
               onClick={() =>
                 updateDataDictionary(dictionary.dictionary_name ?? '')
               }
+              disabled={userProfile.can_manage_definitions !== true}
             />
           </td>
           <td className="px-6 py-2 text-left block max-w-100">
@@ -86,6 +90,7 @@ export default function DataDictionaryConfigurationTable() {
               onClick={() =>
                 setSelectedDictionaryToDelete(dictionary.dictionary_name ?? '')
               }
+              disabled={userProfile.can_manage_definitions !== true}
             />
           </td>
           <td className="px-6 py-2 text-left block max-w-100">

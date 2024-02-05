@@ -3,8 +3,12 @@ import Button from '../../components/Button';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/definition.actions';
 import { ROUTES } from '../../shared/routes';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 
 export default function DataDictionaryConfigurationHeader() {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
+
   const dispatch = useActionDispatch();
   const addDictionary = () => {
     dispatch(
@@ -27,6 +31,7 @@ export default function DataDictionaryConfigurationHeader() {
         variant="contained"
         className="absolute right-2 top-2 w-40"
         onClick={addDictionary}
+        disabled={userProfile.can_manage_definitions !== true}
       />
     </thead>
   );

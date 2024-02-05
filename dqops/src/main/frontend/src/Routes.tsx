@@ -7,6 +7,7 @@ import ConnectionLayout from "./components/ConnectionLayout";
 import DefinitionLayout from "./components/DefinitionLayout";
 import DashboardLayout from "./components/DashboardLayout";
 import IncidentsLayout from "./components/IncidentsLayout";
+import CreateConnection from './pages/CreateConnection';
 
 const Routes = () => {
   return (
@@ -37,8 +38,10 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} />} />
 
+      {/* Create Connection (packed with MainLayout) */}
+      <Route exact path={ROUTES.PATTERNS.CREATE} render={() => <CreateConnection/>} />
+
       {/* Connction Layout pages */}
-      <Route exact path={ROUTES.PATTERNS.CREATE} render={() => <ConnectionLayout route={ROUTES.PATTERNS.CREATE} />} />
       <Route exact path={ROUTES.PATTERNS.CONNECTION} render={() => <ConnectionLayout route={ROUTES.PATTERNS.CONNECTION} />} />
       <Route exact path={ROUTES.PATTERNS.SCHEMA} render={() => <ConnectionLayout route={ROUTES.PATTERNS.SCHEMA} />} />
       <Route exact path={ROUTES.PATTERNS.TABLE} render={() => <ConnectionLayout route={ROUTES.PATTERNS.TABLE} />} />

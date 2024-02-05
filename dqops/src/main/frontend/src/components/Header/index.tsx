@@ -279,7 +279,7 @@ const Header = () => {
               'px-4 cursor-pointer',
               location.pathname.startsWith('/definitions') ? 'font-bold' : ''
               )}
-              onClick={() => history.push('/definitions')}
+              onClick={() => location.pathname.startsWith('/definitions') ? undefined : history.push('/definitions')}
               >
             Configuration
             </div>
