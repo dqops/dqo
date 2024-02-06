@@ -60,6 +60,7 @@ import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
+import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
@@ -1051,4 +1052,66 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     public TreeNodeTraversalResult accept(DictionaryWrapperImpl dictionaryWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
+
+    /**
+     * Accepts a file format specification.
+     *
+     * @param fileFormatSpec File format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FileFormatSpec fileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a csv file format specification.
+     *
+     * @param csvFileFormatSpec Csv file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CsvFileFormatSpec csvFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a json file format specification.
+     *
+     * @param jsonFileFormatSpec Json file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(JsonFileFormatSpec jsonFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a parquet file format specification.
+     *
+     * @param parquetFileFormatSpec Parquet file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ParquetFileFormatSpec parquetFileFormatSpec, T parameter){
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+
+    /**
+     * Accepts a file path list spec
+     *
+     * @param filePathListSpec   File path list spec
+     * @param parameter          Visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(FilePathListSpec filePathListSpec, T parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
 }

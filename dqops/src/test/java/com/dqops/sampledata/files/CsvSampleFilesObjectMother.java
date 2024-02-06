@@ -15,6 +15,8 @@
  */
 package com.dqops.sampledata.files;
 
+import com.dqops.sampledata.files.csv.CsvFileProvider;
+import com.dqops.sampledata.files.csv.HeaderEntry;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.api.ColumnType;
@@ -25,18 +27,31 @@ import tech.tablesaw.columns.Column;
 import tech.tablesaw.io.csv.CsvReadOptions;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Provides access to cached instances of sample data.
  */
 public class CsvSampleFilesObjectMother {
     private static final Map<String, SampleTableFromCsv> tables = new HashMap<>();
+
+    /**
+     * The supported column types that are the same as the types in ColumnType class
+     */
+    private static ArrayList<ColumnType> columnTypesToDetect = new ArrayList<>() {{
+        add(ColumnType.INTEGER);
+        add(ColumnType.DOUBLE);
+        add(ColumnType.LONG);
+        add(ColumnType.LOCAL_DATE);
+        add(ColumnType.LOCAL_DATE_TIME);
+        add(ColumnType.LOCAL_TIME);
+        add(ColumnType.INSTANT);
+        add(ColumnType.STRING);
+    }};
 
     /**
      * Loads a CSV file with sample data from the dqo/sampledata folder. Applies requested column types according to the
@@ -47,22 +62,9 @@ public class CsvSampleFilesObjectMother {
      */
     public static CsvSampleFileContent loadTableCsv(String fileName) {
         try {
-            String sampleDataFolder = System.getenv("SAMPLE_DATA_FOLDER");
-            Path sampleFilePath = Path.of(sampleDataFolder).resolve(fileName);
-            File sampleFile = sampleFilePath.toFile();
-            Assertions.assertTrue(Files.exists(sampleFilePath));
+            File sampleFile = CsvFileProvider.getFile(fileName);
             HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
-            ArrayList<ColumnType> columnTypesToDetect = new ArrayList<>() {{
-				add(ColumnType.INTEGER);
-				add(ColumnType.DOUBLE);
-				add(ColumnType.LONG);
-				add(ColumnType.LOCAL_DATE);
-				add(ColumnType.LOCAL_DATE_TIME);
-				add(ColumnType.LOCAL_TIME);
-				add(ColumnType.INSTANT);
-				add(ColumnType.STRING);
-            }};
             CsvReadOptions csvReadOptions = CsvReadOptions.builder(sampleFile)
                     .header(true)
                     .columnTypesToDetect(columnTypesToDetect)
@@ -121,6 +123,131 @@ public class CsvSampleFilesObjectMother {
     }
 
     /**
+     * Loads CSV files with sample data from the dqo/sampledata/{path} folder. Applies requested column types according to the
+     * column names. The header row from header.csv file should have column names in the format: {column_name}:{requested_type}. Supported types
+     * are the same as types in ColumnType class (case insensitive), for example: INTEGER, DOUBLE, LOCAL_DATE, LOCAL_DATE_TIME.
+     * @param folderName CSV file name in the sampledata folder.
+     * @return Loaded multiple csv.
+     */
+    public static CsvSampleFileContent loadTableFromFolderWithCsvFiles(String folderName) {
+        try {
+            List<File> sampleFiles = CsvFileProvider.getFiles(folderName);
+            HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
+
+            Table convertedTable = Table.create(folderName);
+
+            File headerFile = sampleFiles.stream()
+                    .filter(file -> file.getName().equals("header.csv"))
+                    .findFirst()
+                    .get();
+
+            List<HeaderEntry> columnNamesWithTypes = getColumnNamesWithTypesFromHeaderFile(headerFile);
+
+            sampleFiles.stream()
+                    .filter(file -> !file.getName().equals("header.csv"))
+                    .collect(Collectors.toList())
+                    .forEach(file -> {
+
+                        CsvReadOptions csvReadOptions = CsvReadOptions.builder(file)
+                                .header(false)
+                                .columnTypesToDetect(columnTypesToDetect)
+                                .separator(',')
+                                .dateFormat(DateTimeFormatter.ISO_DATE)
+                                .dateTimeFormat(DateTimeFormatter.ISO_LOCAL_DATE_TIME)
+                                .missingValueIndicator("")
+                                .build();
+
+                        Table loadedTable = Table.read().csv(csvReadOptions);
+
+                        int i = 0;
+                        for (Column<?> loadedColumn : loadedTable.columnArray()) {
+
+                            loadedColumn.setName(columnNamesWithTypes.get(i).getColumnName());
+
+                            Column<?> convertedColumn = getConvertedColumn(
+                                    loadedColumn,
+                                    columnNamesWithTypes.get(i).getColumnType(),
+                                    loadedTable,
+                                    convertedTable,
+                                    columnNamesWithTypes.get(i).getColumnName());
+                            if(convertedColumn != null){
+                                if(!convertedTable.containsColumn(columnNamesWithTypes.get(i).getColumnName())){
+                                    convertedTable.addColumns(convertedColumn);
+                                } else {
+                                    // todo: add data
+                                }
+                            }
+                            i++;
+                        }
+                    });
+
+            return new CsvSampleFileContent(convertedTable, columnPhysicalDataTypes);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException("Failed to read sample files from the path: " + folderName, ex);
+        }
+    }
+
+    private static List<HeaderEntry> getColumnNamesWithTypesFromHeaderFile(File headerFile){
+
+        String rawHeader = null;
+        try {
+            rawHeader = Files.readAllLines(headerFile.toPath()).get(0);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        List<HeaderEntry> columnNamesWithTypes = new ArrayList<>();
+
+        Arrays.stream(rawHeader.split(",")).forEachOrdered(headerColumn -> {
+
+            String[] nameTypeParts = headerColumn.split(":");
+            Assertions.assertTrue(nameTypeParts.length == 2);
+            String columnName = nameTypeParts[0];
+            String typeName = nameTypeParts[1];
+            ColumnType columnType = ColumnType.valueOf(typeName);
+
+            HeaderEntry headerEntry = new HeaderEntry(columnName, columnType);
+            columnNamesWithTypes.add(headerEntry);
+        });
+
+        return columnNamesWithTypes;
+    }
+
+    private static Column<?> getConvertedColumn(Column<?> loadedColumn,
+                                                ColumnType columnType,
+                                                Table loadedTable,
+                                                Table convertedTable,
+                                                String columnName){
+
+        if (loadedColumn instanceof StringColumn) {
+            StringColumn loadedStringColumn = (StringColumn) loadedColumn;
+            loadedColumn = loadedStringColumn.set(loadedStringColumn.isEqualTo(""), (String)null);
+        }
+
+        if (loadedColumn instanceof TextColumn) {
+            TextColumn loadedTextColumn = (TextColumn) loadedColumn;
+            loadedColumn = loadedTextColumn.set(loadedTextColumn.isEqualTo(""), (String)null);
+        }
+
+        if (loadedColumn.type().equals(columnType)) {
+            Column<?> copiedColumn = loadedColumn.copy();
+            copiedColumn.setName(columnName);
+            if(!convertedTable.columnNames().contains(copiedColumn.name())) {
+                convertedTable.addColumns(copiedColumn);
+            }
+            return null;
+        }
+
+        Column<?> convertedColumn = columnType.create(columnName);
+        for (int i = 0; i < loadedTable.rowCount(); i++) {
+            String stringValue = loadedColumn.getString(i);
+            convertedColumn.appendCell(stringValue); // conversion
+        }
+
+        return convertedColumn;
+    }
+
+    /**
      * Loads or returns a cached sample table loaded from a csv file in the dqo/sampledata folder.
      * @param fileName CSV file name inside the dqo/sampledata folder.
      * @return Sample data with a proposed physical table name based on the table hash.
@@ -129,13 +256,36 @@ public class CsvSampleFilesObjectMother {
         if (tables.containsKey(fileName)) {
             return tables.get(fileName);
         }
-
         CsvSampleFileContent csvSampleFileContent = loadTableCsv(fileName);
+        return getSampleTable(csvSampleFileContent, fileName);
+    }
+
+    /**
+     * Loads or returns a cached sample table loaded from a csv file in the dqo/sampledata folder.
+     * @param filesFolder folder of CSV file names inside the dqo/sampledata folder.
+     * @return Sample data with a proposed physical table name based on the table hash.
+     */
+    public static SampleTableFromCsv getSampleTableForFiles(String filesFolder) {
+        if (tables.containsKey(filesFolder)) {
+            return tables.get(filesFolder);
+        }
+        CsvSampleFileContent csvSampleFileContent = loadTableFromFolderWithCsvFiles(filesFolder);
+        return getSampleTable(csvSampleFileContent, filesFolder);
+    }
+
+    /**
+     * Loads a sample table to the cache of tables and returns the sample table.
+     * @param csvSampleFileContent Csv sample file content.
+     * @param csvDataName Csv data name that will be used as a key in a table cache.
+     * @return Sample table.
+     */
+    private static SampleTableFromCsv getSampleTable(CsvSampleFileContent csvSampleFileContent, String csvDataName){
         Table loadedTable = csvSampleFileContent.getTable();
         long tableHash = TableHashingHelper.hashTable(loadedTable);
         String hashedTableName = loadedTable.name() + "_" + tableHash;
         SampleTableFromCsv sampleTable = new SampleTableFromCsv(loadedTable, hashedTableName, tableHash, csvSampleFileContent.getColumnPhysicalDataTypes());
-		tables.put(fileName, sampleTable);
+        tables.put(csvDataName, sampleTable);
         return sampleTable;
     }
+
 }

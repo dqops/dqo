@@ -124,7 +124,6 @@ public class SingleStoreDbSourceConnection {
 
         sqlBuilder.append("SELECT ");
         sqlBuilder.append("TABLE_CATALOG,TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,ORDINAL_POSITION,COLUMN_DEFAULT,IS_NULLABLE,IS_SPARSE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,CHARACTER_SET_NAME,COLLATION_NAME,CAST(COLUMN_TYPE as CHAR(8192)),COLUMN_KEY,EXTRA,PRIVILEGES,COLUMN_COMMENT,DATETIME_PRECISION");
-//        sqlBuilder.append("*");
         sqlBuilder.append(" FROM ");
 
         String databaseName = providerSpecificConfiguration.getDatabase();

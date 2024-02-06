@@ -38,6 +38,7 @@ import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
@@ -80,6 +81,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
+            put("file_format", o -> o.fileFormat);
         }
     };
 
@@ -195,6 +197,11 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
 
     @JsonIgnore
     private String yamlParsingError;
+
+    @JsonPropertyDescription("File format with the specification used as a source data.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private FileFormatSpec fileFormat;
 
     /**
      * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
@@ -551,6 +558,24 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
 		setDirtyIf(!Objects.equals(this.comments, comments));
         this.comments = comments;
 		propagateHierarchyIdToField(comments, "comments");
+    }
+
+    /**
+     * Returns a file format.
+     * @return A file format.
+     */
+    public FileFormatSpec getFileFormat() {
+        return fileFormat;
+    }
+
+    /**
+     * Sets a new file format.
+     * @param fileFormat A file format.
+     */
+    public void setFileFormat(FileFormatSpec fileFormat) {
+        setDirtyIf(!Objects.equals(this.fileFormat, fileFormat));
+        this.fileFormat = fileFormat;
+        propagateHierarchyIdToField(fileFormat, "file_format");
     }
 
     /**
@@ -957,6 +982,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
+            cloned.fileFormat = null;   // todo: not sure if valid
             cloned.columns = null;
             cloned.statistics = null;
             cloned.incidentGrouping = null;

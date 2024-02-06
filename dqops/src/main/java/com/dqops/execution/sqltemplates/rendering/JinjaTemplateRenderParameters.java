@@ -58,6 +58,7 @@ public class JinjaTemplateRenderParameters {
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
     private List<String> additionalFilters;
+    private String tableFromFiles;
 
     /**
      * Creates a default, empty jinja template render parameters object.
@@ -95,7 +96,8 @@ public class JinjaTemplateRenderParameters {
 										 ProviderDialectSettings dialectSettings,
                                          String actualValueAlias,
                                          String expectedValueAlias,
-                                         List<String> additionalFilters) {
+                                         List<String> additionalFilters,
+                                         String tableFromFiles) {
         this.connection = connection;
         this.table = table;
         this.targetTable = table.getPhysicalTableName();
@@ -111,6 +113,7 @@ public class JinjaTemplateRenderParameters {
         this.actualValueAlias = actualValueAlias;
         this.expectedValueAlias = expectedValueAlias;
         this.additionalFilters = additionalFilters;
+        this.tableFromFiles = tableFromFiles;
     }
 
     /**
@@ -139,6 +142,8 @@ public class JinjaTemplateRenderParameters {
             setActualValueAlias(sensorRunParameters.getActualValueAlias());
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
             setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
+            setTableFromFiles(sensorRunParameters.getTable().getFileFormat() != null
+                    ? sensorRunParameters.getTable().getFileFormat().buildTableOptionsString() : null);
         }};
 
         return result;
@@ -383,4 +388,21 @@ public class JinjaTemplateRenderParameters {
     public void setAdditionalFilters(List<String> additionalFilters) {
         this.additionalFilters = additionalFilters;
     }
+
+    /**
+     * Returns the table from files with properties string.
+     * @return The table properties string.
+     */
+    public String getTableFromFiles() {
+        return tableFromFiles;
+    }
+
+    /**
+     * Sets the table from files with properties string.
+     * @param tableFromFiles The table properties string.
+     */
+    public void setTableFromFiles(String tableFromFiles) {
+        this.tableFromFiles = tableFromFiles;
+    }
+
 }

@@ -37,6 +37,9 @@ public enum ProviderType {
     @JsonProperty("postgresql")
     postgresql,
 
+    @JsonProperty("duckdb")
+    duckdb,
+
     @JsonProperty("presto")
     presto,
 
@@ -70,6 +73,8 @@ public enum ProviderType {
                 return "Oracle";
             case postgresql:
                 return "PostgreSQL";
+            case duckdb:
+                return "DuckDB";
             case presto:
                 return "Presto";
             case redshift:

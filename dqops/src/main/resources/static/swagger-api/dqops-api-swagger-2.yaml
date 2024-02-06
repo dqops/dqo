@@ -28710,6 +28710,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -28813,6 +28814,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -28831,6 +28833,10 @@ definitions:
         description: "PostgreSQL connection parameters. Specify parameters in the\
           \ postgresql section or set the url (which is the PostgreSQL JDBC url)."
         $ref: "#/definitions/PostgresqlParametersSpec"
+      duckdb:
+        description: "DuckDB connection parameters. Specify parameters in the duckdb\
+          \ section or set the url (which is the DuckDB JDBC url)."
+        $ref: "#/definitions/DuckdbParametersSpec"
       redshift:
         description: "Redshift connection parameters. Specify parameters in the redshift\
           \ section or set the url (which is the Redshift JDBC url)."
@@ -28956,6 +28962,46 @@ definitions:
         format: "int64"
         description: "Maximum accepted count (inclusive), leave empty when the limit\
           \ is not assigned."
+  CsvFileFormatSpec:
+    type: "object"
+    properties:
+      all_varchar:
+        type: "boolean"
+      allow_quoted_nulls:
+        type: "boolean"
+      auto_detect:
+        type: "boolean"
+      columns:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      compression:
+        type: "string"
+      dateformat:
+        type: "string"
+      decimal_separator:
+        type: "string"
+      delim:
+        type: "string"
+      escape:
+        type: "string"
+      filename:
+        type: "boolean"
+      header:
+        type: "boolean"
+      hive_partitioning:
+        type: "boolean"
+      ignore_errors:
+        type: "boolean"
+      new_line:
+        type: "string"
+      quote:
+        type: "string"
+      skip:
+        type: "integer"
+        format: "int64"
+      timestampformat:
+        type: "string"
   CustomCheckSpec:
     type: "object"
     properties:
@@ -29757,6 +29803,31 @@ definitions:
         description: "User can change his own password in DQOps Cloud, because the\
           \ DQOps Cloud Pairing API Key is valid and synchronization is enabled."
     description: "The model that describes the current user and his access rights."
+  DuckdbParametersSpec:
+    type: "object"
+    properties:
+      in_memory:
+        type: "boolean"
+        description: "To use the special value :memory: to create an in-memory database\
+          \ where no data is persisted to disk (i.e., all data is lost when you exit\
+          \ the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format\
+          \ to use dynamic substitution."
+      database:
+        type: "string"
+        description: "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      options:
+        type: "string"
+        description: "DuckDB connection 'options' initialization parameter. For example\
+          \ setting this to -c statement_timeout=5min would set the statement timeout\
+          \ parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS}\
+          \ configuration with a custom environment variable."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   Duration:
     type: "object"
     properties:
@@ -29995,6 +30066,27 @@ definitions:
         description: "Field value for an date."
     description: "Model of a single field that is used to edit a parameter value for\
       \ a sensor or a rule. Describes the type of the field and the current value."
+  FileFormatSpec:
+    type: "object"
+    properties:
+      csv_file_format:
+        description: "Csv file format specification."
+        $ref: "#/definitions/CsvFileFormatSpec"
+      json_file_format:
+        description: "Json file format specification."
+        $ref: "#/definitions/JsonFileFormatSpec"
+      parquet_file_format:
+        description: "Parquet file format specification."
+        $ref: "#/definitions/ParquetFileFormatSpec"
+      file_path_list:
+        type: "array"
+        description: "The list of paths to files with data that are used as a source."
+        items:
+          type: "string"
+      file_paths:
+        type: "array"
+        items:
+          type: "string"
   HierarchyIdModel:
     type: "object"
     properties:
@@ -30260,6 +30352,8 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
+  JsonFileFormatSpec:
+    type: "object"
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -30639,6 +30733,8 @@ definitions:
         description: "The default value for a parameter in a custom check or a custom\
           \ rule."
     description: "Defines a single field that is a sensor parameter or a rule parameter."
+  ParquetFileFormatSpec:
+    type: "object"
   PartitionIncrementalTimeWindowSpec:
     type: "object"
     properties:
@@ -30802,6 +30898,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -30833,6 +30930,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -34781,6 +34879,9 @@ definitions:
           \ in the table data quality specification file."
         items:
           $ref: "#/definitions/CommentSpec"
+      file_format:
+        description: "File format with the specification used as a source data."
+        $ref: "#/definitions/FileFormatSpec"
   TableSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
