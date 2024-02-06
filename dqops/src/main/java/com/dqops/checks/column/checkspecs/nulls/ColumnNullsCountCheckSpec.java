@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set number of null values in the monitored column.
+ * Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
+ * Raises a data quality issue when the count of null values is above a *max_count* threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

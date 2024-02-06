@@ -66,6 +66,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`columns`](./TableYaml.md#columnspecmap)</span>|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|*[ColumnSpecMap](./TableYaml.md#columnspecmap)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments used for change tracking and documenting changes directly in the table data quality specification file.|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
+|<span class="no-wrap-code ">[`file_format`](./TableYaml.md#fileformatspec)</span>|File format with the specification used as a source data.|*[FileFormatSpec](./TableYaml.md#fileformatspec)*| | | |
 
 
 
@@ -1420,6 +1421,163 @@ The structure of this object is described below
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">[`parameters`](../sensors/column/sampling-column-sensors.md#column-samples)</span>|Profiler parameters|*[ColumnSamplingColumnSamplesSensorParametersSpec](../sensors/column/sampling-column-sensors.md#column-samples)*| | | |
 |<span class="no-wrap-code ">`disabled`</span>|Disables this profiler. Only enabled profilers are executed during a profiling process.|*boolean*| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## FileFormatSpec
+File format specification for data loaded from the physical files of one of supported formats.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`csv_file_format`](./TableYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./TableYaml.md#csvfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`json_file_format`](./TableYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./TableYaml.md#jsonfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`parquet_file_format`](./TableYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./TableYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`file_path_list`](./TableYaml.md#filepathlistspec)</span>|The list of paths to files with data that are used as a source.|*[FilePathListSpec](./TableYaml.md#filepathlistspec)*| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## CsvFileFormatSpec
+Csv file format specification for querying data in the csv format files.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`all_varchar`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`allow_quoted_nulls`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`auto_detect`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`columns`</span>||*Dict[string, string]*| | | |
+|<span class="no-wrap-code ">`compression`</span>||*string*| | | |
+|<span class="no-wrap-code ">`dateformat`</span>||*string*| | | |
+|<span class="no-wrap-code ">`decimal_separator`</span>||*string*| | | |
+|<span class="no-wrap-code ">`delim`</span>||*string*| | | |
+|<span class="no-wrap-code ">`escape`</span>||*string*| | | |
+|<span class="no-wrap-code ">`filename`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`header`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`hive_partitioning`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`ignore_errors`</span>||*boolean*| | | |
+|<span class="no-wrap-code ">`new_line`</span>||*string*| | | |
+|<span class="no-wrap-code ">`quote`</span>||*string*| | | |
+|<span class="no-wrap-code ">`skip`</span>||*long*| | | |
+|<span class="no-wrap-code ">`timestampformat`</span>||*string*| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## JsonFileFormatSpec
+Json file format specification for querying data in the json format files.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+
+
+
+
+
+
+
+
+
+___
+
+
+## ParquetFileFormatSpec
+Parquet file format specification for querying data in the parquet format files.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+
+
+
+
+
+
+
+
+
+___
+
+
+## FilePathListSpec
+
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">`self`</span>||*List[string]*| | | |
 
 
 

@@ -4,8 +4,8 @@ kind: check
 spec:
   sensor_name: column/nulls/not_null_count
   rule_name: comparison/min_count
-  help_text: Detects empty columns. The default rule min_count=1 verifies that the
-    column has any values. Verifies that the number of not null values in a column
-    does not exceed the minimum accepted count. Stores the most recent captured value
-    for each day when the data quality check was evaluated.
+  help_text: Detects empty columns that contain only null values. Counts the number
+    of rows that have non-null values. Raises a data quality issue when the count
+    of non-null values is below min_count. Stores the most recent captured value for
+    each day when the data quality check was evaluated.
   standard: true

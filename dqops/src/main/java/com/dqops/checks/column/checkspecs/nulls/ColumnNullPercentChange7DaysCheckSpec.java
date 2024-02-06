@@ -34,7 +34,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
+ * Detects relative increases or decreases in the percentage of null values since the last week (seven days ago).
+ * Measures the percentage of null values for each day.
+ * Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

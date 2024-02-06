@@ -45,11 +45,10 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         {
             put("daily_partition_nulls_count", o -> o.dailyPartitionNullsCount);
             put("daily_partition_nulls_percent", o -> o.dailyPartitionNullsPercent);
+            put("daily_partition_nulls_percent_anomaly", o ->o.dailyPartitionNullsPercentAnomaly);
 
             put("daily_partition_not_nulls_count", o -> o.dailyPartitionNotNullsCount);
             put("daily_partition_not_nulls_percent", o -> o.dailyPartitionNotNullsPercent);
-
-            put("daily_partition_nulls_percent_anomaly", o ->o.dailyPartitionNullsPercentAnomaly);
 
             put("daily_partition_nulls_percent_change", o ->o.dailyPartitionNullsPercentChange);
             put("daily_partition_nulls_percent_change_1_day", o ->o.dailyPartitionNullsPercentChange1Day);
@@ -58,20 +57,20 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         }
     };
 
-    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsCountCheckSpec dailyPartitionNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each daily partition.")
     private ColumnNullsPercentCheckSpec dailyPartitionNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.")
+    private ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec dailyPartitionNullsPercentChange;
@@ -125,6 +124,24 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
+     * Returns a null percent value anomaly 90 days check specification.
+     * @return Null percent value anomaly 90 days check specification.
+     */
+    public ColumnNullPercentAnomalyStationaryCheckSpec getDailyPartitionNullsPercentAnomaly() {
+        return dailyPartitionNullsPercentAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a null percent value anomaly 90 days check.
+     * @param dailyPartitionNullsPercentAnomaly Null percent value anomaly 90 days check specification.
+     */
+    public void setDailyPartitionNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentAnomaly, dailyPartitionNullsPercentAnomaly));
+        this.dailyPartitionNullsPercentAnomaly = dailyPartitionNullsPercentAnomaly;
+        propagateHierarchyIdToField(dailyPartitionNullsPercentAnomaly, "daily_partition_nulls_percent_anomaly");
+    }
+
+    /**
      * Returns a not nulls count check.
      * @return Not nulls count check.
      */
@@ -148,24 +165,6 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
      */
     public ColumnNotNullsPercentCheckSpec getDailyPartitionNotNullsPercent() {
         return dailyPartitionNotNullsPercent;
-    }
-
-    /**
-     * Returns a null percent value anomaly 90 days check specification.
-     * @return Null percent value anomaly 90 days check specification.
-     */
-    public ColumnNullPercentAnomalyStationaryCheckSpec getDailyPartitionNullsPercentAnomaly() {
-        return dailyPartitionNullsPercentAnomaly;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 90 days check.
-     * @param dailyPartitionNullsPercentAnomaly Null percent value anomaly 90 days check specification.
-     */
-    public void setDailyPartitionNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec dailyPartitionNullsPercentAnomaly) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionNullsPercentAnomaly, dailyPartitionNullsPercentAnomaly));
-        this.dailyPartitionNullsPercentAnomaly = dailyPartitionNullsPercentAnomaly;
-        propagateHierarchyIdToField(dailyPartitionNullsPercentAnomaly, "daily_partition_nulls_percent_anomaly");
     }
 
     /**

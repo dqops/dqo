@@ -35,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+ * Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
+ * Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
+ * The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -154,18 +156,6 @@ public class ColumnNotNullsPercentCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
-     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
-     *
-     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
-     */
-    @Override
-    @JsonIgnore
-    public boolean isStandard() {
-        return true;
     }
 
     /**

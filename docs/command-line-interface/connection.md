@@ -73,7 +73,8 @@ Creates a new connection to the database with the specified details such as conn
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
+                [--sqlserver-disable-encryption]
                 [--athena-authentication-mode=<athenaAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -90,7 +91,8 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-http-path=<httpPath>]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--databricks-user=<user>] [--duckdb-database=<database>]
+                [--duckdb-options=<options>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -125,18 +127,20 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-K=<String=String>]...
-                [-M=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [-D=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
 **DQOps shell synopsis**
 
 ```
-dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+dqo> connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
+                [--sqlserver-disable-encryption]
                 [--athena-authentication-mode=<athenaAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -153,7 +157,8 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-http-path=<httpPath>]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
-                [--databricks-user=<user>] [--mysql-database=<database>]
+                [--databricks-user=<user>] [--duckdb-database=<database>]
+                [--duckdb-options=<options>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -188,11 +193,12 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--trino-catalog=<catalog>] [--trino-engine=<trinoEngineType>]
                 [--trino-host=<host>] [--trino-password=<password>]
                 [--trino-port=<port>] [--trino-user=<user>]
-                [-D=<String=String>]... [-E=<String=String>]...
-                [-F=<String=String>]... [-K=<String=String>]...
-                [-M=<String=String>]... [-O=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
-                [-S=<String=String>]... [-T=<String=String>]...
+                [-D=<String=String>]... [-Duck=<String=String>]...
+                [-E=<String=String>]... [-F=<String=String>]...
+                [-K=<String=String>]... [-M=<String=String>]...
+                [-O=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]... [-S=<String=String>]...
+                [-T=<String=String>]...
 
 ```
 
@@ -223,6 +229,9 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-in-memory" class="no-wrap-code">`--duckdb-in-memory`</div>|To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
@@ -255,7 +264,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--presto-password" class="no-wrap-code">`--presto-password`</div>|Presto database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--presto-port" class="no-wrap-code">`--presto-port`</div>|Presto port number| ||
 |<div id="connection add--presto-user" class="no-wrap-code">`--presto-user`</div>|Presto user name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
+|<div id="connection add-t" class="no-wrap-code">`-t`</div><div id="connection add--provider" class="no-wrap-code">`--provider`</div>|Connection provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
 |<div id="connection add--redshift-database" class="no-wrap-code">`--redshift-database`</div>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--redshift-host" class="no-wrap-code">`--redshift-host`</div>|Redshift host name| ||
 |<div id="connection add--redshift-options" class="no-wrap-code">`--redshift-options`</div>|Redshift connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -289,6 +298,7 @@ All parameters supported by the command are listed below.
 |<div id="connection add--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection add--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection add-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
 |<div id="connection add-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<div id="connection add-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||
@@ -370,7 +380,8 @@ Update the connection or connections that match the conditions specified in the 
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
+                   [--sqlserver-disable-encryption]
                    [--athena-authentication-mode=<athenaAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -388,6 +399,7 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--duckdb-database=<database>] [--duckdb-options=<options>]
                    [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
@@ -424,18 +436,19 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-K=<String=String>]... [-M=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
 **DQOps shell synopsis**
 
 ```
-dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
+dqo> connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
+                   [--sqlserver-disable-encryption]
                    [--athena-authentication-mode=<athenaAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -453,6 +466,7 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-options=<options>]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
+                   [--duckdb-database=<database>] [--duckdb-options=<options>]
                    [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
@@ -489,11 +503,11 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--trino-engine=<trinoEngineType>] [--trino-host=<host>]
                    [--trino-password=<password>] [--trino-port=<port>]
                    [--trino-user=<user>] [-D=<String=String>]...
-                   [-E=<String=String>]... [-F=<String=String>]...
-                   [-K=<String=String>]... [-M=<String=String>]...
-                   [-O=<String=String>]... [-P=<String=String>]...
-                   [-R=<String=String>]... [-S=<String=String>]...
-                   [-T=<String=String>]...
+                   [-Duck=<String=String>]... [-E=<String=String>]...
+                   [-F=<String=String>]... [-K=<String=String>]...
+                   [-M=<String=String>]... [-O=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+                   [-S=<String=String>]... [-T=<String=String>]...
 
 ```
 
@@ -524,6 +538,9 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-password" class="no-wrap-code">`--databricks-password`</div>|Databricks database password.| ||
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
+|<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-in-memory" class="no-wrap-code">`--duckdb-in-memory`</div>|To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
@@ -589,6 +606,7 @@ All parameters supported by the command are listed below.
 |<div id="connection update--trino-port" class="no-wrap-code">`--trino-port`</div>|Trino port number.| ||
 |<div id="connection update--trino-user" class="no-wrap-code">`--trino-user`</div>|Trino user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-D" class="no-wrap-code">`-D`</div>|Databricks additional properties that are added to the JDBC connection string| ||
+|<div id="connection update-Duck" class="no-wrap-code">`-Duck`</div>|DuckDB additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-E" class="no-wrap-code">`-E`</div>|Presto additional properties that are added to the JDBC connection string.| ||
 |<div id="connection update-F" class="no-wrap-code">`-F`</div>|Snowflake additional properties that are added to the JDBC connection string| ||
 |<div id="connection update-K" class="no-wrap-code">`-K`</div>|Spark additional properties that are added to the JDBC connection string| ||

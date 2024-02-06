@@ -22961,24 +22961,24 @@
           }
         },
         "daily_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
+        "daily_nulls_percent_anomaly" : {
+          "description" : "Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.",
+          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
+        },
         "daily_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
-        },
-        "daily_nulls_percent_anomaly" : {
-          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during the last 90 days.",
-          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
         },
         "daily_nulls_percent_change" : {
           "description" : "Verifies that the null percent value in a column changed in a fixed rate since the last readout.",
@@ -23009,24 +23009,24 @@
           }
         },
         "daily_partition_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "daily_partition_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
+        "daily_partition_nulls_percent_anomaly" : {
+          "description" : "Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.",
+          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
+        },
         "daily_partition_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "daily_partition_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
-        },
-        "daily_partition_nulls_percent_anomaly" : {
-          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
         },
         "daily_partition_nulls_percent_change" : {
           "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout.",
@@ -23057,19 +23057,19 @@
           }
         },
         "monthly_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent count check result for each month when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold.. Stores the most recent count check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_not_nulls_count" : {
-          "description" : "Detects columns that are empty and have no values (with the rule threshold min_count=1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         }
       }
@@ -23085,19 +23085,19 @@
           }
         },
         "monthly_partition_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "monthly_partition_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
         "monthly_partition_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "monthly_partition_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
         }
       }
@@ -23257,24 +23257,24 @@
           }
         },
         "profile_nulls_count" : {
-          "description" : "Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.",
+          "description" : "Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold.",
           "$ref" : "#/definitions/ColumnNullsCountCheckSpec"
         },
         "profile_nulls_percent" : {
-          "description" : "Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.",
+          "description" : "Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold.",
           "$ref" : "#/definitions/ColumnNullsPercentCheckSpec"
         },
+        "profile_nulls_percent_anomaly" : {
+          "description" : "Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.",
+          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
+        },
         "profile_not_nulls_count" : {
-          "description" : "Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.",
+          "description" : "Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count.",
           "$ref" : "#/definitions/ColumnNotNullsCountCheckSpec"
         },
         "profile_not_nulls_percent" : {
-          "description" : "Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage.",
+          "description" : "Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage.",
           "$ref" : "#/definitions/ColumnNotNullsPercentCheckSpec"
-        },
-        "profile_nulls_percent_anomaly" : {
-          "description" : "Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.",
-          "$ref" : "#/definitions/ColumnNullPercentAnomalyStationaryCheckSpec"
         },
         "profile_nulls_percent_change" : {
           "description" : "Verifies that the null percent value in a column changed in a fixed rate since last readout.",

@@ -371,47 +371,64 @@ A column-level check that ensures that there are no more than a minimum percenta
 Checks for the presence of null or missing values in a column.
 
 ### [nulls count](./nulls/nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
+ Raises a data quality issue when the count of null values is above a *max_count* threshold.
 
 
 
 ### [nulls percent](./nulls/nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
-
-
-
-### [not nulls count](./nulls/not-nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
-
-
-
-### [not nulls percent](./nulls/not-nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.
+ Raises a data quality issue when the percentage of null values is above a *max_percent* threshold.
+ Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.
 
 
 
 ### [nulls percent anomaly](./nulls/nulls-percent-anomaly.md)
-A column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value.
+ Raises a data quality issue when the rate of null values increases or decreases too much.
+
+
+
+### [not nulls count](./nulls/not-nulls-count.md)
+Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
+ Raises a data quality issue when the count of non-null values is below *min_count*.
+ The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number
+ to assert that a column has at least that many non-null values.
+
+
+
+### [not nulls percent](./nulls/not-nulls-percent.md)
+Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
+ Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
+ The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
 
 
 
 ### [nulls percent change](./nulls/nulls-percent-change.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
+Detects relative increases or decreases in the percentage of null values since the last measured percentage.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 1 day](./nulls/nulls-percent-change-1-day.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+Detects relative increases or decreases in the percentage of null values since the previous day.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 7 days](./nulls/nulls-percent-change-7-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
+Detects relative increases or decreases in the percentage of null values since the last week (seven days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 30 days](./nulls/nulls-percent-change-30-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from the last month.
+Detects relative increases or decreases in the percentage of null values since the last month (30 days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
