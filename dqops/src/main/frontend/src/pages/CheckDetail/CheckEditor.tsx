@@ -127,94 +127,109 @@ const CheckEditor = ({
       );
     }
   };
-      return (
-        <div className="pt-10 pb-2 px-8 z-1">
-          <div className="pb-4 gap-2">
-            <Checkbox 
-              checked={standard}
-              onChange={(value: boolean) => { 
-                onChangeStandard(value); setIsUpdated(true);
-              }}
-              disabled={custom === false ? true : false}
-              className={custom === false ? 'cursor-default' : ''}
-              label="Standard data quality check, always shown in the editor"
-            />
-          </div>
-          <div className="pb-4 gap-2">
-            Sensor name:
-            <div className="flex items-center gap-x-4 pt-2">
-              <Select
-                placeholder={selectedSensor}
-                options={
-                  (memoizedData.sensors &&
-                    memoizedData.sensors.map((x) => ({
-                      label: x.full_sensor_name ?? '',
-                      value: x.full_sensor_name ?? ''
-                    }))) ||
-                  []
-                }
-                disabled={(custom === false || canEditDefinitions === false) ? true : false}
-                value={selectedSensor}
-                onChange={(selected) => {
-                  onChangeSensor(selected), setIsUpdated(true);
-                }}
-                disableIcon={custom === false ? true : false}
-                className="w-1/2"
-                triggerClassName={(custom === false || canEditDefinitions === false) ? "cursor-default" : ""}
-              />
-              <Button
-                label="Show definition"
-                color="primary"
-                disabled={!selectedSensor}
-                onClick={() => openSensorFirstLevelTab(selectedSensor)}
-              />
-            </div>
-          </div>
-          <div>
-            Rule name:
-            <div className="flex items-center gap-x-4 pt-2">
-              <Select
-                placeholder={selectedRule}
-                options={
-                  (memoizedData.rules &&
-                    memoizedData.rules.map((x) => ({
-                      label: x.full_rule_name ?? '',
-                      value: x.full_rule_name ?? ''
-                    }))) ||
-                  []
-                }
-                value={selectedRule}
-                disabled={(custom === false || canEditDefinitions===false) ? true : false}
-                onChange={(selected) => {
-                  onChangeRule(selected), setIsUpdated(true);
-                }}
-                disableIcon={custom === false ? true : false}
-                className="w-1/2"
-                triggerClassName={(custom === false || canEditDefinitions === false) ? "cursor-default" : ""}
-              />
-              <Button
-                label="Show definition"
-                color="primary"
-                disabled={!selectedRule}
-                onClick={() => openRuleFirstLevelTab(selectedRule)}
-              />
-            </div>
-          </div>
-          <div className="mt-6">
-            Help text:
-            <div className="flex items-center gap-x-4 pt-2 w-1/2">
-              <textarea
-                value={helpText}
-                className="font-regular text-sm focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full leading-1.5 rounded"
-                onChange={(e) => {
-                  onChangeHelpText(e), setIsUpdated(true);
-                }}
-                disabled={(custom === false || canEditDefinitions === false) ? true : false}
-              ></textarea>
-            </div>
-          </div>
+  return (
+    <div className="pt-10 pb-2 px-8 z-1">
+      <div className="pb-4 gap-2">
+        <Checkbox
+          checked={standard}
+          onChange={(value: boolean) => {
+            onChangeStandard(value);
+            setIsUpdated(true);
+          }}
+          disabled={custom === false ? true : false}
+          className={custom === false ? 'cursor-default' : ''}
+          label="Standard data quality check, always shown in the editor"
+        />
+      </div>
+      <div className="pb-4 gap-2">
+        Sensor name:
+        <div className="flex items-center gap-x-4 pt-2">
+          <Select
+            placeholder={selectedSensor}
+            options={
+              (memoizedData.sensors &&
+                memoizedData.sensors.map((x) => ({
+                  label: x.full_sensor_name ?? '',
+                  value: x.full_sensor_name ?? ''
+                }))) ||
+              []
+            }
+            disabled={
+              custom === false || canEditDefinitions === false ? true : false
+            }
+            value={selectedSensor}
+            onChange={(selected) => {
+              onChangeSensor(selected), setIsUpdated(true);
+            }}
+            disableIcon={custom === false ? true : false}
+            className="w-1/2"
+            triggerClassName={
+              custom === false || canEditDefinitions === false
+                ? 'cursor-default'
+                : ''
+            }
+          />
+          <Button
+            label="Show definition"
+            color="primary"
+            disabled={!selectedSensor}
+            onClick={() => openSensorFirstLevelTab(selectedSensor)}
+          />
         </div>
-      );
-    };
+      </div>
+      <div>
+        Rule name:
+        <div className="flex items-center gap-x-4 pt-2">
+          <Select
+            placeholder={selectedRule}
+            options={
+              (memoizedData.rules &&
+                memoizedData.rules.map((x) => ({
+                  label: x.full_rule_name ?? '',
+                  value: x.full_rule_name ?? ''
+                }))) ||
+              []
+            }
+            value={selectedRule}
+            disabled={
+              custom === false || canEditDefinitions === false ? true : false
+            }
+            onChange={(selected) => {
+              onChangeRule(selected), setIsUpdated(true);
+            }}
+            disableIcon={custom === false ? true : false}
+            className="w-1/2"
+            triggerClassName={
+              custom === false || canEditDefinitions === false
+                ? 'cursor-default'
+                : ''
+            }
+          />
+          <Button
+            label="Show definition"
+            color="primary"
+            disabled={!selectedRule}
+            onClick={() => openRuleFirstLevelTab(selectedRule)}
+          />
+        </div>
+      </div>
+      <div className="mt-6">
+        Help text:
+        <div className="flex items-center gap-x-4 pt-2 w-1/2">
+          <textarea
+            value={helpText}
+            className="min-h-50 font-regular text-sm focus:ring-1 focus:ring-teal-500 focus:ring-opacity-80 focus:border-0 border-gray-300 h-26 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none min-w-40 w-full leading-1.5 rounded"
+            onChange={(e) => {
+              onChangeHelpText(e), setIsUpdated(true);
+            }}
+            disabled={
+              custom === false || canEditDefinitions === false ? true : false
+            }
+          ></textarea>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default CheckEditor;
