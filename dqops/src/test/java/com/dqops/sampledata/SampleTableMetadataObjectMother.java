@@ -45,9 +45,7 @@ import com.dqops.sampledata.files.csv.CsvFileProvider;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.columns.Column;
 
-import java.util.Arrays;
-import java.util.SortedMap;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -285,18 +283,18 @@ public class SampleTableMetadataObjectMother {
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance(), secretValueLookupContext);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTableForFiles(csvFilesFolder);
 
-        SortedMap<String, String> header = new TreeMap<>();
-        Arrays.asList(sampleTable.getTable().columnArray())
-                .forEach(column -> {
-                    if(DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.containsKey(column.type())){
-                        header.put(column.name(), column.type().toString());
-                    } else {
-                        header.put(
-                                column.name(),
-                                DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.get(column.type().toString())
-                        );
-                    }
-                });
+        HashMap<String, String> header = new LinkedHashMap<>();
+        List<Column<?>> columnList = Arrays.asList(sampleTable.getTable().columnArray());
+        columnList.stream().forEachOrdered(column -> {
+            if(DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.containsKey(column.type())){
+                header.put(column.name(), column.type().toString());
+            } else {
+                header.put(
+                        column.name(),
+                        DuckDbTypesMappings.CSV_TYPES_TO_DUCK_DB.get(column.type().toString())
+                );
+            }
+        });
 
         TableSpec tableSpec = new TableSpec();
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFiles(

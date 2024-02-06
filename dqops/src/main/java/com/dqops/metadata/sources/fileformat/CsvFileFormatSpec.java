@@ -12,7 +12,6 @@ import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 import java.util.Map;
-import java.util.SortedMap;
 
 /**
  * Csv file format specification for querying data in the csv format files.
@@ -31,7 +30,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
     private Boolean allVarchar;
     private Boolean allowQuotedNulls;
     private Boolean autoDetect;
-    private SortedMap<String, String> columns;
+    private Map<String, String> columns;
     private String compression;
     private String dateformat;
     private String decimalSeparator;
@@ -133,7 +132,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      * Sets the columns map.
      * @param columns Columns map.
      */
-    public void setColumns(SortedMap<String, String> columns) {
+    public void setColumns(Map<String, String> columns) {
         this.columns = columns;
     }
 

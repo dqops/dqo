@@ -125,4 +125,29 @@ class TableOptionsFormatterTest {
                 output);
     }
 
+    @Test
+    void formatMapWhenSet_columnsNonAlphabetically_keepsOrderOfColumns() {
+        TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
+                List.of("file_one.csv"));
+
+        LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<>();
+
+        linkedHashMap.put("z", "zzz");
+        linkedHashMap.put("a", "aaa");
+
+        tableOptionsFormatter.formatMapWhenSet("columns", linkedHashMap);
+
+        String output = tableOptionsFormatter.toString();
+
+        Assertions.assertEquals("""
+                csv_file(
+                  'file_one.csv',
+                  columns = {
+                    'z': 'zzz',
+                    'a': 'aaa'
+                  }
+                )""",
+                output);
+    }
+
 }

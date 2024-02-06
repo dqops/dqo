@@ -3,7 +3,7 @@ package com.dqops.metadata.sources.fileformat;
 import com.dqops.sampledata.files.csv.CsvFileProvider;
 
 import java.util.List;
-import java.util.SortedMap;
+import java.util.Map;
 
 /**
  * Object mother for FileFormatSpec.
@@ -31,7 +31,7 @@ public class FileFormatSpecObjectMother {
      * @param headerNameTypeMap A header of the data.
      * @return FileFormatSpec
      */
-    public static FileFormatSpec createForCsvFiles(List<String> csvFileNames, SortedMap<String, String> headerNameTypeMap) {
+    public static FileFormatSpec createForCsvFiles(List<String> csvFileNames, Map<String, String> headerNameTypeMap) {
 
         FilePathListSpec filePathListSpec = new FilePathListSpec();
         csvFileNames.stream()
