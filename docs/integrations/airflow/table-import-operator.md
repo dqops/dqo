@@ -114,7 +114,7 @@ which contains a JSON formatted response from DQOps presented below.
       }, 'comments': []
     }]
   }, 
-  'status': 'succeeded'
+  'status': 'finished'
 }
 ```
 
@@ -150,7 +150,7 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **failed**: The job has failed with an execution error.
 - **queued**: The job is queued.
 - **running**: The job is now running.
-- **succeeded**: The job has finished successfully.
+- **finished**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
 
 ## What's next

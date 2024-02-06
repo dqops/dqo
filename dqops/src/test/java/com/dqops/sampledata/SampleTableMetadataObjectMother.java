@@ -23,6 +23,7 @@ import com.dqops.connectors.databricks.DatabricksConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckDbTypesMappings;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.mysql.MysqlConnectionSpecObjectMother;
+import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.connectors.oracle.OracleConnectionSpecObjectMother;
 import com.dqops.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
@@ -134,13 +135,10 @@ public class SampleTableMetadataObjectMother {
                 return TrinoConnectionSpecObjectMother.getSchemaName();
 
             case mysql:
-                switch(connectionSpec.getMysql().getMysqlEngineType()){
-                    case mysql:
-                        return MysqlConnectionSpecObjectMother.getSchemaName();
-                    case singlestoredb:
-                        return SingleStoreDbConnectionSpecObjectMother.getSchemaName();
-                    default:
-                        throw new RuntimeException("Given enum is not supported : " + connectionSpec.getMysql().getMysqlEngineType());
+                if (connectionSpec.getMysql().getMysqlEngineType() == MysqlEngineType.singlestoredb) {
+                    return SingleStoreDbConnectionSpecObjectMother.getSchemaName();
+                } else {
+                    return MysqlConnectionSpecObjectMother.getSchemaName();
                 }
             case oracle:
                 return OracleConnectionSpecObjectMother.getSchemaName();

@@ -1,6 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Copyright © 2021 DQOps (support@dqops.com)
+# Copyright © 2021-2024 DQOps (support@dqops.com)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ if [ -e $(dirname $0)/dqops/pom.xml ]; then
 
     returnedValue=$?
     if [ $returnedValue -ne 0 ]; then
-        echo Java JDK is not installed. Make sure that your JAVA_HOME points to a JDK 11 or never installation. Java JRE is not enough to compile DQO
+        echo Java JDK is not installed. Make sure that your JAVA_HOME points to a JDK 11 or never installation. Java JRE is not enough to compile DQOps
         exit $?
     fi
 

@@ -171,28 +171,6 @@ public class DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec extends
 
         return checkCategoriesSpec;
     }
-    /**
-     * Applies the checks on a target table.
-     * @param targetTable Target table.
-     * @param dialectSettings Dialect settings, to decide if the checks are applicable.
-     */
-    public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
-        if (this.volume != null && !this.volume.isDefault()) {
-            this.getTableCheckCategories(targetTable).setVolume(this.volume.deepClone());
-        }
-
-        if (this.availability != null && !this.availability.isDefault()) {
-            this.getTableCheckCategories(targetTable).setAvailability(this.availability.deepClone());
-        }
-
-        if (this.schema != null && !this.schema.isDefault()) {
-            this.getTableCheckCategories(targetTable).setSchema(this.schema.deepClone());
-        }
-
-        if (this.getCustom() != null && !this.getCustom().isEmpty()) {
-            this.getTableCheckCategories(targetTable).setCustom(this.getCustom().deepClone());
-        }
-    }
 
     /**
      * Returns the type of checks (profiling, monitoring, partitioned).

@@ -308,6 +308,8 @@ public class SettingsCliServiceImpl implements SettingsCliService {
 		textBuilder.append(String.format("DQOps Cloud API key is: %s\n", apiKeyString));
 		textBuilder.append(String.format("Tenant id: %s/%d\n", apiKeyPayload.getTenantId(), apiKeyPayload.getTenantGroup()));
 		textBuilder.append(String.format("License type: %s\n", apiKeyPayload.getLicenseType()));
+		textBuilder.append(String.format("Access to the data quality data lake and dashboards: %s\n",
+				apiKeyPayload.getDataQualityDataWarehouse() == null || apiKeyPayload.getDataQualityDataWarehouse() == true));
 
 		for (Map.Entry<DqoCloudLimit, Integer> limitEntry : apiKeyPayload.getLimits().entrySet()) {
 			String limitEntryName = "";

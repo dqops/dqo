@@ -6,7 +6,7 @@ This is a list of pii column data quality checks supported by DQOps and a brief 
 
 
 ## column-level pii checks
-Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
+Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.
 
 ### [contains usa phone percent](./contains-usa-phone-percent.md)
 Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.

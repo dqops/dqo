@@ -27,7 +27,7 @@ import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /**
- * Collection of unique labels assigned to items (tables, columns, checks) that could be targeted for a data quality check execution.
+ * A collection of unique labels assigned to items (tables, columns, checks) that can be targeted for a data quality check execution.
  */
 public class LabelSetSpec extends AbstractSet<String> implements HierarchyNode, YamlNotRenderWhenDefault {
     @JsonIgnore

@@ -30,7 +30,7 @@ Job status of a job on the queue.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|queued<br/>running<br/>waiting<br/>succeeded<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
+|string|queued<br/>running<br/>waiting<br/>finished<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
 
 ___
 
@@ -44,7 +44,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`result`](#collectstatisticsresult)</span>|Optional result object that is returned only when the wait parameter was true and the &quot;collect statistics&quot; job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |*[CollectStatisticsResult](#collectstatisticsresult)*|
+|<span class="no-wrap-code">[`result`](#collectstatisticsresult)</span>|Optional result object that is returned only when the wait parameter was true and the "collect statistics" job has finished. Contains the summary result of collecting basic statistics, including the number of statistics collectors (queries) that managed to capture metrics about the table(s). |*[CollectStatisticsResult](#collectstatisticsresult)*|
 |<span class="no-wrap-code">[`status`](#dqojobstatus)</span>|Job status|*[DqoJobStatus](#dqojobstatus)*|
 
 
@@ -60,7 +60,7 @@ Parameters for the &quot;delete stored data* queue job that deletes data from pa
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The connection name.|*string*|
-|<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. This filter does not support patterns.|*string*|
+|<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. This filter does not support patterns.|*string*|
 |<span class="no-wrap-code">`date_start`</span>|The start date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|*date*|
 |<span class="no-wrap-code">`date_end`</span>|The end date (inclusive) to delete the data, based on the *time_period* column in Parquet files.|*date*|
 |<span class="no-wrap-code">`delete_errors`</span>|Delete the data from the [errors](../../reference/parquetfiles/errors.md) table. Because the default value is *false*, this parameter must be set to *true* to delete the errors.|*boolean*|
@@ -93,7 +93,7 @@ DQOps root folders in the dqo use home that may be replicated to a remote file s
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>_indexes<br/>_local_settings<br/>|
+|string|data_sensor_readouts<br/>data_check_results<br/>data_statistics<br/>data_errors<br/>data_incidents<br/>sources<br/>sensors<br/>rules<br/>checks<br/>settings<br/>credentials<br/>dictionaries<br/>_indexes<br/>_local_settings<br/>|
 
 ___
 
@@ -155,7 +155,7 @@ Object returned from the operation that queues a &quot;delete stored data&quot; 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`result`](#deletestoreddataresult)</span>|Optional result object that is returned only when the wait parameter was true and the &quot;delete stored data&quot; job has finished. Contains a list of partitions that were deleted or updated.|*[DeleteStoredDataResult](#deletestoreddataresult)*|
+|<span class="no-wrap-code">[`result`](#deletestoreddataresult)</span>|Optional result object that is returned only when the wait parameter was true and the "delete stored data" job has finished. Contains a list of partitions that were deleted or updated.|*[DeleteStoredDataResult](#deletestoreddataresult)*|
 |<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|Job status|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 
 
@@ -229,17 +229,18 @@ Simple object for starting multiple folder synchronization jobs with the same co
 |<span class="no-wrap-code">[`direction`](./jobs.md#filesynchronizationdirection)</span>|File synchronization direction, the default is full synchronization (push local changes and pull other changes from DQOps Cloud).|*[FileSynchronizationDirection](./jobs.md#filesynchronizationdirection)*|
 |<span class="no-wrap-code">`force_refresh_native_tables`</span>|Force full refresh of native tables in the data quality data warehouse. The default synchronization mode is to refresh only modified data.|*boolean*|
 |<span class="no-wrap-code">`detect_cron_schedules`</span>|Scans the yaml files (with the configuration for connections and tables) and detects new cron schedules. Detected cron schedules are registered in the cron (Quartz) job scheduler.|*boolean*|
-|<span class="no-wrap-code">`sources`</span>|Synchronize the &quot;sources&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`sensors`</span>|Synchronize the &quot;sensors&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`rules`</span>|Synchronize the &quot;rules&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`checks`</span>|Synchronize the &quot;checks&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`settings`</span>|Synchronize the &quot;settings&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`credentials`</span>|Synchronize the &quot;.credentials&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`data_sensor_readouts`</span>|Synchronize the &quot;.data/sensor_readouts&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`data_check_results`</span>|Synchronize the &quot;.data/check_results&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`data_statistics`</span>|Synchronize the &quot;.data/statistics&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`data_errors`</span>|Synchronize the &quot;.data/errors&quot; folder.|*boolean*|
-|<span class="no-wrap-code">`data_incidents`</span>|Synchronize the &quot;.data/incidents&quot; folder.|*boolean*|
+|<span class="no-wrap-code">`sources`</span>|Synchronize the "sources" folder.|*boolean*|
+|<span class="no-wrap-code">`sensors`</span>|Synchronize the "sensors" folder.|*boolean*|
+|<span class="no-wrap-code">`rules`</span>|Synchronize the "rules" folder.|*boolean*|
+|<span class="no-wrap-code">`checks`</span>|Synchronize the "checks" folder.|*boolean*|
+|<span class="no-wrap-code">`settings`</span>|Synchronize the "settings" folder.|*boolean*|
+|<span class="no-wrap-code">`credentials`</span>|Synchronize the ".credentials" folder.|*boolean*|
+|<span class="no-wrap-code">`dictionaries`</span>|Synchronize the "dictionaries" folder.|*boolean*|
+|<span class="no-wrap-code">`data_sensor_readouts`</span>|Synchronize the ".data/sensor_readouts" folder.|*boolean*|
+|<span class="no-wrap-code">`data_check_results`</span>|Synchronize the ".data/check_results" folder.|*boolean*|
+|<span class="no-wrap-code">`data_statistics`</span>|Synchronize the ".data/statistics" folder.|*boolean*|
+|<span class="no-wrap-code">`data_errors`</span>|Synchronize the ".data/errors" folder.|*boolean*|
+|<span class="no-wrap-code">`data_incidents`</span>|Synchronize the ".data/incidents" folder.|*boolean*|
 |<span class="no-wrap-code">`synchronize_folder_with_local_changes`</span>|Synchronize all folders that have local changes. When this field is set to true, there is no need to enable synchronization of single folders because DQOps will decide which folders need synchronization (to be pushed to the cloud).|*boolean*|
 
 
@@ -313,7 +314,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
-|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
 |<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
@@ -345,13 +346,13 @@ Hierarchy node search filters for finding enabled statistics collectors (basic p
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`column_names`</span>|The list of column names or column name patters. This field accepts search patterns in the format: &#x27;fk_\*&#x27;, &#x27;\*_id&#x27;, &#x27;prefix\*suffix&#x27;.|*List[string]*|
-|<span class="no-wrap-code">`collector_name`</span>|The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: &#x27;prefix\*&#x27;, &#x27;\*suffix&#x27;, &#x27;prefix_\*_suffix&#x27;. In order to collect only top 10 most common column samples, use &#x27;column_samples&#x27;.|*string*|
-|<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: &#x27;table/volume/row_\*&#x27;, &#x27;\*_count&#x27;, &#x27;table/volume/prefix_\*_suffix&#x27;.|*string*|
+|<span class="no-wrap-code">`column_names`</span>|The list of column names or column name patters. This field accepts search patterns in the format: 'fk_\*', '\*_id', 'prefix\*suffix'.|*List[string]*|
+|<span class="no-wrap-code">`collector_name`</span>|The target statistics collector name to capture only selected statistics. Uses the short collector nameThis field supports search patterns such as: 'prefix\*', '\*suffix', 'prefix_\*_suffix'. In order to collect only top 10 most common column samples, use 'column_samples'.|*string*|
+|<span class="no-wrap-code">`sensor_name`</span>|The target sensor name to run only data quality checks that are using this sensor. Uses the full sensor name which is the full folder path within the *sensors* folder. This field supports search patterns such as: 'table/volume/row_\*', '\*_count', 'table/volume/prefix_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`collector_category`</span>|The target statistics collector category, for example: *nulls*, *volume*, *sampling*.|*string*|
 |<span class="no-wrap-code">[`target`](#statisticscollectortarget)</span>|The target type of object to collect statistics from. Supported values are: *table* to collect only table level statistics or *column* to collect only column level statistics.|*[StatisticsCollectorTarget](#statisticscollectortarget)*|
-|<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: &#x27;source\*&#x27;, &#x27;\*_prod&#x27;, &#x27;prefix\*suffix&#x27;.|*string*|
-|<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *&lt;schema_name&gt;.&lt;table_name&gt;*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: &#x27;schema_name.tab_prefix_\*&#x27;, &#x27;schema_name.*&#x27;, &#x27;*.*&#x27;, &#x27;schema_name.\*_customer&#x27;, &#x27;schema_name.tab_\*_suffix&#x27;.|*string*|
+|<span class="no-wrap-code">`connection`</span>|The connection (data source) name. Supports search patterns in the format: 'source\*', '\*_prod', 'prefix\*suffix'.|*string*|
+|<span class="no-wrap-code">`full_table_name`</span>|The schema and table name. It is provided as *<schema_name>.<table_name>*, for example *public.fact_sales*. The schema and table name accept patterns both in the schema name and table name parts. Sample patterns are: 'schema_name.tab_prefix_\*', 'schema_name.*', '*.*', 'schema_name.\*_customer', 'schema_name.tab_\*_suffix'.|*string*|
 |<span class="no-wrap-code">`enabled`</span>|A boolean flag to target enabled tables, columns or checks. When the value of this field is not set, the default value of this field is *true*, targeting only tables, columns and checks that are not implicitly disabled.|*boolean*|
 
 
@@ -380,7 +381,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
+|<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -397,10 +398,10 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
-|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent &#x27;run checks on table&#x27; jobs that could be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
 |<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
+|<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -518,7 +519,7 @@ Describes a change to the job status or the job queue (such as a new job was add
 ___
 
 ## FolderSynchronizationStatus
-Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.
+Enumeration of statuses identifying the synchronization status for each folder that can be synchronized with the DQOps cloud.
 
 
 **The structure of this object is described below**
@@ -539,17 +540,18 @@ Model that describes the current synchronization status for each folder.
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">[`sources`](#foldersynchronizationstatus)</span>|The synchronization status of the &quot;sources&quot; folder.|*[FolderSynchronizationStatus](#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`sensors`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;sensors&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`rules`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;rules&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`checks`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;checks&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`settings`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;settings&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`credentials`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.credentials&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`data_sensor_readouts`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.data/sensor_readouts&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`data_check_results`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.data/check_results&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`data_statistics`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.data/statistics&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`data_errors`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.data/errors&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
-|<span class="no-wrap-code">[`data_incidents`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the &quot;.data/incidents&quot; folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`sources`](#foldersynchronizationstatus)</span>|The synchronization status of the "sources" folder.|*[FolderSynchronizationStatus](#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`sensors`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "sensors" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`rules`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "rules" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`checks`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "checks" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`settings`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "settings" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`credentials`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".credentials" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`dictionaries`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the "dictionaries" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`data_sensor_readouts`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/sensor_readouts" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`data_check_results`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/check_results" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`data_statistics`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/statistics" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`data_errors`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/errors" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
+|<span class="no-wrap-code">[`data_incidents`](./jobs.md#foldersynchronizationstatus)</span>|The synchronization status of the ".data/incidents" folder.|*[FolderSynchronizationStatus](./jobs.md#foldersynchronizationstatus)*|
 
 
 ___
@@ -611,7 +613,7 @@ Object returned from the operation that queues a &quot;import tables&quot; job. 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`result`](#importtablesresult)</span>|Optional result object that is returned only when the wait parameter was true and the &quot;import tables&quot; job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |*[ImportTablesResult](#importtablesresult)*|
+|<span class="no-wrap-code">[`result`](#importtablesresult)</span>|Optional result object that is returned only when the wait parameter was true and the "import tables" job has finished. Contains the summary result of importing tables, including table and column schemas of imported tables. |*[ImportTablesResult](#importtablesresult)*|
 |<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|Job status|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 
 
@@ -627,7 +629,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`job_id`](./common.md#dqoqueuejobid)</span>|Job id that identifies a job that was started on the DQOps job queue.|*[DqoQueueJobId](./common.md#dqoqueuejobid)*|
-|<span class="no-wrap-code">[`result`](./jobs.md#runchecksresult)</span>|Optional result object that is returned only when the wait parameter was true and the &quot;run checks&quot; job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|*[RunChecksResult](./jobs.md#runchecksresult)*|
+|<span class="no-wrap-code">[`result`](./jobs.md#runchecksresult)</span>|Optional result object that is returned only when the wait parameter was true and the "run checks" job has finished. Contains the summary result of the data quality checks executed, including the severity of the most severe issue detected. The calling code (the data pipeline) can decide if further processing should be continued.|*[RunChecksResult](./jobs.md#runchecksresult)*|
 |<span class="no-wrap-code">[`status`](./jobs.md#dqojobstatus)</span>|Job status|*[DqoJobStatus](./jobs.md#dqojobstatus)*|
 
 
@@ -646,8 +648,8 @@ Object mapped to the default spring error payload (key/values).
 |<span class="no-wrap-code">`status`</span>|Optional status code.|*integer*|
 |<span class="no-wrap-code">`error`</span>|Error name.|*string*|
 |<span class="no-wrap-code">`exception`</span>|Optional exception.|*string*|
-|<span class="no-wrap-code">`message`</span>|Exception&#x27;s message.|*string*|
-|<span class="no-wrap-code">`path`</span>|Exception&#x27;s stack trace (optional).|*string*|
+|<span class="no-wrap-code">`message`</span>|Exception's message.|*string*|
+|<span class="no-wrap-code">`path`</span>|Exception's stack trace (optional).|*string*|
 
 
 ___

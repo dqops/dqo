@@ -89,7 +89,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration
-    class BetweenIntsRuleParametersSpec:
+    class BetweenFloatsRuleParametersSpec:
         from_: float
         to: float
     
@@ -103,6 +103,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -113,7 +114,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
     # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
     class RuleExecutionRunParameters:
         actual_value: float
-        parameters: BetweenIntsRuleParametersSpec
+        parameters: BetweenFloatsRuleParametersSpec
         time_period_local: datetime
         previous_readouts: Sequence[HistoricDataPoint]
         time_window: RuleTimeWindowSettingsSpec
@@ -252,6 +253,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -292,6 +294,152 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         lower_bound = getattr(rule_parameters.parameters, "from") if hasattr(rule_parameters.parameters, 'from') else None
         upper_bound = rule_parameters.parameters.to if hasattr(rule_parameters.parameters, 'to') else None
         passed = (lower_bound if lower_bound is not None else rule_parameters.actual_value) <= rule_parameters.actual_value <= (upper_bound if upper_bound is not None else rule_parameters.actual_value)
+    
+        return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+    
+    ```
+
+
+
+---
+
+## between percent
+Data quality rule that verifies if a data quality check percentage readout is between an accepted range of percentages.
+
+**Rule summary**
+
+The between percent data quality rule is described below.
+
+| Category | Full rule name | Rule specification source code | Python source code |
+| ---------|----------------|--------------------|--------------------|
+| comparison | <span class="no-wrap-code">`comparison/between_percent`</span> | [Rule configuration](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_percent.dqorule.yaml) | [Python code](https://github.com/dqops/dqo/blob/develop/home/rules/comparison/between_percent.py) |
+
+
+**Rule parameters**
+
+The parameters passed to the rule are shown below.
+
+| Field name | Description | Allowed data type | Required | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|<span class="no-wrap-code">`min_percent`</span>|Minimum accepted percentage of rows passing the check (inclusive).|*double*| ||
+|<span class="no-wrap-code">`max_percent`</span>|Maximum accepted percentage of rows passing the check (inclusive).|*double*| ||
+
+
+
+
+**Rule definition YAML**
+
+The rule definition YAML file *comparison/between_percent.dqorule.yaml* with the time window and rule parameters configuration is shown below.
+
+??? abstract "Please expand to see the content of the .dqorule.yaml file"
+
+    ``` { .yaml linenums="1" }
+    # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+    apiVersion: dqo/v1
+    kind: rule
+    spec:
+      type: python
+      java_class_name: com.dqops.execution.rules.runners.python.PythonRuleRunner
+      mode: current_value
+      fields:
+      - field_name: min_percent
+        display_name: min_percent
+        help_text: Minimum accepted percentage of rows passing the check (inclusive).
+        data_type: double
+        default_value: 100.0
+      - field_name: max_percent
+        display_name: max_percent
+        help_text: Maximum accepted percentage of rows passing the check (inclusive).
+        data_type: double
+    ```
+
+
+
+
+
+
+**Rule source code**
+
+Please expand the section below to see the Python source code for the *comparison/between_percent* rule.
+The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-architecture.md#dqops-home)/rules/comparison/between_percent.py* file in the DQOps distribution.
+
+??? abstract "Rule source code"
+
+    ``` { .python linenums="1" }
+    #
+    # Copyright © 2021 DQOps (support@dqops.com)
+    #
+    # Licensed under the Apache License, Version 2.0 (the "License");
+    # you may not use this file except in compliance with the License.
+    # You may obtain a copy of the License at
+    #
+    #     http://www.apache.org/licenses/LICENSE-2.0
+    #
+    # Unless required by applicable law or agreed to in writing, software
+    # distributed under the License is distributed on an "AS IS" BASIS,
+    # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    # See the License for the specific language governing permissions and
+    # limitations under the License.
+    #
+    
+    from datetime import datetime
+    from typing import Sequence
+    
+    
+    # rule specific parameters object, contains values received from the quality check threshold configuration
+    class BetweenPercentRuleParametersSpec:
+        min_percent: float
+        max_percent: float
+    
+    
+    class HistoricDataPoint:
+        timestamp_utc: datetime
+        local_datetime: datetime
+        back_periods_index: int
+        sensor_readout: float
+        expected_value: float
+    
+    
+    class RuleTimeWindowSettingsSpec:
+        prediction_time_window: int
+        max_periods_with_readouts: int
+    
+    
+    # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+    class RuleExecutionRunParameters:
+        actual_value: float
+        parameters: BetweenPercentRuleParametersSpec
+        time_period_local: datetime
+        previous_readouts: Sequence[HistoricDataPoint]
+        time_window: RuleTimeWindowSettingsSpec
+    
+    
+    # default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+    # what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+    class RuleExecutionResult:
+        passed: bool
+        expected_value: float
+        lower_bound: float
+        upper_bound: float
+    
+        def __init__(self, passed=None, expected_value=None, lower_bound=None, upper_bound=None):
+            self.passed = passed
+            self.expected_value = expected_value
+            self.lower_bound = lower_bound
+            self.upper_bound = upper_bound
+    
+    
+    # rule evaluation method that should be modified for each type of rule
+    def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+        if not hasattr(rule_parameters, 'actual_value'):
+            return RuleExecutionResult()
+    
+        expected_value = None
+        lower_bound = rule_parameters.parameters.min_percent if hasattr(rule_parameters.parameters, 'min_percent') else None
+        upper_bound = rule_parameters.parameters.max_percent if hasattr(rule_parameters.parameters, 'max_percent') else None
+        passed = (lower_bound if lower_bound is not None else
+                     rule_parameters.actual_value) <= rule_parameters.actual_value <= (
+                     upper_bound if upper_bound is not None else rule_parameters.actual_value)
     
         return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
     
@@ -398,6 +546,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -449,7 +598,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
 
 ## detected datatype equals
 Data quality rule that verifies that a data quality check readout of a string_datatype_detect (the data type detection) matches an expected data type.
- The supported values are in the range 1..7, which are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The supported values are in the range 1..8, which are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
 
 **Rule summary**
 
@@ -466,7 +615,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*timestamps*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
+|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
 
 
 
@@ -496,7 +645,7 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
         - integers
         - floats
         - dates
-        - timestamps
+        - datetimes
         - booleans
         - texts
         - mixed
@@ -556,6 +705,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -695,6 +845,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -847,6 +998,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -969,6 +1121,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1092,6 +1245,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1231,6 +1385,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1354,6 +1509,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1487,6 +1643,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1626,6 +1783,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1765,6 +1923,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -1909,6 +2068,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2069,6 +2229,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2212,6 +2373,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2350,6 +2512,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2488,6 +2651,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2627,6 +2791,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2766,6 +2931,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -2904,6 +3070,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -3027,6 +3194,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -3148,6 +3316,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:

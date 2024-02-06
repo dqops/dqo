@@ -72,7 +72,7 @@ public class StatisticsResultsForColumnModel {
     private Collection<StatisticsMetricModel> metrics = new ArrayList<>();
 
     /**
-     * Collect statistics job template that could be used to collect the statistics again for the column.
+     * Collect statistics job template that can be used to collect the statistics again for the column.
      */
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;

@@ -3,7 +3,7 @@ Read this guide to learn how to activate or deactivate multiple data quality che
 
 ## Overview
 
-n DQOps, you can activate, deactivate and modify data quality checks for tables and columns using the [**Check editor**](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
+In DQOps, you can activate, deactivate and modify data quality checks for tables and columns using the [**Check editor**](../dqo-concepts/dqops-user-interface-overview.md#check-editor).
 However, if you need to perform these actions on multiple checks at once, you can use the multiple check editor.
 This feature can save you a lot of time simplifying repetitive actions of activating the same check on multiple 
 tables or columns.

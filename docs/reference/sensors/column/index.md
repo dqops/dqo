@@ -13,7 +13,7 @@
 |-------------|-------------|
 |[*expected_numbers_in_use_count*](./accepted_values-column-sensors.md#expected-numbers-in-use-count)|Column level sensor that counts how many expected numeric values are used in a tested column. Finds unique column values from the set of expected numeric values and counts them. This sensor is useful to analyze numeric columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row. The typical types of tested columns are numeric status or type columns.|
 |[*expected_text_values_in_use_count*](./accepted_values-column-sensors.md#expected-text-values-in-use-count)|Column level sensor that counts how many expected string values are used in a tested column. Finds unique column values from the set of expected string values and counts them. This sensor is useful to analyze string columns that have a low number of unique values and it should be tested if all possible values from the list of expected values are used in any row. The typical type of columns analyzed using this sensor are currency, country, status or gender columns.|
-|[*expected_texts_in_top_values_count*](./accepted_values-column-sensors.md#expected-texts-in-top-values-count)|Column level sensor that counts how many expected string values are among the TOP most popular values in the column. The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter). Then, it will compare the list of most popular values to the given list of expected values that should be most popular. This sensor will return the number of expected values that were found within the &#x27;top&#x27; most popular column values. This sensor is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers. The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.|
+|[*expected_texts_in_top_values_count*](./accepted_values-column-sensors.md#expected-texts-in-top-values-count)|Column level sensor that counts how many expected string values are among the TOP most popular values in the column. The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter). Then, it will compare the list of most popular values to the given list of expected values that should be most popular. This sensor will return the number of expected values that were found within the &#x27;top&#x27; most popular column values. This sensor is useful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers. The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.|
 |[*number_found_in_set_percent*](./accepted_values-column-sensors.md#number-found-in-set-percent)|Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values. Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value). This sensor is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.|
 |[*text_found_in_set_percent*](./accepted_values-column-sensors.md#text-found-in-set-percent)|Column level sensor that calculates the percentage of rows for which the tested string (text) column contains a value from the list of expected values. Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value). This sensor is useful for testing that a string column with a low number of unique values (country, currency, state, gender, etc.) contains only values from a set of expected values.|
 
@@ -75,7 +75,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*string_datatype_detect*](./datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.|
+|[*string_datatype_detect*](./datatype-column-sensors.md#string-datatype-detect)|Column level sensor that analyzes all values in a text column and detects the data type of the values. The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.|
 
 
 
@@ -84,9 +84,9 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*date_match_format_percent*](./datetime-column-sensors.md#date-match-format-percent)|Column level sensor that calculates the percentage of values that does fit a given date regex in a column.|
+|[*date_in_range_percent*](./datetime-column-sensors.md#date-in-range-percent)|Column level sensor that finds the percentage of date values that are outside an accepted range. This sensor detects presence of fake or corrupted dates such as 1900-01-01 or 2099-12-31.|
 |[*date_values_in_future_percent*](./datetime-column-sensors.md#date-values-in-future-percent)|Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.|
-|[*value_in_range_date_percent*](./datetime-column-sensors.md#value-in-range-date-percent)|Column level sensor that calculates the percent of non-negative values in a column.|
+|[*text_match_date_format_percent*](./datetime-column-sensors.md#text-match-date-format-percent)|Column level sensor that calculates the percentage of text values that match an expected date format.|
 
 
 
@@ -117,7 +117,7 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*integer_in_range_percent*](./numeric-column-sensors.md#integer-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).|
+|[*integer_in_range_percent*](./numeric-column-sensors.md#integer-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).|
 |[*invalid_latitude_count*](./numeric-column-sensors.md#invalid-latitude-count)|Column level sensor that counts invalid latitude in a column.|
 |[*invalid_longitude_count*](./numeric-column-sensors.md#invalid-longitude-count)|Column level sensor that counts invalid longitude in a column.|
 |[*mean*](./numeric-column-sensors.md#mean)|Column level sensor that counts the average (mean) of values in a column.|
@@ -129,7 +129,7 @@
 |[*number_above_max_value_percent*](./numeric-column-sensors.md#number-above-max-value-percent)|Column level sensor that calculates the percentage of values that are above than a given value in a column.|
 |[*number_below_min_value_count*](./numeric-column-sensors.md#number-below-min-value-count)|Column level sensor that calculates the count of values that are below than a given value in a column.|
 |[*number_below_min_value_percent*](./numeric-column-sensors.md#number-below-min-value-percent)|Column level sensor that calculates the percentage of values that are below than a given value in a column.|
-|[*number_in_range_percent*](./numeric-column-sensors.md#number-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).|
+|[*number_in_range_percent*](./numeric-column-sensors.md#number-in-range-percent)|Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions. The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).|
 |[*percentile*](./numeric-column-sensors.md#percentile)|Column level sensor that finds the median in a given column.|
 |[*population_stddev*](./numeric-column-sensors.md#population-stddev)|Column level sensor that calculates population standard deviation in a given column.|
 |[*population_variance*](./numeric-column-sensors.md#population-variance)|Column level sensor that calculates population variance in a given column.|

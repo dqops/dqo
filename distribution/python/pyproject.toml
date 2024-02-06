@@ -3,5 +3,6 @@ requires = [
      "setuptools>=42",
      "wheel==0.37.1",
      "install-jdk>=1.0.4",
-     "build==0.7.0"]
+     "build==0.7.0",
+     'httpx>=0.20.0,<0.26.0']
 build-backend = "setuptools.build_meta"

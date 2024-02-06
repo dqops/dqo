@@ -18,7 +18,7 @@ The **{{replace primaryCheckName "_" " "}}** data quality check has the followin
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`{{checkName}}`</span>|[{{category}}](../../../dqo-concepts/categories-of-data-quality-checks/{{categoryPageName}})|[{{checkType}}](../../../dqo-concepts/definition-of-data-quality-checks/{{checkTypeConceptPage}})|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[*{{sensor.sensorName}}*](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[*{{rule.ruleName}}*](../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|{{checkmark standard}}|
+|<span class="no-wrap-code">`{{checkName}}`</span>|[{{category}}](../../../categories-of-data-quality-checks/{{categoryPageName}})|[{{checkType}}](../../../dqo-concepts/definition-of-data-quality-checks/{{checkTypeConceptPage}})|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|{{qualityDimension}}|[*{{sensor.sensorName}}*](../../../reference/sensors/{{target}}/{{sensor.category}}-{{target}}-sensors.md#{{replace sensor.sensorName "_" "-"}})|[*{{rule.ruleName}}*](../../../reference/rules/{{capitalizeFirst rule.category}}.md#{{replace rule.ruleName "_" "-"}})|{{checkmark standard}}|
 
 **Command-line examples**
 

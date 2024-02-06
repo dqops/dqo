@@ -3,11 +3,13 @@ import { JobApiClient, DataSourcesApi } from '../../../services/apiClient';
 import { RemoteTableListModel } from '../../../api';
 import SvgIcon from '../../SvgIcon';
 import Loader from '../../Loader';
-import ConnectionActionGroup from './ConnectionActionGroup';
 import Checkbox from '../../Checkbox';
 import Button from '../../Button';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
-import { setAdvisorJobId, toggleAdvisor } from '../../../redux/actions/job.actions';
+import {
+  setAdvisorJobId,
+  toggleAdvisor
+} from '../../../redux/actions/job.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { setCurrentJobId } from '../../../redux/actions/source.actions';
@@ -15,29 +17,24 @@ import { useParams } from 'react-router-dom';
 import { CheckTypes } from '../../../shared/routes';
 import { getFirstLevelActiveTab } from '../../../redux/selectors';
 
-interface ISourceSchemasViewProps {
-  connectionName: string;
-  schemaName: string;
-  onBack: () => void;
-}
-
-const SourceTablesView = ({
-  connectionName,
-  schemaName,
-  onBack
-}: ISourceSchemasViewProps) => {
+const SourceTablesView = () => {
   const {
     checkTypes,
+    connection,
+    schema
   }: {
     checkTypes: CheckTypes;
+    connection: string;
+    schema: string;
   } = useParams();
   const [loading, setLoading] = useState(false);
   const [selectedTables, setSelectedTables] = useState<string[]>([]);
   const [tables, setTables] = useState<RemoteTableListModel[]>([]);
- 
+
   const dispatch = useActionDispatch();
-  const { job_dictionary_state } =
-  useSelector((state: IRootState) => state.job);
+  const { job_dictionary_state } = useSelector(
+    (state: IRootState) => state.job
+  );
   const [jobId, setJobId] = useState<number>();
   const job = jobId ? job_dictionary_state[jobId] : undefined;
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
@@ -45,7 +42,7 @@ const SourceTablesView = ({
   const fetchSourceTables = async () => {
     setLoading(true);
     setSelectedTables([]);
-    DataSourcesApi.getRemoteDataSourceTables(connectionName, schemaName)
+    DataSourcesApi.getRemoteDataSourceTables(connection, schema)
       .then((res) => {
         setTables(res.data);
       })
@@ -56,7 +53,7 @@ const SourceTablesView = ({
 
   useEffect(() => {
     fetchSourceTables();
-  }, [connectionName, schemaName]);
+  }, [connection, schema]);
 
   const selectAll = () => {
     setSelectedTables(tables.map((item) => item.tableName ?? ''));
@@ -67,16 +64,12 @@ const SourceTablesView = ({
   };
 
   const importSelectedTables = async () => {
-    const res = await JobApiClient.importTables(
-      undefined,
-      false, 
-      undefined,
-      {
-      connectionName,
-      schemaName,
+    const res = await JobApiClient.importTables(undefined, false, undefined, {
+      connectionName: connection,
+      schemaName: schema,
       tableNames: selectedTables
     });
-    
+
     dispatch(
       setCurrentJobId(
         checkTypes,
@@ -86,17 +79,13 @@ const SourceTablesView = ({
     );
     dispatch(setAdvisorJobId(res.data?.jobId?.jobId ?? 0));
     setJobId(res.data?.jobId?.jobId);
-    dispatch(toggleAdvisor(true)); 
+    dispatch(toggleAdvisor(true));
   };
 
   const importAllTables = async () => {
-    const res = await JobApiClient.importTables(
-      undefined,
-      false,
-      undefined,
-      {
-      connectionName,
-      schemaName,
+    const res = await JobApiClient.importTables(undefined, false, undefined, {
+      connectionName: connection,
+      schemaName: schema,
       tableNames: tables.map((item) => item.tableName ?? '')
     });
 
@@ -121,14 +110,14 @@ const SourceTablesView = ({
   };
 
   useEffect(() => {
-    if (jobId !== 0 && jobId!== undefined && job?.status==="succeeded") {
-      fetchSourceTables()
+    if (jobId !== 0 && jobId !== undefined && job?.status === 'finished') {
+      fetchSourceTables();
     }
-  }, [job?.status])
+  }, [job?.status]);
 
   return (
     <div className="py-4 px-8">
-      <ConnectionActionGroup onImport={onBack} />
+      {/* <ConnectionActionGroup onImport={onBack} /> */}
       <div className="flex justify-end space-x-4 mb-4">
         <Button
           color="primary"

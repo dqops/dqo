@@ -33,10 +33,10 @@ class TableListModel:
             executed.
         stage (Union[Unset, str]): Stage name.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries.
-        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
-            The table priority is copied into each data quality check result and a sensor result, enabling efficient
-            grouping of more and less important tables during a data quality improvement project, when the data quality
-            issues on higher priority tables are fixed before data quality issues on less important tables.
+        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The
+            table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of
+            more and less important tables during a data quality improvement project, when the data quality issues on higher
+            priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriod]):
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.

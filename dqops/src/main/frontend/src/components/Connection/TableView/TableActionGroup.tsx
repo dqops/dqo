@@ -143,7 +143,7 @@ const TableActionGroup = ({
               ? 'Collecting...'
               : selectedColumns 
               ? 'Collect statistics on selected'
-              : 'Collect Statistics'
+              : 'Collect statistics'
           }
           color={collectStatisticsSpinner ? 'secondary' : 'primary'}
           leftIcon={

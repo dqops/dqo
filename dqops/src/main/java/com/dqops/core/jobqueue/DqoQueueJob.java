@@ -85,7 +85,7 @@ public abstract class DqoQueueJob<T> {
             return DqoJobCompletionStatus.CANCELLED;
         }
 
-        return DqoJobCompletionStatus.SUCCEEDED;
+        return DqoJobCompletionStatus.FINISHED;
     }
 
     /**

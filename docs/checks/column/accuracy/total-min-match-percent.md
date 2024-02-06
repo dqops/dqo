@@ -18,7 +18,7 @@ Verifies that the percentage of difference in total min of a column in a table a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_total_min_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_total_min_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -111,7 +111,7 @@ spec:
         accuracy:
           profile_total_min_match_percent:
             parameters:
-              referenced_table: dim_customer
+              referenced_table: landing_zone.customer_raw
               referenced_column: customer_id
             warning:
               max_diff_percent: 0.0
@@ -160,7 +160,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -195,7 +195,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -230,7 +230,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -268,7 +268,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,
                 analyzed_table.actual_value
             FROM (SELECT
@@ -306,7 +306,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -341,10 +341,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -376,7 +376,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -411,7 +411,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -446,7 +446,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -481,7 +481,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -516,10 +516,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -534,7 +534,7 @@ Verifies that the percentage of difference in total min of a column in a table a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_total_min_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_total_min_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -628,7 +628,7 @@ spec:
           accuracy:
             daily_total_min_match_percent:
               parameters:
-                referenced_table: dim_customer
+                referenced_table: landing_zone.customer_raw
                 referenced_column: customer_id
               warning:
                 max_diff_percent: 0.0
@@ -677,7 +677,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -712,7 +712,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -747,7 +747,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -785,7 +785,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,
                 analyzed_table.actual_value
             FROM (SELECT
@@ -823,7 +823,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -858,10 +858,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -893,7 +893,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -928,7 +928,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -963,7 +963,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -998,7 +998,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1033,10 +1033,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -1051,7 +1051,7 @@ Verifies that the percentage of difference in total min of a column in a table a
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_total_min_match_percent`</span>|[accuracy](../../../dqo-concepts/categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_total_min_match_percent`</span>|[accuracy](../../../categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Accuracy|[*total_min_match_percent*](../../../reference/sensors/column/accuracy-column-sensors.md#total-min-match-percent)|[*diff_percent*](../../../reference/rules/Comparison.md#diff-percent)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1145,7 +1145,7 @@ spec:
           accuracy:
             monthly_total_min_match_percent:
               parameters:
-                referenced_table: dim_customer
+                referenced_table: landing_zone.customer_raw
                 referenced_column: customer_id
               warning:
                 max_diff_percent: 0.0
@@ -1194,7 +1194,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1229,7 +1229,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1264,7 +1264,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1302,7 +1302,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,
                 analyzed_table.actual_value
             FROM (SELECT
@@ -1340,7 +1340,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1375,10 +1375,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -1410,7 +1410,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1445,7 +1445,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1480,7 +1480,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1515,7 +1515,7 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1550,10 +1550,10 @@ spec:
             SELECT
                 (SELECT
                     MIN(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MIN(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___

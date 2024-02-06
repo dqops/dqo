@@ -9815,7 +9815,7 @@ paths:
       tags:
       - "DataSources"
       summary: "testConnection"
-      description: "Checks if the given remote connection could be opened and the\
+      description: "Checks if the given remote connection can be opened and if the\
         \ credentials are valid"
       operationId: "testConnection"
       consumes:
@@ -10602,7 +10602,7 @@ paths:
       tags:
       - "Environment"
       summary: "issueApiKey"
-      description: "Issues a local API Key for the calling user. This API Key could\
+      description: "Issues a local API Key for the calling user. This API Key can\
         \ be used to authenticate using the DQOps REST API client. This API Key should\
         \ be passed in the \"Authorization\" HTTP header in the format \"Authorization:\
         \ Bearer <api_key>\"."
@@ -11170,7 +11170,7 @@ paths:
       - "Jobs"
       summary: "collectStatisticsOnTable"
       description: "Starts a new background job that will run selected data statistics\
-        \ collectors on a whole table"
+        \ collectors for the entire table"
       operationId: "collectStatisticsOnTable"
       consumes:
       - "application/json"
@@ -11201,7 +11201,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, only the job id is returned without the results.\
-          \ The default timeout is 120 seconds, but could be reconfigured (see the\
+          \ The default timeout is 120 seconds, but it can be reconfigured (see the\
           \ 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11261,7 +11261,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, only the job id is returned without the results.\
-          \ The default timeout is 120 seconds, but could be reconfigured (see the\
+          \ The default timeout is 120 seconds, but it can be reconfigured (see the\
           \ 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11321,7 +11321,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the delete stored data job is still running, only the job id is returned\
-          \ without the results. The default timeout is 120 seconds, but could be\
+          \ without the results. The default timeout is 120 seconds, but it can be\
           \ reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11378,7 +11378,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the import tables job is still running, only the job id is returned without\
-          \ the results. The default timeout is 120 seconds, but could be reconfigured\
+          \ the results. The default timeout is 120 seconds, but it can be reconfigured\
           \ (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11530,7 +11530,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, the method returns the job model that is not\
           \ yet finished and has no results. The default timeout is 120 seconds, but\
-          \ could be reconfigured (see the 'dqo' cli command documentation)."
+          \ it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -11589,7 +11589,7 @@ paths:
         in: "query"
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the checks are still running, only the job id is returned without the\
-          \ results. The default timeout is 120 seconds, but could be reconfigured\
+          \ results. The default timeout is 120 seconds, but it can be reconfigured\
           \ (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
@@ -11635,7 +11635,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the job is still running, the method returns the job model that is not\
           \ yet finished and has no results. The default timeout is 120 seconds, but\
-          \ could be reconfigured (see the 'dqo' cli command documentation)."
+          \ it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -11762,7 +11762,7 @@ paths:
         description: "The wait timeout in seconds, when the wait timeout elapses and\
           \ the synchronization with the DQOps Cloud is still running, only the job\
           \ id is returned without the results. The default timeout is 120 seconds,\
-          \ but could be reconfigured (see the 'dqo' cli command documentation)."
+          \ but it can be reconfigured (see the 'dqo' cli command documentation)."
         required: false
         type: "integer"
         format: "int32"
@@ -12535,96 +12535,66 @@ definitions:
           \ apply updates only to the fields for which no configuration exists."
     description: "Parameter object for creating pruned patch trees of all checks that\
       \ fit the filters."
-  AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec:
+  AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule01ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule05ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
-  AnomalyStationaryPercentileMovingAverageRule1ParametersSpec:
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
+  AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec:
     type: "object"
     properties:
       anomaly_percent:
         type: "number"
         format: "double"
-        description: "Probability that the current sensor readout will achieve values\
-          \ within the mean according to the distribution of the previous values gathered\
-          \ within the time window. In other words, the inter-quantile range around\
-          \ the mean of the estimated normal distribution. Set the time window at\
-          \ the threshold level for all severity levels (warning, error, fatal) at\
-          \ once. The default is a time window of 90 periods (days, etc.), but at\
-          \ least 30 readouts must exist to run the calculation. You can change the\
-          \ default value by modifying prediction_time_window parameterin Definitions\
-          \ section."
+        description: "The probability (in percent) that the current sensor readout\
+          \ (measure) is an anomaly, because the value is outside the regular range\
+          \ of previous readouts. The default time window of 90 time periods (days,\
+          \ etc.) is used, but at least 30 readouts must exist to run the calculation."
   AuthenticatedDashboardModel:
     type: "object"
     properties:
@@ -12651,6 +12621,17 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
+  BetweenPercentRuleParametersSpec:
+    type: "object"
+    properties:
+      min_percent:
+        type: "number"
+        format: "double"
+        description: "Minimum accepted percentage of rows passing the check (inclusive)."
+      max_percent:
+        type: "number"
+        format: "double"
+        description: "Maximum accepted percentage of rows passing the check (inclusive)."
   BigQueryParametersSpec:
     type: "object"
     properties:
@@ -13198,8 +13179,8 @@ definitions:
       sensor_name:
         type: "string"
         description: "Full sensor name. This field is for information purposes and\
-          \ could be used to create additional custom checks that are reusing the\
-          \ same data quality sensor."
+          \ can be used to create additional custom checks that reuse the same data\
+          \ quality sensor."
       quality_dimension:
         type: "string"
         description: "Data quality dimension used for tagging the results of this\
@@ -13296,7 +13277,7 @@ definitions:
       configuration_requirements_errors:
         type: "array"
         description: "List of configuration errors that must be fixed before the data\
-          \ quality check could be executed."
+          \ quality check can be executed."
         items:
           type: "string"
       similar_checks:
@@ -13776,8 +13757,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "The maximum number of concurrent 'run checks on table' jobs\
-          \ that could be run on this connection. Limits the number of concurrent\
-          \ jobs."
+          \ that can be run on this connection. Limits the number of concurrent jobs."
       table:
         description: "The full physical name (schema.table) of the target table."
         $ref: "#/definitions/PhysicalTableName"
@@ -13787,8 +13767,8 @@ definitions:
         $ref: "#/definitions/StatisticsCollectorSearchFilters"
       data_scope:
         type: "string"
-        description: "The target scope of collecting statistics. Statistics could\
-          \ be collected on a whole table or for each data grouping separately."
+        description: "The target scope of collecting statistics. Statistics can be\
+          \ collected for the entire table or for each data grouping separately."
         enum:
         - "table"
         - "data_group"
@@ -13811,8 +13791,8 @@ definitions:
         $ref: "#/definitions/StatisticsCollectorSearchFilters"
       data_scope:
         type: "string"
-        description: "The target scope of collecting statistics. Statistics could\
-          \ be collected on a whole table or for each data grouping separately."
+        description: "The target scope of collecting statistics. Statistics can be\
+          \ collected for the entire table or for each data grouping separately."
         enum:
         - "table"
         - "data_group"
@@ -13847,7 +13827,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -14258,7 +14238,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14294,14 +14274,16 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
       referenced_column:
         type: "string"
-        description: "This field can be used to define the name of the column to be\
-          \ compared to. In order to define the name of the column, user should write\
-          \ correct name as a String."
+        description: "The name of a column in the reference table. DQOps calculates\
+          \ an aggregate value on that column and compares it with the value in the\
+          \ analyzed table."
   ColumnAccuracyTotalMaxMatchPercentCheckSpec:
     type: "object"
     properties:
@@ -14338,7 +14320,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14374,14 +14356,16 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
       referenced_column:
         type: "string"
-        description: "This field can be used to define the name of the column to be\
-          \ compared to. In order to define the name of the column, user should write\
-          \ correct name as a String."
+        description: "The name of a column in the reference table. DQOps calculates\
+          \ an aggregate value on that column and compares it with the value in the\
+          \ analyzed table."
   ColumnAccuracyTotalMinMatchPercentCheckSpec:
     type: "object"
     properties:
@@ -14418,7 +14402,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14454,14 +14438,16 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
       referenced_column:
         type: "string"
-        description: "This field can be used to define the name of the column to be\
-          \ compared to. In order to define the name of the column, user should write\
-          \ correct name as a String."
+        description: "The name of a column in the reference table. DQOps calculates\
+          \ an aggregate value on that column and compares it with the value in the\
+          \ analyzed table."
   ColumnAccuracyTotalNotNullCountMatchPercentCheckSpec:
     type: "object"
     properties:
@@ -14498,7 +14484,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14534,14 +14520,16 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
       referenced_column:
         type: "string"
-        description: "This field can be used to define the name of the column to be\
-          \ compared to. In order to define the name of the column, user should write\
-          \ correct name as a String."
+        description: "The name of a column in the reference table. DQOps calculates\
+          \ an aggregate value on that column and compares it with the value in the\
+          \ analyzed table."
   ColumnAccuracyTotalSumMatchPercentCheckSpec:
     type: "object"
     properties:
@@ -14578,7 +14566,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -14614,14 +14602,16 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
       referenced_column:
         type: "string"
-        description: "This field can be used to define the name of the column to be\
-          \ compared to. In order to define the name of the column, user should write\
-          \ correct name as a String."
+        description: "The name of a column in the reference table. DQOps calculates\
+          \ an aggregate value on that column and compares it with the value in the\
+          \ analyzed table."
   ColumnAnomalyDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -14645,6 +14635,18 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      daily_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+      daily_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
       daily_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -14706,16 +14708,33 @@ definitions:
           $ref: "#/definitions/CustomCheckSpec"
       daily_partition_sum_anomaly:
         description: "Verifies that the sum in a column is within a percentile from\
-          \ measurements made during the last 90 days."
+          \ measurements made during the last 90 days. Calculates the sum of each\
+          \ daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnSumAnomalyStationaryPartitionCheckSpec"
       daily_partition_mean_anomaly:
         description: "Verifies that the mean value in a column is within a percentile\
-          \ from measurements made during the last 90 days."
+          \ from measurements made during the last 90 days. Calculates the mean (average)\
+          \ of each daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnMeanAnomalyStationaryCheckSpec"
       daily_partition_median_anomaly:
         description: "Verifies that the median in a column is within a percentile\
-          \ from measurements made during the last 90 days."
+          \ from measurements made during the last 90 days. Calculates the median\
+          \ of each daily partition and detect anomalies between daily partitions."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      daily_partition_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days. Finds the minimum value of each daily partition and detect\
+          \ anomalies between daily partitions."
+        $ref: "#/definitions/ColumnMinAnomalyStationaryCheckSpec"
+      daily_partition_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days. Finds the maximum value of each daily partition and detect\
+          \ anomalies between daily partitions."
+        $ref: "#/definitions/ColumnMaxAnomalyStationaryCheckSpec"
       daily_partition_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since last readout."
@@ -14833,6 +14852,18 @@ definitions:
         description: "Verifies that the median in a column changes in a rate within\
           \ a percentile boundary during the last 90 days."
         $ref: "#/definitions/ColumnMedianAnomalyStationaryCheckSpec"
+      profile_min_anomaly:
+        description: "Detects new outliers, which are new minimum values, much below\
+          \ the last known minimum value. If the minimum value is constantly changing,\
+          \ detects outliers as the biggest change of the minimum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMinAnomalyDifferencingCheckSpec"
+      profile_max_anomaly:
+        description: "Detects new outliers, which are new maximum values, much above\
+          \ the last known maximum value. If the maximum value is constantly changing,\
+          \ detects outliers as the biggest change of the maximum value during the\
+          \ last 90 days."
+        $ref: "#/definitions/ColumnMaxAnomalyDifferencingCheckSpec"
       profile_mean_change:
         description: "Verifies that the mean value in a column changed in a fixed\
           \ rate since the last readout."
@@ -15020,7 +15051,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15081,7 +15112,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15231,7 +15262,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15293,7 +15324,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15397,7 +15428,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15458,7 +15489,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15774,7 +15805,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15844,7 +15875,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -15914,7 +15945,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16148,7 +16179,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16218,7 +16249,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16339,7 +16370,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16764,16 +16795,16 @@ definitions:
       daily_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types. Raises a data quality issue when the detected data type\
-          \ does not match the expected data type. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
+          \ 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed\
+          \ data types. Raises a data quality issue when the detected data type does\
+          \ not match the expected data type. Stores the most recent captured value\
+          \ for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
       daily_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
-          \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
-          \ 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent\
+          \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes,\
+          \ 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
   ColumnDatatypeDailyPartitionedChecksSpec:
@@ -16790,16 +16821,16 @@ definitions:
       daily_partition_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types. Raises a data quality issue when the detected data type\
-          \ does not match the expected data type. Stores a separate data quality\
-          \ check result for each daily partition."
+          \ 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed\
+          \ data types. Raises a data quality issue when the detected data type does\
+          \ not match the expected data type. Stores a separate data quality check\
+          \ result for each daily partition."
         $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
       daily_partition_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed when compared to an earlier not empty partition. The sensor\
           \ returns the detected type of column data: 1 - integers, 2 - floats, 3\
-          \ - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.\
+          \ - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.\
           \ Stores a separate data quality check result for each daily partition."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
   ColumnDatatypeMonthlyMonitoringChecksSpec:
@@ -16816,16 +16847,16 @@ definitions:
       monthly_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types. Raises a data quality issue when the detected data type\
-          \ does not match the expected data type. Stores the most recent check result\
+          \ 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed\
+          \ data types. Raises a data quality issue when the detected data type does\
+          \ not match the expected data type. Stores the most recent check result\
           \ for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
       monthly_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
-          \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
-          \ 5 - booleans, 6 - strings, 7 - mixed data types. Stores the most recent\
+          \ type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes,\
+          \ 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
   ColumnDatatypeMonthlyPartitionedChecksSpec:
@@ -16842,16 +16873,16 @@ definitions:
       monthly_partition_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types. Raises a data quality issue when the detected data type\
-          \ does not match the expected data type. Stores a separate data quality\
-          \ check result for each monthly partition."
+          \ 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed\
+          \ data types. Raises a data quality issue when the detected data type does\
+          \ not match the expected data type. Stores a separate data quality check\
+          \ result for each monthly partition."
         $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
       monthly_partition_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed when compared to an earlier not empty partition. The sensor\
           \ returns the detected type of column data: 1 - integers, 2 - floats, 3\
-          \ - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.\
+          \ - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.\
           \ Stores a separate data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
   ColumnDatatypeProfilingChecksSpec:
@@ -16868,15 +16899,15 @@ definitions:
       profile_detected_datatype_in_text:
         description: "Detects the data type of text values stored in the column. The\
           \ sensor returns the code of the detected type of column data: 1 - integers,\
-          \ 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 -\
-          \ mixed data types. Raises a data quality issue when the detected data type\
-          \ does not match the expected data type."
+          \ 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed\
+          \ data types. Raises a data quality issue when the detected data type does\
+          \ not match the expected data type."
         $ref: "#/definitions/ColumnDetectedDatatypeInTextCheckSpec"
       profile_detected_datatype_in_text_changed:
         description: "Detects that the data type of texts stored in a text column\
           \ has changed since the last verification. The sensor returns the detected\
-          \ data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps,\
-          \ 5 - booleans, 6 - strings, 7 - mixed data types."
+          \ data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes,\
+          \ 6 - booleans, 7 - strings, 8 - mixed data types."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeChangedCheckSpec"
   ColumnDatatypeStringDatatypeChangedCheckSpec:
     type: "object"
@@ -16914,7 +16945,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -16927,7 +16958,7 @@ definitions:
       parameters:
         description: "The sensor parameters for a sensor that returns a value that\
           \ identifies the detected type of column data: 1 - integers, 2 - floats,\
-          \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types."
+          \ 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
@@ -16957,6 +16988,83 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnDateInRangePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnDateInRangePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a set percentage of date values\
+          \ in the range defined by the user in a column that raises a data quality\
+          \ error (alert)."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnDateInRangePercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      min_date:
+        type: "string"
+        format: "date"
+        description: "The earliest accepted date."
+      max_date:
+        type: "string"
+        format: "date"
+        description: "The latest accepted date."
   ColumnDateValuesInFuturePercentCheckSpec:
     type: "object"
     properties:
@@ -16993,7 +17101,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17034,17 +17142,17 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
-      daily_datetime_value_in_range_date_percent:
+      daily_date_in_range_percent:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage.\
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
-      daily_date_match_format_percent:
+        $ref: "#/definitions/ColumnDateInRangePercentCheckSpec"
+      daily_text_match_date_format_percent:
         description: "Verifies that the percentage of date values matching the given\
           \ format in a text column does not exceed the maximum accepted percentage.\
           \ Creates a separate data quality check (and an alert) for each daily monitoring."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
   ColumnDatetimeDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -17061,94 +17169,16 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores a separate data\
           \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
-      daily_partition_datetime_value_in_range_date_percent:
+      daily_partition_date_in_range_percent:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage.\
           \ Stores a separate data quality check result for each daily partition."
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
-      daily_partition_date_match_format_percent:
+        $ref: "#/definitions/ColumnDateInRangePercentCheckSpec"
+      daily_partition_text_match_date_format_percent:
         description: "Verifies that the percentage of date values matching the given\
           \ format in a text column does not exceed the maximum accepted percentage.\
           \ Stores a separate data quality check result for each daily partition."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
-  ColumnDatetimeDateMatchFormatPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum percentage of rows\
-          \ with matching date format in a column that raises a data quality error\
-          \ (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
-  ColumnDatetimeDateMatchFormatPercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      date_formats:
-        type: "string"
-        description: "Desired date format. Sensor will try to parse the column records\
-          \ and cast the data using this format."
-        enum:
-        - "DD/MM/YYYY"
-        - "DD-MM-YYYY"
-        - "DD.MM.YYYY"
-        - "YYYY-MM-DD"
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
   ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec:
     type: "object"
     properties:
@@ -17172,18 +17202,18 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ check result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
-      monthly_datetime_value_in_range_date_percent:
+      monthly_date_in_range_percent:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage.\
           \ Stores the most recent check result for each month when the data quality\
           \ check was evaluated."
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
-      monthly_date_match_format_percent:
+        $ref: "#/definitions/ColumnDateInRangePercentCheckSpec"
+      monthly_text_match_date_format_percent:
         description: "Verifies that the percentage of date values matching the given\
           \ format in a text column does not exceed the maximum accepted percentage.\
           \ Creates a separate data quality check (and an alert) for each monthly\
           \ monitoring."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
   ColumnDatetimeMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -17200,16 +17230,16 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores a separate data\
           \ quality check result for each monthly partition."
         $ref: "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
-      monthly_partition_datetime_value_in_range_date_percent:
+      monthly_partition_date_in_range_percent:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage.\
           \ Stores a separate data quality check result for each monthly partition."
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
-      monthly_partition_date_match_format_percent:
+        $ref: "#/definitions/ColumnDateInRangePercentCheckSpec"
+      monthly_partition_text_match_date_format_percent:
         description: "Verifies that the percentage of date values matching the given\
           \ format in a text column does not exceed the maximum accepted percentage.\
           \ Stores a separate data quality check result for each monthly partition."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
   ColumnDatetimeProfilingChecksSpec:
     type: "object"
     properties:
@@ -17225,91 +17255,14 @@ definitions:
         description: "Verifies that the percentage of date values in future in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnDateValuesInFuturePercentCheckSpec"
-      profile_datetime_value_in_range_date_percent:
+      profile_date_in_range_percent:
         description: "Verifies that the percentage of date values in the range defined\
           \ by the user in a column does not exceed the maximum accepted percentage."
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentCheckSpec"
-      profile_date_match_format_percent:
+        $ref: "#/definitions/ColumnDateInRangePercentCheckSpec"
+      profile_text_match_date_format_percent:
         description: "Verifies that the percentage of date values matching the given\
           \ format in a text column does not exceed the maximum accepted percentage."
-        $ref: "#/definitions/ColumnDatetimeDateMatchFormatPercentCheckSpec"
-  ColumnDatetimeValueInRangeDatePercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that could be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnDatetimeValueInRangeDatePercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a set percentage of date values\
-          \ in the range defined by the user in a column that raises a data quality\
-          \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
-  ColumnDatetimeValueInRangeDatePercentSensorParametersSpec:
-    type: "object"
-    properties:
-      filter:
-        type: "string"
-        description: "SQL WHERE clause added to the sensor query. Both the table level\
-          \ filter and a sensor query filter are added, separated by an AND operator."
-      min_value:
-        type: "string"
-        format: "date"
-        description: "Lower bound range variable."
-      max_value:
-        type: "string"
-        format: "date"
-        description: "Upper bound range variable."
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
   ColumnDetectedDatatypeInTextCheckSpec:
     type: "object"
     properties:
@@ -17346,7 +17299,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17359,22 +17312,22 @@ definitions:
       parameters:
         description: "The sensor parameters for a sensor that returns a value that\
           \ identifies the detected type of column data: 1 - integers, 2 - floats,\
-          \ 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types."
+          \ 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types."
         $ref: "#/definitions/ColumnDatatypeStringDatatypeDetectSensorParametersSpec"
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check, detects that the data type\
-          \ of values stored in a column matches an expected data type code (1..7)."
+          \ of values stored in a column matches an expected data type code (1..8)."
         $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       error:
         description: "Default alerting thresholdthat raises a data quality issue at\
           \ an error severity level, detects that the data type of values stored in\
-          \ a column matches an expected data type code (1..7)."
+          \ a column matches an expected data type code (1..8)."
         $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem, detects that the data type of\
-          \ values stored in a column matches an expected data type code (1..7)."
+          \ values stored in a column matches an expected data type code (1..8)."
         $ref: "#/definitions/DetectedDatatypeEqualsRuleParametersSpec"
   ColumnDistinctCountAnomalyDifferencingCheckSpec:
     type: "object"
@@ -17412,7 +17365,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17428,15 +17381,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -17473,7 +17426,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17489,15 +17442,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -17534,7 +17487,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17595,7 +17548,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17656,7 +17609,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17717,7 +17670,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17778,7 +17731,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17839,7 +17792,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17855,15 +17808,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnDistinctPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -17900,7 +17853,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -17961,7 +17914,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18022,7 +17975,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18083,7 +18036,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18144,7 +18097,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18205,7 +18158,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18266,7 +18219,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18327,7 +18280,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18389,7 +18342,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18451,7 +18404,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18518,7 +18471,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18534,15 +18487,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of false value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
   ColumnIntegerInRangePercentCheckSpec:
     type: "object"
     properties:
@@ -18579,7 +18532,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18684,7 +18637,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18782,7 +18735,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18909,7 +18862,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -18970,7 +18923,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19031,7 +18984,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19092,7 +19045,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19153,7 +19106,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19214,7 +19167,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19323,6 +19276,128 @@ definitions:
           \ (results)."
     description: "Column list model that returns the basic fields from a column specification,\
       \ excluding nested nodes like a list of activated checks."
+  ColumnMaxAnomalyDifferencingCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+  ColumnMaxAnomalyStationaryCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMaxSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMaxInRangeCheckSpec:
     type: "object"
     properties:
@@ -19359,7 +19434,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19420,7 +19495,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19436,15 +19511,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMeanChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19481,7 +19556,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19542,7 +19617,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19603,7 +19678,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19664,7 +19739,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19725,7 +19800,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19786,7 +19861,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19802,15 +19877,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMedianChange1DayCheckSpec:
     type: "object"
     properties:
@@ -19847,7 +19922,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19908,7 +19983,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -19969,7 +20044,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20030,7 +20105,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20091,7 +20166,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20116,6 +20191,128 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/BetweenFloatsRuleParametersSpec"
+  ColumnMinAnomalyDifferencingCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
+  ColumnMinAnomalyStationaryCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnNumericMinSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
+      error:
+        description: "Default alerting threshold for a set number of rows with negative\
+          \ value in a column that raises a data quality alert"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnMinInRangeCheckSpec:
     type: "object"
     properties:
@@ -20152,7 +20349,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20379,7 +20576,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20440,7 +20637,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20501,7 +20698,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20562,7 +20759,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20623,7 +20820,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20684,7 +20881,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20745,7 +20942,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20761,15 +20958,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnNullPercentChange1DayCheckSpec:
     type: "object"
     properties:
@@ -20806,7 +21003,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20867,7 +21064,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20928,7 +21125,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -20989,7 +21186,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21050,7 +21247,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21357,7 +21554,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21485,7 +21682,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21547,7 +21744,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21609,7 +21806,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21671,7 +21868,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21733,7 +21930,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -21801,7 +21998,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23250,7 +23447,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23311,7 +23508,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23372,7 +23569,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23433,7 +23630,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23494,7 +23691,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23555,7 +23752,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23624,7 +23821,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23693,7 +23890,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23762,7 +23959,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -23831,7 +24028,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24083,7 +24280,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24144,7 +24341,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24346,7 +24543,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24407,7 +24604,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24497,7 +24694,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24621,7 +24818,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24656,14 +24853,15 @@ definitions:
       sql_expression:
         type: "string"
         description: "SQL expression used for calculated fields or when additional\
-          \ column value transformation is required before the column could be used\
-          \ analyzed in data quality checks (data type conversion, transformation).\
-          \ It should be an SQL expression using the SQL language of the analyzed\
-          \ database type. Use replacement tokens {table} to replace the content with\
-          \ the full table name, {alias} to replace the content with the table alias\
-          \ of an analyzed table or {column} to replace the content with the analyzed\
-          \ column name. An example to extract a value from a string column that stores\
-          \ a JSON in PostgreSQL: \"{column}::json->'address'->'zip'\"."
+          \ column value transformation is required before the column can be used\
+          \ for analysis with data quality checks (data type conversion, transformation).\
+          \ It should be an SQL expression that uses the SQL language of the analyzed\
+          \ database type. Use the replacement tokens {table} to replace the content\
+          \ with the full table name, {alias} to replace the content with the table\
+          \ alias of the table under analysis, or {column} to replace the content\
+          \ with the analyzed column name. An example of extracting a value from a\
+          \ string column storing JSON in PostgreSQL: \"{column}::json->'address'->'zip'\"\
+          ."
       type_snapshot:
         description: "Column data type that was retrieved when the table metadata\
           \ was imported."
@@ -24740,7 +24938,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24776,7 +24974,7 @@ definitions:
       sql_expression:
         type: "string"
         description: "SQL aggregate expression that returns a numeric value calculated\
-          \ from rows. The expression is evaluated on a whole table or withing a GROUP\
+          \ from rows. The expression is evaluated on a whole table or within a GROUP\
           \ BY clause for daily partitions and/or data groups. The expression can\
           \ use {table} and {column} placeholder that are replaced with a full table\
           \ name and the analyzed column name."
@@ -24816,7 +25014,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24896,7 +25094,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -24976,7 +25174,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25155,7 +25353,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25171,15 +25369,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -25216,7 +25414,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25232,15 +25430,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   ColumnSumChange1DayCheckSpec:
     type: "object"
     properties:
@@ -25277,7 +25475,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25338,7 +25536,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25399,7 +25597,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25460,7 +25658,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25521,7 +25719,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25799,7 +25997,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25867,7 +26065,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25929,7 +26127,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -25991,7 +26189,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26053,7 +26251,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26115,7 +26313,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26141,6 +26339,84 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnTextMatchDateFormatPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnTextMatchDateFormatPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum percentage of rows\
+          \ with matching date format in a column that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+  ColumnTextMatchDateFormatPercentSensorParametersSpec:
+    type: "object"
+    properties:
+      filter:
+        type: "string"
+        description: "SQL WHERE clause added to the sensor query. Both the table level\
+          \ filter and a sensor query filter are added, separated by an AND operator."
+      date_format:
+        type: "string"
+        description: "Desired date format. Sensor will try to parse the column records\
+          \ and cast the data using this format."
+        enum:
+        - "DD/MM/YYYY"
+        - "DD-MM-YYYY"
+        - "DD.MM.YYYY"
+        - "YYYY-MM-DD"
   ColumnTextMatchingDatePatternPercentCheckSpec:
     type: "object"
     properties:
@@ -26177,7 +26453,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26239,7 +26515,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26301,7 +26577,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26362,7 +26638,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26423,7 +26699,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26701,7 +26977,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26762,7 +27038,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26823,7 +27099,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26885,7 +27161,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -26946,7 +27222,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27008,7 +27284,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27167,7 +27443,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27229,7 +27505,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27475,7 +27751,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27537,7 +27813,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27599,7 +27875,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27660,7 +27936,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -27676,15 +27952,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinPercentRule100WarningParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       error:
         description: "Default alerting threshold for a set percentage of true value\
           \ in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinPercentRule100ErrorParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinPercentRule95ParametersSpec"
+        $ref: "#/definitions/BetweenPercentRuleParametersSpec"
   ColumnTypeSnapshotSpec:
     type: "object"
     properties:
@@ -28117,7 +28393,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28178,7 +28454,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28239,7 +28515,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28434,6 +28710,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -28537,6 +28814,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -28555,6 +28833,10 @@ definitions:
         description: "PostgreSQL connection parameters. Specify parameters in the\
           \ postgresql section or set the url (which is the PostgreSQL JDBC url)."
         $ref: "#/definitions/PostgresqlParametersSpec"
+      duckdb:
+        description: "DuckDB connection parameters. Specify parameters in the duckdb\
+          \ section or set the url (which is the DuckDB JDBC url)."
+        $ref: "#/definitions/DuckdbParametersSpec"
       redshift:
         description: "Redshift connection parameters. Specify parameters in the redshift\
           \ section or set the url (which is the Redshift JDBC url)."
@@ -28680,6 +28962,46 @@ definitions:
         format: "int64"
         description: "Maximum accepted count (inclusive), leave empty when the limit\
           \ is not assigned."
+  CsvFileFormatSpec:
+    type: "object"
+    properties:
+      all_varchar:
+        type: "boolean"
+      allow_quoted_nulls:
+        type: "boolean"
+      auto_detect:
+        type: "boolean"
+      columns:
+        type: "object"
+        additionalProperties:
+          type: "string"
+      compression:
+        type: "string"
+      dateformat:
+        type: "string"
+      decimal_separator:
+        type: "string"
+      delim:
+        type: "string"
+      escape:
+        type: "string"
+      filename:
+        type: "boolean"
+      header:
+        type: "boolean"
+      hive_partitioning:
+        type: "boolean"
+      ignore_errors:
+        type: "boolean"
+      new_line:
+        type: "string"
+      quote:
+        type: "string"
+      skip:
+        type: "integer"
+        format: "int64"
+      timestampformat:
+        type: "string"
   CustomCheckSpec:
     type: "object"
     properties:
@@ -28716,7 +29038,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -28972,20 +29294,20 @@ definitions:
       source:
         type: "string"
         description: "The source of the data grouping dimension value. The default\
-          \ grouping dimension source is a tag. Assign a tag when there are multiple\
-          \ similar tables that store the same data for different areas (countries,\
-          \ etc.). This could be a country name if a table or partition stores information\
-          \ for that country."
+          \ source of the grouping dimension is a tag. The tag should be assigned\
+          \ when there are many similar tables that store the same data for different\
+          \ areas (countries, etc.). It can be the name of the country if the table\
+          \ or partition stores information for that country."
         enum:
         - "tag"
         - "column_value"
       tag:
         type: "string"
-        description: "The value assigned to a data quality grouping dimension when\
-          \ the source is 'tag'. Assign a hardcoded (static) data grouping dimension\
-          \ value (tag) when there are multiple similar tables that store the same\
-          \ data for different areas (countries, etc.). This could be a country name\
-          \ if a table or partition stores information for that country."
+        description: "The value assigned to the data quality grouping dimension when\
+          \ the source is 'tag'. Assign a hard-coded (static) value to the data grouping\
+          \ dimension (tag) when there are multiple similar tables storing the same\
+          \ data for different areas (countries, etc.). This can be the name of the\
+          \ country if the table or partition stores information for that country."
       column:
         type: "string"
         description: "Column name that contains a dynamic data grouping dimension\
@@ -29172,7 +29494,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -29202,7 +29524,7 @@ definitions:
         - "integers"
         - "floats"
         - "dates"
-        - "timestamps"
+        - "datetimes"
         - "booleans"
         - "texts"
         - "mixed"
@@ -29232,7 +29554,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -29299,7 +29621,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -29383,27 +29705,26 @@ definitions:
       connections_limit:
         type: "integer"
         format: "int32"
-        description: "Limit of the number of connections that could be synchronized\
+        description: "Limit of the number of connections that can be synchronized\
           \ to the DQOps Cloud data quality warehouse."
       users_limit:
         type: "integer"
         format: "int32"
-        description: "Limit of the number of users that could be added to a DQOps\
-          \ environment."
+        description: "Limit of the number of users that can be added to a DQOps environment."
       months_limit:
         type: "integer"
         format: "int32"
         description: "Limit of the number of recent months (excluding the current\
-          \ month) that could be synchronized to the DQOps Cloud data quality warehouse."
+          \ month) that can be synchronized to the DQOps Cloud data quality warehouse."
       connection_tables_limit:
         type: "integer"
         format: "int32"
-        description: "Limit of the number of tables inside each connection that could\
+        description: "Limit of the number of tables inside each connection that can\
           \ be synchronized to the DQOps Cloud data quality warehouse."
       tables_limit:
         type: "integer"
         format: "int32"
-        description: "Limit of the total number of tables that could be synchronized\
+        description: "Limit of the total number of tables that can be synchronized\
           \ to the DQOps Cloud data quality warehouse."
       jobs_limit:
         type: "integer"
@@ -29420,6 +29741,11 @@ definitions:
         - "operator"
         - "viewer"
         - "none"
+      data_quality_data_warehouse_enabled:
+        type: "boolean"
+        description: "True when the account has access to the DQOps Cloud's data quality\
+          \ data lake and data warehouse, allowing to synchronize files and use the\
+          \ data quality data warehouse."
       can_manage_account:
         type: "boolean"
         description: "User is the administrator of the account and can perform security\
@@ -29477,6 +29803,31 @@ definitions:
         description: "User can change his own password in DQOps Cloud, because the\
           \ DQOps Cloud Pairing API Key is valid and synchronization is enabled."
     description: "The model that describes the current user and his access rights."
+  DuckdbParametersSpec:
+    type: "object"
+    properties:
+      in_memory:
+        type: "boolean"
+        description: "To use the special value :memory: to create an in-memory database\
+          \ where no data is persisted to disk (i.e., all data is lost when you exit\
+          \ the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format\
+          \ to use dynamic substitution."
+      database:
+        type: "string"
+        description: "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      options:
+        type: "string"
+        description: "DuckDB connection 'options' initialization parameter. For example\
+          \ setting this to -c statement_timeout=5min would set the statement timeout\
+          \ parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS}\
+          \ configuration with a custom environment variable."
+      properties:
+        type: "object"
+        description: "A dictionary of custom JDBC parameters that are added to the\
+          \ JDBC connection string, a key/value dictionary."
+        additionalProperties:
+          type: "string"
   Duration:
     type: "object"
     properties:
@@ -29715,6 +30066,27 @@ definitions:
         description: "Field value for an date."
     description: "Model of a single field that is used to edit a parameter value for\
       \ a sensor or a rule. Describes the type of the field and the current value."
+  FileFormatSpec:
+    type: "object"
+    properties:
+      csv_file_format:
+        description: "Csv file format specification."
+        $ref: "#/definitions/CsvFileFormatSpec"
+      json_file_format:
+        description: "Json file format specification."
+        $ref: "#/definitions/JsonFileFormatSpec"
+      parquet_file_format:
+        description: "Parquet file format specification."
+        $ref: "#/definitions/ParquetFileFormatSpec"
+      file_path_list:
+        type: "array"
+        description: "The list of paths to files with data that are used as a source."
+        items:
+          type: "string"
+      file_paths:
+        type: "array"
+        items:
+          type: "string"
   HierarchyIdModel:
     type: "object"
     properties:
@@ -29768,7 +30140,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -29980,6 +30352,8 @@ definitions:
         type: "integer"
         format: "int32"
         description: "Count of open (new) data quality incidents."
+  JsonFileFormatSpec:
+    type: "object"
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -30061,7 +30435,7 @@ definitions:
         description: "Maximum number of consecutive days with check failures. A check\
           \ is failed when a sensor query fails due to a connection error, missing\
           \ or corrupted table."
-  MaxFailuresRule10ParametersSpec:
+  MaxFailuresRule1ParametersSpec:
     type: "object"
     properties:
       max_failures:
@@ -30359,38 +30733,39 @@ definitions:
         description: "The default value for a parameter in a custom check or a custom\
           \ rule."
     description: "Defines a single field that is a sensor parameter or a rule parameter."
+  ParquetFileFormatSpec:
+    type: "object"
   PartitionIncrementalTimeWindowSpec:
     type: "object"
     properties:
       daily_partitioning_recent_days:
         type: "integer"
         format: "int32"
-        description: "Number of recent days that are analyzed by daily partitioned\
-          \ checks in incremental mode. The default value is 7 days back."
+        description: "The number of recent days analyzed by daily partition checks\
+          \ in incremental mode. The default value is 7 last days."
       daily_partitioning_include_today:
         type: "boolean"
-        description: "Analyze also today's data by daily partitioned checks in incremental\
+        description: "Analyze also today's data by daily partition checks in incremental\
           \ mode. The default value is false, which means that the today's and the\
-          \ future partitions are not analyzed, only yesterday's partition and earlier\
-          \ daily partitions are analyzed because today's data could be still incomplete.\
-          \ Change the value to 'true' if the current day should be also analyzed.\
-          \ The change may require configuring the schedule for daily checks correctly,\
-          \ to run after the data load."
+          \ future partitions are not analyzed. Only yesterday's partition and previous\
+          \ daily partitions are analyzed because today's data may still be incomplete.\
+          \ Change the value to 'true' if the current day should also be analyzed.\
+          \ This change may require you to configure the schedule for daily checks\
+          \ correctly. The checks must run after the data load."
       monthly_partitioning_recent_months:
         type: "integer"
         format: "int32"
-        description: "Number of recent months that are analyzed by monthly partitioned\
-          \ checks in incremental mode. The default value is 1 month back which means\
-          \ the previous calendar month."
+        description: "The number of recent days analyzed by monthly partition checks\
+          \ in incremental mode. The default value is the previous calendar month."
       monthly_partitioning_include_current_month:
         type: "boolean"
-        description: "Analyze also this month's data by monthly partitioned checks\
-          \ in incremental mode. The default value is false, which means that the\
-          \ current month is not analyzed and future data is also filtered out because\
-          \ the current month could be incomplete. Set the value to 'true' if the\
-          \ current month should be analyzed before the end of the month. The schedule\
-          \ for running monthly checks should be also configured to run more frequently\
-          \ (daily, hourly, etc.)."
+        description: "Analyze also this month's data by monthly partition checks in\
+          \ incremental mode. The default value is false, which means that the current\
+          \ month is not analyzed. Future data is also filtered out because the current\
+          \ month may be incomplete. Change the value to 'true' if the current month\
+          \ should also be analyzed before the end of the month. This change may require\
+          \ you to configure the schedule to run monthly checks more frequently (daily,\
+          \ hourly, etc.)."
   PhysicalTableName:
     type: "object"
     properties:
@@ -30498,9 +30873,9 @@ definitions:
         type: "boolean"
         description: "The sensor supports grouping by a partition date, using the\
           \ GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column\
-          \ could be used for partition checks, calculating separate data quality\
-          \ metrics for each daily/monthly partition. The default value is true, because\
-          \ most of the data quality sensor support partitioned checks."
+          \ can be used for partition checks, calculating separate data quality metrics\
+          \ for each daily/monthly partition. The default value is true, because most\
+          \ of the data quality sensor support partitioned checks."
       parameters:
         type: "object"
         description: "Additional provider specific sensor parameters"
@@ -30523,6 +30898,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -30554,6 +30930,7 @@ definitions:
         - "mysql"
         - "oracle"
         - "postgresql"
+        - "duckdb"
         - "presto"
         - "redshift"
         - "snowflake"
@@ -30799,9 +31176,9 @@ definitions:
     properties:
       rule_name:
         type: "string"
-        description: "Full rule name. This field is for information purposes and could\
-          \ be used to create additional custom checks that are reusing the same data\
-          \ quality rule."
+        description: "Full rule name. This field is for information purposes and can\
+          \ be used to create additional custom checks that reuse the same data quality\
+          \ rule."
       rule_parameters:
         type: "array"
         description: "List of fields for editing the rule parameters like thresholds."
@@ -30879,8 +31256,7 @@ definitions:
         type: "integer"
         format: "int32"
         description: "The maximum number of concurrent 'run checks on table' jobs\
-          \ that could be run on this connection. Limits the number of concurrent\
-          \ jobs."
+          \ that can be run on this connection. Limits the number of concurrent jobs."
       table:
         description: "The full physical name (schema.table) of the target table."
         $ref: "#/definitions/PhysicalTableName"
@@ -30947,7 +31323,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -31311,9 +31687,9 @@ definitions:
       type:
         type: "string"
         description: "Credential type that is based on the detected format of the\
-          \ file. If the file could be parsed as a valid utf-8 string then it is assumed\
-          \ that the credential is a text. Otherwise it is a binary file that could\
-          \ be retrieved only as a base64 value."
+          \ file. If the file can be parsed as a valid utf-8 string, it is assumed\
+          \ that the credential is a text. Otherwise, it is a binary file that can\
+          \ only be retrieved as a base64 value."
         enum:
         - "text"
         - "binary"
@@ -31337,9 +31713,9 @@ definitions:
       type:
         type: "string"
         description: "Credential type that is based on the detected format of the\
-          \ file. If the file could be parsed as a valid utf-8 string then it is assumed\
-          \ that the credential is a text. Otherwise it is a binary file that could\
-          \ be retrieved only as a base64 value."
+          \ file. If the file can be parsed as a valid utf-8 string, then it is assumed\
+          \ that the credential is a text. Otherwise, it is a binary file that can\
+          \ only be retrieved as a base64 value."
         enum:
         - "text"
         - "binary"
@@ -31374,7 +31750,7 @@ definitions:
       time_scale:
         type: "string"
         description: "The time scale (daily, monthly). The time scale is optional\
-          \ and could be null (for profiling checks)."
+          \ and can be null (for profiling checks)."
         enum:
         - "daily"
         - "monthly"
@@ -31383,7 +31759,7 @@ definitions:
         description: "The check's category."
       check_name:
         type: "string"
-        description: "The similar check name in another category."
+        description: "Similar check name in another category."
     description: "Model that identifies a similar check in another category or another\
       \ type of check (monitoring, partition)."
   SingleStoreDbParametersSpec:
@@ -31740,7 +32116,7 @@ definitions:
         - "queued"
         - "running"
         - "waiting"
-        - "succeeded"
+        - "finished"
         - "failed"
         - "cancel_requested"
         - "cancelled"
@@ -31864,7 +32240,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -31900,9 +32276,11 @@ definitions:
           \ filter and a sensor query filter are added, separated by an AND operator."
       referenced_table:
         type: "string"
-        description: "This field can be used to define the name of the table to be\
-          \ compared to. In order to define the name of the table, user should write\
-          \ correct name as a String."
+        description: "The name of the reference table. DQOps accepts the name in two\
+          \ forms: a fully qualified name including the schema name, for example landing_zone.customer_raw,\
+          \ or only a table name. When only a table name is used, DQOps assumes that\
+          \ the table is in the same schema as the analyzed table, and prefixes the\
+          \ name with the schema and optionally database name."
   TableAvailabilityCheckSpec:
     type: "object"
     properties:
@@ -31939,7 +32317,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -31959,11 +32337,11 @@ definitions:
       error:
         description: "Default alerting threshold with the maximum number of consecutive\
           \ table availability issues that raises a data quality error (alert)"
-        $ref: "#/definitions/MaxFailuresRule5ParametersSpec"
+        $ref: "#/definitions/MaxFailuresRule1ParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxFailuresRule10ParametersSpec"
+        $ref: "#/definitions/MaxFailuresRule5ParametersSpec"
   TableAvailabilityDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -32106,7 +32484,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32214,7 +32592,7 @@ definitions:
         description: "Boolean flag that decides if the current user can delete data\
           \ (results)."
     description: "Model that contains the basic information about a table comparison\
-      \ configuration that specifies how the current table could be compared to another\
+      \ configuration that specifies how the current table can be compared with another\
       \ table that is a source of truth for comparison."
   TableComparisonConfigurationSpec:
     type: "object"
@@ -32541,7 +32919,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32933,7 +33311,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -32994,7 +33372,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33055,7 +33433,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33141,7 +33519,7 @@ definitions:
       priority:
         type: "integer"
         format: "int32"
-        description: "Table priority (1, 2, 3, 4, ...). The tables could be assigned\
+        description: "Table priority (1, 2, 3, 4, ...). The tables can be assigned\
           \ a priority level. The table priority is copied into each data quality\
           \ check result and a sensor result, enabling efficient grouping of more\
           \ and less important tables during a data quality improvement project, when\
@@ -33371,7 +33749,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33522,7 +33900,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33538,15 +33916,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountAnomalyStationaryPartitionCheckSpec:
     type: "object"
     properties:
@@ -33583,7 +33961,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33599,15 +33977,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule1ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec"
       error:
         description: "Default alerting threshold for a set number of rows with negative\
           \ value in a column that raises a data quality alert"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule05ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRule01ParametersSpec"
+        $ref: "#/definitions/AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec"
   TableRowCountChange1DayCheckSpec:
     type: "object"
     properties:
@@ -33644,7 +34022,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33705,7 +34083,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33766,7 +34144,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33827,7 +34205,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33888,7 +34266,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -33949,7 +34327,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34010,7 +34388,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34081,7 +34459,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34142,7 +34520,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34203,7 +34581,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34384,7 +34762,7 @@ definitions:
       priority:
         type: "integer"
         format: "int32"
-        description: "Table priority (1, 2, 3, 4, ...). The tables could be assigned\
+        description: "Table priority (1, 2, 3, 4, ...). The tables can be assigned\
           \ a priority level. The table priority is copied into each data quality\
           \ check result and a sensor result, enabling efficient grouping of more\
           \ and less important tables during a data quality improvement project, when\
@@ -34431,24 +34809,24 @@ definitions:
       table_comparisons:
         type: "object"
         description: "Dictionary of data comparison configurations. Data comparison\
-          \ configurations are used for cross data-source comparisons to compare this\
-          \ table (called the compared table) with other reference tables (the source\
-          \ of truth). The reference table's metadata must be imported into DQOps,\
-          \ but the reference table could be located on a different data source. DQOps\
-          \ will compare metrics calculated for groups of rows (using a GROUP BY clause).\
-          \ For each comparison, the user must specify a name of a data grouping.\
-          \ The number of data grouping dimensions on the parent table and the reference\
-          \ table defined in selected data grouping configurations must match. DQOps\
-          \ will run the same data quality sensors on both the parent table (tested\
-          \ table) and the reference table (the source of truth), comparing the measures\
-          \ (sensor readouts) captured from both the tables."
+          \ configurations are used for comparisons between data sources to compare\
+          \ this table (called the compared table) with other reference tables (the\
+          \ source of truth). The reference table's metadata must be imported into\
+          \ DQOps, but the reference table may be located in another data source.\
+          \ DQOps will compare metrics calculated for groups of rows (using the GROUP\
+          \ BY clause). For each comparison, the user must specify a name of a data\
+          \ grouping. The number of data grouping dimensions in the parent table and\
+          \ the reference table defined in the selected data grouping configurations\
+          \ must match. DQOps will run the same data quality sensors on both the parent\
+          \ table (table under test) and the reference table (the source of truth),\
+          \ comparing the measures (sensor readouts) captured from both tables."
         additionalProperties:
           $ref: "#/definitions/TableComparisonConfigurationSpec"
       incident_grouping:
         description: "Incident grouping configuration with the overridden configuration\
-          \ at a table level. The field value in this object that are configured will\
-          \ override the default configuration from the connection level. The incident\
-          \ grouping level could be changed or incident creation could be disabled."
+          \ at a table level. The configured field value in this object will override\
+          \ the default configuration from the connection level. Incident grouping\
+          \ level can be changed or incident creation can be disabled."
         $ref: "#/definitions/TableIncidentGroupingSpec"
       owner:
         description: "Table owner information like the data steward name or the business\
@@ -34501,6 +34879,9 @@ definitions:
           \ in the table data quality specification file."
         items:
           $ref: "#/definitions/CommentSpec"
+      file_format:
+        description: "File format with the specification used as a source data."
+        $ref: "#/definitions/FileFormatSpec"
   TableSqlAggregateExpressionCheckSpec:
     type: "object"
     properties:
@@ -34537,7 +34918,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34573,9 +34954,9 @@ definitions:
       sql_expression:
         type: "string"
         description: "SQL aggregate expression that returns a numeric value calculated\
-          \ from rows. The expression is evaluated on a whole table or withing a GROUP\
-          \ BY clause for daily partitions and/or data groups. The expression can\
-          \ use a {table} placeholder that is replaced with a full table name."
+          \ from rows. The expression is evaluated for the entire table or within\
+          \ a GROUP BY clause for daily partitions and/or data groups. The expression\
+          \ can use a {table} placeholder that is replaced with a full table name."
   TableSqlConditionFailedCheckSpec:
     type: "object"
     properties:
@@ -34612,7 +34993,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34690,7 +35071,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:
@@ -34768,7 +35149,7 @@ definitions:
           \ than the built-in dimensions (Timeliness, Validity, etc.)."
       display_name:
         type: "string"
-        description: "Data quality check display name that could be assigned to the\
+        description: "Data quality check display name that can be assigned to the\
           \ check, otherwise the check_display_name stored in the parquet result files\
           \ is the check_name."
       data_grouping:

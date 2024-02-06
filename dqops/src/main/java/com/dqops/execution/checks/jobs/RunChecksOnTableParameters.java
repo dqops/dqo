@@ -44,10 +44,10 @@ public class RunChecksOnTableParameters implements Cloneable {
     private String connection;
 
     /**
-     * The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * Null value means that there are no limits applied.
      */
-    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.")
+    @JsonPropertyDescription("The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.")
     private Integer maxJobsPerConnection;
 
     /**
@@ -96,7 +96,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     /**
      * Creates a check run parameters.
      * @param connection The name of the target connection.
-     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.
+     * @param maxJobsPerConnection The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.
      * @param table The full physical name (schema.table) of the target table.
      * @param checkSearchFilters Check search filters.
      * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
@@ -136,7 +136,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     }
 
     /**
-     * Returns the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
+     * Returns the limit of concurrent jobs (run checks on table) that can be executed in parallel on this connection.
      * @return Maximum number of concurrent check executions on this connection.
      */
     public Integer getMaxJobsPerConnection() {
@@ -144,7 +144,7 @@ public class RunChecksOnTableParameters implements Cloneable {
     }
 
     /**
-     * Sets the limit of concurrent jobs (run checks on table) that could be executed in parallel on this connection.
+     * Sets the limit of concurrent jobs (run checks on table) that can be executed in parallel on this connection.
      * @param maxJobsPerConnection Maximum number of concurrent check executions on this connection.
      */
     public void setMaxJobsPerConnection(Integer maxJobsPerConnection) {

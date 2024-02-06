@@ -20,7 +20,7 @@ The total row count match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
 
 
 
@@ -236,7 +236,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     {%- macro render_referenced_table(referenced_table) -%}
     {%- if referenced_table.find(".") < 0 -%}
-       {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+       {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
     {%- else -%}
        {{ referenced_table }}
     {%- endif -%}

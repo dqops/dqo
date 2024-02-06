@@ -1,0 +1,15 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/SensorDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: sensor
+spec:
+  fields:
+  - field_name: min_date
+    display_name: min_date
+    help_text: The earliest accepted date.
+    data_type: date
+    default_value: 1900-01-02
+  - field_name: max_date
+    display_name: max_date
+    help_text: The latest accepted date.
+    data_type: date
+    default_value: 2099-12-30

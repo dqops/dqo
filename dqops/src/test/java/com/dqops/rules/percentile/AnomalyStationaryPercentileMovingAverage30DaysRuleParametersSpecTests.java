@@ -39,7 +39,7 @@ import java.util.Arrays;
 
 @SpringBootTest
 public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTests extends BaseTest {
-    private AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec sut;
+    private AnomalyStationaryPercentileMovingAverage30DaysRuleWarning1PctParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -49,7 +49,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
 
     @BeforeEach
     void setUp() {
-        this.sut = new AnomalyStationaryPercentileMovingAverage30DaysRule1ParametersSpec();
+        this.sut = new AnomalyStationaryPercentileMovingAverage30DaysRuleWarning1PctParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
@@ -70,7 +70,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
         }
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -88,7 +88,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
         Arrays.fill(this.sensorReadouts, 10.0);
 
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(10.0,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
@@ -102,7 +102,7 @@ public class AnomalyStationaryPercentileMovingAverage30DaysRuleParametersSpecTes
     @Test
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         HistoricDataPoint[] historicDataPoints = HistoricDataPointObjectMother.fillHistoricReadouts(
-                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts);
+                this.timeWindowSettings, TimePeriodGradient.day, this.readoutTimestamp, this.sensorReadouts, null);
 
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null,
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);

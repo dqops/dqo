@@ -61,33 +61,33 @@ public class DqoUserProfileModel {
     private String trialPeriodExpiresAt;
 
     /**
-     * Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionsLimit;
 
     /**
-     * Limit of the number of users that could be added to a DQOps environment.
+     * Limit of the number of users that can be added to a DQOps environment.
      */
-    @JsonPropertyDescription("Limit of the number of users that could be added to a DQOps environment.")
+    @JsonPropertyDescription("Limit of the number of users that can be added to a DQOps environment.")
     private Integer usersLimit;
 
     /**
-     * Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer monthsLimit;
 
     /**
-     * Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionTablesLimit;
 
     /**
-     * Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer tablesLimit;
 
     /**
@@ -101,6 +101,12 @@ public class DqoUserProfileModel {
      */
     @JsonPropertyDescription("User role that limits possible operations that the current user can perform.")
     private DqoUserRole accountRole;
+
+    /**
+     * True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.
+     */
+    @JsonPropertyDescription("True when the account has access to the DQOps Cloud's data quality data lake and data warehouse, allowing to synchronize files and use the data quality data warehouse.")
+    private boolean dataQualityDataWarehouseEnabled;
 
     /**
      * User is the administrator of the account and can perform security related actions, such as managing users.
@@ -236,6 +242,8 @@ public class DqoUserProfileModel {
             model.setConnectionTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT));
             model.setTablesLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.TABLES_LIMIT));
             model.setJobsLimit(dqoCloudApiKey.getApiKeyPayload().getLimits().get(DqoCloudLimit.JOBS_LIMIT));
+            model.setDataQualityDataWarehouseEnabled(dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == null ||
+                    dqoCloudApiKey.getApiKeyPayload().getDataQualityDataWarehouse() == true);
             model.setCanChangeOwnPassword(true);
         } else {
             model.setTenant("Standalone");
@@ -269,6 +277,7 @@ public class DqoUserProfileModel {
             setCanCompareTables(true);
             setCanManageUsers(false);
             setCanManageAndViewSharedCredentials(true);
+            setDataQualityDataWarehouseEnabled(false);
             setTenant("Standalone");
             setLicenseType(DqoCloudLicenseType.FREE.name());
             setJobsLimit(1);

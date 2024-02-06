@@ -12,13 +12,10 @@ spec:
   fields:
   - field_name: anomaly_percent
     display_name: anomaly_percent
-    help_text: "Probability that the current sensor readout will achieve values within\
-      \ the mean according to the distribution of the previous values gathered within\
-      \ the time window. In other words, the inter-quantile range around the mean\
-      \ of the estimated normal distribution. Set the time window at the threshold\
-      \ level for all severity levels (warning, error, fatal) at once. The default\
-      \ is a time window of 30 periods (days, etc.), but at least 10 readouts must\
-      \ exist to run the calculation."
+    help_text: "The probability (in percent) that the current sensor readout (measure)\
+      \ is an anomaly, because the value is outside the regular range of previous\
+      \ readouts. The default time window of 30 periods (days, etc.) is required,\
+      \ but at least 10 readouts must exist to run the calculation."
     data_type: double
     required: true
-    default_value: 0.1
+    default_value: 0.5

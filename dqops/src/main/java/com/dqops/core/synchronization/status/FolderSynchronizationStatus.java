@@ -18,7 +18,7 @@ package com.dqops.core.synchronization.status;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.
+ * Enumeration of statuses identifying the synchronization status for each folder that can be synchronized with the DQOps cloud.
  */
 public enum FolderSynchronizationStatus {
     /**

@@ -8,13 +8,13 @@ DQOps comes with around 150 predefined data quality checks which helps you monit
 ## Key features
 - Intuitive graphical interface and access via CLI
 - Support of a number of different data sources: BigQuery, Snowflake, PostgreSQL, Redshift, SQL Server and MySQL
-- ~600 build-in table and column checks with easy customization
+- ~150 build-in table and column checks with easy customization
 - Table and column-level checks which allows writing your own SQL queries
 - Daily and monthly date partition testing
 - Data grouping by up to 9 different data grouping levels
 - Build-in scheduling
 - Calculation of data quality KPIs which can be displayed on multiple built-in data quality dashboards
-- Incident analysis
+- Data quality incident management and notifications
 
 ## Installation
 
@@ -72,7 +72,7 @@ The following list shows selected use cases, with examples and best practices.
   describes the formulas used by DQOps to calculate a data quality score, used to measure the quality of data sources
 
 - You will learn how to [create custom data quality dashboards](https://dqops.com/docs/integrations/looker-studio/creating-custom-data-quality-dashboards/)
-  using custom connector for Looker Studio provided by DQOps. Your data quality dashboards will show the data quality
+  using a custom connector for Looker Studio provided by DQOps. Your data quality dashboards will show the data quality
   results organized in a format that is easy to understand by your business sponsors.
 
 - Look at the [categories of data quality checks](https://dqops.com/docs/dqo-concepts/categories-of-data-quality-checks/)
@@ -82,8 +82,8 @@ The following list shows selected use cases, with examples and best practices.
   with DQOps.
 
 - Learn how to [measure data quality incrementally](https://dqops.com/docs/dqo-concepts/incremental-data-quality-monitoring/)
-  using time partitioned checks that are a unique feature of DQOps, allowing to analyze financial data, append-only data,
-  or very big tables at a terabyte or petabyte scales.
+  using time partitioned checks that are a unique feature of DQOps, allowing the analysis of financial data, append-only data,
+  or very big tables at a terabyte or petabyte scale.
 
 - Similar data quality issues are grouped into data quality incidents,
   learn how [grouping data quality issues to incidents](https://dqops.com/docs/dqo-concepts/grouping-data-quality-issues-to-incidents/),
@@ -95,16 +95,97 @@ or using the [DQOps user interface](https://dqops.com/docs/dqo-concepts/dqops-us
 
 - Learn how to [detect database and table availability issues](https://dqops.com/docs/examples/data-availability/detect-table-availability-issues/).
 
-- Learn how configure data volume checks to [detect empty or incomplete tables](https://dqops.com/docs/examples/data-completeness/detect-empty-or-incomplete-tables/).
+- Learn how to configure data volume checks to [detect empty or incomplete tables](https://dqops.com/docs/examples/data-completeness/detect-empty-or-incomplete-tables/).
 
 - Detect if [columns contain only accepted values](https://dqops.com/docs/examples/data-consistency/percentage-of-rows-with-a-text-found-in-set/).
 
-- Detect duplicate values in columns by [measuring percentage of duplicates](https://dqops.com/docs/examples/data-uniqueness/percentage-of-duplicates/).
+- Detect duplicate values in columns by [measuring the percentage of duplicates](https://dqops.com/docs/examples/data-uniqueness/percentage-of-duplicates/).
 
 - Validate values in text columns using a regular expression to [detect values that are invalid emails](https://dqops.com/docs/examples/data-validity/detect-invalid-emails/).
 
 - Use schema drift data quality checks to [detect table schema changes](https://dqops.com/docs/examples/schema/detect-table-schema-changes/),
-  such as: missing columns, column order changed, column data type changed, or just that new columns were added or removed from a table.
+  such as missing columns, column order change, column data type change, or just that new columns were added or removed from a table.
+
+
+## DQOps client
+You can integrate DQOps into data pipelines and ML pipelines by calling a [Python client for DQOps](https://pypi.org/project/dqops/).
+Install the client as a Python package:
+
+```
+python -m pip install --user dqops
+```
+
+The `dqops` package contains a remote client that can connect to a DQOps instance and perform all operations supported by the user interface.
+The DQOps client could be used inside data pipelines or data preparation code to verify the quality of tables.
+
+You can use the unauthenticated client to connect to a local DQOps instance from your data pipeline code. First, create the client object.
+
+```python
+from dqops import client
+
+dqops_client = client.Client(base_url="http://localhost:8888")
+```
+
+Alternatively, if you are connecting to a production instance of DQOps that has authentication
+enabled, you have to open the user's profile screen in DQOps and generate your DQOps API Key.
+Then take the key and use it as the token, when creating an `AuthenticatedClient` instead.
+
+```python
+from dqops import client
+
+dqops_client = client.AuthenticatedClient(base_url="http://localhost:8888", token="Your DQO API Key")
+```
+
+Now, you can call operations on DQOps. The following code shows how to execute data quality checks
+on data sources that are already registered in DQOps.
+
+```python
+from dqops.client.api.jobs import run_checks
+from dqops.client.models import CheckSearchFilters, \
+                              RunChecksParameters
+
+
+request_body = RunChecksParameters(
+  check_search_filters=CheckSearchFilters(
+      column='sample_column',
+      column_data_type='string',
+      connection='sample_connection',
+      full_table_name='sample_schema.sample_table',
+      enabled=True
+  )
+)
+
+check_results = run_checks.sync(
+  client=dqops_client,
+  json_body=request_body
+)
+
+```
+
+The [`run_checks`](https://dqops.com/docs/client/operations/jobs/#run_checks) operation returns a summary of executed data quality checks and the highest
+data quality issue severity level. In the following example, the most severe issue was at an **error** severity level.
+
+```json
+{
+  "jobId" : {
+    "jobId" : 123456789,
+    "createdAt" : "2023-10-11T13:42:00Z"
+  },
+  "result" : {
+    "highest_severity" : "error",
+    "executed_checks" : 10,
+    "valid_results" : 7,
+    "warnings" : 1,
+    "errors" : 2,
+    "fatals" : 0,
+    "execution_errors" : 0
+  },
+  "status" : "succeeded"
+}
+```
+
+Learn more about the DQOps Python client in the [DQOps REST API client](https://dqops.com/docs/client/) reference
+documentation that shows Python code examples for every operation supported by the client.
 
 
 ## Documentation
@@ -116,8 +197,6 @@ The [getting started](https://dqops.com/docs/getting-started/) guide shows how t
 Also, read the [DQOps concept](https://dqops.com/docs/dqo-concepts/) guide to know how DQOps operates,
 and how to configure data quality checks.
 
-The documentation of the [DQOps REST API Python client](https://dqops.com/docs/client/) shows the complete
-documentation of the Python client, including code samples that are ready to copy-paste into your data pipeline code.
 
 ## Contact and issues
 

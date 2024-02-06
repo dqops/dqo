@@ -18,6 +18,7 @@ export default function DataDictionaryItemOverview() {
   const dispatch = useDispatch();
 
   const addDictionary = async () => {
+    if (dictionaryName.length === 0) return;
     await DataDictionaryApiClient.createDictionary({
       dictionary_name: dictionaryName,
       file_content: textAreaValue
@@ -49,55 +50,49 @@ export default function DataDictionaryItemOverview() {
   }, [dictionary_name]);
 
   return (
-    <DefinitionLayout>
-      {userProfile.can_manage_definitions === true ? (
-        <>
-          <div className="w-full border-b border-b-gray-400 flex justify-between ">
-            <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
-              <div>Dictionary:</div>
-              <Input
-                value={dictionaryName}
-                onChange={(e) => setDictionaryName(e.target.value)}
-                disabled={dictionary_name}
-              />
-            </div>
-            <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
-              {dictionary_name ? (
-                <a
-                  href={`/api/credentials/${dictionary_name}/download`}
-                  rel="noreferrer"
-                  target="_blank"
-                >
-                  <Button
-                    label="Download"
-                    color="primary"
-                    className="w-30"
-                    variant="contained"
-                  />
-                </a>
-              ) : null}
-              <Button
-                label={dictionary_name ? 'Save' : 'Add dictionary'}
-                color="primary"
-                variant="contained"
-                className={'my-3'}
-                onClick={dictionary_name ? editDictionary : addDictionary}
-              />
-            </div>
-          </div>
-          <div className="px-5">
-            <TextArea
-              className="w-full min-h-120 mt-4"
-              value={textAreaValue}
-              onChange={(e) => setTextAreaValue(e.target.value)}
+    <>
+      <div className="w-full border-b border-b-gray-400 flex justify-between ">
+        <div className="text-xl font-semibold truncate flex items-center pl-5 space-x-2">
+          <div>Dictionary:</div>
+          <Input
+          value={dictionaryName}
+          onChange={(e) => setDictionaryName(e.target.value)}
+          disabled={dictionary_name || userProfile.can_manage_definitions !== true}
+        />
+      </div>
+      <div className="flex items-center justify-center space-x-1 pr-5 overflow-hidden">
+        {dictionary_name ? (
+          <a
+            href={`/api/credentials/${dictionary_name}/download`}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <Button
+              label="Download"
+              color="primary"
+              className="w-30"
+              variant="contained"
             />
-          </div>
-        </>
-      ) : (
-        <div className="w-full h-screen flex items-center justify-center text-red-500 text-2xl">
-          Access denied
-        </div>
-      )}
-    </DefinitionLayout>
+          </a>
+        ) : null}
+        <Button
+          label={dictionary_name ? 'Save' : 'Add dictionary'}
+          color="primary"
+          variant="contained"
+          className={'my-3'}
+          onClick={dictionary_name ? editDictionary : addDictionary}
+          disabled={userProfile.can_manage_definitions !== true}
+        />
+      </div>
+    </div>
+    <div className="px-5">
+      <TextArea
+        className="w-full min-h-120 mt-4"
+        value={textAreaValue}
+        onChange={(e) => setTextAreaValue(e.target.value)}
+        disabled={userProfile.can_manage_definitions !== true}
+      />
+    </div>
+  </>
   );
 }

@@ -95,6 +95,11 @@ public class SynchronizeMetadataSchedulerJob implements Job, InterruptableJob {
                 return;
             }
 
+            if (cloudApiKeyPayload.getDataQualityDataWarehouse() != null &&
+                    cloudApiKeyPayload.getDataQualityDataWarehouse() == false) {
+                return; // the user was not granted access to the data quality data warehouse
+            }
+
             if (jobRunCount > 0 && (cloudApiKeyPayload.getLicenseType() == null ||
                     cloudApiKeyPayload.getLicenseType() == DqoCloudLicenseType.FREE ||
                     cloudApiKeyPayload.getExpiresAt() != null)) {

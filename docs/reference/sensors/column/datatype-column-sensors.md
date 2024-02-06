@@ -6,7 +6,7 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 
 ## string datatype detect
 Column level sensor that analyzes all values in a text column and detects the data type of the values.
- The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+ The sensor returns a value that identifies the detected data type of column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
 
 **Sensor summary**
 
@@ -78,7 +78,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -94,8 +94,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -156,7 +156,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -172,8 +172,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -193,7 +193,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[-+]?\\d+$') IS TRUE
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[-+]?[0-9]+$') }}
                             THEN 1
                         ELSE 0
                     END
@@ -201,8 +201,7 @@ The templates used to generate the SQL query for each data source supported by D
                 THEN 1
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
-                    CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.])[0-9]+$') IS TRUE
+                    CASE WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
                             THEN 1
                         ELSE 0
                         END
@@ -211,7 +210,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$') IS TRUE
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4}))$|^(([0-9]{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^(([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^(([0-9]{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$') }}
                             THEN 1
                         ELSE 0
                         END
@@ -220,7 +219,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$') IS TRUE
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])[:]([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$') }}
                             THEN 1
                         ELSE 0
                         END
@@ -229,29 +228,29 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
-                        WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$') IS TRUE
+                        WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$') }}
                             THEN 1
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
-                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
-                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[-+]?\d+$') IS TRUE OR
-                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[+-]?([0-9]*[.])[0-9]+$') IS TRUE OR
-                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$') IS TRUE OR
-                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[\s]?(am|pm|AM|PM)?)$') IS TRUE OR
-                             REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$') IS TRUE
-                            THEN 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[-+]?[0-9]+$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^[+-]?([0-9]*[.])[0-9]+$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4}))$|^(([0-9]{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^(([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^(([0-9]{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])[:]([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$|^(([0-9]{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[ \t\n\r\f\v]([0]|[00]|2[0-3]|[01][0-9])\\:([0-5][0-9])\\:([0-5][0-9])[ \t\n\r\f\v]?(am|pm|AM|PM)?)$') }}
+                            OR {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$') }}
+                                THEN 0
                         WHEN TRIM({{ lib.render_target_column('analyzed_table') }}) <> ''
                             THEN 1
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -312,7 +311,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -328,8 +327,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -395,7 +394,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -411,8 +410,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -473,7 +472,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -489,8 +488,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -558,7 +557,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -574,8 +573,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -636,7 +635,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -652,8 +651,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -714,7 +713,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -730,8 +729,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -799,7 +798,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -815,8 +814,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -878,7 +877,7 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                         END
                 )
-                THEN 5
+                THEN 6
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                 SUM(
                     CASE
@@ -894,8 +893,8 @@ The templates used to generate the SQL query for each data source supported by D
                         ELSE 0
                     END
                 )
-                THEN 6
-            ELSE 7
+                THEN 7
+            ELSE 8
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

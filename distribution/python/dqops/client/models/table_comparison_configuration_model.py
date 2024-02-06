@@ -20,7 +20,7 @@ T = TypeVar("T", bound="TableComparisonConfigurationModel")
 @_attrs_define
 class TableComparisonConfigurationModel:
     """Model that contains the basic information about a table comparison configuration that specifies how the current
-    table could be compared to another table that is a source of truth for comparison.
+    table can be compared with another table that is a source of truth for comparison.
 
         Attributes:
             table_comparison_configuration_name (Union[Unset, str]): The name of the table comparison configuration that is

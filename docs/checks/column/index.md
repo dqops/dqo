@@ -39,7 +39,7 @@ A column-level check that counts how many expected text values are among the TOP
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
- This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
 
 
 
@@ -104,6 +104,18 @@ A column-level check that ensures that the mean value in a monitored column is w
 
 ### [median anomaly](./anomaly/median-anomaly.md)
 A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+
+
+
+### [min anomaly](./anomaly/min-anomaly.md)
+A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+
+
+
+### [max anomaly](./anomaly/max-anomaly.md)
+A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
+ If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
 
 
 
@@ -265,7 +277,7 @@ A column-level check that ensures that compares the count of null values in the 
 
 
 ## column-level custom_sql checks
-Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
 ### [sql condition failed on column](./custom_sql/sql-condition-failed-on-column.md)
 A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
@@ -298,16 +310,16 @@ Column level check that uses a custom SQL SELECT statement to retrieve a result 
 
 
 ## column-level datatype checks
-Analyzes all values in a text column to detect if all values could be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
+Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
 ### [detected datatype in text](./datatype/detected-datatype-in-text.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..7, which are the codes of detected data types.
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
 ### [detected datatype in text changed](./datatype/detected-datatype-in-text-changed.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
+A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
  For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
@@ -324,15 +336,15 @@ A column-level check that ensures that there are no more than a set percentage o
 
 
 
-### [datetime value in range date percent](./datetime/datetime-value-in-range-date-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
+### [date in range percent](./datetime/date-in-range-percent.md)
+A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
 
 
 
-### [date match format percent](./datetime/date-match-format-percent.md)
-A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+### [text match date format percent](./datetime/text-match-date-format-percent.md)
+A column-level check that validates the values in text columns match one of predefined date formats.
  It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- The default value 100.0 (percent) verifies that all values match a given date format.
+ The default value 100.0 (percent) verifies that all values match an expected format.
 
 
 
@@ -609,7 +621,7 @@ A column-level check that ensures that there are no more than a maximum number o
 
 
 ## column-level pii checks
-Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
+Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.
 
 ### [contains usa phone percent](./pii/contains-usa-phone-percent.md)
 Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.

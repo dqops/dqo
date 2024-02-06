@@ -126,13 +126,10 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
      * @return Physical database name.
      */
     public String getDatabase() {
-        switch (mysqlEngineType){
-            case mysql:
-                return database;
-            case singlestoredb:
-                return SingleStoreDbParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
-            default:
-                throw new RuntimeException("Given enum is not supported : " + mysqlEngineType);
+        if (mysqlEngineType == MysqlEngineType.singlestoredb) {
+            return SingleStoreDbParametersSpec.DEFAULT_CATALOG_NAME; // database and schema is the same thing for the single store db
+        } else {
+            return database;
         }
     }
 
@@ -300,10 +297,9 @@ public class MysqlParametersSpec extends BaseProviderParametersSpec
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
-        if(cloned.singleStoreDbParametersSpec != null){
+        if (cloned.singleStoreDbParametersSpec != null) {
             cloned.singleStoreDbParametersSpec = cloned.singleStoreDbParametersSpec.expandAndTrim(secretValueProvider, lookupContext);
         }
-        cloned.mysqlEngineType = MysqlEngineType.valueOf(secretValueProvider.expandValue(cloned.mysqlEngineType.toString(), lookupContext));
 
         return cloned;
     }

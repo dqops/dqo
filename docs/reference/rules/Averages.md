@@ -22,8 +22,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_above`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
-|<span class="no-wrap-code">`max_percent_below`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_above`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_below`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -49,20 +49,20 @@ The rule definition YAML file *averages/between_percent_moving_average_30_days.d
       fields:
       - field_name: max_percent_above
         display_name: max_percent_above
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ above a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be above a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ below a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be below a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
     ```
@@ -112,6 +112,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -186,8 +187,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_above`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
-|<span class="no-wrap-code">`max_percent_below`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_above`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_below`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -213,20 +214,20 @@ The rule definition YAML file *averages/between_percent_moving_average_60_days.d
       fields:
       - field_name: max_percent_above
         display_name: max_percent_above
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ above a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be above a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ below a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be below a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
     ```
@@ -276,6 +277,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -350,8 +352,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_above`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
-|<span class="no-wrap-code">`max_percent_below`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_above`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_below`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -377,20 +379,20 @@ The rule definition YAML file *averages/between_percent_moving_average_7_days.dq
       fields:
       - field_name: max_percent_above
         display_name: max_percent_above
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ above a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be above a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
       - field_name: max_percent_below
         display_name: max_percent_below
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ below a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be below a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         default_value: 10.0
     ```
@@ -440,6 +442,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -514,8 +517,8 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_above`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
-|<span class="no-wrap-code">`max_percent_below`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_above`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
+|<span class="no-wrap-code">`max_percent_below`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*| ||
 
 
 
@@ -541,19 +544,19 @@ The rule definition YAML file *averages/percent_moving_average.dqorule.yaml* wit
       fields:
       - field_name: max_percent_above
         display_name: max_percent_above
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ above a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (warning, error, fatal) at once. The\
-          \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
-          \ must exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be above a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (warning, error, fatal) at\
+          \ once. The default is a 14 time periods (days, etc.) time window, but at least\
+          \ 7 readouts must exist to run the calculation."
         data_type: double
       - field_name: max_percent_below
         display_name: max_percent_below
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ below a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (warning, error, fatal) at once. The\
-          \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
-          \ must exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be below a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (warning, error, fatal) at\
+          \ once. The default is a 14 time periods (days, etc.) time window, but at least\
+          \ 7 readouts must exist to run the calculation."
         data_type: double
     ```
 
@@ -602,6 +605,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -676,7 +680,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_within`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`max_percent_within`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -702,11 +706,11 @@ The rule definition YAML file *averages/within_percent_moving_average_30_days.dq
       fields:
       - field_name: max_percent_within
         display_name: max_percent_within
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ within a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be within a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         required: true
         default_value: 10.0
@@ -756,6 +760,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -830,7 +835,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_within`</span>|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`max_percent_within`</span>|The maximum percentage (e.q., 3%) by which the current sensor readout can be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a time window of 14 periods (days, etc.), but there must be at least 7 readouts to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -856,11 +861,11 @@ The rule definition YAML file *averages/within_percent_moving_average_60_days.dq
       fields:
       - field_name: max_percent_within
         display_name: max_percent_within
-        help_text: "Maximum percent (e.q. 3%) that the current sensor reading could be\
-          \ within a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readings must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.q., 3%) by which the current sensor readout\
+          \ can be within a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a time window of 14 periods (days, etc.), but there must be\
+          \ at least 7 readouts to run the calculation."
         data_type: double
         required: true
         default_value: 10.0
@@ -910,6 +915,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:
@@ -984,7 +990,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`max_percent_within`</span>|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*|:material-check-bold:||
+|<span class="no-wrap-code">`max_percent_within`</span>|The maximum percentage (e.g., 3%) by which the current sensor readout can be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|*double*|:material-check-bold:||
 
 
 
@@ -1010,11 +1016,11 @@ The rule definition YAML file *averages/within_percent_moving_average_7_days.dqo
       fields:
       - field_name: max_percent_within
         display_name: max_percent_within
-        help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-          \ within a moving average within the time window. Set the time window at the\
-          \ threshold level for all severity levels (low, medium, high) at once. The default\
-          \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
-          \ exist to run the calculation."
+        help_text: "The maximum percentage (e.g., 3%) by which the current sensor readout\
+          \ can be within a moving average within the time window. Set the time window\
+          \ at the threshold level for all severity levels (low, medium, high) at once.\
+          \ The default is a 14 time periods (days, etc.) time window, but at least 7\
+          \ readouts must exist to run the calculation."
         data_type: double
         required: true
         default_value: 10.0
@@ -1064,6 +1070,7 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         local_datetime: datetime
         back_periods_index: int
         sensor_readout: float
+        expected_value: float
     
     
     class RuleTimeWindowSettingsSpec:

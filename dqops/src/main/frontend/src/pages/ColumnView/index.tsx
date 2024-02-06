@@ -202,7 +202,7 @@ const ColumnView = () => {
   }, [isProfilingCheckOnly, isMonitoringOnly, isPartitionCheckOnly, activeTab]);
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[360px]">
           <div className="flex items-center space-x-2 max-w-full">
@@ -255,7 +255,7 @@ const ColumnView = () => {
           </>
         )}
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

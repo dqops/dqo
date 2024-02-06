@@ -21,6 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.integrity.ColumnIntegrityLookupKeyNotFoundCountCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,7 +44,6 @@ public class ColumnIntegrityDailyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("daily_partition_lookup_key_not_found", o -> o.dailyPartitionLookupKeyNotFound);
             put("daily_partition_lookup_key_found_percent", o -> o.dailyPartitionLookupKeyFoundPercent);
-
         }
     };
 
@@ -130,5 +130,16 @@ public class ColumnIntegrityDailyPartitionedChecksSpec extends AbstractCheckCate
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.daily;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

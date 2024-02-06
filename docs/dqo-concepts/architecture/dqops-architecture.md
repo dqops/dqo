@@ -121,7 +121,7 @@ sensors, rules, and dashboard configuration files. The folders in the `DQOps hom
 
 DQOps runs as a Java JVM process that starts two additional Python processes to run the Jinja2 template engine
 and call data quality rules as Python functions. 
-DQOps java process also exposes an http web server. The default port is 8888, but it could be changed 
+DQOps java process also exposes an http web server. The default port is 8888, but it can be changed 
 by setting the [--server.port](../../command-line-interface/dqo.md) startup parameter.
 
 

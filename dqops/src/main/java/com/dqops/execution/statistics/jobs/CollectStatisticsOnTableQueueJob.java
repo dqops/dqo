@@ -71,7 +71,7 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
      * Job internal implementation method that should be implemented by derived jobs.
      * @param jobExecutionContext Job execution context.
      *
-     * @return Optional result value that could be returned by the job.
+     * @return Optional result value that can be returned by the job.
      */
     @Override
     public StatisticsCollectionExecutionSummary onExecute(DqoJobExecutionContext jobExecutionContext) {
@@ -140,8 +140,8 @@ public class CollectStatisticsOnTableQueueJob extends DqoQueueJob<StatisticsColl
     }
 
     /**
-     * Creates a typed parameters model that could be sent back to the UI.
-     * The parameters model could contain a subset of parameters.
+     * Creates a typed parameters model that can be sent back to the UI.
+     * The parameters model can contain a subset of parameters.
      *
      * @return Job queue parameters that are easy to serialize and shown in the UI.
      */

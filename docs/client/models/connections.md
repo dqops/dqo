@@ -14,7 +14,7 @@ The references of all objects used by [connections](../operations/connections.md
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Filters addressing basic tree search parameters. These filters takes precedence over other selectors.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`check_model_patch`](./common.md#checkmodel)</span>|Sample configured check model which will pasted onto selected checks.|*[CheckModel](./common.md#checkmodel)*|
 |<span class="no-wrap-code">`selected_tables_to_columns`</span>|List of concrete table and column names which will be the target. Column mappings are ignored for table level checks. This filter is applied at the end.|*Dict[string, List[string]]*|
-|<span class="no-wrap-code">`override_conflicts`</span>|Override existing configurations if they&#x27;re present. If false, apply updates only to the fields for which no configuration exists.|*boolean*|
+|<span class="no-wrap-code">`override_conflicts`</span>|Override existing configurations if they're present. If false, apply updates only to the fields for which no configuration exists.|*boolean*|
 
 
 ___

@@ -5,11 +5,11 @@ import DataDictionaryConfigurationTable from './DataDictionaryConfigurationTable
 
 export default function DataDictionary() {
   return (
-    <DefinitionLayout>
+    <>
       <table className="w-full ">
         <DataDictionaryConfigurationHeader />
         <DataDictionaryConfigurationTable />
       </table>
-    </DefinitionLayout>
+    </>
   );
 }

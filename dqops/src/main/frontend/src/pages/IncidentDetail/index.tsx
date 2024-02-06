@@ -175,12 +175,12 @@ export const IncidentDetail = () => {
     );
   };
 
-  useEffect(() => {
-    onChangeFilter({
-      filter: debouncedSearchTerm,
-      page: 1
-    });
-  }, [debouncedSearchTerm]);
+  // useEffect(() => {
+  //   onChangeFilter({
+  //     filter: debouncedSearchTerm,
+  //     page: 1
+  //   });
+  // }, [debouncedSearchTerm]);
 
   const getWarnings = (minimumSeverity?: number) => {
     if (!minimumSeverity) return 'No warnings';
@@ -214,7 +214,7 @@ export const IncidentDetail = () => {
           table
         ),
         state: {},
-        label: 'Incident Configuration'
+        label: 'Incident configuration'
       })
     );
     history.push(
@@ -305,7 +305,7 @@ export const IncidentDetail = () => {
   };
 
   return (
-    <IncidentsLayout>
+    <>
       <div className="relative">
         <IncidentNavigation incident={incidentDetail} />
         <div className="flex items-center justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
@@ -560,7 +560,7 @@ export const IncidentDetail = () => {
         onSubmit={handleAddIssueUrl}
         incident={incidentDetail}
       />
-    </IncidentsLayout>
+    </>
   );
 };
 

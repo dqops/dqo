@@ -240,14 +240,14 @@ RunChecksQueueJobResult(
 		fatals=0,
 		execution_errors=0
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
 
 ### **Collect statistics on tables**
 
-Starts a new background job that will run selected data statistics collectors on a whole table
+Starts a new background job that will run selected data statistics collectors for the entire table
 
 ```python
 from dqops import client
@@ -294,7 +294,7 @@ CollectStatisticsQueueJobResult(
 		total_collectors_failed=1,
 		total_collected_results=2
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -348,7 +348,7 @@ CollectStatisticsQueueJobResult(
 		total_collectors_failed=1,
 		total_collected_results=2
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -425,7 +425,7 @@ ImportTablesQueueJobResult(
 			)
 		]
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -597,7 +597,7 @@ By running this operation you should get a response that resembles the one below
 
 ```python
 DqoJobHistoryEntryModel(
-	status=DqoJobStatus.SUCCEEDED,
+	status=DqoJobStatus.FINISHED,
 	status_changed_at='2007-10-11T13:42:00Z'
 )
 ```
@@ -620,6 +620,7 @@ Are you looking to address a specific issue? Head down here for full reference d
 |[DataGroupingConfigurations](./operations/data_grouping_configurations.md)|Operations for managing the configuration of data groupings on a table level in DQOps.|
 |[DataSources](./operations/data_sources.md)|Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables).|
 |[Defaults](./operations/defaults.md)|Default settings management for configuring the default data quality checks that are configured for all imported tables and columns.|
+|[Dictionaries](./operations/dictionaries.md)|Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks.|
 |[Environment](./operations/environment.md)|DQOps environment and configuration controller, provides access to the DQOps configuration, current user&#x27;s information and issue local API Keys for the calling user.|
 |[Errors](./operations/errors.md)|Operations that return the execution errors captured when data quality checks were executed on data sources, and sensors or rules failed with an error.|
 |[Healthcheck](./operations/healthcheck.md)|Health check operations for checking if the DQOps service is up and operational. Used for monitoring by load balancers.|

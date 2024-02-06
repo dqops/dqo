@@ -32,8 +32,8 @@ class CheckModel:
         check_name (Union[Unset, str]): Data quality check name that is used in YAML.
         help_text (Union[Unset, str]): Help text that describes the data quality check.
         sensor_parameters (Union[Unset, List['FieldModel']]): List of fields for editing the sensor parameters.
-        sensor_name (Union[Unset, str]): Full sensor name. This field is for information purposes and could be used to
-            create additional custom checks that are reusing the same data quality sensor.
+        sensor_name (Union[Unset, str]): Full sensor name. This field is for information purposes and can be used to
+            create additional custom checks that reuse the same data quality sensor.
         quality_dimension (Union[Unset, str]): Data quality dimension used for tagging the results of this data quality
             checks.
         rule (Union[Unset, RuleThresholdsModel]): Model that returns the form definition and the form data to edit a
@@ -71,7 +71,7 @@ class CheckModel:
             that should be used for this check.
         check_target (Union[Unset, CheckTargetModel]):
         configuration_requirements_errors (Union[Unset, List[str]]): List of configuration errors that must be fixed
-            before the data quality check could be executed.
+            before the data quality check can be executed.
         similar_checks (Union[Unset, List['SimilarCheckModel']]): List of similar checks in other check types or in
             other time scales.
         can_edit (Union[Unset, bool]): Boolean flag that decides if the current user can edit the check.

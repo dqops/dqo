@@ -36,7 +36,7 @@ import java.util.Objects;
  * The check will first count the number of occurrences of each column's value and will pick the TOP X most popular values (configurable by the 'top' parameter).
  * Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  * This check will verify how many supposed most popular values (provided in the 'expected_values' list) were not found in the top X most popular values in the column.
- * This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ * This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

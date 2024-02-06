@@ -189,7 +189,7 @@ The supported values for the **source** field are:
 
 ### **Grouping by calculated columns**
 Virtual columns that are defined as SQL expressions ([calculated columns](configuring-data-quality-checks-and-rules.md#calculated-columns))
-can be also used for dynamic grouping. This complex scenario could be used to run data quality checks on unstructured data
+can also be used for dynamic grouping. This complex scenario can be used to run data quality checks on unstructured data
 in the landing zone of the data warehouse.
 
 The calculated column must be defined under the *columns* node. Once the calculated column is defined, it can be referenced
@@ -304,7 +304,7 @@ for only one country. Detecting data quality issues that are related to a single
 cause analysis and allows to contact the right person, 
 responsible for providing the data from that data grouping (the country in this example).
 
-When a data quality issue is identified (a data quality check's rule raised an alert), DQOps could be configured
+When a data quality issue is identified (a data quality check's rule raised an alert), DQOps can be configured
 to create either one data quality incident for the whole table (without identification of the data group) or for each
 group of data (the country in this example) as a separate data quality incident.
 
@@ -401,6 +401,15 @@ identification of the source of the data quality issue.
 | **2023-10-05** |  93.9% |  96.4% |  96.2% |
 | **2023-10-07** |  94.8% |  94.9% |  95.4% |
 | **2023-10-08** |  94.7% | **0%** |  95.2% |
+
+## Review data groups on dashboards
+
+DQOps has multiple built-in [**data quality dashboards**](types-of-data-quality-dashboards.md) that allows you to view and filter 
+data quality issues for different data groups. 
+
+Below is an example of **Current table status** dashboard showing grouping by different product categories. 
+
+![Data grouping on current table status dashboard.png](https://dqops.com/docs/images/concepts/data-grouping-on-current-table-status-dashboard.png)
 
 
 ## What's next

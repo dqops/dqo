@@ -20,7 +20,6 @@ import lombok.Data;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,8 +28,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -299,12 +296,22 @@ public class DocumentationFolder {
     }
 
     /**
-     * Change order of subdirectories and files according to the provided comparator (in-place).
+     * Change order of subdirectories and files according to the provided comparator (in-place), sorting by the file name.
      * @param comparator Comparator on subdirectory/file names.
      */
-    public void sortByNameRecursive(Comparator<String> comparator) {
+    public void sortByFileNameRecursive(Comparator<String> comparator) {
         this.subFolders.sort((f1, f2) -> comparator.compare(f1.getFolderName(), f2.getFolderName()));
         this.files.sort((f1, f2) -> comparator.compare(f1.getFileName(), f2.getFileName()));
-        this.subFolders.forEach(f -> f.sortByNameRecursive(comparator));
+        this.subFolders.forEach(f -> f.sortByFileNameRecursive(comparator));
+    }
+
+    /**
+     * Change order of subdirectories and files according to the provided comparator (in-place), sorting by the label shown in the table of contents.
+     * @param comparator Comparator on subdirectory/file names.
+     */
+    public void sortByLabelRecursive(Comparator<String> comparator) {
+        this.subFolders.sort((f1, f2) -> comparator.compare(f1.getLinkName(), f2.getLinkName()));
+        this.files.sort((f1, f2) -> comparator.compare(f1.getLinkName(), f2.getLinkName()));
+        this.subFolders.forEach(f -> f.sortByLabelRecursive(comparator));
     }
 }

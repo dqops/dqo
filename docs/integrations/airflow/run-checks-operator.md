@@ -123,7 +123,7 @@ The status details will appear in a one line as an info level log from the opera
 Executed job adds information to an Airflow task log as well as to XCom's "return_value" key. 
 The executed task of run check type returns the RunChecksQueueJobResult object with execution details visible above.
 
-When the task execution succeeded or not, the task instance in Airflow is marked as Success or Failed accordingly.
+When the task execution finished or not, the task instance in Airflow is marked as Success or Failed accordingly.
 If the data quality is flawless the Airflow task run square will be filled with the green color on an execution view in the DAG.
 
 !!! tip "Use of fail_at_severity parameter"
@@ -175,7 +175,7 @@ Status field is the DqoJobStatus enum, which have one of values:
 - **failed**: The job has failed with an execution error.
 - **queued**: The job is queued.
 - **running**: The job is now running.
-- **succeeded**: The job has finished successfully.
+- **finished**: The job has finished successfully.
 - **waiting**: The job is parked until the concurrency constraints are met.
 
 ## Long-running run check task

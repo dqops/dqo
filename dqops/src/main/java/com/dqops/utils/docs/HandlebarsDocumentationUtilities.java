@@ -22,7 +22,6 @@ import com.github.jknack.handlebars.*;
 import com.github.jknack.handlebars.helper.ConditionalHelpers;
 import com.github.jknack.handlebars.helper.StringHelpers;
 import com.github.jknack.handlebars.io.FileTemplateLoader;
-import io.swagger.models.auth.In;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 
@@ -185,7 +184,7 @@ public class HandlebarsDocumentationUtilities {
                 // Only simple objects get complete linkage
                 String templateToReturn = null;
                 if ((isSimpleObject(typeModel) || isLinkableEnum(typeModel)) && typeModel.getClassUsedOnTheFieldPath() != null) {
-                    templateToReturn = "[`%s`](" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
+                    templateToReturn = "[`%s`](" + changeAnchorToLowerCaseAndFixWindowsUrls(typeModel.getClassUsedOnTheFieldPath()) + ")";
                 } else {
                     templateToReturn = "`%s`";
                 }
@@ -207,14 +206,17 @@ public class HandlebarsDocumentationUtilities {
             ObjectDataType objectDataType = Objects.requireNonNullElse(typeModel.getObjectDataType(), ObjectDataType.object_type);
             switch (objectDataType) {
                 case list_type:
-                    return String.format("List[%s]", apply(typeModel.getGenericKeyType(), options));
+                    return String.format("List[%s]",
+                            changeAnchorToLowerCaseAndFixWindowsUrls(apply(typeModel.getGenericKeyType(), options).toString()));
                 case map_type:
-                    return String.format("Dict[%s, %s]", apply(typeModel.getGenericKeyType(), options), apply(typeModel.getGenericValueType(), options));
+                    return String.format("Dict[%s, %s]",
+                            changeAnchorToLowerCaseAndFixWindowsUrls(apply(typeModel.getGenericKeyType(), options).toString()),
+                            changeAnchorToLowerCaseAndFixWindowsUrls(apply(typeModel.getGenericValueType(), options).toString()));
                 case object_type:
                 default:
                     if (typeModel.getClassUsedOnTheFieldPath() != null) {
                         return "[" + typeModel.getClassNameUsedOnTheField() + "]" +
-                                "(" + changeAnchorToLowerCase(typeModel.getClassUsedOnTheFieldPath()) + ")";
+                                "(" + changeAnchorToLowerCaseAndFixWindowsUrls(typeModel.getClassUsedOnTheFieldPath()) + ")";
                     }
                     else {
                         return "`" + typeModel.getClassNameUsedOnTheField() + "`";
@@ -228,7 +230,11 @@ public class HandlebarsDocumentationUtilities {
          * @param url Url to fix.
          * @return Fixed url.
          */
-        private String changeAnchorToLowerCase(String url) {
+        private String changeAnchorToLowerCaseAndFixWindowsUrls(String url) {
+            if (url.indexOf('\\') >= 0) {
+                url = url.replace('\\', '/');
+            }
+
             int indexOfHash = url.indexOf('#');
             if (indexOfHash < 0) {
                 return url;

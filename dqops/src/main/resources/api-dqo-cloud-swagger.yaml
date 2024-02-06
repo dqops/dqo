@@ -33,7 +33,17 @@ paths:
       description: "Issues a read-only Google access token used by the DQO Looker\
         \ Studio Community Connector to query the tenant's data quality data warehouse."
       operationId: "issueTenantDataROQueryAccessToken"
-      parameters: []
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -53,6 +63,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -76,6 +96,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -95,6 +125,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -118,6 +158,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -137,6 +187,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -160,6 +220,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -179,6 +249,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -202,6 +282,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -221,6 +311,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -244,6 +344,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -263,6 +373,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -286,6 +406,16 @@ paths:
         description: "The name of the data domain"
         required: false
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -305,6 +435,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -413,7 +553,17 @@ paths:
       description: "Returns a list of data domains. Only a user with an ADMIN role\
         \ can call this operation."
       operationId: "getDataDomainsList"
-      parameters: []
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -437,6 +587,16 @@ paths:
         description: "Data domain name"
         required: true
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -458,6 +618,16 @@ paths:
         description: "Data domain name"
         required: true
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         default:
           description: "successful operation"
@@ -477,6 +647,16 @@ paths:
       - name: "dataDomain"
         in: "query"
         description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
         required: false
         type: "string"
       responses:
@@ -503,6 +683,16 @@ paths:
         required: false
         schema:
           $ref: "#/definitions/UserLoginTicketGrantingTicketRequest"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -524,6 +714,21 @@ paths:
         required: false
         schema:
           $ref: "#/definitions/RefreshTableRequest"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      - name: "table"
+        in: "query"
+        description: "Table"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -539,7 +744,17 @@ paths:
       description: "Returns a list of users for the current account. Only a user with\
         \ an ADMIN role can call this operation."
       operationId: "listAccountUsers"
-      parameters: []
+      parameters:
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         200:
           description: "successful operation"
@@ -563,6 +778,16 @@ paths:
         required: false
         schema:
           $ref: "#/definitions/DqoUserModel"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         default:
           description: "successful operation"
@@ -580,6 +805,16 @@ paths:
         in: "path"
         description: "User's email"
         required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
         type: "string"
       responses:
         200:
@@ -608,6 +843,16 @@ paths:
         description: "User's email"
         required: true
         type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
       responses:
         default:
           description: "successful operation"
@@ -626,6 +871,16 @@ paths:
         in: "path"
         description: "User's email"
         required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
         type: "string"
       responses:
         default:
@@ -651,6 +906,16 @@ paths:
         in: "path"
         description: "User's email"
         required: true
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
         type: "string"
       responses:
         default:

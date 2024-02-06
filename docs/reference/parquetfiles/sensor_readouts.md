@@ -41,8 +41,8 @@ The columns of this table are described below.
  | <span class="no-wrap-code">`schema_name`</span> | The database schema name. | *STRING* |
  | <span class="no-wrap-code">`table_name`</span> | The monitored table name. | *STRING* |
  | <span class="no-wrap-code">`table_name_pattern`</span> | The table name pattern, in case that a data quality check targets multiple tables. | *STRING* |
- | <span class="no-wrap-code">`table_stage`</span> | The stage name of the table. It is a free-form text configured on the table level that could identify the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | *STRING* |
- | <span class="no-wrap-code">`table_priority`</span> | The table priority value copied from the table&#x27;s definition. The table priority could be used for sorting tables by their importance. | *INTEGER* |
+ | <span class="no-wrap-code">`table_stage`</span> | The stage name of the table. This is a free-form text configured at the table level that can identify  the layers of the data warehouse or a data lake, for example: &quot;landing&quot;, &quot;staging&quot;, &quot;cleansing&quot;, etc. | *STRING* |
+ | <span class="no-wrap-code">`table_priority`</span> | The table priority value copied from the table&#x27;s definition. The table priority can be used to sort tables according to their importance. | *INTEGER* |
  | <span class="no-wrap-code">`column_hash`</span> | The hash of a column. | *BIGINT* |
  | <span class="no-wrap-code">`column_name`</span> | The column for which the results are stored. | *STRING* |
  | <span class="no-wrap-code">`column_name_pattern`</span> | The column pattern, in case that a data quality check targets multiple columns. | *STRING* |

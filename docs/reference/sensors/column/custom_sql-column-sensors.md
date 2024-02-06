@@ -143,7 +143,7 @@ The sql aggregated expression sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`sql_expression`</span>|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`sql_expression`</span>|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or within a GROUP BY clause for daily partitions and/or data groups. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|*string*|:material-check-bold:||
 
 
 

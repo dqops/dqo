@@ -76,7 +76,7 @@ def sync_detailed(
 ) -> Response[CollectStatisticsQueueJobResult]:
     """collectStatisticsOnTable
 
-     Starts a new background job that will run selected data statistics collectors on a whole table
+     Starts a new background job that will run selected data statistics collectors for the entire table
 
     Args:
         job_business_key (Union[Unset, None, str]):
@@ -116,7 +116,7 @@ def sync(
 ) -> Optional[CollectStatisticsQueueJobResult]:
     """collectStatisticsOnTable
 
-     Starts a new background job that will run selected data statistics collectors on a whole table
+     Starts a new background job that will run selected data statistics collectors for the entire table
 
     Args:
         job_business_key (Union[Unset, None, str]):
@@ -151,7 +151,7 @@ async def asyncio_detailed(
 ) -> Response[CollectStatisticsQueueJobResult]:
     """collectStatisticsOnTable
 
-     Starts a new background job that will run selected data statistics collectors on a whole table
+     Starts a new background job that will run selected data statistics collectors for the entire table
 
     Args:
         job_business_key (Union[Unset, None, str]):
@@ -189,7 +189,7 @@ async def asyncio(
 ) -> Optional[CollectStatisticsQueueJobResult]:
     """collectStatisticsOnTable
 
-     Starts a new background job that will run selected data statistics collectors on a whole table
+     Starts a new background job that will run selected data statistics collectors for the entire table
 
     Args:
         job_business_key (Union[Unset, None, str]):

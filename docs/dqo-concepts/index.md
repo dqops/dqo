@@ -57,12 +57,6 @@ The DQOps YAML schema files allow unprecedented
 [coding experience with Visual Studio Code](../integrations/visual-studio-code/index.md) when managing the
 configuring the data quality checks directly in the editor. Code completion, syntax validation and help hints
 are shown by Visual Studio Code and many other editors when editing DQOps YAML files.
-    
-
-### **[Categories of checks](categories-of-data-quality-checks/index.md)** 
-The most common data quality issues that are detected by DQOps are divided into **categories**.
-Read this section to learn what type of data quality problems are detected by DQOps out-of-the-box.
-For any other type of data quality issue, you can define custom data quality checks.
 
 
 ### **[Running data quality checks](running-data-quality-checks.md)**
@@ -153,7 +147,7 @@ The most important data quality dimensions supported by DQOps are:
 
 
 ### **[Auditing time periods](auditing-data-quality-with-time-periods.md)**
-DQOps captures the time period for which the data quality result is valid. It could be an end-of-day data quality status
+DQOps captures the time period for which the data quality result is valid. This can be the data quality status at the end of the day
 in *[daily monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)*.
 Learn how DQOps captures the local timezone of monitored data sources, even if monitoring databases are located
 in different countries, regions and continents.

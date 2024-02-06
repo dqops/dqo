@@ -137,6 +137,16 @@ description: DQOps is an open-source data quality platform for data quality and 
 
         [:octicons-arrow-right-24: Getting started guide](getting-started/index.md)
 
+
+    -   :material-image-broken-variant:{ .lg .middle } __Categories of data quality checks__
+    
+        ---
+    
+        Find out what types of most common data quality issues DQOps can detect. The manual for each category shows how to activate the check.
+    
+        [:octicons-arrow-right-24: Review the categories of data quality issues](categories-of-data-quality-checks/index.md)
+
+
     -   :material-download:{ .lg .middle } __Download from PyPI or Docker Hub__
     
         ---
@@ -184,7 +194,7 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     ![Checks in DQOps can be quickly edited with intuitive user interface](https://dqops.com/docs/images/dqops-checks-editor.png "Checks in DQOps can be quickly edited with intuitive user interface"){ loading=lazy }
     <div>
 
-    **Activate data quality checks**
+    **Run scheduled data quality checks**
 
     [DQOps user interface](dqo-concepts/dqops-user-interface-overview.md) is designed to resemble popular database management tools. The data sources, tables and columns are on the left.
     The workspace in the center shows tables and columns in tabs, which allows you to open multiple objects and edit many tables at once. 
@@ -203,6 +213,31 @@ DQOps uses [data quality checks](dqo-concepts/definition-of-data-quality-checks/
     </div>
     </div>
 
+!!! success "Anomaly detection"
+
+    <div class="grid" markdown>
+
+    ![DQOps detect anomalies in numeric values and data volume](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/numeric-mean-anomaly-partitions-chart-min.png "DQOps detects anomalies in numeric values and data volume"){ loading=lazy }
+    <div>
+
+    **Detect data anomalies**
+
+    All historical metrics, such as a row count, minimum, maximum, and median value, are stored locally to allow time series prediction. 
+
+    Detect outliers such as new minimum or maximum values. Compare metrics such as a sum of values between daily partitions.
+    Detect anomalies between daily partitions, such as an unexpected increase in the number of rows in a partition.
+    
+    DQOps detects the following types of data anomalies:
+
+    [:octicons-arrow-right-24: Detect anomalies in numeric values](categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#new-maximum)
+
+    [:octicons-arrow-right-24: Compare seasonal data to a reference value](categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md#compare-to-a-reference-point)
+
+    </div>
+    </div>
+
+
+
 ### Data quality dashboards
 Over 50 built-in data quality dashboards let you drill-down to the problem.
 
@@ -217,11 +252,15 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
 
     DQOps measures data quality using a data quality KPI score. The formula is simple and trustworthy, the KPI is the percentage of **passed data quality checks**.
 
-    The [initial data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score) after data profiling,
-    or a [data quality KPI](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks) for monitored data sources
-    can be reviewed on data quality dashboards.
+    DQOps presents the [data quality KPI scores](dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#when-to-use-monitoring-checks)
+    for each month, showing the **progress in data quality to business sponsors**.
+
+    Data quality KPIs are also a great way to assess the [initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
+    after profiling new data sources to identify areas for improvement.
 
     [:octicons-arrow-right-24: Data quality KPI score formula](dqo-concepts/definition-of-data-quality-kpis.md#data-quality-score-formula)
+
+    [:octicons-arrow-right-24: Measure the initial data quality KPI score](dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md#initial-data-quality-kpi-score)
 
     [:octicons-arrow-right-24: Data quality KPI dashboards](dqo-concepts/types-of-data-quality-dashboards.md#data-quality-kpis)
 
@@ -242,10 +281,14 @@ Over 50 built-in data quality dashboards let you drill-down to the problem.
     
     DQOps synchronizes the data to a complimentary [Data Quality Data Warehouse](dqo-concepts/architecture/dqops-architecture.md#data-quality-data-warehouse)
     that is accessed using a DQOps Looker Studio connector. You can even create [custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md).
-    
-    [:octicons-arrow-right-24: Data quality data lake table schema](dqo-concepts/data-storage-of-data-quality-results.md#parquet-tables)
-    
+
+    [:octicons-arrow-right-24: Types of data quality dashboards](dqo-concepts/types-of-data-quality-dashboards.md)
+
     [:octicons-arrow-right-24: Creating custom data quality dashboards](integrations/looker-studio/creating-custom-data-quality-dashboards.md)
+
+    [:octicons-arrow-right-24: Data quality data lake table schema](dqo-concepts/data-storage-of-data-quality-results.md#parquet-tables)
+
+    [:octicons-arrow-right-24: Using dashboards for daily data quality monitoring](working-with-dqo/daily-monitoring-of-data-quality.md)
 
     </div>
     </div>
@@ -282,7 +325,8 @@ React to data quality incidents and assign them to the right teams who can fix t
 ## DQOps is DevOps and DataOps friendly
 
 Technical users can manage data quality check configuration at scale by changing YAML files in their editor of choice 
-and version the configuration in Git. An example YAML configuration with the `profile_nulls_count` check configured is shown below.
+and version the configuration in Git. An example below shows how to configure the [`profile_nulls_count`](checks/column/nulls/nulls-count.md#profile-nulls-count)
+data quality check in a DQOps YAML file that you can version in Git.
 
 ```yaml hl_lines="7-15"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -290,7 +334,7 @@ apiVersion: dqo/v1
 kind: table
 spec:
   columns:
-    target_column:
+    target_column_name:
       profiling_checks:
         nulls:
           profile_nulls_count:
@@ -305,8 +349,11 @@ spec:
 ```
 
 See how DQOps supports [editing data quality configuration files in Visual Studio Code](integrations/visual-studio-code/index.md),
-validating the structure of files, suggesting data quality checks names and parameters, and even showing help about 150+ data quality
+validating the structure of files, suggesting data quality checks names and parameters, and even showing the help about 150+ data quality
 checks inside Visual Studio Code.
+
+You can also run data quality checks from data pipelines, and integrate data quality into [Apache Airflow](integrations/airflow/index.md)
+using our [REST API Python client](client/index.md).
 
 ## Competitive advantages
 <div class="grid cards grid-columns-150-pct" markdown>
@@ -358,10 +405,10 @@ Want to learn more about data quality?
 
     <div class="grid" markdown>
 
-    ![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy }
+    [![A step-by-step guide to improve data quality](images/dqops-ebook-open-with-process.png "A step-by-step guide to improve data quality"){ loading=lazy; class=glightbox-ignored-image }](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     <div>
 
-    DQOps team has written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
+    DQOps creators have written an eBook ["A step-by-step guide to improve data quality"](https://dqops.com/dqo_ebook_a_step-by-step_guide_to_improve_data_quality-2/)
     that describes their experience in data cleansing and data quality monitoring using DQOps. 
 
     The eBook desribes a full data quality improvement process that allows to reach a ~100% data quality KPI score within 6-12 months.

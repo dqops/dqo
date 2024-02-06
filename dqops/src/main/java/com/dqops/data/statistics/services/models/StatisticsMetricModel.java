@@ -53,7 +53,7 @@ public class StatisticsMetricModel {
     private StatisticsResultDataType resultDataType;
 
     /**
-     * The metric value that was collected. It could be a string, datetime, date, double - depending on the data type.
+     * The metric value that was collected. It can be a string, datetime, date, double - depending on the data type.
      */
     @JsonPropertyDescription("Statistics result for the metric")
     private Object result;

@@ -29,7 +29,9 @@ http://localhost:8888/api/incidentstat
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidentstat^
@@ -37,7 +39,25 @@ http://localhost:8888/api/incidentstat
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "openIncidents" : 0
+	}, {
+	  "openIncidents" : 0
+	}, {
+	  "openIncidents" : 0
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -53,8 +73,24 @@ http://localhost:8888/api/incidentstat
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +107,23 @@ http://localhost:8888/api/incidentstat
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -91,7 +143,23 @@ http://localhost:8888/api/incidentstat
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +179,19 @@ http://localhost:8888/api/incidentstat
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0),
+		IncidentsPerConnectionModel(open_incidents=0)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -159,7 +239,9 @@ http://localhost:8888/api/incidents/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection^
@@ -167,7 +249,37 @@ http://localhost:8888/api/incidents/{connectionName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}, {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}, {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -186,8 +298,42 @@ http://localhost:8888/api/incidents/{connectionName}
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -207,7 +353,41 @@ http://localhost:8888/api/incidents/{connectionName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -230,7 +410,41 @@ http://localhost:8888/api/incidents/{connectionName}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -253,7 +467,37 @@ http://localhost:8888/api/incidents/{connectionName}
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		),
+		IncidentModel(
+			year=0,
+			month=0,
+			highest_severity=0,
+			minimum_severity=0,
+			failed_checks_count=0
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -294,7 +538,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
@@ -302,7 +548,25 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "year" : 0,
+	  "month" : 0,
+	  "highestSeverity" : 0,
+	  "minimumSeverity" : 0,
+	  "failedChecksCount" : 0
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -322,8 +586,26 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -344,7 +626,25 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -368,7 +668,25 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -392,7 +710,21 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentModel(
+		year=0,
+		month=0,
+		highest_severity=0,
+		minimum_severity=0,
+		failed_checks_count=0
+	)
+    ```
+    
+    
+    
 
 
 
@@ -438,7 +770,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
@@ -446,7 +780,26 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    {
+	  "hasProfilingIssues" : false,
+	  "hasMonitoringIssues" : false,
+	  "hasPartitionedIssues" : false,
+	  "days" : { },
+	  "columns" : { },
+	  "checks" : { }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -466,8 +819,33 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -488,7 +866,32 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -512,7 +915,32 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -536,7 +964,28 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    IncidentIssueHistogramModel(
+		has_profiling_issues=False,
+		has_monitoring_issues=False,
+		has_partitioned_issues=False,
+		days={
+		
+		},
+		columns={
+		
+		},
+		checks={
+		
+		}
+	)
+    ```
+    
+    
+    
 
 
 
@@ -586,7 +1035,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
@@ -594,7 +1045,100 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	}, {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	}, {
+	  "id" : "3854372",
+	  "checkHash" : 0,
+	  "checkCategory" : "sample_category",
+	  "checkName" : "sample_check",
+	  "checkDisplayName" : "sample_target/sample_category/sample_check",
+	  "checkType" : "profiling",
+	  "actualValue" : 100.0,
+	  "expectedValue" : 110.0,
+	  "warningLowerBound" : 105.0,
+	  "warningUpperBound" : 115.0,
+	  "errorLowerBound" : 95.0,
+	  "errorUpperBound" : 125.0,
+	  "fatalLowerBound" : 85.0,
+	  "fatalUpperBound" : 135.0,
+	  "severity" : 2,
+	  "columnName" : "sample_column",
+	  "dataGroup" : "sample_data_grouping",
+	  "durationMs" : 142,
+	  "executedAt" : "2023-10-01T14:00:00Z",
+	  "timeGradient" : "hour",
+	  "timePeriod" : "2023-10-01T14:00:00",
+	  "includeInKpi" : true,
+	  "includeInSla" : true,
+	  "provider" : "BigQuery",
+	  "qualityDimension" : "sample_quality_dimension",
+	  "sensorName" : "sample_target/sample_category/sample_sensor"
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -616,8 +1160,105 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -640,7 +1281,104 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -666,7 +1404,104 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -692,7 +1527,100 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		),
+		CheckResultEntryModel(
+			id='3854372',
+			check_hash=0,
+			check_category='sample_category',
+			check_name='sample_check',
+			check_display_name='sample_target/sample_category/sample_check',
+			check_type=CheckType.PROFILING,
+			actual_value=100.0,
+			expected_value=110.0,
+			warning_lower_bound=105.0,
+			warning_upper_bound=115.0,
+			error_lower_bound=95.0,
+			error_upper_bound=125.0,
+			fatal_lower_bound=85.0,
+			fatal_upper_bound=135.0,
+			severity=2,
+			column_name='sample_column',
+			data_group='sample_data_grouping',
+			duration_ms=142,
+			executed_at='2023-10-01T14:00:00Z',
+			time_gradient=TimePeriodGradient.HOUR,
+			time_period=Some date/time value: [2023-10-01T14:00],
+			include_in_kpi=True,
+			include_in_sla=True,
+			provider='BigQuery',
+			quality_dimension='sample_quality_dimension',
+			sensor_name='sample_target/sample_category/sample_sensor'
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -727,7 +1655,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
@@ -735,7 +1665,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -754,8 +1688,12 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -775,7 +1713,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -798,7 +1740,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -821,7 +1767,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
 
 
 
@@ -856,7 +1802,9 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
@@ -864,7 +1812,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -884,8 +1836,12 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -906,7 +1862,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -930,7 +1890,11 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -954,7 +1918,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 	
     ```
 
-
+    
 
 
 

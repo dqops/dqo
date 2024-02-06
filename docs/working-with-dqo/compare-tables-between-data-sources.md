@@ -88,7 +88,7 @@ Once all the required elements have been set, run the comparison between two tab
 After completion of the job, the checkbox will be highlighted with the color of the result: green for valid, yellow for 
 warning, orange for error and red for fatal. 
 
-![Results](https://dqops.com/docs/images/working-with-dqo/comparisons/results2.png)
+![Table reconciliation summary with discrepancies on columns](https://dqops.com/docs/images/working-with-dqo/comparisons/results2.png)
 
 
 ## View detailed results of table comparison
@@ -96,23 +96,23 @@ warning, orange for error and red for fatal.
 By expanding the rows, you can view the more detailed results. Additionally, if you set the grouping columns, you will 
 be able to view a list of mismatches in the data groupings.
 
-![Results details](https://dqops.com/docs/images/working-with-dqo/comparisons/results-detils.png)
+![Table reconciliation details at a column level](https://dqops.com/docs/images/working-with-dqo/comparisons/results-detils.png)
 
 In a situation when you see the results for a table comparison checks that have been collected earlier, you can delete 
 the old results by clicking the **Delete results** button. 
 
-![Deleting results](https://dqops.com/docs/images/working-with-dqo/comparisons/delete-results2.png)
+![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/delete-results2.png)
 
 
 ## Deleting table comparison
 
 To remove an entire table comparison configuration, go to the list of table comparisons and click the **Delete** button. 
 
-![Deleting comparison](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison2.png)
+![Deleting table comparison results](https://dqops.com/docs/images/working-with-dqo/comparisons/deleting-comparison2.png)
 
 
 ## Next steps
-- Read the concept of [table comparison (data reconciliation) data quality checks](../dqo-concepts/categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md) supported by DQOps.
+- Read the concept of [table comparison (data reconciliation) data quality checks](../categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md) supported by DQOps.
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../dqops-installation/run-dqops-as-docker-container.md).
 - DQOps provide you with summary statistics about your table and column. This information can be valuable in deciding which data quality checks and threshold levels should be set to monitor data quality. For more details about [Basic data statistics, click here](collecting-basic-data-statistics.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../integrations/slack/configuring-slack-notifications.md). 

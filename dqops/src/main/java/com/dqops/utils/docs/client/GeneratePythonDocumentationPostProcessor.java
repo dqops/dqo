@@ -34,7 +34,6 @@ import com.dqops.utils.docs.client.operations.examples.serialization.PythonSeria
 import com.dqops.utils.docs.files.*;
 import com.dqops.utils.docs.generators.ParsedSampleObjectFactoryImpl;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
-import com.github.jknack.handlebars.Template;
 import com.google.common.base.CaseFormat;
 import io.swagger.parser.OpenAPIParser;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -116,7 +115,7 @@ public class GeneratePythonDocumentationPostProcessor {
             DocumentationFolder modifiedClientFolder = DocumentationFolderFactory.loadCurrentFiles(clientDocPath);
             modifiedClientFolder.setLinkName("REST API Python client");
 
-            modifiedClientFolder.sortByNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
+            modifiedClientFolder.sortByFileNameRecursive(cherryPickComparator.thenComparing(Comparator.naturalOrder()));
 
             List<String> renderedIndexYaml = modifiedClientFolder.generateMkDocsNavigation(2);
             FileContentIndexReplaceUtility.replaceContentLines(projectDir.resolve("../mkdocs.yml"),

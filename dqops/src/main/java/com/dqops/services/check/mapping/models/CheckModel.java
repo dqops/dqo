@@ -67,9 +67,9 @@ public class CheckModel implements Cloneable {
     private List<FieldModel> sensorParameters = new ArrayList<>();
 
     /**
-     * Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.
+     * Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.
      */
-    @JsonPropertyDescription("Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.")
+    @JsonPropertyDescription("Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.")
     private String sensorName;
 
     /**
@@ -202,9 +202,9 @@ public class CheckModel implements Cloneable {
     private CheckTargetModel checkTarget;
 
     /**
-     * List of configuration errors that must be fixed before the data quality check could be executed.
+     * List of configuration errors that must be fixed before the data quality check can be executed.
      */
-    @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
+    @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check can be executed.")
     private List<String> configurationRequirementsErrors;
 
     /**

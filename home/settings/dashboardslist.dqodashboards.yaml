@@ -995,6 +995,7 @@ spec:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: partitioned
             - dashboard_name: Partition completeness status
+              standard: true
               url: https://lookerstudio.google.com/embed/reporting/df39a605-73cd-4f7c-956f-56389914c97a/page/c5B8C
               width: 1400
               height: 2900
@@ -1005,6 +1006,7 @@ spec:
           standard: true
           dashboards:
             - dashboard_name: Partition validity status
+              standard: true
               url: https://lookerstudio.google.com/embed/reporting/d09f31d3-aa53-4160-ba49-0ff80ae9dec1/page/c5B8C
               width: 1400
               height: 2900
@@ -1081,18 +1083,18 @@ spec:
     - folder_name: Execution errors
       standard: true
       dashboards:
-        - dashboard_name: History of execution errors
-          standard: true
-          url: https://lookerstudio.google.com/embed/reporting/e8bbf4ee-df17-407f-991d-1cba8217788d/page/c5B8C
-          width: 1400
-          height: 2300
-          parameters:
-            ds0.token: '%DQO_CLOUD_TOKEN%'
         - dashboard_name: Details of execution errors
           standard: true
           url: https://lookerstudio.google.com/embed/reporting/4699f5b5-41bc-482c-bfea-fa7ee5cb6c94/page/c5B8C
           width: 1400
           height: 2600
+          parameters:
+            ds0.token: '%DQO_CLOUD_TOKEN%'
+        - dashboard_name: History of execution errors
+          standard: true
+          url: https://lookerstudio.google.com/embed/reporting/e8bbf4ee-df17-407f-991d-1cba8217788d/page/c5B8C
+          width: 1400
+          height: 2300
           parameters:
             ds0.token: '%DQO_CLOUD_TOKEN%'
 

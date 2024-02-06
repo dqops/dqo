@@ -1,26 +1,27 @@
-import React from "react";
+import React from 'react';
 import {
   ParameterDefinitionSpec,
   ParameterDefinitionSpecDataTypeEnum,
   ParameterDefinitionSpecDisplayHintEnum
-} from "../../api";
-import Checkbox from "../Checkbox";
-import StringListField from "../StringListField";
-import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../SvgIcon";
-import { EditInput } from "../EditInput";
-import EditSelect from "../EditSelect";
+} from '../../api';
+import Checkbox from '../Checkbox';
+import StringListField from '../StringListField';
+import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../SvgIcon';
+import { EditInput } from '../EditInput';
+import EditSelect from '../EditSelect';
+import TextArea from '../TextArea';
 
 type RuleFieldRowProps = {
   field: ParameterDefinitionSpec;
   onChange: (obj: Partial<ParameterDefinitionSpec>) => void;
   onDelete: () => void;
   isReadOnly?: boolean;
-}
+};
 
 const emptyOption = {
   label: 'None',
-  value: undefined,
+  value: undefined
 };
 
 const dataTypeOptions = [
@@ -35,20 +36,27 @@ const displayHintOptions = [
   emptyOption,
   ...Object.values(ParameterDefinitionSpecDisplayHintEnum).map((item) => ({
     label: item,
-    value: item,
+    value: item
   }))
 ];
 
-const RuleFieldRow = ({ field, onChange, onDelete, isReadOnly }: RuleFieldRowProps) => {
+const RuleFieldRow = ({
+  field,
+  onChange,
+  onDelete,
+  isReadOnly
+}: RuleFieldRowProps) => {
   return (
     <tr>
       <td className="pr-4 py-2  align-top w-40">
         <EditInput
           isReadOnly={isReadOnly}
           value={field.field_name}
-          onChange={(e) => onChange({
-            field_name: e.target.value
-          })}
+          onChange={(e) =>
+            onChange({
+              field_name: e.target.value
+            })
+          }
           error={!field.field_name}
         />
       </td>
@@ -56,20 +64,24 @@ const RuleFieldRow = ({ field, onChange, onDelete, isReadOnly }: RuleFieldRowPro
         <EditInput
           isReadOnly={isReadOnly}
           value={field.display_name}
-          onChange={(e) => onChange({
-            display_name: e.target.value
-          })}
+          onChange={(e) =>
+            onChange({
+              display_name: e.target.value
+            })
+          }
           error={!field.display_name}
         />
       </td>
-      <td className="px-4 py-2  align-top">
-        <EditInput
-          isReadOnly={isReadOnly}
-          className="h-9 !py-1.5"
+      <td className="px-4 py-2 align-top">
+        <TextArea
+          disabled={isReadOnly}
+          className="min-h-15 !py-1.5"
           value={field.help_text}
-          onChange={(e) => onChange({
-            help_text: e.target.value
-          })}
+          onChange={(e) =>
+            onChange({
+              help_text: e.target.value
+            })
+          }
         />
       </td>
       <td className="px-4 py-2  align-top w-40">

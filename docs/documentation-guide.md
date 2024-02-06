@@ -50,6 +50,15 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: List of data sources](data-sources/index.md)
 
+-   :material-format-list-checks:{ .lg .middle } __Categories of data quality checks__
+
+    ---
+
+    Find out what types of common data quality issues are easy to detect with DQOps.
+
+    [:octicons-arrow-right-24: Categories of data quality checks](categories-of-data-quality-checks/index.md)
+
+
 -   :material-book-education:{ .lg .middle } __Use cases and examples__
 
     ---

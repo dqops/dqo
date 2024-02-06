@@ -50,7 +50,7 @@ public class RuleExecutionRunParameters {
      * @param expectedValue Optional expected value returned by the sensor.
      * @param parameters Rule parameters.
      * @param timePeriodLocal Time period of the readouts as a local date time.
-     * @param previousReadouts Array of previous sensor readouts (could be null).
+     * @param previousReadouts Array of previous sensor readouts (may have a null value).
      * @param timeWindow Rule threshold time window configuration.
      */
     public RuleExecutionRunParameters(Double actualValue,

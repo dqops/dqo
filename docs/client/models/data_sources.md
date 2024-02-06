@@ -26,7 +26,7 @@ Connection test status result model returned from REST API. Describes the status
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`connection_test_result`](#connectionteststatus)</span>|Connection test result|*[ConnectionTestStatus](#connectionteststatus)*|
-|<span class="no-wrap-code">`error_message`</span>|Optional error message when the status is not &quot;SUCCESS&quot;|*string*|
+|<span class="no-wrap-code">`error_message`</span>|Optional error message when the status is not "SUCCESS"|*string*|
 
 
 ___

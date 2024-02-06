@@ -56,7 +56,7 @@ def sync_detailed(
     """getAllSharedCredentials
 
      Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
-    folder..
+    folder.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -82,7 +82,7 @@ def sync(
     """getAllSharedCredentials
 
      Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
-    folder..
+    folder.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -104,7 +104,7 @@ async def asyncio_detailed(
     """getAllSharedCredentials
 
      Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
-    folder..
+    folder.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -128,7 +128,7 @@ async def asyncio(
     """getAllSharedCredentials
 
      Returns a list of all shared credentials that are present in the DQOps user's home .credentials/
-    folder..
+    folder.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

@@ -73,7 +73,7 @@ const ConnectionPage = () => {
   );
   const history = useHistory();
   const location = useLocation() as any;
-  const { import_schema, create_success, schema } = qs.parse(location.search);
+  const { import_schema, create_success } = qs.parse(location.search);
 
   const { isUpdatedConnectionBasic } = useSelector(
     getFirstLevelState(checkTypes)
@@ -164,7 +164,7 @@ const ConnectionPage = () => {
   }, [import_schema, checkTypes]);
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 pr-[570px]">
           <div className="flex items-center space-x-2 max-w-full">
@@ -184,17 +184,13 @@ const ConnectionPage = () => {
         {activeTab === 'comments' && <ConnectionCommentView />}
         {activeTab === 'labels' && <ConnectionLabelsView />}
         {activeTab === 'schemas' &&
-          (import_schema === 'true' ? (
-            <SourceSchemasView defaultSchema={schema as string} />
-          ) : (
-            <SchemasView />
-          ))}
+          (import_schema === 'true' ? <SourceSchemasView /> : <SchemasView />)}
         {activeTab === 'data-groupings' && (
           <ConnectionDefaultGroupingConfiguration />
         )}
         {activeTab === 'incidents' && <IncidentsNotificationsView />}
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

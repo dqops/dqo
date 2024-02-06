@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import TableColumns from '../TableColumnsView/TableColumns';
 import {
   DataGroupingConfigurationSpec,
   TableColumnsStatisticsModel,
   TableStatisticsModel
 } from '../../api';
-import { AxiosResponse } from 'axios';
-import { TableApiClient } from '../../services/apiClient';
 import Loader from '../../components/Loader';
 import { useSelector } from 'react-redux';
 import { getFirstLevelState } from '../../redux/selectors';
@@ -25,7 +23,8 @@ export default function TableStatisticsView({
   setNumberOfSelected2,
   statistics,
   onChangeSelectedColumns,
-  refreshListFunc
+  refreshListFunc,
+  rowCount
 }: {
   connectionName: string;
   schemaName: string;
@@ -36,9 +35,9 @@ export default function TableStatisticsView({
   statistics?: TableColumnsStatisticsModel;
   onChangeSelectedColumns?: (columns: string[]) => void;
   refreshListFunc: () => void;
+  rowCount: TableStatisticsModel
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
-  const [rowCount, setRowCount] = useState<TableStatisticsModel>();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
 
   const {
@@ -51,22 +50,22 @@ export default function TableStatisticsView({
     table: string;
     tab: string;
   } = useParams();
-  const fetchRows = async () => {
-    try {
-      const res: AxiosResponse<TableStatisticsModel> =
-        await TableApiClient.getTableStatistics(
-          connectionName,
-          schemaName,
-          tableName
-        );
-      setRowCount(res.data);
-    } catch (err) {
-      console.error(err);
-    }
-  };
-  useEffect(() => {
-    fetchRows();
-  }, [connectionName, schemaName, tableName]);
+  // const fetchRows = async () => {
+  //   try {
+  //     const res: AxiosResponse<TableStatisticsModel> =
+  //       await TableApiClient.getTableStatistics(
+  //         connectionName,
+  //         schemaName,
+  //         tableName
+  //       );
+  //     setRowCount(res.data);
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
+  // useEffect(() => {
+  //   fetchRows();
+  // }, [connectionName, schemaName, tableName]);
 
   useEffect(() => {
     setNumberOfSelected(0);
@@ -108,7 +107,7 @@ export default function TableStatisticsView({
     <div>
       <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
         <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 ">
-          Table Statistics
+          Table statistics
         </div>
         <div className="flex justify-between gap-x-10">
           <div className="flex gap-x-6 ml-3">

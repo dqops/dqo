@@ -15,7 +15,7 @@ The references of all objects used {{#if (neq modelsGroupName "common")}}by [{{m
 {{else}}
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-{{#each objectFields}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{replace helpText ":mm" "\:mm"}}|*{{{render-type typeModel}}}*|
+{{#each objectFields}}|<span class="no-wrap-code">{{{render-type typeModel yamlFieldName}}}</span>|{{{replace helpText ":mm" "\:mm"}}}|*{{{render-type typeModel}}}*|
 {{/each}}
 {{/if}}
 ___

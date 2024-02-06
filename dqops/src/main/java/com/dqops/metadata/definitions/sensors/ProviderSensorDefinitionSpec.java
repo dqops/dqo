@@ -55,7 +55,7 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec implements Invali
     private Boolean supportsGrouping;
 
     @JsonInclude(JsonInclude.Include.NON_NULL)
-    @JsonPropertyDescription("The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column could be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.")
+    @JsonPropertyDescription("The sensor supports grouping by a partition date, using the GROUP BY clause in SQL. Sensors that support grouping by a partition_by_column can be used for partition checks, calculating separate data quality metrics for each daily/monthly partition. The default value is true, because most of the data quality sensor support partitioned checks.")
     private Boolean supportsPartitionedChecks;
 
     @JsonPropertyDescription("Additional provider specific sensor parameters")

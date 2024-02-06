@@ -103,6 +103,7 @@ All command-line commands supported from the DQOps shell or directly from the sy
  | <span class="no-wrap-code">[`dqo cloud sync checks`](./cloud.md#dqo-cloud-sync-checks)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;checks&quot; folder. |
  | <span class="no-wrap-code">[`dqo cloud sync settings`](./cloud.md#dqo-cloud-sync-settings)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;settings&quot; folder. |
  | <span class="no-wrap-code">[`dqo cloud sync credentials`](./cloud.md#dqo-cloud-sync-credentials)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;.credentials&quot; folder. |
+ | <span class="no-wrap-code">[`dqo cloud sync dictionaries`](./cloud.md#dqo-cloud-sync-dictionaries)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;dictionaries&quot; folder. |
  | <span class="no-wrap-code">[`dqo cloud sync all`](./cloud.md#dqo-cloud-sync-all)</span> | Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders. |
 
 

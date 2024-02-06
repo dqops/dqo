@@ -110,7 +110,7 @@ A table-level check that detects if the list of columns and the order of columns
 ### [column types changed](./schema/column-types-changed.md)
 A table-level check that detects if the column names or column types have changed since the last time the check was run.
  This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
- A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns could be reordered as long
+ A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long
  as all columns are still present and the data types match since the last time they were tested.
 
 
@@ -161,7 +161,7 @@ A table-level check that calculates the maximum difference in days between inges
 Evaluates the overall quality of the table by verifying the number of rows.
 
 ### [row count](./volume/row-count.md)
-A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
+A table-level check that ensures that the tested table has at least a minimum accepted number of rows. Using the default configuration, detects empty tables.
  The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
 
 

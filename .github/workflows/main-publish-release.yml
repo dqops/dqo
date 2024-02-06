@@ -125,7 +125,7 @@ jobs:
         name: Build and Push Docker Image
         with:
           image: dqops/dqo
-          tags: $(date +%s),${{ steps.read_version.outputs.content }},latest
+          tags: ${{ steps.read_version.outputs.content }},latest
           dockerfile: Dockerfile-fast
           enableBuildKit: true
           multiPlatform: true

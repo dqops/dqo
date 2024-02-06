@@ -46,7 +46,7 @@ def sync_detailed(
 ) -> Response[str]:
     r"""issueApiKey
 
-     Issues a local API Key for the calling user. This API Key could be used to authenticate using the
+     Issues a local API Key for the calling user. This API Key can be used to authenticate using the
     DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
@@ -73,7 +73,7 @@ def sync(
 ) -> Optional[str]:
     r"""issueApiKey
 
-     Issues a local API Key for the calling user. This API Key could be used to authenticate using the
+     Issues a local API Key for the calling user. This API Key can be used to authenticate using the
     DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
@@ -96,7 +96,7 @@ async def asyncio_detailed(
 ) -> Response[str]:
     r"""issueApiKey
 
-     Issues a local API Key for the calling user. This API Key could be used to authenticate using the
+     Issues a local API Key for the calling user. This API Key can be used to authenticate using the
     DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 
@@ -121,7 +121,7 @@ async def asyncio(
 ) -> Optional[str]:
     r"""issueApiKey
 
-     Issues a local API Key for the calling user. This API Key could be used to authenticate using the
+     Issues a local API Key for the calling user. This API Key can be used to authenticate using the
     DQOps REST API client. This API Key should be passed in the \"Authorization\" HTTP header in the
     format \"Authorization: Bearer <api_key>\".
 

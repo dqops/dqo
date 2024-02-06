@@ -19,7 +19,7 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenIntsRuleParametersSpec:
+class BetweenFloatsRuleParametersSpec:
     from_: float
     to: float
 
@@ -33,6 +33,7 @@ class HistoricDataPoint:
     local_datetime: datetime
     back_periods_index: int
     sensor_readout: float
+    expected_value: float
 
 
 class RuleTimeWindowSettingsSpec:
@@ -43,7 +44,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: BetweenIntsRuleParametersSpec
+    parameters: BetweenFloatsRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec

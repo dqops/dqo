@@ -28,7 +28,7 @@ import java.util.Objects;
 
 /**
  * Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
- * The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
+ * The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

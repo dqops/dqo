@@ -82,7 +82,7 @@ public final class SpecFileNames {
     /**
      * Default checks file name.
      */
-    public static final String DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML = "defaultchecks.dqochecks.yaml";
+    public static final String DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML = "default.dqodefaultchecks.yaml";
 
     /**
      * Default notification configuration file name.

@@ -138,7 +138,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
                     "The default configuration 'OFF' disables console logging, allowing to use the DQOps shell without being distracted by log entries. " +
                     "Set the 'PATTERN' mode to send formatted entries to the console in a format similar to Apache logs. " +
                     "When running DQOps in as a docker container on a Kubernetes engine that is configured to capture DQOps container logs, use 'JSON' mode to publish " +
-                    "structured Json log entries that could be parsed by fluentd or other similar log engines. JSON formatted messages use a Logstash compatible format.", defaultValue = "OFF")
+                    "structured Json log entries that can be parsed by fluentd or other similar log engines. JSON formatted messages use a Logstash compatible format.", defaultValue = "OFF")
     private DqoConsoleLoggingMode dqoLoggingConsole;
 
     @CommandLine.Option(names = {"--dqo.logging.console-immediate-flush"},
@@ -156,7 +156,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private boolean dqoLoggingEnableUserHomeLogging;
 
     @CommandLine.Option(names = {"--dqo.logging.max-history"},
-            description = "Sets the maximum number of log files that could be stored (archived) in the .logs folder.", defaultValue = "7")
+            description = "Sets the maximum number of log files that can be stored (archived) in the .logs folder.", defaultValue = "7")
     private Integer maxHistory;
 
     @CommandLine.Option(names = {"--dqo.logging.total-size-cap"},
@@ -221,7 +221,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.default-time-zone"},
             description = "Default time zone name used to convert the server's local dates to a local time in a time zone that is relevant for the user. Use official IANA time zone names. " +
-                    "When the parameter is not configured, DQOps uses the local time zone of the host running the application. The time zone could be reconfigured at a user settings level.")
+                    "When the parameter is not configured, DQOps uses the local time zone of the host running the application. The time zone can be reconfigured at a user settings level.")
     private String dqoDefaultTimeZone;
 
     @CommandLine.Option(names = {"--dqo.incidents.count-open-incidents-days"},
@@ -339,7 +339,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "Unix cron expression to configure how often the scheduler will synchronize the local copy of the metadata with DQOps Cloud and detect new cron schedules. " +
                     "The default schedule will synchronize local files with DQOps Cloud and refresh the data quality data warehouse 5 minutes past each hour. " +
                     "A DQOps instance that uses a FREE or a trial PERSONAL license will ignore this setting and synchronize files once an hour, on a random time. " +
-                    "Synchronization with DQOps cloud could be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "5 * * * *")
+                    "Synchronization with DQOps cloud can be disabled by setting --dqo.scheduler.enable-cloud-sync=false.", defaultValue = "5 * * * *")
     private String dqoSchedulerSynchronizeCronSchedule;
 
     @CommandLine.Option(names = {"--dqo.scheduler.synchronized-folders"},
@@ -445,9 +445,9 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
 
     @CommandLine.Option(names = {"--dqo.cache.parquet-cache-memory-fraction"},
             description = "The maximum fraction of the JVM heap memory (configured using the -Xmx java parameter) that is used to cache parquet files in memory. " +
-                    "The default value 0.6 means that up to 50%% of the JVM heap memory could be used for caching files. " +
+                    "The default value 0.6 means that up to 50%% of the JVM heap memory can be used for caching files. " +
                     "The value of the reserved-heap-memory-bytes is subtracted from the total memory size (JVM's -Xmx or -XX:MaxRAMPercentage=80.0 parameter values) " +
-                    "before the memory fraction is calculated. The value could be increased to 0.8 for for systems when JVM is given more than 8 GB RAM. ", defaultValue = "0.6")
+                    "before the memory fraction is calculated. The value can be increased to 0.8 for for systems when JVM is given more than 8 GB RAM. ", defaultValue = "0.6")
     private double dqoCacheParquetCacheMemoryFraction = 0.6;
 
     @CommandLine.Option(names = {"--dqo.cache.reserved-heap-memory-bytes"},
@@ -479,7 +479,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private String springConfigLocation;
 
     /**
-     * This field will capture all remaining parameters that could be also in the form "--name" and should be captured by Spring to update the configuration parameters.
+     * This field will capture all remaining parameters that can be also in the form "--name" and should be captured by Spring to update the configuration parameters.
      */
     @CommandLine.Unmatched
     private List<String> remainingUnmatchedArguments;

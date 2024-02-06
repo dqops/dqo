@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
 import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -160,5 +161,16 @@ public class TableTimelinessMonthlyMonitoringChecksSpec extends AbstractCheckCat
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return CheckTimeScale.monthly;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.ANY;
     }
 }

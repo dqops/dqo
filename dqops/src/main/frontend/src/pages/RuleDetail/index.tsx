@@ -53,7 +53,7 @@ export const RuleDetail = () => {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   useEffect(() => {
-    if (!ruleDetail && (type !== 'create' || copied === true)) {
+    if (full_rule_name !== undefined && !ruleDetail && (type !== 'create' || copied === true)) {
       dispatch(getRule(urlencodeDecoder(String(full_rule_name))));
     }
   }, [full_rule_name, ruleDetail, type]);
@@ -62,11 +62,13 @@ export const RuleDetail = () => {
     if (type === 'create' && copied !== true) {
       setRuleName('');
     } else {
-      setRuleName(
-        String(full_rule_name).split('/')[
-          String(full_rule_name).split('/').length - 1
-        ] + '_copy'
-      );
+      if (full_rule_name !== undefined) {
+        setRuleName(
+          String(full_rule_name).split('/')[
+            String(full_rule_name).split('/').length - 1
+          ] + '_copy'
+        );
+      }
     }
   }, [type, copied]);
 
@@ -200,7 +202,7 @@ export const RuleDetail = () => {
   };
 
   return (
-    <DefinitionLayout>
+    <>
       <div className="relative">
         <RuleActionGroup
           onSave={onCreateRule}
@@ -248,7 +250,7 @@ export const RuleDetail = () => {
         onConfirm={onDelete}
         message={`Are you sure you want to delete the rule ${full_rule_name}`}
       />
-    </DefinitionLayout>
+    </>
   );
 };
 

@@ -42,7 +42,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/overview^
@@ -50,7 +52,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -72,8 +113,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -96,7 +222,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -122,7 +333,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -148,7 +444,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -192,7 +569,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/overview^
@@ -200,7 +579,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -222,8 +640,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -246,7 +749,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -272,7 +860,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -298,7 +971,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -341,7 +1095,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/overview^
@@ -349,7 +1105,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -369,8 +1164,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -391,7 +1271,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -415,7 +1380,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -439,7 +1489,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -482,7 +1613,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/overview^
@@ -490,7 +1623,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -511,8 +1683,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -534,7 +1791,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -559,7 +1901,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -584,7 +2011,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -627,7 +2135,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/overview^
@@ -635,7 +2145,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -656,8 +2205,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -679,7 +2313,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -704,7 +2423,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -729,7 +2533,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -771,7 +2656,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    ### **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/overview^
@@ -779,7 +2666,46 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	}, {
+	  "checkHash" : 0,
+	  "timePeriods" : [ ],
+	  "timePeriodsUtc" : [ ],
+	  "executedAtTimestamps" : [ ],
+	  "timePeriodDisplayTexts" : [ ],
+	  "statuses" : [ ],
+	  "dataGroups" : [ ],
+	  "results" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -798,8 +2724,93 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -819,7 +2830,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -842,7 +2938,92 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    ### **Execution**
 
     ```python
     from dqops import client
@@ -865,7 +3046,88 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    ### **Return value sample**
+    
+    ```python
+    [
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		),
+		CheckResultsOverviewDataModel(
+			check_hash=0,
+			time_periods=[
+			
+			],
+			time_periods_utc=[
+			
+			],
+			executed_at_timestamps=[
+			
+			],
+			time_period_display_texts=[
+			
+			],
+			statuses=[
+			
+			],
+			data_groups=[
+			
+			],
+			results=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 

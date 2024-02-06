@@ -152,7 +152,7 @@ const TableColumnsView = () => {
 
       
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       fetchColumns();
     }
   }, [job]);
@@ -163,7 +163,7 @@ const TableColumnsView = () => {
 
 
   return (
-    <ConnectionLayout>
+    <>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2 max-w-full">
           <SvgIcon name="column" className="w-5 h-5 shrink-0" />
@@ -196,7 +196,7 @@ const TableColumnsView = () => {
                 : 
                 selectedColumns?.length!== 0 ? 
                 'Collect statistics on selected' : 
-                'Collect Statistics'
+                'Collect statistics'
             }
             color={
               filteredJobs
@@ -228,7 +228,7 @@ const TableColumnsView = () => {
           refreshListFunc={fetchColumns}
         />
       </div>
-    </ConnectionLayout>
+    </>
   );
 };
 

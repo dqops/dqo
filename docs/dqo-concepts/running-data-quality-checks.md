@@ -471,7 +471,7 @@ dqo> check run --connection=sales-dwh --full-table-name=public.fact_sales --chec
 
 
 ## Targeting a category of checks
-You can also run all checks from a [data quality check category](categories-of-data-quality-checks/index.md), skipping other categories. 
+You can also run all checks from a [data quality check category](../categories-of-data-quality-checks/index.md), skipping other categories. 
 
 !!! info "Filtering by category and check type"
 
@@ -480,8 +480,8 @@ You can also run all checks from a [data quality check category](categories-of-d
     a single check by its name, but the check type and optionally the check time scale should be specified to avoid
     running unexpected data quality checks.
 
-The following example shows both checks defined in the [*nulls*](categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)
-and the [*schema*](categories-of-data-quality-checks/how-to-detect-table-schema-changes.md) category on a column.
+The following example shows both checks defined in the [*nulls*](../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)
+and the [*schema*](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md) category on a column.
 The highlighted section shows only the *schema* checks that you want to run on all columns.
 
 ``` { .yaml .annotate linenums="1" hl_lines="16-19 26-29" }
@@ -516,7 +516,7 @@ spec:
                 expected_value: 1
 ```
 
-We will use the `--category=schema` filter to run the [*schema* data quality checks](categories-of-data-quality-checks/how-to-detect-table-schema-changes.md).
+We will use the `--category=schema` filter to run the [*schema* data quality checks](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md).
 Additionally, following the note above, only the *daily monitoring* checks will be run.
 
 ``` { .asc .annotate }
@@ -598,7 +598,7 @@ data quality issue severity level. In the following example, the most severe iss
     "fatals" : 0,
     "execution_errors" : 0
   },
-  "status" : "succeeded"
+  "status" : "finished"
 }
 ```
 

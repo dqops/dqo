@@ -23,7 +23,7 @@ class RunChecksOnTableParameters:
         Attributes:
             connection (Union[Unset, str]): The name of the target connection.
             max_jobs_per_connection (Union[Unset, int]): The maximum number of concurrent 'run checks on table' jobs that
-                could be run on this connection. Limits the number of concurrent jobs.
+                can be run on this connection. Limits the number of concurrent jobs.
             table (Union[Unset, PhysicalTableName]):
             check_search_filters (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
                 checks on which tables and columns should be executed.

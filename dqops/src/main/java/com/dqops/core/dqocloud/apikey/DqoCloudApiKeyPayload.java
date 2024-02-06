@@ -89,6 +89,10 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private DqoUserRole domainRole;
 
+    @JsonProperty("dqw")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private Boolean dataQualityDataWarehouse;
+
 
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
@@ -327,6 +331,22 @@ public class DqoCloudApiKeyPayload {
      */
     public void setDomainRole(DqoUserRole domainRole) {
         this.domainRole = domainRole;
+    }
+
+    /**
+     * Returns true if the user has access to a data quality data warehouse, false when access is disabled.
+     * @return Data quality data warehouse access is granted or disabled.
+     */
+    public Boolean getDataQualityDataWarehouse() {
+        return dataQualityDataWarehouse;
+    }
+
+    /**
+     * Sets the flag to enable access to the data quality data warehouse and the data lake.
+     * @param dataQualityDataWarehouse Data warehouse and data lake access enabled.
+     */
+    public void setDataQualityDataWarehouse(Boolean dataQualityDataWarehouse) {
+        this.dataQualityDataWarehouse = dataQualityDataWarehouse;
     }
 
     /**

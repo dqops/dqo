@@ -19,7 +19,7 @@ Verifies availability of a table in a monitored database using a simple query.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_table_availability`</span>|[availability](../../../dqo-concepts/categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -112,9 +112,9 @@ spec:
         warning:
           max_failures: 0
         error:
-          max_failures: 5
+          max_failures: 1
         fatal:
-          max_failures: 10
+          max_failures: 5
   columns: {}
 
 ```
@@ -323,7 +323,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -516,7 +516,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -536,7 +536,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_table_availability`</span>|[availability](../../../dqo-concepts/categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -630,9 +630,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -841,7 +841,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1034,7 +1034,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1054,7 +1054,7 @@ Verifies availability of a table in a monitored database using a simple query. S
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_table_availability`</span>|[availability](../../../dqo-concepts/categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_table_availability`</span>|[availability](../../../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Availability|[*table_availability*](../../../reference/sensors/table/availability-table-sensors.md#table-availability)|[*max_failures*](../../../reference/rules/Comparison.md#max-failures)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1148,9 +1148,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -1359,7 +1359,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1552,7 +1552,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

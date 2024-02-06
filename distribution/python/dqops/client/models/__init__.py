@@ -4,27 +4,28 @@ from .all_checks_patch_parameters import AllChecksPatchParameters
 from .all_checks_patch_parameters_selected_tables_to_columns import (
     AllChecksPatchParametersSelectedTablesToColumns,
 )
-from .anomaly_differencing_percentile_moving_average_rule_01_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec,
 )
-from .anomaly_differencing_percentile_moving_average_rule_1_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec,
 )
-from .anomaly_differencing_percentile_moving_average_rule_05_parameters_spec import (
-    AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec,
+from .anomaly_differencing_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+    AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_01_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule01ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_error_05_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_1_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule1ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_fatal_01_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec,
 )
-from .anomaly_stationary_percentile_moving_average_rule_05_parameters_spec import (
-    AnomalyStationaryPercentileMovingAverageRule05ParametersSpec,
+from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters_spec import (
+    AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec,
 )
 from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
+from .between_percent_rule_parameters_spec import BetweenPercentRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
 from .big_query_jobs_create_project import BigQueryJobsCreateProject
 from .big_query_parameters_spec import BigQueryParametersSpec
@@ -430,6 +431,10 @@ from .column_datatype_string_datatype_changed_check_spec import (
 from .column_datatype_string_datatype_detect_sensor_parameters_spec import (
     ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
 )
+from .column_date_in_range_percent_check_spec import ColumnDateInRangePercentCheckSpec
+from .column_date_in_range_percent_sensor_parameters_spec import (
+    ColumnDateInRangePercentSensorParametersSpec,
+)
 from .column_date_values_in_future_percent_check_spec import (
     ColumnDateValuesInFuturePercentCheckSpec,
 )
@@ -444,12 +449,6 @@ from .column_datetime_daily_partitioned_checks_spec import (
 )
 from .column_datetime_daily_partitioned_checks_spec_custom_checks import (
     ColumnDatetimeDailyPartitionedChecksSpecCustomChecks,
-)
-from .column_datetime_date_match_format_percent_check_spec import (
-    ColumnDatetimeDateMatchFormatPercentCheckSpec,
-)
-from .column_datetime_date_match_format_percent_sensor_parameters_spec import (
-    ColumnDatetimeDateMatchFormatPercentSensorParametersSpec,
 )
 from .column_datetime_date_values_in_future_percent_sensor_parameters_spec import (
     ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec,
@@ -469,12 +468,6 @@ from .column_datetime_monthly_partitioned_checks_spec_custom_checks import (
 from .column_datetime_profiling_checks_spec import ColumnDatetimeProfilingChecksSpec
 from .column_datetime_profiling_checks_spec_custom_checks import (
     ColumnDatetimeProfilingChecksSpecCustomChecks,
-)
-from .column_datetime_value_in_range_date_percent_check_spec import (
-    ColumnDatetimeValueInRangeDatePercentCheckSpec,
-)
-from .column_datetime_value_in_range_date_percent_sensor_parameters_spec import (
-    ColumnDatetimeValueInRangeDatePercentSensorParametersSpec,
 )
 from .column_detected_datatype_in_text_check_spec import (
     ColumnDetectedDatatypeInTextCheckSpec,
@@ -586,6 +579,12 @@ from .column_invalid_uuid_format_found_check_spec import (
     ColumnInvalidUuidFormatFoundCheckSpec,
 )
 from .column_list_model import ColumnListModel
+from .column_max_anomaly_differencing_check_spec import (
+    ColumnMaxAnomalyDifferencingCheckSpec,
+)
+from .column_max_anomaly_stationary_check_spec import (
+    ColumnMaxAnomalyStationaryCheckSpec,
+)
 from .column_max_in_range_check_spec import ColumnMaxInRangeCheckSpec
 from .column_mean_anomaly_stationary_check_spec import (
     ColumnMeanAnomalyStationaryCheckSpec,
@@ -603,6 +602,12 @@ from .column_median_change_7_days_check_spec import ColumnMedianChange7DaysCheck
 from .column_median_change_30_days_check_spec import ColumnMedianChange30DaysCheckSpec
 from .column_median_change_check_spec import ColumnMedianChangeCheckSpec
 from .column_median_in_range_check_spec import ColumnMedianInRangeCheckSpec
+from .column_min_anomaly_differencing_check_spec import (
+    ColumnMinAnomalyDifferencingCheckSpec,
+)
+from .column_min_anomaly_stationary_check_spec import (
+    ColumnMinAnomalyStationaryCheckSpec,
+)
 from .column_min_in_range_check_spec import ColumnMinInRangeCheckSpec
 from .column_model import ColumnModel
 from .column_monitoring_checks_root_spec import ColumnMonitoringChecksRootSpec
@@ -1087,6 +1092,12 @@ from .column_text_length_below_min_length_percent_check_spec import (
 from .column_text_length_in_range_percent_check_spec import (
     ColumnTextLengthInRangePercentCheckSpec,
 )
+from .column_text_match_date_format_percent_check_spec import (
+    ColumnTextMatchDateFormatPercentCheckSpec,
+)
+from .column_text_match_date_format_percent_sensor_parameters_spec import (
+    ColumnTextMatchDateFormatPercentSensorParametersSpec,
+)
 from .column_text_matching_date_pattern_percent_check_spec import (
     ColumnTextMatchingDatePatternPercentCheckSpec,
 )
@@ -1291,6 +1302,8 @@ from .dashboard_spec import DashboardSpec
 from .dashboard_spec_parameters import DashboardSpecParameters
 from .dashboards_folder_spec import DashboardsFolderSpec
 from .data_delete_result_partition import DataDeleteResultPartition
+from .data_dictionary_list_model import DataDictionaryListModel
+from .data_dictionary_model import DataDictionaryModel
 from .data_grouping_configuration_list_model import DataGroupingConfigurationListModel
 from .data_grouping_configuration_model import DataGroupingConfigurationModel
 from .data_grouping_configuration_spec import DataGroupingConfigurationSpec
@@ -1373,8 +1386,8 @@ from .max_diff_percent_rule_0_parameters_spec import MaxDiffPercentRule0Paramete
 from .max_diff_percent_rule_1_parameters_spec import MaxDiffPercentRule1ParametersSpec
 from .max_diff_percent_rule_5_parameters_spec import MaxDiffPercentRule5ParametersSpec
 from .max_failures_rule_0_parameters_spec import MaxFailuresRule0ParametersSpec
+from .max_failures_rule_1_parameters_spec import MaxFailuresRule1ParametersSpec
 from .max_failures_rule_5_parameters_spec import MaxFailuresRule5ParametersSpec
-from .max_failures_rule_10_parameters_spec import MaxFailuresRule10ParametersSpec
 from .max_missing_rule_0_error_parameters_spec import MaxMissingRule0ErrorParametersSpec
 from .max_missing_rule_0_warning_parameters_spec import (
     MaxMissingRule0WarningParametersSpec,
@@ -1402,6 +1415,7 @@ from .mono_dqo_queue_job_id import MonoDqoQueueJobId
 from .mono_object import MonoObject
 from .mono_void import MonoVoid
 from .my_sql_ssl_mode import MySqlSslMode
+from .mysql_engine_type import MysqlEngineType
 from .mysql_parameters_spec import MysqlParametersSpec
 from .mysql_parameters_spec_properties import MysqlParametersSpecProperties
 from .optional import Optional
@@ -1463,6 +1477,8 @@ from .sensor_readouts_list_model import SensorReadoutsListModel
 from .shared_credential_list_model import SharedCredentialListModel
 from .shared_credential_model import SharedCredentialModel
 from .similar_check_model import SimilarCheckModel
+from .single_store_db_load_balancing_mode import SingleStoreDbLoadBalancingMode
+from .single_store_db_parameters_spec import SingleStoreDbParametersSpec
 from .snowflake_parameters_spec import SnowflakeParametersSpec
 from .snowflake_parameters_spec_properties import SnowflakeParametersSpecProperties
 from .sort_direction import SortDirection
@@ -1852,15 +1868,16 @@ from .value_changed_rule_parameters_spec import ValueChangedRuleParametersSpec
 __all__ = (
     "AllChecksPatchParameters",
     "AllChecksPatchParametersSelectedTablesToColumns",
-    "AnomalyDifferencingPercentileMovingAverageRule01ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverageRule05ParametersSpec",
-    "AnomalyDifferencingPercentileMovingAverageRule1ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule01ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule05ParametersSpec",
-    "AnomalyStationaryPercentileMovingAverageRule1ParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleError05PctParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleFatal01PctParametersSpec",
+    "AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleError05PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleFatal01PctParametersSpec",
+    "AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec",
     "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
+    "BetweenPercentRuleParametersSpec",
     "BigQueryAuthenticationMode",
     "BigQueryJobsCreateProject",
     "BigQueryParametersSpec",
@@ -2026,12 +2043,12 @@ __all__ = (
     "ColumnDatatypeProfilingChecksSpecCustomChecks",
     "ColumnDatatypeStringDatatypeChangedCheckSpec",
     "ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
+    "ColumnDateInRangePercentCheckSpec",
+    "ColumnDateInRangePercentSensorParametersSpec",
     "ColumnDatetimeDailyMonitoringChecksSpec",
     "ColumnDatetimeDailyMonitoringChecksSpecCustomChecks",
     "ColumnDatetimeDailyPartitionedChecksSpec",
     "ColumnDatetimeDailyPartitionedChecksSpecCustomChecks",
-    "ColumnDatetimeDateMatchFormatPercentCheckSpec",
-    "ColumnDatetimeDateMatchFormatPercentSensorParametersSpec",
     "ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec",
     "ColumnDatetimeMonthlyMonitoringChecksSpec",
     "ColumnDatetimeMonthlyMonitoringChecksSpecCustomChecks",
@@ -2039,8 +2056,6 @@ __all__ = (
     "ColumnDatetimeMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnDatetimeProfilingChecksSpec",
     "ColumnDatetimeProfilingChecksSpecCustomChecks",
-    "ColumnDatetimeValueInRangeDatePercentCheckSpec",
-    "ColumnDatetimeValueInRangeDatePercentSensorParametersSpec",
     "ColumnDateValuesInFuturePercentCheckSpec",
     "ColumnDetectedDatatypeInTextCheckSpec",
     "ColumnDistinctCountAnomalyDifferencingCheckSpec",
@@ -2084,6 +2099,8 @@ __all__ = (
     "ColumnInvalidLongitudeCountCheckSpec",
     "ColumnInvalidUuidFormatFoundCheckSpec",
     "ColumnListModel",
+    "ColumnMaxAnomalyDifferencingCheckSpec",
+    "ColumnMaxAnomalyStationaryCheckSpec",
     "ColumnMaxInRangeCheckSpec",
     "ColumnMeanAnomalyStationaryCheckSpec",
     "ColumnMeanChange1DayCheckSpec",
@@ -2097,6 +2114,8 @@ __all__ = (
     "ColumnMedianChange7DaysCheckSpec",
     "ColumnMedianChangeCheckSpec",
     "ColumnMedianInRangeCheckSpec",
+    "ColumnMinAnomalyDifferencingCheckSpec",
+    "ColumnMinAnomalyStationaryCheckSpec",
     "ColumnMinInRangeCheckSpec",
     "ColumnModel",
     "ColumnMonitoringChecksRootSpec",
@@ -2285,6 +2304,8 @@ __all__ = (
     "ColumnTextLengthBelowMinLengthCheckSpec",
     "ColumnTextLengthBelowMinLengthPercentCheckSpec",
     "ColumnTextLengthInRangePercentCheckSpec",
+    "ColumnTextMatchDateFormatPercentCheckSpec",
+    "ColumnTextMatchDateFormatPercentSensorParametersSpec",
     "ColumnTextMatchingDatePatternPercentCheckSpec",
     "ColumnTextMatchingNamePatternPercentCheckSpec",
     "ColumnTextMaxLengthCheckSpec",
@@ -2373,6 +2394,8 @@ __all__ = (
     "DatabricksParametersSpec",
     "DatabricksParametersSpecProperties",
     "DataDeleteResultPartition",
+    "DataDictionaryListModel",
+    "DataDictionaryModel",
     "DataGroupingConfigurationListModel",
     "DataGroupingConfigurationModel",
     "DataGroupingConfigurationSpec",
@@ -2443,7 +2466,7 @@ __all__ = (
     "MaxDiffPercentRule1ParametersSpec",
     "MaxDiffPercentRule5ParametersSpec",
     "MaxFailuresRule0ParametersSpec",
-    "MaxFailuresRule10ParametersSpec",
+    "MaxFailuresRule1ParametersSpec",
     "MaxFailuresRule5ParametersSpec",
     "MaxMissingRule0ErrorParametersSpec",
     "MaxMissingRule0WarningParametersSpec",
@@ -2463,6 +2486,7 @@ __all__ = (
     "MonoDqoQueueJobId",
     "MonoObject",
     "MonoVoid",
+    "MysqlEngineType",
     "MysqlParametersSpec",
     "MysqlParametersSpecProperties",
     "MySqlSslMode",
@@ -2521,6 +2545,8 @@ __all__ = (
     "SharedCredentialListModel",
     "SharedCredentialModel",
     "SimilarCheckModel",
+    "SingleStoreDbLoadBalancingMode",
+    "SingleStoreDbParametersSpec",
     "SnowflakeParametersSpec",
     "SnowflakeParametersSpecProperties",
     "SortDirection",

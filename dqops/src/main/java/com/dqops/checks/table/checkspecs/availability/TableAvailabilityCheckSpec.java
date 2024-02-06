@@ -20,6 +20,7 @@ import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxFailuresRule0ParametersSpec;
+import com.dqops.rules.comparison.MaxFailuresRule1ParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule5ParametersSpec;
 import com.dqops.rules.comparison.MaxFailuresRule10ParametersSpec;
 import com.dqops.sensors.table.availability.TableAvailabilitySensorParametersSpec;
@@ -42,7 +43,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule0ParametersSpec, MaxFailuresRule5ParametersSpec, MaxFailuresRule10ParametersSpec> {
+public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabilitySensorParametersSpec, MaxFailuresRule0ParametersSpec, MaxFailuresRule1ParametersSpec, MaxFailuresRule5ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableAvailabilityCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -61,12 +62,12 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
     @JsonPropertyDescription("Default alerting threshold with the maximum number of consecutive table availability issues that raises a data quality error (alert)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxFailuresRule5ParametersSpec error;
+    private MaxFailuresRule1ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxFailuresRule10ParametersSpec fatal;
+    private MaxFailuresRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -113,7 +114,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxFailuresRule5ParametersSpec getError() {
+    public MaxFailuresRule1ParametersSpec getError() {
         return this.error;
     }
 
@@ -121,7 +122,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxFailuresRule5ParametersSpec error) {
+    public void setError(MaxFailuresRule1ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -133,7 +134,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxFailuresRule10ParametersSpec getFatal() {
+    public MaxFailuresRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -141,7 +142,7 @@ public class TableAvailabilityCheckSpec extends AbstractCheckSpec<TableAvailabil
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxFailuresRule10ParametersSpec fatal) {
+    public void setFatal(MaxFailuresRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

@@ -129,7 +129,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
 
     /**
      * Returns an error message for a failed job.
-     * @return Error message or null when the job has not finished or has succeeded.
+     * @return Error message or null when the job has not finished or has finished.
      */
     public String getErrorMessage() {
         return errorMessage;
@@ -221,7 +221,7 @@ public class DqoJobHistoryEntryModel implements Comparable<DqoJobHistoryEntryMod
         @Override
         public DqoJobHistoryEntryModel createSample() {
             return new DqoJobHistoryEntryModel() {{
-                setStatus(DqoJobStatus.succeeded);
+                setStatus(DqoJobStatus.finished);
                 setStatusChangedAt(LocalDateTime.of((int)SampleLongsRegistry.getYear(),
                         (int)SampleLongsRegistry.getMonth(),
                         11,

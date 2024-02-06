@@ -363,15 +363,13 @@
 {% endmacro %}
 
 {% macro render_date_formats(date_formats) %}
-    {%- if date_formats == 'YYYY-MM-DD'-%}
-        '%Y-%m-%d'
-    {%- elif date_formats == 'MM/DD/YYYY' -%}
-        '%m/%d/%Y'
-    {%- elif date_formats == 'DD/MM/YYYY' -%}
-        '%d/%m/%Y'
-    {%- elif date_formats == 'YYYY/MM/DD'-%}
-        '%Y/%m/%d'
-    {%- elif date_formats == 'Month D, YYYY'-%}
-        '%m %d,%Y'
+    {%- if date_formats == 'DD/MM/YYYY'-%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$'
+    {%- elif date_formats == 'DD-MM-YYYY' -%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1])-(0[1-9]|1[0-2])-(\d{4})$'
+    {%- elif date_formats == 'DD.MM.YYYY' -%}
+        '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
+    {%- elif date_formats == 'YYYY-MM-DD' -%}
+        '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
     {%- endif -%}
 {% endmacro -%}

@@ -20,8 +20,9 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,8 +44,8 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("profile_date_values_in_future_percent", o -> o.profileDateValuesInFuturePercent);
-            put("profile_datetime_value_in_range_date_percent", o -> o.profileDatetimeValueInRangeDatePercent);
-            put("profile_date_match_format_percent", o -> o.profileDateMatchFormatPercent);
+            put("profile_date_in_range_percent", o -> o.profileDateInRangePercent);
+            put("profile_text_match_date_format_percent", o -> o.profileTextMatchDateFormatPercent);
         }
     };
 
@@ -52,10 +53,10 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
     private ColumnDateValuesInFuturePercentCheckSpec profileDateValuesInFuturePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec profileDatetimeValueInRangeDatePercent;
+    private ColumnDateInRangePercentCheckSpec profileDateInRangePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent;
+    private ColumnTextMatchDateFormatPercentCheckSpec profileTextMatchDateFormatPercent;
 
 
     /**
@@ -80,36 +81,36 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getProfileDatetimeValueInRangeDatePercent() {
-        return profileDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getProfileDateInRangePercent() {
+        return profileDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param profileDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param profileDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setProfileDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec profileDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileDatetimeValueInRangeDatePercent, profileDatetimeValueInRangeDatePercent));
-        this.profileDatetimeValueInRangeDatePercent = profileDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(profileDatetimeValueInRangeDatePercent, "profile_datetime_value_in_range_date_percent");
+    public void setProfileDateInRangePercent(ColumnDateInRangePercentCheckSpec profileDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileDateInRangePercent, profileDateInRangePercent));
+        this.profileDateInRangePercent = profileDateInRangePercent;
+        propagateHierarchyIdToField(profileDateInRangePercent, "profile_date_in_range_percent");
     }
 
     /**
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getProfileDateMatchFormatPercent() {
-        return profileDateMatchFormatPercent;
+    public ColumnTextMatchDateFormatPercentCheckSpec getProfileTextMatchDateFormatPercent() {
+        return profileTextMatchDateFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param profileDateMatchFormatPercent Date match format percentage check.
+     * @param profileTextMatchDateFormatPercent Date match format percentage check.
      */
-    public void setProfileDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec profileDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileDateMatchFormatPercent, profileDateMatchFormatPercent));
-        this.profileDateMatchFormatPercent = profileDateMatchFormatPercent;
-        propagateHierarchyIdToField(profileDateMatchFormatPercent, "profile_date_match_format_percent");
+    public void setProfileTextMatchDateFormatPercent(ColumnTextMatchDateFormatPercentCheckSpec profileTextMatchDateFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextMatchDateFormatPercent, profileTextMatchDateFormatPercent));
+        this.profileTextMatchDateFormatPercent = profileTextMatchDateFormatPercent;
+        propagateHierarchyIdToField(profileTextMatchDateFormatPercent, "profile_text_match_date_format_percent");
     }
 
     /**
@@ -161,5 +162,16 @@ public class ColumnDatetimeProfilingChecksSpec extends AbstractCheckCategorySpec
     @JsonIgnore
     public CheckTimeScale getCheckTimeScale() {
         return null;
+    }
+
+    /**
+     * Returns an array of supported data type categories. DQOps uses this list when activating default data quality checks.
+     *
+     * @return Array of supported data type categories.
+     */
+    @Override
+    @JsonIgnore
+    public DataTypeCategory[] getSupportedDataTypeCategories() {
+        return DataTypeCategory.CONTAINS_DATE;
     }
 }

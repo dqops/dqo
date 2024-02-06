@@ -48,7 +48,7 @@ export default function UserDetail() {
 
 
   return (
-    <DefinitionLayout>
+    <>
       <div className='w-full border-b border-b-gray-400 flex justify-end '>  
         <Button label={'Save'}
          color='primary'
@@ -73,6 +73,6 @@ export default function UserDetail() {
           className='my-5 '
         />
       </div>
-    </DefinitionLayout>
+    </>
   )
 }
