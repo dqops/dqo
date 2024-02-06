@@ -245,8 +245,8 @@ public class SampleTableMetadataObjectMother {
      * @param connectionSpecRaw Target connection spec.
      * @return Sample table metadata.
      */
-    public static SampleTableMetadata createSampleTableMetadataForLocalCsvFile(String csvFileName,
-                                                                               ConnectionSpec connectionSpecRaw) {
+    public static SampleTableMetadata createSampleTableMetadataForExplicitCsvFile(String csvFileName,
+                                                                                  ConnectionSpec connectionSpecRaw) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
@@ -275,8 +275,8 @@ public class SampleTableMetadataObjectMother {
      * @param connectionSpecRaw Target connection spec.
      * @return Sample table metadata.
      */
-    public static SampleTableMetadata createSampleTableMetadataForLocalMultipleCsvFiles(String csvFilesFolder,
-                                                                                        ConnectionSpec connectionSpecRaw) {
+    public static SampleTableMetadata createSampleTableMetadataForExplicitMultipleCsvFiles(String csvFilesFolder,
+                                                                                           ConnectionSpec connectionSpecRaw) {
         ProviderType providerType = connectionSpecRaw.getProviderType();
         String connectionName = getConnectionNameForProvider(providerType);
         SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
