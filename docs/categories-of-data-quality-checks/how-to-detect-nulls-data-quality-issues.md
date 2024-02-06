@@ -9,9 +9,9 @@ Data quality checks that are detecting issues related to nulls are listed below.
 How to detect nulls data quality issues.
 
 ## Use cases
-| **Name of the example**                                                   | **Description**                                                                                                                                                                          |
-|:--------------------------------------------------------------------------|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Detect null values](../examples/data-completeness/detect-null-values.md) | This example shows how to detect that the number of null values in a column does not exceed the maximum accepted count using [nulls_count](../checks/column/nulls/nulls-count.md) check. |
+| **Name of the example**                                                          | **Description**                                                                                                                                   |
+|:---------------------------------------------------------------------------------|:--------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Detect incomplete columns](../examples/data-completeness/detect-null-values.md) | This example shows how to incomplete columns that have too many null values using the [nulls_count](../checks/column/nulls/nulls-count.md) check. |
 
 ## List of nulls checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |

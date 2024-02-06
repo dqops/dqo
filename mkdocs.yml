@@ -92,10 +92,10 @@ nav:
       - Data availability:
           - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Detect null values: "examples/data-completeness/detect-null-values.md"
+          - Detect incomplete columns: "examples/data-completeness/detect-null-values.md"
           - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
       - Data consistency:
-          - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+          - Percentage of rows having only accepted values: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
       - Data reasonability:
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"

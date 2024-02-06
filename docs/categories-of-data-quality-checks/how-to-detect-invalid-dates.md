@@ -70,11 +70,11 @@ spec:
 
 
 ## Dates out of range
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) asserts that all date values are within a reasonable range. 
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) asserts that all date values are within a reasonable range. 
 This check detects rows with corrupted or fake dates, such as 1900-01-01 or 2099-12-31.
 
 ### Configure date in range check in UI
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check is configured with three parameters.
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) check is configured with three parameters.
 
 - **min_date** parameter that is the earliest accepted date inclusive. 
   The default value is *1900-01-02* to exclude a common placeholder date *1900-01-01*.
@@ -89,7 +89,7 @@ The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-
 ![Date in range percent data quality check with valid date ranges](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-range-percent-check-min.png){ loading=lazy }
 
 ### Configure date in range check in YAML
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check requires the configuration of the parameters described before.
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) check requires the configuration of the parameters described before.
 
 ``` { .yaml linenums="1" hl_lines="13-18" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
