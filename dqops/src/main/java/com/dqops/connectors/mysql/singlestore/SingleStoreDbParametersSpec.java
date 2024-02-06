@@ -162,7 +162,6 @@ public class SingleStoreDbParametersSpec extends BaseProviderParametersSpec {
      */
     public SingleStoreDbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         SingleStoreDbParametersSpec cloned = this.deepClone();
-        cloned.loadBalancingMode = SingleStoreDbLoadBalancingMode.valueOf(secretValueProvider.expandValue(cloned.loadBalancingMode.toString(), lookupContext));
         cloned.hostDescriptions = secretValueProvider.expandList(cloned.hostDescriptions, lookupContext);
         cloned.schema = secretValueProvider.expandValue(cloned.schema, lookupContext);
 

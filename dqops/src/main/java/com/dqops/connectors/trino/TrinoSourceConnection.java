@@ -138,7 +138,9 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(trinoSpec.getProperties());
         }
 
-        switch(trinoSpec.getAthenaAuthenticationMode()){
+        AthenaAuthenticationMode athenaAuthenticationMode = trinoSpec.getAthenaAuthenticationMode() == null ?
+                AthenaAuthenticationMode.default_credentials : trinoSpec.getAthenaAuthenticationMode() ;
+        switch(athenaAuthenticationMode){
             case iam:
                 String user = this.getSecretValueProvider().expandValue(trinoSpec.getUser(), secretValueLookupContext);
                 if (!Strings.isNullOrEmpty(user)){
@@ -164,7 +166,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             default:
-                throw new RuntimeException("Given enum is not supported : " + trinoSpec.getAthenaAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + athenaAuthenticationMode);
         }
 
         String region = this.getSecretValueProvider().expandValue(trinoSpec.getAthenaRegion(), secretValueLookupContext);
@@ -217,8 +219,10 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public void createTable(TableSpec tableSpec) {
-
         TrinoEngineType trinoEngineType = this.getConnectionSpec().getTrino().getTrinoEngineType();
+        if (trinoEngineType == null) {
+            trinoEngineType = TrinoEngineType.trino;
+        }
 
         switch (trinoEngineType){
             case trino:
@@ -327,6 +331,10 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     protected Table rawTableResultFromResultSet(ResultSet results, String sqlQueryStatement) throws SQLException {
         TrinoEngineType trinoEngineType = this.getConnectionSpec().getTrino().getTrinoEngineType();
+        if (trinoEngineType == null) {
+            trinoEngineType = TrinoEngineType.trino;
+        }
+
         switch (trinoEngineType){
             case trino:
                 return super.rawTableResultFromResultSet(results, sqlQueryStatement);

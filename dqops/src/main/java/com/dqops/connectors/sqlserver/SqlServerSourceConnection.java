@@ -107,7 +107,9 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(sqlserverSpec.getProperties());
         }
 
-        switch (sqlserverSpec.getAuthenticationMode()){
+        SqlServerAuthenticationMode authenticationMode = sqlserverSpec.getAuthenticationMode() == null ?
+                SqlServerAuthenticationMode.sql_password : sqlserverSpec.getAuthenticationMode();
+        switch (authenticationMode){
             case sql_password:
             case active_directory_password:
             case active_directory_service_principal:
@@ -118,7 +120,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 String password = this.getSecretValueProvider().expandValue(sqlserverSpec.getPassword(), secretValueLookupContext);
                 hikariConfig.setPassword(password);
 
-                String authenticationValue = getJdbcAuthenticationValue(sqlserverSpec.getAuthenticationMode());
+                String authenticationValue = getJdbcAuthenticationValue(authenticationMode);
                 dataSourceProperties.put("authentication", authenticationValue);
 
                 break;
@@ -152,7 +154,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 }
                 break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + sqlserverSpec.getAuthenticationMode());
+                throw new RuntimeException("Given enum is not supported : " + authenticationMode);
         }
 
         String options =  this.getSecretValueProvider().expandValue(sqlserverSpec.getOptions(), secretValueLookupContext);
