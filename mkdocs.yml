@@ -135,6 +135,7 @@ nav:
       - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
       - User and access management: "working-with-dqo/access-management.md"
       - Managing errors: "working-with-dqo/managing-errors.md"
+      - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
   - Integrations:
       - "integrations/index.md"
@@ -340,8 +341,8 @@ nav:
       - datetime:
         - 'checks/column/datetime/index.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
-        - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
-        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
+        - date in range percent: 'checks/column/datetime/date-in-range-percent.md'
+        - text match date format percent: 'checks/column/datetime/text-match-date-format-percent.md'
       - integrity:
         - 'checks/column/integrity/index.md'
         - lookup key not found: 'checks/column/integrity/lookup-key-not-found.md'

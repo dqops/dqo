@@ -30,10 +30,10 @@
 
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN 100.0
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE CAST(100.0 * SUM(
             {{ render_value_in_future() }}
-        ) AS DOUBLE) / COUNT(*)
+        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

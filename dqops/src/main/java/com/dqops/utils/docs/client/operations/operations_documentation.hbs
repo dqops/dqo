@@ -45,14 +45,14 @@ Follow the [link]({{clientSourceUrl}}) to see the source code on GitHub.
 {{#each usageExamples}}
 
 === "{{{executionMethod.navbarHeader}}}"
-    ### **Execution**
+    **Execution**
 
     ```{{{executionMethod.codeFormatting}}}
     {{{renderedExample}}}
     ```
 
     {{#if (or returnValueSampleJson returnValueSamplePython)}}
-    ### **Return value sample**
+    **Return value sample**
     {{#if (eq executionMethod.codeFormatting "python")}}
     ```python
     {{{indent returnValueSamplePython 1}}}

@@ -336,15 +336,15 @@ A column-level check that ensures that there are no more than a set percentage o
 
 
 
-### [datetime value in range date percent](./datetime/datetime-value-in-range-date-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
+### [date in range percent](./datetime/date-in-range-percent.md)
+A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
 
 
 
-### [date match format percent](./datetime/date-match-format-percent.md)
-A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
+### [text match date format percent](./datetime/text-match-date-format-percent.md)
+A column-level check that validates the values in text columns match one of predefined date formats.
  It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- The default value 100.0 (percent) verifies that all values match a given date format.
+ The default value 100.0 (percent) verifies that all values match an expected format.
 
 
 

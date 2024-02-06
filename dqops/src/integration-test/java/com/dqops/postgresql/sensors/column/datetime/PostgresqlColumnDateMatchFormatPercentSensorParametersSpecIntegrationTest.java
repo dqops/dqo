@@ -15,7 +15,7 @@
  */
 package com.dqops.postgresql.sensors.column.datetime;
 
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.postgresql.BasePostgresqlIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.connectors.ProviderType;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.datetime.ColumnDatetimeDateMatchFormatPercentSensorParametersSpec;
+import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
 import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,9 +40,9 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnDatetimeDateMatchFormatPercentSensorParametersSpec sut;
+    private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec checkSpec;
+    private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,14 +50,14 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnDatetimeDateMatchFormatPercentSensorParametersSpec();
-        this.checkSpec = new ColumnDatetimeDateMatchFormatPercentCheckSpec();
+        this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
+        this.checkSpec = new ColumnTextMatchDateFormatPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_text", this.checkSpec);
@@ -72,7 +72,7 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
@@ -87,7 +87,7 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
@@ -102,7 +102,7 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
@@ -117,7 +117,7 @@ public class PostgresqlColumnDateMatchFormatPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
+        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");

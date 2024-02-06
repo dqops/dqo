@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/datetime/text_match_date_format_percent
+  rule_name: comparison/min_percent
+  help_text: Verifies that the percentage of date values matching the given format
+    in a text column does not exceed the maximum accepted percentage. Stores a separate
+    data quality check result for each monthly partition.
+  standard: true
