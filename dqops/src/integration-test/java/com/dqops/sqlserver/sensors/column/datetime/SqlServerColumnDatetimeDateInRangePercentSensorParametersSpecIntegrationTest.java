@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.spark.sensors.column.datetime;
+package com.dqops.sqlserver.sensors.column.datetime;
 
-import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -28,39 +27,45 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
-import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
-import com.dqops.spark.BaseSparkIntegrationTest;
+import com.dqops.sensors.column.datetime.ColumnDateInRangePercentSensorParametersSpec;
+import com.dqops.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+import java.time.LocalDate;
 
 @SpringBootTest
-public class SparkColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseSparkIntegrationTest {
-    private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
+public class SqlServerColumnDatetimeDateInRangePercentSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private ColumnDateInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
+    private ColumnDateInRangePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.spark);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
-        this.checkSpec = new ColumnTextMatchDateFormatPercentCheckSpec();
+        this.sut = new ColumnDateInRangePercentSensorParametersSpec();
+        this.checkSpec = new ColumnDateInRangePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.ISO8601);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "date_text", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDateInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinDate(lower);
+        this.sut.setMaxDate(upper);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -72,61 +77,85 @@ public class SparkColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDateInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinDate(lower);
+        this.sut.setMaxDate(upper);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDateInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinDate(lower);
+        this.sut.setMaxDate(upper);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.daily,"date");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDateInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinDate(lower);
+        this.sut.setMaxDate(upper);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormat(DatetimeBuiltInDateFormats.DaySlashMonthSlashYear);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date_text", this.checkSpec, CheckTimeScale.monthly,"date");
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
+        this.sut = (ColumnDateInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
+
+        LocalDate lower = LocalDate.of(2022,1,1);
+        LocalDate upper = LocalDate.of(2022,1,10);
+
+        this.sut.setMinDate(lower);
+        this.sut.setMaxDate(upper);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 }

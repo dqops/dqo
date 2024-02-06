@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.postgresql.sensors.column.datetime;
+package com.dqops.duckdb.sensors.column.datetime;
 
-import com.dqops.postgresql.BasePostgresqlIntegrationTest;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -24,6 +23,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class PostgresqlColumnDateInRangePercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+public class DuckdbColumnDatetimeDateInRangePercentSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private ColumnDateInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDateInRangePercentCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class PostgresqlColumnDateInRangePercentSensorParametersSpecIntegrationTe
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.duckdb);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDateInRangePercentSensorParametersSpec();

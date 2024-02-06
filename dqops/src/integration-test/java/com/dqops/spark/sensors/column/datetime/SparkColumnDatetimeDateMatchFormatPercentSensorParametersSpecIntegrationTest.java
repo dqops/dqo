@@ -13,16 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.singlestore.sensors.column.datetime;
+package com.dqops.spark.sensors.column.datetime;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
-import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
+import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
-import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
@@ -31,7 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
 import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
-import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
+import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
+public class SparkColumnDatetimeDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseSparkIntegrationTest {
     private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
@@ -48,8 +47,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, connectionSpec);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.spark);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
@@ -69,7 +67,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -84,7 +82,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,7 +97,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -114,7 +112,7 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -129,6 +127,6 @@ public class SingleStoreDbColumnDateMatchFormatPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

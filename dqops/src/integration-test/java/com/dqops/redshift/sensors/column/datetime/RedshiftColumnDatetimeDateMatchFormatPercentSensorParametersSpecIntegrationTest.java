@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.mysql.sensors.column.datetime;
+package com.dqops.redshift.sensors.column.datetime;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
@@ -24,7 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import com.dqops.mysql.BaseMysqlIntegrationTest;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -39,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseMysqlIntegrationTest {
+public class RedshiftColumnDatetimeDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
@@ -47,7 +47,7 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.mysql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();
@@ -67,7 +67,7 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -82,7 +82,7 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -112,7 +112,7 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -127,6 +127,6 @@ public class MysqlColumnDateMatchFormatPercentSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

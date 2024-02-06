@@ -13,22 +13,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.databricks.sensors.column.datetime;
+package com.dqops.singlestore.sensors.column.datetime;
 
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
-import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.singlestore.BaseSingleStoreDbIntegrationTest;
+import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.connectors.mysql.SingleStoreDbConnectionSpecObjectMother;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnDateInRangePercentSensorParametersSpec;
-import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
+public class SingleStoreDbColumnDatetimeDateInRangePercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
     private ColumnDateInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDateInRangePercentCheckSpec checkSpec;
@@ -46,7 +47,8 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.databricks);
+        ConnectionSpec connectionSpec = SingleStoreDbConnectionSpecObjectMother.create();
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, connectionSpec);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDateInRangePercentSensorParametersSpec();
@@ -72,7 +74,7 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -93,7 +95,7 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -114,7 +116,7 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -135,7 +137,7 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -156,6 +158,6 @@ public class DatabricksColumnDateInRangePercentSensorParametersSpecIntegrationTe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 }

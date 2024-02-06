@@ -1,3 +1,5 @@
+package com.dqops.oracle.sensors.column.datetime;
+
 /*
  * Copyright © 2021 DQOps (support@dqops.com)
  *
@@ -13,9 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.snowflake.sensors.column.datetime;
 
-import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -24,6 +24,7 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.oracle.BaseOracleIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
@@ -38,7 +39,7 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+public class OracleColumnDatetimeDateInRangePercentSensorParametersSpecIntegrationTest extends BaseOracleIntegrationTest {
     private ColumnDateInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDateInRangePercentCheckSpec checkSpec;
@@ -46,7 +47,7 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.oracle);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDateInRangePercentSensorParametersSpec();
@@ -65,14 +66,14 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
         this.sut.setMinDate(lower);
         this.sut.setMaxDate(upper);
-        runParameters.setTimeSeries(null);
+       runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -86,14 +87,14 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
         this.sut.setMinDate(lower);
         this.sut.setMaxDate(upper);
-        runParameters.setTimeSeries(null);
+       runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -107,14 +108,14 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
         this.sut.setMinDate(lower);
         this.sut.setMaxDate(upper);
-        runParameters.setTimeSeries(null);
+       runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -128,14 +129,14 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
         this.sut.setMinDate(lower);
         this.sut.setMaxDate(upper);
-        runParameters.setTimeSeries(null);
+//        runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -149,13 +150,13 @@ public class SnowflakeColumnDateInRangePercentSensorParametersSpecIntegrationTes
 
         this.sut.setMinDate(lower);
         this.sut.setMaxDate(upper);
-        runParameters.setTimeSeries(null);
+      runParameters.setTimeSeries(null);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 }

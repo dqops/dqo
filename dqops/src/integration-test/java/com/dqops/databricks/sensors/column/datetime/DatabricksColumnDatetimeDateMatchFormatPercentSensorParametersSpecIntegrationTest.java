@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.presto.sensors.column.datetime;
+package com.dqops.databricks.sensors.column.datetime;
 
-import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -31,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnTextMatchDateFormatPercentSensorParametersSpec;
 import com.dqops.sensors.column.datetime.DatetimeBuiltInDateFormats;
+import com.dqops.databricks.BaseDatabricksIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PrestoColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
+public class DatabricksColumnDatetimeDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseDatabricksIntegrationTest {
     private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
@@ -47,7 +47,7 @@ public class PrestoColumnDateMatchFormatPercentSensorParametersSpecIntegrationTe
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.presto);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.databricks);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();

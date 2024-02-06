@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.bigquery.sensors.column.datetime;
+package com.dqops.presto.sensors.column.datetime;
 
-import com.dqops.bigquery.BaseBigQueryIntegrationTest;
+import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -39,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PrestoColumnDatetimeDateMatchFormatPercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
     private ColumnTextMatchDateFormatPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnTextMatchDateFormatPercentCheckSpec checkSpec;
@@ -47,7 +47,7 @@ public class BigQueryColumnDateMatchFormatPercentSensorParametersSpecIntegration
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.presto);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnTextMatchDateFormatPercentSensorParametersSpec();

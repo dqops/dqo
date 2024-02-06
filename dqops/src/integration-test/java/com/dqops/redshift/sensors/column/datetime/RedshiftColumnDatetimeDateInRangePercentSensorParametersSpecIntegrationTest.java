@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.spark.sensors.column.datetime;
+package com.dqops.redshift.sensors.column.datetime;
 
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -23,12 +23,12 @@ import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import com.dqops.redshift.BaseRedshiftIntegrationTest;
 import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.datetime.ColumnDateInRangePercentSensorParametersSpec;
-import com.dqops.spark.BaseSparkIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class SparkColumnDateInRangePercentSensorParametersSpecIntegrationTest extends BaseSparkIntegrationTest {
+public class RedshiftColumnDatetimeDateInRangePercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnDateInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDateInRangePercentCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class SparkColumnDateInRangePercentSensorParametersSpecIntegrationTest ex
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.spark);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDateInRangePercentSensorParametersSpec();
