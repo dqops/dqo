@@ -134,7 +134,7 @@ const TableColumns = ({
         maximumValue: renderValue(maximumValueData?.[i]),
         length: renderValue(lengthData?.[i]),
         scale: renderValue(scaleData?.[i]),
-        importedDatatype: String(renderValue(typeData?.[i])),
+        importedDatatype: typeData?.[i],
         columnHash: Number(hashData?.[i]),
         isColumnSelected: false
       };
