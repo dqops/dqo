@@ -4,9 +4,12 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
@@ -28,18 +31,69 @@ public class JsonFileFormatSpec extends AbstractSpec {
         }
     };
 
+    @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Boolean autoDetect;
+
+    @JsonPropertyDescription("A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Map<String, String> columns;
+
+    @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private String compression;
+
+    @JsonPropertyDescription("\tWhether strings representing integer values should be converted to a numerical type.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Boolean convertStringsToIntegers;
+
+    @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private String dateformat;
+
+    @JsonPropertyDescription("Whether or not an extra filename column should be included in the result.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Boolean filename;
+
+    @JsonPropertyDescription("\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private String format;
+
+    @JsonPropertyDescription("\tWhether or not to interpret the path as a hive partitioned path.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Boolean hivePartitioning;
+
+    @JsonPropertyDescription("Whether to ignore parse errors (only possible when format is 'newline_delimited').")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Boolean ignoreErrors;
+
+    @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BigInteger maximumDepth;
+
+    @JsonPropertyDescription("\tThe maximum size of a JSON object (in bytes)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private Long maximumObjectSize;
+
+    @JsonPropertyDescription("Can be one of ['auto', 'true', 'false']")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private String records;
+
+    @JsonPropertyDescription("\tSpecifies the date format to use when parsing timestamps.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private String timestampformat;
 
     /**
