@@ -1,7 +1,4 @@
 import React, { ReactNode } from 'react';
-
-import PropTypes from 'prop-types';
-
 import LeftView from '../Dashboards/LeftView';
 import Header from '../Header';
 import { useDashboard } from '../../contexts/dashboardContext';
@@ -13,11 +10,10 @@ interface LayoutProps {
 }
 
 const DashboardLayout = ({ route }: LayoutProps) => {
-
   const getComponent = () => {
     switch (route) {
       case ROUTES.PATTERNS.DASHBOARDS:
-        return <Dashboards/>
+        return <Dashboards />;
       default:
         return null;
     }
@@ -43,10 +39,6 @@ const DashboardLayout = ({ route }: LayoutProps) => {
       </div>
     </div>
   );
-};
-
-DashboardLayout.propTypes = {
-  children: PropTypes.any.isRequired
 };
 
 export default DashboardLayout;
