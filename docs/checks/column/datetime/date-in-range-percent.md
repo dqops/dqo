@@ -1,6 +1,8 @@
 # date in range percent data quality checks
 
-A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.
+ The default configuration detects fake dates such as 1900-01-01 and 2099-12-31.
+ Measures the percentage of valid dates and raises a data quality issue when too many dates are found.
 
 
 ___
@@ -13,7 +15,7 @@ The **date in range percent** data quality check has the following variants for 
 
 **Check description**
 
-Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -257,10 +259,10 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -279,10 +281,10 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1005,10 +1007,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1026,10 +1028,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1603,7 +1605,7 @@ ___
 
 **Check description**
 
-Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1848,10 +1850,10 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1870,10 +1872,10 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2597,10 +2599,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2618,10 +2620,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3195,7 +3197,7 @@ ___
 
 **Check description**
 
-Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -3440,10 +3442,10 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3462,10 +3464,10 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4189,10 +4191,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4210,10 +4212,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4787,7 +4789,7 @@ ___
 
 **Check description**
 
-Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -5042,10 +5044,10 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5064,10 +5066,10 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5802,10 +5804,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5823,10 +5825,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6398,7 +6400,7 @@ ___
 
 **Check description**
 
-Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -6653,10 +6655,10 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6675,10 +6677,10 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -7413,10 +7415,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7434,10 +7436,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '' AND CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                            WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,

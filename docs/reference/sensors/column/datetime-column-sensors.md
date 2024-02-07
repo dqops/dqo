@@ -116,10 +116,10 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
                 ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -606,10 +606,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 {{ render_value_in_future() }}
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1173,11 +1173,11 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR) ~ {{ lib.render_date_formats(parameters.date_formats) }} IS NOT NULL
+                    WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

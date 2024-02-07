@@ -1212,7 +1212,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_formats(parameters.date_formats)}}) IS TRUE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
@@ -1997,7 +1997,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_formats(parameters.date_formats)}}) IS FALSE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                         THEN 1
                     ELSE 0
                 END
