@@ -17,7 +17,7 @@ export default function TableColumnsHeader({
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   return (
-    <thead>
+    <thead className="text-sm">
       <tr>
         <th className="border-b border-gray-100 " style={{ width: '6px' }}></th>
         {labels.map((x, index) => (
@@ -45,8 +45,8 @@ export default function TableColumnsHeader({
             >
               <div>{x}</div>
               <div>
-                <SvgIcon name="chevron-up" className="w-3 h-3" />
-                <SvgIcon name="chevron-down" className="w-3 h-3" />
+                <SvgIcon name="chevron-up" className="w-2 h-2" />
+                <SvgIcon name="chevron-down" className="w-2 h-2" />
               </div>
             </div>
           </th>
@@ -67,8 +67,8 @@ export default function TableColumnsHeader({
           >
             <div onClick={() => updateData('updated data')}>Nulls percent</div>
             <div>
-              <SvgIcon name="chevron-up" className="w-3 h-3" />
-              <SvgIcon name="chevron-down" className="w-3 h-3" />
+              <SvgIcon name="chevron-up" className="w-2 h-2" />
+              <SvgIcon name="chevron-down" className="w-2 h-2" />
             </div>
           </div>
         </th>
@@ -87,8 +87,8 @@ export default function TableColumnsHeader({
           >
             <div>Distinct count</div>
             <div>
-              <SvgIcon name="chevron-up" className="w-3 h-3" />
-              <SvgIcon name="chevron-down" className="w-3 h-3" />
+              <SvgIcon name="chevron-up" className="w-2 h-2" />
+              <SvgIcon name="chevron-down" className="w-2 h-2" />
             </div>
           </div>
         </th>
