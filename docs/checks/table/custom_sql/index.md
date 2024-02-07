@@ -26,7 +26,8 @@ A table-level check that uses a custom SQL expression on each row to verify (ass
 
 
 ### [sql condition passed percent on table](./sql-condition-passed-percent-on-table.md)
-A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 | Data quality check name | Check type | Description | Standard |
