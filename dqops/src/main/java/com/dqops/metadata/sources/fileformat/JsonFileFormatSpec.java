@@ -114,7 +114,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.ignoreErrors, ignoreErrors);
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumDepth, maximumDepth);
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumObjectSize, maximumObjectSize);
-        tableOptionsFormatter.formatValueWhenSet(Fields.records, records);
+        tableOptionsFormatter.formatStringWhenSet(Fields.records, records);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
         return tableOptionsFormatter.toString();
     }
