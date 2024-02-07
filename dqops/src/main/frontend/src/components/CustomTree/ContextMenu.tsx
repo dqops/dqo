@@ -305,6 +305,7 @@ const ContextMenu = ({
             </div>
           )}
           {(node.level === TREE_LEVEL.TABLE ||
+            node.level === TREE_LEVEL.COLUMNS ||
             node.level === TREE_LEVEL.COLUMN) && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
