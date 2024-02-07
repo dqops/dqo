@@ -15,6 +15,7 @@ class ParquetFileFormatSpecTest {
             setFilename(true);
             setFileRowNumber(true);
             setHivePartitioning(true);
+            setUnionByName(true);
         }};
 
         String output = sut.buildSourceTableOptionsString(List.of("/dev/table.csv"));
@@ -23,6 +24,7 @@ class ParquetFileFormatSpecTest {
         assertTrue(output.contains("filename = true"));
         assertTrue(output.contains("file_row_number = true"));
         assertTrue(output.contains("hive_partitioning = true"));
+        assertTrue(output.contains("union_by_name = true"));
     }
 
     @Test
