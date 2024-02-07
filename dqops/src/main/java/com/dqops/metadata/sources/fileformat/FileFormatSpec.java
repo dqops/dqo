@@ -134,13 +134,12 @@ public class FileFormatSpec extends AbstractSpec {
         if(csvFileFormat != null){
             return csvFileFormat.buildSourceTableOptionsString(filePathList);
         }
-//        if(jsonFileFormat != null){   // todo
-//
-//        }
-//        if(parquetFileFormat != null){    // todo
-//
-//        }
-
+        if(jsonFileFormat != null){
+            return jsonFileFormat.buildSourceTableOptionsString(filePathList);
+        }
+        if(parquetFileFormat != null){
+            return parquetFileFormat.buildSourceTableOptionsString(filePathList);
+        }
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
 
