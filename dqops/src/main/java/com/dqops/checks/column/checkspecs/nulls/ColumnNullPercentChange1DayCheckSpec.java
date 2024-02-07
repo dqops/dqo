@@ -169,6 +169,6 @@ public class ColumnNullPercentChange1DayCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }

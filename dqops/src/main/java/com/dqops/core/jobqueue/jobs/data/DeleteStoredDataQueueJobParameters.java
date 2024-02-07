@@ -121,9 +121,10 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     /**
      * Creates a job parameters object by relying on info provided in CheckSearchFilters.
      * @param checkSearchFilters Check search filters object providing the basis for the job parameters.
+     * @param deleteStatistics Delete also statistics.
      * @return Delete stored data job parameters based on the filters.
      */
-    public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
+    public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters, boolean deleteStatistics) {
         if (checkSearchFilters == null) {
             return null;
         }
@@ -141,7 +142,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
             setDeleteCheckResults(true);
             setDeleteErrors(true);
-            setDeleteStatistics(true);
+            setDeleteStatistics(deleteStatistics);
             setDeleteSensorReadouts(true);
         }};
     }
@@ -159,7 +160,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     public static class DeleteStoredDataQueueJobParametersSampleFactory implements SampleValueFactory<DeleteStoredDataQueueJobParameters> {
         @Override
         public DeleteStoredDataQueueJobParameters createSample() {
-            return fromCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample());
+            return fromCheckSearchFilters(new CheckSearchFilters.CheckSearchFiltersSampleFactory().createSample(), false);
         }
     }
 }

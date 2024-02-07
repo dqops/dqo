@@ -181,6 +181,6 @@ public class ColumnNullPercentAnomalyStationaryCheckSpec
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Consistency;
+        return DefaultDataQualityDimensions.Completeness;
     }
 }
