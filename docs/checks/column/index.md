@@ -293,7 +293,7 @@ A column-level check that ensures that a set percentage of rows passed a custom 
 
 
 ### [sql aggregate expression on column](./custom_sql/sql-aggregate-expression-on-column.md)
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 

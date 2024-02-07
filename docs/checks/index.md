@@ -63,7 +63,7 @@ A table-level check that ensures that a minimum percentage of rows passed a cust
 
 
 ### [sql aggregate expression on table](./table/custom_sql/sql-aggregate-expression-on-table.md)
-A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.
 
 
 
@@ -557,7 +557,7 @@ A column-level check that ensures that a set percentage of rows passed a custom 
 
 
 ### [sql aggregate expression on column](./column/custom_sql/sql-aggregate-expression-on-column.md)
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 

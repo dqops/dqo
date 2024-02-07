@@ -34966,7 +34966,8 @@ definitions:
           \ on the parent table."
       parameters:
         description: "Sensor parameters with the custom SQL aggregate expression that\
-          \ is evaluated on a table"
+          \ is evaluated on a table. Use an {alias} token to reference the tested\
+          \ table."
         $ref: "#/definitions/TableSqlAggregatedExpressionSensorParametersSpec"
       warning:
         description: "Default alerting threshold for warnings raised when the aggregated\

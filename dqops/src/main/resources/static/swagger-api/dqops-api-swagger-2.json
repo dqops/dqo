@@ -36054,7 +36054,7 @@
           "description" : "Data grouping configuration name that should be applied to this data quality check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent table."
         },
         "parameters" : {
-          "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a table",
+          "description" : "Sensor parameters with the custom SQL aggregate expression that is evaluated on a table. Use an {alias} token to reference the tested table.",
           "$ref" : "#/definitions/TableSqlAggregatedExpressionSensorParametersSpec"
         },
         "warning" : {

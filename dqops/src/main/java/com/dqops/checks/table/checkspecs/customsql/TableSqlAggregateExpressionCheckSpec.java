@@ -32,7 +32,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+ * A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -44,7 +44,7 @@ public class TableSqlAggregateExpressionCheckSpec extends AbstractCheckSpec<Tabl
         }
     };
 
-    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a table")
+    @JsonPropertyDescription("Sensor parameters with the custom SQL aggregate expression that is evaluated on a table. Use an {alias} token to reference the tested table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlAggregatedExpressionSensorParametersSpec parameters = new TableSqlAggregatedExpressionSensorParametersSpec();

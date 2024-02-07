@@ -1,6 +1,6 @@
 # sql aggregate expression on table data quality checks
 
-A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.
 
 
 ___

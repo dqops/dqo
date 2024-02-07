@@ -1,6 +1,6 @@
 # sql aggregate expression on column data quality checks
 
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 ___
