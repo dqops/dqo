@@ -161,10 +161,10 @@ export default function TableQualityStatus({ timeScale }: IProps) {
   }, [categoryDimension, tableDataQualityStatus, severityType]);
 
   return (
-    <div className="p-4">
+    <div className="p-4 text-sm">
       <div className="flex justify-between items-center">
         <div className="flex pb-6 gap-x-5 items-center">
-          <div>Group checks by: </div>
+          <div className='text-sm'>Group checks by: </div>
           <RadioButton
             checked={categoryDimension === 'category'}
             label="category"
