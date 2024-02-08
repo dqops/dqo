@@ -100,10 +100,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s""";
@@ -131,10 +131,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -160,10 +160,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -189,10 +189,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -225,10 +225,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -256,10 +256,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -289,10 +289,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
@@ -332,10 +332,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -369,10 +369,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -406,10 +406,10 @@ public class ColumnTextTextParsableToFloatPercentSensorParametersSpecBigQueryTes
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * COUNT(
                         SAFE_CAST(%1$s AS FLOAT64)
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,

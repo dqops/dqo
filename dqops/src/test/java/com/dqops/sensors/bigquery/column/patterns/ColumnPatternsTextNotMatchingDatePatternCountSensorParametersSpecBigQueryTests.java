@@ -120,7 +120,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -152,7 +152,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -184,7 +184,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -216,7 +216,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -248,7 +248,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -284,7 +284,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -319,7 +319,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -354,7 +354,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -396,7 +396,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -433,7 +433,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -472,7 +472,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -521,7 +521,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -564,7 +564,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
@@ -607,7 +607,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
