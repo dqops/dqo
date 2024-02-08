@@ -59,7 +59,7 @@ public class CheckCategoryDocumentationConstants {
         put("blanks", "Blanks and whitespaces");
         put("patterns", "Text patterns");
         put("datatype", "Data type detection");
-        put("anomaly", "Anomalies");
+        put("anomaly", "Anomaly detection");
         put("availability", "Table availability");
         put("bool", "Boolean values");
         put("numeric", "Numeric statistics");
