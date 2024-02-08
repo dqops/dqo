@@ -51,7 +51,11 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
         <thead>
           <tr>
             <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
-            <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
+            <th className="text-left px-8 py-2"></th>
+            <th className="text-left px-8 py-2"></th>
+            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+              Action
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -65,32 +69,30 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
               canUserEditLabel={userProfile.can_edit_labels}
             />
           ))}
-          <tr>
-            <td className="pr-4 min-w-40 py-2">
-              <Input
-                className="focus:!ring-0 focus:!border"
-                value={labels.length ? labels[labels.length - 1] : ''}
-                onChange={(e) => onChangeText(e.target.value)}
-                onKeyDown={onKeyDown}
-              />
-            </td>
-            {hasAdd && (
-              <td className="px-8 max-w-34 min-w-34 py-2">
-                <div className="flex justify-center">
-                  <IconButton
-                    size="sm"
-                    className="bg-teal-500"
-                    onClick={onAdd}
-                    disabled={userProfile.can_edit_labels === false}
-                  >
-                    <SvgIcon name="add" className="w-4" />
-                  </IconButton>
-                </div>
-              </td>
-            )}
-          </tr>
         </tbody>
       </table>
+      <div className="flex items-center w-full">
+        <div className="pr-4 min-w-40 py-2 w-11/12">
+          <Input
+            className="focus:!ring-0 focus:!border"
+            value={labels.length ? labels[labels.length - 1] : ''}
+            onChange={(e) => onChangeText(e.target.value)}
+            onKeyDown={onKeyDown}
+          />
+        </div>
+        <div className="px-8 max-w-34 min-w-34 py-2">
+          <div className="flex justify-center">
+            <IconButton
+              size="sm"
+              className="bg-teal-500"
+              onClick={onAdd}
+              disabled={userProfile.can_edit_labels === false}
+            >
+              <SvgIcon name="add" className="w-4" />
+            </IconButton>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

@@ -90,31 +90,29 @@ const CommentsView = ({
                 />
               ))
             : ''}
-          <tr>
-            <td className="pr-4 min-w-40 py-2">
-              <Input
-                className="h-10 focus:!ring-0 focus:!border"
-                value={text}
-                onChange={onChangeText}
-              />
-            </td>
-            <td></td>
-            <td></td>
-            <td className="px-8 max-w-34 min-w-34 py-2">
-              <div className="flex justify-center">
-                <IconButton
-                  size="sm"
-                  className="bg-teal-500"
-                  onClick={onAdd}
-                  disabled={userProfile.can_edit_labels === false}
-                >
-                  <SvgIcon name="add" className="w-4" />
-                </IconButton>
-              </div>
-            </td>
-          </tr>
         </tbody>
       </table>
+      <div className="flex items-center w-full ">
+        <div className="pr-4 min-w-40 py-2 w-11/12">
+          <Input
+            className="h-10 focus:!ring-0 focus:!border"
+            value={text}
+            onChange={onChangeText}
+          />
+        </div>
+        <div className="px-8 max-w-34 min-w-34 py-2">
+          <div className="flex justify-center">
+            <IconButton
+              size="sm"
+              className="bg-teal-500"
+              onClick={onAdd}
+              disabled={userProfile.can_edit_labels === false}
+            >
+              <SvgIcon name="add" className="w-4" />
+            </IconButton>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
