@@ -51,6 +51,8 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
         <thead>
           <tr>
             <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
+            <th className="text-left px-8 py-2"></th>
+            <th className="text-left px-8 py-2"></th>
             <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
           </tr>
         </thead>
@@ -77,7 +79,12 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
             {hasAdd && (
               <td className="px-8 max-w-34 min-w-34 py-2">
                 <div className="flex justify-center">
-                  <IconButton size="sm" className="bg-teal-500" onClick={onAdd} disabled={userProfile.can_edit_labels === false}>
+                  <IconButton
+                    size="sm"
+                    className="bg-teal-500"
+                    onClick={onAdd}
+                    disabled={userProfile.can_edit_labels === false}
+                  >
                     <SvgIcon name="add" className="w-4" />
                   </IconButton>
                 </div>

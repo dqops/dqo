@@ -81,7 +81,7 @@ const SchemasView = () => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="py-2 pl-6 text-left">Schema Name</th>
+            <th className="py-2 pl-2 text-left">Schema Name</th>
             <th />
           </tr>
         </thead>
@@ -91,11 +91,11 @@ const SchemasView = () => {
               key={item.schema_name}
               className="border-b border-gray-300 last:border-b-0 relative"
             >
-              <td className="">
+              <td>
                 <Button
                   label={item.schema_name}
                   variant="text"
-                  className="underline"
+                  className="underline px-2"
                   onClick={() => goToTable(item.schema_name ?? '', 'tables')}
                 />
               </td>
