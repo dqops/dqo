@@ -50,9 +50,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     private boolean inMemory;
 
     //todo: parameters
-//    @CommandLine.Option(names = {"--postgresql-host"}, description = "DuckDB host name")
-//    @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
-//    private String host;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -83,23 +80,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.inMemory, inMemory));
         this.inMemory = inMemory;
     }
-
-//    /**
-//     * Returns the host name.
-//     * @return Host name.
-//     */
-//    public String getHost() {
-//        return host;
-//    }
-//
-//    /**
-//     * Sets the host name.
-//     * @param host New host name.
-//     */
-//    public void setHost(String host) {
-//        setDirtyIf(!Objects.equals(this.host, host));
-//        this.host = host;
-//    }
 
     /**
      * Returns a physical database name.
@@ -134,7 +114,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.options, options));
         this.options = options;
     }
-
 
     /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
