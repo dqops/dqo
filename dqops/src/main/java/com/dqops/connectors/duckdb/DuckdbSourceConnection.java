@@ -194,4 +194,24 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         return Arrays.asList("httpfs");
     }
 
+    /**
+     * Lists tables inside a schema and userhome's dqotables for the connection. Views are also returned.
+     *
+     * @param schemaName Schema name.
+     * @return List of tables in the given schema.
+     */
+    @Override
+    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+        List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
+        TableList tableList = connectionWrapper.getTables();
+
+        for (TableWrapper table : tableList) {
+            PhysicalTableName physicalTableName = table.getPhysicalTableName();
+            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+            sourceTableModels.add(schemaModel);
+        }
+
+        return sourceTableModels;
+    }
+
 }
