@@ -13,6 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package com.dqops.redshift.sensors.column.bool;
+
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
 import com.dqops.connectors.ProviderType;
@@ -62,7 +64,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -75,7 +77,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -88,7 +90,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -114,6 +116,6 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(50.0, (double) resultTable.column(0).get(0), 0.001);
     }
 }

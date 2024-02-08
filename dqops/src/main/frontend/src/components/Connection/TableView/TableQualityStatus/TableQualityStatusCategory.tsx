@@ -103,7 +103,7 @@ export default function TableQualityStatusCategory({
               ) !== '' ? (
                 <div
                   className={clsx(
-                    'w-43 h-12 flex ',
+                    'w-43 h-8 flex ',
                     getColor(
                       getTableStatus(severityType, firstLevelChecks[key]).status
                     ),
@@ -136,7 +136,7 @@ export default function TableQualityStatusCategory({
                     >
                       <div
                         className={clsx(
-                          ' h-4 w-4 mr-2 mt-4 ml-2',
+                          ' h-4 w-4 mr-2 mt-1 ml-2',
                           getColor(
                             getTableCircleStatus(
                               severityType,

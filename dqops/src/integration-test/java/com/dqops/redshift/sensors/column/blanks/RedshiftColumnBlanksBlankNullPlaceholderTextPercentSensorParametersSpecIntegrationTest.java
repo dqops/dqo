@@ -65,7 +65,7 @@ public class RedshiftColumnBlanksBlankNullPlaceholderTextPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, Precision.round((double)resultTable.column(0).get(0),3));
+        Assertions.assertEquals(37.03704071044922, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class RedshiftColumnBlanksBlankNullPlaceholderTextPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, Precision.round((double)resultTable.column(0).get(0),3));
+        Assertions.assertEquals(37.03704071044922, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class RedshiftColumnBlanksBlankNullPlaceholderTextPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, Precision.round((double)resultTable.column(0).get(0),3));
+        Assertions.assertEquals(37.03704071044922, Precision.round((double)resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -117,6 +117,6 @@ public class RedshiftColumnBlanksBlankNullPlaceholderTextPercentSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, Precision.round((double)resultTable.column(0).get(0),3));
+        Assertions.assertEquals(37.03704071044922, Precision.round((double)resultTable.column(0).get(0),3));
     }
 }

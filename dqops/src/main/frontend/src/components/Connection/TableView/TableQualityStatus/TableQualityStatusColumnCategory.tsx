@@ -126,11 +126,6 @@ export default function TableQualityStatusColumnCategory({
     <React.Fragment key={`column_${customKey}`}>
       <tr
         key={`column_row_${customKey}`}
-        className={clsx(
-          index !==
-            Object.keys(tableDataQualityStatus.columns ?? {}).length - 1 &&
-            'my-2'
-        )}
       >
         <td
           key={`column_cell_${customKey}`}
@@ -182,7 +177,7 @@ export default function TableQualityStatusColumnCategory({
                 </div>
                 <div
                   className={clsx(
-                    'h-12 w-43 flex',
+                    'h-8 w-43 flex',
                     getColor(
                       getColumnStatus(
                         severityType,
@@ -232,7 +227,7 @@ export default function TableQualityStatusColumnCategory({
                       )}
                     >
                       <div
-                        className="h-4 w-4 ml-2 mt-4 mr-2"
+                        className="h-4 w-4 ml-2 mt-1 mr-2"
                         style={{
                           borderRadius: '6px',
                           ...(getColor(
