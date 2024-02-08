@@ -43,7 +43,7 @@ public class DuckdbConnectionSpecObjectMother {
 
 			setDuckdb(new DuckdbParametersSpec()
             {{
-                setInMemory(true);
+                setSourceFilesType(DuckdbSourceFilesType.IN_MEMORY);
 //                setDatabase();
             }});
         }};

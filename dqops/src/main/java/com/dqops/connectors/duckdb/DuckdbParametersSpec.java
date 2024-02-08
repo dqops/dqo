@@ -45,11 +45,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--duckdb-in-memory"}, description = "To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private boolean inMemory;
-
-    //todo: parameters
+    @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbSourceFilesType sourceFilesType;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -69,16 +67,33 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * @return inMemory value.
      */
     public boolean isInMemory () {
-        return inMemory;
+        return sourceFilesType.equals(DuckdbSourceFilesType.IN_MEMORY);
+    }
+
+//    /**
+//     * Sets an inMemory value.
+//     * @param inMemory inMemory value.
+//     */
+//    public void setInMemory(boolean inMemory) {
+//        setDirtyIf(!Objects.equals(this.inMemory, inMemory));
+//        this.inMemory = inMemory;
+//    }
+
+    /**
+     * Returns an sourceFilesType value.
+     * @return sourceFilesType value.
+     */
+    public DuckdbSourceFilesType getSourceFilesType() {
+        return sourceFilesType;
     }
 
     /**
-     * Sets an inMemory value.
-     * @param inMemory inMemory value.
+     * Sets an sourceFilesType value.
+     * @param sourceFilesType sourceFilesType value.
      */
-    public void setInMemory(boolean inMemory) {
-        setDirtyIf(!Objects.equals(this.inMemory, inMemory));
-        this.inMemory = inMemory;
+    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
+        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
+        this.sourceFilesType = sourceFilesType;
     }
 
     /**
@@ -159,7 +174,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      */
     public DuckdbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DuckdbParametersSpec cloned = this.deepClone();
-//        cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
+        cloned.sourceFilesType = DuckdbSourceFilesType.valueOf(secretValueProvider.expandValue(String.valueOf(cloned.sourceFilesType), lookupContext));
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);

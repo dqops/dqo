@@ -23,6 +23,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -104,12 +105,22 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
         }
         // todo: cli
 
-//        if (Strings.isNullOrEmpty(postgresqlSpec.getHost())) {
-//            if (isHeadless) {
-//                throw new CliRequiredParameterMissingException("--postgresql-host");
-//            }
-//
-//            postgresqlSpec.setHost(terminalReader.prompt("PostgreSQL host name (--postgresql-host)", "${POSTGRESQL_HOST}", false));
+        DuckdbSourceFilesType duckdbSourceFilesType = duckdbSpec.getSourceFilesType();
+        if(duckdbSourceFilesType == null){
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-source-files-type");
+            }
+            duckdbSpec.setSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB.", DuckdbSourceFilesType.class, DuckdbSourceFilesType.IN_MEMORY,false));
+        }
+
+        if (duckdbSourceFilesType.equals(DuckdbSourceFilesType.IN_MEMORY) && Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-database");
+            }
+            duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
+        }
+//        else {
+//            duckdbSpec.setDatabase("");
 //        }
 
     }
