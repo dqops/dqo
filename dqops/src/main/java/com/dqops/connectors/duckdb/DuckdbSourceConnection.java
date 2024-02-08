@@ -28,6 +28,7 @@ import com.dqops.metadata.sources.*;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -87,6 +88,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             jdbcConnectionBuilder.append(":memory:");
         }
 
+        String database = duckdbSpec.getDatabase();
+        if(database != null){
+            jdbcConnectionBuilder.append(database);
+        }
+
         String jdbcUrl = jdbcConnectionBuilder.toString();
         hikariConfig.setJdbcUrl(jdbcUrl);
 
@@ -96,12 +102,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(duckdbSpec.getProperties());
         }
 
-        // todo: connection
-
-//        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
-//        if (!Strings.isNullOrEmpty(options)) {
-//            dataSourceProperties.put("options", options);
-//        }
+        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(options)) {
+            dataSourceProperties.put("options", options);
+        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
