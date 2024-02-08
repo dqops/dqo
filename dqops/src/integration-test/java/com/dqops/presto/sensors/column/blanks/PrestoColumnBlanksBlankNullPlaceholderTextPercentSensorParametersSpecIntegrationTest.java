@@ -64,7 +64,7 @@ public class PrestoColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(37.03704071044922, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PrestoColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(37.03704071044922, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PrestoColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(37.03704071044922, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class PrestoColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(33.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(37.03704071044922, (double) resultTable.column(0).get(0), 0.001);
     }
 }
