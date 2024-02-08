@@ -24,10 +24,10 @@ export default function SeverityInputBlock({
   type
 }: TSeverityInputBlock) {
   return (
-    <div className="flex flex-col pt-0 mt-0 w-full">
+    <div className="block mb-5 mt-3 h-35">
       <div className="bg-yellow-100 px-4 py-2 flex items-center gap-2">
         <Input
-          className="max-w-30 !min-w-initial"
+          className="max-w-25 !min-w-initial"
           value={
             type === 'column'
               ? reference?.compare_column_count?.warning_difference_percent
@@ -52,7 +52,7 @@ export default function SeverityInputBlock({
       </div>
       <div className="bg-orange-100 px-4 py-2 flex items-center gap-2">
         <Input
-          className="max-w-30 !min-w-initial"
+          className="max-w-25 !min-w-initial"
           value={
             type === 'column'
               ? reference?.compare_column_count?.error_difference_percent
@@ -77,7 +77,7 @@ export default function SeverityInputBlock({
       </div>
       <div className="bg-red-100 px-4 py-2 flex items-center gap-2">
         <Input
-          className="max-w-30 !min-w-initial"
+          className="max-w-25 !min-w-initial"
           value={
             type === 'column'
               ? reference?.compare_column_count?.fatal_difference_percent

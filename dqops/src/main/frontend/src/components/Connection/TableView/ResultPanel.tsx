@@ -55,10 +55,10 @@ export default function ResultPanel({
 
   return (
     <tr className=" h-70 w-full">
-      <th className="text-left pr-4 py-1.5  w-1/6 "></th>
-      <th className="text-left px-4 py-1.5 w-1/6 "></th>
+      <th></th>
+      <th></th>
       {checkArray.map((x, jIndex) => (
-        <th className=" px-4 py-1.5 pr-1 relative" key={jIndex}>
+        <th className="py-1.5 relative" key={jIndex}>
           <ResultBox
             item={prepareObj(x + '_match')}
             bool={bools[jIndex]}

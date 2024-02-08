@@ -71,60 +71,60 @@ const TableRow: React.FC<TableRowProps> = ({
         )}{' '}
         {table}
       </th>
-      <th className="text-left px-4 py-1.5"></th>
+      <th ></th>
       <th
         className={clsx(
-          'text-center px-0 py-4 pr-2 w-1/12 relative',
+          'text-center px-0 py-4 pr-2 relative !w-40 !max-w-40',
           calculateColor(
             '',
             '',
             'row_count',
             checkTypes,
             tableComparisonResults
-          )
-        )}
-      >
+            )
+            )}
+            >
         <Checkbox
           checked={showRowCount}
           onChange={(checked) => {
             onUpdateChecksUI(checksUI, 'row', checked);
             setIsUpdated(true);
           }}
-        />{' '}
+          />{' '}
         {calculateColor('', '', 'row_count', checkTypes, tableComparisonResults)
           .length !== 0 &&
           !showRowCount && <>{renderWarningTooltip()}</>}
       </th>
       <th
         className={clsx(
-          'text-center px-0 py-4 pr-2 w-1/12 relative',
+          'text-center px-0 py-4 pr-2 relative !w-40 !max-w-40',
           reference.supports_compare_column_count === true
-            ? calculateColor(
+          ? calculateColor(
                 '',
                 '',
                 'column_count',
                 checkTypes,
                 tableComparisonResults
-              )
-            : ''
-        )}
-      >
+                )
+                : ''
+                )}
+                >
         {reference.supports_compare_column_count === true ? (
           <Checkbox
-            checked={showColumnCount}
-            onChange={(checked) => {
-              onUpdateChecksUI(checksUI, 'column', checked);
-              setIsUpdated(true);
-            }}
+          checked={showColumnCount}
+          onChange={(checked) => {
+            onUpdateChecksUI(checksUI, 'column', checked);
+            setIsUpdated(true);
+          }}
           />
-        ) : null}
+          ) : null}
         {calculateColor(
           '',
           '',
           'column_count',
           checkTypes,
           tableComparisonResults
-        ).length !== 0 &&
+          ).length !== 0 &&
           !showColumnCount && <>{renderWarningTooltip()}</>}
       </th>
     </tr>
