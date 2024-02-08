@@ -89,7 +89,7 @@ export default function TableComparisonOverwiewBody({
           <td
             key={jIndex}
             className={clsx(
-              'text-center py-1.5 relative !max-w-40 !w-40',
+              'text-center py-1.5 relative !max-w-30 !w-30',
               calculateColor(
                 item.compared_column_name ?? '',
                 itemData.key,

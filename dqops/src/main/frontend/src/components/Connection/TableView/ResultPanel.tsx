@@ -54,7 +54,7 @@ export default function ResultPanel({
   };
 
   return (
-    <tr className=" h-70 w-full">
+    <tr className=" h-80 w-full">
       <th></th>
       <th></th>
       {checkArray.map((x, jIndex) => (

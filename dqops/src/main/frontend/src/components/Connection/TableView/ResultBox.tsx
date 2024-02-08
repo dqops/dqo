@@ -28,7 +28,6 @@ const ResultBox = ({
   checkName,
   index
 }: data) => {
-  console.log(item);
   const onChangeCompare = (
     obj: Partial<CompareThresholdsModel>,
     checkName?: CheckName
@@ -53,7 +52,7 @@ const ResultBox = ({
 
   return (
     <tr className="w-full flex flex-col text-sm font-light justify-start items-start  absolute top-0">
-      <td className="h-42">
+      <td className="h-43 w-full">
         {' '}
         <div className="block mb-5 mt-3 h-20">
           <div
@@ -164,7 +163,7 @@ const ResultBox = ({
             {item.warnings}
           </td>
           <td>
-            <a className="group relative text-blue-300 underline whitespace-nowrap cursor-pointer text-xs">
+            <a className="group relative text-blue-300 underline whitespace-normal cursor-pointer text-xs">
               Show mismatches
               <section
                 className="hidden group-hover:grid grid-cols-1 absolute px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light"

@@ -74,7 +74,7 @@ const TableRow: React.FC<TableRowProps> = ({
       <th ></th>
       <th
         className={clsx(
-          'text-center px-0 py-4 pr-2 relative !w-40 !max-w-40',
+          'text-center px-0 py-4 pr-[11px] relative !w-30 !max-w-30 flex justify-center items-center',
           calculateColor(
             '',
             '',
@@ -97,7 +97,7 @@ const TableRow: React.FC<TableRowProps> = ({
       </th>
       <th
         className={clsx(
-          'text-center px-0 py-4 pr-2 relative !w-40 !max-w-40',
+          'text-center px-0 py-4 pr-[11px] relative !w-30 !max-w-30',
           reference.supports_compare_column_count === true
           ? calculateColor(
                 '',

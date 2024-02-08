@@ -594,17 +594,17 @@ export const EditProfilingReferenceTable = ({
         reference.columns !== undefined &&
         Object.keys(reference).length > 0 && (
           <SectionWrapper title="" className=" my-4 mx-4">
-            <table className="max-w-400">
+            <table className="max-w-300">
               <thead>
                 <tr>
                   <th className="text-left pr-4 py-1.5">
                     Table-level comparison
                   </th>
                   <th></th>
-                  <th className="text-center px-4 py-1.5 pr-1">
+                  <th className="text-center py-1.5">
                     Row count
                   </th>
-                  <th className="text-center px-4 py-1.5 pr-1">
+                  <th className="text-center py-1.5 whitespace-nowrap">
                     {reference.supports_compare_column_count === true
                       ? 'Column count'
                       : ''}
@@ -626,13 +626,12 @@ export const EditProfilingReferenceTable = ({
                 reference={reference}
                 checkTypes={checkTypes}
               />
+              {tableLevelComparisonExtended && (
               <tr>
                 <th></th>
                 <th></th>
-
                 <th>
-                  {tableLevelComparisonExtended && (
-                    <div className="flex flex-col w-40 font-normal">
+                    <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
                       {showRowCount ? (
                         <SeverityInputBlock
                         onChange={onChangeCompareRowCount}
@@ -651,12 +650,10 @@ export const EditProfilingReferenceTable = ({
                         />
                         ) : null}
                     </div>
-                  )}
                 </th>              
                 <th>
-                  {tableLevelComparisonExtended &&
-                  reference?.supports_compare_column_count === true ? (
-                    <div className="flex flex-col font-normal w-40">
+                  {reference?.supports_compare_column_count === true ? (
+                    <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
                       {showColumnCount ? (
                         <SeverityInputBlock
                         onChange={onChangeCompareColumnCount}
@@ -677,14 +674,14 @@ export const EditProfilingReferenceTable = ({
                     </div>
                   ) : null}
                 </th>
-
               </tr>
+                )}
               <tr>
                 <th className="text-left pr-4 py-1.5">Compared column</th>
                 <th className="text-left px-4 py-1.5"></th>
                 {checkNames.map((x, index) => (
                   <th
-                    className="text-center px-4 py-1.5 pr-1 w-40"
+                    className="text-center px-4 py-1.5 pr-1 w-25"
                     key={index}
                   >
                     {x}
