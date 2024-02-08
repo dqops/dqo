@@ -44,7 +44,7 @@ export default function SelecColumnGroupingOverlook({
   };
 
   return (
-    <div className="flex items-center gap-4 mb-8">
+    <div className="flex items-center gap-4 mb-4">
       <SvgIcon
         name="chevron-right"
         className="w-5 h-5"

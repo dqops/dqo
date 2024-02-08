@@ -58,12 +58,12 @@ const ResultBox = ({
         <div className="block mb-5 mt-3 h-20">
           <div
             className={clsx(
-              ' px-4 py-2 flex items-center gap-2',
+              ' px-2 py-2 flex items-center gap-2',
               bool ? 'bg-yellow-100' : 'bg-gray-400'
             )}
           >
             <Input
-              className="max-w-30 !min-w-initial"
+              className="max-w-25 !min-w-initial"
               type="number"
               value={
                 reference?.columns?.at(index)?.[checkName!]
@@ -86,12 +86,12 @@ const ResultBox = ({
           </div>
           <div
             className={clsx(
-              ' px-4 py-2 flex items-center gap-2',
+              ' px-2 py-2 flex items-center gap-2',
               bool ? 'bg-orange-100' : 'bg-gray-50'
             )}
           >
             <Input
-              className="max-w-30 !min-w-initial"
+              className="max-w-25 !min-w-initial"
               type="number"
               value={
                 reference?.columns?.at(index)?.[checkName!]
@@ -114,12 +114,12 @@ const ResultBox = ({
           </div>
           <div
             className={clsx(
-              ' px-4 py-2 flex items-center gap-2',
+              ' px-2 py-2 flex items-center gap-2',
               bool ? 'bg-red-100' : 'bg-gray-300'
             )}
           >
             <Input
-              className="max-w-30 !min-w-initial"
+              className="max-w-25 !min-w-initial"
               type="number"
               value={
                 reference?.columns?.at(index)?.[checkName!]
@@ -164,7 +164,7 @@ const ResultBox = ({
             {item.warnings}
           </td>
           <td>
-            <a className="group relative text-blue-300 underline whitespace-nowrap cursor-pointer">
+            <a className="group relative text-blue-300 underline whitespace-nowrap cursor-pointer text-sm">
               Show mismatches
               <section
                 className="hidden group-hover:grid grid-cols-1 absolute px-1 gap-y-1 rounded-md border border-gray-400 z-50 bg-white text-black no-underline font-light"

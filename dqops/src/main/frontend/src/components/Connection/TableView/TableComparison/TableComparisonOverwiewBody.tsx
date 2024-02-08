@@ -127,6 +127,11 @@ export default function TableComparisonOverwiewBody({
                   (x) => x.label === item.reference_column_name
                 )
               }
+              disabled={item.reference_column_name === undefined ||
+                item.reference_column_name.length === 0 ||
+                !columnOptions.find(
+                  (x) => x.label === item.reference_column_name
+                )}
             />
             {calculateColor(
               item.compared_column_name ?? '',
