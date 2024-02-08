@@ -90,6 +90,8 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setBillingProjectId(null);
         this.connectionSpec.getBigquery().setQuotaProjectId(null);
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.connectionSpec.getBigquery().setJobsCreateProject(BigQueryJobsCreateProject.create_jobs_in_default_project_from_credentials);
+
         this.sut.open(this.secretValueLookupContext);
         List<SourceSchemaModel> schemas = this.sut.listSchemas();
 
@@ -101,7 +103,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void listTables_whenSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, null);
 
         Assertions.assertTrue(tables.size() > 0);
     }
@@ -110,7 +112,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, null);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
@@ -125,7 +127,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, null);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
@@ -139,6 +141,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.connectionSpec.getBigquery().setBillingProjectId(null);
         this.connectionSpec.getBigquery().setQuotaProjectId(null);
         this.connectionSpec.getBigquery().setSourceProjectId("bigquery-public-data");
+        this.connectionSpec.getBigquery().setJobsCreateProject(BigQueryJobsCreateProject.create_jobs_in_default_project_from_credentials);
         this.sut.open(this.secretValueLookupContext);
         Table results = this.sut.executeQuery("select count(*) from `bigquery-public-data.austin_crime.crime`",
                 JobCancellationToken.createDummyJobCancellationToken(), null, false);

@@ -288,12 +288,13 @@ A column-level check that uses a custom SQL expression on each column to verify 
 
 
 ### [sql condition passed percent on column](./custom_sql/sql-condition-passed-percent-on-column.md)
-A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 
 ### [sql aggregate expression on column](./custom_sql/sql-aggregate-expression-on-column.md)
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 
@@ -313,13 +314,13 @@ Column level check that uses a custom SQL SELECT statement to retrieve a result 
 Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
 ### [detected datatype in text](./datatype/detected-datatype-in-text.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+A column-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
 ### [detected datatype in text changed](./datatype/detected-datatype-in-text-changed.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+A column-level check that scans all values in a string column, finds the right data type and detects when the desired data type changes. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
  For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
@@ -332,19 +333,20 @@ A table-level check that scans all values in a string column and detects the dat
 Validates that the data in a date or time column is in the expected format and within predefined ranges.
 
 ### [date values in future percent](./datetime/date-values-in-future-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.
+Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.
 
 
 
 ### [date in range percent](./datetime/date-in-range-percent.md)
-A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.
+ The default configuration detects fake dates such as 1900-01-01 and 2099-12-31.
+ Measures the percentage of valid dates and raises a data quality issue when too many dates are found.
 
 
 
 ### [text match date format percent](./datetime/text-match-date-format-percent.md)
-A column-level check that validates the values in text columns match one of predefined date formats.
- It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- The default value 100.0 (percent) verifies that all values match an expected format.
+Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.
+ Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.
 
 
 
@@ -371,47 +373,64 @@ A column-level check that ensures that there are no more than a minimum percenta
 Checks for the presence of null or missing values in a column.
 
 ### [nulls count](./nulls/nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
+ Raises a data quality issue when the count of null values is above a *max_count* threshold.
 
 
 
 ### [nulls percent](./nulls/nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
-
-
-
-### [not nulls count](./nulls/not-nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
-
-
-
-### [not nulls percent](./nulls/not-nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.
+ Raises a data quality issue when the percentage of null values is above a *max_percent* threshold.
+ Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.
 
 
 
 ### [nulls percent anomaly](./nulls/nulls-percent-anomaly.md)
-A column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value.
+ Raises a data quality issue when the rate of null values increases or decreases too much.
+
+
+
+### [not nulls count](./nulls/not-nulls-count.md)
+Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
+ Raises a data quality issue when the count of non-null values is below *min_count*.
+ The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number
+ to assert that a column has at least that many non-null values.
+
+
+
+### [not nulls percent](./nulls/not-nulls-percent.md)
+Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
+ Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
+ The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
 
 
 
 ### [nulls percent change](./nulls/nulls-percent-change.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
+Detects relative increases or decreases in the percentage of null values since the last measured percentage.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 1 day](./nulls/nulls-percent-change-1-day.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+Detects relative increases or decreases in the percentage of null values since the previous day.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 7 days](./nulls/nulls-percent-change-7-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
+Detects relative increases or decreases in the percentage of null values since the last week (seven days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 30 days](./nulls/nulls-percent-change-30-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from the last month.
+Detects relative increases or decreases in the percentage of null values since the last month (30 days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 

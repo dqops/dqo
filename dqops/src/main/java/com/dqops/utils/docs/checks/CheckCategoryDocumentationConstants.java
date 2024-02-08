@@ -44,6 +44,7 @@ public class CheckCategoryDocumentationConstants {
         put("custom_sql", "how-to-detect-data-quality-issues-with-custom-sql.md");
         put("uniqueness", "how-to-detect-data-uniqueness-issues-and-duplicates.md");
         put("pii", "how-to-detect-pii-values-and-sensitive-data.md");
+        put("nulls", "how-to-detect-empty-or-incomplete-columns-with-nulls.md");
     }};
 
     /**
@@ -60,11 +61,11 @@ public class CheckCategoryDocumentationConstants {
         put("datatype", "Data type detection");
         put("anomaly", "Anomalies");
         put("availability", "Table availability");
-        put("bool", "Booleans");
-        put("numeric", "Numerics");
+        put("bool", "Boolean values");
+        put("numeric", "Numeric statistics");
         put("datetime", "Invalid dates");
         put("text", "Text statistics");
-        put("nulls", "Nulls");
+        put("nulls", "Empty and incomplete columns");
         put("accuracy", "Data accuracy");
         put("custom_sql", "Custom SQL and multi-column checks");
         put("volume", "Data volume");

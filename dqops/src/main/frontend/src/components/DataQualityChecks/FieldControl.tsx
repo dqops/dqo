@@ -16,6 +16,7 @@ import IntegerListField from '../IntegerListField';
 import FieldDatePicker from '../FieldDatePicker';
 import clsx from 'clsx';
 import FloatingPointInput from '../FloatingPointInput';
+import ExtendedTextAre from '../ExtendedTextArea';
 
 interface ISensorParametersFieldSettingsProps {
   field: FieldModel;
@@ -74,7 +75,12 @@ const FieldControl = ({
     });
   };
 
-  const isInvalid = !field.optional && !disabled && (value === undefined || value === '' || (Array.isArray(value) && value.length === 0));
+  const isInvalid =
+    !field.optional &&
+    !disabled &&
+    (value === undefined ||
+      value === '' ||
+      (Array.isArray(value) && value.length === 0));
   return (
     <div>
       {type === 'boolean' && (
@@ -91,12 +97,15 @@ const FieldControl = ({
         <>
           {field.definition?.display_hint ===
           ParameterDefinitionSpecDisplayHintEnum.textarea ? (
-            <TextArea
+            <ExtendedTextAre
               label={label}
               value={value}
               tooltipText={tooltip}
               className="!min-w-30 !max-w-30 !text-xs"
               onChange={(e) => handleChange({ string_value: e.target.value })}
+              setValue={(value: string) =>
+                handleChange({ string_value: value })
+              }
               disabled={disabled}
               error={isInvalid}
               rows={1}

@@ -150,9 +150,9 @@ const TableDetails = ({
             </td>
             <td className="px-4 py-2">
               <TextArea
-                value={columnBasic?.sql_expression}
+                value={columnBasic?.sql_expression ?? ''}
                 onChange={(e) =>
-                  handleSnapTypeChange({ sql_expression: e.target.value })
+                  handleChange({ sql_expression: e.target.value })
                 }
                 className="min-h-25"
               />

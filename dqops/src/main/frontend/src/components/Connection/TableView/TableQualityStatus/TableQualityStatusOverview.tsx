@@ -141,7 +141,7 @@ export default function TableQualityStatusOverview({
           </th>
         ))}
       </thead>
-      <tbody>
+      <tbody className='text-sm'>
         <TableQualityStatusCategory
           tableDataQualityStatus={tableDataQualityStatus}
           severityType={severityType}

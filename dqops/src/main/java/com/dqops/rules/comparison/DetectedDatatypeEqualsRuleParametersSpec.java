@@ -40,7 +40,7 @@ public class DetectedDatatypeEqualsRuleParametersSpec extends AbstractRuleParame
         }
     };
 
-    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.")
+    @JsonPropertyDescription("Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.")
     private DetectedDatatypeCategory expectedDatatype;
 
     /**

@@ -72,7 +72,7 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegr
     @Test
     void listTables_whenPUBLICSchemaListed_thenReturnsTables() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("public");
+        List<SourceTableModel> tables = this.sut.listTables("public", null);
 
         Assertions.assertTrue(tables.size() > 0);
     }
@@ -80,7 +80,7 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegr
     @Test
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("public");
+        List<SourceTableModel> tables = this.sut.listTables("public", null);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
@@ -94,7 +94,7 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegr
     @Test
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("public");
+        List<SourceTableModel> tables = this.sut.listTables("public", null);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());

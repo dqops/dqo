@@ -250,9 +250,9 @@ at various [issue severity levels](../dqo-concepts/definition-of-data-quality-ch
 
 
 ## Use cases
-| **Name of the example**                                                                                 | **Description**                                                                                                                                                             |
-|:--------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Detect empty or incomplete tables](../examples/data-completeness/detect-empty-or-incomplete-tables.md) | This example shows how to check that the number of rows in a table does not exceed the minimum accepted count using [row_count](../checks/table/volume/row-count.md) check. |
+| **Name of the example**                                                                                 | **Description**                                                                                                            |
+|:--------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------|
+| [Detect empty or incomplete tables](../examples/data-completeness/detect-empty-or-incomplete-tables.md) | This example shows how to find empty or too small tables using the [row_count](../checks/table/volume/row-count.md) check. |
 
 ## List of volume checks at a table level
 | Data quality check name | Data quality dimension | Description | Standard check |

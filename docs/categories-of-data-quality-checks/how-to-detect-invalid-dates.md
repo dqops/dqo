@@ -70,11 +70,11 @@ spec:
 
 
 ## Dates out of range
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) asserts that all date values are within a reasonable range. 
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) asserts that all date values are within a reasonable range. 
 This check detects rows with corrupted or fake dates, such as 1900-01-01 or 2099-12-31.
 
 ### Configure date in range check in UI
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check is configured with three parameters.
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) check is configured with three parameters.
 
 - **min_date** parameter that is the earliest accepted date inclusive. 
   The default value is *1900-01-02* to exclude a common placeholder date *1900-01-01*.
@@ -89,7 +89,7 @@ The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-
 ![Date in range percent data quality check with valid date ranges](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/date-in-range-percent-check-min.png){ loading=lazy }
 
 ### Configure date in range check in YAML
-The [*datetime_value_in_range_date_percent*](../checks/column/datetime/datetime-value-in-range-date-percent.md) check requires the configuration of the parameters described before.
+The [*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md) check requires the configuration of the parameters described before.
 
 ``` { .yaml linenums="1" hl_lines="13-18" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -183,9 +183,9 @@ spec:
 ## List of datetime checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md)|Validity|A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.|:material-check-bold:|
-|[*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md)|Validity|A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid|:material-check-bold:|
-|[*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)|Validity|A column-level check that validates the values in text columns match one of predefined date formats. It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format. The default value 100.0 (percent) verifies that all values match an expected format.|:material-check-bold:|
+|[*date_values_in_future_percent*](../checks/column/datetime/date-values-in-future-percent.md)|Validity|Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.|:material-check-bold:|
+|[*date_in_range_percent*](../checks/column/datetime/date-in-range-percent.md)|Validity|Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found.|:material-check-bold:|
+|[*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)|Validity|Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.|:material-check-bold:|
 
 
 **Reference and samples**

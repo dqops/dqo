@@ -51,6 +51,14 @@ The templates used to generate the SQL query for each data source supported by D
                             | replace('{schema_name}', target_table.schema_name)
                             | replace('{column_name}', column_name) }}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                            | replace('{schema_name}', target_table.schema_name)
+                            | replace('{column_name}', column_name) }}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -172,6 +180,20 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
@@ -364,6 +386,27 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -622,6 +665,30 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
@@ -922,6 +989,27 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -1163,6 +1251,30 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0

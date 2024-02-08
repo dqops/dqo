@@ -20,7 +20,7 @@ interface ITextAreaProps {
   dataTestId?: string;
   tooltipText?: string;
   disabled?: boolean;
-  onClick?: (e: any) => void 
+  onClick?: (e: any) => void;
 }
 
 const TextArea = ({

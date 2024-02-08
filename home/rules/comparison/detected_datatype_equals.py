@@ -23,10 +23,11 @@ class DetectedDatatypeCategory(IntEnum):
     integers = 1
     floats = 2
     dates = 3
-    timestamps = 4
-    booleans = 5
-    texts = 6
-    mixed = 7
+    datetimes = 4
+    timestamps = 5
+    booleans = 6
+    texts = 7
+    mixed = 8
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration

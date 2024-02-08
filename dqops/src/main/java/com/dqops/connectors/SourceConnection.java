@@ -18,6 +18,7 @@ package com.dqops.connectors;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import tech.tablesaw.api.Table;
 
@@ -54,9 +55,10 @@ public interface SourceConnection extends Closeable {
     /**
      * Lists tables inside a schema. Views are also returned.
      * @param schemaName Schema name.
+     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
-    List<SourceTableModel> listTables(String schemaName);
+    List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper);
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.

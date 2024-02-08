@@ -24,6 +24,7 @@ import com.dqops.rules.comparison.MaxPercentRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxPercentRule5ParametersSpec;
 import com.dqops.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
+ * Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.
+ * Raises a data quality issue when the percentage of null values is above a *max_percent* threshold.
+ * Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -153,6 +156,18 @@ public class ColumnNullsPercentCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

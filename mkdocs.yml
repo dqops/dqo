@@ -67,15 +67,15 @@ nav:
     - Accepted values: 'categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
     - Anomalies: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
     - Blanks and whitespaces: 'categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
-    - Booleans: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
+    - Boolean values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
     - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
     - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
     - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
     - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
     - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
+    - Empty and incomplete columns: 'categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md'
     - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
-    - Nulls: 'categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
-    - Numerics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
+    - Numeric statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
     - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
     - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
     - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
@@ -92,10 +92,10 @@ nav:
       - Data availability:
           - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Detect null values: "examples/data-completeness/detect-null-values.md"
+          - Detect incomplete columns: "examples/data-completeness/detect-null-values.md"
           - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
       - Data consistency:
-          - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+          - Percentage of rows having only accepted values: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
       - Data reasonability:
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
@@ -351,9 +351,9 @@ nav:
         - 'checks/column/nulls/index.md'
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
+        - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
-        - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
         - nulls percent change 1 day: 'checks/column/nulls/nulls-percent-change-1-day.md'
         - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'

@@ -269,7 +269,6 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
-        cloned.authenticationMode = SqlServerAuthenticationMode.valueOf(secretValueProvider.expandValue(cloned.authenticationMode.toString(), lookupContext));
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;

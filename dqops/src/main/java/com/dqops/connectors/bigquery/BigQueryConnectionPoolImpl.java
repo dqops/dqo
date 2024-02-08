@@ -94,8 +94,11 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
             GoogleCredentials googleCredentials = null;
             switch (bigQueryParametersSpec.getAuthenticationMode()) {
                 case google_application_credentials:
-                    SharedCredentialWrapper defaultCredentialsSharedSecret = secretValueLookupContext.getUserHome().getCredentials()
-                            .getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true);
+                    SharedCredentialWrapper defaultCredentialsSharedSecret =
+                            secretValueLookupContext != null && secretValueLookupContext.getUserHome() != null &&
+                            secretValueLookupContext.getUserHome().getCredentials() != null ?
+                            secretValueLookupContext.getUserHome().getCredentials()
+                            .getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) : null;
                     if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
                             !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
                         String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();

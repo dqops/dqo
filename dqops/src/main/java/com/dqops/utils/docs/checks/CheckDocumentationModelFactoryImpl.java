@@ -28,6 +28,7 @@ import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.bigquery.BigQueryProviderDialectSettings;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
 import com.dqops.connectors.databricks.DatabricksProviderDialectSettings;
+import com.dqops.connectors.duckdb.DuckdbProviderDialectSettings;
 import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.mysql.MysqlProviderDialectSettings;
@@ -741,6 +742,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return new SparkProviderDialectSettings();
             case databricks:
                 return new DatabricksProviderDialectSettings();
+            case duckdb:
+                return new DuckdbProviderDialectSettings();
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
