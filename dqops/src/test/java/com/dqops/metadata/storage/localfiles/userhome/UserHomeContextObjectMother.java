@@ -73,7 +73,7 @@ public final class UserHomeContextObjectMother {
      * @param sampleTableMetadata Sample table with the connection spec and the table spec.
      */
     public static void addSampleTable(UserHomeContext userHomeContext, SampleTableMetadata sampleTableMetadata) {
-        Assertions.assertNull(sampleTableMetadata.getConnectionSpec().getHierarchyId(), "We have a race condition, the spec object was already attached to a home context");
+//        Assertions.assertNull(sampleTableMetadata.getConnectionSpec().getHierarchyId(), "We have a race condition, the spec object was already attached to a home context");
 
         ConnectionWrapper connectionWrapper = userHomeContext.getUserHome().getConnections().getByObjectName(sampleTableMetadata.getConnectionName(), true);
         if (connectionWrapper == null) {

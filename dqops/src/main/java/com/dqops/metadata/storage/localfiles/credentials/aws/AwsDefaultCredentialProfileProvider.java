@@ -32,8 +32,10 @@ public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
         String sectionTitle = "default";
 
         FileSharedCredentialWrapperImpl defaultCredentialsSharedSecret =
+                secretValueLookupContext != null && secretValueLookupContext.getUserHome() != null &&
+                secretValueLookupContext.getUserHome().getCredentials() != null ?
                 (FileSharedCredentialWrapperImpl) secretValueLookupContext.getUserHome().getCredentials().getByObjectName(
-                    DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true);
+                    DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true) : null;
 
         if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
                 !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {

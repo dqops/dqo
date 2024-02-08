@@ -30766,7 +30766,7 @@
       "properties" : {
         "expected_datatype" : {
           "type" : "string",
-          "description" : "Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.",
+          "description" : "Expected data type code, the values for the sensor's actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.",
           "enum" : [ "integers", "floats", "dates", "datetimes", "booleans", "texts", "mixed" ]
         }
       }
