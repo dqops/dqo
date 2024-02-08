@@ -91,7 +91,7 @@ public class StreamingPythonProcess implements Closeable, ExecuteResultHandler {
      * @param <O> Output type.
      * @return Response received from the process.
      */
-    public synchronized <I, O> O sendReceiveMessage(I input, Class<O> outputType) {
+    public <I, O> O sendReceiveMessage(I input, Class<O> outputType) {
         try {
             PythonRequestReplyMessage<I, O> sendReceiveMessage = new PythonRequestReplyMessage<>(input, outputType);
             this.requestReplyMessages.put(sendReceiveMessage);

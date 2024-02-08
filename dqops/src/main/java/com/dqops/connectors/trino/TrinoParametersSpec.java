@@ -317,15 +317,12 @@ public class TrinoParametersSpec extends BaseProviderParametersSpec
     public TrinoParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         TrinoParametersSpec cloned = this.deepClone();
 
-        cloned.trinoEngineType = TrinoEngineType.valueOf(secretValueProvider.expandValue(cloned.trinoEngineType.toString(), lookupContext));
-
         cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.port = secretValueProvider.expandValue(cloned.port, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
-        cloned.athenaAuthenticationMode = AthenaAuthenticationMode.valueOf(secretValueProvider.expandValue(cloned.athenaAuthenticationMode.toString(), lookupContext));
         cloned.athenaRegion = secretValueProvider.expandValue(cloned.athenaRegion, lookupContext);
         cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.athenaWorkGroup = secretValueProvider.expandValue(cloned.athenaWorkGroup, lookupContext);

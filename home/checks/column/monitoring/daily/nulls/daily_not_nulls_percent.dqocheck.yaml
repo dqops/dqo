@@ -4,8 +4,7 @@ kind: check
 spec:
   sensor_name: column/nulls/not_null_percent
   rule_name: comparison/min_percent
-  help_text: Measures the percent of not null values in a column. Raises a data quality
-    exception when the percentage of not null values is below a minimum accepted percentage.
-    Stores the most recent captured value for each day when the data quality check
-    was evaluated.
-  standard: true
+  help_text: Detects incomplete columns that contain too few non-null values. Measures
+    the percentage of rows that have non-null values. Raises a data quality issue
+    when the percentage of non-null values is below min_percentage. Stores the most
+    recent captured value for each day when the data quality check was evaluated.

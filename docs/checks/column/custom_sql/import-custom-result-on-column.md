@@ -169,6 +169,28 @@ spec:
                   logs.analyzed_table_name = '<target_table>' AND
                   logs.analyzed_column_name = 'target_column'
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                                    | replace('{schema_name}', target_table.schema_name)
+                                    | replace('{column_name}', column_name) }}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND
+                  logs.analyzed_table_name = '<target_table>' AND
+                  logs.analyzed_column_name = 'target_column'
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -529,6 +551,28 @@ spec:
                   logs.analyzed_table_name = '<target_table>' AND
                   logs.analyzed_column_name = 'target_column'
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                                    | replace('{schema_name}', target_table.schema_name)
+                                    | replace('{column_name}', column_name) }}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND
+                  logs.analyzed_table_name = '<target_table>' AND
+                  logs.analyzed_column_name = 'target_column'
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -878,6 +922,28 @@ spec:
                                     | replace('{column_name}', column_name) }}
             ```
         === "Rendered SQL for Databricks"
+
+            ```sql
+            SELECT
+              logs.my_actual_value as actual_value,
+              logs.my_expected_value as expected_value,
+              logs.error_severity as severity
+            FROM custom_data_quality_results as logs
+            WHERE logs.analyzed_schema_name = '<target_schema>' AND
+                  logs.analyzed_table_name = '<target_table>' AND
+                  logs.analyzed_column_name = 'target_column'
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            {{ parameters.sql_query | replace('{table_name}', target_table.table_name)
+                                    | replace('{schema_name}', target_table.schema_name)
+                                    | replace('{column_name}', column_name) }}
+            ```
+        === "Rendered SQL for DuckDB"
 
             ```sql
             SELECT

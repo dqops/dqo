@@ -2,14 +2,14 @@
 
 SELECT
     CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE 100.0 * SUM(
             CASE
-                WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_formats(parameters.date_formats)}}) IS TRUE
+                WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS TRUE
                     THEN 1
                 ELSE 0
             END
-        ) / COUNT(*)
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}

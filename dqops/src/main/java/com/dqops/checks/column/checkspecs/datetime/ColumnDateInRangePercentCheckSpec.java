@@ -33,7 +33,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the dates are within a range of reasonable values. Measures the percentage of valid
+ * Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.
+ * The default configuration detects fake dates such as 1900-01-01 and 2099-12-31.
+ * Measures the percentage of valid dates and raises a data quality issue when too many dates are found.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

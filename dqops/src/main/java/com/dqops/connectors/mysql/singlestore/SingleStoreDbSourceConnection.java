@@ -39,7 +39,9 @@ public class SingleStoreDbSourceConnection {
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:singlestore:");
 
-        switch (singleStoreDbParametersSpec.getLoadBalancingMode()){
+        SingleStoreDbLoadBalancingMode loadBalancingMode = singleStoreDbParametersSpec.getLoadBalancingMode() == null
+                ? SingleStoreDbLoadBalancingMode.none : singleStoreDbParametersSpec.getLoadBalancingMode();
+        switch (loadBalancingMode){
             case loadbalance:
                 jdbcConnectionBuilder.append("loadbalance:");
                 break;
@@ -48,7 +50,7 @@ public class SingleStoreDbSourceConnection {
                 break;
             case none: break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + singleStoreDbParametersSpec.getLoadBalancingMode());
+                throw new RuntimeException("Given enum is not supported : " + loadBalancingMode);
         }
         jdbcConnectionBuilder.append("//");
 

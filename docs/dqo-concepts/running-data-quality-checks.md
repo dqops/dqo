@@ -480,7 +480,7 @@ You can also run all checks from a [data quality check category](../categories-o
     a single check by its name, but the check type and optionally the check time scale should be specified to avoid
     running unexpected data quality checks.
 
-The following example shows both checks defined in the [*nulls*](../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)
+The following example shows both checks defined in the [*nulls*](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)
 and the [*schema*](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md) category on a column.
 The highlighted section shows only the *schema* checks that you want to run on all columns.
 

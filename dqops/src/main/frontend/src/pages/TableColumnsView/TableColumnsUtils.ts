@@ -110,6 +110,8 @@ export const getSortedArrayByMinimalValue = (
       StringArray.push(object);
     } else if (minimalValue === 'Yes' || minimalValue === 'No') {
       BoolArray.push(object);
+    } else if (minimalValue === undefined) {
+      StringArray.push(object);
     } else if (
       typeof minimalValue === 'string' &&
       isNaN(Number(minimalValue))
@@ -174,7 +176,7 @@ export const getSortedArrayByMinimalValue = (
   });
 
   const sortedResult = [...BoolArray, ...StringArray, ...NumberArray];
-  return sortedResult;
+  return sortedResult.length > 0 ? sortedResult : dataArray;
 };
 
 export const getSortedData = <T extends { [key: string]: any }>(

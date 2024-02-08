@@ -27,8 +27,10 @@ public class AzureCredentialsProviderImpl implements AzureCredentialsProvider {
     public Optional<AzureCredential> provideCredentials(SecretValueLookupContext secretValueLookupContext){
 
         FileSharedCredentialWrapperImpl defaultCredentialsSharedSecret =
+                secretValueLookupContext != null && secretValueLookupContext.getUserHome() != null &&
+                secretValueLookupContext.getUserHome().getCredentials() != null ?
                 (FileSharedCredentialWrapperImpl) secretValueLookupContext.getUserHome().getCredentials().getByObjectName(
-                        DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME, true);
+                        DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME, true) : null;
 
         if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
                 !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {

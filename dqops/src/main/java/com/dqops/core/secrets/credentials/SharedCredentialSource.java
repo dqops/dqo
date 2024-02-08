@@ -61,6 +61,10 @@ public class SharedCredentialSource {
 
         try {
             UserHome userHome = currentLookupContext.getUserHome();
+            if (userHome == null) {
+                return null;
+            }
+
             SharedCredentialList credentials = userHome.getCredentials();
             SharedCredentialWrapper sharedCredentialWrapper = credentials.getByObjectName(corePropertyName, true);
             if (sharedCredentialWrapper == null || sharedCredentialWrapper.getObject() == null ||

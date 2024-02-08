@@ -171,7 +171,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName());
+            List<SourceTableModel> tableModels = sourceConnection.listTables(this.importParameters.getSchemaName(), connectionWrapper);
             if (tableModels.size() == 0) {
                 throw new ImportSchemaQueueJobException("No tables found in the data source when importing tables on the " +
                         this.importParameters.getConnectionName() + ", from the " + this.importParameters.getSchemaName() + " schema");

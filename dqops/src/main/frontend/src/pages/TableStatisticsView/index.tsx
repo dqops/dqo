@@ -35,7 +35,7 @@ export default function TableStatisticsView({
   statistics?: TableColumnsStatisticsModel;
   onChangeSelectedColumns?: (columns: string[]) => void;
   refreshListFunc: () => void;
-  rowCount: TableStatisticsModel
+  rowCount: TableStatisticsModel;
 }) {
   const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const { loading } = useSelector(getFirstLevelState(checkTypes));
@@ -104,8 +104,8 @@ export default function TableStatisticsView({
   }
 
   return (
-    <div>
-      <div className="inline-block justify-center gap-y-6 h-20 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
+    <div className="text-sm">
+      <div className="inline-block justify-center gap-y-6 h-16 ml-4 mt-8 border border-gray-300 px-4 py-6 relative rounded">
         <div className="font-bold ml-3 px-2 absolute bg-white left-2 top-0 -translate-y-1/2 text-gray-700 ">
           Table statistics
         </div>

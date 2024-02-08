@@ -198,35 +198,24 @@ export const getRequiredColumnsIndexes = (
       }
     }
   }
-  return { referenceMissingIndexes, comparedMissingIndexes };
+
+  const isConfigurationCorrect =
+    referenceMissingIndexes.length === 0 && comparedMissingIndexes.length === 0;
+  return {
+    referenceMissingIndexes,
+    comparedMissingIndexes,
+    isConfigurationCorrect
+  };
 };
 
 export const getIsButtonEnabled = (parameters: TParameters): boolean => {
-  const isDataGroupingCorrect = parameters.dataGroupingArray?.every(
-    (x) =>
-      x?.compared_table_column_name !== undefined &&
-      x?.reference_table_column_name !== undefined &&
-      x?.reference_table_column_name.length > 0 &&
-      x?.compared_table_column_name.length > 0
-  );
-
-  const isDataGroupingEmpty = parameters.dataGroupingArray?.every(
-    (x) =>
-      (x.compared_table_column_name === undefined ||
-        x.compared_table_column_name.length === 0) &&
-      (x.reference_table_column_name === undefined ||
-        x.reference_table_column_name.length === 0)
-  );
-
   return !!(
     parameters.refConnection &&
     parameters.refSchema &&
     parameters.refTable &&
     parameters.name &&
-    (isDataGroupingCorrect ||
-      isDataGroupingEmpty ||
-      !parameters.dataGroupingArray ||
-      parameters.dataGroupingArray.length === 0)
+    getRequiredColumnsIndexes(parameters.dataGroupingArray ?? [])
+      .isConfigurationCorrect
   );
 };
 

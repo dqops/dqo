@@ -35,9 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that validates the values in text columns match one of predefined date formats.
- * It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- * The default value 100.0 (percent) verifies that all values match an expected format.
+ * Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.
+ * Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
