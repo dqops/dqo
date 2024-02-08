@@ -342,15 +342,15 @@ public class ReflectionServiceImplTests extends BaseTest {
 
     @Test
     void makeFieldInfo_whenFieldIsLocalDate_thenReturnsFieldInfoWithLocalDateType() throws Exception {
-        Field field = ColumnDateInRangePercentSensorParametersSpec.class.getDeclaredField("minValue");
+        Field field = ColumnDateInRangePercentSensorParametersSpec.class.getDeclaredField("minDate");
         FieldInfo fieldInfo = this.sut.makeFieldInfo(field.getDeclaringClass(), field);
         Assertions.assertNotNull(fieldInfo);
         Assertions.assertSame(field.getType(), fieldInfo.getClazz());
         Assertions.assertEquals(ParameterDataType.date_type, fieldInfo.getDataType());
-        Assertions.assertEquals("minValue", fieldInfo.getClassFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getYamlFieldName());
-        Assertions.assertEquals("min_value", fieldInfo.getDisplayName());
-        Assertions.assertEquals("Lower bound range variable.", fieldInfo.getHelpText());
+        Assertions.assertEquals("minDate", fieldInfo.getClassFieldName());
+        Assertions.assertEquals("min_date", fieldInfo.getYamlFieldName());
+        Assertions.assertEquals("min_date", fieldInfo.getDisplayName());
+        Assertions.assertEquals("The earliest accepted date.", fieldInfo.getHelpText());
         Assertions.assertNotNull(fieldInfo.getGetterMethod());
         Assertions.assertNotNull(fieldInfo.getSetterMethod());
         Assertions.assertEquals(null, fieldInfo.getDefaultValue());

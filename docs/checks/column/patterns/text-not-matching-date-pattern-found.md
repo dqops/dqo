@@ -151,7 +151,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -172,7 +172,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -207,7 +207,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -228,7 +228,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -252,14 +252,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -273,14 +273,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -311,7 +311,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -332,7 +332,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -370,7 +370,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -397,7 +397,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -440,14 +440,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -461,14 +461,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -499,14 +499,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -527,14 +527,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -570,14 +570,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -591,14 +591,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -629,7 +629,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -650,7 +650,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -685,7 +685,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -706,7 +706,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -743,7 +743,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -764,7 +764,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -800,7 +800,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -828,7 +828,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -921,7 +921,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -941,7 +941,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -977,7 +977,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -997,7 +997,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -1022,14 +1022,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1042,14 +1042,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1081,7 +1081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1101,7 +1101,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -1140,7 +1140,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1166,7 +1166,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -1215,14 +1215,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1235,14 +1235,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1274,14 +1274,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1301,14 +1301,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -1350,14 +1350,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1370,14 +1370,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1409,7 +1409,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1429,7 +1429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -1465,7 +1465,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1485,7 +1485,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -1523,7 +1523,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1543,7 +1543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -1586,7 +1586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -1613,7 +1613,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -1789,7 +1789,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -1810,7 +1810,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -1845,7 +1845,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1866,7 +1866,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -1890,14 +1890,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1911,14 +1911,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1949,7 +1949,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1970,7 +1970,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -2008,7 +2008,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2035,7 +2035,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -2078,14 +2078,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2099,14 +2099,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2137,14 +2137,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2165,14 +2165,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -2208,14 +2208,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2229,14 +2229,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2267,7 +2267,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2288,7 +2288,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -2323,7 +2323,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2344,7 +2344,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -2381,7 +2381,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2402,7 +2402,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -2438,7 +2438,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -2466,7 +2466,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -2560,7 +2560,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -2580,7 +2580,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -2616,7 +2616,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2636,7 +2636,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -2661,14 +2661,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2681,14 +2681,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2720,7 +2720,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2740,7 +2740,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -2779,7 +2779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2805,7 +2805,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -2854,14 +2854,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2874,14 +2874,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2913,14 +2913,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2940,14 +2940,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2989,14 +2989,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3009,14 +3009,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3048,7 +3048,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3068,7 +3068,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -3104,7 +3104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3124,7 +3124,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -3162,7 +3162,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3182,7 +3182,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -3225,7 +3225,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -3252,7 +3252,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -3428,7 +3428,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -3449,7 +3449,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -3484,7 +3484,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3505,7 +3505,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -3529,14 +3529,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3550,14 +3550,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3588,7 +3588,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3609,7 +3609,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -3647,7 +3647,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3674,7 +3674,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -3717,14 +3717,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3738,14 +3738,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3776,14 +3776,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3804,14 +3804,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -3847,14 +3847,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3868,14 +3868,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3906,7 +3906,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3927,7 +3927,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -3962,7 +3962,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -3983,7 +3983,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4020,7 +4020,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4041,7 +4041,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -4077,7 +4077,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -4105,7 +4105,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -4199,7 +4199,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -4219,7 +4219,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -4255,7 +4255,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4275,7 +4275,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4300,14 +4300,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4320,14 +4320,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4359,7 +4359,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4379,7 +4379,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -4418,7 +4418,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4444,7 +4444,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -4493,14 +4493,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4513,14 +4513,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4552,14 +4552,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4579,14 +4579,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -4628,14 +4628,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4648,14 +4648,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4687,7 +4687,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4707,7 +4707,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -4743,7 +4743,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4763,7 +4763,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4801,7 +4801,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -4821,7 +4821,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -4864,7 +4864,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -4891,7 +4891,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -5077,7 +5077,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -5098,7 +5098,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -5133,7 +5133,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5154,7 +5154,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -5178,14 +5178,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5199,14 +5199,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5237,7 +5237,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5258,7 +5258,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -5296,7 +5296,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5323,7 +5323,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -5366,14 +5366,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5387,14 +5387,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5425,14 +5425,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5453,14 +5453,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -5496,14 +5496,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5517,14 +5517,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5555,7 +5555,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5576,7 +5576,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -5611,7 +5611,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5632,7 +5632,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -5669,7 +5669,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5690,7 +5690,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -5730,7 +5730,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -5758,7 +5758,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -5862,7 +5862,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -5882,7 +5882,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -5918,7 +5918,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -5938,7 +5938,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -5963,14 +5963,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5983,14 +5983,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6022,7 +6022,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6042,7 +6042,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -6081,7 +6081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6107,7 +6107,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -6156,14 +6156,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6176,14 +6176,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6215,14 +6215,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6242,14 +6242,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6291,14 +6291,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6311,14 +6311,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6350,7 +6350,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6370,7 +6370,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -6406,7 +6406,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6426,7 +6426,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -6464,7 +6464,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6484,7 +6484,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -6525,7 +6525,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -6552,7 +6552,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -6738,7 +6738,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -6759,7 +6759,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -6794,7 +6794,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6815,7 +6815,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -6839,14 +6839,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6860,14 +6860,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6898,7 +6898,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6919,7 +6919,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -6957,7 +6957,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -6984,7 +6984,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -7027,14 +7027,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7048,14 +7048,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -7086,14 +7086,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -7114,14 +7114,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -7157,14 +7157,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7178,14 +7178,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -7216,7 +7216,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7237,7 +7237,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -7272,7 +7272,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7293,7 +7293,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -7330,7 +7330,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7351,7 +7351,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -7391,7 +7391,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -7419,7 +7419,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -7523,7 +7523,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -7543,7 +7543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -7579,7 +7579,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7599,7 +7599,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -7624,14 +7624,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7644,14 +7644,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -7683,7 +7683,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7703,7 +7703,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -7742,7 +7742,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -7768,7 +7768,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -7817,14 +7817,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7837,14 +7837,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -7876,14 +7876,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -7903,14 +7903,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -7952,14 +7952,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7972,14 +7972,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -8011,7 +8011,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -8031,7 +8031,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -8067,7 +8067,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -8087,7 +8087,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -8125,7 +8125,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -8145,7 +8145,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -8186,7 +8186,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -8213,7 +8213,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL

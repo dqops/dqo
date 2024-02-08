@@ -19,14 +19,20 @@ package com.dqops.checks.defaults;
 import com.dqops.BaseTest;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeMonthlyMonitoringChecksSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.connectors.ProviderDialectSettingsObjectMother;
@@ -65,7 +71,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenProfilingChecksSet_thenConfiguresThemOnTable() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingTableObservabilityCheckSettingsSpec tableDefaults = new DefaultProfilingTableObservabilityCheckSettingsSpec();
+        TableProfilingCheckCategoriesSpec tableDefaults = new TableProfilingCheckCategoriesSpec();
         profilingDefaults.setTable(tableDefaults);
         TableVolumeProfilingChecksSpec volumeDefaults = new TableVolumeProfilingChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
@@ -79,7 +85,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenDailyMonitoringChecksSet_thenConfiguresThemOnTable() {
         DefaultDailyMonitoringObservabilityCheckSettingsSpec dailyDefaults = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringDaily(dailyDefaults);
-        DefaultDailyMonitoringTableObservabilityCheckSettingsSpec tableDefaults = new DefaultDailyMonitoringTableObservabilityCheckSettingsSpec();
+        TableDailyMonitoringCheckCategoriesSpec tableDefaults = new TableDailyMonitoringCheckCategoriesSpec();
         dailyDefaults.setTable(tableDefaults);
         TableVolumeDailyMonitoringChecksSpec volumeDefaults = new TableVolumeDailyMonitoringChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
@@ -93,7 +99,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenMonthlyMonitoringChecksSet_thenConfiguresThemOnTable() {
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec dailyDefaults = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringMonthly(dailyDefaults);
-        DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec tableDefaults = new DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec();
+        TableMonthlyMonitoringCheckCategoriesSpec tableDefaults = new TableMonthlyMonitoringCheckCategoriesSpec();
         dailyDefaults.setTable(tableDefaults);
         TableVolumeMonthlyMonitoringChecksSpec volumeDefaults = new TableVolumeMonthlyMonitoringChecksSpec();
         tableDefaults.setVolume(volumeDefaults);
@@ -107,7 +113,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenProfilingChecksSetOnColumn_thenConfiguresThemOnTable() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+        ColumnProfilingCheckCategoriesSpec columnDefaults = new ColumnProfilingCheckCategoriesSpec();
         profilingDefaults.setColumn(columnDefaults);
         ColumnNullsProfilingChecksSpec nullsDefaults = new ColumnNullsProfilingChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -121,7 +127,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenDailyMonitoringChecksSetOnColumn_thenConfiguresThemOnTable() {
         DefaultDailyMonitoringObservabilityCheckSettingsSpec monitoringDailyDefaults = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringDaily(monitoringDailyDefaults);
-        DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec();
+        ColumnDailyMonitoringCheckCategoriesSpec columnDefaults = new ColumnDailyMonitoringCheckCategoriesSpec();
         monitoringDailyDefaults.setColumn(columnDefaults);
         ColumnNullsDailyMonitoringChecksSpec nullsDefaults = new ColumnNullsDailyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -135,7 +141,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnTable_whenMonthlyMonitoringChecksSetOnColumn_thenConfiguresThemOnTable() {
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec monitoringDailyDefaults = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringMonthly(monitoringDailyDefaults);
-        DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec();
+        ColumnMonthlyMonitoringCheckCategoriesSpec columnDefaults = new ColumnMonthlyMonitoringCheckCategoriesSpec();
         monitoringDailyDefaults.setColumn(columnDefaults);
         ColumnNullsMonthlyMonitoringChecksSpec nullsDefaults = new ColumnNullsMonthlyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -149,7 +155,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnColumn_whenProfilingChecksSetOnColumn_thenConfiguresThemOnColumn() {
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+        ColumnProfilingCheckCategoriesSpec columnDefaults = new ColumnProfilingCheckCategoriesSpec();
         profilingDefaults.setColumn(columnDefaults);
         ColumnNullsProfilingChecksSpec nullsDefaults = new ColumnNullsProfilingChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -163,7 +169,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnColumn_whenDailyMonitoringChecksSetOnColumn_thenConfiguresThemOnColumn() {
         DefaultDailyMonitoringObservabilityCheckSettingsSpec monitoringDailyDefaults = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringDaily(monitoringDailyDefaults);
-        DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec();
+        ColumnDailyMonitoringCheckCategoriesSpec columnDefaults = new ColumnDailyMonitoringCheckCategoriesSpec();
         monitoringDailyDefaults.setColumn(columnDefaults);
         ColumnNullsDailyMonitoringChecksSpec nullsDefaults = new ColumnNullsDailyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -177,7 +183,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
     public void applyOnColumn_whenMonthlyMonitoringChecksSetOnColumn_thenConfiguresThemOnColumn() {
         DefaultMonthlyMonitoringObservabilityCheckSettingsSpec monitoringDailyDefaults = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
         this.sut.setMonitoringMonthly(monitoringDailyDefaults);
-        DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec();
+        ColumnMonthlyMonitoringCheckCategoriesSpec columnDefaults = new ColumnMonthlyMonitoringCheckCategoriesSpec();
         monitoringDailyDefaults.setColumn(columnDefaults);
         ColumnNullsMonthlyMonitoringChecksSpec nullsDefaults = new ColumnNullsMonthlyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
@@ -193,7 +199,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
 
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+        ColumnProfilingCheckCategoriesSpec columnDefaults = new ColumnProfilingCheckCategoriesSpec();
         profilingDefaults.setColumn(columnDefaults);
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);
@@ -209,7 +215,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
 
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+        ColumnProfilingCheckCategoriesSpec columnDefaults = new ColumnProfilingCheckCategoriesSpec();
         profilingDefaults.setColumn(columnDefaults);
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);
@@ -225,7 +231,7 @@ public class DefaultObservabilityChecksSpecTests extends BaseTest {
 
         DefaultProfilingObservabilityCheckSettingsSpec profilingDefaults = new DefaultProfilingObservabilityCheckSettingsSpec();
         this.sut.setProfiling(profilingDefaults);
-        DefaultProfilingColumnObservabilityCheckSettingsSpec columnDefaults = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+        ColumnProfilingCheckCategoriesSpec columnDefaults = new ColumnProfilingCheckCategoriesSpec();
         profilingDefaults.setColumn(columnDefaults);
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);

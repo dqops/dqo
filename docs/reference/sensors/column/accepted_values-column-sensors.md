@@ -2157,13 +2157,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT(*)
+              ) / ({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2270,13 +2270,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT({{ lib.render_target_column('analyzed_table') }})
+              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2347,13 +2347,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT({{ lib.render_target_column('analyzed_table') }})
+              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2382,13 +2382,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT({{ lib.render_target_column('analyzed_table') }})
+              ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2453,13 +2453,13 @@ The templates used to generate the SQL query for each data source supported by D
                     THEN 1
                   ELSE 0
                 END
-              )/COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+              ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
         CASE
-            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE {{render_else()}}
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -2646,14 +2646,14 @@ The templates used to generate the SQL query for each data source supported by D
         0.0
         {%- else -%}
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END
         {%- endif -%}
     {% endmacro -%}

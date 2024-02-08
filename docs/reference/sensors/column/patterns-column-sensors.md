@@ -1149,14 +1149,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1186,14 +1186,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TRY_TO_TIMESTAMP ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1209,14 +1209,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS TRUE
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1246,14 +1246,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1283,14 +1283,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1325,14 +1325,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1362,14 +1362,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1405,14 +1405,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1442,14 +1442,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1479,14 +1479,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1516,14 +1516,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TRY_CONVERT(DATETIME, {{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT_BIG(*)
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1553,14 +1553,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1607,14 +1607,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$")
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1629,14 +1629,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP "^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$"
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1651,14 +1651,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN regexp_matches({{ lib.render_target_column('analyzed_table') }}, '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([''\s-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$')
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1673,14 +1673,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v\'\-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.]))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([ \t\n\r\f\v\'\-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([ \t\n\r\f\v\'\-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$') }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1695,14 +1695,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[[:alpha:] .''-]{2,}(\s.[[:alpha:] .''-]{2,})+$')
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1723,14 +1723,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[[:alpha:] .''-]+$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1745,14 +1745,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([''\s-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$')
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1774,14 +1774,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[[:alpha:] .''-]+$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1796,14 +1796,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[[:alpha:] .''-]+$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1818,14 +1818,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP "^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$"
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1840,14 +1840,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[^ -~]%'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT_BIG(*)
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1862,14 +1862,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([''\s-.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([''\s-.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$')
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1937,7 +1937,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
@@ -1971,7 +1971,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -1994,14 +1994,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_formats)}}) IS FALSE
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2031,7 +2031,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2068,7 +2068,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2110,14 +2110,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2147,14 +2147,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE SUM(
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(SUM(
                 CASE
                     WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
                         THEN 1
                     ELSE 0
                 END
-            )
+            ) AS DOUBLE)
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2190,14 +2190,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2227,7 +2227,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2261,7 +2261,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2297,7 +2297,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
@@ -2334,7 +2334,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
@@ -2403,7 +2403,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2433,7 +2433,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2464,14 +2464,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2487,7 +2487,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -2518,7 +2518,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2555,14 +2555,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2586,14 +2586,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE SUM(
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                         THEN 0
                     ELSE 1
                 END
-            )
+            ) AS DOUBLE)
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2624,14 +2624,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-            ELSE 100.0 * SUM(
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                         THEN 0
                     ELSE 1
                 END
-            ) / COUNT(*)
+            )
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2655,7 +2655,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2685,7 +2685,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2715,7 +2715,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -2746,7 +2746,7 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2815,14 +2815,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2846,14 +2846,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2877,14 +2877,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2900,14 +2900,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex ) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2931,14 +2931,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
             {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2968,14 +2968,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2999,14 +2999,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3037,14 +3037,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3068,14 +3068,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3099,14 +3099,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} RLIKE {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3129,14 +3129,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT_BIG(*)
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3156,14 +3156,14 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         CASE
-            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3210,14 +3210,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3232,14 +3232,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3276,14 +3276,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), '[0-9a-fA-F]{8}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{4}[ \t\n\r\f\v-]?[0-9a-fA-F]{12}') }}
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3298,14 +3298,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '^[0-9A-F]{8}([ -]?)[0-9A-F]{4}([ -]?)[0-9A-F]{4}\1[0-9A-F]{4}\1[0-9A-F]{12}$','i')
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3325,14 +3325,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3347,14 +3347,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3376,14 +3376,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3398,14 +3398,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3420,14 +3420,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3442,14 +3442,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN TRY_CONVERT(UNIQUEIDENTIFIER,{{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
-            ) / COUNT_BIG(*)
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3464,14 +3464,14 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN REGEXP_LIKE(TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS VARCHAR), '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$')
                         THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

@@ -525,7 +525,7 @@ spec:
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -542,7 +542,7 @@ spec:
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1054,7 +1054,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1070,7 +1070,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -1661,7 +1661,7 @@ spec:
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1678,7 +1678,7 @@ spec:
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -2191,7 +2191,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2207,7 +2207,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
@@ -2798,7 +2798,7 @@ spec:
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2815,7 +2815,7 @@ spec:
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -3328,7 +3328,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3344,7 +3344,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
@@ -3945,7 +3945,7 @@ spec:
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3962,7 +3962,7 @@ spec:
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -4489,7 +4489,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4505,7 +4505,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
@@ -5104,7 +5104,7 @@ spec:
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5121,7 +5121,7 @@ spec:
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -5648,7 +5648,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value
+                ) / COUNT_BIG(*) AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
             FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5664,7 +5664,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         WHEN analyzed_table.[target_column] >= -180.0 AND analyzed_table.[target_column] <= 180.0 THEN 1
                         ELSE 0
                     END
-                )/COUNT_BIG(*) AS actual_value,
+                ) / COUNT_BIG(*) AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,

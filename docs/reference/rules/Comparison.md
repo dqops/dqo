@@ -615,7 +615,7 @@ The parameters passed to the rule are shown below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - texts, 7 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
+|<span class="no-wrap-code">`expected_datatype`</span>|Expected data type code, the values for the sensor&#x27;s actual values are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - texts, 8 - mixed data types.|*enum*| |*integers*<br/>*floats*<br/>*dates*<br/>*datetimes*<br/>*booleans*<br/>*texts*<br/>*mixed*<br/>|
 
 
 
@@ -689,10 +689,11 @@ The file is found in the *[$DQO_HOME](../../dqo-concepts/architecture/dqops-arch
         integers = 1
         floats = 2
         dates = 3
-        timestamps = 4
-        booleans = 5
-        texts = 6
-        mixed = 7
+        datetimes = 4
+        timestamps = 5
+        booleans = 6
+        texts = 7
+        mixed = 8
     
     
     # rule specific parameters object, contains values received from the quality check threshold configuration

@@ -150,7 +150,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -170,7 +170,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -203,7 +203,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -223,7 +223,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -256,7 +256,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -278,7 +278,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -311,7 +311,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -331,7 +331,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -364,7 +364,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -392,7 +392,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -431,7 +431,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -453,7 +453,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -486,7 +486,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -513,7 +513,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -552,7 +552,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -574,7 +574,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -607,7 +607,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -627,7 +627,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -660,7 +660,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -680,7 +680,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -729,7 +729,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -751,7 +751,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -782,7 +782,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -809,7 +809,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -898,7 +898,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -917,7 +917,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -951,7 +951,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -970,7 +970,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1004,7 +1004,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1025,7 +1025,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1059,7 +1059,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1078,7 +1078,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1112,7 +1112,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1139,7 +1139,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1184,7 +1184,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1205,7 +1205,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1239,7 +1239,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -1265,7 +1265,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -1310,7 +1310,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1331,7 +1331,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1365,7 +1365,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1384,7 +1384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1418,7 +1418,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1437,7 +1437,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1487,7 +1487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1508,7 +1508,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -1543,7 +1543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -1569,7 +1569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -1741,7 +1741,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1761,7 +1761,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1794,7 +1794,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1814,7 +1814,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1847,7 +1847,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1869,7 +1869,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -1902,7 +1902,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1922,7 +1922,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -1955,7 +1955,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -1983,7 +1983,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2022,7 +2022,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2044,7 +2044,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2077,7 +2077,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -2104,7 +2104,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -2143,7 +2143,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2165,7 +2165,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2198,7 +2198,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2218,7 +2218,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2251,7 +2251,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2271,7 +2271,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -2320,7 +2320,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2342,7 +2342,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -2373,7 +2373,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -2400,7 +2400,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -2490,7 +2490,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2509,7 +2509,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -2543,7 +2543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2562,7 +2562,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -2596,7 +2596,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2617,7 +2617,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2651,7 +2651,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2670,7 +2670,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -2704,7 +2704,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2731,7 +2731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2776,7 +2776,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2797,7 +2797,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2831,7 +2831,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -2857,7 +2857,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -2902,7 +2902,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2923,7 +2923,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -2957,7 +2957,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -2976,7 +2976,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3010,7 +3010,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3029,7 +3029,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -3079,7 +3079,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3100,7 +3100,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -3135,7 +3135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -3161,7 +3161,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -3333,7 +3333,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3353,7 +3353,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -3386,7 +3386,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3406,7 +3406,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -3439,7 +3439,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3461,7 +3461,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3494,7 +3494,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3514,7 +3514,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -3547,7 +3547,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3575,7 +3575,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3614,7 +3614,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3636,7 +3636,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3669,7 +3669,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -3696,7 +3696,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -3735,7 +3735,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3757,7 +3757,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3790,7 +3790,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3810,7 +3810,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -3843,7 +3843,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3863,7 +3863,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -3912,7 +3912,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -3934,7 +3934,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -3965,7 +3965,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -3992,7 +3992,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -4082,7 +4082,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4101,7 +4101,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -4135,7 +4135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4154,7 +4154,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -4188,7 +4188,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4209,7 +4209,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -4243,7 +4243,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4262,7 +4262,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -4296,7 +4296,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4323,7 +4323,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -4368,7 +4368,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4389,7 +4389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -4423,7 +4423,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -4449,7 +4449,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -4494,7 +4494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4515,7 +4515,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -4549,7 +4549,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4568,7 +4568,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -4602,7 +4602,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4621,7 +4621,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -4671,7 +4671,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4692,7 +4692,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -4727,7 +4727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -4753,7 +4753,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -4935,7 +4935,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -4955,7 +4955,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -4988,7 +4988,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5008,7 +5008,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5041,7 +5041,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5063,7 +5063,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5096,7 +5096,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5116,7 +5116,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5149,7 +5149,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5177,7 +5177,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5216,7 +5216,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5238,7 +5238,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5271,7 +5271,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -5298,7 +5298,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -5337,7 +5337,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5359,7 +5359,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5392,7 +5392,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5412,7 +5412,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5445,7 +5445,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5465,7 +5465,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5514,7 +5514,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5536,7 +5536,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -5568,7 +5568,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -5595,7 +5595,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -5695,7 +5695,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5714,7 +5714,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5748,7 +5748,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5767,7 +5767,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5801,7 +5801,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5822,7 +5822,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5856,7 +5856,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5875,7 +5875,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -5909,7 +5909,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -5936,7 +5936,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -5981,7 +5981,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6002,7 +6002,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6036,7 +6036,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -6062,7 +6062,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -6107,7 +6107,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6128,7 +6128,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6162,7 +6162,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6181,7 +6181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6215,7 +6215,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6234,7 +6234,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -6284,7 +6284,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6305,7 +6305,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -6338,7 +6338,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -6364,7 +6364,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -6546,7 +6546,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6566,7 +6566,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -6599,7 +6599,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6619,7 +6619,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -6652,7 +6652,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6674,7 +6674,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6707,7 +6707,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6727,7 +6727,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -6760,7 +6760,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6788,7 +6788,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6827,7 +6827,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6849,7 +6849,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -6882,7 +6882,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -6909,7 +6909,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -6948,7 +6948,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -6970,7 +6970,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7003,7 +7003,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7023,7 +7023,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7056,7 +7056,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7076,7 +7076,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -7125,7 +7125,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7147,7 +7147,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -7179,7 +7179,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -7206,7 +7206,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -7306,7 +7306,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7325,7 +7325,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -7359,7 +7359,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7378,7 +7378,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -7412,7 +7412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7433,7 +7433,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7467,7 +7467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7486,7 +7486,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -7520,7 +7520,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7547,7 +7547,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7592,7 +7592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7613,7 +7613,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7647,7 +7647,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -7673,7 +7673,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
@@ -7718,7 +7718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7739,7 +7739,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7773,7 +7773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7792,7 +7792,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
@@ -7826,7 +7826,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7845,7 +7845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
@@ -7895,7 +7895,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
@@ -7916,7 +7916,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
@@ -7949,7 +7949,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
@@ -7975,7 +7975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
