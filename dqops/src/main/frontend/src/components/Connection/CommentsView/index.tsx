@@ -98,6 +98,8 @@ const CommentsView = ({
                 onChange={onChangeText}
               />
             </td>
+            <td></td>
+            <td></td>
             <td className="px-8 max-w-34 min-w-34 py-2">
               <div className="flex justify-center">
                 <IconButton
