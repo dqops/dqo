@@ -211,9 +211,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         TableList tableList = connectionWrapper.getTables();
 
         for (TableWrapper table : tableList) {
-            PhysicalTableName physicalTableName = table.getPhysicalTableName();
-            SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-            sourceTableModels.add(schemaModel);
+            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
+                PhysicalTableName physicalTableName = table.getPhysicalTableName();
+                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+                sourceTableModels.add(schemaModel);
+            }
         }
 
         return sourceTableModels;
