@@ -119,16 +119,13 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             return;
         }
 
-        try {
-            Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
-            this.jobUpdateSink = null;
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
-                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
-            currentSink.emitComplete(emitFailureHandler);
-        }
-        finally {
-            this.started = false;
-        }
+        this.started = false;
+
+        Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
+        this.jobUpdateSink = null;
+        Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+               this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+        currentSink.emitComplete(emitFailureHandler);
     }
 
     /**
@@ -339,7 +336,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
                     .values());
-            if (changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
+
+            if (this.started && changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
                 this.waitingClients.put(changeSequence, completableFuture);
