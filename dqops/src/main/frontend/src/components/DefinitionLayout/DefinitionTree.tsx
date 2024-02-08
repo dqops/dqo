@@ -11,8 +11,11 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
   CheckDefinitionFolderModel,
+  CheckDefinitionListModel,
   RuleFolderModel,
-  SensorFolderModel
+  RuleListModel,
+  SensorFolderModel,
+  SensorListModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import clsx from 'clsx';
@@ -55,7 +58,8 @@ export const DefinitionTree = () => {
     nodes,
     toggleSensorFolder,
     toggleRuleFolder,
-    toggleDataQualityChecksFolder
+    toggleDataQualityChecksFolder,
+    sortItemsTreeAlphabetically
   } = useDefinition();
 
   useEffect(() => {
@@ -129,58 +133,60 @@ export const DefinitionTree = () => {
             );
           })}
         <div className="ml-2">
-          {folder.sensors?.map((sensor) => (
-            <div
-              key={sensor.full_sensor_name}
-              className={clsx(
-                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
-                sensor.custom ? 'font-bold' : '',
-                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                  sensor.sensor_name
-                  ? 'bg-gray-300'
-                  : ''
-              )}
-              onClick={() => {
-                !(
-                  sensor.yaml_parsing_error &&
-                  sensor.yaml_parsing_error.length > 0
-                )
-                  ? openSensorFirstLevelTab(sensor)
-                  : undefined;
-              }}
-            >
-              <SvgIcon
-                name="definitionssensors"
-                className="w-4 h-4 min-w-4 shrink-0"
-              />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {urlencodeEncoder(sensor.sensor_name ?? '')}
-              </div>
-              {sensor.yaml_parsing_error &&
-              sensor.yaml_parsing_error.length > 0 ? (
-                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                  <Tooltip
-                    content={sensor.yaml_parsing_error}
-                    className="max-w-120 z-50"
-                    placement="right-start"
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        right: '30px',
-                        top: '4px',
-                        borderRadius: '3px'
-                      }}
-                      className="bg-white"
-                    >
-                      <SvgIcon name="warning" className="w-5 h-5" />
-                    </div>
-                  </Tooltip>
+          {sortItemsTreeAlphabetically(folder.sensors)?.map(
+            (sensor: SensorListModel) => (
+              <div
+                key={sensor.full_sensor_name}
+                className={clsx(
+                  'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
+                  sensor.custom ? 'font-bold' : '',
+                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                    sensor.sensor_name
+                    ? 'bg-gray-300'
+                    : ''
+                )}
+                onClick={() => {
+                  !(
+                    sensor.yaml_parsing_error &&
+                    sensor.yaml_parsing_error.length > 0
+                  )
+                    ? openSensorFirstLevelTab(sensor)
+                    : undefined;
+                }}
+              >
+                <SvgIcon
+                  name="definitionssensors"
+                  className="w-4 h-4 min-w-4 shrink-0"
+                />
+                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                  {urlencodeEncoder(sensor.sensor_name ?? '')}
                 </div>
-              ) : null}
-              <SensorContextMenu singleSensor={true} sensor={sensor} />
-            </div>
-          ))}
+                {sensor.yaml_parsing_error &&
+                sensor.yaml_parsing_error.length > 0 ? (
+                  <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                    <Tooltip
+                      content={sensor.yaml_parsing_error}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '4px',
+                          borderRadius: '3px'
+                        }}
+                        className="bg-white"
+                      >
+                        <SvgIcon name="warning" className="w-5 h-5" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                ) : null}
+                <SensorContextMenu singleSensor={true} sensor={sensor} />
+              </div>
+            )
+          )}
         </div>
       </div>
     );
@@ -237,54 +243,60 @@ export const DefinitionTree = () => {
             );
           })}
         <div className="ml-2 ">
-          {folder.rules?.map((rule) => (
-            <div
-              key={rule.full_rule_name}
-              className={clsx(
-                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
-                rule.custom ? 'font-bold ' : '',
-                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                  rule.rule_name
-                  ? 'bg-gray-300'
-                  : ''
-              )}
-              onClick={() => {
-                !(rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0)
-                  ? openRuleFirstLevelTab(rule)
-                  : undefined;
-              }}
-            >
-              <SvgIcon
-                name="definitionsrules"
-                className="w-4 h-4 min-w-4 shrink-0"
-              />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {urlencodeEncoder(rule.rule_name ?? '')}
-              </div>
-              {rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0 ? (
-                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                  <Tooltip
-                    content={rule.yaml_parsing_error}
-                    className="max-w-120 z-50"
-                    placement="right-start"
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        right: '30px',
-                        top: '4px',
-                        borderRadius: '3px'
-                      }}
-                      className="bg-white"
-                    >
-                      <SvgIcon name="warning" className="w-5 h-5" />
-                    </div>
-                  </Tooltip>
+          {sortItemsTreeAlphabetically(folder.rules)?.map(
+            (rule: RuleListModel) => (
+              <div
+                key={rule.full_rule_name}
+                className={clsx(
+                  'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
+                  rule.custom ? 'font-bold ' : '',
+                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                    rule.rule_name
+                    ? 'bg-gray-300'
+                    : ''
+                )}
+                onClick={() => {
+                  !(
+                    rule.yaml_parsing_error &&
+                    rule.yaml_parsing_error.length > 0
+                  )
+                    ? openRuleFirstLevelTab(rule)
+                    : undefined;
+                }}
+              >
+                <SvgIcon
+                  name="definitionsrules"
+                  className="w-4 h-4 min-w-4 shrink-0"
+                />
+                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                  {urlencodeEncoder(rule.rule_name ?? '')}
                 </div>
-              ) : null}
-              <RuleContextMenu singleRule={true} rule={rule} />
-            </div>
-          ))}
+                {rule.yaml_parsing_error &&
+                rule.yaml_parsing_error.length > 0 ? (
+                  <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                    <Tooltip
+                      content={rule.yaml_parsing_error}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '4px',
+                          borderRadius: '3px'
+                        }}
+                        className="bg-white"
+                      >
+                        <SvgIcon name="warning" className="w-5 h-5" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                ) : null}
+                <RuleContextMenu singleRule={true} rule={rule} />
+              </div>
+            )
+          )}
         </div>
       </div>
     );
@@ -346,60 +358,63 @@ export const DefinitionTree = () => {
           })}
         <div className="ml-2">
           {folder.checks &&
-            folder?.checks.map((check) => (
-              <div key={check.check_name}>
-                <div
-                  className={clsx(
-                    'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
-                    check.custom ? 'font-bold' : '',
-                    activeTab
-                      ?.split('/')
-                      .at(activeTab?.split('/').length - 1) === check.check_name
-                      ? 'bg-gray-300'
-                      : ''
-                  )}
-                  onClick={() => {
-                    !(
-                      check.yaml_parsing_error &&
-                      check.yaml_parsing_error.length > 0
-                    )
-                      ? openCheckFirstLevelTab(check)
-                      : undefined;
-                  }}
-                >
-                  <SvgIcon
-                    name="definitionssensors"
-                    className="w-4 h-4 min-w-4 shrink-0"
-                  />
-                  <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                    {urlencodeEncoder(check.check_name ?? '')}
-                  </div>
-                  {check.yaml_parsing_error &&
-                  check.yaml_parsing_error.length > 0 ? (
-                    <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                      <Tooltip
-                        content={check.yaml_parsing_error}
-                        className="max-w-120 z-50"
-                        placement="right-start"
-                      >
-                        <div
-                          style={{
-                            position: 'absolute',
-                            right: '30px',
-                            top: '4px',
-                            borderRadius: '3px'
-                          }}
-                          className="bg-white"
-                        >
-                          <SvgIcon name="warning" className="w-5 h-5" />
-                        </div>
-                      </Tooltip>
+            sortItemsTreeAlphabetically(folder?.checks).map(
+              (check: CheckDefinitionListModel) => (
+                <div key={check.check_name}>
+                  <div
+                    className={clsx(
+                      'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
+                      check.custom ? 'font-bold' : '',
+                      activeTab
+                        ?.split('/')
+                        .at(activeTab?.split('/').length - 1) ===
+                        check.check_name
+                        ? 'bg-gray-300'
+                        : ''
+                    )}
+                    onClick={() => {
+                      !(
+                        check.yaml_parsing_error &&
+                        check.yaml_parsing_error.length > 0
+                      )
+                        ? openCheckFirstLevelTab(check)
+                        : undefined;
+                    }}
+                  >
+                    <SvgIcon
+                      name="definitionssensors"
+                      className="w-4 h-4 min-w-4 shrink-0"
+                    />
+                    <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                      {urlencodeEncoder(check.check_name ?? '')}
                     </div>
-                  ) : null}
-                  <DataQualityContextMenu singleCheck={true} check={check} />
+                    {check.yaml_parsing_error &&
+                    check.yaml_parsing_error.length > 0 ? (
+                      <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                        <Tooltip
+                          content={check.yaml_parsing_error}
+                          className="max-w-120 z-50"
+                          placement="right-start"
+                        >
+                          <div
+                            style={{
+                              position: 'absolute',
+                              right: '30px',
+                              top: '4px',
+                              borderRadius: '3px'
+                            }}
+                            className="bg-white"
+                          >
+                            <SvgIcon name="warning" className="w-5 h-5" />
+                          </div>
+                        </Tooltip>
+                      </div>
+                    ) : null}
+                    <DataQualityContextMenu singleCheck={true} check={check} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
         </div>
       </div>
     );

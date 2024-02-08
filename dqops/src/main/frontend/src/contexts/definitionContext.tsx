@@ -19,6 +19,12 @@ import { ROUTES } from '../shared/routes';
 import { urlencodeEncoder } from '../utils';
 import { INestTab } from '../redux/reducers/source.reducer';
 
+type TTreeItems =
+  | SensorListModel[]
+  | RuleListModel[]
+  | CheckDefinitionListModel[]
+  | undefined;
+
 const DefinitionContext = React.createContext({} as any);
 
 function DefinitionProvider(props: any) {
@@ -256,6 +262,30 @@ function DefinitionProvider(props: any) {
     }
   ];
 
+  const sortItemsTreeAlphabetically = (array: TTreeItems) => {
+    if (!array) return [];
+    if ('sensor_name' in array[0] ?? {}) {
+      return array.slice().sort((a, b) => {
+        const sensorNameA = (a as SensorListModel).sensor_name ?? '';
+        const sensorNameB = (b as SensorListModel).sensor_name ?? '';
+        return sensorNameA.localeCompare(sensorNameB);
+      });
+    } else if ('rule_name' in array[0] ?? {}) {
+      return array.slice().sort((a, b) => {
+        const ruleNameA = (a as RuleListModel).rule_name ?? '';
+        const ruleNameB = (b as RuleListModel).rule_name ?? '';
+        return ruleNameA.localeCompare(ruleNameB);
+      });
+    } else if ('check_name' in array[0] ?? {}) {
+      return array.slice().sort((a, b) => {
+        const checkNameA = (a as CheckDefinitionListModel).check_name ?? '';
+        const checkNameB = (b as CheckDefinitionListModel).check_name ?? '';
+        return checkNameA.localeCompare(checkNameB);
+      });
+    }
+    return [];
+  };
+
   return (
     <DefinitionContext.Provider
       value={{
@@ -269,6 +299,7 @@ function DefinitionProvider(props: any) {
         toggleSensorFolder,
         toggleRuleFolder,
         toggleDataQualityChecksFolder,
+        sortItemsTreeAlphabetically,
         nodes
       }}
       {...props}
