@@ -70,7 +70,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -100,17 +100,17 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -130,17 +130,17 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE_CAST(%s AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                            WHEN SAFE_CAST(%1$s AS TIMESTAMP) > CURRENT_TIMESTAMP()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -164,19 +164,19 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
                 SELECT
                     CASE
-                        WHEN COUNT(*) = 0 THEN 100.0
+                        WHEN COUNT(%1$s) = 0 THEN 0.0
                         ELSE 100.0 * SUM(
                             CASE
-                                WHEN %s > CURRENT_DATETIME()
+                                WHEN %1$s > CURRENT_DATETIME()
                                     THEN 1
                                 ELSE 0
                             END
-                        ) / COUNT(*)
+                        ) / COUNT(%1$s)
                     END AS actual_value,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
-                FROM `%s`.`%s`.`%s` AS analyzed_table
-                WHERE %s
+                FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
                 GROUP BY time_period, time_period_utc
                 ORDER BY time_period, time_period_utc""";
 
@@ -197,19 +197,19 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -230,19 +230,19 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
@@ -270,18 +270,18 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -305,20 +305,20 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
@@ -342,20 +342,20 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -388,21 +388,21 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
@@ -427,21 +427,21 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc""";
 
@@ -466,21 +466,21 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN %s > CURRENT_DATETIME()
+                            WHEN %1$s > CURRENT_DATETIME()
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
                   AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc

@@ -121,14 +121,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s""";
@@ -153,14 +153,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s""";
@@ -185,14 +185,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s""";
@@ -217,14 +217,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s""";
@@ -249,14 +249,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s""";
@@ -285,14 +285,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -320,14 +320,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -355,14 +355,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -397,14 +397,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
@@ -434,14 +434,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -473,14 +473,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`length_int` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
@@ -522,14 +522,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -565,14 +565,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
@@ -608,14 +608,14 @@ public class ColumnPatternsTextMatchingDatePatternPercentSensorParametersSpecBig
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,

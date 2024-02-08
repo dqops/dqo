@@ -100,7 +100,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -131,7 +131,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -160,7 +160,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -189,7 +189,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -225,7 +225,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -256,7 +256,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -289,7 +289,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -332,7 +332,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -369,7 +369,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
@@ -406,7 +406,7 @@ public class ColumnUniquenessDuplicatePercentSensorParametersSpecBigQueryTests e
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(%1$s) - COUNT(DISTINCT %1$s)
                     ) / COUNT(%s)
