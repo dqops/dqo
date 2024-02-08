@@ -90,7 +90,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/datetime/value_in_range_date_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/datetime/date_in_range_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -108,13 +108,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s""";
@@ -143,13 +143,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s""";
@@ -182,13 +182,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
                 SELECT
                     CASE
-                        WHEN COUNT(%1$s) = 0 THEN NULL
+                        WHEN COUNT(%1$s) = 0 THEN 0.0
                         ELSE 100.0 * SUM(
                             CASE
                                 WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                             END
-                        ) / COUNT(*)
+                        ) / COUNT(%1$s)
                     END AS actual_value,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc 
@@ -220,13 +220,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -258,13 +258,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
@@ -303,13 +303,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
@@ -343,13 +343,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -385,13 +385,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
                 SELECT
                     CASE
-                        WHEN COUNT(%1$s) = 0 THEN NULL
+                        WHEN COUNT(%1$s) = 0 THEN 0.0
                         ELSE 100.0 * SUM(
                             CASE
                                 WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                             END
-                        ) / COUNT(*)
+                        ) / COUNT(%1$s)
                     END AS actual_value,
                     analyzed_table.`date2` AS grouping_level_1,
                     CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -436,13 +436,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,
@@ -480,13 +480,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,
@@ -524,13 +524,13 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
                 analyzed_table.`date3` AS grouping_level_2,

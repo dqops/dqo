@@ -101,7 +101,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -137,7 +137,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -171,7 +171,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -205,7 +205,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -246,7 +246,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -282,7 +282,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -320,7 +320,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -368,7 +368,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -410,7 +410,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')
@@ -452,7 +452,7 @@ public class ColumnPatternsTextNotMatchingRegexCountSensorParametersSpecBigQuery
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%s) = 0 THEN NULL
+                    WHEN COUNT(%s) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(%1$s, r'^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$')

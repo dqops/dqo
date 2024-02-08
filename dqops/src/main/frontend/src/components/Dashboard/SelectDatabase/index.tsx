@@ -28,7 +28,7 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
               <SvgIcon
                 name={option.iconName}
                 className={clsx(
-                  'mb-3 w-20 text-blue-500',
+                  'mb-3 text-blue-500',
                   option.name === 'Spark' && 'w-30'
                 )}
               />
