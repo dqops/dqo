@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import ActionGroup from './TableActionGroup';
@@ -16,10 +16,28 @@ import {
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import Select from '../../Select';
-import { TableListModelProfilingChecksResultTruncationEnum } from '../../../api';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  CsvFileFormatSpec,
+  TableListModelProfilingChecksResultTruncationEnum
+} from '../../../api';
 import NumberInput from '../../NumberInput';
 import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
+import { ConnectionApiClient } from '../../../services/apiClient';
+enum fileFormat {
+  csv = 'csv_file_format',
+  json = 'json_file_format',
+  parquet = 'parquet_file_format',
+  file_path_list = 'file_path_list',
+  file_path = 'file_path'
+}
+
+type TConfiguration = CsvFileFormatSpec;
+//add json parquet type
+// type TConfiguration = CsvFileFormatSpec | JsonFileFormat | ParquetFileFormat etc
 
 const TableDetails = () => {
   const {
@@ -36,15 +54,37 @@ const TableDetails = () => {
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
+  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
+  const [paths, setPaths] = useState<Array<string>>(['']);
+  const [fileFormatType, setfileFormatType] = useState<fileFormat>(
+    fileFormat.csv
+  );
+  const [configuration, setConfiguration] = useState<TConfiguration>({});
+
+  const onChangeConfiguration = (params: Partial<TConfiguration>) => {
+    setConfiguration((prev) => ({
+      ...prev,
+      ...params
+    }));
+  };
+
+  const cleanConfiguration = () => {
+    setConfiguration({});
+  };
+
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   useEffect(() => {
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
+    const getConnectionBasic = async () => {
+      await ConnectionApiClient.getConnectionBasic(connection).then((res) =>
+        setConnectionModel(res.data)
+      );
+    };
+    getConnectionBasic();
   }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
 
   const handleChange = (obj: any) => {
@@ -75,6 +115,16 @@ const TableDetails = () => {
     );
   };
 
+  const onChangePath = (value: string) => {
+    const copiedPaths = [...paths];
+    copiedPaths[paths.length - 1] = value;
+    setPaths(copiedPaths);
+  };
+
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
+
+  const onChangeFile = (val: fileFormat) => setfileFormatType(val);
+
   return (
     <div className="p-4">
       <ActionGroup
@@ -83,7 +133,14 @@ const TableDetails = () => {
         isUpdating={isUpdating}
       />
 
-      <table  className={clsx("mb-6 w-160 text-sm", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
+      <table
+        className={clsx(
+          'mb-6 w-160 text-sm',
+          userProfile.can_manage_data_sources
+            ? ''
+            : 'cursor-not-allowed pointer-events-none'
+        )}
+      >
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>
@@ -148,10 +205,17 @@ const TableDetails = () => {
                   { label: '', value: undefined },
                   ...Object.values(
                     TableListModelProfilingChecksResultTruncationEnum
-                  ).map((x) => ({ label: x?.replaceAll("_", " ")
-                  .replace(/./, c => c.toUpperCase()) , value: x }))
+                  ).map((x) => ({
+                    label: x
+                      ?.replaceAll('_', ' ')
+                      .replace(/./, (c) => c.toUpperCase()),
+                    value: x
+                  }))
                 ]}
-                value={tableBasic?.advanced_profiling_result_truncation ?? TableListModelProfilingChecksResultTruncationEnum.one_per_month}
+                value={
+                  tableBasic?.advanced_profiling_result_truncation ??
+                  TableListModelProfilingChecksResultTruncationEnum.one_per_month
+                }
                 onChange={(selected) =>
                   handleChange({
                     advanced_profiling_result_truncation: selected
@@ -168,6 +232,21 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
+      {connectionModel.provider_type ===
+      ConnectionSpecProviderTypeEnum.duckdb ? (
+        <FileFormatConfiguration
+          paths={paths}
+          onAddPath={onAddPath}
+          onChangePath={onChangePath}
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
+          configuration={configuration}
+          onChangeConfiguration={onChangeConfiguration}
+          cleanConfiguration={cleanConfiguration}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };
