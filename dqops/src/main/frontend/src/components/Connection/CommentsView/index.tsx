@@ -67,32 +67,28 @@ const CommentsView = ({
 
   return (
     <div className="p-4 text-sm">
-      <table className={clsx('w-full', className)}>
-        <thead>
-          <tr>
-            <th className="text-left min-w-40 w-full pr-4 py-2">Comment</th>
-            <th className="text-left px-8 py-2">Author</th>
-            <th className="text-left px-8 py-2">Date</th>
-            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {comments
-            ? comments.map((comment, index) => (
-                <CommentItem
-                  comment={comment}
-                  key={index}
-                  idx={index}
-                  onChange={onChangeComment}
-                  onRemove={onRemoveComment}
-                />
-              ))
-            : ''}
-        </tbody>
-      </table>
-      <div className="flex items-center w-full ">
+      <div className={clsx('w-full', className)}>
+        <div className="flex items-center font-bold">
+          <div className="w-9/12">Comment</div>
+          <div className="w-1/12">Author</div>
+          <div className="w-1/12">Date</div>
+          <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+            Action
+          </div>
+        </div>
+        {comments
+          ? comments.map((comment, index) => (
+              <CommentItem
+                comment={comment}
+                key={index}
+                idx={index}
+                onChange={onChangeComment}
+                onRemove={onRemoveComment}
+              />
+            ))
+          : ''}
+      </div>
+      <div className="flex items-center w-full">
         <div className="pr-4 min-w-40 py-2 w-11/12">
           <Input
             className="h-10 focus:!ring-0 focus:!border"
