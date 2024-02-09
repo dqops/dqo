@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  Dialog,
-  DialogBody,
-  DialogFooter,
-  IconButton
-} from '@material-tailwind/react';
+import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
 import {
@@ -15,7 +10,11 @@ import {
 import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
-import { ConnectionModel, ConnectionSpecProviderTypeEnum } from '../../api';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  CsvFileFormatSpec
+} from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
 interface AddTableDialogProps {
@@ -32,6 +31,10 @@ enum fileFormat {
   file_path = 'file_path'
 }
 
+type TConfiguration = CsvFileFormatSpec;
+//add json parquet type
+// type TConfiguration = CsvFileFormatSpec | JsonFileFormat | ParquetFileFormat etc
+
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
@@ -41,6 +44,19 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [fileFormatType, setfileFormatType] = useState<fileFormat>(
     fileFormat.csv
   );
+  const [configuration, setConfiguration] = useState<TConfiguration>({});
+
+  const onChangeConfiguration = (params: Partial<TConfiguration>) => {
+    setConfiguration((prev) => ({
+      ...prev,
+      ...params
+    }));
+  };
+
+  const cleanConfiguration = () => {
+    setConfiguration({});
+  };
+
   const { connection, schema }: { connection: string; schema: string } =
     useParams();
 
@@ -95,7 +111,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   return (
     <Dialog open={open} handler={onClose}>
-      <DialogBody className="pt-6 pb-2 px-8">
+      <DialogBody className="pt-4 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Table</h1>
           <div>
@@ -106,18 +122,21 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             />
           </div>
         </div>
-        {/* {connectionModel.provider_type ===
-        ConnectionSpecProviderTypeEnum.duckdb ? ( */}
-        <FileFormatConfiguration
-          paths={paths}
-          onAddPath={onAddPath}
-          onChangePath={onChangePath}
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-        />
-        {/* // ) : (
-        //   <></>
-        // )} */}
+        {connectionModel.provider_type ===
+        ConnectionSpecProviderTypeEnum.duckdb ? (
+          <FileFormatConfiguration
+            paths={paths}
+            onAddPath={onAddPath}
+            onChangePath={onChangePath}
+            fileFormatType={fileFormatType}
+            onChangeFile={onChangeFile}
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+            cleanConfiguration={cleanConfiguration}
+          />
+        ) : (
+          <></>
+        )}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button

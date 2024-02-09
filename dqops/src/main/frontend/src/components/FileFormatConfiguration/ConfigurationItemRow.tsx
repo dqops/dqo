@@ -18,7 +18,7 @@ export default function ConfigurationItemRow({
 
   return (
     <div>
-      <div>{label}</div>
+      <div className="py-1">{label}</div>
       <Input value={value} onChange={handleChange} />
     </div>
   );

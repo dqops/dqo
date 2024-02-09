@@ -71,7 +71,13 @@ export default function CsvFormatConfiguration({
   }, [configuration]);
 
   return (
-    <div>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gap: '16px'
+      }}
+    >
       {csvConfiguration.map((x, index) => (
         <ConfigurationItemRow
           key={index}
