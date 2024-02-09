@@ -24,7 +24,7 @@ public class FileFormatSpec extends AbstractSpec {
 
     private static final ChildHierarchyNodeFieldMapImpl<FileFormatSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("file_paths", o -> o.filePathList);
+            put("file_path_list", o -> o.filePathList);
             put("csv_file_format", o -> o.csvFileFormat);
             put("json_file_format", o -> o.jsonFileFormat);
             put("parquet_file_format", o -> o.parquetFileFormat);
@@ -113,7 +113,7 @@ public class FileFormatSpec extends AbstractSpec {
      * Returns the list of paths to files with data that are used as a source.
      * @return List with file paths.
      */
-    public FilePathListSpec getFilePaths() {
+    public FilePathListSpec getFilePathList() {
         return filePathList;
     }
 
@@ -121,7 +121,7 @@ public class FileFormatSpec extends AbstractSpec {
      * Sets the list of paths to files with data that are used as a source.
      * @param filePathList List with file paths.
      */
-    public void setFilePaths(FilePathListSpec filePathList) {
+    public void setFilePathList(FilePathListSpec filePathList) {
         setDirtyIf(!Objects.equals(this.filePathList, filePathList));
         this.filePathList = filePathList;
     }
