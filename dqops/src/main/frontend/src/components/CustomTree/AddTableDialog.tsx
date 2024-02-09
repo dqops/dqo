@@ -16,7 +16,6 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { ConnectionModel, ConnectionSpecProviderTypeEnum } from '../../api';
-import SvgIcon from '../SvgIcon';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
 interface AddTableDialogProps {
@@ -25,12 +24,23 @@ interface AddTableDialogProps {
   node?: CustomTreeNode;
 }
 
+enum fileFormat {
+  csv = 'csv_file_format',
+  json = 'json_file_format',
+  parquet = 'parquet_file_format',
+  file_path_list = 'file_path_list',
+  file_path = 'file_path'
+}
+
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const { refreshNode } = useTree();
   const [paths, setPaths] = useState<Array<string>>(['']);
+  const [fileFormatType, setfileFormatType] = useState<fileFormat>(
+    fileFormat.csv
+  );
   const { connection, schema }: { connection: string; schema: string } =
     useParams();
 
@@ -81,6 +91,8 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
 
+  const onChangeFile = (val: fileFormat) => setfileFormatType(val);
+
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-6 pb-2 px-8">
@@ -100,6 +112,8 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           paths={paths}
           onAddPath={onAddPath}
           onChangePath={onChangePath}
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
         />
         {/* // ) : (
         //   <></>
