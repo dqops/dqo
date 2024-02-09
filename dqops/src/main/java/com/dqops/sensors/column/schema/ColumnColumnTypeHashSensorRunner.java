@@ -179,9 +179,17 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
                     jobCancellationToken.throwIfCancelled();
                     String schemaName = sensorRunParameters.getTable().getPhysicalTableName().getSchemaName();
                     String tableName = sensorRunParameters.getTable().getPhysicalTableName().getTableName();
-                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(schemaName, new ArrayList<>() {{
-                        add(tableName);
-                    }});
+
+                    ConnectionList connections = executionContext.getUserHomeContext().getUserHome().getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionSpec.getConnectionName(), true);
+
+                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
+                            schemaName,
+                            new ArrayList<>() {{
+                                add(tableName);
+                            }},
+                            connectionWrapper
+                    );
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found

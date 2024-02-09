@@ -132,7 +132,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             ArrayList<String> tableNames = new ArrayList<>();
             tableNames.add(physicalTableName.getTableName());
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(physicalTableName.getSchemaName(), tableNames, connectionWrapper);
 
             if (sourceTableSpecs.size() == 0) {
                 cliOperationStatus.setFailedMessage("No tables found in the data source");

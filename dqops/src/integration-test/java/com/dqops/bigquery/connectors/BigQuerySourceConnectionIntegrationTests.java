@@ -116,7 +116,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -131,7 +131,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata(expectedSchema, tableNames, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }

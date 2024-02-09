@@ -15,7 +15,6 @@
  */
 package com.dqops.connectors;
 
-import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -187,7 +186,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {
