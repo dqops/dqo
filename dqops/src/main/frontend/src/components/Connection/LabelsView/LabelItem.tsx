@@ -9,7 +9,7 @@ interface ILabelItemProps {
   label: string;
   onChange: (key: number, value: string) => void;
   onRemove: (key: number) => void;
-  canUserEditLabel?: boolean
+  canUserEditLabel?: boolean;
 }
 
 const LabelItem = ({
@@ -20,8 +20,15 @@ const LabelItem = ({
   canUserEditLabel
 }: ILabelItemProps) => {
   return (
-    <tr className={clsx(canUserEditLabel !== true ? "pointer-events-none cursor-not-allowed" : "")}>
-      <td className="pr-4 min-w-40 py-2">
+    <div
+      className={clsx(
+        'flex items-center w-full ',
+        canUserEditLabel !== true
+          ? 'pointer-events-none cursor-not-allowed'
+          : ''
+      )}
+    >
+      <div className="pr-4 min-w-40 w-11/12 py-2">
         <div>
           <Input
             className="focus:!ring-0 focus:!border"
@@ -30,8 +37,8 @@ const LabelItem = ({
             error={label === ''}
           />
         </div>
-      </td>
-      <td className="px-8 max-w-34 min-w-34 py-2">
+      </div>
+      <div className="px-8 max-w-34 min-w-34 py-2">
         <div className="flex justify-center">
           <IconButton
             color="teal"
@@ -43,8 +50,8 @@ const LabelItem = ({
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
         </div>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 
