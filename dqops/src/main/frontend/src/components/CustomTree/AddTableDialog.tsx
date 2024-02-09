@@ -1,11 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
-import { JobApiClient, TableApiClient } from '../../services/apiClient';
+import {
+  ConnectionApiClient,
+  JobApiClient,
+  TableApiClient
+} from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
+import { ConnectionModel, ConnectionSpecProviderTypeEnum } from '../../api';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -16,15 +21,16 @@ interface AddTableDialogProps {
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
+  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const { refreshNode } = useTree();
   const { connection, schema }: { connection: string; schema: string } =
     useParams();
 
+  const args = node ? node.id.toString().split('.') : [];
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
-        const args = node.id.toString().split('.');
         await TableApiClient.createTable(args[0], args[1], name).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: args[0],
@@ -48,6 +54,17 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     }
   };
 
+  useEffect(() => {
+    const getConnectionBasic = async () => {
+      await ConnectionApiClient.getConnectionBasic(args[0]).then((res) =>
+        setConnectionModel(res.data)
+      );
+    };
+    if (node) {
+      getConnectionBasic();
+    }
+  }, [open]);
+
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-6 pb-2 px-8">
@@ -61,6 +78,12 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             />
           </div>
         </div>
+        {connectionModel.provider_type ===
+        ConnectionSpecProviderTypeEnum.duckdb ? (
+          <></>
+        ) : (
+          <></>
+        )}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button
