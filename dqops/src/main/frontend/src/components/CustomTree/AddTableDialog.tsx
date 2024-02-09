@@ -13,7 +13,8 @@ import { useParams } from 'react-router-dom';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
-  CsvFileFormatSpec
+  CsvFileFormatSpec,
+  FileFormatSpec
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
@@ -61,11 +62,20 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     useParams();
 
   const args = node ? node.id.toString().split('.') : [];
+
+  //todo: pass file_paths or file_path_list to createTable method, based on provider type
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
-        await TableApiClient.createTable(args[0], args[1], name).then(() =>
+        await TableApiClient.createTable(args[0], args[1], name, {
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_path_list: paths.filter((x) => x.length !== 0),
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: args[0],
             schemaName: args[1],
@@ -74,7 +84,14 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         );
         refreshNode(node);
       } else {
-        await TableApiClient.createTable(connection, schema, name).then(() =>
+        await TableApiClient.createTable(connection, schema, name, {
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_path_list: paths.filter((x) => x.length !== 0),
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: connection,
             schemaName: schema,

@@ -20,6 +20,7 @@ import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
   CsvFileFormatSpec,
+  FileFormatSpec,
   TableListModelProfilingChecksResultTruncationEnum
 } from '../../../api';
 import NumberInput from '../../NumberInput';
@@ -57,9 +58,13 @@ const TableDetails = () => {
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [paths, setPaths] = useState<Array<string>>(['']);
   const [fileFormatType, setfileFormatType] = useState<fileFormat>(
-    fileFormat.csv
+    (Object.keys(tableBasic?.file_format).find((x) =>
+      x.includes('format')
+    ) as fileFormat) ?? fileFormat.csv
   );
-  const [configuration, setConfiguration] = useState<TConfiguration>({});
+  const [configuration, setConfiguration] = useState<TConfiguration>(
+    tableBasic?.file_format ?? {}
+  );
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setConfiguration((prev) => ({
@@ -107,7 +112,15 @@ const TableDetails = () => {
         connection,
         schema,
         table,
-        tableBasic
+        {
+          ...tableBasic,
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_path_list: paths.filter((x) => x.length !== 0),
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }
       )
     );
     await dispatch(
