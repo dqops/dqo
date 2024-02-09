@@ -109,6 +109,9 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const onChangeFile = (val: fileFormat) => setfileFormatType(val);
 
+  const onDeletePath = (index: number) =>
+    setPaths((prev) => prev.filter((x, i) => i !== index));
+
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-4 pb-2 px-8">
@@ -133,6 +136,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             configuration={configuration}
             onChangeConfiguration={onChangeConfiguration}
             cleanConfiguration={cleanConfiguration}
+            onDeletePath={onDeletePath}
           />
         ) : (
           <></>

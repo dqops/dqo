@@ -125,6 +125,9 @@ const TableDetails = () => {
 
   const onChangeFile = (val: fileFormat) => setfileFormatType(val);
 
+  const onDeletePath = (index: number) =>
+    setPaths((prev) => prev.filter((x, i) => i !== index));
+
   return (
     <div className="p-4">
       <ActionGroup
@@ -232,21 +235,22 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
-      {connectionModel.provider_type ===
-      ConnectionSpecProviderTypeEnum.duckdb ? (
-        <FileFormatConfiguration
-          paths={paths}
-          onAddPath={onAddPath}
-          onChangePath={onChangePath}
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-          configuration={configuration}
-          onChangeConfiguration={onChangeConfiguration}
-          cleanConfiguration={cleanConfiguration}
-        />
-      ) : (
+      {/* {connectionModel.provider_type ===
+      ConnectionSpecProviderTypeEnum.duckdb ? ( */}
+      <FileFormatConfiguration
+        paths={paths}
+        onAddPath={onAddPath}
+        onChangePath={onChangePath}
+        fileFormatType={fileFormatType}
+        onChangeFile={onChangeFile}
+        configuration={configuration}
+        onChangeConfiguration={onChangeConfiguration}
+        cleanConfiguration={cleanConfiguration}
+        onDeletePath={onDeletePath}
+      />
+      {/* ) : (
         <></>
-      )}
+      )} */}
     </div>
   );
 };

@@ -14,6 +14,7 @@ type TFileFormatConfigurationProps = {
   configuration: TConfiguration;
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
+  onDeletePath: (index: number) => void;
 };
 
 enum fileFormat {
@@ -36,7 +37,8 @@ export default function FileFormatConfiguration({
   onChangeFile,
   configuration,
   cleanConfiguration,
-  onChangeConfiguration
+  onChangeConfiguration,
+  onDeletePath
 }: TFileFormatConfigurationProps) {
   // create components for json, parquet etc, with same params required
   const renderConfiguration = () => {
@@ -73,6 +75,7 @@ export default function FileFormatConfiguration({
         paths={paths}
         onAddPath={onAddPath}
         onChangePath={onChangePath}
+        onDeletePath={onDeletePath}
       />
       <div className="flex items-center gap-x-5">
         <div>File format</div>{' '}
