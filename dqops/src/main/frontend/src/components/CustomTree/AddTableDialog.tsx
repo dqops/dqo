@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
+import {
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  IconButton
+} from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
 import {
@@ -11,6 +16,7 @@ import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { ConnectionModel, ConnectionSpecProviderTypeEnum } from '../../api';
+import SvgIcon from '../SvgIcon';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -23,6 +29,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [loading, setLoading] = useState(false);
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const { refreshNode } = useTree();
+  const [paths, setPaths] = useState<Array<string>>(['']);
   const { connection, schema }: { connection: string; schema: string } =
     useParams();
 
@@ -65,6 +72,14 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     }
   }, [open]);
 
+  const onChangePath = (value: string) => {
+    const copiedPaths = [...paths];
+    copiedPaths[paths.length - 1] = value;
+    setPaths(copiedPaths);
+  };
+
+  const onAdd = () => setPaths((prev) => [...prev, '']);
+
   return (
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-6 pb-2 px-8">
@@ -78,12 +93,34 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             />
           </div>
         </div>
-        {connectionModel.provider_type ===
-        ConnectionSpecProviderTypeEnum.duckdb ? (
-          <></>
-        ) : (
-          <></>
-        )}
+        {/* {connectionModel.provider_type ===
+        ConnectionSpecProviderTypeEnum.duckdb ? ( */}
+        <div className="text-sm">
+          {paths.slice(0, paths.length - 1).map((x, index) => (
+            <div key={index} className="text-black py-1">
+              {x}
+            </div>
+          ))}
+          <div className="flex items-center w-full">
+            <div className="pr-4 min-w-40 py-2 w-11/12">
+              <Input
+                className="focus:!ring-0 focus:!border"
+                value={paths.length ? paths[paths.length - 1] : ''}
+                onChange={(e) => onChangePath(e.target.value)}
+              />
+            </div>
+            <div className="px-8 max-w-34 min-w-34 py-2">
+              <div className="flex justify-center">
+                <IconButton size="sm" className="bg-teal-500" onClick={onAdd}>
+                  <SvgIcon name="add" className="w-4" />
+                </IconButton>
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* // ) : (
+        //   <></>
+        // )} */}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button

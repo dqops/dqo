@@ -50,9 +50,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
       <table className="w-full">
         <thead>
           <tr>
-            <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
-            <th className="text-left px-8 py-2"></th>
-            <th className="text-left px-8 py-2"></th>
+            <th className="text-left min-w-40 w-11/12 pr-4 py-2">Label</th>
             <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
               Action
             </th>
@@ -80,7 +78,7 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
             onKeyDown={onKeyDown}
           />
         </div>
-        <div className="px-8 max-w-34 min-w-34 py-2">
+        <div className="px-8 py-2">
           <div className="flex justify-center">
             <IconButton
               size="sm"
