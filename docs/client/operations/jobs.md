@@ -31,7 +31,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/jobs/jobs/123123124324324^
@@ -43,7 +43,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -64,7 +64,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -85,7 +85,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -109,7 +109,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -178,7 +178,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/collectstatistics/withgrouping^
@@ -190,7 +190,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -215,7 +215,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -244,7 +244,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -269,7 +269,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -298,7 +298,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -323,7 +323,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -355,7 +355,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -380,7 +380,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -412,7 +412,7 @@ http://localhost:8888/api/jobs/collectstatistics/withgrouping
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -482,7 +482,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/collectstatistics/table^
@@ -494,7 +494,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -519,7 +519,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -548,7 +548,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -573,7 +573,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -602,7 +602,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -627,7 +627,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -659,7 +659,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -684,7 +684,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -716,7 +716,7 @@ http://localhost:8888/api/jobs/collectstatistics/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CollectStatisticsQueueJobResult(
@@ -786,19 +786,19 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/deletestoreddata^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
+		"{\"connection\":\"sample_connection\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"columnNames\":[\"sample_column\"]}"
 	
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -815,7 +815,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -830,7 +830,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=True,
+		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		column_names=[
@@ -846,7 +846,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DeleteStoredDataQueueJobResult(
@@ -863,7 +863,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -878,7 +878,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=True,
+		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		column_names=[
@@ -894,7 +894,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DeleteStoredDataQueueJobResult(
@@ -911,7 +911,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -929,7 +929,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=True,
+		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		column_names=[
@@ -945,7 +945,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DeleteStoredDataQueueJobResult(
@@ -962,7 +962,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -980,7 +980,7 @@ http://localhost:8888/api/jobs/deletestoreddata
 		connection='sample_connection',
 		full_table_name='sample_schema.sample_table',
 		delete_errors=True,
-		delete_statistics=True,
+		delete_statistics=False,
 		delete_check_results=True,
 		delete_sensor_readouts=True,
 		column_names=[
@@ -996,7 +996,7 @@ http://localhost:8888/api/jobs/deletestoreddata
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DeleteStoredDataQueueJobResult(
@@ -1042,7 +1042,7 @@ http://localhost:8888/api/jobs/jobs
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/jobs^
@@ -1051,7 +1051,7 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1079,7 +1079,7 @@ http://localhost:8888/api/jobs/jobs
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1097,7 +1097,7 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueInitialSnapshotModel(
@@ -1127,7 +1127,7 @@ http://localhost:8888/api/jobs/jobs
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1145,7 +1145,7 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueInitialSnapshotModel(
@@ -1175,7 +1175,7 @@ http://localhost:8888/api/jobs/jobs
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1196,7 +1196,7 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueInitialSnapshotModel(
@@ -1226,7 +1226,7 @@ http://localhost:8888/api/jobs/jobs
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1247,7 +1247,7 @@ http://localhost:8888/api/jobs/jobs
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueInitialSnapshotModel(
@@ -1313,7 +1313,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/jobs/123123124324324^
@@ -1322,7 +1322,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1336,7 +1336,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1355,7 +1355,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -1369,7 +1369,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1388,7 +1388,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -1402,7 +1402,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1424,7 +1424,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -1438,7 +1438,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1460,7 +1460,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -1510,7 +1510,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/jobchangessince/3854372^
@@ -1519,7 +1519,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1547,7 +1547,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1566,7 +1566,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueIncrementalSnapshotModel(
@@ -1596,7 +1596,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1615,7 +1615,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueIncrementalSnapshotModel(
@@ -1645,7 +1645,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1667,7 +1667,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueIncrementalSnapshotModel(
@@ -1697,7 +1697,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1719,7 +1719,7 @@ http://localhost:8888/api/jobs/jobchangessince/{sequenceNumber}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobQueueIncrementalSnapshotModel(
@@ -1794,7 +1794,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/importtables^
@@ -1806,7 +1806,7 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1846,7 +1846,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1873,7 +1873,7 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ImportTablesQueueJobResult(
@@ -1923,7 +1923,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1950,7 +1950,7 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ImportTablesQueueJobResult(
@@ -2000,7 +2000,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2030,7 +2030,7 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ImportTablesQueueJobResult(
@@ -2080,7 +2080,7 @@ http://localhost:8888/api/jobs/importtables
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2110,7 +2110,7 @@ http://localhost:8888/api/jobs/importtables
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ImportTablesQueueJobResult(
@@ -2182,7 +2182,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/scheduler/isrunning^
@@ -2194,7 +2194,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2215,7 +2215,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2236,7 +2236,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2260,7 +2260,7 @@ http://localhost:8888/api/jobs/scheduler/isrunning
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2329,7 +2329,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/runchecks^
@@ -2341,7 +2341,7 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2367,7 +2367,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2398,7 +2398,7 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -2424,7 +2424,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2455,7 +2455,7 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -2481,7 +2481,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2515,7 +2515,7 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -2541,7 +2541,7 @@ http://localhost:8888/api/jobs/runchecks
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2575,7 +2575,7 @@ http://localhost:8888/api/jobs/runchecks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -2630,7 +2630,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/start^
@@ -2639,7 +2639,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2650,7 +2650,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2667,7 +2667,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2678,7 +2678,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2695,7 +2695,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2706,7 +2706,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2726,7 +2726,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2737,7 +2737,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2757,7 +2757,7 @@ http://localhost:8888/api/jobs/scheduler/status/start
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2797,7 +2797,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/scheduler/status/stop^
@@ -2806,7 +2806,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2817,7 +2817,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2834,7 +2834,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2845,7 +2845,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2862,7 +2862,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2873,7 +2873,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2893,7 +2893,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2904,7 +2904,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2924,7 +2924,7 @@ http://localhost:8888/api/jobs/scheduler/status/stop
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SpringErrorPayload()
@@ -2980,7 +2980,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/jobs/synchronize^
@@ -2992,7 +2992,7 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3005,7 +3005,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3044,7 +3044,7 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
@@ -3055,7 +3055,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3094,7 +3094,7 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
@@ -3105,7 +3105,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3147,7 +3147,7 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
@@ -3158,7 +3158,7 @@ http://localhost:8888/api/jobs/synchronize
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3200,7 +3200,7 @@ http://localhost:8888/api/jobs/synchronize
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SynchronizeMultipleFoldersQueueJobResult(status=DqoJobStatus.QUEUED)
@@ -3248,7 +3248,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/jobs/123123124324324/wait^
@@ -3257,7 +3257,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3271,7 +3271,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3290,7 +3290,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -3304,7 +3304,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3323,7 +3323,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -3337,7 +3337,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3359,7 +3359,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -3373,7 +3373,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3395,7 +3395,7 @@ http://localhost:8888/api/jobs/jobs/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoJobHistoryEntryModel(
@@ -3446,7 +3446,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/jobs/runchecks/123123124324324/wait^
@@ -3455,7 +3455,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3481,7 +3481,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3500,7 +3500,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -3526,7 +3526,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3545,7 +3545,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -3571,7 +3571,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3593,7 +3593,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(
@@ -3619,7 +3619,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3641,7 +3641,7 @@ http://localhost:8888/api/jobs/runchecks/{jobId}/wait
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RunChecksQueueJobResult(

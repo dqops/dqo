@@ -44,9 +44,9 @@ class ColumnNullsProfilingChecksSpec:
             rules should match the type of the configured sensor and rule for the custom check.
         profile_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         profile_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
+        profile_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         profile_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         profile_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        profile_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         profile_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         profile_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         profile_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -56,11 +56,11 @@ class ColumnNullsProfilingChecksSpec:
     custom_checks: Union[Unset, "ColumnNullsProfilingChecksSpecCustomChecks"] = UNSET
     profile_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     profile_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
-    profile_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
-    profile_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
     profile_nulls_percent_anomaly: Union[
         Unset, "ColumnNullPercentAnomalyStationaryCheckSpec"
     ] = UNSET
+    profile_not_nulls_count: Union[Unset, "ColumnNotNullsCountCheckSpec"] = UNSET
+    profile_not_nulls_percent: Union[Unset, "ColumnNotNullsPercentCheckSpec"] = UNSET
     profile_nulls_percent_change: Union[
         Unset, "ColumnNullPercentChangeCheckSpec"
     ] = UNSET
@@ -88,6 +88,10 @@ class ColumnNullsProfilingChecksSpec:
         if not isinstance(self.profile_nulls_percent, Unset):
             profile_nulls_percent = self.profile_nulls_percent.to_dict()
 
+        profile_nulls_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.profile_nulls_percent_anomaly, Unset):
+            profile_nulls_percent_anomaly = self.profile_nulls_percent_anomaly.to_dict()
+
         profile_not_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_not_nulls_count, Unset):
             profile_not_nulls_count = self.profile_not_nulls_count.to_dict()
@@ -95,10 +99,6 @@ class ColumnNullsProfilingChecksSpec:
         profile_not_nulls_percent: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_not_nulls_percent, Unset):
             profile_not_nulls_percent = self.profile_not_nulls_percent.to_dict()
-
-        profile_nulls_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.profile_nulls_percent_anomaly, Unset):
-            profile_nulls_percent_anomaly = self.profile_nulls_percent_anomaly.to_dict()
 
         profile_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.profile_nulls_percent_change, Unset):
@@ -131,12 +131,12 @@ class ColumnNullsProfilingChecksSpec:
             field_dict["profile_nulls_count"] = profile_nulls_count
         if profile_nulls_percent is not UNSET:
             field_dict["profile_nulls_percent"] = profile_nulls_percent
+        if profile_nulls_percent_anomaly is not UNSET:
+            field_dict["profile_nulls_percent_anomaly"] = profile_nulls_percent_anomaly
         if profile_not_nulls_count is not UNSET:
             field_dict["profile_not_nulls_count"] = profile_not_nulls_count
         if profile_not_nulls_percent is not UNSET:
             field_dict["profile_not_nulls_percent"] = profile_not_nulls_percent
-        if profile_nulls_percent_anomaly is not UNSET:
-            field_dict["profile_nulls_percent_anomaly"] = profile_nulls_percent_anomaly
         if profile_nulls_percent_change is not UNSET:
             field_dict["profile_nulls_percent_change"] = profile_nulls_percent_change
         if profile_nulls_percent_change_1_day is not UNSET:
@@ -211,6 +211,19 @@ class ColumnNullsProfilingChecksSpec:
                 _profile_nulls_percent
             )
 
+        _profile_nulls_percent_anomaly = d.pop("profile_nulls_percent_anomaly", UNSET)
+        profile_nulls_percent_anomaly: Union[
+            Unset, ColumnNullPercentAnomalyStationaryCheckSpec
+        ]
+        if isinstance(_profile_nulls_percent_anomaly, Unset):
+            profile_nulls_percent_anomaly = UNSET
+        else:
+            profile_nulls_percent_anomaly = (
+                ColumnNullPercentAnomalyStationaryCheckSpec.from_dict(
+                    _profile_nulls_percent_anomaly
+                )
+            )
+
         _profile_not_nulls_count = d.pop("profile_not_nulls_count", UNSET)
         profile_not_nulls_count: Union[Unset, ColumnNotNullsCountCheckSpec]
         if isinstance(_profile_not_nulls_count, Unset):
@@ -227,19 +240,6 @@ class ColumnNullsProfilingChecksSpec:
         else:
             profile_not_nulls_percent = ColumnNotNullsPercentCheckSpec.from_dict(
                 _profile_not_nulls_percent
-            )
-
-        _profile_nulls_percent_anomaly = d.pop("profile_nulls_percent_anomaly", UNSET)
-        profile_nulls_percent_anomaly: Union[
-            Unset, ColumnNullPercentAnomalyStationaryCheckSpec
-        ]
-        if isinstance(_profile_nulls_percent_anomaly, Unset):
-            profile_nulls_percent_anomaly = UNSET
-        else:
-            profile_nulls_percent_anomaly = (
-                ColumnNullPercentAnomalyStationaryCheckSpec.from_dict(
-                    _profile_nulls_percent_anomaly
-                )
             )
 
         _profile_nulls_percent_change = d.pop("profile_nulls_percent_change", UNSET)
@@ -300,9 +300,9 @@ class ColumnNullsProfilingChecksSpec:
             custom_checks=custom_checks,
             profile_nulls_count=profile_nulls_count,
             profile_nulls_percent=profile_nulls_percent,
+            profile_nulls_percent_anomaly=profile_nulls_percent_anomaly,
             profile_not_nulls_count=profile_not_nulls_count,
             profile_not_nulls_percent=profile_not_nulls_percent,
-            profile_nulls_percent_anomaly=profile_nulls_percent_anomaly,
             profile_nulls_percent_change=profile_nulls_percent_change,
             profile_nulls_percent_change_1_day=profile_nulls_percent_change_1_day,
             profile_nulls_percent_change_7_days=profile_nulls_percent_change_7_days,

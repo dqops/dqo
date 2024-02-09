@@ -779,7 +779,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1317,7 +1317,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1339,7 +1339,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1361,7 +1361,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1384,7 +1384,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1407,7 +1407,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1434,7 +1434,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1529,7 +1529,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1552,7 +1552,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1574,7 +1574,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1596,7 +1596,7 @@ The templates used to generate the SQL query for each data source supported by D
                         THEN 1
                     ELSE 0
                 END
-            )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

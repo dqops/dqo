@@ -38,7 +38,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
@@ -53,7 +53,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -95,7 +95,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -137,7 +137,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -182,7 +182,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -256,7 +256,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
@@ -268,7 +268,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -289,7 +289,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -310,7 +310,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -334,7 +334,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -387,7 +387,7 @@ http://localhost:8888/api/sensors
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/sensors^
@@ -396,7 +396,7 @@ http://localhost:8888/api/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -419,7 +419,7 @@ http://localhost:8888/api/sensors
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -437,7 +437,7 @@ http://localhost:8888/api/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -464,7 +464,7 @@ http://localhost:8888/api/sensors
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -482,7 +482,7 @@ http://localhost:8888/api/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -509,7 +509,7 @@ http://localhost:8888/api/sensors
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -530,7 +530,7 @@ http://localhost:8888/api/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -557,7 +557,7 @@ http://localhost:8888/api/sensors
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -578,7 +578,7 @@ http://localhost:8888/api/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -641,7 +641,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
@@ -650,7 +650,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -677,7 +677,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -696,7 +696,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorModel(
@@ -721,7 +721,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -740,7 +740,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorModel(
@@ -765,7 +765,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -787,7 +787,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorModel(
@@ -812,7 +812,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -834,7 +834,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorModel(
@@ -888,7 +888,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/sensors^
@@ -897,7 +897,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -910,7 +910,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -928,7 +928,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorFolderModel(
@@ -946,7 +946,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -964,7 +964,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorFolderModel(
@@ -982,7 +982,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1003,7 +1003,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorFolderModel(
@@ -1021,7 +1021,7 @@ http://localhost:8888/api/definitions/sensors
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1042,7 +1042,7 @@ http://localhost:8888/api/definitions/sensors
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     SensorFolderModel(
@@ -1097,7 +1097,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/sensors/sample_target/sample_category/sample_sensor^
@@ -1112,7 +1112,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1154,7 +1154,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1196,7 +1196,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1241,7 +1241,7 @@ http://localhost:8888/api/sensors/{fullSensorName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

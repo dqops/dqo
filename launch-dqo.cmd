@@ -15,4 +15,4 @@
 @REM limitations under the License.
 @REM
 
-"%DQO_RUNNER%" %DQO_JAVA_OPTS% --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*
+"%DQO_RUNNER%" %DQO_JAVA_OPTS% --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*

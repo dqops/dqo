@@ -42,7 +42,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/comparisons/sample_table_comparison/results^
@@ -51,7 +51,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -65,7 +65,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -89,7 +89,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -107,7 +107,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -131,7 +131,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -149,7 +149,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -176,7 +176,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -194,7 +194,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -221,7 +221,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -279,7 +279,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/comparisons/sample_table_comparison/results^
@@ -288,7 +288,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -302,7 +302,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -326,7 +326,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -344,7 +344,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -368,7 +368,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -386,7 +386,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -413,7 +413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -431,7 +431,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -458,7 +458,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -515,7 +515,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/comparisons/sample_table_comparison/results^
@@ -524,7 +524,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -538,7 +538,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -560,7 +560,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -578,7 +578,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -600,7 +600,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -618,7 +618,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -643,7 +643,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(
@@ -661,7 +661,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -686,7 +686,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonResultsModel(

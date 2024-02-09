@@ -495,10 +495,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    COUNT_BIG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                COUNT_BIG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -507,10 +507,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(referenced_table.[customer_id])
+                    COUNT_BIG(referenced_table.[customer_id])
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(analyzed_table.[target_column]) AS actual_value
+                COUNT_BIG(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1039,10 +1039,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    COUNT_BIG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                COUNT_BIG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -1051,10 +1051,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(referenced_table.[customer_id])
+                    COUNT_BIG(referenced_table.[customer_id])
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(analyzed_table.[target_column]) AS actual_value
+                COUNT_BIG(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1583,10 +1583,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                    COUNT_BIG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                COUNT_BIG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -1595,10 +1595,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(referenced_table.[customer_id])
+                    COUNT_BIG(referenced_table.[customer_id])
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(analyzed_table.[target_column]) AS actual_value
+                COUNT_BIG(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"

@@ -638,8 +638,8 @@ The rule definition YAML file *comparison/detected_datatype_equals.dqorule.yaml*
       - field_name: expected_datatype
         display_name: expected_datatype
         help_text: "Expected data type code, the values for the sensor's actual values\
-          \ are: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6\
-          \ - texts, 7 - mixed data types."
+          \ are: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 -\
+          \ texts, 8 - mixed data types."
         data_type: enum
         allowed_values:
         - integers

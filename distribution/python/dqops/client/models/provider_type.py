@@ -4,6 +4,7 @@ from enum import Enum
 class ProviderType(str, Enum):
     BIGQUERY = "bigquery"
     DATABRICKS = "databricks"
+    DUCKDB = "duckdb"
     MYSQL = "mysql"
     ORACLE = "oracle"
     POSTGRESQL = "postgresql"

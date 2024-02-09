@@ -45,4 +45,4 @@ if [ $returnedValue -ne 0 ]; then
     exit $returnedValue
 fi
 
-$DQO_RUNNER $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*
+$DQO_RUNNER $DQO_JAVA_OPTS --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -cp "$DQO_LAUNCH_CLASSPATH" org.springframework.boot.loader.JarLauncher $*

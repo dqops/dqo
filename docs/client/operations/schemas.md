@@ -49,7 +49,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/daily/model^
@@ -58,7 +58,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -81,7 +81,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -104,7 +104,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -137,7 +137,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -160,7 +160,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -193,7 +193,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -219,7 +219,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -252,7 +252,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -278,7 +278,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -352,7 +352,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/daily^
@@ -361,7 +361,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -378,7 +378,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -401,7 +401,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -428,7 +428,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -451,7 +451,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -478,7 +478,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -504,7 +504,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -531,7 +531,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -557,7 +557,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -631,7 +631,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/daily/model^
@@ -640,7 +640,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -663,7 +663,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -686,7 +686,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -719,7 +719,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -742,7 +742,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -775,7 +775,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -801,7 +801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -834,7 +834,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -860,7 +860,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -934,7 +934,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/daily^
@@ -943,7 +943,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -960,7 +960,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -983,7 +983,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1010,7 +1010,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1033,7 +1033,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1060,7 +1060,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1086,7 +1086,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1113,7 +1113,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1139,7 +1139,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1212,7 +1212,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
@@ -1221,7 +1221,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1244,7 +1244,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1265,7 +1265,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1298,7 +1298,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1319,7 +1319,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1352,7 +1352,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1376,7 +1376,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1409,7 +1409,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1433,7 +1433,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1506,7 +1506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling^
@@ -1515,7 +1515,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1532,7 +1532,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1553,7 +1553,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1580,7 +1580,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1601,7 +1601,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1628,7 +1628,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1652,7 +1652,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1679,7 +1679,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1703,7 +1703,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1766,7 +1766,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas^
@@ -1775,7 +1775,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1801,7 +1801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1820,7 +1820,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1850,7 +1850,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1869,7 +1869,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1899,7 +1899,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1921,7 +1921,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1951,7 +1951,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1973,7 +1973,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [

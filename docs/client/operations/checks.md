@@ -38,7 +38,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -53,7 +53,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -87,7 +87,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -121,7 +121,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -158,7 +158,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -224,7 +224,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -236,7 +236,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -257,7 +257,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -278,7 +278,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -302,7 +302,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -355,7 +355,7 @@ http://localhost:8888/api/checks
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/checks^
@@ -364,7 +364,7 @@ http://localhost:8888/api/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -393,7 +393,7 @@ http://localhost:8888/api/checks
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -411,7 +411,7 @@ http://localhost:8888/api/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -444,7 +444,7 @@ http://localhost:8888/api/checks
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -462,7 +462,7 @@ http://localhost:8888/api/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -495,7 +495,7 @@ http://localhost:8888/api/checks
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -516,7 +516,7 @@ http://localhost:8888/api/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -549,7 +549,7 @@ http://localhost:8888/api/checks
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -570,7 +570,7 @@ http://localhost:8888/api/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -639,7 +639,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -648,7 +648,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -668,7 +668,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -687,7 +687,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionModel(
@@ -707,7 +707,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -726,7 +726,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionModel(
@@ -746,7 +746,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -768,7 +768,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionModel(
@@ -788,7 +788,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -810,7 +810,7 @@ http://localhost:8888/api/checks/{fullCheckName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionModel(
@@ -859,7 +859,7 @@ http://localhost:8888/api/definitions/checks
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/checks^
@@ -868,7 +868,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -879,7 +879,7 @@ http://localhost:8888/api/definitions/checks
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -897,7 +897,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionFolderModel(
@@ -912,7 +912,7 @@ http://localhost:8888/api/definitions/checks
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -930,7 +930,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionFolderModel(
@@ -945,7 +945,7 @@ http://localhost:8888/api/definitions/checks
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -966,7 +966,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionFolderModel(
@@ -981,7 +981,7 @@ http://localhost:8888/api/definitions/checks
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1002,7 +1002,7 @@ http://localhost:8888/api/definitions/checks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckDefinitionFolderModel(
@@ -1053,7 +1053,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -1068,7 +1068,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1102,7 +1102,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1136,7 +1136,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1173,7 +1173,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

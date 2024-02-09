@@ -38,7 +38,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas^
@@ -47,7 +47,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -64,7 +64,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -83,7 +83,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -98,7 +98,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -117,7 +117,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -132,7 +132,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -154,7 +154,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -169,7 +169,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -191,7 +191,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -243,7 +243,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/datasource/connections/sample_connection/schemas/sample_schema/tables^
@@ -252,7 +252,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -269,7 +269,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -289,7 +289,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -304,7 +304,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -324,7 +324,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -339,7 +339,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -362,7 +362,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -377,7 +377,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -400,7 +400,7 @@ http://localhost:8888/api/datasource/connections/{connectionName}/schemas/{schem
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -458,7 +458,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/datasource/testconnection^
@@ -470,7 +470,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -481,7 +481,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -556,7 +556,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ConnectionTestModel()
@@ -567,7 +567,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -642,7 +642,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ConnectionTestModel()
@@ -653,7 +653,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -731,7 +731,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ConnectionTestModel()
@@ -742,7 +742,7 @@ http://localhost:8888/api/datasource/testconnection
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -820,7 +820,7 @@ http://localhost:8888/api/datasource/testconnection
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     ConnectionTestModel()

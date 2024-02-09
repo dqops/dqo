@@ -31,7 +31,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
@@ -40,7 +40,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -74,7 +74,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -92,7 +92,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -133,7 +133,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -151,7 +151,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -192,7 +192,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -213,7 +213,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -254,7 +254,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -275,7 +275,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -345,7 +345,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
@@ -354,7 +354,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -388,7 +388,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -406,7 +406,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -447,7 +447,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -465,7 +465,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -506,7 +506,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -527,7 +527,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -568,7 +568,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -589,7 +589,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -659,7 +659,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
@@ -668,7 +668,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -702,7 +702,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -720,7 +720,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -761,7 +761,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -779,7 +779,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -820,7 +820,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -841,7 +841,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -882,7 +882,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -903,7 +903,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -973,7 +973,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
@@ -982,7 +982,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1016,7 +1016,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1034,7 +1034,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1075,7 +1075,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1093,7 +1093,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1134,7 +1134,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1155,7 +1155,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1196,7 +1196,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1217,7 +1217,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1287,7 +1287,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/column^
@@ -1296,7 +1296,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1330,7 +1330,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1348,7 +1348,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1389,7 +1389,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1407,7 +1407,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1448,7 +1448,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1469,7 +1469,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1510,7 +1510,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1531,7 +1531,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1601,7 +1601,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
@@ -1610,7 +1610,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1644,7 +1644,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1662,7 +1662,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1703,7 +1703,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1721,7 +1721,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1762,7 +1762,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1783,7 +1783,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1824,7 +1824,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1845,7 +1845,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     CheckContainerModel(
@@ -1922,7 +1922,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
@@ -1931,7 +1931,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1944,7 +1944,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1964,7 +1964,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     MonitoringScheduleSpec(
@@ -1978,7 +1978,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1998,7 +1998,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     MonitoringScheduleSpec(
@@ -2012,7 +2012,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2035,7 +2035,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     MonitoringScheduleSpec(
@@ -2049,7 +2049,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2072,7 +2072,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     MonitoringScheduleSpec(
@@ -2115,7 +2115,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultwebhooks^
@@ -2124,7 +2124,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2140,7 +2140,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2158,7 +2158,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentWebhookNotificationsSpec(
@@ -2174,7 +2174,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2192,7 +2192,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentWebhookNotificationsSpec(
@@ -2208,7 +2208,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2229,7 +2229,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentWebhookNotificationsSpec(
@@ -2245,7 +2245,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2266,7 +2266,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentWebhookNotificationsSpec(
@@ -2311,7 +2311,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
@@ -2326,7 +2326,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2383,7 +2383,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2440,7 +2440,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2500,7 +2500,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2589,7 +2589,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
@@ -2604,7 +2604,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2661,7 +2661,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2718,7 +2718,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2778,7 +2778,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2867,7 +2867,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
@@ -2882,7 +2882,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2939,7 +2939,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2996,7 +2996,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3056,7 +3056,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3145,7 +3145,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
@@ -3160,7 +3160,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3217,7 +3217,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3274,7 +3274,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3334,7 +3334,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3423,7 +3423,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column^
@@ -3438,7 +3438,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3495,7 +3495,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3552,7 +3552,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3612,7 +3612,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3701,7 +3701,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table^
@@ -3716,7 +3716,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3773,7 +3773,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3830,7 +3830,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3890,7 +3890,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3986,7 +3986,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
@@ -4001,7 +4001,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4030,7 +4030,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4059,7 +4059,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4091,7 +4091,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4152,7 +4152,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks^
@@ -4167,7 +4167,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4196,7 +4196,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4225,7 +4225,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4257,7 +4257,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

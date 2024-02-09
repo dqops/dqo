@@ -31,7 +31,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/dictionaries^
@@ -46,7 +46,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -78,7 +78,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -110,7 +110,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -145,7 +145,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -209,7 +209,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/dictionaries/status_codes.csv^
@@ -221,7 +221,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -242,7 +242,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -263,7 +263,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -287,7 +287,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -340,7 +340,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}/download
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dictionaries/status_codes.csv/download^
@@ -352,7 +352,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}/download
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -374,7 +374,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}/download
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -396,7 +396,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}/download
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -421,7 +421,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}/download
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -475,7 +475,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dictionaries^
@@ -484,7 +484,7 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -504,7 +504,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -522,7 +522,7 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -546,7 +546,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -564,7 +564,7 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -588,7 +588,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -609,7 +609,7 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -633,7 +633,7 @@ http://localhost:8888/api/dictionaries
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -654,7 +654,7 @@ http://localhost:8888/api/dictionaries
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -714,7 +714,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dictionaries/status_codes.csv^
@@ -723,7 +723,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -737,7 +737,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -756,7 +756,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DataDictionaryModel(
@@ -775,7 +775,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -794,7 +794,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DataDictionaryModel(
@@ -813,7 +813,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -835,7 +835,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DataDictionaryModel(
@@ -854,7 +854,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -876,7 +876,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DataDictionaryModel(
@@ -931,7 +931,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/dictionaries/status_codes.csv^
@@ -946,7 +946,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -979,7 +979,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1012,7 +1012,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1048,7 +1048,7 @@ http://localhost:8888/api/dictionaries/{dictionaryName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

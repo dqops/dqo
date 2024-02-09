@@ -154,7 +154,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -174,7 +174,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -207,7 +207,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -227,7 +227,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -260,7 +260,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -282,7 +282,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -315,7 +315,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -335,7 +335,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -368,7 +368,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -396,7 +396,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -435,7 +435,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -457,7 +457,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -490,7 +490,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -517,7 +517,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -556,7 +556,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -578,7 +578,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -611,7 +611,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -631,7 +631,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -664,7 +664,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -684,7 +684,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -729,13 +729,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -751,13 +751,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -786,7 +786,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -813,7 +813,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -902,7 +902,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -921,7 +921,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -955,7 +955,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -974,7 +974,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1008,7 +1008,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1029,7 +1029,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1063,7 +1063,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1082,7 +1082,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1116,7 +1116,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1143,7 +1143,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1188,7 +1188,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1209,7 +1209,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1243,7 +1243,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1269,7 +1269,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1314,7 +1314,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1335,7 +1335,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1369,7 +1369,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1388,7 +1388,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1422,7 +1422,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1441,7 +1441,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1487,13 +1487,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1508,13 +1508,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -1547,7 +1547,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1573,7 +1573,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1745,7 +1745,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1765,7 +1765,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1798,7 +1798,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1818,7 +1818,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1851,7 +1851,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1873,7 +1873,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -1906,7 +1906,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1926,7 +1926,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -1959,7 +1959,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -1987,7 +1987,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2026,7 +2026,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2048,7 +2048,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2081,7 +2081,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2108,7 +2108,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2147,7 +2147,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2169,7 +2169,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2202,7 +2202,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2222,7 +2222,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2255,7 +2255,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2275,7 +2275,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -2320,13 +2320,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2342,13 +2342,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
@@ -2377,7 +2377,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2404,7 +2404,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2494,7 +2494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2513,7 +2513,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -2547,7 +2547,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2566,7 +2566,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -2600,7 +2600,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2621,7 +2621,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2655,7 +2655,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2674,7 +2674,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -2708,7 +2708,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2735,7 +2735,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2780,7 +2780,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2801,7 +2801,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2835,7 +2835,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2861,7 +2861,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2906,7 +2906,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2927,7 +2927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -2961,7 +2961,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -2980,7 +2980,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3014,7 +3014,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3033,7 +3033,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -3079,13 +3079,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3100,13 +3100,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -3139,7 +3139,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3165,7 +3165,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3337,7 +3337,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3357,7 +3357,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -3390,7 +3390,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3410,7 +3410,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -3443,7 +3443,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3465,7 +3465,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3498,7 +3498,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3518,7 +3518,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -3551,7 +3551,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3579,7 +3579,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3618,7 +3618,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3640,7 +3640,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3673,7 +3673,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3700,7 +3700,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3739,7 +3739,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3761,7 +3761,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3794,7 +3794,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3814,7 +3814,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -3847,7 +3847,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3867,7 +3867,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -3912,13 +3912,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3934,13 +3934,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -3969,7 +3969,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -3996,7 +3996,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4086,7 +4086,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4105,7 +4105,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -4139,7 +4139,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4158,7 +4158,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -4192,7 +4192,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4213,7 +4213,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4247,7 +4247,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4266,7 +4266,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -4300,7 +4300,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4327,7 +4327,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4372,7 +4372,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4393,7 +4393,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4427,7 +4427,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4453,7 +4453,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4498,7 +4498,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4519,7 +4519,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4553,7 +4553,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4572,7 +4572,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4606,7 +4606,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4625,7 +4625,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -4671,13 +4671,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4692,13 +4692,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -4731,7 +4731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4757,7 +4757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -4939,7 +4939,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -4959,7 +4959,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -4992,7 +4992,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5012,7 +5012,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5045,7 +5045,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5067,7 +5067,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5100,7 +5100,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5120,7 +5120,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5153,7 +5153,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5181,7 +5181,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5220,7 +5220,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5242,7 +5242,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5275,7 +5275,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5302,7 +5302,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5341,7 +5341,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5363,7 +5363,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5396,7 +5396,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5416,7 +5416,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5449,7 +5449,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5469,7 +5469,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5514,13 +5514,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5536,13 +5536,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
@@ -5572,7 +5572,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5599,7 +5599,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5699,7 +5699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5718,7 +5718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5752,7 +5752,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5771,7 +5771,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5805,7 +5805,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5826,7 +5826,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5860,7 +5860,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5879,7 +5879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -5913,7 +5913,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -5940,7 +5940,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -5985,7 +5985,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6006,7 +6006,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6040,7 +6040,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6066,7 +6066,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6111,7 +6111,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6132,7 +6132,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6166,7 +6166,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6185,7 +6185,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6219,7 +6219,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6238,7 +6238,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -6284,13 +6284,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6305,13 +6305,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -6342,7 +6342,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6368,7 +6368,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6550,7 +6550,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6570,7 +6570,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -6603,7 +6603,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6623,7 +6623,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -6656,7 +6656,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6678,7 +6678,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6711,7 +6711,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6731,7 +6731,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -6764,7 +6764,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6792,7 +6792,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6831,7 +6831,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6853,7 +6853,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6886,7 +6886,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6913,7 +6913,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -6952,7 +6952,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -6974,7 +6974,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7007,7 +7007,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7027,7 +7027,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7060,7 +7060,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7080,7 +7080,7 @@ spec:
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -7125,13 +7125,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7147,13 +7147,13 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
@@ -7183,7 +7183,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7210,7 +7210,7 @@ spec:
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7310,7 +7310,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7329,7 +7329,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -7363,7 +7363,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7382,7 +7382,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -7416,7 +7416,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7437,7 +7437,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7471,7 +7471,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7490,7 +7490,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -7524,7 +7524,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7551,7 +7551,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7596,7 +7596,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7617,7 +7617,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7651,7 +7651,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7677,7 +7677,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7722,7 +7722,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7743,7 +7743,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7777,7 +7777,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7796,7 +7796,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
@@ -7830,7 +7830,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7849,7 +7849,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN CAST(analyzed_table.`target_column` AS DATE) >= '1900-01-02' AND CAST(analyzed_table.`target_column` AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
@@ -7895,13 +7895,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_date) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_date) }} THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7916,13 +7916,13 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table.[target_column] AS DATE) >= '1900-01-02' AND TRY_CAST(analyzed_table.[target_column] AS DATE) <= '2099-12-30' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -7953,7 +7953,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ render_date_format_cast() }} >= CAST({{ lib.make_text_constant(parameters.min_date) }} AS TIMESTAMP) AND {{ render_date_format_cast() }} <= CAST({{ lib.make_text_constant(parameters.max_date) }} AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
@@ -7979,7 +7979,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= CAST('1900-01-02' AS TIMESTAMP) AND TRY_CAST(analyzed_table."target_column" AS DATE) <= CAST('2099-12-30' AS TIMESTAMP) THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,

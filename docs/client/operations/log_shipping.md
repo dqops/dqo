@@ -31,7 +31,7 @@ http://localhost:8888/api/logs/debug
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/debug^
@@ -46,7 +46,7 @@ http://localhost:8888/api/logs/debug
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -73,7 +73,7 @@ http://localhost:8888/api/logs/debug
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -100,7 +100,7 @@ http://localhost:8888/api/logs/debug
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -130,7 +130,7 @@ http://localhost:8888/api/logs/debug
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -189,7 +189,7 @@ http://localhost:8888/api/logs/error
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/error^
@@ -204,7 +204,7 @@ http://localhost:8888/api/logs/error
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -231,7 +231,7 @@ http://localhost:8888/api/logs/error
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -258,7 +258,7 @@ http://localhost:8888/api/logs/error
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -288,7 +288,7 @@ http://localhost:8888/api/logs/error
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -347,7 +347,7 @@ http://localhost:8888/api/logs/info
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/info^
@@ -362,7 +362,7 @@ http://localhost:8888/api/logs/info
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -389,7 +389,7 @@ http://localhost:8888/api/logs/info
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -416,7 +416,7 @@ http://localhost:8888/api/logs/info
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -446,7 +446,7 @@ http://localhost:8888/api/logs/info
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -505,7 +505,7 @@ http://localhost:8888/api/logs/warn
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/logs/warn^
@@ -520,7 +520,7 @@ http://localhost:8888/api/logs/warn
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -547,7 +547,7 @@ http://localhost:8888/api/logs/warn
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -574,7 +574,7 @@ http://localhost:8888/api/logs/warn
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -604,7 +604,7 @@ http://localhost:8888/api/logs/warn
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

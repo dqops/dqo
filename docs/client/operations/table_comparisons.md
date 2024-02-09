@@ -40,7 +40,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations^
@@ -55,7 +55,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -99,7 +99,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -143,7 +143,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -190,7 +190,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -275,14 +275,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -290,7 +290,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -343,7 +343,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -370,7 +370,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -423,7 +423,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -450,7 +450,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -506,7 +506,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -533,7 +533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -589,7 +589,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -654,14 +654,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -669,7 +669,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -722,7 +722,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -749,7 +749,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -802,7 +802,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -829,7 +829,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -885,7 +885,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -912,7 +912,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -968,7 +968,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1033,14 +1033,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1048,7 +1048,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1101,7 +1101,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1128,7 +1128,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1181,7 +1181,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1208,7 +1208,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1264,7 +1264,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1291,7 +1291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1347,7 +1347,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1412,14 +1412,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1427,7 +1427,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1480,7 +1480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1507,7 +1507,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1560,7 +1560,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1587,7 +1587,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1643,7 +1643,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1670,7 +1670,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1726,7 +1726,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1791,14 +1791,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -1806,7 +1806,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1859,7 +1859,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1886,7 +1886,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1939,7 +1939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -1966,7 +1966,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2022,7 +2022,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -2049,7 +2049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2105,7 +2105,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -2164,7 +2164,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
@@ -2176,7 +2176,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2200,7 +2200,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2224,7 +2224,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2251,7 +2251,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2317,7 +2317,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
@@ -2326,7 +2326,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2349,7 +2349,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2371,7 +2371,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonConfigurationModel(
@@ -2396,7 +2396,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2418,7 +2418,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonConfigurationModel(
@@ -2443,7 +2443,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2468,7 +2468,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonConfigurationModel(
@@ -2493,7 +2493,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2518,7 +2518,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonConfigurationModel(
@@ -2583,7 +2583,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations^
@@ -2592,7 +2592,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -2639,7 +2639,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2662,7 +2662,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -2719,7 +2719,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2742,7 +2742,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -2799,7 +2799,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2825,7 +2825,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -2882,7 +2882,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -2908,7 +2908,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -3004,7 +3004,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/daily^
@@ -3013,7 +3013,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3049,7 +3049,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    "connection" : "unknown",
 	    "fullTableName" : "sample_schema.sample_table",
 	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
+	    "deleteStatistics" : false,
 	    "deleteCheckResults" : true,
 	    "deleteSensorReadouts" : true,
 	    "checkCategory" : "comparisons",
@@ -3067,7 +3067,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3089,7 +3089,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3128,7 +3128,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3147,7 +3147,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3169,7 +3169,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3208,7 +3208,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3227,7 +3227,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3252,7 +3252,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3291,7 +3291,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3310,7 +3310,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3335,7 +3335,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3374,7 +3374,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3432,7 +3432,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/monitoring/monthly^
@@ -3441,7 +3441,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3477,7 +3477,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    "connection" : "unknown",
 	    "fullTableName" : "sample_schema.sample_table",
 	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
+	    "deleteStatistics" : false,
 	    "deleteCheckResults" : true,
 	    "deleteSensorReadouts" : true,
 	    "checkCategory" : "comparisons",
@@ -3495,7 +3495,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3517,7 +3517,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3556,7 +3556,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3575,7 +3575,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3597,7 +3597,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3636,7 +3636,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3655,7 +3655,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3680,7 +3680,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3719,7 +3719,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3738,7 +3738,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3763,7 +3763,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3802,7 +3802,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -3860,7 +3860,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/daily^
@@ -3869,7 +3869,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -3905,7 +3905,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    "connection" : "unknown",
 	    "fullTableName" : "sample_schema.sample_table",
 	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
+	    "deleteStatistics" : false,
 	    "deleteCheckResults" : true,
 	    "deleteSensorReadouts" : true,
 	    "checkCategory" : "comparisons",
@@ -3923,7 +3923,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -3945,7 +3945,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -3984,7 +3984,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4003,7 +4003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4025,7 +4025,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4064,7 +4064,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4083,7 +4083,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4108,7 +4108,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4147,7 +4147,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4166,7 +4166,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4191,7 +4191,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4230,7 +4230,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4288,7 +4288,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/partitioned/monthly^
@@ -4297,7 +4297,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -4333,7 +4333,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    "connection" : "unknown",
 	    "fullTableName" : "sample_schema.sample_table",
 	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
+	    "deleteStatistics" : false,
 	    "deleteCheckResults" : true,
 	    "deleteSensorReadouts" : true,
 	    "checkCategory" : "comparisons",
@@ -4351,7 +4351,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4373,7 +4373,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4412,7 +4412,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4431,7 +4431,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4453,7 +4453,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4492,7 +4492,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4511,7 +4511,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4536,7 +4536,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4575,7 +4575,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4594,7 +4594,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4619,7 +4619,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4658,7 +4658,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4716,7 +4716,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/sample_table_comparison/profiling^
@@ -4725,7 +4725,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -4761,7 +4761,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	    "connection" : "unknown",
 	    "fullTableName" : "sample_schema.sample_table",
 	    "deleteErrors" : true,
-	    "deleteStatistics" : true,
+	    "deleteStatistics" : false,
 	    "deleteCheckResults" : true,
 	    "deleteSensorReadouts" : true,
 	    "checkCategory" : "comparisons",
@@ -4779,7 +4779,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4801,7 +4801,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4840,7 +4840,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4859,7 +4859,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4881,7 +4881,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -4920,7 +4920,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -4939,7 +4939,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -4964,7 +4964,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -5003,7 +5003,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5022,7 +5022,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5047,7 +5047,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     TableComparisonModel(
@@ -5086,7 +5086,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5144,7 +5144,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisonconfigurations/sample_table_comparison^
@@ -5159,7 +5159,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5204,7 +5204,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5249,7 +5249,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5297,7 +5297,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5384,14 +5384,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/daily/sample_table_comparison^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -5399,7 +5399,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5452,7 +5452,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5480,7 +5480,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5533,7 +5533,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5561,7 +5561,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5617,7 +5617,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5645,7 +5645,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5701,7 +5701,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5768,14 +5768,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/monitoring/monthly/sample_table_comparison^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -5783,7 +5783,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5836,7 +5836,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5864,7 +5864,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -5917,7 +5917,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -5945,7 +5945,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6001,7 +6001,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6029,7 +6029,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6085,7 +6085,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6152,14 +6152,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/daily/sample_table_comparison^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -6167,7 +6167,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6220,7 +6220,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6248,7 +6248,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6301,7 +6301,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6329,7 +6329,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6385,7 +6385,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6413,7 +6413,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6469,7 +6469,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6536,14 +6536,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/partitioned/monthly/sample_table_comparison^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -6551,7 +6551,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6604,7 +6604,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6632,7 +6632,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6685,7 +6685,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6713,7 +6713,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6769,7 +6769,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6797,7 +6797,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6853,7 +6853,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -6920,14 +6920,14 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/tablecomparisons/profiling/sample_table_comparison^
 		-H "Accept: application/json"^
 		-H "Content-Type: application/json"^
 		-d^
-		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":true,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
+		"{\"table_comparison_configuration_name\":\"sample_table_comparison\",\"compared_connection\":\"unknown\",\"compared_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"reference_connection\":\"sample_connection\",\"reference_table\":{\"schema_name\":\"sample_schema\",\"table_name\":\"sample_table\"},\"grouping_columns\":[],\"default_compare_thresholds\":{\"warning_difference_percent\":0.0,\"error_difference_percent\":1.0},\"supports_compare_column_count\":true,\"columns\":[],\"compare_table_run_checks_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"enabled\":true,\"checkType\":\"monitoring\",\"timeScale\":\"daily\",\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\"},\"compare_table_clean_data_job_template\":{\"connection\":\"unknown\",\"fullTableName\":\"sample_schema.sample_table\",\"deleteErrors\":true,\"deleteStatistics\":false,\"deleteCheckResults\":true,\"deleteSensorReadouts\":true,\"checkCategory\":\"comparisons\",\"tableComparisonName\":\"sample_table_comparison\",\"checkType\":\"monitoring\",\"timeGradient\":\"day\"},\"can_edit\":true,\"can_run_compare_checks\":true,\"can_delete_data\":true}"
 	
     ```
 
@@ -6935,7 +6935,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -6988,7 +6988,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -7016,7 +7016,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -7069,7 +7069,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -7097,7 +7097,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -7153,7 +7153,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',
@@ -7181,7 +7181,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -7237,7 +7237,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 			connection='unknown',
 			full_table_name='sample_schema.sample_table',
 			delete_errors=True,
-			delete_statistics=True,
+			delete_statistics=False,
 			delete_check_results=True,
 			delete_sensor_readouts=True,
 			check_category='comparisons',

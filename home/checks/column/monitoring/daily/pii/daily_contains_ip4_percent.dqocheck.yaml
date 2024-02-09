@@ -4,6 +4,7 @@ kind: check
 spec:
   sensor_name: column/pii/contains_ip4_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of rows that contains IP4 address values
-    in a column does not fall below the minimum accepted percentage. Stores the most
-    recent captured value for each day when the data quality check was evaluated.
+  help_text: Detects IP4 addresses in text columns. Verifies that the percentage of
+    rows that contains IP4 address values in a column does not fall below the minimum
+    accepted percentage. Stores the most recent captured value for each day when the
+    data quality check was evaluated.

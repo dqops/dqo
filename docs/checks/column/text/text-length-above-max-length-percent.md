@@ -697,7 +697,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -718,7 +718,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -1452,7 +1452,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1472,7 +1472,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -2285,7 +2285,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2306,7 +2306,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
@@ -3041,7 +3041,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3061,7 +3061,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -3874,7 +3874,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3895,7 +3895,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -4630,7 +4630,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4650,7 +4650,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -5473,7 +5473,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5494,7 +5494,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
@@ -6243,7 +6243,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6263,7 +6263,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -7084,7 +7084,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7105,7 +7105,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
@@ -7854,7 +7854,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7874,7 +7874,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    )/ COUNT_BIG(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,

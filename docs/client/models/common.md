@@ -425,7 +425,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
+|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>duckdb<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
 
 ___
 

@@ -65,7 +65,7 @@ nav:
   - Categories of checks:
     - 'categories-of-data-quality-checks/index.md'
     - Accepted values: 'categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
-    - Anomalies: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
+    - Anomaly detection: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
     - Blanks and whitespaces: 'categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
     - Boolean values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
     - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'

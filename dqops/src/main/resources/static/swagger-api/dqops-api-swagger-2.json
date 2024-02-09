@@ -25624,23 +25624,23 @@
           }
         },
         "daily_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "daily_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects emails in text columns. Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "daily_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects USA zip codes in text columns. Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "daily_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "daily_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25656,23 +25656,23 @@
           }
         },
         "daily_partition_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "daily_partition_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects emails in text columns. Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "daily_partition_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects USA zip codes in text columns. Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "daily_partition_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "daily_partition_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25688,23 +25688,23 @@
           }
         },
         "monthly_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains a USA phone number in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "monthly_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects emails in text columns. Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "monthly_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects USA zip codes in text columns. Verifies that the percentage of rows that contains a USA zip code in a column does not exceed the maximum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "monthly_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "monthly_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25720,23 +25720,23 @@
           }
         },
         "monthly_partition_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "monthly_partition_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects emails in text columns. Verifies that the percentage of rows that contains emails in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "monthly_partition_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects USA zip codes in text columns. Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "monthly_partition_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains IP4 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "monthly_partition_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -25752,23 +25752,23 @@
           }
         },
         "profile_contains_usa_phone_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.",
+          "description" : "Detects USA phone numbers in text columns. Verifies that the percentage of rows that contains USA phone number in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaPhonePercentCheckSpec"
         },
         "profile_contains_email_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.",
+          "description" : "Detects emails in text columns. Verifies that the percentage of rows that contains valid emails in a column does not exceed the minimum accepted percentage.",
           "$ref" : "#/definitions/ColumnPiiContainsEmailPercentCheckSpec"
         },
         "profile_contains_usa_zipcode_percent" : {
-          "description" : "Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.",
+          "description" : "Detects USA zip codes in text columns. Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnPiiContainsUsaZipcodePercentCheckSpec"
         },
         "profile_contains_ip4_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.",
+          "description" : "Detects IP4 addresses in text columns. Verifies that the percentage of rows that contains valid IP4 address values in a column does not fall below the minimum accepted percentage.",
           "$ref" : "#/definitions/ColumnPiiContainsIp4PercentCheckSpec"
         },
         "profile_contains_ip6_percent" : {
-          "description" : "Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.",
+          "description" : "Detects IP6 addresses in text columns. Verifies that the percentage of rows that contains valid IP6 address values in a column does not fall below the minimum accepted percentage.",
           "$ref" : "#/definitions/ColumnPiiContainsIp6PercentCheckSpec"
         }
       }
@@ -34786,6 +34786,10 @@
           "type" : "string",
           "description" : "Defines how many profiling checks results are stored for the table monthly. By default, DQOps will use the 'one_per_month' configuration and store only the most recent profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.",
           "enum" : [ "one_per_month", "one_per_week", "one_per_day", "one_per_hour", "all_results" ]
+        },
+        "file_format" : {
+          "description" : "File format for a file based table, such as a CSV or Parquet file.",
+          "$ref" : "#/definitions/FileFormatSpec"
         },
         "has_any_configured_checks" : {
           "type" : "boolean",
