@@ -125,6 +125,9 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
                             CheckCategoryDocumentationConstants.CATEGORY_FILE_NAMES.get(checkCategoryModel.getCategoryName()) :
                     "how-to-detect-" + checkCategoryModel.getCategoryName().replace('_', '-') + "-data-quality-issues.md";
             String categoryNameWithSpaces = checkCategoryModel.getCategoryName().replace('_', ' ');
+            if (Objects.equals(categoryNameWithSpaces, "pii")) {
+                categoryNameWithSpaces = "PII";
+            }
             String listOfTableChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a table level";
             String listOfColumnChecksBeginMarker = "## List of " + categoryNameWithSpaces + " checks at a column level";
 
