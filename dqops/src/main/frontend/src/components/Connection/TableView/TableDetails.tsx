@@ -58,7 +58,7 @@ const TableDetails = () => {
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [paths, setPaths] = useState<Array<string>>(['']);
   const [fileFormatType, setfileFormatType] = useState<fileFormat>(
-    (Object.keys(tableBasic?.file_format).find((x) =>
+    (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
       x.includes('format')
     ) as fileFormat) ?? fileFormat.csv
   );
