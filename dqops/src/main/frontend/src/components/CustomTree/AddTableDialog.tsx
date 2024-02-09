@@ -5,7 +5,10 @@ import Input from '../Input';
 import { JobApiClient, TableApiClient } from '../../services/apiClient';
 import { CustomTreeNode } from '../../shared/interfaces';
 import { useTree } from '../../contexts/treeContext';
-import { useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -19,6 +22,8 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const { refreshNode } = useTree();
   const { connection, schema }: { connection: string; schema: string } =
     useParams();
+  const dispatch = useActionDispatch();
+  const history = useHistory();
 
   const handleSubmit = async () => {
     try {
@@ -42,6 +47,34 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           })
         );
       }
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url: ROUTES.TABLE_LEVEL_PAGE(
+            CheckTypes.SOURCES,
+            connection,
+            schema,
+            name,
+            'detail'
+          ),
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            CheckTypes.SOURCES,
+            connection,
+            schema,
+            name
+          ),
+          state: {},
+          label: name
+        })
+      );
+      history.push(
+        ROUTES.TABLE_LEVEL_PAGE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          name,
+          'detail'
+        )
+      );
       onClose();
     } finally {
       setLoading(false);
