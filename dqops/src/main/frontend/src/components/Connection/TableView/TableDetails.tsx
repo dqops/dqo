@@ -235,22 +235,22 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
-      {/* {connectionModel.provider_type ===
-      ConnectionSpecProviderTypeEnum.duckdb ? ( */}
-      <FileFormatConfiguration
-        paths={paths}
-        onAddPath={onAddPath}
-        onChangePath={onChangePath}
-        fileFormatType={fileFormatType}
-        onChangeFile={onChangeFile}
-        configuration={configuration}
-        onChangeConfiguration={onChangeConfiguration}
-        cleanConfiguration={cleanConfiguration}
-        onDeletePath={onDeletePath}
-      />
-      {/* ) : (
+      {connectionModel.provider_type ===
+      ConnectionSpecProviderTypeEnum.duckdb ? (
+        <FileFormatConfiguration
+          paths={paths}
+          onAddPath={onAddPath}
+          onChangePath={onChangePath}
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
+          configuration={configuration}
+          onChangeConfiguration={onChangeConfiguration}
+          cleanConfiguration={cleanConfiguration}
+          onDeletePath={onDeletePath}
+        />
+      ) : (
         <></>
-      )} */}
+      )}
     </div>
   );
 };
