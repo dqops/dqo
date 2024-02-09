@@ -6,7 +6,7 @@ SELECT
             CASE
                 WHEN REGEXP_CONTAINS(
                     CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                    r"[0-9]{5}(?:-[0-9]{4})?"
+                    r"(^|[ \t.,:;\"'`|\n\r])[0-9]{5}(?:-[0-9]{4})?([ \t.,:;\"'`|\n\r]|$)"
                 ) THEN 1
                 ELSE 0
             END
