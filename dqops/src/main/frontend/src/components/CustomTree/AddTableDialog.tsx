@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
-import { TableApiClient } from "../../services/apiClient";
-import { CustomTreeNode } from "../../shared/interfaces";
-import { useTree } from "../../contexts/treeContext";
-import { useParams } from "react-router-dom";
+import { JobApiClient, TableApiClient } from '../../services/apiClient';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { useTree } from '../../contexts/treeContext';
+import { useParams } from 'react-router-dom';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -13,25 +13,34 @@ interface AddTableDialogProps {
   node?: CustomTreeNode;
 }
 
-const AddTableDialog = ({
-  open,
-  onClose,
-  node
-}: AddTableDialogProps) => {
-  const [name, setName] = useState("");
+const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
+  const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const { refreshNode } = useTree();
-  const { connection, schema }: { connection: string, schema: string } = useParams()
+  const { connection, schema }: { connection: string; schema: string } =
+    useParams();
 
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await TableApiClient.createTable(args[0], args[1], name);
+        await TableApiClient.createTable(args[0], args[1], name).then(() =>
+          JobApiClient.importTables(undefined, false, undefined, {
+            connectionName: args[0],
+            schemaName: args[1],
+            tableNames: [name]
+          })
+        );
         refreshNode(node);
       } else {
-        await TableApiClient.createTable(connection, schema, name);
+        await TableApiClient.createTable(connection, schema, name).then(() =>
+          JobApiClient.importTables(undefined, false, undefined, {
+            connectionName: connection,
+            schemaName: schema,
+            tableNames: [name]
+          })
+        );
       }
       onClose();
     } finally {
