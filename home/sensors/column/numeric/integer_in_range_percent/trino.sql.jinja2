@@ -1,11 +1,14 @@
 {% import '/dialects/trino.sql.jinja2' as lib with context -%}
 SELECT
-    CAST(100.0 * SUM(
-        CASE
-            WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-            ELSE 0
-        END
-    ) AS DOUBLE) / COUNT(*) AS actual_value
+    CASE
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+        ELSE CAST(100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                ELSE 0
+            END
+        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+    END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
 FROM (
