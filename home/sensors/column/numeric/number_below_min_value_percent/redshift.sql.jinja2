@@ -1,12 +1,14 @@
 {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
 SELECT
-    100.0 * SUM(
-        CASE
-            WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
-                THEN 1
-            ELSE 0
-        END
-    )/ COUNT(*) AS actual_value
+    CASE
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+    END AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
