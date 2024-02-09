@@ -29,29 +29,43 @@ const CommentItem = ({
   };
 
   return (
-    <tr>
-      <td className="pr-4 min-w-40 py-2">
+    <div className="w-full flex items-center">
+      <div className="pr-4 min-w-40 py-2 w-9/12 whitespace-normal">
         {isEditing ? (
-          <Input className="focus:!ring-0 focus:!border" value={text} onChange={(e) => setText(e.target.value)} />
+          <Input
+            className="focus:!ring-0 focus:!border"
+            value={text}
+            onChange={(e) => setText(e.target.value)}
+          />
         ) : (
           comment.comment
         )}
-      </td>
-      <td className="px-8 min-w-60 py-2">{comment.comment_by}</td>
-      <td className="px-8 min-w-60 py-2">
+      </div>
+      <div className=" w-1/12 py-2">{comment.comment_by}</div>
+      <div className=" w-1/12 py-2">
         {moment(comment.date).format('MMM, DD YYYY')}
-      </td>
-      <td className="px-8 min-w-34 max-w-34 py-2">
+      </div>
+      <div className="px-8 min-w-34 max-w-34 py-2">
         <div className="flex space-x-2 items-center justify-end">
-          <IconButton size="sm" onClick={isEditing ? onSave : onEdit} color="teal" className="!shadow-none">
+          <IconButton
+            size="sm"
+            onClick={isEditing ? onSave : onEdit}
+            color="teal"
+            className="!shadow-none"
+          >
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
-          <IconButton size="sm" onClick={() => onRemove(idx)} color="teal" className="!shadow-none">
+          <IconButton
+            size="sm"
+            onClick={() => onRemove(idx)}
+            color="teal"
+            className="!shadow-none"
+          >
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
         </div>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 };
 
