@@ -104,26 +104,27 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             connectionSpec.setDuckdb(duckdbSpec);
         }
 
-        DuckdbSourceFilesType duckdbSourceFilesType = duckdbSpec.getDuckdbSourceFilesType();
-        if(duckdbSourceFilesType == null){
+        if (duckdbSpec.getDuckdbReadMode() == null) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-read-mode");
+            }
+            duckdbSpec.setDuckdbReadMode(terminalReader.promptEnum("DuckDB read mode.", DuckdbReadMode.class, DuckdbReadMode.FILES,false));
+        }
+
+        if (duckdbSpec.getDuckdbReadMode().equals(DuckdbReadMode.IN_MEMORY) && Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
+            if (isHeadless) {
+                throw new CliRequiredParameterMissingException("--duckdb-database");
+            }
+            duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
+        }
+
+        if(duckdbSpec.getDuckdbReadMode().equals(DuckdbReadMode.FILES) && duckdbSpec.getDuckdbSourceFilesType() == null){
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-source-files-type");
             }
             duckdbSpec.setDuckdbSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB.", DuckdbSourceFilesType.class, null,true));
         }
 
-        DuckdbReadMode duckdbReadMode = duckdbSpec.getDuckdbReadMode();
-        if(duckdbReadMode == null){
-            duckdbSpec.setDuckdbReadMode(DuckdbReadMode.IN_MEMORY);
-            if (Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
-                if (isHeadless) {
-                    throw new CliRequiredParameterMissingException("--duckdb-database");
-                }
-                duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
-            }
-        } else {
-            duckdbSpec.setDuckdbReadMode(DuckdbReadMode.FILES);
-        }
     }
 
     /**
