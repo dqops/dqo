@@ -411,7 +411,7 @@ const CheckListItem = ({
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
               isDefaultEditing !== true && isAlreadyDeleted !== true && (
                 <Tooltip
-                  content="Run Check"
+                  content="Run check"
                   className="max-w-80 py-4 px-4 bg-gray-800"
                 >
                   <div>
