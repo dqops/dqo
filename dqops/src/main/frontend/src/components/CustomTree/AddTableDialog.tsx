@@ -17,6 +17,7 @@ import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { ConnectionModel, ConnectionSpecProviderTypeEnum } from '../../api';
 import SvgIcon from '../SvgIcon';
+import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -78,7 +79,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     setPaths(copiedPaths);
   };
 
-  const onAdd = () => setPaths((prev) => [...prev, '']);
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
 
   return (
     <Dialog open={open} handler={onClose}>
@@ -95,29 +96,11 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         </div>
         {/* {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb ? ( */}
-        <div className="text-sm">
-          {paths.slice(0, paths.length - 1).map((x, index) => (
-            <div key={index} className="text-black py-1">
-              {x}
-            </div>
-          ))}
-          <div className="flex items-center w-full">
-            <div className="pr-4 min-w-40 py-2 w-11/12">
-              <Input
-                className="focus:!ring-0 focus:!border"
-                value={paths.length ? paths[paths.length - 1] : ''}
-                onChange={(e) => onChangePath(e.target.value)}
-              />
-            </div>
-            <div className="px-8 max-w-34 min-w-34 py-2">
-              <div className="flex justify-center">
-                <IconButton size="sm" className="bg-teal-500" onClick={onAdd}>
-                  <SvgIcon name="add" className="w-4" />
-                </IconButton>
-              </div>
-            </div>
-          </div>
-        </div>
+        <FileFormatConfiguration
+          paths={paths}
+          onAddPath={onAddPath}
+          onChangePath={onChangePath}
+        />
         {/* // ) : (
         //   <></>
         // )} */}

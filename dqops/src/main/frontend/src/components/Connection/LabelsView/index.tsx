@@ -46,29 +46,23 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
   };
 
   return (
-    <div className="p-4 text-sm">
-      <table className="w-full">
-        <thead>
-          <tr>
-            <th className="text-left min-w-40 w-11/12 pr-4 py-2">Label</th>
-            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {labels.slice(0, labels.length - 1).map((label, index) => (
-            <LabelItem
-              label={label}
-              key={index}
-              idx={index}
-              onChange={onChangeLabel}
-              onRemove={onRemoveLabel}
-              canUserEditLabel={userProfile.can_edit_labels}
-            />
-          ))}
-        </tbody>
-      </table>
+    <div className="p-4 text-sm w-full">
+      <div className="flex items-center font-bold">
+        <div className="text-left min-w-40 w-11/12 pr-4 py-2">Label</div>
+        <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+          Action
+        </div>
+      </div>
+      {labels.slice(0, labels.length - 1).map((label, index) => (
+        <LabelItem
+          label={label}
+          key={index}
+          idx={index}
+          onChange={onChangeLabel}
+          onRemove={onRemoveLabel}
+          canUserEditLabel={userProfile.can_edit_labels}
+        />
+      ))}
       <div className="flex items-center w-full">
         <div className="pr-4 min-w-40 py-2 w-11/12">
           <Input
