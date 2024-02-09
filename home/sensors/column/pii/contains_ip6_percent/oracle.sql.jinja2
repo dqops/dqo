@@ -6,9 +6,9 @@ SELECT
             CASE
                 WHEN
                     REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                '([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}') OR
+                                '(^|[ \t.,:;"''`|\n\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \t.,:;"''`|\n\r]|$)') OR
                     REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},
-                                 '[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}')
+                                '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)')
                     THEN 1
                 ELSE 0
             END
