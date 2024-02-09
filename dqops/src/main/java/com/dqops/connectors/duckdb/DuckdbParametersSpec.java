@@ -45,9 +45,13 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
+    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbReadMode duckdbReadMode;
+
     @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSourceFilesType sourceFilesType;
+    private DuckdbSourceFilesType duckdbSourceFilesType;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -63,37 +67,37 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     private Map<String, String> properties;
 
     /**
-     * Returns an inMemory value.
-     * @return inMemory value.
+     * Returns an duckdbReadMode value.
+     * @return duckdbReadMode value.
      */
-    public boolean isInMemory () {
-        return sourceFilesType.equals(DuckdbSourceFilesType.IN_MEMORY);
+    public DuckdbReadMode getDuckdbReadMode() {
+        return duckdbReadMode;
     }
 
-//    /**
-//     * Sets an inMemory value.
-//     * @param inMemory inMemory value.
-//     */
-//    public void setInMemory(boolean inMemory) {
-//        setDirtyIf(!Objects.equals(this.inMemory, inMemory));
-//        this.inMemory = inMemory;
-//    }
+    /**
+     * Sets an duckdbReadMode value.
+     * @param duckdbReadMode duckdbReadMode value.
+     */
+    public void setDuckdbReadMode(DuckdbReadMode duckdbReadMode) {
+        setDirtyIf(!Objects.equals(duckdbReadMode, duckdbReadMode));
+        this.duckdbReadMode = duckdbReadMode;
+    }
 
     /**
      * Returns an sourceFilesType value.
      * @return sourceFilesType value.
      */
-    public DuckdbSourceFilesType getSourceFilesType() {
-        return sourceFilesType;
+    public DuckdbSourceFilesType getDuckdbSourceFilesType() {
+        return duckdbSourceFilesType;
     }
 
     /**
      * Sets an sourceFilesType value.
-     * @param sourceFilesType sourceFilesType value.
+     * @param duckdbSourceFilesType sourceFilesType value.
      */
-    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
-        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
-        this.sourceFilesType = sourceFilesType;
+    public void setDuckdbSourceFilesType(DuckdbSourceFilesType duckdbSourceFilesType) {
+        setDirtyIf(!Objects.equals(duckdbSourceFilesType, duckdbSourceFilesType));
+        this.duckdbSourceFilesType = duckdbSourceFilesType;
     }
 
     /**
@@ -174,7 +178,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      */
     public DuckdbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DuckdbParametersSpec cloned = this.deepClone();
-        cloned.sourceFilesType = DuckdbSourceFilesType.valueOf(secretValueProvider.expandValue(String.valueOf(cloned.sourceFilesType), lookupContext));
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);

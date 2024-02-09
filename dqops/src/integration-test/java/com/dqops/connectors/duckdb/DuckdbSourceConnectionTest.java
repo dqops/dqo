@@ -46,9 +46,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     @Test
     void retrieveTableMetadata_fromTableSpecWithCsvFilePath_readColumnTypes() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.create();
-        DuckdbParametersSpec duckdb = spec.getDuckdb();
-        duckdb.setSourceFilesType(DuckdbSourceFilesType.CSV);
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForCsv();
         this.sut.setConnectionSpec(spec);
         this.fileConnectionWrapper.setSpec(spec);
 

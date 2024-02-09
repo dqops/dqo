@@ -103,26 +103,27 @@ public class DuckdbConnectionProvider extends AbstractSqlConnectionProvider {
             duckdbSpec = new DuckdbParametersSpec();
             connectionSpec.setDuckdb(duckdbSpec);
         }
-        // todo: cli
 
-        DuckdbSourceFilesType duckdbSourceFilesType = duckdbSpec.getSourceFilesType();
+        DuckdbSourceFilesType duckdbSourceFilesType = duckdbSpec.getDuckdbSourceFilesType();
         if(duckdbSourceFilesType == null){
             if (isHeadless) {
                 throw new CliRequiredParameterMissingException("--duckdb-source-files-type");
             }
-            duckdbSpec.setSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB.", DuckdbSourceFilesType.class, DuckdbSourceFilesType.IN_MEMORY,false));
+            duckdbSpec.setDuckdbSourceFilesType(terminalReader.promptEnum("Type of source files for DuckDB.", DuckdbSourceFilesType.class, null,true));
         }
 
-        if (duckdbSourceFilesType.equals(DuckdbSourceFilesType.IN_MEMORY) && Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
-            if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--duckdb-database");
+        DuckdbReadMode duckdbReadMode = duckdbSpec.getDuckdbReadMode();
+        if(duckdbReadMode == null){
+            duckdbSpec.setDuckdbReadMode(DuckdbReadMode.IN_MEMORY);
+            if (Strings.isNullOrEmpty(duckdbSpec.getDatabase())) {
+                if (isHeadless) {
+                    throw new CliRequiredParameterMissingException("--duckdb-database");
+                }
+                duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
             }
-            duckdbSpec.setDatabase(terminalReader.prompt("DuckDB in memory database name (--duckdb-database)", "${DUCKDB_DATABASE}", false));
+        } else {
+            duckdbSpec.setDuckdbReadMode(DuckdbReadMode.FILES);
         }
-//        else {
-//            duckdbSpec.setDatabase("");
-//        }
-
     }
 
     /**

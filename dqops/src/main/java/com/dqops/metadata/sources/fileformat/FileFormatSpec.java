@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -130,14 +131,23 @@ public class FileFormatSpec extends AbstractSpec {
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
      * @return Table options string.
      */
-    public String buildTableOptionsString(){
-        if(csvFileFormat != null){
+    public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.CSV)){
+            if(csvFileFormat == null){
+                csvFileFormat = new CsvFileFormatSpec();
+            }
             return csvFileFormat.buildSourceTableOptionsString(filePathList);
         }
-        if(jsonFileFormat != null){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.JSON)){
+            if(jsonFileFormat == null){
+                jsonFileFormat = new JsonFileFormatSpec();
+            }
             return jsonFileFormat.buildSourceTableOptionsString(filePathList);
         }
-        if(parquetFileFormat != null){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.PARQUET)){
+            if(parquetFileFormat == null){
+                parquetFileFormat = new ParquetFileFormatSpec();
+            }
             return parquetFileFormat.buildSourceTableOptionsString(filePathList);
         }
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());

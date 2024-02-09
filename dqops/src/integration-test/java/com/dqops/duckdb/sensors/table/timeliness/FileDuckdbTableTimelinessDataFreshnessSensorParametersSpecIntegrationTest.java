@@ -47,7 +47,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.create();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForInMemory();
         String csvFileName = SampleCsvFileNames.test_average_delay;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

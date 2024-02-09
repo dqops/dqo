@@ -1,7 +1,9 @@
 package com.dqops.connectors.duckdb;
 
+/**
+ * DuckDB supported file types to be read as a table.
+ */
 public enum DuckdbSourceFilesType {
-    IN_MEMORY,
     CSV,
     JSON,
     PARQUET
