@@ -32,7 +32,7 @@ public class FileDuckdbTableVolumeRowCountSensorParametersSpecIntegrationTest ex
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForInMemory();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
         String csvFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
