@@ -47,11 +47,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbReadMode duckdbReadMode;
+    private DuckdbReadMode readMode;
 
     @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSourceFilesType duckdbSourceFilesType;
+    private DuckdbSourceFilesType sourceFilesType;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -67,37 +67,37 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     private Map<String, String> properties;
 
     /**
-     * Returns an duckdbReadMode value.
-     * @return duckdbReadMode value.
+     * Returns a readMode value.
+     * @return readMode value.
      */
-    public DuckdbReadMode getDuckdbReadMode() {
-        return duckdbReadMode;
+    public DuckdbReadMode getReadMode() {
+        return readMode;
     }
 
     /**
-     * Sets an duckdbReadMode value.
-     * @param duckdbReadMode duckdbReadMode value.
+     * Sets a readMode value.
+     * @param readMode readMode value.
      */
-    public void setDuckdbReadMode(DuckdbReadMode duckdbReadMode) {
-        setDirtyIf(!Objects.equals(duckdbReadMode, duckdbReadMode));
-        this.duckdbReadMode = duckdbReadMode;
+    public void setReadMode(DuckdbReadMode readMode) {
+        setDirtyIf(!Objects.equals(readMode, readMode));
+        this.readMode = readMode;
     }
 
     /**
-     * Returns an sourceFilesType value.
+     * Returns a sourceFilesType value.
      * @return sourceFilesType value.
      */
-    public DuckdbSourceFilesType getDuckdbSourceFilesType() {
-        return duckdbSourceFilesType;
+    public DuckdbSourceFilesType getSourceFilesType() {
+        return sourceFilesType;
     }
 
     /**
-     * Sets an sourceFilesType value.
-     * @param duckdbSourceFilesType sourceFilesType value.
+     * Sets a sourceFilesType value.
+     * @param sourceFilesType sourceFilesType value.
      */
-    public void setDuckdbSourceFilesType(DuckdbSourceFilesType duckdbSourceFilesType) {
-        setDirtyIf(!Objects.equals(duckdbSourceFilesType, duckdbSourceFilesType));
-        this.duckdbSourceFilesType = duckdbSourceFilesType;
+    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
+        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
+        this.sourceFilesType = sourceFilesType;
     }
 
     /**

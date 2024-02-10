@@ -84,7 +84,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
 
-        if(duckdbSpec.getDuckdbReadMode().equals(DuckdbReadMode.IN_MEMORY)){
+        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.IN_MEMORY)){
             jdbcConnectionBuilder.append(":memory:");
         }
 
@@ -234,7 +234,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
-        if(duckdbParametersSpec.getDuckdbReadMode().equals(DuckdbReadMode.IN_MEMORY)){
+        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.IN_MEMORY)){
             return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper);
         }
 
