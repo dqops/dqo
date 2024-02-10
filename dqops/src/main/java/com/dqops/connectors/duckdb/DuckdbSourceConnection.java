@@ -84,7 +84,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
 
-        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.IN_MEMORY)){
+        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
             jdbcConnectionBuilder.append(":memory:");
         }
 
@@ -208,6 +208,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     @Override
     public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
         List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
+
+        if(connectionWrapper == null){
+            return sourceTableModels;
+        }
+
         TableList tableList = connectionWrapper.getTables();
 
         for (TableWrapper table : tableList) {
@@ -234,7 +239,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
-        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.IN_MEMORY)){
+        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
             return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper);
         }
 
