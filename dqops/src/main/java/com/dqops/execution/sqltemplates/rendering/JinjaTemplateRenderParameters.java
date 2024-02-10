@@ -150,7 +150,7 @@ public class JinjaTemplateRenderParameters {
         }};
 
         DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
-        if(duckdbParametersSpec != null && duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.FILES)
+        if(duckdbParametersSpec != null && duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.files)
             && duckdbParametersSpec.getSourceFilesType() != null
         ){
             DuckdbSourceFilesType duckdbSourceFilesType = duckdbParametersSpec.getSourceFilesType();

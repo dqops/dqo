@@ -33,7 +33,7 @@ public class DuckdbConnectionSpecObjectMother {
 			setProviderType(ProviderType.duckdb);
 			setDuckdb(new DuckdbParametersSpec()
             {{
-                setReadMode(DuckdbReadMode.IN_MEMORY);
+                setReadMode(DuckdbReadMode.in_memory);
             }});
         }};
 
@@ -50,8 +50,8 @@ public class DuckdbConnectionSpecObjectMother {
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
-                setReadMode(DuckdbReadMode.FILES);
-                setSourceFilesType(DuckdbSourceFilesType.CSV);
+                setReadMode(DuckdbReadMode.files);
+                setSourceFilesType(DuckdbSourceFilesType.csv);
             }});
         }};
 

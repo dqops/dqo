@@ -132,19 +132,19 @@ public class FileFormatSpec extends AbstractSpec {
      * @return Table options string.
      */
     public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.CSV)){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.csv)){
             if(csvFileFormat == null){
                 csvFileFormat = new CsvFileFormatSpec();
             }
             return csvFileFormat.buildSourceTableOptionsString(filePathList);
         }
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.JSON)){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.json)){
             if(jsonFileFormat == null){
                 jsonFileFormat = new JsonFileFormatSpec();
             }
             return jsonFileFormat.buildSourceTableOptionsString(filePathList);
         }
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.PARQUET)){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.parquet)){
             if(parquetFileFormat == null){
                 parquetFileFormat = new ParquetFileFormatSpec();
             }
