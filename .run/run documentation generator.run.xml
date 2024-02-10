@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="run documentation generator" type="Application" factoryName="Application">
     <option name="ALTERNATIVE_JRE_PATH" value="temurin-17" />
+    <option name="VM_PARAMETERS" value="--add-opens java.base/java.util.concurrent=ALL-UNNAMED" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <envs>
       <env name="DQO_HOME" value="$PROJECT_DIR$/home" />

@@ -145,12 +145,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -172,7 +174,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -204,12 +206,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -231,7 +235,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -256,7 +260,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -277,7 +281,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -308,6 +312,8 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -319,7 +325,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -342,7 +348,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -364,7 +370,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -373,12 +379,14 @@ spec:
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -405,7 +413,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -442,12 +450,14 @@ spec:
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -469,7 +479,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -501,12 +511,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -535,7 +547,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -573,13 +585,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -601,7 +615,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -633,13 +647,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -661,7 +677,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -693,12 +709,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -720,7 +738,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -752,12 +770,14 @@ spec:
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -765,7 +785,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -781,7 +801,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -789,7 +809,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -811,12 +831,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -845,7 +867,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -932,12 +954,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -958,7 +982,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -991,12 +1015,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1017,7 +1043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -1043,7 +1069,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -1063,7 +1089,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -1095,6 +1121,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -1106,7 +1134,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -1128,7 +1156,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -1151,7 +1179,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -1160,12 +1188,14 @@ Expand the *Configure with data grouping* section to see additional examples for
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -1191,7 +1221,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -1234,12 +1264,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1260,7 +1292,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -1293,12 +1325,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1326,7 +1360,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -1370,13 +1404,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1397,7 +1433,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -1430,13 +1466,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1457,7 +1495,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -1490,12 +1528,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1516,7 +1556,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -1549,12 +1589,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1562,7 +1604,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1577,7 +1619,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -1585,7 +1627,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -1614,12 +1656,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1647,7 +1691,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -1817,12 +1861,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1844,7 +1890,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -1876,12 +1922,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -1903,7 +1951,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -1928,7 +1976,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -1949,7 +1997,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -1980,6 +2028,8 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -1991,7 +2041,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -2014,7 +2064,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -2036,7 +2086,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -2045,12 +2095,14 @@ spec:
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -2077,7 +2129,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -2114,12 +2166,14 @@ spec:
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2141,7 +2195,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2173,12 +2227,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2207,7 +2263,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2245,13 +2301,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2273,7 +2331,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2305,13 +2363,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2333,7 +2393,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2365,12 +2425,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2392,7 +2454,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -2424,12 +2486,14 @@ spec:
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2437,7 +2501,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2453,7 +2517,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -2461,7 +2525,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
@@ -2483,12 +2547,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2517,7 +2583,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2605,12 +2671,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2631,7 +2699,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -2664,12 +2732,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2690,7 +2760,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -2716,7 +2786,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -2736,7 +2806,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -2768,6 +2838,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -2779,7 +2851,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -2801,7 +2873,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -2824,7 +2896,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -2833,12 +2905,14 @@ Expand the *Configure with data grouping* section to see additional examples for
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -2864,7 +2938,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -2907,12 +2981,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2933,7 +3009,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -2966,12 +3042,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -2999,7 +3077,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3043,13 +3121,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3070,7 +3150,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3103,13 +3183,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3130,7 +3212,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3163,12 +3245,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3189,7 +3273,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -3222,12 +3306,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3235,7 +3321,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3250,7 +3336,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -3258,7 +3344,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -3287,12 +3373,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3320,7 +3408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3490,12 +3578,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3517,7 +3607,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -3549,12 +3639,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3576,7 +3668,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -3601,7 +3693,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -3622,7 +3714,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -3653,6 +3745,8 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -3664,7 +3758,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -3687,7 +3781,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -3709,7 +3803,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -3718,12 +3812,14 @@ spec:
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -3750,7 +3846,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -3787,12 +3883,14 @@ spec:
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3814,7 +3912,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3846,12 +3944,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3880,7 +3980,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3918,13 +4018,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -3946,7 +4048,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -3978,13 +4080,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4006,7 +4110,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4038,12 +4142,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4065,7 +4171,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -4097,12 +4203,14 @@ spec:
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4110,7 +4218,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4126,7 +4234,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -4134,7 +4242,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -4156,12 +4264,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4190,7 +4300,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4278,12 +4388,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4304,7 +4416,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -4337,12 +4449,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4363,7 +4477,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -4389,7 +4503,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -4409,7 +4523,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -4441,6 +4555,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -4452,7 +4568,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -4474,7 +4590,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -4497,7 +4613,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -4506,12 +4622,14 @@ Expand the *Configure with data grouping* section to see additional examples for
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -4537,7 +4655,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -4580,12 +4698,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4606,7 +4726,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4639,12 +4759,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4672,7 +4794,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4716,13 +4838,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4743,7 +4867,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4776,13 +4900,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4803,7 +4929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -4836,12 +4962,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4862,7 +4990,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -4895,12 +5023,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4908,7 +5038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4923,7 +5053,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -4931,7 +5061,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -4960,12 +5090,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -4993,7 +5125,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5173,12 +5305,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5200,7 +5334,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -5232,12 +5366,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5259,7 +5395,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -5284,7 +5420,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -5305,7 +5441,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -5336,6 +5472,8 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -5347,7 +5485,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -5370,7 +5508,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -5392,7 +5530,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -5401,12 +5539,14 @@ spec:
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -5433,7 +5573,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -5470,12 +5610,14 @@ spec:
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5497,7 +5639,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5529,12 +5671,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5563,7 +5707,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5601,13 +5745,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5629,7 +5775,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5661,13 +5807,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5689,7 +5837,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5721,12 +5869,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5748,7 +5898,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -5780,12 +5930,14 @@ spec:
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5793,7 +5945,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5809,7 +5961,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -5817,7 +5969,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
@@ -5843,12 +5995,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -5877,7 +6031,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -5975,12 +6129,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6001,7 +6157,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -6034,12 +6190,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6060,7 +6218,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -6086,7 +6244,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -6106,7 +6264,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -6138,6 +6296,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -6149,7 +6309,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -6171,7 +6331,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -6194,7 +6354,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -6203,12 +6363,14 @@ Expand the *Configure with data grouping* section to see additional examples for
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -6234,7 +6396,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -6277,12 +6439,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6303,7 +6467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -6336,12 +6500,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6369,7 +6535,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -6413,13 +6579,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6440,7 +6608,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -6473,13 +6641,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6500,7 +6670,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -6533,12 +6703,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6559,7 +6731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -6592,12 +6764,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6605,7 +6779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6620,7 +6794,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -6628,7 +6802,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -6655,12 +6829,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6688,7 +6864,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -6868,12 +7044,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6895,7 +7073,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -6927,12 +7105,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -6954,7 +7134,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -6979,7 +7159,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -7000,7 +7180,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -7031,6 +7211,8 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -7042,7 +7224,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -7065,7 +7247,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -7087,7 +7269,7 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -7096,12 +7278,14 @@ spec:
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -7128,7 +7312,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -7165,12 +7349,14 @@ spec:
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7192,7 +7378,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -7224,12 +7410,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7258,7 +7446,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -7296,13 +7484,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7324,7 +7514,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -7356,13 +7546,15 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7384,7 +7576,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -7416,12 +7608,14 @@ spec:
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7443,7 +7637,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -7475,12 +7669,14 @@ spec:
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7488,7 +7684,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7504,7 +7700,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -7512,7 +7708,7 @@ spec:
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
@@ -7538,12 +7734,14 @@ spec:
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7572,7 +7770,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -7670,12 +7868,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7696,7 +7896,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -7729,12 +7929,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7755,7 +7957,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -7781,7 +7983,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST({{lib.render_target_column('analyzed_table')}} AS VARCHAR), {{ lib.render_date_format(parameters.date_format) }}) IS TRUE
@@ -7801,7 +8003,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_MATCHES(CAST(analyzed_table."target_column" AS VARCHAR), '^([0][1-9]|[1-2][0-9]|[3][0-1])/(0[1-9]|1[0-2])/([0-9]{4})$') IS TRUE
@@ -7833,6 +8035,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([0-9]{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
@@ -7844,7 +8048,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                {{ render_regex(lib.render_target_column('analyzed_table'), render_date_format(parameters.date_format) ) }}
@@ -7866,7 +8070,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table.`target_column` IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table.`target_column`, '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/]([0-9]{4})$')
@@ -7889,7 +8093,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-              {% macro render_date_format(date_format) %}
+            {% macro render_date_format(date_format) %}
               {%- if date_format == 'DD/MM/YYYY'-%}
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$'
               {%- elif date_format == 'DD-MM-YYYY' -%}
@@ -7898,12 +8102,14 @@ Expand the *Configure with data grouping* section to see additional examples for
               '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
               {%- elif date_format == 'YYYY-MM-DD' -%}
               '^([0-9]{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+              {%- elif date_format == 'MM/DD/YYYY'-%}
+                '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
               {%- endif -%}
-              {% endmacro -%}
+            {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
                                REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})
@@ -7929,7 +8135,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(CASE
                           WHEN analyzed_table."target_column" IS NOT NULL AND
                                REGEXP_LIKE(analyzed_table."target_column", '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})$')
@@ -7972,12 +8178,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^([0][1-9]|[1-2][0-9]|[3][0-1]).(0[1-9]|1[0-2]).(\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])/([0][1-9]|[1-2][0-9]|[3][0-1])/([0-9]{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -7998,7 +8206,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -8031,12 +8239,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                    '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8064,7 +8274,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -8108,13 +8318,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8135,7 +8347,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -8168,13 +8380,15 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/]([1-9]|[1-9][0-9]|[1-9][0-9][0-9]|[1-9][0-9][0-9][0-9])$'
                 {%- endif -%}
             {% endmacro -%}
             
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8195,7 +8409,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND
@@ -8228,12 +8442,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8254,7 +8470,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.`target_column` IS NOT NULL AND
@@ -8287,12 +8503,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1-2][0-9]|3[0-1])\.(0[1-9]|1[0-2])\.([1-9][0-9]{3})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^([1-9][0-9]{3})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])/(0[1-9]|[1-2][0-9]|3[0-1])/([1-9][0-9]{3})$'
                 {%- endif -%}
             {% endmacro %}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8300,7 +8518,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8315,7 +8533,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] IS NOT NULL AND
@@ -8323,7 +8541,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(analyzed_table.[target_column])
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -8350,12 +8568,14 @@ Expand the *Configure with data grouping* section to see additional examples for
                     '^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})$'
                 {%- elif date_format == 'YYYY-MM-DD' -%}
                     '^(\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$'
+                {%- elif date_format == 'MM/DD/YYYY'-%}
+                        '^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\d{4})$'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
@@ -8383,7 +8603,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" IS NOT NULL AND

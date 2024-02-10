@@ -17,9 +17,15 @@
 package com.dqops.checks.defaults;
 
 import com.dqops.checks.*;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.checks.custom.CustomCheckSpecMap;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -178,12 +184,12 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
     public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
         if (this.profiling != null) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetTable.getTableCheckRootContainer(CheckType.profiling, null, true);
-            DefaultProfilingTableObservabilityCheckSettingsSpec tableProfilingDefaults = this.profiling.getTable();
+            TableProfilingCheckCategoriesSpec tableProfilingDefaults = this.profiling.getTable();
             if (tableProfilingDefaults != null && !tableProfilingDefaults.isDefault()) {
                 applyDefaultChecksOnContainer(tableProfilingDefaults, tableProfilingContainer, null, dialectSettings);
             }
 
-            DefaultProfilingColumnObservabilityCheckSettingsSpec columnProfilingDefaults = this.profiling.getColumn();
+            ColumnProfilingCheckCategoriesSpec columnProfilingDefaults = this.profiling.getColumn();
             if (columnProfilingDefaults != null && !columnProfilingDefaults.isDefault()) {
                 for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
                     AbstractRootChecksContainerSpec columnProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
@@ -195,12 +201,12 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
 
         if (this.monitoringDaily != null) {
             AbstractRootChecksContainerSpec tableDailyMonitoringContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-            DefaultDailyMonitoringTableObservabilityCheckSettingsSpec tableMonitoringDailyDefaults = this.monitoringDaily.getTable();
+            TableDailyMonitoringCheckCategoriesSpec tableMonitoringDailyDefaults = this.monitoringDaily.getTable();
             if (tableMonitoringDailyDefaults != null && !tableMonitoringDailyDefaults.isDefault()) {
                 applyDefaultChecksOnContainer(tableMonitoringDailyDefaults, tableDailyMonitoringContainer, null, dialectSettings);
             }
 
-            DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
+            ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
             if (columnDailyMonitoringDefaults != null && !columnDailyMonitoringDefaults.isDefault()) {
                 for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
                     AbstractRootChecksContainerSpec columnDailyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
@@ -212,12 +218,12 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
 
         if (this.monitoringMonthly != null) {
             AbstractRootChecksContainerSpec tableMonthlyMonitoringContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-            DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec tableMonitoringMonthlyDefaults = this.monitoringMonthly.getTable();
+            TableMonthlyMonitoringCheckCategoriesSpec tableMonitoringMonthlyDefaults = this.monitoringMonthly.getTable();
             if (tableMonitoringMonthlyDefaults != null && !tableMonitoringMonthlyDefaults.isDefault()) {
                 applyDefaultChecksOnContainer(tableMonitoringMonthlyDefaults, tableMonthlyMonitoringContainer, null, dialectSettings);
             }
 
-            DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
+            ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
             if (columnMonthlyMonitoringDefaults != null && !columnMonthlyMonitoringDefaults.isDefault()) {
                 for (ColumnSpec targetColumn : targetTable.getColumns().values()) {
                     AbstractRootChecksContainerSpec columnMonthlyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
@@ -316,7 +322,7 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
         DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
 
         if (this.profiling != null) {
-            DefaultProfilingColumnObservabilityCheckSettingsSpec columnProfilingDefaults = this.profiling.getColumn();
+            ColumnProfilingCheckCategoriesSpec columnProfilingDefaults = this.profiling.getColumn();
             if (columnProfilingDefaults != null && !columnProfilingDefaults.isDefault()) {
                 AbstractRootChecksContainerSpec columnProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
                 applyDefaultChecksOnContainer(columnProfilingDefaults, columnProfilingContainer, dataTypeCategory, dialectSettings);
@@ -324,7 +330,7 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
         }
 
         if (this.monitoringDaily != null) {
-            DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
+            ColumnDailyMonitoringCheckCategoriesSpec columnDailyMonitoringDefaults = this.monitoringDaily.getColumn();
             if (columnDailyMonitoringDefaults != null && !columnDailyMonitoringDefaults.isDefault()) {
                 AbstractRootChecksContainerSpec columnDailyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
                 applyDefaultChecksOnContainer(columnDailyMonitoringDefaults, columnDailyMonitoringContainer, dataTypeCategory, dialectSettings);
@@ -332,7 +338,7 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
         }
 
         if (this.monitoringMonthly != null) {
-            DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
+            ColumnMonthlyMonitoringCheckCategoriesSpec columnMonthlyMonitoringDefaults = this.monitoringMonthly.getColumn();
             if (columnMonthlyMonitoringDefaults != null && !columnMonthlyMonitoringDefaults.isDefault()) {
                 AbstractRootChecksContainerSpec columnMonthlyMonitoringContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
                 applyDefaultChecksOnContainer(columnMonthlyMonitoringDefaults, columnMonthlyMonitoringContainer, dataTypeCategory, dialectSettings);

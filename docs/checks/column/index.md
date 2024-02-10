@@ -643,27 +643,27 @@ A column-level check that ensures that there are no more than a maximum number o
 Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.
 
 ### [contains usa phone percent](./pii/contains-usa-phone-percent.md)
-Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.
+This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
 
 
 
 ### [contains email percent](./pii/contains-email-percent.md)
-Column check that calculates the percentage of rows that contains valid email values in a monitored column.
+This check detects emails inside text columns. It measures the percentage of columns containing an email and raises a data quality issue when too many rows contain emails.
 
 
 
 ### [contains usa zipcode percent](./pii/contains-usa-zipcode-percent.md)
-Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.
+This check detects USA zip code inside text columns. It measures the percentage of columns containing a zip code and raises a data quality issue when too many rows contain zip codes.
 
 
 
 ### [contains ip4 percent](./pii/contains-ip4-percent.md)
-Column check that calculates the percentage of rows that contains valid IP4 address values in a monitored column.
+This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.
 
 
 
 ### [contains ip6 percent](./pii/contains-ip6-percent.md)
-Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
+This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.
 
 
 

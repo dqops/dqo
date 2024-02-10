@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Oracle from the UI, command-lin
 
 ## Overview
 
-[Oracle Database](https://docs.oracle.com/en/database/) is a robust object relational database that provides efficient and effective solutions for database 
+Oracle Database is a robust object relational database that provides efficient and effective solutions for database 
 users such as delivering high performance, protecting users from unauthorized access, and enabling fast failure recovery.
 
 ## Add Oracle connection using the user interface

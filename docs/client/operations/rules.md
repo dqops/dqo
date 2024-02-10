@@ -38,7 +38,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -53,7 +53,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -88,7 +88,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -123,7 +123,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -161,7 +161,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -228,7 +228,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -240,7 +240,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -261,7 +261,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -282,7 +282,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -306,7 +306,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -359,7 +359,7 @@ http://localhost:8888/api/rules
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules^
@@ -368,7 +368,7 @@ http://localhost:8888/api/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -397,7 +397,7 @@ http://localhost:8888/api/rules
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -415,7 +415,7 @@ http://localhost:8888/api/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -448,7 +448,7 @@ http://localhost:8888/api/rules
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -466,7 +466,7 @@ http://localhost:8888/api/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -499,7 +499,7 @@ http://localhost:8888/api/rules
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -520,7 +520,7 @@ http://localhost:8888/api/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -553,7 +553,7 @@ http://localhost:8888/api/rules
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -574,7 +574,7 @@ http://localhost:8888/api/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -643,7 +643,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -652,7 +652,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -671,7 +671,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -690,7 +690,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleModel(
@@ -709,7 +709,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -728,7 +728,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleModel(
@@ -747,7 +747,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -769,7 +769,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleModel(
@@ -788,7 +788,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -810,7 +810,7 @@ http://localhost:8888/api/rules/{fullRuleName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleModel(
@@ -858,7 +858,7 @@ http://localhost:8888/api/definitions/rules
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/rules^
@@ -867,7 +867,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -929,7 +929,7 @@ http://localhost:8888/api/definitions/rules
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -947,7 +947,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleFolderModel(
@@ -992,7 +992,7 @@ http://localhost:8888/api/definitions/rules
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1010,7 +1010,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleFolderModel(
@@ -1055,7 +1055,7 @@ http://localhost:8888/api/definitions/rules
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1076,7 +1076,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleFolderModel(
@@ -1121,7 +1121,7 @@ http://localhost:8888/api/definitions/rules
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1142,7 +1142,7 @@ http://localhost:8888/api/definitions/rules
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     RuleFolderModel(
@@ -1223,7 +1223,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -1238,7 +1238,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1273,7 +1273,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1308,7 +1308,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1346,7 +1346,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

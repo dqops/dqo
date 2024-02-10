@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Amazon Athena from the UI, comm
 
 ## Overview
 
-[Amazon Athena](https://docs.aws.amazon.com/athena/) is a serverless, interactive analytics service built on open-source
+Amazon Athena is a serverless, interactive analytics service built on open-source
 frameworks, that makes it easy to analyze data in Amazon S3 using standard SQL.
 
 ## Prerequisite credentials

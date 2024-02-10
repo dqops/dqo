@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Trino from the UI, command-line
 
 ## Overview
 
-[Trino](https://trino.io/docs/current/) is a fast distributed SQL query engine for big data analytics that helps you explore your data universe.
+Trino is a fast distributed SQL query engine for big data analytics that helps you explore your data universe.
 
 ## Add Trino connection using the user interface
 

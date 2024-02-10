@@ -1295,6 +1295,8 @@ from .connection_test_model import ConnectionTestModel
 from .connection_test_status import ConnectionTestStatus
 from .count_between_rule_parameters_spec import CountBetweenRuleParametersSpec
 from .credential_type import CredentialType
+from .csv_file_format_spec import CsvFileFormatSpec
+from .csv_file_format_spec_columns import CsvFileFormatSpecColumns
 from .custom_check_spec import CustomCheckSpec
 from .custom_rule_parameters_spec import CustomRuleParametersSpec
 from .custom_sensor_parameters_spec import CustomSensorParametersSpec
@@ -1346,6 +1348,8 @@ from .dqo_settings_model_properties_additional_property import (
 )
 from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
+from .duckdb_parameters_spec import DuckdbParametersSpec
+from .duckdb_parameters_spec_properties import DuckdbParametersSpecProperties
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
@@ -1355,6 +1359,7 @@ from .error_entry_model import ErrorEntryModel
 from .errors_list_model import ErrorsListModel
 from .external_log_entry import ExternalLogEntry
 from .field_model import FieldModel
+from .file_format_spec import FileFormatSpec
 from .file_synchronization_direction import FileSynchronizationDirection
 from .folder_synchronization_status import FolderSynchronizationStatus
 from .hierarchy_id_model import HierarchyIdModel
@@ -1376,6 +1381,7 @@ from .incident_sort_order import IncidentSortOrder
 from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
+from .json_file_format_spec import JsonFileFormatSpec
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1427,6 +1433,7 @@ from .oracle_parameters_spec import OracleParametersSpec
 from .oracle_parameters_spec_properties import OracleParametersSpecProperties
 from .parameter_data_type import ParameterDataType
 from .parameter_definition_spec import ParameterDefinitionSpec
+from .parquet_file_format_spec import ParquetFileFormatSpec
 from .partition_incremental_time_window_spec import PartitionIncrementalTimeWindowSpec
 from .physical_table_name import PhysicalTableName
 from .postgresql_parameters_spec import PostgresqlParametersSpec
@@ -2385,6 +2392,8 @@ __all__ = (
     "ConnectionTestStatus",
     "CountBetweenRuleParametersSpec",
     "CredentialType",
+    "CsvFileFormatSpec",
+    "CsvFileFormatSpecColumns",
     "CustomCheckSpec",
     "CustomRuleParametersSpec",
     "CustomSensorParametersSpec",
@@ -2426,6 +2435,8 @@ __all__ = (
     "DqoSettingsModelPropertiesAdditionalProperty",
     "DqoUserProfileModel",
     "DqoUserRole",
+    "DuckdbParametersSpec",
+    "DuckdbParametersSpecProperties",
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
@@ -2435,6 +2446,7 @@ __all__ = (
     "ErrorsListModel",
     "ExternalLogEntry",
     "FieldModel",
+    "FileFormatSpec",
     "FileSynchronizationDirection",
     "FolderSynchronizationStatus",
     "HierarchyIdModel",
@@ -2456,6 +2468,7 @@ __all__ = (
     "IncidentsPerConnectionModel",
     "IncidentStatus",
     "IncidentWebhookNotificationsSpec",
+    "JsonFileFormatSpec",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2497,6 +2510,7 @@ __all__ = (
     "OracleParametersSpecProperties",
     "ParameterDataType",
     "ParameterDefinitionSpec",
+    "ParquetFileFormatSpec",
     "PartitionIncrementalTimeWindowSpec",
     "PhysicalTableName",
     "PostgresqlParametersSpec",

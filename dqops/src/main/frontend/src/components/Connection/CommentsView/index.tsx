@@ -67,48 +67,46 @@ const CommentsView = ({
 
   return (
     <div className="p-4 text-sm">
-      <table className={clsx('w-full', className)}>
-        <thead>
-          <tr>
-            <th className="text-left w-full pr-4 py-2">Comment</th>
-            <th className="text-left px-8 py-2">Author</th>
-            <th className="text-left px-8 py-2">Date</th>
-            <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
-              Action
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {comments
-            ? comments.map((comment, index) => (
-                <CommentItem
-                  comment={comment}
-                  key={index}
-                  idx={index}
-                  onChange={onChangeComment}
-                  onRemove={onRemoveComment}
-                />
-              ))
-            : ''}
-        </tbody>
-      </table>
-      <div className={clsx("flex items-center py-2", userProfile.can_edit_comments !== true ? "pointer-events-none cursor-not-allowed" : "")}>
-        <div className="flex-1 pr-4">
+      <div className={clsx('w-full', className)}>
+        <div className="flex items-center font-bold">
+          <div className="w-9/12">Comment</div>
+          <div className="w-1/12">Author</div>
+          <div className="w-1/12">Date</div>
+          <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+            Action
+          </div>
+        </div>
+        {comments
+          ? comments.map((comment, index) => (
+              <CommentItem
+                comment={comment}
+                key={index}
+                idx={index}
+                onChange={onChangeComment}
+                onRemove={onRemoveComment}
+              />
+            ))
+          : ''}
+      </div>
+      <div className="flex items-center w-full">
+        <div className="pr-4 min-w-40 py-2 w-11/12">
           <Input
             className="h-10 focus:!ring-0 focus:!border"
             value={text}
             onChange={onChangeText}
           />
         </div>
-        <div className="max-w-34 min-w-34 flex px-8">
-          <IconButton
-            size="sm"
-            className="w-10 h-10 !shadow-none"
-            color="teal"
-            onClick={onAdd}
-          >
-            <SvgIcon name="add" className="w-5 text-white" />
-          </IconButton>
+        <div className="px-8 max-w-34 min-w-34 py-2">
+          <div className="flex justify-center">
+            <IconButton
+              size="sm"
+              className="bg-teal-500"
+              onClick={onAdd}
+              disabled={userProfile.can_edit_labels === false}
+            >
+              <SvgIcon name="add" className="w-4" />
+            </IconButton>
+          </div>
         </div>
       </div>
     </div>

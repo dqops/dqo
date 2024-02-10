@@ -90,7 +90,7 @@ export default function EditReferenceTable({
           />
         )}
       </div>
-      <div className="py-4">
+      <div className="pb-4">
         {selectedReference && editColumnGrouping === false ? (
           <SelectColumnGroupingOverlook
             onChangeEditColumnGrouping={onChangeEditColumnGrouping}

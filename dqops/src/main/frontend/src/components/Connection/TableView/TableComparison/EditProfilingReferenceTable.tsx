@@ -594,17 +594,17 @@ export const EditProfilingReferenceTable = ({
         reference.columns !== undefined &&
         Object.keys(reference).length > 0 && (
           <SectionWrapper title="" className=" my-4 mx-4">
-            <table className="w-full">
+            <table className="max-w-300">
               <thead>
                 <tr>
                   <th className="text-left pr-4 py-1.5">
                     Table-level comparison
                   </th>
                   <th></th>
-                  <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                  <th className="text-center py-1.5">
                     Row count
                   </th>
-                  <th className="text-center px-4 py-1.5 pr-1 w-1/12">
+                  <th className="text-center py-1.5 whitespace-nowrap">
                     {reference.supports_compare_column_count === true
                       ? 'Column count'
                       : ''}
@@ -626,63 +626,62 @@ export const EditProfilingReferenceTable = ({
                 reference={reference}
                 checkTypes={checkTypes}
               />
+              {tableLevelComparisonExtended && (
               <tr>
                 <th></th>
                 <th></th>
                 <th>
-                  {tableLevelComparisonExtended && (
-                    <div className="flex flex-col w-full font-normal">
+                    <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
                       {showRowCount ? (
                         <SeverityInputBlock
-                          onChange={onChangeCompareRowCount}
-                          reference={reference}
-                          onUpdateChecksUI={onUpdateChecksUI}
-                          checksUI={checksUI}
-                          type="row"
+                        onChange={onChangeCompareRowCount}
+                        reference={reference}
+                        onUpdateChecksUI={onUpdateChecksUI}
+                        checksUI={checksUI}
+                        type="row"
                         />
-                      ) : (
-                        <div className="h-39"></div>
-                      )}
+                        ) : (
+                          <div className="h-39"></div>
+                          )}
                       {rowKey ? (
                         <TableLevelResults
-                          tableComparisonResults={tableComparisonResults}
-                          type={rowKey}
+                        tableComparisonResults={tableComparisonResults}
+                        type={rowKey}
                         />
-                      ) : null}
+                        ) : null}
                     </div>
-                  )}
-                </th>
+                </th>              
                 <th>
-                  {tableLevelComparisonExtended &&
-                  reference?.supports_compare_column_count === true ? (
-                    <div className="flex flex-col w-full font-normal">
+                  {reference?.supports_compare_column_count === true ? (
+                    <div className="flex flex-col font-normal !w-30 !max-w-30 !min-w-30">
                       {showColumnCount ? (
                         <SeverityInputBlock
-                          onChange={onChangeCompareColumnCount}
-                          reference={reference}
-                          onUpdateChecksUI={onUpdateChecksUI}
-                          checksUI={checksUI}
-                          type="column"
+                        onChange={onChangeCompareColumnCount}
+                        reference={reference}
+                        onUpdateChecksUI={onUpdateChecksUI}
+                        checksUI={checksUI}
+                        type="column"
                         />
-                      ) : (
-                        <div className="h-39"></div>
-                      )}
+                        ) : (
+                          <div className="h-39"></div>
+                          )}
                       {columnKey ? (
                         <TableLevelResults
-                          tableComparisonResults={tableComparisonResults}
-                          type={columnKey}
+                        tableComparisonResults={tableComparisonResults}
+                        type={columnKey}
                         />
-                      ) : null}
+                        ) : null}
                     </div>
                   ) : null}
                 </th>
               </tr>
+                )}
               <tr>
                 <th className="text-left pr-4 py-1.5">Compared column</th>
                 <th className="text-left px-4 py-1.5"></th>
                 {checkNames.map((x, index) => (
                   <th
-                    className="text-center px-4 py-1.5 pr-1 w-1/12"
+                    className="text-center px-4 py-1.5 pr-1 w-25"
                     key={index}
                   >
                     {x}

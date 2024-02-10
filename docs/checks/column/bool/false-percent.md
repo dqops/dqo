@@ -131,14 +131,14 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -152,14 +152,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -175,14 +175,14 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -196,14 +196,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -219,14 +219,14 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -240,14 +240,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -263,14 +263,14 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -284,14 +284,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -307,14 +307,14 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -334,14 +334,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -363,14 +363,14 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -384,14 +384,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -407,14 +407,14 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -434,14 +434,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -463,14 +463,14 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -484,14 +484,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -507,14 +507,14 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -528,14 +528,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
@@ -551,14 +551,14 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -572,14 +572,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -595,14 +595,14 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -616,14 +616,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -637,14 +637,14 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -664,14 +664,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -737,14 +737,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -757,14 +757,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -781,14 +781,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -801,14 +801,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -825,14 +825,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -845,14 +845,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -869,14 +869,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -889,14 +889,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -913,14 +913,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -939,14 +939,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -974,14 +974,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -994,14 +994,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1018,14 +1018,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1044,14 +1044,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -1079,14 +1079,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1099,14 +1099,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1123,14 +1123,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1143,14 +1143,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1167,14 +1167,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1187,14 +1187,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -1211,14 +1211,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1231,14 +1231,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -1259,14 +1259,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1285,14 +1285,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -1441,14 +1441,14 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1462,14 +1462,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -1485,14 +1485,14 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1506,14 +1506,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -1529,14 +1529,14 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1550,14 +1550,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1573,14 +1573,14 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1594,14 +1594,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -1617,14 +1617,14 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1644,14 +1644,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -1673,14 +1673,14 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1694,14 +1694,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1717,14 +1717,14 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1744,14 +1744,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -1773,14 +1773,14 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1794,14 +1794,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1817,14 +1817,14 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1838,14 +1838,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
@@ -1861,14 +1861,14 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1882,14 +1882,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -1905,14 +1905,14 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1926,14 +1926,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
@@ -1947,14 +1947,14 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1974,14 +1974,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -2048,14 +2048,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2068,14 +2068,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2092,14 +2092,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2112,14 +2112,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2136,14 +2136,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2156,14 +2156,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2180,14 +2180,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2200,14 +2200,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2224,14 +2224,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2250,14 +2250,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2285,14 +2285,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2305,14 +2305,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2329,14 +2329,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2355,14 +2355,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2390,14 +2390,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2410,14 +2410,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2434,14 +2434,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2454,14 +2454,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2478,14 +2478,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2498,14 +2498,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2522,14 +2522,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2542,14 +2542,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -2570,14 +2570,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2596,14 +2596,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2752,14 +2752,14 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2773,14 +2773,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -2796,14 +2796,14 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2817,14 +2817,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -2840,14 +2840,14 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2861,14 +2861,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2884,14 +2884,14 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2905,14 +2905,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -2928,14 +2928,14 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2955,14 +2955,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -2984,14 +2984,14 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3005,14 +3005,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3028,14 +3028,14 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3055,14 +3055,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -3084,14 +3084,14 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3105,14 +3105,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3128,14 +3128,14 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3149,14 +3149,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
@@ -3172,14 +3172,14 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3193,14 +3193,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -3216,14 +3216,14 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3237,14 +3237,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
@@ -3258,14 +3258,14 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3285,14 +3285,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -3359,14 +3359,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3379,14 +3379,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3403,14 +3403,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3423,14 +3423,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3447,14 +3447,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3467,14 +3467,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3491,14 +3491,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3511,14 +3511,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3535,14 +3535,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3561,14 +3561,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -3596,14 +3596,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3616,14 +3616,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3640,14 +3640,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3666,14 +3666,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -3701,14 +3701,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3721,14 +3721,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3745,14 +3745,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3765,14 +3765,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3789,14 +3789,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3809,14 +3809,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3833,14 +3833,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3853,14 +3853,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -3881,14 +3881,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3907,14 +3907,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -4073,14 +4073,14 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4094,14 +4094,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
@@ -4117,14 +4117,14 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4138,14 +4138,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
@@ -4161,14 +4161,14 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4182,14 +4182,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4205,14 +4205,14 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4226,14 +4226,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -4249,14 +4249,14 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4276,14 +4276,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -4305,14 +4305,14 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4326,14 +4326,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4349,14 +4349,14 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4376,14 +4376,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -4405,14 +4405,14 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4426,14 +4426,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4449,14 +4449,14 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4470,14 +4470,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
@@ -4493,14 +4493,14 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4514,14 +4514,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
@@ -4537,14 +4537,14 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4558,14 +4558,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
@@ -4583,14 +4583,14 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4610,14 +4610,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -4694,14 +4694,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4714,14 +4714,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -4738,14 +4738,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4758,14 +4758,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -4782,14 +4782,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4802,14 +4802,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4826,14 +4826,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4846,14 +4846,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -4870,14 +4870,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4896,14 +4896,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -4931,14 +4931,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4951,14 +4951,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4975,14 +4975,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5001,14 +5001,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -5036,14 +5036,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5056,14 +5056,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5080,14 +5080,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5100,14 +5100,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5124,14 +5124,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5144,14 +5144,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -5168,14 +5168,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5188,14 +5188,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -5214,14 +5214,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5240,14 +5240,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -5406,14 +5406,14 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5427,14 +5427,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
@@ -5450,14 +5450,14 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5471,14 +5471,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
@@ -5494,14 +5494,14 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5515,14 +5515,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5538,14 +5538,14 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5559,14 +5559,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -5582,14 +5582,14 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5609,14 +5609,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -5638,14 +5638,14 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5659,14 +5659,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5682,14 +5682,14 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5709,14 +5709,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -5738,14 +5738,14 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5759,14 +5759,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5782,14 +5782,14 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5803,14 +5803,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
@@ -5826,14 +5826,14 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5847,14 +5847,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
@@ -5870,14 +5870,14 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5891,14 +5891,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
@@ -5916,14 +5916,14 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5943,14 +5943,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
                 time_period,
                 time_period_utc
@@ -6027,14 +6027,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6047,14 +6047,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -6071,14 +6071,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6091,14 +6091,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -6115,14 +6115,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6135,14 +6135,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6159,14 +6159,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6179,14 +6179,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -6203,14 +6203,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6229,14 +6229,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table."target_column" = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6264,14 +6264,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6284,14 +6284,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6308,14 +6308,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6334,14 +6334,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6369,14 +6369,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6389,14 +6389,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6413,14 +6413,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6433,14 +6433,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6457,14 +6457,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6477,14 +6477,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table.`target_column`
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(analyzed_table.`target_column`)
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -6501,14 +6501,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6521,14 +6521,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG (*) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN analyzed_table.[target_column] = 0
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT_BIG (*)
+                    ) / COUNT_BIG(analyzed_table.[target_column])
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -6547,14 +6547,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT {{ lib.render_target_column('analyzed_table')}}
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END as actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6573,14 +6573,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                         CASE
                             WHEN NOT analyzed_table."target_column"
                                 THEN 1
                             ELSE 0
                         END
-                    ) AS DOUBLE) / COUNT(*)
+                    ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END as actual_value,
             
                             analyzed_table.grouping_level_1,

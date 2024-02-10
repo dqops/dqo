@@ -213,7 +213,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getCategories().size());
+        Assertions.assertEquals(6, uiModel.getCategories().size());
     }
 
     @Test
@@ -223,7 +223,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(10, uiModel.getCategories().size());
+        Assertions.assertEquals(16, uiModel.getCategories().size());
     }
 
     @Test
@@ -233,7 +233,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getCategories().size());
+        Assertions.assertEquals(6, uiModel.getCategories().size());
     }
 
     @Test
@@ -243,7 +243,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(10, uiModel.getCategories().size());
+        Assertions.assertEquals(16, uiModel.getCategories().size());
     }
 
     @Test
@@ -253,7 +253,7 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(3, uiModel.getCategories().size());
+        Assertions.assertEquals(6, uiModel.getCategories().size());
     }
 
     @Test
@@ -263,6 +263,6 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
-        Assertions.assertEquals(10, uiModel.getCategories().size());
+        Assertions.assertEquals(16, uiModel.getCategories().size());
     }
 }

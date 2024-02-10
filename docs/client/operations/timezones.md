@@ -31,7 +31,7 @@ http://localhost:8888/api/timezones
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/timezones^
@@ -40,7 +40,7 @@ http://localhost:8888/api/timezones
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -51,7 +51,7 @@ http://localhost:8888/api/timezones
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -69,7 +69,7 @@ http://localhost:8888/api/timezones
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -84,7 +84,7 @@ http://localhost:8888/api/timezones
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -102,7 +102,7 @@ http://localhost:8888/api/timezones
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -117,7 +117,7 @@ http://localhost:8888/api/timezones
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -138,7 +138,7 @@ http://localhost:8888/api/timezones
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -153,7 +153,7 @@ http://localhost:8888/api/timezones
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -174,7 +174,7 @@ http://localhost:8888/api/timezones
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [

@@ -134,7 +134,7 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -151,7 +151,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -170,7 +170,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -187,7 +187,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -206,7 +206,7 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -223,7 +223,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -242,7 +242,7 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -259,7 +259,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -278,7 +278,7 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -301,7 +301,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -326,7 +326,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -343,7 +343,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -362,7 +362,7 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -386,7 +386,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -411,7 +411,7 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -428,7 +428,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -447,7 +447,7 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -464,7 +464,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -483,7 +483,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -500,7 +500,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -519,7 +519,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -536,7 +536,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -553,7 +553,7 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -577,7 +577,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -649,7 +649,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -665,7 +665,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -685,7 +685,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -701,7 +701,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -721,7 +721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -737,7 +737,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -757,7 +757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -773,7 +773,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -793,7 +793,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -815,7 +815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -846,7 +846,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -862,7 +862,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -882,7 +882,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -905,7 +905,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -936,7 +936,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -952,7 +952,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -972,7 +972,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -988,7 +988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1008,7 +1008,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1024,7 +1024,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1044,7 +1044,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -1060,7 +1060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -1084,7 +1084,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1107,7 +1107,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -1262,7 +1262,7 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1279,7 +1279,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1298,7 +1298,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1315,7 +1315,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1334,7 +1334,7 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1351,7 +1351,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1370,7 +1370,7 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1387,7 +1387,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1406,7 +1406,7 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1429,7 +1429,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1454,7 +1454,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1471,7 +1471,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1490,7 +1490,7 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1514,7 +1514,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -1539,7 +1539,7 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1556,7 +1556,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1575,7 +1575,7 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1592,7 +1592,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1611,7 +1611,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1628,7 +1628,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1647,7 +1647,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -1664,7 +1664,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -1681,7 +1681,7 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1705,7 +1705,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -1778,7 +1778,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1794,7 +1794,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1814,7 +1814,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1830,7 +1830,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1850,7 +1850,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1866,7 +1866,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1886,7 +1886,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1902,7 +1902,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -1922,7 +1922,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1944,7 +1944,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -1975,7 +1975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1991,7 +1991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2011,7 +2011,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2034,7 +2034,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -2065,7 +2065,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2081,7 +2081,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2101,7 +2101,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2117,7 +2117,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2137,7 +2137,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2153,7 +2153,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2173,7 +2173,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2189,7 +2189,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -2213,7 +2213,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2236,7 +2236,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -2391,7 +2391,7 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2408,7 +2408,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2427,7 +2427,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2444,7 +2444,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2463,7 +2463,7 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2480,7 +2480,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2499,7 +2499,7 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2516,7 +2516,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2535,7 +2535,7 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2558,7 +2558,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2583,7 +2583,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2600,7 +2600,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2619,7 +2619,7 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2643,7 +2643,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -2668,7 +2668,7 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2685,7 +2685,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2704,7 +2704,7 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2721,7 +2721,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -2740,7 +2740,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2757,7 +2757,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2776,7 +2776,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -2793,7 +2793,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -2810,7 +2810,7 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2834,7 +2834,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -2907,7 +2907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2923,7 +2923,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2943,7 +2943,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2959,7 +2959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -2979,7 +2979,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -2995,7 +2995,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3015,7 +3015,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3031,7 +3031,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3051,7 +3051,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3073,7 +3073,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3104,7 +3104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3120,7 +3120,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3140,7 +3140,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3163,7 +3163,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -3194,7 +3194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3210,7 +3210,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3230,7 +3230,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3246,7 +3246,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3266,7 +3266,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3282,7 +3282,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3302,7 +3302,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -3318,7 +3318,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -3342,7 +3342,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3365,7 +3365,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -3530,7 +3530,7 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3547,7 +3547,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3566,7 +3566,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3583,7 +3583,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3602,7 +3602,7 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3619,7 +3619,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3638,7 +3638,7 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3655,7 +3655,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3674,7 +3674,7 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3697,7 +3697,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3722,7 +3722,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3739,7 +3739,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3758,7 +3758,7 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3782,7 +3782,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -3807,7 +3807,7 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3824,7 +3824,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3843,7 +3843,7 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3860,7 +3860,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -3879,7 +3879,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3896,7 +3896,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -3915,7 +3915,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -3932,7 +3932,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -3953,7 +3953,7 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -3977,7 +3977,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -4060,7 +4060,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4076,7 +4076,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4096,7 +4096,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4112,7 +4112,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4132,7 +4132,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4148,7 +4148,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4168,7 +4168,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4184,7 +4184,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4204,7 +4204,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4226,7 +4226,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4257,7 +4257,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4273,7 +4273,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4293,7 +4293,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4316,7 +4316,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -4347,7 +4347,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4363,7 +4363,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4383,7 +4383,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4399,7 +4399,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4419,7 +4419,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4435,7 +4435,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4455,7 +4455,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -4471,7 +4471,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -4493,7 +4493,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4516,7 +4516,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -4681,7 +4681,7 @@ spec:
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4698,7 +4698,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4717,7 +4717,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4734,7 +4734,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4753,7 +4753,7 @@ spec:
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4770,7 +4770,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4789,7 +4789,7 @@ spec:
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4806,7 +4806,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -4825,7 +4825,7 @@ spec:
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4848,7 +4848,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4873,7 +4873,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4890,7 +4890,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4909,7 +4909,7 @@ spec:
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4933,7 +4933,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -4958,7 +4958,7 @@ spec:
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4975,7 +4975,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -4994,7 +4994,7 @@ spec:
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5011,7 +5011,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5030,7 +5030,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5047,7 +5047,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -5066,7 +5066,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -5083,7 +5083,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -5104,7 +5104,7 @@ spec:
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5128,7 +5128,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -5211,7 +5211,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5227,7 +5227,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -5247,7 +5247,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5263,7 +5263,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -5283,7 +5283,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5299,7 +5299,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5319,7 +5319,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5335,7 +5335,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -5355,7 +5355,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5377,7 +5377,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5408,7 +5408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5424,7 +5424,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5444,7 +5444,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5467,7 +5467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
@@ -5498,7 +5498,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5514,7 +5514,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5534,7 +5534,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5550,7 +5550,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) / COUNT(analyzed_table."target_column")
@@ -5570,7 +5570,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5586,7 +5586,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT(analyzed_table.`target_column`) - COUNT(DISTINCT analyzed_table.`target_column`)
                     ) / COUNT(analyzed_table.`target_column`)
@@ -5606,7 +5606,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) - COUNT_BIG(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
@@ -5622,7 +5622,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE 100.0 * (
                         COUNT_BIG(analyzed_table.[target_column]) - COUNT_BIG(DISTINCT analyzed_table.[target_column])
                     ) / COUNT_BIG(analyzed_table.[target_column])
@@ -5644,7 +5644,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -5667,7 +5667,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE CAST(100.0 * (
                         COUNT(analyzed_table."target_column") - COUNT(DISTINCT analyzed_table."target_column")
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")

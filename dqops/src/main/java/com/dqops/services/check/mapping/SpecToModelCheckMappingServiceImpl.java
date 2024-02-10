@@ -41,6 +41,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -178,6 +179,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
             if (categoryFieldValue == null) {
                 continue;
+            }
+
+            HierarchyNode categoryHierarchyNode = (HierarchyNode) categoryFieldValue;
+            if (categoryHierarchyNode.getHierarchyId() == null && checkCategoriesSpec != null && checkCategoriesSpec.getHierarchyId() != null) {
+                categoryHierarchyNode.setHierarchyId(new HierarchyId(checkCategoriesSpec.getHierarchyId(), categoryFieldInfo.getYamlFieldName()));
             }
 
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
@@ -453,6 +459,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                         (AbstractSpec) checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
                 AbstractCheckSpec<?, ?, ?, ?> checkFieldValue = (AbstractCheckSpec<?, ?, ?, ?>) checkSpecObject;
+                HierarchyNode parentHierarchyNode = (HierarchyNode) checkCategoryParentNode;
+                if (checkFieldValue.getHierarchyId() == null && parentHierarchyNode != null && parentHierarchyNode.getHierarchyId() != null) {
+                    checkFieldValue.setHierarchyId(new HierarchyId(parentHierarchyNode.getHierarchyId(), checkFieldInfo.getYamlFieldName()));
+                }
+
                 CheckModel checkModel = createCheckModel(checkFieldInfo,
                         null,
                         checkFieldValue,

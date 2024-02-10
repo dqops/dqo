@@ -63,7 +63,7 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -76,7 +76,7 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -89,7 +89,7 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,6 +115,6 @@ public class SnowflakeColumnPiiContainsUsaPhonePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(92.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 }

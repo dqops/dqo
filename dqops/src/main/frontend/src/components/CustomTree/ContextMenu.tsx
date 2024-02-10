@@ -42,7 +42,8 @@ const ContextMenu = ({
     runChecks,
     collectStatisticsOnTable,
     deleteStoredData,
-    runPartitionedChecks
+    runPartitionedChecks,
+    reimportTableMetadata
   } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
@@ -377,6 +378,15 @@ const ContextMenu = ({
               />
             </>
           )}
+          {node.level === TREE_LEVEL.TABLE &&
+            checkTypes === CheckTypes.SOURCES && (
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => reimportTableMetadata(node)}
+              >
+                Reimport table metadata
+              </div>
+            )}
         </div>
       </PopoverContent>
     </Popover>

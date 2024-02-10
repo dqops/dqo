@@ -24,12 +24,15 @@ import com.dqops.metadata.search.StatisticsCollectorSearchFilters;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableOwnerSpec;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 import org.apache.parquet.Strings;
@@ -100,6 +103,12 @@ public class TableListModel {
             "profiling checks result executed during the month. By changing this value, it is possible to store one value per day or even store all profiling checks results.")
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private ProfilingTimePeriod profilingChecksResultTruncation;
+
+    @JsonPropertyDescription("File format for a file based table, such as a CSV or Parquet file.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private FileFormatSpec fileFormat;
+
 
     /**
      * True when the table has any checks configured.
@@ -293,6 +302,7 @@ public class TableListModel {
             setFilter(tableSpec.getFilter());
             setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
+            setFileFormat(tableSpec.getFileFormat());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
@@ -359,6 +369,7 @@ public class TableListModel {
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setPriority(this.getPriority());
         targetTableSpec.setOwner(this.getOwner());
+        targetTableSpec.setFileFormat(this.getFileFormat());
 
         if (targetTableSpec.getProfilingChecks() == null) {
             targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());

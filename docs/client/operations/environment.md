@@ -31,7 +31,7 @@ http://localhost:8888/api/environment/settings
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/environment/settings^
@@ -40,7 +40,7 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -53,7 +53,7 @@ http://localhost:8888/api/environment/settings
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +71,7 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoSettingsModel(
@@ -86,7 +86,7 @@ http://localhost:8888/api/environment/settings
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -104,7 +104,7 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoSettingsModel(
@@ -119,7 +119,7 @@ http://localhost:8888/api/environment/settings
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -140,7 +140,7 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoSettingsModel(
@@ -155,7 +155,7 @@ http://localhost:8888/api/environment/settings
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -176,7 +176,7 @@ http://localhost:8888/api/environment/settings
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoSettingsModel(
@@ -220,7 +220,7 @@ http://localhost:8888/api/environment/profile
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/environment/profile^
@@ -229,7 +229,7 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -258,7 +258,7 @@ http://localhost:8888/api/environment/profile
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -276,7 +276,7 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoUserProfileModel(
@@ -305,7 +305,7 @@ http://localhost:8888/api/environment/profile
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -323,7 +323,7 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoUserProfileModel(
@@ -352,7 +352,7 @@ http://localhost:8888/api/environment/profile
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -373,7 +373,7 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoUserProfileModel(
@@ -402,7 +402,7 @@ http://localhost:8888/api/environment/profile
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -423,7 +423,7 @@ http://localhost:8888/api/environment/profile
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     DqoUserProfileModel(
@@ -481,7 +481,7 @@ http://localhost:8888/api/environment/issueapikey
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/environment/issueapikey^
@@ -490,7 +490,7 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -501,7 +501,7 @@ http://localhost:8888/api/environment/issueapikey
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -519,7 +519,7 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     'sample_string_value'
@@ -530,7 +530,7 @@ http://localhost:8888/api/environment/issueapikey
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -548,7 +548,7 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     'sample_string_value'
@@ -559,7 +559,7 @@ http://localhost:8888/api/environment/issueapikey
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -580,7 +580,7 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     'sample_string_value'
@@ -591,7 +591,7 @@ http://localhost:8888/api/environment/issueapikey
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -612,7 +612,7 @@ http://localhost:8888/api/environment/issueapikey
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     'sample_string_value'

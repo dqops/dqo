@@ -239,7 +239,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -255,7 +255,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -271,7 +271,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -287,7 +287,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -303,7 +303,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table')}}) / COUNT(*)
         END AS actual_value
        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -325,7 +325,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -341,7 +341,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE CAST(100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) AS DOUBLE) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -364,7 +364,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -380,7 +380,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -396,7 +396,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -412,7 +412,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN NULL
+            WHEN COUNT_BIG(*) = 0 THEN 0.0
             ELSE 100.0 * COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) / COUNT_BIG(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -428,7 +428,7 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 0.0
             ELSE CAST(100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) AS DOUBLE) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -824,7 +824,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -918,13 +918,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN NULL
+            WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
                     ELSE 0
                 END
-                )/COUNT(*)
+            ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -960,13 +960,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN NULL
+            WHEN COUNT_BIG(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
                     ELSE 0
                 END
-                )/COUNT_BIG(*)
+            ) / COUNT_BIG(*)
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}

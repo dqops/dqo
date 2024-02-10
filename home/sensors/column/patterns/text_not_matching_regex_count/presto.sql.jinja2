@@ -10,14 +10,14 @@
 
 SELECT
     CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-        ELSE SUM(
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+        ELSE CAST(SUM(
             CASE
                 WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                     THEN 0
                 ELSE 1
             END
-        )
+        ) AS DOUBLE)
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

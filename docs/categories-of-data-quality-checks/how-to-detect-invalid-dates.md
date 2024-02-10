@@ -152,12 +152,13 @@ The parameters of the [*text_match_date_format_percent*](../checks/column/dateti
 The configuration of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md) 
 check uses a list of date formats supported by DQOps.
 
-| Date format constant | Sample date  |
-|----------------------|--------------|
-| `YYYY-MM-DD`         | 2023-12-31   |
-| `DD/MM/YYYY`         | 31/12/2023   |
-| `DD-MM-YYYY`         | 31-12-2024   |
-| `DD.MM.YYYY`         | 31.12.2024   |
+| Date format constant | Sample date |
+|----------------------|-------------|
+| `MM/DD/YYYY`         | 12/31/2023  |
+| `YYYY-MM-DD`         | 2023-12-31  |
+| `DD/MM/YYYY`         | 31/12/2023  |
+| `DD-MM-YYYY`         | 31-12-2024  |
+| `DD.MM.YYYY`         | 31.12.2024  |
 
 The configuration of the [*text_match_date_format_percent*](../checks/column/datetime/text-match-date-format-percent.md)
 check in YAML is shown below.

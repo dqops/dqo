@@ -65,7 +65,7 @@ public class PostgresqlColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(100.0, Precision.round((double) resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PostgresqlColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(100.0, Precision.round((double) resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -91,7 +91,7 @@ public class PostgresqlColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(100.0, Precision.round((double) resultTable.column(0).get(0),3));
     }
 
     @Test
@@ -117,6 +117,6 @@ public class PostgresqlColumnTextTextParsableToIntegerPercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(96.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(100.0, Precision.round((double) resultTable.column(0).get(0),3));
     }
 }

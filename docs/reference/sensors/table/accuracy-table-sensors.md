@@ -244,10 +244,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         (SELECT
-            COUNT(*)
+            COUNT_BIG(*)
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        COUNT(*) AS actual_value
+        COUNT_BIG(*) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```

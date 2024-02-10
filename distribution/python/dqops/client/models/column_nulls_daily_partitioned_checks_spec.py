@@ -44,9 +44,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
             and rules should match the type of the configured sensor and rule for the custom check.
         daily_partition_nulls_count (Union[Unset, ColumnNullsCountCheckSpec]):
         daily_partition_nulls_percent (Union[Unset, ColumnNullsPercentCheckSpec]):
+        daily_partition_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         daily_partition_not_nulls_count (Union[Unset, ColumnNotNullsCountCheckSpec]):
         daily_partition_not_nulls_percent (Union[Unset, ColumnNotNullsPercentCheckSpec]):
-        daily_partition_nulls_percent_anomaly (Union[Unset, ColumnNullPercentAnomalyStationaryCheckSpec]):
         daily_partition_nulls_percent_change (Union[Unset, ColumnNullPercentChangeCheckSpec]):
         daily_partition_nulls_percent_change_1_day (Union[Unset, ColumnNullPercentChange1DayCheckSpec]):
         daily_partition_nulls_percent_change_7_days (Union[Unset, ColumnNullPercentChange7DaysCheckSpec]):
@@ -58,14 +58,14 @@ class ColumnNullsDailyPartitionedChecksSpec:
     ] = UNSET
     daily_partition_nulls_count: Union[Unset, "ColumnNullsCountCheckSpec"] = UNSET
     daily_partition_nulls_percent: Union[Unset, "ColumnNullsPercentCheckSpec"] = UNSET
+    daily_partition_nulls_percent_anomaly: Union[
+        Unset, "ColumnNullPercentAnomalyStationaryCheckSpec"
+    ] = UNSET
     daily_partition_not_nulls_count: Union[
         Unset, "ColumnNotNullsCountCheckSpec"
     ] = UNSET
     daily_partition_not_nulls_percent: Union[
         Unset, "ColumnNotNullsPercentCheckSpec"
-    ] = UNSET
-    daily_partition_nulls_percent_anomaly: Union[
-        Unset, "ColumnNullPercentAnomalyStationaryCheckSpec"
     ] = UNSET
     daily_partition_nulls_percent_change: Union[
         Unset, "ColumnNullPercentChangeCheckSpec"
@@ -94,6 +94,12 @@ class ColumnNullsDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_nulls_percent, Unset):
             daily_partition_nulls_percent = self.daily_partition_nulls_percent.to_dict()
 
+        daily_partition_nulls_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_partition_nulls_percent_anomaly, Unset):
+            daily_partition_nulls_percent_anomaly = (
+                self.daily_partition_nulls_percent_anomaly.to_dict()
+            )
+
         daily_partition_not_nulls_count: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.daily_partition_not_nulls_count, Unset):
             daily_partition_not_nulls_count = (
@@ -104,12 +110,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
         if not isinstance(self.daily_partition_not_nulls_percent, Unset):
             daily_partition_not_nulls_percent = (
                 self.daily_partition_not_nulls_percent.to_dict()
-            )
-
-        daily_partition_nulls_percent_anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_partition_nulls_percent_anomaly, Unset):
-            daily_partition_nulls_percent_anomaly = (
-                self.daily_partition_nulls_percent_anomaly.to_dict()
             )
 
         daily_partition_nulls_percent_change: Union[Unset, Dict[str, Any]] = UNSET
@@ -149,6 +149,10 @@ class ColumnNullsDailyPartitionedChecksSpec:
             field_dict["daily_partition_nulls_count"] = daily_partition_nulls_count
         if daily_partition_nulls_percent is not UNSET:
             field_dict["daily_partition_nulls_percent"] = daily_partition_nulls_percent
+        if daily_partition_nulls_percent_anomaly is not UNSET:
+            field_dict[
+                "daily_partition_nulls_percent_anomaly"
+            ] = daily_partition_nulls_percent_anomaly
         if daily_partition_not_nulls_count is not UNSET:
             field_dict[
                 "daily_partition_not_nulls_count"
@@ -157,10 +161,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
             field_dict[
                 "daily_partition_not_nulls_percent"
             ] = daily_partition_not_nulls_percent
-        if daily_partition_nulls_percent_anomaly is not UNSET:
-            field_dict[
-                "daily_partition_nulls_percent_anomaly"
-            ] = daily_partition_nulls_percent_anomaly
         if daily_partition_nulls_percent_change is not UNSET:
             field_dict[
                 "daily_partition_nulls_percent_change"
@@ -237,6 +237,21 @@ class ColumnNullsDailyPartitionedChecksSpec:
                 _daily_partition_nulls_percent
             )
 
+        _daily_partition_nulls_percent_anomaly = d.pop(
+            "daily_partition_nulls_percent_anomaly", UNSET
+        )
+        daily_partition_nulls_percent_anomaly: Union[
+            Unset, ColumnNullPercentAnomalyStationaryCheckSpec
+        ]
+        if isinstance(_daily_partition_nulls_percent_anomaly, Unset):
+            daily_partition_nulls_percent_anomaly = UNSET
+        else:
+            daily_partition_nulls_percent_anomaly = (
+                ColumnNullPercentAnomalyStationaryCheckSpec.from_dict(
+                    _daily_partition_nulls_percent_anomaly
+                )
+            )
+
         _daily_partition_not_nulls_count = d.pop(
             "daily_partition_not_nulls_count", UNSET
         )
@@ -258,21 +273,6 @@ class ColumnNullsDailyPartitionedChecksSpec:
             daily_partition_not_nulls_percent = (
                 ColumnNotNullsPercentCheckSpec.from_dict(
                     _daily_partition_not_nulls_percent
-                )
-            )
-
-        _daily_partition_nulls_percent_anomaly = d.pop(
-            "daily_partition_nulls_percent_anomaly", UNSET
-        )
-        daily_partition_nulls_percent_anomaly: Union[
-            Unset, ColumnNullPercentAnomalyStationaryCheckSpec
-        ]
-        if isinstance(_daily_partition_nulls_percent_anomaly, Unset):
-            daily_partition_nulls_percent_anomaly = UNSET
-        else:
-            daily_partition_nulls_percent_anomaly = (
-                ColumnNullPercentAnomalyStationaryCheckSpec.from_dict(
-                    _daily_partition_nulls_percent_anomaly
                 )
             )
 
@@ -340,9 +340,9 @@ class ColumnNullsDailyPartitionedChecksSpec:
             custom_checks=custom_checks,
             daily_partition_nulls_count=daily_partition_nulls_count,
             daily_partition_nulls_percent=daily_partition_nulls_percent,
+            daily_partition_nulls_percent_anomaly=daily_partition_nulls_percent_anomaly,
             daily_partition_not_nulls_count=daily_partition_not_nulls_count,
             daily_partition_not_nulls_percent=daily_partition_not_nulls_percent,
-            daily_partition_nulls_percent_anomaly=daily_partition_nulls_percent_anomaly,
             daily_partition_nulls_percent_change=daily_partition_nulls_percent_change,
             daily_partition_nulls_percent_change_1_day=daily_partition_nulls_percent_change_1_day,
             daily_partition_nulls_percent_change_7_days=daily_partition_nulls_percent_change_7_days,

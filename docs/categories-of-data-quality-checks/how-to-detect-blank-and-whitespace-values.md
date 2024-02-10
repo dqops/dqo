@@ -103,7 +103,7 @@ Turn on the "Advanced checks" checkbox. DQOps will also show non-standard checks
 ![Measure percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/measure-whitespace-and-null-placeholder-percent-data-quality-checks-min.png){ loading=lazy }
 
 ### Configure checks in YAML
-The percentage checks are easy to configure in a YAML file. The parameter `max_percent`
+The percentage checks are easy to configure in a YAML file. The parameter `max_percent` controls the maximum accepted percentage.
 
 ``` { .yaml linenums="1" hl_lines="12-21"  }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json

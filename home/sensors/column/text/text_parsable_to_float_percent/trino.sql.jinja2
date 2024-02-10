@@ -2,10 +2,10 @@
 {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN 100.0
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE CAST(100.0 * COUNT(
             TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DOUBLE)
-        ) AS DOUBLE) / COUNT(*)
+        ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
     {{- lib.render_time_dimension_projection_reference('analyzed_table') }}

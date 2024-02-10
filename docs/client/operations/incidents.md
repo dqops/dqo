@@ -31,7 +31,7 @@ http://localhost:8888/api/incidentstat
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidentstat^
@@ -40,7 +40,7 @@ http://localhost:8888/api/incidentstat
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -57,7 +57,7 @@ http://localhost:8888/api/incidentstat
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -75,7 +75,7 @@ http://localhost:8888/api/incidentstat
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -90,7 +90,7 @@ http://localhost:8888/api/incidentstat
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -108,7 +108,7 @@ http://localhost:8888/api/incidentstat
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -123,7 +123,7 @@ http://localhost:8888/api/incidentstat
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -144,7 +144,7 @@ http://localhost:8888/api/incidentstat
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -159,7 +159,7 @@ http://localhost:8888/api/incidentstat
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -180,7 +180,7 @@ http://localhost:8888/api/incidentstat
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -241,7 +241,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection^
@@ -250,7 +250,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -279,7 +279,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -300,7 +300,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -333,7 +333,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -354,7 +354,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -387,7 +387,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -411,7 +411,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -444,7 +444,7 @@ http://localhost:8888/api/incidents/{connectionName}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -468,7 +468,7 @@ http://localhost:8888/api/incidents/{connectionName}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -540,7 +540,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident^
@@ -549,7 +549,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -566,7 +566,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -588,7 +588,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentModel(
@@ -605,7 +605,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -627,7 +627,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentModel(
@@ -644,7 +644,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -669,7 +669,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentModel(
@@ -686,7 +686,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -711,7 +711,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentModel(
@@ -772,7 +772,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/histogram^
@@ -781,7 +781,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -799,7 +799,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -821,7 +821,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentIssueHistogramModel(
@@ -845,7 +845,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -867,7 +867,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentIssueHistogramModel(
@@ -891,7 +891,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -916,7 +916,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentIssueHistogramModel(
@@ -940,7 +940,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -965,7 +965,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     IncidentIssueHistogramModel(
@@ -1037,7 +1037,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issues^
@@ -1046,7 +1046,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     
     ```js
@@ -1138,7 +1138,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1162,7 +1162,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1258,7 +1258,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1282,7 +1282,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1378,7 +1378,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1405,7 +1405,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1501,7 +1501,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1528,7 +1528,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
     ```
 
     
-    ### **Return value sample**
+    **Return value sample**
     
     ```python
     [
@@ -1657,7 +1657,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/issueurl^
@@ -1669,7 +1669,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1693,7 +1693,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1717,7 +1717,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1744,7 +1744,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1804,7 +1804,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "curl"
-    ### **Execution**
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/incidents/sample_connection/2007/10/sample_incident/status^
@@ -1816,7 +1816,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1841,7 +1841,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1866,7 +1866,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth sync client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client
@@ -1894,7 +1894,7 @@ http://localhost:8888/api/incidents/{connectionName}/{year}/{month}/{incidentId}
 
 
 === "Python auth async client"
-    ### **Execution**
+    **Execution**
 
     ```python
     from dqops import client

@@ -16,6 +16,8 @@
 
 package com.dqops.checks.defaults;
 
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,18 +53,18 @@ public class DefaultDailyMonitoringObservabilityCheckSettingsSpec extends Abstra
     @JsonPropertyDescription("The default configuration of daily monitoring checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultDailyMonitoringTableObservabilityCheckSettingsSpec table = new DefaultDailyMonitoringTableObservabilityCheckSettingsSpec();
+    private TableDailyMonitoringCheckCategoriesSpec table = new TableDailyMonitoringCheckCategoriesSpec();
 
     @JsonPropertyDescription("The default configuration of daily monitoring checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec column = new DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec();
+    private ColumnDailyMonitoringCheckCategoriesSpec column = new ColumnDailyMonitoringCheckCategoriesSpec();
 
     /**
      * Returns the container of default table level checks.
      * @return Table level checks.
      */
-    public DefaultDailyMonitoringTableObservabilityCheckSettingsSpec getTable() {
+    public TableDailyMonitoringCheckCategoriesSpec getTable() {
         return table;
     }
 
@@ -70,7 +72,7 @@ public class DefaultDailyMonitoringObservabilityCheckSettingsSpec extends Abstra
      * Sets the reference to the container of table level default checks.
      * @param table Table level checks container.
      */
-    public void setTable(DefaultDailyMonitoringTableObservabilityCheckSettingsSpec table) {
+    public void setTable(TableDailyMonitoringCheckCategoriesSpec table) {
         this.setDirtyIf(!Objects.equals(this.table, table));
         this.table = table;
         this.propagateHierarchyIdToField(table, "table");
@@ -80,7 +82,7 @@ public class DefaultDailyMonitoringObservabilityCheckSettingsSpec extends Abstra
      * Returns the container of default column level checks.
      * @return Column level checks.
      */
-    public DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec getColumn() {
+    public ColumnDailyMonitoringCheckCategoriesSpec getColumn() {
         return column;
     }
 
@@ -88,7 +90,7 @@ public class DefaultDailyMonitoringObservabilityCheckSettingsSpec extends Abstra
      * Sets the reference to the container of column level default checks.
      * @param column Column level checks container.
      */
-    public void setColumn(DefaultDailyMonitoringColumnObservabilityCheckSettingsSpec column) {
+    public void setColumn(ColumnDailyMonitoringCheckCategoriesSpec column) {
         this.setDirtyIf(!Objects.equals(this.column, column));
         this.column = column;
         this.propagateHierarchyIdToField(column, "column");

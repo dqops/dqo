@@ -16,7 +16,7 @@
 
 SELECT
     CASE
-        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
                 WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
