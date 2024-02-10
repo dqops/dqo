@@ -34,7 +34,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
+ * This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ * This check measures the percentage of valid keys found in the dictionary table.
+ * It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -47,10 +47,10 @@ public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCa
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each monthly partition.")
     private ColumnIntegrityLookupKeyNotFoundCountCheckSpec monthlyPartitionLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores a separate data quality check result for each monthly partition.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionLookupKeyFoundPercent;
 
     /**

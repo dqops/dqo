@@ -95,8 +95,8 @@
 
 | Sensor name | Description |
 |-------------|-------------|
-|[*foreign_key_match_percent*](./integrity-column-sensors.md#foreign-key-match-percent)|Column level sensor that calculates the percentage of values that match values in column of another table.|
-|[*foreign_key_not_match_count*](./integrity-column-sensors.md#foreign-key-not-match-count)|Column level sensor that calculates the count of values that does not match values in column of another table.|
+|[*foreign_key_match_percent*](./integrity-column-sensors.md#foreign-key-match-percent)|Column level sensor that calculates the percentage of values that match values in a column of another dictionary table.|
+|[*foreign_key_not_match_count*](./integrity-column-sensors.md#foreign-key-not-match-count)|Column level sensor that calculates the count of values that does not match values in a column of another dictionary table.|
 
 
 

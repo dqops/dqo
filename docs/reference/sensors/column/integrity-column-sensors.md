@@ -5,7 +5,7 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 
 
 ## foreign key match percent
-Column level sensor that calculates the percentage of values that match values in column of another table.
+Column level sensor that calculates the percentage of values that match values in a column of another dictionary table.
 
 **Sensor summary**
 
@@ -409,7 +409,7 @@ ___
 
 
 ## foreign key not match count
-Column level sensor that calculates the count of values that does not match values in column of another table.
+Column level sensor that calculates the count of values that does not match values in a column of another dictionary table.
 
 **Sensor summary**
 

@@ -357,12 +357,15 @@ Verifies that the values in text columns match one of the predefined date format
 Checks the referential integrity of a column against a column in another table.
 
 ### [lookup key not found](./integrity/lookup-key-not-found.md)
-A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.
 
 
 
 ### [lookup key found percent](./integrity/lookup-key-found-percent.md)
-A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
+This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ This check measures the percentage of valid keys found in the dictionary table.
+ It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.
 
 
 

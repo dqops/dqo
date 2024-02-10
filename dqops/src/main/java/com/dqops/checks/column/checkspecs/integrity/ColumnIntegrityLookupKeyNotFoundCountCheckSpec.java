@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+ * This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ * This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

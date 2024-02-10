@@ -30,7 +30,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the percentage of values that match values in column of another table.
+ * Column level sensor that calculates the percentage of values that match values in a column of another dictionary table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -43,7 +43,7 @@ public class ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec extends A
     };
 
     @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
-    @SampleValues(values = { "dim_customer" })
+    @SampleValues(values = { "public.dim_customer" })
     @RequiredField
     private String foreignTable;
 
