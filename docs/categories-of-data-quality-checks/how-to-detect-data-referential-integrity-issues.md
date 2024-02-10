@@ -135,12 +135,12 @@ and [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-per
 The checks use two parameters to identify the dictionary table and the key column in that table.
 
 - The **foreign_table** parameter should be a fully qualified table name.
-  For the purpose of this example, we are using the `\`bigquery-public-data\`.\`country_codes\`.\`country_codes\`` table.
+  For the purpose of this example, we are using the _&#96;bigquery-public-data&#96;.&#96;country_codes&#96;.&#96;country_codes&#96;_ table.
 
 - The **foreign_column** parameter is the name of the primary key column in the dictionary table.
 
-The [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check also takes a *max_count* rule parameter, 
-and the [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md) check takes a *max_percent* rule parameter.
+The [*lookup_key_not_found*](../checks/column/integrity/lookup-key-not-found.md) check also takes a **max_count** rule parameter, 
+and the [*lookup_key_found_percent*](../checks/column/integrity/lookup-key-found-percent.md) check takes a **max_percent** rule parameter.
 
 ![Detecting missing keys using a lookup data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/foreign-key-lookup-check-configured-in-check-editor-min.png){ loading=lazy }
 
