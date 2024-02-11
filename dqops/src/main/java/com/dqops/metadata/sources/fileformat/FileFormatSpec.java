@@ -24,7 +24,7 @@ public class FileFormatSpec extends AbstractSpec {
 
     private static final ChildHierarchyNodeFieldMapImpl<FileFormatSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("file_paths", o -> o.filePathList);
+            put("file_paths", o -> o.filePaths);
             put("csv_file_format", o -> o.csvFileFormat);
             put("json_file_format", o -> o.jsonFileFormat);
             put("parquet_file_format", o -> o.parquetFileFormat);
@@ -49,10 +49,9 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private FilePathListSpec filePathList;
+    private FilePathListSpec filePaths = new FilePathListSpec();
 
     public FileFormatSpec() {
-        this.filePathList = new FilePathListSpec();
     }
 
     /**
@@ -114,16 +113,17 @@ public class FileFormatSpec extends AbstractSpec {
      * @return List with file paths.
      */
     public FilePathListSpec getFilePaths() {
-        return filePathList;
+        return filePaths;
     }
 
     /**
      * Sets the list of paths to files with data that are used as a source.
-     * @param filePathList List with file paths.
+     * @param filePaths List with file paths.
      */
-    public void setFilePaths(FilePathListSpec filePathList) {
-        setDirtyIf(!Objects.equals(this.filePathList, filePathList));
-        this.filePathList = filePathList;
+    public void setFilePaths(FilePathListSpec filePaths) {
+        setDirtyIf(!Objects.equals(this.filePaths, filePaths));
+        this.filePaths = filePaths;
+        propagateHierarchyIdToField(filePaths, "file_paths");
     }
 
     /**
@@ -131,8 +131,8 @@ public class FileFormatSpec extends AbstractSpec {
      * @return Table options string.
      */
     public String buildTableOptionsString(){
-        if(csvFileFormat != null){
-            return csvFileFormat.buildSourceTableOptionsString(filePathList);
+        if (csvFileFormat != null) {
+            return csvFileFormat.buildSourceTableOptionsString(filePaths);
         }
 //        if(jsonFileFormat != null){   // todo
 //
@@ -167,9 +167,9 @@ public class FileFormatSpec extends AbstractSpec {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (this.filePathList != null) {
+        if (this.filePaths != null) {
             stringBuilder.append("Files: ");
-            stringBuilder.append(String.join(", ", this.filePathList) );
+            stringBuilder.append(String.join(", ", this.filePaths) );
         }
 
         return stringBuilder.toString();
