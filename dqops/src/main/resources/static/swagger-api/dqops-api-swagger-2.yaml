@@ -30132,13 +30132,9 @@ definitions:
       parquet_file_format:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
-      file_path_list:
-        type: "array"
-        description: "The list of paths to files with data that are used as a source."
-        items:
-          type: "string"
       file_paths:
         type: "array"
+        description: "The list of paths to files with data that are used as a source."
         items:
           type: "string"
   HierarchyIdModel:

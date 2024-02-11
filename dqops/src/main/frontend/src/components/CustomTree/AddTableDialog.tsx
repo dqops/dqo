@@ -31,7 +31,6 @@ enum fileFormat {
   csv = 'csv_file_format',
   json = 'json_file_format',
   parquet = 'parquet_file_format',
-  file_path_list = 'file_path_list',
   file_path = 'file_path'
 }
 
@@ -68,7 +67,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const args = node ? node.id.toString().split('.') : [];
 
-  //todo: pass file_paths or file_path_list to createTable method, based on provider type
+  //todo: pass file_paths to createTable method, based on provider type
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -77,7 +76,6 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_path_list: paths.filter((x) => x.length !== 0),
               file_paths: paths.filter((x) => x.length !== 0)
             } ?? undefined
         }).then(() =>
@@ -93,7 +91,6 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_path_list: paths.filter((x) => x.length !== 0),
               file_paths: paths.filter((x) => x.length !== 0)
             } ?? undefined
         }).then(() =>
