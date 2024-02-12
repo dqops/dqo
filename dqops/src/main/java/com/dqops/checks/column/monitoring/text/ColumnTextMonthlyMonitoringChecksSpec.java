@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespaceCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespacePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,9 +51,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
             put("monthly_text_length_above_max_length", o -> o.monthlyTextLengthAboveMaxLength);
             put("monthly_text_length_above_max_length_percent", o -> o.monthlyTextLengthAboveMaxLengthPercent);
             put("monthly_text_length_in_range_percent", o -> o.monthlyTextLengthInRangePercent);
-
-            put("monthly_text_surrounded_by_whitespace", o -> o.monthlyTextSurroundedByWhitespace);
-            put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -81,12 +78,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextLengthInRangePercentCheckSpec monthlyTextLengthInRangePercent;
-
-    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -231,42 +222,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyTextLengthInRangePercent, monthlyTextLengthInRangePercent));
         this.monthlyTextLengthInRangePercent = monthlyTextLengthInRangePercent;
         propagateHierarchyIdToField(monthlyTextLengthInRangePercent, "monthly_text_length_in_range_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyTextSurroundedByWhitespace() {
-        return monthlyTextSurroundedByWhitespace;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace count check.
-     * @param monthlyTextSurroundedByWhitespace String surrounded by whitespace count check.
-     */
-    public void setMonthlyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespace, monthlyTextSurroundedByWhitespace));
-        this.monthlyTextSurroundedByWhitespace = monthlyTextSurroundedByWhitespace;
-        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespace, "monthly_text_surrounded_by_whitespace");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyTextSurroundedByWhitespacePercent() {
-        return monthlyTextSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param monthlyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
-     */
-    public void setMonthlyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespacePercent, monthlyTextSurroundedByWhitespacePercent));
-        this.monthlyTextSurroundedByWhitespacePercent = monthlyTextSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
     }
 
 

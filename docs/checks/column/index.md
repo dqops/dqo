@@ -225,6 +225,16 @@ A column-level check that ensures that there are no more than a maximum percent 
 
 
 
+### [text surrounded by whitespace](./blanks/text-surrounded-by-whitespace.md)
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+
+
+
+### [text surrounded by whitespace percent](./blanks/text-surrounded-by-whitespace-percent.md)
+A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
+
+
+
 
 
 
@@ -778,16 +788,6 @@ A column-level check that ensures that the percentage of text values in the moni
 
 ### [text length in range percent](./text/text-length-in-range-percent.md)
 Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
-
-
-
-### [text surrounded by whitespace](./text/text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text surrounded by whitespace percent](./text/text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
 
 
 

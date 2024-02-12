@@ -47,6 +47,9 @@ public class ColumnBlanksDailyPartitionedChecksSpec extends AbstractCheckCategor
             put("daily_partition_empty_text_percent", o -> o.dailyPartitionEmptyTextPercent);
             put("daily_partition_whitespace_text_percent", o -> o.dailyPartitionWhitespaceTextPercent);
             put("daily_partition_null_placeholder_text_percent", o -> o.dailyPartitionNullPlaceholderTextPercent);
+
+            put("daily_partition_text_surrounded_by_whitespace", o -> o.dailyPartitionTextSurroundedByWhitespace);
+            put("daily_partition_text_surrounded_by_whitespace_percent", o -> o.dailyPartitionTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -67,6 +70,12 @@ public class ColumnBlanksDailyPartitionedChecksSpec extends AbstractCheckCategor
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyPartitionNullPlaceholderTextPercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec dailyPartitionTextSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyPartitionTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -175,6 +184,42 @@ public class ColumnBlanksDailyPartitionedChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.dailyPartitionNullPlaceholderTextPercent, dailyPartitionNullPlaceholderTextPercent));
         this.dailyPartitionNullPlaceholderTextPercent = dailyPartitionNullPlaceholderTextPercent;
         propagateHierarchyIdToField(dailyPartitionNullPlaceholderTextPercent, "daily_partition_null_placeholder_text_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyPartitionTextSurroundedByWhitespace() {
+        return dailyPartitionTextSurroundedByWhitespace;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param dailyPartitionTextSurroundedByWhitespace String surrounded by whitespace count check.
+     */
+    public void setDailyPartitionTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyPartitionTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextSurroundedByWhitespace, dailyPartitionTextSurroundedByWhitespace));
+        this.dailyPartitionTextSurroundedByWhitespace = dailyPartitionTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(dailyPartitionTextSurroundedByWhitespace, "daily_partition_text_surrounded_by_whitespace");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyPartitionTextSurroundedByWhitespacePercent() {
+        return dailyPartitionTextSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param dailyPartitionTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setDailyPartitionTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyPartitionTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextSurroundedByWhitespacePercent, dailyPartitionTextSurroundedByWhitespacePercent));
+        this.dailyPartitionTextSurroundedByWhitespacePercent = dailyPartitionTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyPartitionTextSurroundedByWhitespacePercent, "daily_partition_text_surrounded_by_whitespace_percent");
     }
 
 

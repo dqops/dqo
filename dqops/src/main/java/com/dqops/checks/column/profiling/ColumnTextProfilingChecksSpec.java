@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespaceCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespacePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,9 +51,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_text_length_above_max_length", o -> o.profileTextLengthAboveMaxLength);
             put("profile_text_length_above_max_length_percent", o -> o.profileTextLengthAboveMaxLengthPercent);
             put("profile_text_length_in_range_percent", o -> o.profileTextLengthInRangePercent);
-
-            put("profile_text_surrounded_by_whitespace", o -> o.profileTextSurroundedByWhitespace);
-            put("profile_text_surrounded_by_whitespace_percent", o -> o.profileTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -80,12 +77,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column")
     private ColumnTextLengthInRangePercentCheckSpec profileTextLengthInRangePercent;
-
-    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table")
-    private ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -230,42 +221,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextLengthInRangePercent, profileTextLengthInRangePercent));
         this.profileTextLengthInRangePercent = profileTextLengthInRangePercent;
         propagateHierarchyIdToField(profileTextLengthInRangePercent, "profile_text_length_in_range_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getProfileTextSurroundedByWhitespace() {
-        return profileTextSurroundedByWhitespace;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace count check.
-     * @param profileTextSurroundedByWhitespace String surrounded by whitespace count check.
-     */
-    public void setProfileTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespace, profileTextSurroundedByWhitespace));
-        this.profileTextSurroundedByWhitespace = profileTextSurroundedByWhitespace;
-        propagateHierarchyIdToField(profileTextSurroundedByWhitespace, "profile_text_surrounded_by_whitespace");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getProfileTextSurroundedByWhitespacePercent() {
-        return profileTextSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param profileTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
-     */
-    public void setProfileTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespacePercent, profileTextSurroundedByWhitespacePercent));
-        this.profileTextSurroundedByWhitespacePercent = profileTextSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(profileTextSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
     }
 
 

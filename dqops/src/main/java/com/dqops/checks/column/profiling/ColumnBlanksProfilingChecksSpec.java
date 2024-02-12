@@ -47,6 +47,9 @@ public class ColumnBlanksProfilingChecksSpec extends AbstractCheckCategorySpec {
             put("profile_empty_text_percent", o -> o.profileEmptyTextPercent);
             put("profile_whitespace_text_percent", o -> o.profileWhitespaceTextPercent);
             put("profile_null_placeholder_text_percent", o -> o.profileNullPlaceholderTextPercent);
+
+            put("profile_text_surrounded_by_whitespace", o -> o.profileTextSurroundedByWhitespace);
+            put("profile_text_surrounded_by_whitespace_percent", o -> o.profileTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -67,6 +70,12 @@ public class ColumnBlanksProfilingChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec profileNullPlaceholderTextPercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table")
+    private ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage")
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -175,6 +184,42 @@ public class ColumnBlanksProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileNullPlaceholderTextPercent, profileNullPlaceholderTextPercent));
         this.profileNullPlaceholderTextPercent = profileNullPlaceholderTextPercent;
         propagateHierarchyIdToField(profileNullPlaceholderTextPercent, "profile_null_placeholder_text_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnTextSurroundedByWhitespaceCheckSpec getProfileTextSurroundedByWhitespace() {
+        return profileTextSurroundedByWhitespace;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param profileTextSurroundedByWhitespace String surrounded by whitespace count check.
+     */
+    public void setProfileTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespace, profileTextSurroundedByWhitespace));
+        this.profileTextSurroundedByWhitespace = profileTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(profileTextSurroundedByWhitespace, "profile_text_surrounded_by_whitespace");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getProfileTextSurroundedByWhitespacePercent() {
+        return profileTextSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param profileTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setProfileTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespacePercent, profileTextSurroundedByWhitespacePercent));
+        this.profileTextSurroundedByWhitespacePercent = profileTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(profileTextSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
     }
 
 

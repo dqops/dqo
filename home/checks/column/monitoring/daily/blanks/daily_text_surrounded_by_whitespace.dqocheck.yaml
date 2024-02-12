@@ -1,0 +1,10 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/blanks/text_surrounded_by_whitespace_count
+  rule_name: comparison/max_count
+  help_text: The check counts the number of text values in the column that are surrounded
+    by whitespace characters and should be trimmed before loading to another table.
+    Stores the most recent captured value for each day when the data quality check
+    was evaluated.

@@ -56,7 +56,7 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          text:
+          accepted_values:
             daily_text_valid_currency_code_percent:
               warning:
                 min_percent: 75.0

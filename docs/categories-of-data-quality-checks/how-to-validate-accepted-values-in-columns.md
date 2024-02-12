@@ -228,9 +228,10 @@ spec:
 
 
 ## Use cases
-| **Name of the example**                                                                                                       | **Description**                                                                                                                                                                               |
-|:------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Percentage of rows having only accepted values](../examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that a text column contains only accepted values using the [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check. |
+| **Name of the example**                                                                                                       | **Description**                                                                                                                                                                                                                                    |
+|:------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of rows having only accepted values](../examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that a text column contains only accepted values using the [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check.                                                      |
+| [Percentage of valid currency codes](../examples/data-validity/percentage-of-valid-currency-codes.md)                         | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../checks/column/accepted_values/text-valid-currency-code-percent.md) check. |
 
 
 ## List of accepted values checks at a column level

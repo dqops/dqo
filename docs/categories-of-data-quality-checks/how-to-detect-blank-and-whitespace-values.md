@@ -139,6 +139,8 @@ spec:
 |[*empty_text_percent*](../checks/column/blanks/empty-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
 |[*whitespace_text_percent*](../checks/column/blanks/whitespace-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
 |[*null_placeholder_text_percent*](../checks/column/blanks/null-placeholder-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.| |
+|[*text_surrounded_by_whitespace*](../checks/column/blanks/text-surrounded-by-whitespace.md)|Validity|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
+|[*text_surrounded_by_whitespace_percent*](../checks/column/blanks/text-surrounded-by-whitespace-percent.md)|Validity|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
 
 
 **Reference and samples**

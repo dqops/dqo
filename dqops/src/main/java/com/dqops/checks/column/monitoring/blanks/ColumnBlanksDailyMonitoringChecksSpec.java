@@ -47,6 +47,10 @@ public class ColumnBlanksDailyMonitoringChecksSpec extends AbstractCheckCategory
             put("daily_empty_text_percent", o -> o.dailyEmptyTextPercent);
             put("daily_whitespace_text_percent", o -> o.dailyWhitespaceTextPercent);
             put("daily_null_placeholder_text_percent", o -> o.dailyNullPlaceholderTextPercent);
+
+
+            put("daily_text_surrounded_by_whitespace", o -> o.dailyTextSurroundedByWhitespace);
+            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -67,6 +71,12 @@ public class ColumnBlanksDailyMonitoringChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec dailyNullPlaceholderTextPercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -175,6 +185,42 @@ public class ColumnBlanksDailyMonitoringChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.dailyNullPlaceholderTextPercent, dailyNullPlaceholderTextPercent));
         this.dailyNullPlaceholderTextPercent = dailyNullPlaceholderTextPercent;
         propagateHierarchyIdToField(dailyNullPlaceholderTextPercent, "daily_null_placeholder_text_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyTextSurroundedByWhitespace() {
+        return dailyTextSurroundedByWhitespace;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param dailyTextSurroundedByWhitespace String surrounded by whitespace count check.
+     */
+    public void setDailyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespace, dailyTextSurroundedByWhitespace));
+        this.dailyTextSurroundedByWhitespace = dailyTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(dailyTextSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyTextSurroundedByWhitespacePercent() {
+        return dailyTextSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param dailyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setDailyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespacePercent, dailyTextSurroundedByWhitespacePercent));
+        this.dailyTextSurroundedByWhitespacePercent = dailyTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(dailyTextSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
     }
 
 

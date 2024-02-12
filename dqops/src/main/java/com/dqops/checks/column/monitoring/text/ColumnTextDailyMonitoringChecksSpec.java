@@ -19,8 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespaceCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespacePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,9 +51,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
             put("daily_text_length_above_max_length", o -> o.dailyTextLengthAboveMaxLength);
             put("daily_text_length_above_max_length_percent", o -> o.dailyTextLengthAboveMaxLengthPercent);
             put("daily_text_length_in_range_percent", o -> o.dailyTextLengthInRangePercent);
-
-            put("daily_text_surrounded_by_whitespace", o -> o.dailyTextSurroundedByWhitespace);
-            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -80,12 +77,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextLengthInRangePercentCheckSpec dailyTextLengthInRangePercent;
-
-    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -230,42 +221,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyTextLengthInRangePercent, dailyTextLengthInRangePercent));
         this.dailyTextLengthInRangePercent = dailyTextLengthInRangePercent;
         propagateHierarchyIdToField(dailyTextLengthInRangePercent, "daily_text_length_in_range_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyTextSurroundedByWhitespace() {
-        return dailyTextSurroundedByWhitespace;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace count check.
-     * @param dailyTextSurroundedByWhitespace String surrounded by whitespace count check.
-     */
-    public void setDailyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespace, dailyTextSurroundedByWhitespace));
-        this.dailyTextSurroundedByWhitespace = dailyTextSurroundedByWhitespace;
-        propagateHierarchyIdToField(dailyTextSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyTextSurroundedByWhitespacePercent() {
-        return dailyTextSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param dailyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
-     */
-    public void setDailyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespacePercent, dailyTextSurroundedByWhitespacePercent));
-        this.dailyTextSurroundedByWhitespacePercent = dailyTextSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(dailyTextSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
     }
 
 

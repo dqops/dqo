@@ -17197,6 +17197,14 @@
         "daily_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -17233,6 +17241,14 @@
         "daily_partition_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -17399,6 +17415,14 @@
         "monthly_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -17435,6 +17459,14 @@
         "monthly_partition_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -17583,6 +17615,14 @@
         "profile_null_placeholder_text_percent" : {
           "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -27394,14 +27434,6 @@
         "daily_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -27446,14 +27478,6 @@
         "daily_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -28184,14 +28208,6 @@
         "monthly_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -28236,14 +28252,6 @@
         "monthly_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -28624,14 +28632,6 @@
         "profile_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },

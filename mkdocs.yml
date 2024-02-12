@@ -319,6 +319,8 @@ nav:
         - empty text percent: 'checks/column/blanks/empty-text-percent.md'
         - whitespace text percent: 'checks/column/blanks/whitespace-text-percent.md'
         - null placeholder text percent: 'checks/column/blanks/null-placeholder-text-percent.md'
+        - text surrounded by whitespace: 'checks/column/blanks/text-surrounded-by-whitespace.md'
+        - text surrounded by whitespace percent: 'checks/column/blanks/text-surrounded-by-whitespace-percent.md'
       - bool:
         - 'checks/column/bool/index.md'
         - true percent: 'checks/column/bool/true-percent.md'
@@ -430,8 +432,6 @@ nav:
         - text length above max length: 'checks/column/text/text-length-above-max-length.md'
         - text length above max length percent: 'checks/column/text/text-length-above-max-length-percent.md'
         - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
-        - text surrounded by whitespace: 'checks/column/text/text-surrounded-by-whitespace.md'
-        - text surrounded by whitespace percent: 'checks/column/text/text-surrounded-by-whitespace-percent.md'
       - uniqueness:
         - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'

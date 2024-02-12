@@ -120,34 +120,6 @@ Column check that calculates the percentage of text values with a length below t
 
 
 
-### [text surrounded by whitespace](./text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
-
-
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#profile-text-surrounded-by-whitespace)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table| |
-|[<span class="no-wrap-code">`daily_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#daily-text-surrounded-by-whitespace)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#monthly-text-surrounded-by-whitespace)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#daily-partition-text-surrounded-by-whitespace)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace`</span>](./text-surrounded-by-whitespace.md#monthly-partition-text-surrounded-by-whitespace)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
-
-
-
-### [text surrounded by whitespace percent](./text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
-
-
-| Data quality check name | Check type | Description | Standard |
-|-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`profile_text_surrounded_by_whitespace_percent`</span>](./text-surrounded-by-whitespace-percent.md#profile-text-surrounded-by-whitespace-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage| |
-|[<span class="no-wrap-code">`daily_text_surrounded_by_whitespace_percent`</span>](./text-surrounded-by-whitespace-percent.md#daily-text-surrounded-by-whitespace-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`monthly_text_surrounded_by_whitespace_percent`</span>](./text-surrounded-by-whitespace-percent.md#monthly-text-surrounded-by-whitespace-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
-|[<span class="no-wrap-code">`daily_partition_text_surrounded_by_whitespace_percent`</span>](./text-surrounded-by-whitespace-percent.md#daily-partition-text-surrounded-by-whitespace-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
-|[<span class="no-wrap-code">`monthly_partition_text_surrounded_by_whitespace_percent`</span>](./text-surrounded-by-whitespace-percent.md#monthly-partition-text-surrounded-by-whitespace-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
-
-
-
 
 
 

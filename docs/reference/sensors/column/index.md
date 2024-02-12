@@ -43,6 +43,8 @@
 |[*empty_text_percent*](./blanks-column-sensors.md#empty-text-percent)|Column level sensor that calculates the percentage of rows with an empty string.|
 |[*null_placeholder_text_count*](./blanks-column-sensors.md#null-placeholder-text-count)|Column level sensor that calculates the number of rows with a null placeholder string column value.|
 |[*null_placeholder_text_percent*](./blanks-column-sensors.md#null-placeholder-text-percent)|Column level sensor that calculates the percentage of rows with a null placeholder string column value.|
+|[*text_surrounded_by_whitespace_count*](./blanks-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
+|[*text_surrounded_by_whitespace_percent*](./blanks-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
 |[*whitespace_text_count*](./blanks-column-sensors.md#whitespace-text-count)|Column level sensor that calculates the number of rows with a whitespace text column value.|
 |[*whitespace_text_percent*](./blanks-column-sensors.md#whitespace-text-percent)|Column level sensor that calculates the percentage of rows with a whitespace text column value.|
 
@@ -228,8 +230,6 @@
 |[*text_max_length*](./text-column-sensors.md#text-max-length)|Column level sensor that ensures that the length of text values in a column does not exceed the maximum accepted length.|
 |[*text_mean_length*](./text-column-sensors.md#text-mean-length)|Column level sensor that ensures that the length of text values in a column does not exceed the mean accepted length.|
 |[*text_min_length*](./text-column-sensors.md#text-min-length)|Column level sensor that ensures that the length of text values in a column does not exceed the minimum accepted length.|
-|[*text_surrounded_by_whitespace_count*](./text-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
-|[*text_surrounded_by_whitespace_percent*](./text-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
 
 
 

@@ -47,6 +47,9 @@ public class ColumnBlanksMonthlyMonitoringChecksSpec extends AbstractCheckCatego
             put("monthly_empty_text_percent", o -> o.monthlyEmptyTextPercent);
             put("monthly_whitespace_text_percent", o -> o.monthlyWhitespaceTextPercent);
             put("monthly_null_placeholder_text_percent", o -> o.monthlyNullPlaceholderTextPercent);
+
+            put("monthly_text_surrounded_by_whitespace", o -> o.monthlyTextSurroundedByWhitespace);
+            put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -67,6 +70,12 @@ public class ColumnBlanksMonthlyMonitoringChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyNullPlaceholderTextPercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -175,6 +184,42 @@ public class ColumnBlanksMonthlyMonitoringChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.monthlyNullPlaceholderTextPercent, monthlyNullPlaceholderTextPercent));
         this.monthlyNullPlaceholderTextPercent = monthlyNullPlaceholderTextPercent;
         propagateHierarchyIdToField(monthlyNullPlaceholderTextPercent, "monthly_null_placeholder_text_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyTextSurroundedByWhitespace() {
+        return monthlyTextSurroundedByWhitespace;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param monthlyTextSurroundedByWhitespace String surrounded by whitespace count check.
+     */
+    public void setMonthlyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespace, monthlyTextSurroundedByWhitespace));
+        this.monthlyTextSurroundedByWhitespace = monthlyTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespace, "monthly_text_surrounded_by_whitespace");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyTextSurroundedByWhitespacePercent() {
+        return monthlyTextSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param monthlyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setMonthlyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespacePercent, monthlyTextSurroundedByWhitespacePercent));
+        this.monthlyTextSurroundedByWhitespacePercent = monthlyTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyTextSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
     }
 
 

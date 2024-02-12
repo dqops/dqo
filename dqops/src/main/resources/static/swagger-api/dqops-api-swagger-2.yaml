@@ -14977,6 +14977,18 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+      daily_text_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      daily_text_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Stores the most recent captured value for each day when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnBlanksDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -15018,6 +15030,20 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores a separate data\
           \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+      daily_partition_text_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      daily_partition_text_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Analyzes every daily partition and creates a separate data\
+          \ quality check result with the time period value that identifies the daily\
+          \ partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnBlanksEmptyTextCountSensorParametersSpec:
     type: "object"
     properties:
@@ -15195,6 +15221,18 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+      monthly_text_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Stores the most recent captured value for each month\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      monthly_text_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Stores the most recent captured value for each month when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnBlanksMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -15236,6 +15274,20 @@ definitions:
           \ does not exceed the maximum accepted percentage. Stores a separate data\
           \ quality check result for each monthly partition."
         $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+      monthly_partition_text_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      monthly_partition_text_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage. Analyzes every monthly partition and creates a separate data\
+          \ quality check result with the time period value that identifies the monthly\
+          \ partition."
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnBlanksNullPlaceholderTextFoundCheckSpec:
     type: "object"
     properties:
@@ -15395,6 +15447,16 @@ definitions:
         description: "Verifies that the percentage of null placeholders in a column\
           \ does not exceed the maximum accepted percentage."
         $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+      profile_text_surrounded_by_whitespace:
+        description: "The check counts the number of text values in the column that\
+          \ are surrounded by whitespace characters and should be trimmed before loading\
+          \ to another table"
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+      profile_text_surrounded_by_whitespace_percent:
+        description: "Verifies that the percentage of text values that are surrounded\
+          \ by whitespace characters in a column does not exceed the maximum accepted\
+          \ percentage"
+        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnBlanksWhitespaceTextCountSensorParametersSpec:
     type: "object"
     properties:
@@ -26056,18 +26118,6 @@ definitions:
           \ length in the range provided by the user in the column. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      daily_text_surrounded_by_whitespace:
-        description: "The check counts the number of text values in the column that\
-          \ are surrounded by whitespace characters and should be trimmed before loading\
-          \ to another table. Stores the most recent captured value for each day when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      daily_text_surrounded_by_whitespace_percent:
-        description: "Verifies that the percentage of text values that are surrounded\
-          \ by whitespace characters in a column does not exceed the maximum accepted\
-          \ percentage. Stores the most recent captured value for each day when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnTextDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -26127,20 +26177,6 @@ definitions:
           \ daily partition and creates a separate data quality check result with\
           \ the time period value that identifies the daily partition."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      daily_partition_text_surrounded_by_whitespace:
-        description: "The check counts the number of text values in the column that\
-          \ are surrounded by whitespace characters and should be trimmed before loading\
-          \ to another table. Analyzes every daily partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ daily partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      daily_partition_text_surrounded_by_whitespace_percent:
-        description: "Verifies that the percentage of text values that are surrounded\
-          \ by whitespace characters in a column does not exceed the maximum accepted\
-          \ percentage. Analyzes every daily partition and creates a separate data\
-          \ quality check result with the time period value that identifies the daily\
-          \ partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnTextFoundInSetPercentCheckSpec:
     type: "object"
     properties:
@@ -26957,18 +26993,6 @@ definitions:
           \ length in the range provided by the user in the column. Stores the most\
           \ recent captured value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      monthly_text_surrounded_by_whitespace:
-        description: "The check counts the number of text values in the column that\
-          \ are surrounded by whitespace characters and should be trimmed before loading\
-          \ to another table. Stores the most recent captured value for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      monthly_text_surrounded_by_whitespace_percent:
-        description: "Verifies that the percentage of text values that are surrounded\
-          \ by whitespace characters in a column does not exceed the maximum accepted\
-          \ percentage. Stores the most recent captured value for each month when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnTextMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -27028,20 +27052,6 @@ definitions:
           \ monthly partition and creates a separate data quality check result with\
           \ the time period value that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      monthly_partition_text_surrounded_by_whitespace:
-        description: "The check counts the number of text values in the column that\
-          \ are surrounded by whitespace characters and should be trimmed before loading\
-          \ to another table. Analyzes every monthly partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ monthly partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      monthly_partition_text_surrounded_by_whitespace_percent:
-        description: "Verifies that the percentage of text values that are surrounded\
-          \ by whitespace characters in a column does not exceed the maximum accepted\
-          \ percentage. Analyzes every monthly partition and creates a separate data\
-          \ quality check result with the time period value that identifies the monthly\
-          \ partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnTextNotMatchingDatePatternFoundCheckSpec:
     type: "object"
     properties:
@@ -27454,16 +27464,6 @@ definitions:
         description: "The check measures the percentage of those text values with\
           \ length in the range provided by the user in the column"
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      profile_text_surrounded_by_whitespace:
-        description: "The check counts the number of text values in the column that\
-          \ are surrounded by whitespace characters and should be trimmed before loading\
-          \ to another table"
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-      profile_text_surrounded_by_whitespace_percent:
-        description: "Verifies that the percentage of text values that are surrounded\
-          \ by whitespace characters in a column does not exceed the maximum accepted\
-          \ percentage"
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
   ColumnTextStatisticsCollectorsSpec:
     type: "object"
     properties:

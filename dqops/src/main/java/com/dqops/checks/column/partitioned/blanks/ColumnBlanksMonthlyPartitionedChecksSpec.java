@@ -47,6 +47,9 @@ public class ColumnBlanksMonthlyPartitionedChecksSpec extends AbstractCheckCateg
             put("monthly_partition_empty_text_percent", o -> o.monthlyPartitionEmptyTextPercent);
             put("monthly_partition_whitespace_text_percent", o -> o.monthlyPartitionWhitespaceTextPercent);
             put("monthly_partition_null_placeholder_text_percent", o -> o.monthlyPartitionNullPlaceholderTextPercent);
+
+            put("monthly_partition_text_surrounded_by_whitespace", o -> o.monthlyPartitionTextSurroundedByWhitespace);
+            put("monthly_partition_text_surrounded_by_whitespace_percent", o -> o.monthlyPartitionTextSurroundedByWhitespacePercent);
         }
     };
 
@@ -67,6 +70,12 @@ public class ColumnBlanksMonthlyPartitionedChecksSpec extends AbstractCheckCateg
 
     @JsonPropertyDescription("Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnBlanksNullPlaceholderTextPercentCheckSpec monthlyPartitionNullPlaceholderTextPercent;
+
+    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
+    private ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionTextSurroundedByWhitespace;
+
+    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
+    private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionTextSurroundedByWhitespacePercent;
 
 
     /**
@@ -175,6 +184,42 @@ public class ColumnBlanksMonthlyPartitionedChecksSpec extends AbstractCheckCateg
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionNullPlaceholderTextPercent, monthlyPartitionNullPlaceholderTextPercent));
         this.monthlyPartitionNullPlaceholderTextPercent = monthlyPartitionNullPlaceholderTextPercent;
         propagateHierarchyIdToField(monthlyPartitionNullPlaceholderTextPercent, "monthly_partition_null_placeholder_text_percent");
+    }
+
+    /**
+     * Returns a minimum string valid dates percent check.
+     * @return Minimum string valid dates percent check.
+     */
+    public ColumnTextSurroundedByWhitespaceCheckSpec getMonthlyPartitionTextSurroundedByWhitespace() {
+        return monthlyPartitionTextSurroundedByWhitespace;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace count check.
+     * @param monthlyPartitionTextSurroundedByWhitespace String surrounded by whitespace count check.
+     */
+    public void setMonthlyPartitionTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionTextSurroundedByWhitespace) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextSurroundedByWhitespace, monthlyPartitionTextSurroundedByWhitespace));
+        this.monthlyPartitionTextSurroundedByWhitespace = monthlyPartitionTextSurroundedByWhitespace;
+        propagateHierarchyIdToField(monthlyPartitionTextSurroundedByWhitespace, "monthly_partition_text_surrounded_by_whitespace");
+    }
+
+    /**
+     * Returns a maximum string null placeholder count check.
+     * @return Maximum string null placeholder count check.
+     */
+    public ColumnTextSurroundedByWhitespacePercentCheckSpec getMonthlyPartitionTextSurroundedByWhitespacePercent() {
+        return monthlyPartitionTextSurroundedByWhitespacePercent;
+    }
+
+    /**
+     * Sets a new definition of a string surrounded by whitespace percent check.
+     * @param monthlyPartitionTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
+     */
+    public void setMonthlyPartitionTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyPartitionTextSurroundedByWhitespacePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextSurroundedByWhitespacePercent, monthlyPartitionTextSurroundedByWhitespacePercent));
+        this.monthlyPartitionTextSurroundedByWhitespacePercent = monthlyPartitionTextSurroundedByWhitespacePercent;
+        propagateHierarchyIdToField(monthlyPartitionTextSurroundedByWhitespacePercent, "monthly_partition_text_surrounded_by_whitespace_percent");
     }
 
 
