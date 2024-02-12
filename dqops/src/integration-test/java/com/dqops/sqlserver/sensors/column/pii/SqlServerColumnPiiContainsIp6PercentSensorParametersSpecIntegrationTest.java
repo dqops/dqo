@@ -107,7 +107,7 @@ class SqlServerColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest ex
     }
 
     @Test
-    void runSensor_whenSensorExecutedMonitoringgDailyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
+    void runSensor_whenSensorExecutedMonitoringDailyInvalidRows_thenReturnsOneRowWithTotallyFailedPercentage() {
         this.sut.setFilter(invalidExamplesFilterText);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother
                 .createForTableColumnForMonitoringCheck(

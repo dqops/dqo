@@ -112,7 +112,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
@@ -147,7 +147,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value
@@ -186,7 +186,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                         ELSE 100.0 * SUM(
                             CASE
                                 WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                            ELSE 0
+                                ELSE 0
                             END
                         ) / COUNT(%1$s)
                     END AS actual_value,
@@ -224,7 +224,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -262,7 +262,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -307,7 +307,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -347,7 +347,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -389,7 +389,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                         ELSE 100.0 * SUM(
                             CASE
                                 WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                            ELSE 0
+                                ELSE 0
                             END
                         ) / COUNT(%1$s)
                     END AS actual_value,
@@ -440,7 +440,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -484,7 +484,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,
@@ -528,7 +528,7 @@ public class ColumnDateInRangePercentSensorParametersSpecBigQueryTests extends B
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
-                        ELSE 0
+                            ELSE 0
                         END
                     ) / COUNT(%1$s)
                 END AS actual_value,

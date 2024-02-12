@@ -42,8 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsIp6PercentSensorParametersSpec sut;
-    private final String sensorRegexCompleteIPv6 = "r\"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\"";
-    private final String sensorRegexShortenedIPv6 = "r\"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}\"";
+    private final String sensorRegexCompleteIPv6 = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
+    private final String sensorRegexShortenedIPv6 = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;

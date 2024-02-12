@@ -42,7 +42,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsUsaZipcodePercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"[0-9]{5}(?:-[0-9]{4})?\"";
+    private final String sensorRegex = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])[0-9]{5}(?:-[0-9]{4})?([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsUsaZipcodePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
