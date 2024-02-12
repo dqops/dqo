@@ -2467,7 +2467,7 @@ The templates used to generate the SQL query for each data source supported by D
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
+                    WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
                         THEN 0
                     ELSE 1
                 END

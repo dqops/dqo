@@ -3,6 +3,8 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.duckdb_read_mode import DuckdbReadMode
+from ..models.duckdb_source_files_type import DuckdbSourceFilesType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -18,9 +20,8 @@ T = TypeVar("T", bound="DuckdbParametersSpec")
 class DuckdbParametersSpec:
     """
     Attributes:
-        in_memory (Union[Unset, bool]): To use the special value :memory: to create an in-memory database where no data
-            is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the
-            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        read_mode (Union[Unset, DuckdbReadMode]):
+        source_files_type (Union[Unset, DuckdbSourceFilesType]):
         database (Union[Unset, str]): DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format
             to use dynamic substitution.
         options (Union[Unset, str]): DuckDB connection 'options' initialization parameter. For example setting this to
@@ -30,14 +31,22 @@ class DuckdbParametersSpec:
             to the JDBC connection string, a key/value dictionary.
     """
 
-    in_memory: Union[Unset, bool] = UNSET
+    read_mode: Union[Unset, DuckdbReadMode] = UNSET
+    source_files_type: Union[Unset, DuckdbSourceFilesType] = UNSET
     database: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     properties: Union[Unset, "DuckdbParametersSpecProperties"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        in_memory = self.in_memory
+        read_mode: Union[Unset, str] = UNSET
+        if not isinstance(self.read_mode, Unset):
+            read_mode = self.read_mode.value
+
+        source_files_type: Union[Unset, str] = UNSET
+        if not isinstance(self.source_files_type, Unset):
+            source_files_type = self.source_files_type.value
+
         database = self.database
         options = self.options
         properties: Union[Unset, Dict[str, Any]] = UNSET
@@ -47,8 +56,10 @@ class DuckdbParametersSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if in_memory is not UNSET:
-            field_dict["in_memory"] = in_memory
+        if read_mode is not UNSET:
+            field_dict["read_mode"] = read_mode
+        if source_files_type is not UNSET:
+            field_dict["source_files_type"] = source_files_type
         if database is not UNSET:
             field_dict["database"] = database
         if options is not UNSET:
@@ -65,7 +76,19 @@ class DuckdbParametersSpec:
         )
 
         d = src_dict.copy()
-        in_memory = d.pop("in_memory", UNSET)
+        _read_mode = d.pop("read_mode", UNSET)
+        read_mode: Union[Unset, DuckdbReadMode]
+        if isinstance(_read_mode, Unset):
+            read_mode = UNSET
+        else:
+            read_mode = DuckdbReadMode(_read_mode)
+
+        _source_files_type = d.pop("source_files_type", UNSET)
+        source_files_type: Union[Unset, DuckdbSourceFilesType]
+        if isinstance(_source_files_type, Unset):
+            source_files_type = UNSET
+        else:
+            source_files_type = DuckdbSourceFilesType(_source_files_type)
 
         database = d.pop("database", UNSET)
 
@@ -79,7 +102,8 @@ class DuckdbParametersSpec:
             properties = DuckdbParametersSpecProperties.from_dict(_properties)
 
         duckdb_parameters_spec = cls(
-            in_memory=in_memory,
+            read_mode=read_mode,
+            source_files_type=source_files_type,
             database=database,
             options=options,
             properties=properties,

@@ -14,25 +14,33 @@ T = TypeVar("T", bound="CsvFileFormatSpec")
 
 @_attrs_define
 class CsvFileFormatSpec:
-    """
+    r"""
     Attributes:
-        all_varchar (Union[Unset, bool]):
-        allow_quoted_nulls (Union[Unset, bool]):
-        auto_detect (Union[Unset, bool]):
-        columns (Union[Unset, CsvFileFormatSpecColumns]):
-        compression (Union[Unset, str]):
-        dateformat (Union[Unset, str]):
-        decimal_separator (Union[Unset, str]):
-        delim (Union[Unset, str]):
-        escape (Union[Unset, str]):
-        filename (Union[Unset, bool]):
-        header (Union[Unset, bool]):
-        hive_partitioning (Union[Unset, bool]):
-        ignore_errors (Union[Unset, bool]):
-        new_line (Union[Unset, str]):
-        quote (Union[Unset, str]):
-        skip (Union[Unset, int]):
-        timestampformat (Union[Unset, str]):
+        all_varchar (Union[Unset, bool]): Option to skip type detection for CSV parsing and assume all columns to be of
+            type VARCHAR.
+        allow_quoted_nulls (Union[Unset, bool]): Option to allow the conversion of quoted values to NULL values.
+        auto_detect (Union[Unset, bool]): Enables auto detection of CSV parameters.
+        columns (Union[Unset, CsvFileFormatSpecColumns]): A struct that specifies the column names and column types
+            contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that
+            auto detection is not used.
+        compression (Union[Unset, str]): The compression type for the file. By default this will be detected
+            automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none,
+            gzip, zstd.
+        dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
+        decimal_separator (Union[Unset, str]): The decimal separator of numbers.
+        delim (Union[Unset, str]): Specifies the string that separates columns within each row (line) of the file.
+        escape (Union[Unset, str]): Specifies the string that should appear before a data character sequence that
+            matches the quote value.
+        filename (Union[Unset, bool]): Whether or not an extra filename column should be included in the result.
+        header (Union[Unset, bool]): Specifies that the file contains a header line with the names of each column in the
+            file.
+        hive_partitioning (Union[Unset, bool]): Whether or not to interpret the path as a hive partitioned path.
+        ignore_errors (Union[Unset, bool]): Option to ignore any parsing errors encountered - and instead ignore rows
+            with errors.
+        new_line (Union[Unset, str]): Set the new line character(s) in the file. Options are '\r','\n', or '\r\n'.
+        quote (Union[Unset, str]): Specifies the quoting string to be used when a data value is quoted.
+        skip (Union[Unset, int]): The number of lines at the top of the file to skip.
+        timestampformat (Union[Unset, str]): Specifies the date format to use when parsing timestamps.
     """
 
     all_varchar: Union[Unset, bool] = UNSET

@@ -1350,6 +1350,8 @@ from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
 from .duckdb_parameters_spec import DuckdbParametersSpec
 from .duckdb_parameters_spec_properties import DuckdbParametersSpecProperties
+from .duckdb_read_mode import DuckdbReadMode
+from .duckdb_source_files_type import DuckdbSourceFilesType
 from .duration import Duration
 from .effective_schedule_level_model import EffectiveScheduleLevelModel
 from .effective_schedule_model import EffectiveScheduleModel
@@ -1382,6 +1384,7 @@ from .incident_status import IncidentStatus
 from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpec
 from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .json_file_format_spec import JsonFileFormatSpec
+from .json_file_format_spec_columns import JsonFileFormatSpecColumns
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -2437,6 +2440,8 @@ __all__ = (
     "DqoUserRole",
     "DuckdbParametersSpec",
     "DuckdbParametersSpecProperties",
+    "DuckdbReadMode",
+    "DuckdbSourceFilesType",
     "Duration",
     "EffectiveScheduleLevelModel",
     "EffectiveScheduleModel",
@@ -2469,6 +2474,7 @@ __all__ = (
     "IncidentStatus",
     "IncidentWebhookNotificationsSpec",
     "JsonFileFormatSpec",
+    "JsonFileFormatSpecColumns",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",

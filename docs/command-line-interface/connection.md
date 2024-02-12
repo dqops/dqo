@@ -73,8 +73,7 @@ Creates a new connection to the database with the specified details such as conn
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
-                [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--athena-authentication-mode=<athenaAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -92,7 +91,9 @@ $ dqo [dqo options...] connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--mysql-database=<database>]
+                [--duckdb-options=<options>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-source-files-type=<sourceFilesType>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -139,8 +140,7 @@ $ dqo [dqo options...] connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
 **DQOps shell synopsis**
 
 ```
-dqo> connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
-                [--sqlserver-disable-encryption]
+dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--athena-authentication-mode=<athenaAuthenticationMode>]
                 [--athena-output-location=<athenaOutputLocation>]
                 [--athena-region=<athenaRegion>]
@@ -158,7 +158,9 @@ dqo> connection add [-h] [--duckdb-in-memory] [-fw] [-hl]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--mysql-database=<database>]
+                [--duckdb-options=<options>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-source-files-type=<sourceFilesType>]
+                [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -230,8 +232,9 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection add--duckdb-in-memory" class="no-wrap-code">`--duckdb-in-memory`</div>|To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection add--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
@@ -380,8 +383,7 @@ Update the connection or connections that match the conditions specified in the 
 **Command-line synopsis**
 
 ```
-$ dqo [dqo options...] connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
-                   [--sqlserver-disable-encryption]
+$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--athena-authentication-mode=<athenaAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -400,6 +402,8 @@ $ dqo [dqo options...] connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-database=<database>] [--duckdb-options=<options>]
+                   [--duckdb-read-mode=<readMode>]
+                   [--duckdb-source-files-type=<sourceFilesType>]
                    [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
@@ -447,8 +451,7 @@ $ dqo [dqo options...] connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
 **DQOps shell synopsis**
 
 ```
-dqo> connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
-                   [--sqlserver-disable-encryption]
+dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--athena-authentication-mode=<athenaAuthenticationMode>]
                    [--athena-output-location=<athenaOutputLocation>]
                    [--athena-region=<athenaRegion>]
@@ -467,6 +470,8 @@ dqo> connection update [-h] [--duckdb-in-memory] [-fw] [-hl]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-database=<database>] [--duckdb-options=<options>]
+                   [--duckdb-read-mode=<readMode>]
+                   [--duckdb-source-files-type=<sourceFilesType>]
                    [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
@@ -539,8 +544,9 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-port" class="no-wrap-code">`--databricks-port`</div>|Databricks port number| ||
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
-|<div id="connection update--duckdb-in-memory" class="no-wrap-code">`--duckdb-in-memory`</div>|To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection update--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
