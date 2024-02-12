@@ -22,10 +22,10 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`accepted_values`](./column-monthly-partitioned-checks.md#columnacceptedvaluesmonthlypartitionedchecksspec)</span>|Configuration of accepted values checks on a column level|*[ColumnAcceptedValuesMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnacceptedvaluesmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`text`](./column-monthly-partitioned-checks.md#columntextmonthlypartitionedchecksspec)</span>|Monthly partitioned checks of text values in the column|*[ColumnTextMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columntextmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`blanks`](./column-monthly-partitioned-checks.md#columnblanksmonthlypartitionedchecksspec)</span>|Configuration of column level checks that detect blank and whitespace values|*[ColumnBlanksMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnblanksmonthlypartitionedchecksspec)*| | | |
+|<span class="no-wrap-code ">[`conversions`](./column-monthly-partitioned-checks.md#columnconversionsmonthlypartitionedchecksspec)</span>|Configuration of conversion testing checks on a column level.|*[ColumnConversionsMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnconversionsmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`patterns`](./column-monthly-partitioned-checks.md#columnpatternsmonthlypartitionedchecksspec)</span>|Monthly partitioned pattern match checks on a column level|*[ColumnPatternsMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnpatternsmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`pii`](./column-monthly-partitioned-checks.md#columnpiimonthlypartitionedchecksspec)</span>|Monthly partitioned checks of Personal Identifiable Information (PII) in the column|*[ColumnPiiMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnpiimonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`numeric`](./column-monthly-partitioned-checks.md#columnnumericmonthlypartitionedchecksspec)</span>|Monthly partitioned checks of numeric values in the column|*[ColumnNumericMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnnumericmonthlypartitionedchecksspec)*| | | |
-|<span class="no-wrap-code ">[`anomaly`](./column-monthly-partitioned-checks.md#columnanomalymonthlypartitionedchecksspec)</span>|Monthly partitioned checks for anomalies in numeric columns|*[ColumnAnomalyMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnanomalymonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`datetime`](./column-monthly-partitioned-checks.md#columndatetimemonthlypartitionedchecksspec)</span>|Monthly partitioned checks of datetime in the column|*[ColumnDatetimeMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columndatetimemonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`bool`](./column-monthly-partitioned-checks.md#columnboolmonthlypartitionedchecksspec)</span>|Monthly partitioned checks for booleans in the column|*[ColumnBoolMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnboolmonthlypartitionedchecksspec)*| | | |
 |<span class="no-wrap-code ">[`integrity`](./column-monthly-partitioned-checks.md#columnintegritymonthlypartitionedchecksspec)</span>|Monthly partitioned checks for integrity in the column|*[ColumnIntegrityMonthlyPartitionedChecksSpec](./column-monthly-partitioned-checks.md#columnintegritymonthlypartitionedchecksspec)*| | | |
@@ -167,10 +167,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`monthly_partition_text_length_above_max_length`](../../../checks/column/text/text-length-above-max-length.md)</span>|The check counts the number of text values in the column that is above the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextLengthAboveMaxLengthCheckSpec](../../../checks/column/text/text-length-above-max-length.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_text_length_above_max_length_percent`](../../../checks/column/text/text-length-above-max-length-percent.md)</span>|The check measures the percentage of text values in the column that is above the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextLengthAboveMaxLengthPercentCheckSpec](../../../checks/column/text/text-length-above-max-length-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_text_length_in_range_percent`](../../../checks/column/text/text-length-in-range-percent.md)</span>|The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextLengthInRangePercentCheckSpec](../../../checks/column/text/text-length-in-range-percent.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_boolean_percent`](../../../checks/column/text/text-parsable-to-boolean-percent.md)</span>|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToBooleanPercentCheckSpec](../../../checks/column/text/text-parsable-to-boolean-percent.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_integer_percent`](../../../checks/column/text/text-parsable-to-integer-percent.md)</span>|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToIntegerPercentCheckSpec](../../../checks/column/text/text-parsable-to-integer-percent.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_float_percent`](../../../checks/column/text/text-parsable-to-float-percent.md)</span>|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToFloatPercentCheckSpec](../../../checks/column/text/text-parsable-to-float-percent.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_date_percent`](../../../checks/column/text/text-parsable-to-date-percent.md)</span>|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToDatePercentCheckSpec](../../../checks/column/text/text-parsable-to-date-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_text_surrounded_by_whitespace`](../../../checks/column/text/text-surrounded-by-whitespace.md)</span>|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextSurroundedByWhitespaceCheckSpec](../../../checks/column/text/text-surrounded-by-whitespace.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_text_surrounded_by_whitespace_percent`](../../../checks/column/text/text-surrounded-by-whitespace-percent.md)</span>|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextSurroundedByWhitespacePercentCheckSpec](../../../checks/column/text/text-surrounded-by-whitespace-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_text_valid_country_code_percent`](../../../checks/column/text/text-valid-country-code-percent.md)</span>|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextValidCountryCodePercentCheckSpec](../../../checks/column/text/text-valid-country-code-percent.md)*| | | |
@@ -209,6 +205,38 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`monthly_partition_empty_text_percent`](../../../checks/column/blanks/empty-text-percent.md)</span>|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|*[ColumnBlanksEmptyTextPercentCheckSpec](../../../checks/column/blanks/empty-text-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_whitespace_text_percent`](../../../checks/column/blanks/whitespace-text-percent.md)</span>|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.|*[ColumnBlanksWhitespaceTextPercentCheckSpec](../../../checks/column/blanks/whitespace-text-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_null_placeholder_text_percent`](../../../checks/column/blanks/null-placeholder-text-percent.md)</span>|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|*[ColumnBlanksNullPlaceholderTextPercentCheckSpec](../../../checks/column/blanks/null-placeholder-text-percent.md)*| | | |
+|<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
+
+
+
+
+
+
+
+
+
+___
+
+
+## ColumnConversionsMonthlyPartitionedChecksSpec
+Container of conversion test checks that are monitoring if text values are convertible to a target data type at a monthly partition level.
+
+
+
+
+
+
+
+
+
+The structure of this object is described below
+
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_boolean_percent`](../../../checks/column/conversions/text-parsable-to-boolean-percent.md)</span>|Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToBooleanPercentCheckSpec](../../../checks/column/conversions/text-parsable-to-boolean-percent.md)*| | | |
+|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_integer_percent`](../../../checks/column/conversions/text-parsable-to-integer-percent.md)</span>|Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToIntegerPercentCheckSpec](../../../checks/column/conversions/text-parsable-to-integer-percent.md)*| | | |
+|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_float_percent`](../../../checks/column/conversions/text-parsable-to-float-percent.md)</span>|Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToFloatPercentCheckSpec](../../../checks/column/conversions/text-parsable-to-float-percent.md)*| | | |
+|<span class="no-wrap-code ">[`monthly_partition_text_parsable_to_date_percent`](../../../checks/column/conversions/text-parsable-to-date-percent.md)</span>|Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.|*[ColumnTextParsableToDatePercentCheckSpec](../../../checks/column/conversions/text-parsable-to-date-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 
@@ -336,37 +364,6 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`monthly_partition_valid_longitude_percent`](../../../checks/column/numeric/valid-longitude-percent.md)</span>|Verifies that the percentage of valid longitude values in a column does not fall below the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.|*[ColumnValidLongitudePercentCheckSpec](../../../checks/column/numeric/valid-longitude-percent.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_non_negative_values`](../../../checks/column/numeric/non-negative-values.md)</span>|Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.|*[ColumnNonNegativeCountCheckSpec](../../../checks/column/numeric/non-negative-values.md)*| | | |
 |<span class="no-wrap-code ">[`monthly_partition_non_negative_values_percent`](../../../checks/column/numeric/non-negative-values-percent.md)</span>|Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.|*[ColumnNonNegativePercentCheckSpec](../../../checks/column/numeric/non-negative-values-percent.md)*| | | |
-|<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## ColumnAnomalyMonthlyPartitionedChecksSpec
-Container of built-in preconfigured data quality checks on a column level for detecting anomalies.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`monthly_partition_sum_change`](../../../checks/column/anomaly/sum-change.md)</span>|Verifies that the sum in a column changed in a fixed rate since the last readout.|*[ColumnSumChangeCheckSpec](../../../checks/column/anomaly/sum-change.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_mean_change`](../../../checks/column/anomaly/mean-change.md)</span>|Verifies that the mean value in a column changed in a fixed rate since the last readout.|*[ColumnMeanChangeCheckSpec](../../../checks/column/anomaly/mean-change.md)*| | | |
-|<span class="no-wrap-code ">[`monthly_partition_median_change`](../../../checks/column/anomaly/median-change.md)</span>|Verifies that the median in a column changed in a fixed rate since the last readout.|*[ColumnMedianChangeCheckSpec](../../../checks/column/anomaly/median-change.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 

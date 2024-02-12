@@ -50,11 +50,6 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
             put("monthly_partition_text_length_above_max_length_percent", o -> o.monthlyPartitionTextLengthAboveMaxLengthPercent);
             put("monthly_partition_text_length_in_range_percent", o -> o.monthlyPartitionTextLengthInRangePercent);
 
-            put("monthly_partition_text_parsable_to_boolean_percent", o -> o.monthlyPartitionTextParsableToBooleanPercent);
-            put("monthly_partition_text_parsable_to_integer_percent", o -> o.monthlyPartitionTextParsableToIntegerPercent);
-            put("monthly_partition_text_parsable_to_float_percent", o -> o.monthlyPartitionTextParsableToFloatPercent);
-            put("monthly_partition_text_parsable_to_date_percent", o -> o.monthlyPartitionTextParsableToDatePercent);
-
             put("monthly_partition_text_surrounded_by_whitespace", o -> o.monthlyPartitionTextSurroundedByWhitespace);
             put("monthly_partition_text_surrounded_by_whitespace_percent", o -> o.monthlyPartitionTextSurroundedByWhitespacePercent);
             put("monthly_partition_text_valid_country_code_percent", o -> o.monthlyPartitionTextValidCountryCodePercent);
@@ -86,19 +81,6 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
     private ColumnTextLengthInRangePercentCheckSpec monthlyPartitionTextLengthInRangePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, " +
-            "text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextParsableToBooleanPercentCheckSpec monthlyPartitionTextParsableToBooleanPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextParsableToIntegerPercentCheckSpec monthlyPartitionTextParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextParsableToFloatPercentCheckSpec monthlyPartitionTextParsableToFloatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextParsableToDatePercentCheckSpec monthlyPartitionTextParsableToDatePercent;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
     private ColumnTextSurroundedByWhitespaceCheckSpec monthlyPartitionTextSurroundedByWhitespace;
@@ -255,78 +237,6 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextLengthInRangePercent, monthlyPartitionTextLengthInRangePercent));
         this.monthlyPartitionTextLengthInRangePercent = monthlyPartitionTextLengthInRangePercent;
         propagateHierarchyIdToField(monthlyPartitionTextLengthInRangePercent, "monthly_partition_text_length_in_range_percent");
-    }
-
-    /**
-     * Returns a minimum string parsable to integer percent check.
-     * @return Minimum string parsable to integer percent check.
-     */
-    public ColumnTextParsableToBooleanPercentCheckSpec getMonthlyPartitionTextParsableToBooleanPercent() {
-        return monthlyPartitionTextParsableToBooleanPercent;
-    }
-
-    /**
-     * Sets a new definition of a string boolean placeholder percent check.
-     * @param monthlyPartitionTextParsableToBooleanPercent String boolean placeholder percent check.
-     */
-    public void setMonthlyPartitionTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec monthlyPartitionTextParsableToBooleanPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToBooleanPercent, monthlyPartitionTextParsableToBooleanPercent));
-        this.monthlyPartitionTextParsableToBooleanPercent = monthlyPartitionTextParsableToBooleanPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextParsableToBooleanPercent, "monthly_partition_text_parsable_to_boolean_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace count check.
-     * @return Maximum string surrounded by whitespace count check.
-     */
-    public ColumnTextParsableToIntegerPercentCheckSpec getMonthlyPartitionTextParsableToIntegerPercent() {
-        return monthlyPartitionTextParsableToIntegerPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to integer percent check.
-     * @param monthlyPartitionTextParsableToIntegerPercent String parsable to integer percent check.
-     */
-    public void setMonthlyPartitionTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec monthlyPartitionTextParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToIntegerPercent, monthlyPartitionTextParsableToIntegerPercent));
-        this.monthlyPartitionTextParsableToIntegerPercent = monthlyPartitionTextParsableToIntegerPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextParsableToIntegerPercent, "monthly_partition_text_parsable_to_integer_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace percent check.
-     * @return Maximum string surrounded by whitespace percent check.
-     */
-    public ColumnTextParsableToFloatPercentCheckSpec getMonthlyPartitionTextParsableToFloatPercent() {
-        return monthlyPartitionTextParsableToFloatPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to float percent check.
-     * @param monthlyPartitionTextParsableToFloatPercent String parsable to float percent check.
-     */
-    public void setMonthlyPartitionTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec monthlyPartitionTextParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToFloatPercent, monthlyPartitionTextParsableToFloatPercent));
-        this.monthlyPartitionTextParsableToFloatPercent = monthlyPartitionTextParsableToFloatPercent;
-        propagateHierarchyIdToField(monthlyPartitionTextParsableToFloatPercent, "monthly_partition_text_parsable_to_float_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnTextParsableToDatePercentCheckSpec getMonthlyPartitionTextParsableToDatePercent() {
-        return monthlyPartitionTextParsableToDatePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid dates percent check.
-     * @param monthlyPartitionTextParsableToDatePercent String valid dates percent check.
-     */
-    public void setMonthlyPartitionTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec monthlyPartitionTextParsableToDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextParsableToDatePercent, monthlyPartitionTextParsableToDatePercent));
-        this.monthlyPartitionTextParsableToDatePercent = monthlyPartitionTextParsableToDatePercent;
-        propagateHierarchyIdToField(monthlyPartitionTextParsableToDatePercent, "monthly_partition_text_parsable_to_date_percent");
     }
 
     /**

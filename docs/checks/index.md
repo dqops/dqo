@@ -270,6 +270,9 @@ A table-level check that ensures that the row count changed by a fixed rate sinc
 
 
 
+
+
+
 ## column-level accepted_values checks
 Verifies if all values in the column are from a set of known values, such as country codes.
 
@@ -535,6 +538,32 @@ A column-level check that ensures that compares the count of not null values in 
 ### [null count match](./column/comparisons/null-count-match.md)
 A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.
  Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
+
+
+
+
+
+
+## column-level conversions checks
+Validates that the values in a text column can be parsed and converted to other data types.
+
+### [text parsable to boolean percent](./column/conversions/text-parsable-to-boolean-percent.md)
+A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+
+
+
+### [text parsable to integer percent](./column/conversions/text-parsable-to-integer-percent.md)
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to float percent](./column/conversions/text-parsable-to-float-percent.md)
+A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to date percent](./column/conversions/text-parsable-to-date-percent.md)
+A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 
@@ -968,7 +997,7 @@ A column-level check that detects if the data type of the column has changed sin
 
 
 ## column-level text checks
-Validates that the data in a text column has a valid range, or can be parsed to other data types.
+Validates that the data in a text column has a valid range.
 
 ### [text max length](./column/text/text-max-length.md)
 A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
@@ -1007,26 +1036,6 @@ A column-level check that ensures that the percentage of text values in the moni
 
 ### [text length in range percent](./column/text/text-length-in-range-percent.md)
 Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
-
-
-
-### [text parsable to boolean percent](./column/text/text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
-
-
-
-### [text parsable to integer percent](./column/text/text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to float percent](./column/text/text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to date percent](./column/text/text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 

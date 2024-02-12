@@ -20,11 +20,11 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesDailyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.blanks.ColumnBlanksDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonDailyPartitionedChecksSpecMap;
+import com.dqops.checks.column.partitioned.conversions.ColumnConversionsDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
@@ -67,6 +67,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
+            put("conversions", o -> o.conversions);
             put("blanks", o -> o.blanks);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
@@ -106,6 +107,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBlanksDailyPartitionedChecksSpec blanks;
+
+    @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConversionsDailyPartitionedChecksSpec conversions;
 
     @JsonPropertyDescription("Daily partitioned pattern match checks on a column level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -250,6 +256,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.blanks, blanks));
         this.blanks = blanks;
         this.propagateHierarchyIdToField(blanks, "blanks");
+    }
+
+    /**
+     * Returns the container of conversion testing checks.
+     * @return Conversion testing checks.
+     */
+    public ColumnConversionsDailyPartitionedChecksSpec getConversions() {
+        return conversions;
+    }
+
+    /**
+     * Sets the container of conversion testing checks.
+     * @param conversions Conversion testing checks.
+     */
+    public void setConversions(ColumnConversionsDailyPartitionedChecksSpec conversions) {
+        this.setDirtyIf(!Objects.equals(this.conversions, conversions));
+        this.conversions = conversions;
+        this.propagateHierarchyIdToField(conversions, "conversions");
     }
 
     /**

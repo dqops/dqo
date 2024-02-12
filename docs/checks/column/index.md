@@ -276,6 +276,32 @@ A column-level check that ensures that compares the count of null values in the 
 
 
 
+## column-level conversions checks
+Validates that the values in a text column can be parsed and converted to other data types.
+
+### [text parsable to boolean percent](./conversions/text-parsable-to-boolean-percent.md)
+A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+
+
+
+### [text parsable to integer percent](./conversions/text-parsable-to-integer-percent.md)
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to float percent](./conversions/text-parsable-to-float-percent.md)
+A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to date percent](./conversions/text-parsable-to-date-percent.md)
+A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
+
+
+
+
+
+
 ## column-level custom_sql checks
 Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
@@ -703,7 +729,7 @@ A column-level check that detects if the data type of the column has changed sin
 
 
 ## column-level text checks
-Validates that the data in a text column has a valid range, or can be parsed to other data types.
+Validates that the data in a text column has a valid range.
 
 ### [text max length](./text/text-max-length.md)
 A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
@@ -742,26 +768,6 @@ A column-level check that ensures that the percentage of text values in the moni
 
 ### [text length in range percent](./text/text-length-in-range-percent.md)
 Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
-
-
-
-### [text parsable to boolean percent](./text/text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
-
-
-
-### [text parsable to integer percent](./text/text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to float percent](./text/text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to date percent](./text/text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 

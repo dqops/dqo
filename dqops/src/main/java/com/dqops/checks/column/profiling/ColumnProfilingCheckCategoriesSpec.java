@@ -49,6 +49,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
             put("blanks", o -> o.blanks);
+            put("conversions", o -> o.conversions);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
             put("numeric", o -> o.numeric);
@@ -88,6 +89,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBlanksProfilingChecksSpec blanks;
+
+    @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConversionsProfilingChecksSpec conversions;
 
     @JsonPropertyDescription("Configuration of pattern match checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -237,6 +243,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.blanks, blanks));
         this.blanks = blanks;
         this.propagateHierarchyIdToField(blanks, "blanks");
+    }
+
+    /**
+     * Returns the container of text conversion checks.
+     * @return Text conversion checks.
+     */
+    public ColumnConversionsProfilingChecksSpec getConversions() {
+        return conversions;
+    }
+
+    /**
+     * Sets the container of text conversion checks.
+     * @param conversions Text conversion checks.
+     */
+    public void setConversions(ColumnConversionsProfilingChecksSpec conversions) {
+        this.setDirtyIf(!Objects.equals(this.conversions, conversions));
+        this.conversions = conversions;
+        this.propagateHierarchyIdToField(conversions, "conversions");
     }
 
     /**

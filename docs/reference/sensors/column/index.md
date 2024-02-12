@@ -57,6 +57,18 @@
 
 
 
+### **conversions**
+
+| Sensor name | Description |
+|-------------|-------------|
+|[*text_parsable_to_boolean_percent*](./conversions-column-sensors.md#text-parsable-to-boolean-percent)|Column level sensor that calculates the number of rows with a text value in a text column that is parsable to a boolean type or is a well-known boolean value placeholder: yes, no, true, false, t, f, y, n, 1, 0.|
+|[*text_parsable_to_date_percent*](./conversions-column-sensors.md#text-parsable-to-date-percent)|Column level sensor that ensures that there is at least a minimum percentage of rows with a text value that is parsable to a date in an analyzed column.|
+|[*text_parsable_to_float_percent*](./conversions-column-sensors.md#text-parsable-to-float-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to a float (numeric) value.|
+|[*text_parsable_to_integer_percent*](./conversions-column-sensors.md#text-parsable-to-integer-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to an integer value.|
+
+
+
+
 ### **custom_sql**
 
 | Sensor name | Description |
@@ -214,10 +226,6 @@
 |[*text_max_length*](./text-column-sensors.md#text-max-length)|Column level sensor that ensures that the length of text values in a column does not exceed the maximum accepted length.|
 |[*text_mean_length*](./text-column-sensors.md#text-mean-length)|Column level sensor that ensures that the length of text values in a column does not exceed the mean accepted length.|
 |[*text_min_length*](./text-column-sensors.md#text-min-length)|Column level sensor that ensures that the length of text values in a column does not exceed the minimum accepted length.|
-|[*text_parsable_to_boolean_percent*](./text-column-sensors.md#text-parsable-to-boolean-percent)|Column level sensor that calculates the number of rows with a text value in a text column that is parsable to a boolean type or is a well-known boolean value placeholder: yes, no, true, false, t, f, y, n, 1, 0.|
-|[*text_parsable_to_date_percent*](./text-column-sensors.md#text-parsable-to-date-percent)|Column level sensor that ensures that there is at least a minimum percentage of rows with a text value that is parsable to a date in an analyzed column.|
-|[*text_parsable_to_float_percent*](./text-column-sensors.md#text-parsable-to-float-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to a float (numeric) value.|
-|[*text_parsable_to_integer_percent*](./text-column-sensors.md#text-parsable-to-integer-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to an integer value.|
 |[*text_surrounded_by_whitespace_count*](./text-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
 |[*text_surrounded_by_whitespace_percent*](./text-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
 |[*text_valid_country_code_percent*](./text-column-sensors.md#text-valid-country-code-percent)|Column level sensor that calculates the percentage of rows with text values with a valid country codes in an analyzed column.|

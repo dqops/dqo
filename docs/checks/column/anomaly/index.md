@@ -78,9 +78,7 @@ A column-level check that ensures that the mean value in a monitored column has 
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_mean_change`</span>](./mean-change.md#profile-mean-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_mean_change`</span>](./mean-change.md#daily-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_mean_change`</span>](./mean-change.md#monthly-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_mean_change`</span>](./mean-change.md#daily-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_mean_change`</span>](./mean-change.md#monthly-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 
 
 
@@ -128,9 +126,7 @@ A column-level check that ensures that the median in a monitored column has chan
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_median_change`</span>](./median-change.md#profile-median-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_median_change`</span>](./median-change.md#daily-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_median_change`</span>](./median-change.md#monthly-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_median_change`</span>](./median-change.md#daily-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_median_change`</span>](./median-change.md#monthly-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 
 
 
@@ -178,9 +174,7 @@ A column-level check that ensures that the sum in a monitored column has changed
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sum_change`</span>](./sum-change.md#profile-sum-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_sum_change`</span>](./sum-change.md#daily-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_sum_change`</span>](./sum-change.md#monthly-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_sum_change`</span>](./sum-change.md#daily-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_sum_change`</span>](./sum-change.md#monthly-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 
 
 

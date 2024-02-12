@@ -14783,52 +14783,6 @@ definitions:
         description: "Verifies that the sum in a column changed in a fixed rate since\
           \ the last readout from the last month."
         $ref: "#/definitions/ColumnSumChange30DaysCheckSpec"
-  ColumnAnomalyMonthlyMonitoringChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_sum_change:
-        description: "Verifies that the sum in a column changed in a fixed rate since\
-          \ the last readout."
-        $ref: "#/definitions/ColumnSumChangeCheckSpec"
-      monthly_mean_change:
-        description: "Verifies that the mean value in a column changed in a fixed\
-          \ rate since the last readout."
-        $ref: "#/definitions/ColumnMeanChangeCheckSpec"
-      monthly_median_change:
-        description: "Verifies that the median in a column changed in a fixed rate\
-          \ since the last readout."
-        $ref: "#/definitions/ColumnMedianChangeCheckSpec"
-  ColumnAnomalyMonthlyPartitionedChecksSpec:
-    type: "object"
-    properties:
-      custom_checks:
-        type: "object"
-        description: "Dictionary of additional custom checks within this category.\
-          \ The keys are check names defined in the definition section. The sensor\
-          \ parameters and rules should match the type of the configured sensor and\
-          \ rule for the custom check."
-        additionalProperties:
-          $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_sum_change:
-        description: "Verifies that the sum in a column changed in a fixed rate since\
-          \ the last readout."
-        $ref: "#/definitions/ColumnSumChangeCheckSpec"
-      monthly_partition_mean_change:
-        description: "Verifies that the mean value in a column changed in a fixed\
-          \ rate since the last readout."
-        $ref: "#/definitions/ColumnMeanChangeCheckSpec"
-      monthly_partition_median_change:
-        description: "Verifies that the median in a column changed in a fixed rate\
-          \ since the last readout."
-        $ref: "#/definitions/ColumnMedianChangeCheckSpec"
   ColumnAnomalyProfilingChecksSpec:
     type: "object"
     properties:
@@ -16404,6 +16358,192 @@ definitions:
           \ table) do not match. The alert is generated for every compared group of\
           \ rows (when data grouping is enabled)."
         $ref: "#/definitions/MaxDiffPercentRule5ParametersSpec"
+  ColumnConversionsDailyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Stores the most recent captured value for each day\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      daily_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Stores the most recent captured value for each day when the\
+          \ data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      daily_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Stores the most recent captured value for each day when the data quality\
+          \ check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      daily_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Stores the most recent captured value for each day\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+  ColumnConversionsDailyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      daily_partition_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      daily_partition_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Analyzes every daily partition and creates a separate data\
+          \ quality check result with the time period value that identifies the daily\
+          \ partition."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      daily_partition_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Analyzes every daily partition and creates a separate data quality check\
+          \ result with the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      daily_partition_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Analyzes every daily partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ daily partition."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+  ColumnConversionsMonthlyMonitoringChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Stores the most recent captured value for each month\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      monthly_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Stores the most recent captured value for each month when\
+          \ the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      monthly_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Stores the most recent captured value for each month when the data quality\
+          \ check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      monthly_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Stores the most recent captured value for each month\
+          \ when the data quality check was evaluated."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+  ColumnConversionsMonthlyPartitionedChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      monthly_partition_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      monthly_partition_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage. Analyzes every monthly partition and creates a separate data\
+          \ quality check result with the time period value that identifies the monthly\
+          \ partition."
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      monthly_partition_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage.\
+          \ Analyzes every monthly partition and creates a separate data quality check\
+          \ result with the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      monthly_partition_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression. Analyzes every monthly partition and creates a separate\
+          \ data quality check result with the time period value that identifies the\
+          \ monthly partition."
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+  ColumnConversionsProfilingChecksSpec:
+    type: "object"
+    properties:
+      custom_checks:
+        type: "object"
+        description: "Dictionary of additional custom checks within this category.\
+          \ The keys are check names defined in the definition section. The sensor\
+          \ parameters and rules should match the type of the configured sensor and\
+          \ rule for the custom check."
+        additionalProperties:
+          $ref: "#/definitions/CustomCheckSpec"
+      profile_text_parsable_to_boolean_percent:
+        description: "Verifies that the percentage of text values that are parsable\
+          \ to a boolean value does not fall below the minimum accepted percentage,\
+          \ text values identified as boolean placeholders are: 0, 1, true, false,\
+          \ t, f, yes, no, y, n."
+        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+      profile_text_parsable_to_integer_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ an integer value in a column does not fall below the minimum accepted\
+          \ percentage"
+        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+      profile_text_parsable_to_float_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a float value in a column does not fall below the minimum accepted percentage"
+        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+      profile_text_parsable_to_date_percent:
+        description: "Verifies that the percentage text values that are parsable to\
+          \ a date value in a column does not fall below the minimum accepted percentage.\
+          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
+          \ a regular expression"
+        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
   ColumnCurrentDataQualityStatusModel:
     type: "object"
     properties:
@@ -16679,6 +16819,9 @@ definitions:
         description: "Configuration of column level checks that detect blank and whitespace\
           \ values"
         $ref: "#/definitions/ColumnBlanksDailyMonitoringChecksSpec"
+      conversions:
+        description: "Configuration of conversion testing checks on a column level."
+        $ref: "#/definitions/ColumnConversionsDailyMonitoringChecksSpec"
       patterns:
         description: "Daily monitoring checks of pattern matching on a column level"
         $ref: "#/definitions/ColumnPatternsDailyMonitoringChecksSpec"
@@ -16745,6 +16888,9 @@ definitions:
         description: "Configuration of column level checks that detect blank and whitespace\
           \ values"
         $ref: "#/definitions/ColumnBlanksDailyPartitionedChecksSpec"
+      conversions:
+        description: "Configuration of conversion testing checks on a column level."
+        $ref: "#/definitions/ColumnConversionsDailyPartitionedChecksSpec"
       patterns:
         description: "Daily partitioned pattern match checks on a column level"
         $ref: "#/definitions/ColumnPatternsDailyPartitionedChecksSpec"
@@ -20464,6 +20610,9 @@ definitions:
         description: "Configuration of column level checks that detect blank and whitespace\
           \ values"
         $ref: "#/definitions/ColumnBlanksMonthlyMonitoringChecksSpec"
+      conversions:
+        description: "Configuration of conversion testing checks on a column level."
+        $ref: "#/definitions/ColumnConversionsMonthlyMonitoringChecksSpec"
       patterns:
         description: "Monthly monitoring checks of pattern matching on a column level"
         $ref: "#/definitions/ColumnPatternsMonthlyMonitoringChecksSpec"
@@ -20474,9 +20623,6 @@ definitions:
       numeric:
         description: "Monthly monitoring checks of numeric values in the column"
         $ref: "#/definitions/ColumnNumericMonthlyMonitoringChecksSpec"
-      anomaly:
-        description: "Monthly monitoring checks of anomalies in numeric columns"
-        $ref: "#/definitions/ColumnAnomalyMonthlyMonitoringChecksSpec"
       datetime:
         description: "Monthly monitoring checks of datetime in the column"
         $ref: "#/definitions/ColumnDatetimeMonthlyMonitoringChecksSpec"
@@ -20530,6 +20676,9 @@ definitions:
         description: "Configuration of column level checks that detect blank and whitespace\
           \ values"
         $ref: "#/definitions/ColumnBlanksMonthlyPartitionedChecksSpec"
+      conversions:
+        description: "Configuration of conversion testing checks on a column level."
+        $ref: "#/definitions/ColumnConversionsMonthlyPartitionedChecksSpec"
       patterns:
         description: "Monthly partitioned pattern match checks on a column level"
         $ref: "#/definitions/ColumnPatternsMonthlyPartitionedChecksSpec"
@@ -20540,9 +20689,6 @@ definitions:
       numeric:
         description: "Monthly partitioned checks of numeric values in the column"
         $ref: "#/definitions/ColumnNumericMonthlyPartitionedChecksSpec"
-      anomaly:
-        description: "Monthly partitioned checks for anomalies in numeric columns"
-        $ref: "#/definitions/ColumnAnomalyMonthlyPartitionedChecksSpec"
       datetime:
         description: "Monthly partitioned checks of datetime in the column"
         $ref: "#/definitions/ColumnDatetimeMonthlyPartitionedChecksSpec"
@@ -24445,6 +24591,9 @@ definitions:
         description: "Configuration of column level checks that detect blank and whitespace\
           \ values."
         $ref: "#/definitions/ColumnBlanksProfilingChecksSpec"
+      conversions:
+        description: "Configuration of conversion testing checks on a column level."
+        $ref: "#/definitions/ColumnConversionsProfilingChecksSpec"
       patterns:
         description: "Configuration of pattern match checks on a column level."
         $ref: "#/definitions/ColumnPatternsProfilingChecksSpec"
@@ -25851,32 +26000,6 @@ definitions:
           \ length in the range provided by the user in the column. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      daily_text_parsable_to_boolean_percent:
-        description: "Verifies that the percentage of text values that are parsable\
-          \ to a boolean value does not fall below the minimum accepted percentage,\
-          \ text values identified as boolean placeholders are: 0, 1, true, false,\
-          \ t, f, yes, no, y, n. Stores the most recent captured value for each day\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      daily_text_parsable_to_integer_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ an integer value in a column does not fall below the minimum accepted\
-          \ percentage. Stores the most recent captured value for each day when the\
-          \ data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      daily_text_parsable_to_float_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a float value in a column does not fall below the minimum accepted percentage.\
-          \ Stores the most recent captured value for each day when the data quality\
-          \ check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      daily_text_parsable_to_date_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a date value in a column does not fall below the minimum accepted percentage.\
-          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
-          \ a regular expression. Stores the most recent captured value for each day\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
       daily_text_surrounded_by_whitespace:
         description: "The check counts the number of text values in the column that\
           \ are surrounded by whitespace characters and should be trimmed before loading\
@@ -25960,35 +26083,6 @@ definitions:
           \ daily partition and creates a separate data quality check result with\
           \ the time period value that identifies the daily partition."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      daily_partition_text_parsable_to_boolean_percent:
-        description: "Verifies that the percentage of text values that are parsable\
-          \ to a boolean value does not fall below the minimum accepted percentage,\
-          \ text values identified as boolean placeholders are: 0, 1, true, false,\
-          \ t, f, yes, no, y, n. Analyzes every daily partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ daily partition."
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      daily_partition_text_parsable_to_integer_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ an integer value in a column does not fall below the minimum accepted\
-          \ percentage. Analyzes every daily partition and creates a separate data\
-          \ quality check result with the time period value that identifies the daily\
-          \ partition."
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      daily_partition_text_parsable_to_float_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a float value in a column does not fall below the minimum accepted percentage.\
-          \ Analyzes every daily partition and creates a separate data quality check\
-          \ result with the time period value that identifies the daily partition."
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      daily_partition_text_parsable_to_date_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a date value in a column does not fall below the minimum accepted percentage.\
-          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
-          \ a regular expression. Analyzes every daily partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ daily partition."
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
       daily_partition_text_surrounded_by_whitespace:
         description: "The check counts the number of text values in the column that\
           \ are surrounded by whitespace characters and should be trimmed before loading\
@@ -26831,32 +26925,6 @@ definitions:
           \ length in the range provided by the user in the column. Stores the most\
           \ recent captured value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      monthly_text_parsable_to_boolean_percent:
-        description: "Verifies that the percentage of text values that are parsable\
-          \ to a boolean value does not fall below the minimum accepted percentage,\
-          \ text values identified as boolean placeholders are: 0, 1, true, false,\
-          \ t, f, yes, no, y, n. Stores the most recent captured value for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      monthly_text_parsable_to_integer_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ an integer value in a column does not fall below the minimum accepted\
-          \ percentage. Stores the most recent captured value for each month when\
-          \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      monthly_text_parsable_to_float_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a float value in a column does not fall below the minimum accepted percentage.\
-          \ Stores the most recent captured value for each month when the data quality\
-          \ check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      monthly_text_parsable_to_date_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a date value in a column does not fall below the minimum accepted percentage.\
-          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
-          \ a regular expression. Stores the most recent captured value for each month\
-          \ when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
       monthly_text_surrounded_by_whitespace:
         description: "The check counts the number of text values in the column that\
           \ are surrounded by whitespace characters and should be trimmed before loading\
@@ -26940,35 +27008,6 @@ definitions:
           \ monthly partition and creates a separate data quality check result with\
           \ the time period value that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      monthly_partition_text_parsable_to_boolean_percent:
-        description: "Verifies that the percentage of text values that are parsable\
-          \ to a boolean value does not fall below the minimum accepted percentage,\
-          \ text values identified as boolean placeholders are: 0, 1, true, false,\
-          \ t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ monthly partition."
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      monthly_partition_text_parsable_to_integer_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ an integer value in a column does not fall below the minimum accepted\
-          \ percentage. Analyzes every monthly partition and creates a separate data\
-          \ quality check result with the time period value that identifies the monthly\
-          \ partition."
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      monthly_partition_text_parsable_to_float_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a float value in a column does not fall below the minimum accepted percentage.\
-          \ Analyzes every monthly partition and creates a separate data quality check\
-          \ result with the time period value that identifies the monthly partition."
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      monthly_partition_text_parsable_to_date_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a date value in a column does not fall below the minimum accepted percentage.\
-          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
-          \ a regular expression. Analyzes every monthly partition and creates a separate\
-          \ data quality check result with the time period value that identifies the\
-          \ monthly partition."
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
       monthly_partition_text_surrounded_by_whitespace:
         description: "The check counts the number of text values in the column that\
           \ are surrounded by whitespace characters and should be trimmed before loading\
@@ -27407,27 +27446,6 @@ definitions:
         description: "The check measures the percentage of those text values with\
           \ length in the range provided by the user in the column"
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-      profile_text_parsable_to_boolean_percent:
-        description: "Verifies that the percentage of text values that are parsable\
-          \ to a boolean value does not fall below the minimum accepted percentage,\
-          \ text values identified as boolean placeholders are: 0, 1, true, false,\
-          \ t, f, yes, no, y, n."
-        $ref: "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-      profile_text_parsable_to_integer_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ an integer value in a column does not fall below the minimum accepted\
-          \ percentage"
-        $ref: "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-      profile_text_parsable_to_float_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a float value in a column does not fall below the minimum accepted percentage"
-        $ref: "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-      profile_text_parsable_to_date_percent:
-        description: "Verifies that the percentage text values that are parsable to\
-          \ a date value in a column does not fall below the minimum accepted percentage.\
-          \ DQOps uses a safe_cast when possible, otherwise the text is verified using\
-          \ a regular expression"
-        $ref: "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
       profile_text_surrounded_by_whitespace:
         description: "The check counts the number of text values in the column that\
           \ are surrounded by whitespace characters and should be trimmed before loading\
