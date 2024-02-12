@@ -21,7 +21,6 @@ enum fileFormat {
   csv = 'csv_file_format',
   json = 'json_file_format',
   parquet = 'parquet_file_format',
-  file_path_list = 'file_path_list',
   file_path = 'file_path'
 }
 
@@ -58,9 +57,6 @@ export default function FileFormatConfiguration({
         return <></>;
       }
       case fileFormat.file_path: {
-        return <></>;
-      }
-      case fileFormat.file_path_list: {
         return <></>;
       }
     }

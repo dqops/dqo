@@ -25,7 +25,7 @@ public class FileFormatSpec extends AbstractSpec {
 
     private static final ChildHierarchyNodeFieldMapImpl<FileFormatSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-            put("file_path_list", o -> o.filePathList);
+            put("file_paths", o -> o.filePaths);
             put("csv_file_format", o -> o.csvFileFormat);
             put("json_file_format", o -> o.jsonFileFormat);
             put("parquet_file_format", o -> o.parquetFileFormat);
@@ -50,11 +50,7 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private FilePathListSpec filePathList;
-
-    public FileFormatSpec() {
-        this.filePathList = new FilePathListSpec();
-    }
+    private FilePathListSpec filePaths = new FilePathListSpec();
 
     /**
      * Returns the csv file format specification.
@@ -114,17 +110,18 @@ public class FileFormatSpec extends AbstractSpec {
      * Returns the list of paths to files with data that are used as a source.
      * @return List with file paths.
      */
-    public FilePathListSpec getFilePathList() {
-        return filePathList;
+    public FilePathListSpec getFilePaths() {
+        return filePaths;
     }
 
     /**
      * Sets the list of paths to files with data that are used as a source.
-     * @param filePathList List with file paths.
+     * @param filePaths List with file paths.
      */
-    public void setFilePathList(FilePathListSpec filePathList) {
-        setDirtyIf(!Objects.equals(this.filePathList, filePathList));
-        this.filePathList = filePathList;
+    public void setFilePaths(FilePathListSpec filePaths) {
+        setDirtyIf(!Objects.equals(this.filePaths, filePaths));
+        this.filePaths = filePaths;
+        propagateHierarchyIdToField(filePaths, "file_paths");
     }
 
     /**
@@ -136,19 +133,19 @@ public class FileFormatSpec extends AbstractSpec {
             if(csvFileFormat == null){
                 csvFileFormat = new CsvFileFormatSpec();
             }
-            return csvFileFormat.buildSourceTableOptionsString(filePathList);
+            return csvFileFormat.buildSourceTableOptionsString(filePaths);
         }
         if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.json)){
             if(jsonFileFormat == null){
                 jsonFileFormat = new JsonFileFormatSpec();
             }
-            return jsonFileFormat.buildSourceTableOptionsString(filePathList);
+            return jsonFileFormat.buildSourceTableOptionsString(filePaths);
         }
         if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.parquet)){
             if(parquetFileFormat == null){
                 parquetFileFormat = new ParquetFileFormatSpec();
             }
-            return parquetFileFormat.buildSourceTableOptionsString(filePathList);
+            return parquetFileFormat.buildSourceTableOptionsString(filePaths);
         }
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
@@ -176,9 +173,9 @@ public class FileFormatSpec extends AbstractSpec {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        if (this.filePathList != null) {
+        if (this.filePaths != null) {
             stringBuilder.append("Files: ");
-            stringBuilder.append(String.join(", ", this.filePathList) );
+            stringBuilder.append(String.join(", ", this.filePaths) );
         }
 
         return stringBuilder.toString();

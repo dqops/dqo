@@ -47,10 +47,10 @@ public class ColumnIntegrityDailyMonitoringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnIntegrityLookupKeyNotFoundCountCheckSpec dailyLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec dailyLookupKeyFoundPercent;
 
     /**

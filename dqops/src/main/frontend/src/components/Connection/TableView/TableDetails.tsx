@@ -32,7 +32,6 @@ enum fileFormat {
   csv = 'csv_file_format',
   json = 'json_file_format',
   parquet = 'parquet_file_format',
-  file_path_list = 'file_path_list',
   file_path = 'file_path'
 }
 
@@ -117,7 +116,6 @@ const TableDetails = () => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_path_list: paths.filter((x) => x.length !== 0),
               file_paths: paths.filter((x) => x.length !== 0)
             } ?? undefined
         }

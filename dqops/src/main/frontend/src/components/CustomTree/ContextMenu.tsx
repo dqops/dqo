@@ -384,7 +384,7 @@ const ContextMenu = ({
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                 onClick={() => reimportTableMetadata(node)}
               >
-                Reimport table metadata
+                Reimport metadata
               </div>
             )}
         </div>

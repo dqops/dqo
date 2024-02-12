@@ -248,7 +248,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         try {
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             for (TableWrapper tableWrapper : tableWrappers) {
-                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePathList().get(0);
+                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0);
                 String tableName = tableWrapper.getPhysicalTableName().getTableName();
 
                 tech.tablesaw.api.Table tableResult = getTableResult(tableName, firstFilePath);

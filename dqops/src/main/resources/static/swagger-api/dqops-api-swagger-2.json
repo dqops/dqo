@@ -20402,11 +20402,11 @@
           }
         },
         "daily_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "daily_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20422,11 +20422,11 @@
           }
         },
         "daily_partition_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "daily_partition_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20588,11 +20588,11 @@
           }
         },
         "monthly_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "monthly_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.",
+          "description" : "Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores the most recent check result for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20608,11 +20608,11 @@
           }
         },
         "monthly_partition_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "monthly_partition_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -20628,11 +20628,11 @@
           }
         },
         "profile_lookup_key_not_found" : {
-          "description" : "Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.",
+          "description" : "Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys.",
           "$ref" : "#/definitions/ColumnIntegrityLookupKeyNotFoundCountCheckSpec"
         },
         "profile_lookup_key_found_percent" : {
-          "description" : "Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.",
+          "description" : "Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join.",
           "$ref" : "#/definitions/ColumnIntegrityForeignKeyMatchPercentCheckSpec"
         }
       }
@@ -31391,15 +31391,9 @@
           "description" : "Parquet file format specification.",
           "$ref" : "#/definitions/ParquetFileFormatSpec"
         },
-        "file_path_list" : {
-          "type" : "array",
-          "description" : "The list of paths to files with data that are used as a source.",
-          "items" : {
-            "type" : "string"
-          }
-        },
         "file_paths" : {
           "type" : "array",
+          "description" : "The list of paths to files with data that are used as a source.",
           "items" : {
             "type" : "string"
           }
