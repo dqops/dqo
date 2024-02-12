@@ -21,7 +21,7 @@ import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyDailyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.blanks.ColumnBlanksDailyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.whitespace.ColumnWhitespaceDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolDailyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonDailyPartitionedChecksSpecMap;
 import com.dqops.checks.column.partitioned.conversions.ColumnConversionsDailyPartitionedChecksSpec;
@@ -68,7 +68,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
             put("conversions", o -> o.conversions);
-            put("blanks", o -> o.blanks);
+            put("whitespace", o -> o.whitespace);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
             put("numeric", o -> o.numeric);
@@ -106,7 +106,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksDailyPartitionedChecksSpec blanks;
+    private ColumnWhitespaceDailyPartitionedChecksSpec whitespace;
 
     @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -244,18 +244,18 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
      * Returns the blanks check configuration on a column level.
      * @return Blanks check configuration.
      */
-    public ColumnBlanksDailyPartitionedChecksSpec getBlanks() {
-        return blanks;
+    public ColumnWhitespaceDailyPartitionedChecksSpec getWhitespace() {
+        return whitespace;
     }
 
     /**
      * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
+     * @param whitespace New blanks checks configuration.
      */
-    public void setBlanks(ColumnBlanksDailyPartitionedChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
+    public void setWhitespace(ColumnWhitespaceDailyPartitionedChecksSpec whitespace) {
+        this.setDirtyIf(!Objects.equals(this.whitespace, whitespace));
+        this.whitespace = whitespace;
+        this.propagateHierarchyIdToField(whitespace, "whitespace");
     }
 
     /**

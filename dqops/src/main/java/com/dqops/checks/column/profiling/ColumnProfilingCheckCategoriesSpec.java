@@ -48,7 +48,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
-            put("blanks", o -> o.blanks);
+            put("whitespace", o -> o.whitespace);
             put("conversions", o -> o.conversions);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
@@ -88,7 +88,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksProfilingChecksSpec blanks;
+    private ColumnWhitespaceProfilingChecksSpec whitespace;
 
     @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -231,18 +231,18 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
      * Returns the blanks check configuration on a column level.
      * @return Blanks check configuration.
      */
-    public ColumnBlanksProfilingChecksSpec getBlanks() {
-        return blanks;
+    public ColumnWhitespaceProfilingChecksSpec getWhitespace() {
+        return whitespace;
     }
 
     /**
      * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
+     * @param whitespace New blanks checks configuration.
      */
-    public void setBlanks(ColumnBlanksProfilingChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
+    public void setWhitespace(ColumnWhitespaceProfilingChecksSpec whitespace) {
+        this.setDirtyIf(!Objects.equals(this.whitespace, whitespace));
+        this.whitespace = whitespace;
+        this.propagateHierarchyIdToField(whitespace, "whitespace");
     }
 
     /**

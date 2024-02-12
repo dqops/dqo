@@ -17146,121 +17146,6 @@
         }
       }
     },
-    "ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksDailyMonitoringChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "daily_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "daily_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "daily_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "daily_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksDailyPartitionedChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "daily_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "daily_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "daily_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "daily_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksEmptyTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
     "ColumnBlanksEmptyTextFoundCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -17301,7 +17186,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17357,7 +17242,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceEmptyTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17370,103 +17255,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksEmptyTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksMonthlyMonitoringChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "monthly_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "monthly_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "monthly_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksMonthlyPartitionedChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "monthly_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "monthly_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "monthly_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
     },
@@ -17510,7 +17298,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17566,7 +17354,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17579,59 +17367,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksProfilingChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "profile_empty_text_found" : {
-          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "profile_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "profile_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "profile_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "profile_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "profile_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksWhitespaceTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -17675,7 +17410,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17731,7 +17466,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17744,15 +17479,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksWhitespaceTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -18830,9 +18556,9 @@
           "description" : "Daily monitoring checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextDailyMonitoringChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksDailyMonitoringChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceDailyMonitoringChecksSpec"
         },
         "conversions" : {
           "description" : "Configuration of conversion testing checks on a column level.",
@@ -18917,9 +18643,9 @@
           "description" : "Daily partitioned checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextDailyPartitionedChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksDailyPartitionedChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceDailyPartitionedChecksSpec"
         },
         "conversions" : {
           "description" : "Configuration of conversion testing checks on a column level.",
@@ -22326,9 +22052,9 @@
           "description" : "Monthly monitoring checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextMonthlyMonitoringChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksMonthlyMonitoringChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceMonthlyMonitoringChecksSpec"
         },
         "conversions" : {
           "description" : "Configuration of conversion testing checks on a column level.",
@@ -22409,9 +22135,9 @@
           "description" : "Monthly partitioned checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextMonthlyPartitionedChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksMonthlyPartitionedChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceMonthlyPartitionedChecksSpec"
         },
         "conversions" : {
           "description" : "Configuration of conversion testing checks on a column level.",
@@ -26091,9 +25817,9 @@
           "description" : "Configuration of column level checks that verify text values.",
           "$ref" : "#/definitions/ColumnTextProfilingChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values.",
-          "$ref" : "#/definitions/ColumnBlanksProfilingChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceProfilingChecksSpec"
         },
         "conversions" : {
           "description" : "Configuration of conversion testing checks on a column level.",
@@ -28696,7 +28422,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -28752,7 +28478,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -28950,24 +28676,6 @@
       }
     },
     "ColumnTextTextParsableToIntegerPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec" : {
       "type" : "object",
       "properties" : {
         "filter" : {
@@ -29796,6 +29504,298 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MinPercentRule95ParametersSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceDailyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceDailyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_partition_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_partition_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_partition_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_partition_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceEmptyTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceEmptyTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceMonthlyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceMonthlyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_partition_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_partition_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_partition_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_partition_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceProfilingChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "profile_empty_text_found" : {
+          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "profile_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "profile_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "profile_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "profile_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "profile_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceWhitespaceTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },

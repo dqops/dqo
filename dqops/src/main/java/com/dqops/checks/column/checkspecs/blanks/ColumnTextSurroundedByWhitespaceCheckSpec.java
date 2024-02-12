@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
-import com.dqops.sensors.column.blanks.ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec;
+import com.dqops.sensors.column.whitespace.ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextSurroundedByWhitespaceCheckSpec extends
-        AbstractCheckSpec<ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
+        AbstractCheckSpec<ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextSurroundedByWhitespaceCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,7 +49,7 @@ public class ColumnTextSurroundedByWhitespaceCheckSpec extends
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec parameters = new ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec();
+    private ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec parameters = new ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -71,7 +71,7 @@ public class ColumnTextSurroundedByWhitespaceCheckSpec extends
      * @return Sensor parameters.
      */
     @Override
-    public ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec getParameters() {
+    public ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -79,7 +79,7 @@ public class ColumnTextSurroundedByWhitespaceCheckSpec extends
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

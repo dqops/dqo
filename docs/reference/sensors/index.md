@@ -179,22 +179,6 @@
 
 
 
-### **blanks**
-
-| Sensor name | Description |
-|-------------|-------------|
-|[*empty_text_count*](./column/blanks-column-sensors.md#empty-text-count)|Column level sensor that calculates the number of rows with an empty string.|
-|[*empty_text_percent*](./column/blanks-column-sensors.md#empty-text-percent)|Column level sensor that calculates the percentage of rows with an empty string.|
-|[*null_placeholder_text_count*](./column/blanks-column-sensors.md#null-placeholder-text-count)|Column level sensor that calculates the number of rows with a null placeholder string column value.|
-|[*null_placeholder_text_percent*](./column/blanks-column-sensors.md#null-placeholder-text-percent)|Column level sensor that calculates the percentage of rows with a null placeholder string column value.|
-|[*text_surrounded_by_whitespace_count*](./column/blanks-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
-|[*text_surrounded_by_whitespace_percent*](./column/blanks-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
-|[*whitespace_text_count*](./column/blanks-column-sensors.md#whitespace-text-count)|Column level sensor that calculates the number of rows with a whitespace text column value.|
-|[*whitespace_text_percent*](./column/blanks-column-sensors.md#whitespace-text-percent)|Column level sensor that calculates the percentage of rows with a whitespace text column value.|
-
-
-
-
 ### **bool**
 
 | Sensor name | Description |
@@ -386,6 +370,22 @@
 |[*distinct_percent*](./column/uniqueness-column-sensors.md#distinct-percent)|Column level sensor that calculates the percentage of unique values in a column.|
 |[*duplicate_count*](./column/uniqueness-column-sensors.md#duplicate-count)|Column level sensor that calculates the number of duplicate values in a given column.|
 |[*duplicate_percent*](./column/uniqueness-column-sensors.md#duplicate-percent)|Column level sensor that calculates the percentage of rows that are duplicates.|
+
+
+
+
+### **whitespace**
+
+| Sensor name | Description |
+|-------------|-------------|
+|[*empty_text_count*](./column/whitespace-column-sensors.md#empty-text-count)|Column level sensor that calculates the number of rows with an empty string.|
+|[*empty_text_percent*](./column/whitespace-column-sensors.md#empty-text-percent)|Column level sensor that calculates the percentage of rows with an empty string.|
+|[*null_placeholder_text_count*](./column/whitespace-column-sensors.md#null-placeholder-text-count)|Column level sensor that calculates the number of rows with a null placeholder string column value.|
+|[*null_placeholder_text_percent*](./column/whitespace-column-sensors.md#null-placeholder-text-percent)|Column level sensor that calculates the percentage of rows with a null placeholder string column value.|
+|[*text_surrounded_by_whitespace_count*](./column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
+|[*text_surrounded_by_whitespace_percent*](./column/whitespace-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
+|[*whitespace_text_count*](./column/whitespace-column-sensors.md#whitespace-text-count)|Column level sensor that calculates the number of rows with a whitespace text column value.|
+|[*whitespace_text_percent*](./column/whitespace-column-sensors.md#whitespace-text-percent)|Column level sensor that calculates the percentage of rows with a whitespace text column value.|
 
 
 

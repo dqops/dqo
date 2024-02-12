@@ -460,52 +460,6 @@ A column-level check that ensures that the sum in a monitored column has changed
 
 
 
-## column-level blanks checks
-Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
-
-### [empty text found](./column/blanks/empty-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
-
-
-
-### [whitespace text found](./column/blanks/whitespace-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text found](./column/blanks/null-placeholder-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
-
-
-
-### [empty text percent](./column/blanks/empty-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
-
-
-
-### [whitespace text percent](./column/blanks/whitespace-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text percent](./column/blanks/null-placeholder-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
-
-
-
-### [text surrounded by whitespace](./column/blanks/text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text surrounded by whitespace percent](./column/blanks/text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
-
-
-
-
-
-
 ## column-level bool checks
 Calculates the percentage of data in boolean columns.
 
@@ -1132,6 +1086,52 @@ A column-level check that ensures that the distinct percent in a monitored colum
 
 ### [distinct percent change 30 days](./column/uniqueness/distinct-percent-change-30-days.md)
 A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
+
+
+
+
+
+
+## column-level whitespace checks
+Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
+
+### [empty text found](./column/whitespace/empty-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+
+
+
+### [whitespace text found](./column/whitespace/whitespace-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
+
+
+
+### [null placeholder text found](./column/whitespace/null-placeholder-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
+
+
+
+### [empty text percent](./column/whitespace/empty-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
+
+
+
+### [whitespace text percent](./column/whitespace/whitespace-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
+
+
+
+### [null placeholder text percent](./column/whitespace/null-placeholder-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
+
+
+
+### [text surrounded by whitespace](./column/whitespace/text-surrounded-by-whitespace.md)
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+
+
+
+### [text surrounded by whitespace percent](./column/whitespace/text-surrounded-by-whitespace-percent.md)
+A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
 
 
 

@@ -38,7 +38,7 @@ public class CheckCategoryDocumentationConstants {
         put("datetime", "how-to-detect-invalid-dates.md");
         put("datatype", "how-to-detect-data-type-changes.md");
         put("integrity", "how-to-detect-data-referential-integrity-issues.md");
-        put("blanks", "how-to-detect-blank-and-whitespace-values.md");
+        put("whitespace", "how-to-detect-blank-and-whitespace-values.md");
         put("availability", "how-to-table-availability-issues-and-downtimes.md");
         put("accepted_values", "how-to-validate-accepted-values-in-columns.md");
         put("volume", "how-to-detect-data-volume-issues-and-changes.md");
@@ -57,7 +57,7 @@ public class CheckCategoryDocumentationConstants {
         put("pii", "PII values");
         put("integrity", "Referential integrity");
         put("comparisons", "Comparing tables");
-        put("blanks", "Blanks and whitespaces");
+        put("whitespace", "Blanks and whitespaces");
         put("patterns", "Text patterns");
         put("datatype", "Data type detection");
         put("anomaly", "Anomaly detection");
@@ -96,7 +96,7 @@ public class CheckCategoryDocumentationConstants {
         put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
         put("text", "Validates that the data in a text column has a valid range.");
         put("patterns", "Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.");
-        put("blanks", "Detects text columns that contain blank values, or values that are used as placeholders for missing values: 'n/a', 'None', etc.");
+        put("whitespace", "Detects text columns that contain blank values, or values that are used as placeholders for missing values: 'n/a', 'None', etc.");
         put("conversions", "Validates that the values in a text column can be parsed and converted to other data types.");
         put("datatype", "Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.");
         put("accepted_values", "Verifies if all values in the column are from a set of known values, such as country codes.");

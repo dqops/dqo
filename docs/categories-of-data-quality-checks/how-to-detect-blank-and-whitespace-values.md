@@ -1,7 +1,7 @@
 # Detecting whitespace and null value placeholders
 Read this guide to learn how to detect data quality issues in text columns containing spaces, tabs, or special texts equivalent to a null value.
 
-The data quality checks for detecting whitespace and empty value placeholders are configured in the `blanks` category in DQOps.
+The data quality checks for detecting whitespace and empty value placeholders are configured in the `whitespace` category in DQOps.
 
 ## Types of whitespaces
 We can identify three types of blank texts that should be stored as `NULL` values.
@@ -61,12 +61,12 @@ DQOps has two types of data quality checks to detect blank values.
 Enable the `_found` data quality checks to find blank values or accept a limited number of blank values.
 
 ### Configure checks in UI
-The blank detection checks are standard data quality checks in the "blanks" category.
+The blank detection checks are standard data quality checks in the "whitespace" category.
 
 ![Enable whitespace and null placeholder values detection in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-whitespace-and-null-placeholder-detection-data-quality-checks-min.png){ loading=lazy }
 
 ### Configure checks in YAML
-The blank detection checks are configured in the YAML file inside the `blanks` node.
+The blank detection checks are configured in the YAML file inside the `whitespace` node.
 
 ``` { .yaml linenums="1" hl_lines="12-21" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
@@ -80,7 +80,7 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          blanks:
+          whitespace:
             daily_empty_text_found:
               error:
                 max_count: 0
@@ -98,7 +98,7 @@ spec:
 The blank percent measurement checks are advanced checks, not always visible in the user interface.
 
 ### Configure checks in UI
-Turn on the "Advanced checks" checkbox. DQOps will also show non-standard checks, revealing the percentage of blanks checks.
+Turn on the "Advanced checks" checkbox. DQOps will also show non-standard checks, revealing the percentage of whitespace checks.
 
 ![Measure percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/measure-whitespace-and-null-placeholder-percent-data-quality-checks-min.png){ loading=lazy }
 
@@ -117,7 +117,7 @@ spec:
         nullable: true
       monitoring_checks:
         daily:
-          blanks:
+          whitespace:
             daily_empty_text_percent:
               error:
                 max_percent: 0.0
@@ -130,22 +130,22 @@ spec:
 ```
 
 
-## List of blanks checks at a column level
+## List of whitespace checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
-|[*empty_text_found*](../checks/column/blanks/empty-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.|:material-check-bold:|
-|[*whitespace_text_found*](../checks/column/blanks/whitespace-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.|:material-check-bold:|
-|[*null_placeholder_text_found*](../checks/column/blanks/null-placeholder-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.|:material-check-bold:|
-|[*empty_text_percent*](../checks/column/blanks/empty-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
-|[*whitespace_text_percent*](../checks/column/blanks/whitespace-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
-|[*null_placeholder_text_percent*](../checks/column/blanks/null-placeholder-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.| |
-|[*text_surrounded_by_whitespace*](../checks/column/blanks/text-surrounded-by-whitespace.md)|Validity|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
-|[*text_surrounded_by_whitespace_percent*](../checks/column/blanks/text-surrounded-by-whitespace-percent.md)|Validity|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
+|[*empty_text_found*](../checks/column/whitespace/empty-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.|:material-check-bold:|
+|[*whitespace_text_found*](../checks/column/whitespace/whitespace-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.|:material-check-bold:|
+|[*null_placeholder_text_found*](../checks/column/whitespace/null-placeholder-text-found.md)|Completeness|A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.|:material-check-bold:|
+|[*empty_text_percent*](../checks/column/whitespace/empty-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
+|[*whitespace_text_percent*](../checks/column/whitespace/whitespace-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
+|[*null_placeholder_text_percent*](../checks/column/whitespace/null-placeholder-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.| |
+|[*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)|Validity|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
+|[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|Validity|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
 
 
 **Reference and samples**
 
-The full list of all data quality checks in this category is located in the [column/blanks](../checks/column/blanks/index.md) reference.
+The full list of all data quality checks in this category is located in the [column/whitespace](../checks/column/whitespace/index.md) reference.
 The reference section provides YAML code samples that are ready to copy-paste to the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files,
 the parameters reference, and samples of data source specific SQL queries generated by [data quality sensors](../dqo-concepts/definition-of-data-quality-sensors.md)
 that are used by those checks.
