@@ -19,7 +19,7 @@ public class FileFormatSpecObjectMother {
             setCsvFileFormat( new CsvFileFormatSpec(){{
                 setAutoDetect(true);
             }} );
-            setFilePathList(new FilePathListSpec(){{
+            setFilePaths(new FilePathListSpec(){{
                     add(CsvFileProvider.getFile(csvFileName).toString());
             }});
         }};
@@ -44,7 +44,7 @@ public class FileFormatSpecObjectMother {
                 setHeader(false);
                 setColumns(headerNameTypeMap);
             }} );
-            setFilePathList(filePathListSpec);
+            setFilePaths(filePathListSpec);
         }};
     }
 }
