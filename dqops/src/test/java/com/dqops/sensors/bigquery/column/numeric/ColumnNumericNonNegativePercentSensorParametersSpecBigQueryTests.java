@@ -70,7 +70,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -99,14 +99,17 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -130,16 +133,19 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -159,16 +165,19 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -188,16 +197,19 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -224,15 +236,18 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -255,17 +270,20 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
@@ -288,17 +306,20 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`length_string` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -331,19 +352,22 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -368,19 +392,22 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -405,19 +432,22 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN %1$s < 0 THEN 0
+                            ELSE 1
+                        END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS grouping_level_1,
                 analyzed_table.`mix_of_values` AS grouping_level_2,
                 analyzed_table.`length_string` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

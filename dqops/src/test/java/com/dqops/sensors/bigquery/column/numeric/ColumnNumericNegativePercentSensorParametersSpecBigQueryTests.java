@@ -100,7 +100,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -134,7 +134,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -166,7 +166,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -198,7 +198,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -237,7 +237,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -271,7 +271,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -307,7 +307,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -353,7 +353,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -393,7 +393,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1
@@ -433,7 +433,7 @@ public class ColumnNumericNegativePercentSensorParametersSpecBigQueryTests exten
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(%1$s) = 0 THEN 100.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN %1$s < 0 THEN 1

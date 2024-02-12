@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PrestoColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
+public class PrestoColumnNumericNumberAboveMaxValuePercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
     private ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNumberAboveMaxValuePercentCheckSpec checkSpec;

@@ -42,7 +42,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsUsaPhonePercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsUsaPhonePercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))\"";
+    private final String sensorRegex = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsUsaPhonePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;

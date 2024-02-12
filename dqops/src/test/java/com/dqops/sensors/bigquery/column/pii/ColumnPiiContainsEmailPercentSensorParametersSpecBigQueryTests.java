@@ -42,7 +42,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsEmailPercentSensorParametersSpec sut;
-    private final String sensorRegex = "r\"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}\"";
+    private final String sensorRegex = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsEmailPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
