@@ -251,7 +251,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0);
                 String tableName = tableWrapper.getPhysicalTableName().getTableName();
 
-                tech.tablesaw.api.Table tableResult = getTableResult(tableName, firstFilePath);
+                tech.tablesaw.api.Table tableResult = queryForTableResult(tableName, firstFilePath);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -289,7 +289,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
-    private tech.tablesaw.api.Table getTableResult(String tableName, String firstFilePath){
+    private tech.tablesaw.api.Table queryForTableResult(String tableName, String firstFilePath){
 
         String createQuery = String.format("CREATE TABLE %s AS SELECT * FROM read_csv_auto('%s');", tableName, firstFilePath);
         this.executeCommand(createQuery, JobCancellationToken.createDummyJobCancellationToken());
