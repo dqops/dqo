@@ -248,10 +248,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         try {
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             for (TableWrapper tableWrapper : tableWrappers) {
-                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0);
+                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0); // todo: should we use any parameters available in file format, eg: delimiter?
                 String tableName = tableWrapper.getPhysicalTableName().getTableName();
 
-                tech.tablesaw.api.Table tableResult = queryForTableResult(tableName, firstFilePath);
+                // todo: first file should be replaced with all available files
+                Table tableResult = queryForTableResult(tableName, firstFilePath);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -289,13 +290,41 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Retrieves a table result depending on the source files type.
+     * @param tableName Name of the table.
+     * @param firstFilePath A file path for the single file which metadata are read.
+     * @return A table result with metadata of the given data file.
+     */
     private tech.tablesaw.api.Table queryForTableResult(String tableName, String firstFilePath){
+        DuckdbSourceFilesType duckdbSourceFilesType = super.getConnectionSpec().getDuckdb().getSourceFilesType();
+        switch (duckdbSourceFilesType){
+            case csv:
+                return retrieveTableResultByCreation(tableName, "read_csv_auto", firstFilePath);
+            case json:
+                return retrieveTableResultByCreation(tableName, "read_json_auto", firstFilePath);
+            case parquet:
+                String describeQuery = String.format("DESCRIBE SELECT * FROM '%s'", firstFilePath);
+                return this.executeQuery(describeQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+            default:
+                throw new RuntimeException("The file type is not supported: " + duckdbSourceFilesType);
+        }
+    }
 
-        String createQuery = String.format("CREATE TABLE %s AS SELECT * FROM read_csv_auto('%s');", tableName, firstFilePath);
+    /**
+     * Retrieves a table result by execution of three queries: create, describe and drop. Table metadata are generated for the only one file that is given in the parameters.
+     * @param tableName Table name that will be used as a temporary table created in memory.
+     * @param readAutoMethodName DuckDB method name that allows to read data from the specific file format.
+     * @param firstFilePath A file name that is used to get metadata about the data.
+     * @return Table result with metadata about the data file.
+     */
+    private Table retrieveTableResultByCreation(String tableName, String readAutoMethodName, String firstFilePath){
+        String queryTemplate = "CREATE TABLE %s AS SELECT * FROM %s('%s');";
+        String createQuery = String.format(queryTemplate, tableName, readAutoMethodName, firstFilePath);
         this.executeCommand(createQuery, JobCancellationToken.createDummyJobCancellationToken());
 
         String describeQuery = String.format("DESCRIBE %s", tableName);
-        tech.tablesaw.api.Table tableResult = this.executeQuery(describeQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+        Table tableResult = this.executeQuery(describeQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
 
         String dropQuery = String.format("DROP TABLE %s", tableName);
         this.executeCommand(dropQuery, JobCancellationToken.createDummyJobCancellationToken());
