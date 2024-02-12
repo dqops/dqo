@@ -16,7 +16,7 @@ public class FileFormatSpecObjectMother {
      */
     public static FileFormatSpec createForCsvFile(String csvFileName) {
         return new FileFormatSpec() {{
-            setCsvFileFormat( new CsvFileFormatSpec(){{
+            setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(true);
             }} );
             setFilePaths(new FilePathListSpec(){{
@@ -39,7 +39,7 @@ public class FileFormatSpecObjectMother {
                 .forEach(fileName -> filePathListSpec.add(fileName));
 
         return new FileFormatSpec() {{
-            setCsvFileFormat( new CsvFileFormatSpec(){{
+            setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(true);
                 setHeader(false);
                 setColumns(headerNameTypeMap);

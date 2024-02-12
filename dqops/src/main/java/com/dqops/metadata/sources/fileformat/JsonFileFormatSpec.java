@@ -1,5 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -14,6 +16,7 @@ import lombok.experimental.FieldNameConstants;
 import java.math.BigInteger;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Json file format specification for querying data in the json format files.
@@ -117,6 +120,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param autoDetect Auto detect option.
      */
     public void setAutoDetect(Boolean autoDetect) {
+        setDirtyIf(!Objects.equals(this.autoDetect, autoDetect));
         this.autoDetect = autoDetect;
     }
 
@@ -133,6 +137,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param columns Columns map.
      */
     public void setColumns(Map<String, String> columns) {
+        setDirtyIf(!Objects.equals(this.columns, columns));
         this.columns = columns;
     }
 
@@ -149,6 +154,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param compression Compression type.
      */
     public void setCompression(String compression) {
+        setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
 
@@ -165,6 +171,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param convertStringsToIntegers Convert strings to integers option.
      */
     public void setConvertStringsToIntegers(Boolean convertStringsToIntegers) {
+        setDirtyIf(!Objects.equals(this.convertStringsToIntegers, convertStringsToIntegers));
         this.convertStringsToIntegers = convertStringsToIntegers;
     }
 
@@ -182,6 +189,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param dateformat Date format.
      */
     public void setDateformat(String dateformat) {
+        setDirtyIf(!Objects.equals(this.dateformat, dateformat));
         this.dateformat = dateformat;
     }
 
@@ -198,6 +206,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param filename The filename option state.
      */
     public void setFilename(Boolean filename) {
+        setDirtyIf(!Objects.equals(this.filename, filename));
         this.filename = filename;
     }
 
@@ -214,6 +223,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param format JSON format.
      */
     public void setFormat(String format) {
+        setDirtyIf(!Objects.equals(this.format, format));
         this.format = format;
     }
 
@@ -230,6 +240,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param hivePartitioning The hive partitioning option state.
      */
     public void setHivePartitioning(Boolean hivePartitioning) {
+        setDirtyIf(!Objects.equals(this.hivePartitioning, hivePartitioning));
         this.hivePartitioning = hivePartitioning;
     }
 
@@ -246,6 +257,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param ignoreErrors Ignore errors option state.
      */
     public void setIgnoreErrors(Boolean ignoreErrors) {
+        setDirtyIf(!Objects.equals(this.ignoreErrors, ignoreErrors));
         this.ignoreErrors = ignoreErrors;
     }
 
@@ -262,6 +274,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param maximumDepth The maximum depth of json to be read.
      */
     public void setMaximumDepth(BigInteger maximumDepth) {
+        setDirtyIf(!Objects.equals(this.maximumDepth, maximumDepth));
         this.maximumDepth = maximumDepth;
     }
 
@@ -278,6 +291,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param maximumObjectSize Maximum object size in bytes.
      */
     public void setMaximumObjectSize(Long maximumObjectSize) {
+        setDirtyIf(!Objects.equals(this.maximumObjectSize, maximumObjectSize));
         this.maximumObjectSize = maximumObjectSize;
     }
 
@@ -295,6 +309,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param records Records
      */
     public void setRecords(String records) {
+        setDirtyIf(!Objects.equals(this.records, records));
         this.records = records;
     }
 
@@ -312,6 +327,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param timestampformat Timestamp format.
      */
     public void setTimestampformat(String timestampformat) {
+        setDirtyIf(!Objects.equals(this.timestampformat, timestampformat));
         this.timestampformat = timestampformat;
     }
 
@@ -323,6 +339,24 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates an expanded and trimmed deep copy of the spec.
+     * Configurable properties will be expanded if they contain environment variables or secrets.
+     *
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext       Secret value lookup context used to access shared credentials.
+     * @return Cloned, trimmed and expanded table specification.
+     */
+    public JsonFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        JsonFileFormatSpec cloned = (JsonFileFormatSpec) this.deepClone();
+        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
+        cloned.format = secretValueProvider.expandValue(cloned.format, lookupContext);
+        cloned.records = secretValueProvider.expandValue(cloned.records, lookupContext);
+        cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
+        return cloned;
     }
 
 }
