@@ -3,13 +3,13 @@ from typing import Any, Dict, List, Type, TypeVar
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
-T = TypeVar("T", bound="CsvFileFormatSpecColumns")
+T = TypeVar("T", bound="JsonFileFormatSpecColumns")
 
 
 @_attrs_define
-class CsvFileFormatSpecColumns:
-    """A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER',
-    'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.
+class JsonFileFormatSpecColumns:
+    """A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2:
+    'VARCHAR'}). If auto_detect is enabled these will be inferred
 
     """
 
@@ -25,10 +25,10 @@ class CsvFileFormatSpecColumns:
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         d = src_dict.copy()
-        csv_file_format_spec_columns = cls()
+        json_file_format_spec_columns = cls()
 
-        csv_file_format_spec_columns.additional_properties = d
-        return csv_file_format_spec_columns
+        json_file_format_spec_columns.additional_properties = d
+        return json_file_format_spec_columns
 
     @property
     def additional_keys(self) -> List[str]:

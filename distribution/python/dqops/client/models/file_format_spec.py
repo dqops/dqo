@@ -21,14 +21,12 @@ class FileFormatSpec:
         csv_file_format (Union[Unset, CsvFileFormatSpec]):
         json_file_format (Union[Unset, JsonFileFormatSpec]):
         parquet_file_format (Union[Unset, ParquetFileFormatSpec]):
-        file_path_list (Union[Unset, List[str]]): The list of paths to files with data that are used as a source.
-        file_paths (Union[Unset, List[str]]):
+        file_paths (Union[Unset, List[str]]): The list of paths to files with data that are used as a source.
     """
 
     csv_file_format: Union[Unset, "CsvFileFormatSpec"] = UNSET
     json_file_format: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet_file_format: Union[Unset, "ParquetFileFormatSpec"] = UNSET
-    file_path_list: Union[Unset, List[str]] = UNSET
     file_paths: Union[Unset, List[str]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -45,10 +43,6 @@ class FileFormatSpec:
         if not isinstance(self.parquet_file_format, Unset):
             parquet_file_format = self.parquet_file_format.to_dict()
 
-        file_path_list: Union[Unset, List[str]] = UNSET
-        if not isinstance(self.file_path_list, Unset):
-            file_path_list = self.file_path_list
-
         file_paths: Union[Unset, List[str]] = UNSET
         if not isinstance(self.file_paths, Unset):
             file_paths = self.file_paths
@@ -62,8 +56,6 @@ class FileFormatSpec:
             field_dict["json_file_format"] = json_file_format
         if parquet_file_format is not UNSET:
             field_dict["parquet_file_format"] = parquet_file_format
-        if file_path_list is not UNSET:
-            field_dict["file_path_list"] = file_path_list
         if file_paths is not UNSET:
             field_dict["file_paths"] = file_paths
 
@@ -97,15 +89,12 @@ class FileFormatSpec:
         else:
             parquet_file_format = ParquetFileFormatSpec.from_dict(_parquet_file_format)
 
-        file_path_list = cast(List[str], d.pop("file_path_list", UNSET))
-
         file_paths = cast(List[str], d.pop("file_paths", UNSET))
 
         file_format_spec = cls(
             csv_file_format=csv_file_format,
             json_file_format=json_file_format,
             parquet_file_format=parquet_file_format,
-            file_path_list=file_path_list,
             file_paths=file_paths,
         )
 
