@@ -5,6 +5,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
@@ -27,22 +28,72 @@ public class CsvFileFormatSpec extends AbstractSpec {
         }
     };
 
+    @JsonPropertyDescription("Option to skip type detection for CSV parsing and assume all columns to be of type VARCHAR.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean allVarchar;
+
+    @JsonPropertyDescription("Option to allow the conversion of quoted values to NULL values.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean allowQuotedNulls;
+
+    @JsonPropertyDescription("Enables auto detection of CSV parameters.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean autoDetect;
+
+    @JsonPropertyDescription("A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> columns;
+
+    @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String compression;
+
+    @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String dateformat;
+
+    @JsonPropertyDescription("The decimal separator of numbers.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String decimalSeparator;
+
+    @JsonPropertyDescription("Specifies the string that separates columns within each row (line) of the file.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String delim;
+
+    @JsonPropertyDescription("Specifies the string that should appear before a data character sequence that matches the quote value.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String escape;
+
+    @JsonPropertyDescription("Whether or not an extra filename column should be included in the result.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean filename;
+
+    @JsonPropertyDescription("Specifies that the file contains a header line with the names of each column in the file.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean header;
+
+    @JsonPropertyDescription("Whether or not to interpret the path as a hive partitioned path.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean hivePartitioning;
+
+    @JsonPropertyDescription("Option to ignore any parsing errors encountered - and instead ignore rows with errors.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean ignoreErrors;
+
+    @JsonPropertyDescription("Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String newLine;
+
+    @JsonPropertyDescription("Specifies the quoting string to be used when a data value is quoted.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String quote;
+
+    @JsonPropertyDescription("The number of lines at the top of the file to skip.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long skip;
+
+    @JsonPropertyDescription("Specifies the date format to use when parsing timestamps.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String timestampformat;
 
     /**

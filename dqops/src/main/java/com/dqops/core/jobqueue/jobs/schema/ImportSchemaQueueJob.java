@@ -181,7 +181,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
                     .map(tm -> tm.getTableName().getTableName())
                     .collect(Collectors.toList());
 
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper);
             List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
             this.defaultObservabilityConfigurationService.applyDefaultChecks(filteredSourceTableSpecs,
                     connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);

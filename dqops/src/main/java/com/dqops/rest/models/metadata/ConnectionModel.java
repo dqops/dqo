@@ -19,6 +19,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -90,6 +91,12 @@ public class ConnectionModel {
      */
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
+
+    /**
+     * DuckDB connection parameters.
+     */
+    @JsonPropertyDescription("DuckDB connection parameters.")
+    private DuckdbParametersSpec duckdb;
 
     /**
      * Redshift connection parameters.
@@ -228,6 +235,7 @@ public class ConnectionModel {
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
+            setDuckdb(connectionSpec.getDuckdb());
             setRedshift(connectionSpec.getRedshift());
             setSqlserver(connectionSpec.getSqlserver());
             setMysql(connectionSpec.getMysql());
@@ -294,6 +302,7 @@ public class ConnectionModel {
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
+        targetConnectionSpec.setDuckdb(this.getDuckdb());
         targetConnectionSpec.setRedshift(this.getRedshift());
         targetConnectionSpec.setSqlserver(this.getSqlserver());
         targetConnectionSpec.setMysql(this.getMysql());

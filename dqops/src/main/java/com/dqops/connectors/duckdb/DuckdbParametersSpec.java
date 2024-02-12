@@ -45,14 +45,13 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         }
     };
 
-    @CommandLine.Option(names = {"--duckdb-in-memory"}, description = "To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private boolean inMemory;
+    @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbReadMode readMode;
 
-    //todo: parameters
-//    @CommandLine.Option(names = {"--postgresql-host"}, description = "DuckDB host name")
-//    @JsonPropertyDescription("PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.")
-//    private String host;
+    @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbSourceFilesType sourceFilesType;
 
     @CommandLine.Option(names = {"--duckdb-database"}, description = "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -68,38 +67,38 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     private Map<String, String> properties;
 
     /**
-     * Returns an inMemory value.
-     * @return inMemory value.
+     * Returns a readMode value.
+     * @return readMode value.
      */
-    public boolean isInMemory () {
-        return inMemory;
+    public DuckdbReadMode getReadMode() {
+        return readMode;
     }
 
     /**
-     * Sets an inMemory value.
-     * @param inMemory inMemory value.
+     * Sets a readMode value.
+     * @param readMode readMode value.
      */
-    public void setInMemory(boolean inMemory) {
-        setDirtyIf(!Objects.equals(this.inMemory, inMemory));
-        this.inMemory = inMemory;
+    public void setReadMode(DuckdbReadMode readMode) {
+        setDirtyIf(!Objects.equals(readMode, readMode));
+        this.readMode = readMode;
     }
 
-//    /**
-//     * Returns the host name.
-//     * @return Host name.
-//     */
-//    public String getHost() {
-//        return host;
-//    }
-//
-//    /**
-//     * Sets the host name.
-//     * @param host New host name.
-//     */
-//    public void setHost(String host) {
-//        setDirtyIf(!Objects.equals(this.host, host));
-//        this.host = host;
-//    }
+    /**
+     * Returns a sourceFilesType value.
+     * @return sourceFilesType value.
+     */
+    public DuckdbSourceFilesType getSourceFilesType() {
+        return sourceFilesType;
+    }
+
+    /**
+     * Sets a sourceFilesType value.
+     * @param sourceFilesType sourceFilesType value.
+     */
+    public void setSourceFilesType(DuckdbSourceFilesType sourceFilesType) {
+        setDirtyIf(!Objects.equals(sourceFilesType, sourceFilesType));
+        this.sourceFilesType = sourceFilesType;
+    }
 
     /**
      * Returns a physical database name.
@@ -134,7 +133,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.options, options));
         this.options = options;
     }
-
 
     /**
      * Returns a key/value map of additional properties that are included in the JDBC connection string.
@@ -180,7 +178,6 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      */
     public DuckdbParametersSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
         DuckdbParametersSpec cloned = this.deepClone();
-//        cloned.host = secretValueProvider.expandValue(cloned.host, lookupContext);
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);

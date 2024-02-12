@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -23,22 +24,23 @@ import com.dqops.core.jobqueue.JobCancellationListenerHandle;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
-import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.*;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * DuckDB source connection.
@@ -82,8 +84,13 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:duckdb:");
 
-        if(duckdbSpec.isInMemory()){
+        if(duckdbSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
             jdbcConnectionBuilder.append(":memory:");
+        }
+
+        String database = duckdbSpec.getDatabase();
+        if(database != null){
+            jdbcConnectionBuilder.append(database);
         }
 
         String jdbcUrl = jdbcConnectionBuilder.toString();
@@ -95,12 +102,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(duckdbSpec.getProperties());
         }
 
-        // todo: connection
-
-//        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
-//        if (!Strings.isNullOrEmpty(options)) {
-//            dataSourceProperties.put("options", options);
-//        }
+        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
+        if (!Strings.isNullOrEmpty(options)) {
+            dataSourceProperties.put("options", options);
+        }
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
@@ -192,6 +197,110 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private List<String> getAvailableExtensions(){
         return Arrays.asList("httpfs");
+    }
+
+    /**
+     * Lists tables inside a schema and userhome's dqotables for the connection. Views are also returned.
+     *
+     * @param schemaName Schema name.
+     * @return List of tables in the given schema.
+     */
+    @Override
+    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+        List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
+
+        if(connectionWrapper == null){
+            return sourceTableModels;
+        }
+
+        TableList tableList = connectionWrapper.getTables();
+
+        for (TableWrapper table : tableList) {
+            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
+                PhysicalTableName physicalTableName = table.getPhysicalTableName();
+                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+                sourceTableModels.add(schemaModel);
+            }
+        }
+
+        return sourceTableModels;
+    }
+
+    /**
+     * Retrieves the metadata (column information) for a given list of tables from a given schema.
+     *
+     * @param schemaName Schema name.
+     * @param tableNames Table names.
+     * @return List of table specifications with the column list.
+     */
+    @Override
+    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+        assert !Strings.isNullOrEmpty(schemaName);
+
+        DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
+
+        if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
+            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper);
+        }
+
+        List<TableSpec> tableSpecs = new ArrayList<>();
+
+        try {
+            List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
+            for (TableWrapper tableWrapper : tableWrappers) {
+                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0);
+                String tableName = tableWrapper.getPhysicalTableName().getTableName();
+
+                tech.tablesaw.api.Table tableResult = queryForTableResult(tableName, firstFilePath);
+
+                Column<?>[] columns = tableResult.columnArray();
+                for (Column<?> column : columns) {
+                    column.setName(column.name().toLowerCase(Locale.ROOT));
+                }
+
+                HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
+
+                for (Row colRow : tableResult) {
+                    String physicalTableName = tableName;
+                    String columnName = colRow.getString("column_name");
+                    boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
+                    String dataType = colRow.getString("column_type");
+
+                    TableSpec tableSpec = tablesByTableName.get(physicalTableName);
+                    if (tableSpec == null) {
+                        tableSpec = new TableSpec();
+                        tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
+                        tablesByTableName.put(physicalTableName, tableSpec);
+                        tableSpecs.add(tableSpec);
+                    }
+
+                    ColumnSpec columnSpec = new ColumnSpec();
+                    ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+
+                    columnType.setNullable(isNullable);
+                    columnSpec.setTypeSnapshot(columnType);
+                    tableSpec.getColumns().put(columnName, columnSpec);
+                }
+
+            }
+            return tableSpecs;
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private tech.tablesaw.api.Table queryForTableResult(String tableName, String firstFilePath){
+
+        String createQuery = String.format("CREATE TABLE %s AS SELECT * FROM read_csv_auto('%s');", tableName, firstFilePath);
+        this.executeCommand(createQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+        String describeQuery = String.format("DESCRIBE %s", tableName);
+        tech.tablesaw.api.Table tableResult = this.executeQuery(describeQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
+
+        String dropQuery = String.format("DROP TABLE %s", tableName);
+        this.executeCommand(dropQuery, JobCancellationToken.createDummyJobCancellationToken());
+
+        return tableResult;
     }
 
 }

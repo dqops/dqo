@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.duckdb.sensors.table.availability;
+package com.dqops.duckdb.sensors.column.accuracy;
 
-import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
+import com.dqops.checks.column.checkspecs.accuracy.ColumnAccuracyTotalAverageMatchPercentCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -28,7 +28,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMothe
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.table.availability.TableAvailabilitySensorParametersSpec;
+import com.dqops.sensors.column.accuracy.ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,34 +36,40 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class FilesDuckdbTableAvailabilitySensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
-    private TableAvailabilitySensorParametersSpec sut;
+public class FileDuckdbColumnAccuracyTotalAverageMatchPercentSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+    private ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableAvailabilityCheckSpec checkSpec;
+    private ColumnAccuracyTotalAverageMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private SampleTableMetadata sampleTableMetadataReferenced;
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.create();
-        String csvFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
+        String csvFileName = SampleCsvFileNames.ip4_test;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableAvailabilitySensorParametersSpec();
-        this.checkSpec = new TableAvailabilityCheckSpec();
+        this.sut = new ColumnAccuracyTotalAverageMatchPercentSensorParametersSpec();
+        this.checkSpec = new ColumnAccuracyTotalAverageMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_withUseOfLocalCsvFile_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
-                sampleTableMetadata, this.checkSpec);
+        this.sut.setReferencedTable(this.sampleTableMetadataReferenced.getTableData().getHashedTableName());
+        this.sut.setReferencedColumn("result");
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "result", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0, Double.valueOf(String.valueOf(resultTable.column(0).get(0))));
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(0.75, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.75, resultTable.column(1).get(0));
     }
 
 }

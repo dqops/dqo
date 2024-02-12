@@ -132,7 +132,8 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
             List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(
                     this.importParameters.getSchemaName(),
-                    this.importParameters.getTableNames());
+                    this.importParameters.getTableNames(),
+                    connectionWrapper);
 
             List<TableSpec> importedTablesSpecs = sourceTableSpecs
                     .stream()

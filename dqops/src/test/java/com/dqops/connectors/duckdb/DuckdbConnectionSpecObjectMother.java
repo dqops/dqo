@@ -16,11 +16,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.ProviderType;
-import com.dqops.core.secrets.SecretValueLookupContext;
-import com.dqops.core.secrets.SecretValueProviderImpl;
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.utils.BeanFactoryObjectMother;
-import org.springframework.beans.factory.BeanFactory;
 
 /**
  * Object mother for a testable DuckDB connection spec that provides access to the database.
@@ -31,20 +27,31 @@ public class DuckdbConnectionSpecObjectMother {
      * Creates a default connection spec to single store database.
      * @return Connection spec to a cloud single store environment.
      */
-    public static ConnectionSpec create() {
-
-        BeanFactory beanFactory = BeanFactoryObjectMother.getBeanFactory();
-        SecretValueProviderImpl secretValueProvider = beanFactory.getBean(SecretValueProviderImpl.class);
-        SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
-
+    public static ConnectionSpec createForInMemory() {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
 			setProviderType(ProviderType.duckdb);
-
 			setDuckdb(new DuckdbParametersSpec()
             {{
-                setInMemory(true);
-//                setDatabase();
+                setReadMode(DuckdbReadMode.in_memory);
+            }});
+        }};
+
+        return connectionSpec;
+    }
+
+    /**
+     * Creates a default connection spec to single store database.
+     * @return Connection spec to a cloud single store environment.
+     */
+    public static ConnectionSpec createForCsv() {
+        ConnectionSpec connectionSpec = new ConnectionSpec()
+        {{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec()
+            {{
+                setReadMode(DuckdbReadMode.files);
+                setSourceFilesType(DuckdbSourceFilesType.csv);
             }});
         }};
 

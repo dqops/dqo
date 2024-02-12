@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -50,9 +51,6 @@ public class FileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FilePathListSpec filePaths = new FilePathListSpec();
-
-    public FileFormatSpec() {
-    }
 
     /**
      * Returns the csv file format specification.
@@ -130,17 +128,25 @@ public class FileFormatSpec extends AbstractSpec {
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
      * @return Table options string.
      */
-    public String buildTableOptionsString(){
-        if (csvFileFormat != null) {
+    public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.csv)){
+            if(csvFileFormat == null){
+                csvFileFormat = new CsvFileFormatSpec();
+            }
             return csvFileFormat.buildSourceTableOptionsString(filePaths);
         }
-//        if(jsonFileFormat != null){   // todo
-//
-//        }
-//        if(parquetFileFormat != null){    // todo
-//
-//        }
-
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.json)){
+            if(jsonFileFormat == null){
+                jsonFileFormat = new JsonFileFormatSpec();
+            }
+            return jsonFileFormat.buildSourceTableOptionsString(filePaths);
+        }
+        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.parquet)){
+            if(parquetFileFormat == null){
+                parquetFileFormat = new ParquetFileFormatSpec();
+            }
+            return parquetFileFormat.buildSourceTableOptionsString(filePaths);
+        }
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
 
