@@ -36,7 +36,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class FilesDuckdbTableAvailabilitySensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+public class FileDuckdbTableAvailabilitySensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private TableAvailabilitySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableAvailabilityCheckSpec checkSpec;
@@ -44,7 +44,7 @@ public class FilesDuckdbTableAvailabilitySensorParametersSpecIntegrationTest ext
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForInMemory();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
         String csvFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

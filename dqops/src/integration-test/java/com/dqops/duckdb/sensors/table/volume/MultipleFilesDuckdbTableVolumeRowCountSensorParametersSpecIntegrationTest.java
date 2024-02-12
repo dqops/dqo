@@ -31,7 +31,7 @@ public class MultipleFilesDuckdbTableVolumeRowCountSensorParametersSpecIntegrati
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForInMemory();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
         String csvFilesFolder = SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitMultipleCsvFiles(csvFilesFolder, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
