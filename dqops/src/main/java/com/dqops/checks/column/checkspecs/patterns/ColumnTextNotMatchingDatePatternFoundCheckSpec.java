@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
+ * This check detects dates in the wrong format inside text columns using a regular expression.
+ * It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

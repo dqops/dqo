@@ -1,6 +1,7 @@
 # texts matching regex percent data quality checks
 
-A column-level that calculates the percentage of values that match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.
 
 
 ___

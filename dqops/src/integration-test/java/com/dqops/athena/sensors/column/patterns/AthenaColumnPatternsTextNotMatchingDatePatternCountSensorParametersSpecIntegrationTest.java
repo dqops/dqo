@@ -17,7 +17,6 @@ package com.dqops.athena.sensors.column.patterns;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnTextNotMatchingDatePatternFoundCheckSpec;
-import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -60,7 +59,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec);
 
@@ -74,7 +73,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
@@ -88,7 +87,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
@@ -102,7 +101,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -116,7 +115,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 

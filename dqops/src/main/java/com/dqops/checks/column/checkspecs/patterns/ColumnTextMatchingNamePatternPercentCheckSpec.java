@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level that calculates the percentage of values that match the name regex in a monitored column.
+ * This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
+ * It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -619,10 +619,10 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -1267,10 +1267,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -1993,10 +1993,10 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -2642,10 +2642,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -3368,10 +3368,10 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -4017,10 +4017,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -4753,10 +4753,10 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -5416,10 +5416,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -6150,10 +6150,10 @@ spec:
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END
@@ -6813,10 +6813,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
-                                 {{lib.render_target_column('analyzed_table')}} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
+                            WHEN {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '%[ \t.,:;"''`|\n\r][_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-][ \t.,:;"''`|\n\r]%' OR
+                                 {{ lib.render_target_column('analyzed_table') }} LIKE '[_a-zA-Z0-9.!#$%&''+/=?^`{|}~-]%@[_a-zA-Z0-9-]%.[_a-zA-Z0-9-]'
                                 THEN 1
                             ELSE 0
                         END

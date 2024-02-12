@@ -2589,6 +2589,7 @@ The templates used to generate the SQL query for each data source supported by D
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                     ELSE 0
+                END
             ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

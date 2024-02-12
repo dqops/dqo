@@ -58,7 +58,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date", this.checkSpec);
 
@@ -72,7 +72,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
 
@@ -86,7 +86,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
 
@@ -100,7 +100,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -114,7 +114,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
 

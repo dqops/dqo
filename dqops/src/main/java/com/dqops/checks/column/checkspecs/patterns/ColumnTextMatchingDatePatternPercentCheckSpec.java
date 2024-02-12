@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that calculates the percentage of values that match the date regex in a monitored column.
+ * This check validates the date format of dates stored in text columns.
+ * It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

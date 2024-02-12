@@ -572,8 +572,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -594,8 +594,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -1340,8 +1340,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -1361,8 +1361,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -2186,8 +2186,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -2208,8 +2208,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -2955,8 +2955,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -2976,8 +2976,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -3801,8 +3801,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -3823,8 +3823,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -4570,8 +4570,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -4591,8 +4591,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -5426,8 +5426,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -5448,8 +5448,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -6209,8 +6209,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -6230,8 +6230,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -7063,8 +7063,8 @@ spec:
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -7085,8 +7085,8 @@ spec:
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -7846,8 +7846,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END
@@ -7867,8 +7867,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
-                                OR REGEXP_LIKE(analyzed_table."target_column", '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
+                            WHEN (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])(([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4})([ \t.,:;"''`|\n\r]|$)' )
+                                OR (analyzed_table."target_column" REGEXP '(^|[ \t.,:;"''`|\n\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \t.,:;"''`|\n\r]|$)' )
                             THEN 1
                             ELSE 0
                         END

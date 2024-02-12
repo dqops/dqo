@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+ * This check validates text values using a pattern defined as a regular expression.
+ * It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

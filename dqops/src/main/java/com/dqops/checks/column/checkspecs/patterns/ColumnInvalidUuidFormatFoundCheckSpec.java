@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
+ * This check detects invalid UUID identifiers in text columns using a regular expression.
+ * It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -590,52 +590,62 @@ A column-level check that ensures that there are no more than a set percentage o
 Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.
 
 ### [text not matching regex found](./patterns/text-not-matching-regex-found.md)
-A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [texts matching regex percent](./patterns/texts-matching-regex-percent.md)
-A column-level that calculates the percentage of values that match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid email format found](./patterns/invalid-email-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid emails in a monitored column.
+This check detects invalid email addresses in text columns using a regular expression.
+ It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [text not matching date pattern found](./patterns/text-not-matching-date-pattern-found.md)
-A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
+This check detects dates in the wrong format inside text columns using a regular expression.
+ It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [text matching date pattern percent](./patterns/text-matching-date-pattern-percent.md)
-A column-level check that calculates the percentage of values that match the date regex in a monitored column.
+This check validates the date format of dates stored in text columns.
+ It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [text matching name pattern percent](./patterns/text-matching-name-pattern-percent.md)
-A column-level that calculates the percentage of values that match the name regex in a monitored column.
+This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
+ It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid uuid format found](./patterns/invalid-uuid-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
+This check detects invalid UUID identifiers in text columns using a regular expression.
+ It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [valid uuid format percent](./patterns/valid-uuid-format-percent.md)
-A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
+This check validates the format of UUID values in text columns.
+ It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid ip4 address format found](./patterns/invalid-ip4-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
+This check detects invalid IP4 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [invalid ip6 address format found](./patterns/invalid-ip6-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
+This check detects invalid IP6 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 

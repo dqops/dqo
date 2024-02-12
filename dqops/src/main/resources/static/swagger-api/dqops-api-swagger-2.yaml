@@ -23383,7 +23383,7 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-      date_formats:
+      date_format:
         type: "string"
         description: "Desired date format. Sensor will try to parse the column records\
           \ and cast the data using this format."
@@ -23407,7 +23407,7 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-      date_formats:
+      date_format:
         type: "string"
         description: "Desired date format. Sensor will try to parse the column records\
           \ and cast the data using this format."
@@ -28781,6 +28781,9 @@ definitions:
       postgresql:
         description: "PostgreSQL connection parameters."
         $ref: "#/definitions/PostgresqlParametersSpec"
+      duckdb:
+        description: "DuckDB connection parameters."
+        $ref: "#/definitions/DuckdbParametersSpec"
       redshift:
         description: "Redshift connection parameters."
         $ref: "#/definitions/RedshiftParametersSpec"
@@ -29021,41 +29024,70 @@ definitions:
     properties:
       all_varchar:
         type: "boolean"
+        description: "Option to skip type detection for CSV parsing and assume all\
+          \ columns to be of type VARCHAR."
       allow_quoted_nulls:
         type: "boolean"
+        description: "Option to allow the conversion of quoted values to NULL values."
       auto_detect:
         type: "boolean"
+        description: "Enables auto detection of CSV parameters."
       columns:
         type: "object"
+        description: "A struct that specifies the column names and column types contained\
+          \ within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using\
+          \ this option implies that auto detection is not used."
         additionalProperties:
           type: "string"
       compression:
         type: "string"
+        description: "The compression type for the file. By default this will be detected\
+          \ automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv\
+          \ will use none). Options are none, gzip, zstd."
       dateformat:
         type: "string"
+        description: "Specifies the date format to use when parsing dates."
       decimal_separator:
         type: "string"
+        description: "The decimal separator of numbers."
       delim:
         type: "string"
+        description: "Specifies the string that separates columns within each row\
+          \ (line) of the file."
       escape:
         type: "string"
+        description: "Specifies the string that should appear before a data character\
+          \ sequence that matches the quote value."
       filename:
         type: "boolean"
+        description: "Whether or not an extra filename column should be included in\
+          \ the result."
       header:
         type: "boolean"
+        description: "Specifies that the file contains a header line with the names\
+          \ of each column in the file."
       hive_partitioning:
         type: "boolean"
+        description: "Whether or not to interpret the path as a hive partitioned path."
       ignore_errors:
         type: "boolean"
+        description: "Option to ignore any parsing errors encountered - and instead\
+          \ ignore rows with errors."
       new_line:
         type: "string"
+        description: "Set the new line character(s) in the file. Options are '\\r','\\\
+          n', or '\\r\\n'."
       quote:
         type: "string"
+        description: "Specifies the quoting string to be used when a data value is\
+          \ quoted."
       skip:
         type: "integer"
         format: "int64"
+        description: "The number of lines at the top of the file to skip."
       timestampformat:
         type: "string"
+        description: "Specifies the date format to use when parsing timestamps."
   CustomCheckSpec:
     type: "object"
     properties:
@@ -29860,12 +29892,21 @@ definitions:
   DuckdbParametersSpec:
     type: "object"
     properties:
-      in_memory:
-        type: "boolean"
-        description: "To use the special value :memory: to create an in-memory database\
-          \ where no data is persisted to disk (i.e., all data is lost when you exit\
-          \ the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format\
-          \ to use dynamic substitution."
+      read_mode:
+        type: "string"
+        description: "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+        enum:
+        - "in_memory"
+        - "files"
+      source_files_type:
+        type: "string"
+        description: "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+        enum:
+        - "csv"
+        - "json"
+        - "parquet"
       database:
         type: "string"
         description: "DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
@@ -30404,6 +30445,60 @@ definitions:
         description: "Count of open (new) data quality incidents."
   JsonFileFormatSpec:
     type: "object"
+    properties:
+      auto_detect:
+        type: "boolean"
+        description: "Whether to auto-detect detect the names of the keys and data\
+          \ types of the values automatically"
+      columns:
+        type: "object"
+        description: "A struct that specifies the key names and value types contained\
+          \ within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect\
+          \ is enabled these will be inferred"
+        additionalProperties:
+          type: "string"
+      compression:
+        type: "string"
+        description: "The compression type for the file. By default this will be detected\
+          \ automatically from the file extension (e.g., t.json.gz will use gzip,\
+          \ t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
+      convert_strings_to_integers:
+        type: "boolean"
+        description: "\tWhether strings representing integer values should be converted\
+          \ to a numerical type."
+      dateformat:
+        type: "string"
+        description: "Specifies the date format to use when parsing dates."
+      filename:
+        type: "boolean"
+        description: "Whether or not an extra filename column should be included in\
+          \ the result."
+      format:
+        type: "string"
+        description: "\tCan be one of ['auto', 'unstructured', 'newline_delimited',\
+          \ 'array']."
+      hive_partitioning:
+        type: "boolean"
+        description: "\tWhether or not to interpret the path as a hive partitioned\
+          \ path."
+      ignore_errors:
+        type: "boolean"
+        description: "Whether to ignore parse errors (only possible when format is\
+          \ 'newline_delimited')."
+      maximum_depth:
+        type: "integer"
+        description: "Maximum nesting depth to which the automatic schema detection\
+          \ detects types. Set to -1 to fully detect nested JSON types"
+      maximum_object_size:
+        type: "integer"
+        format: "int64"
+        description: "\tThe maximum size of a JSON object (in bytes)"
+      records:
+        type: "string"
+        description: "Can be one of ['auto', 'true', 'false']"
+      timestampformat:
+        type: "string"
+        description: "\tSpecifies the date format to use when parsing timestamps."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -30785,6 +30880,26 @@ definitions:
     description: "Defines a single field that is a sensor parameter or a rule parameter."
   ParquetFileFormatSpec:
     type: "object"
+    properties:
+      binary_as_string:
+        type: "boolean"
+        description: "Parquet files generated by legacy writers do not correctly set\
+          \ the UTF8 flag for strings, causing string columns to be loaded as BLOB\
+          \ instead. Set this to true to load binary columns as strings."
+      filename:
+        type: "boolean"
+        description: "Whether or not an extra filename column should be included in\
+          \ the result."
+      file_row_number:
+        type: "boolean"
+        description: "Whether or not to include the file_row_number column."
+      hive_partitioning:
+        type: "boolean"
+        description: "Whether or not to interpret the path as a hive partitioned path."
+      union_by_name:
+        type: "boolean"
+        description: "Whether the columns of multiple schemas should be unified by\
+          \ name, rather than by position."
   PartitionIncrementalTimeWindowSpec:
     type: "object"
     properties:

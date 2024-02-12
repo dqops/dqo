@@ -548,19 +548,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -580,19 +568,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -1252,19 +1228,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -1283,19 +1247,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2034,19 +1986,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2066,19 +2006,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2739,19 +2667,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -2770,19 +2686,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3521,19 +3425,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -3553,19 +3445,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -4226,19 +4106,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -4257,19 +4125,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5018,19 +4874,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5050,19 +4894,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5737,19 +5569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -5768,19 +5588,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -6527,19 +6335,7 @@ spec:
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -6559,19 +6355,7 @@ spec:
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -7246,19 +7030,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN ({{ lib.render_target_column('analyzed_table') }} REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
@@ -7277,19 +7049,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CASE
                     WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
-                        CASE WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])[0-9]{3}\.[0-9]{3}\.[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{4} \d{4} \d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+?1?\-?\d{3}\-?\d{3}\-?\d{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(\+1\)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\(1/)\d{10,11}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\+1\([0-9]{3}\)[0-9]{7}([ \t.,:;"''`|\n\r]|$)') OR
-                            WHEN REGEXP_LIKE(analyzed_table."target_column",'(^|[ \t.,:;"''`|\n\r])\d{10,11}([ \t.,:;"''`|\n\r]|$)')
+                        CASE WHEN (analyzed_table."target_column" REGEXP '(^|[ \\t.,:;"''`|\\n\\r])((((\\(\\+1\\)|(\\+1)|(\\([0][0][1]\\)|([0][0][1]))|\\(1\\)|(1))[\\s.-]?)?(\\(?\\d{3}\\)?[\\s.-]?)(\\d{3}[\\s.-]?)(\\d{4})))([ \\t.,:;"''`|\\n\\r]|$)')
                                 THEN 1
                             ELSE 0
                         END
