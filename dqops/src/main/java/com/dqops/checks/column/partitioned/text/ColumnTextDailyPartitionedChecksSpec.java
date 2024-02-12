@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -52,8 +54,6 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
 
             put("daily_partition_text_surrounded_by_whitespace", o -> o.dailyPartitionTextSurroundedByWhitespace);
             put("daily_partition_text_surrounded_by_whitespace_percent", o -> o.dailyPartitionTextSurroundedByWhitespacePercent);
-            put("daily_partition_text_valid_country_code_percent", o -> o.dailyPartitionTextValidCountryCodePercent);
-            put("daily_partition_text_valid_currency_code_percent", o -> o.dailyPartitionTextValidCurrencyCodePercent);
         }
     };
 
@@ -87,12 +87,6 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
     private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyPartitionTextSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
-    private ColumnTextValidCountryCodePercentCheckSpec dailyPartitionTextValidCountryCodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionTextValidCurrencyCodePercent;
 
 
     /**
@@ -273,42 +267,6 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextSurroundedByWhitespacePercent, dailyPartitionTextSurroundedByWhitespacePercent));
         this.dailyPartitionTextSurroundedByWhitespacePercent = dailyPartitionTextSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(dailyPartitionTextSurroundedByWhitespacePercent, "daily_partition_text_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set count check.
-     * @return Minimum strings in set count check.
-     */
-    public ColumnTextValidCountryCodePercentCheckSpec getDailyPartitionTextValidCountryCodePercent() {
-        return dailyPartitionTextValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid country code percent check.
-     * @param dailyPartitionTextValidCountryCodePercent String valid country code percent check.
-     */
-    public void setDailyPartitionTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyPartitionTextValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextValidCountryCodePercent, dailyPartitionTextValidCountryCodePercent));
-        this.dailyPartitionTextValidCountryCodePercent = dailyPartitionTextValidCountryCodePercent;
-        propagateHierarchyIdToField(dailyPartitionTextValidCountryCodePercent, "daily_partition_text_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set percent check.
-     * @return Minimum strings in set percent check.
-     */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyPartitionTextValidCurrencyCodePercent() {
-        return dailyPartitionTextValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid currency code percent check.
-     * @param dailyPartitionTextValidCurrencyCodePercent String valid currency code percent check.
-     */
-    public void setDailyPartitionTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionTextValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextValidCurrencyCodePercent, dailyPartitionTextValidCurrencyCodePercent));
-        this.dailyPartitionTextValidCurrencyCodePercent = dailyPartitionTextValidCurrencyCodePercent;
-        propagateHierarchyIdToField(dailyPartitionTextValidCurrencyCodePercent, "daily_partition_text_valid_currency_code_percent");
     }
 
 

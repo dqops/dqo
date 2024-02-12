@@ -13906,6 +13906,18 @@ definitions:
           \ not found (were missing). Stores the most recent captured value for each\
           \ day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+      daily_text_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Stores the\
+          \ most recent captured value for each day when the data quality check was\
+          \ evaluated."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      daily_text_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Stores the\
+          \ most recent captured value for each day when the data quality check was\
+          \ evaluated."
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnAcceptedValuesDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -13948,6 +13960,18 @@ definitions:
           \ not found (were missing). Stores a separate data quality check result\
           \ for each daily partition."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+      daily_partition_text_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      daily_partition_text_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnAcceptedValuesMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -13990,6 +14014,18 @@ definitions:
           \ not found (were missing). Stores the most recent captured value for each\
           \ month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+      monthly_text_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Stores the\
+          \ most recent captured value for each month when the data quality check\
+          \ was evaluated."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      monthly_text_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Stores the\
+          \ most recent captured value for each month when the data quality check\
+          \ was evaluated."
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnAcceptedValuesMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -14032,6 +14068,18 @@ definitions:
           \ not found (were missing). Stores a separate data quality check result\
           \ for each monthly partition."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+      monthly_partition_text_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      monthly_partition_text_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnAcceptedValuesProfilingChecksSpec:
     type: "object"
     properties:
@@ -14069,6 +14117,14 @@ definitions:
           \ column. Raises a data quality issue when too many expected values were\
           \ not found (were missing)."
         $ref: "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+      profile_text_valid_country_code_percent:
+        description: "Verifies that the percentage of valid country codes in a text\
+          \ column does not fall below the minimum accepted percentage"
+        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+      profile_text_valid_currency_code_percent:
+        description: "Verifies that the percentage of valid currency codes in a text\
+          \ column does not fall below the minimum accepted percentage"
+        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnAcceptedValuesTextFoundInSetPercentSensorParametersSpec:
     type: "object"
     properties:
@@ -26012,18 +26068,6 @@ definitions:
           \ percentage. Stores the most recent captured value for each day when the\
           \ data quality check was evaluated."
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      daily_text_valid_country_code_percent:
-        description: "Verifies that the percentage of valid country codes in a text\
-          \ column does not fall below the minimum accepted percentage. Stores the\
-          \ most recent captured value for each day when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      daily_text_valid_currency_code_percent:
-        description: "Verifies that the percentage of valid currency codes in a text\
-          \ column does not fall below the minimum accepted percentage. Stores the\
-          \ most recent captured value for each day when the data quality check was\
-          \ evaluated."
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -26097,18 +26141,6 @@ definitions:
           \ quality check result with the time period value that identifies the daily\
           \ partition."
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      daily_partition_text_valid_country_code_percent:
-        description: "Verifies that the percentage of valid country codes in a text\
-          \ column does not fall below the minimum accepted percentage. Analyzes every\
-          \ daily partition and creates a separate data quality check result with\
-          \ the time period value that identifies the daily partition."
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      daily_partition_text_valid_currency_code_percent:
-        description: "Verifies that the percentage of valid currency codes in a text\
-          \ column does not fall below the minimum accepted percentage. Analyzes every\
-          \ daily partition and creates a separate data quality check result with\
-          \ the time period value that identifies the daily partition."
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextFoundInSetPercentCheckSpec:
     type: "object"
     properties:
@@ -26937,18 +26969,6 @@ definitions:
           \ percentage. Stores the most recent captured value for each month when\
           \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      monthly_text_valid_country_code_percent:
-        description: "Verifies that the percentage of valid country codes in a text\
-          \ column does not fall below the minimum accepted percentage. Stores the\
-          \ most recent captured value for each month when the data quality check\
-          \ was evaluated."
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      monthly_text_valid_currency_code_percent:
-        description: "Verifies that the percentage of valid currency codes in a text\
-          \ column does not fall below the minimum accepted percentage. Stores the\
-          \ most recent captured value for each month when the data quality check\
-          \ was evaluated."
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -27022,18 +27042,6 @@ definitions:
           \ quality check result with the time period value that identifies the monthly\
           \ partition."
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      monthly_partition_text_valid_country_code_percent:
-        description: "Verifies that the percentage of valid country codes in a text\
-          \ column does not fall below the minimum accepted percentage. Analyzes every\
-          \ monthly partition and creates a separate data quality check result with\
-          \ the time period value that identifies the monthly partition."
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      monthly_partition_text_valid_currency_code_percent:
-        description: "Verifies that the percentage of valid currency codes in a text\
-          \ column does not fall below the minimum accepted percentage. Analyzes every\
-          \ monthly partition and creates a separate data quality check result with\
-          \ the time period value that identifies the monthly partition."
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextNotMatchingDatePatternFoundCheckSpec:
     type: "object"
     properties:
@@ -27456,14 +27464,6 @@ definitions:
           \ by whitespace characters in a column does not exceed the maximum accepted\
           \ percentage"
         $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-      profile_text_valid_country_code_percent:
-        description: "Verifies that the percentage of valid country codes in a text\
-          \ column does not fall below the minimum accepted percentage"
-        $ref: "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-      profile_text_valid_currency_code_percent:
-        description: "Verifies that the percentage of valid currency codes in a text\
-          \ column does not fall below the minimum accepted percentage"
-        $ref: "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
   ColumnTextStatisticsCollectorsSpec:
     type: "object"
     properties:

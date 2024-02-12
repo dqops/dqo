@@ -46,6 +46,9 @@ public class ColumnAcceptedValuesDailyMonitoringChecksSpec extends AbstractCheck
             put("daily_expected_text_values_in_use_count", o -> o.dailyExpectedTextValuesInUseCount);
             put("daily_expected_texts_in_top_values_count", o -> o.dailyExpectedTextsInTopValuesCount);
             put("daily_expected_numbers_in_use_count", o -> o.dailyExpectedNumbersInUseCount);
+
+            put("daily_text_valid_country_code_percent", o -> o.dailyTextValidCountryCodePercent);
+            put("daily_text_valid_currency_code_percent", o -> o.dailyTextValidCurrencyCodePercent);
         }
     };
 
@@ -63,6 +66,12 @@ public class ColumnAcceptedValuesDailyMonitoringChecksSpec extends AbstractCheck
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyExpectedNumbersInUseCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    private ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent;
 
 
     /**
@@ -153,6 +162,42 @@ public class ColumnAcceptedValuesDailyMonitoringChecksSpec extends AbstractCheck
         this.setDirtyIf(!Objects.equals(this.dailyExpectedNumbersInUseCount, dailyExpectedNumbersInUseCount));
         this.dailyExpectedNumbersInUseCount = dailyExpectedNumbersInUseCount;
         propagateHierarchyIdToField(dailyExpectedNumbersInUseCount, "daily_expected_numbers_in_use_count");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnTextValidCountryCodePercentCheckSpec getDailyTextValidCountryCodePercent() {
+        return dailyTextValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid country code percent check.
+     * @param dailyTextValidCountryCodePercent String valid country code percent check.
+     */
+    public void setDailyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextValidCountryCodePercent, dailyTextValidCountryCodePercent));
+        this.dailyTextValidCountryCodePercent = dailyTextValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyTextValidCountryCodePercent, "daily_text_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyTextValidCurrencyCodePercent() {
+        return dailyTextValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid currency code percent check.
+     * @param dailyTextValidCurrencyCodePercent String valid currency code percent check.
+     */
+    public void setDailyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTextValidCurrencyCodePercent, dailyTextValidCurrencyCodePercent));
+        this.dailyTextValidCurrencyCodePercent = dailyTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyTextValidCurrencyCodePercent, "daily_text_valid_currency_code_percent");
     }
 
 

@@ -8,3 +8,4 @@ spec:
     value in a column does not fall below the minimum accepted percentage. Stores
     the most recent captured value for each month when the data quality check was
     evaluated.
+  standard: true

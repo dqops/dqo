@@ -80,7 +80,7 @@ nav:
     - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
     - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
     - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
-    - Table schema drifts: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
+    - Table schema changes: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
     - Text patterns: 'categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
     - Text statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
     - Timeliness and freshness: 'categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
@@ -283,6 +283,8 @@ nav:
         - expected text values in use count: 'checks/column/accepted_values/expected-text-values-in-use-count.md'
         - expected texts in top values count: 'checks/column/accepted_values/expected-texts-in-top-values-count.md'
         - expected numbers in use count: 'checks/column/accepted_values/expected-numbers-in-use-count.md'
+        - text valid country code percent: 'checks/column/accepted_values/text-valid-country-code-percent.md'
+        - text valid currency code percent: 'checks/column/accepted_values/text-valid-currency-code-percent.md'
       - accuracy:
         - 'checks/column/accuracy/index.md'
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
@@ -430,8 +432,6 @@ nav:
         - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
         - text surrounded by whitespace: 'checks/column/text/text-surrounded-by-whitespace.md'
         - text surrounded by whitespace percent: 'checks/column/text/text-surrounded-by-whitespace-percent.md'
-        - text valid country code percent: 'checks/column/text/text-valid-country-code-percent.md'
-        - text valid currency code percent: 'checks/column/text/text-valid-currency-code-percent.md'
       - uniqueness:
         - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'

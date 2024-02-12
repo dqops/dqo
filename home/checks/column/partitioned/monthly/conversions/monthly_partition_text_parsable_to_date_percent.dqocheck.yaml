@@ -9,3 +9,4 @@ spec:
     \ uses a safe_cast when possible, otherwise the text is verified using a regular\
     \ expression. Analyzes every monthly partition and creates a separate data quality\
     \ check result with the time period value that identifies the monthly partition."
+  standard: true

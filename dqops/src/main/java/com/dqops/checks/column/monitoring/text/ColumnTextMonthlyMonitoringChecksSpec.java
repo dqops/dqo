@@ -19,10 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.conversions.ColumnTextParsableToBooleanPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.conversions.ColumnTextParsableToDatePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.conversions.ColumnTextParsableToFloatPercentCheckSpec;
-import com.dqops.checks.column.checkspecs.conversions.ColumnTextParsableToIntegerPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -56,8 +54,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
 
             put("monthly_text_surrounded_by_whitespace", o -> o.monthlyTextSurroundedByWhitespace);
             put("monthly_text_surrounded_by_whitespace_percent", o -> o.monthlyTextSurroundedByWhitespacePercent);
-            put("monthly_text_valid_country_code_percent", o -> o.monthlyTextValidCountryCodePercent);
-            put("monthly_text_valid_currency_code_percent", o -> o.monthlyTextValidCurrencyCodePercent);
         }
     };
 
@@ -91,12 +87,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextSurroundedByWhitespacePercentCheckSpec monthlyTextSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent;
 
 
     /**
@@ -277,42 +267,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyTextSurroundedByWhitespacePercent, monthlyTextSurroundedByWhitespacePercent));
         this.monthlyTextSurroundedByWhitespacePercent = monthlyTextSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(monthlyTextSurroundedByWhitespacePercent, "monthly_text_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set count check.
-     * @return Minimum strings in set count check.
-     */
-    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyTextValidCountryCodePercent() {
-        return monthlyTextValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid country code percent check.
-     * @param monthlyTextValidCountryCodePercent String valid country code percent check.
-     */
-    public void setMonthlyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCountryCodePercent, monthlyTextValidCountryCodePercent));
-        this.monthlyTextValidCountryCodePercent = monthlyTextValidCountryCodePercent;
-        propagateHierarchyIdToField(monthlyTextValidCountryCodePercent, "monthly_text_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set percent check.
-     * @return Minimum strings in set percent check.
-     */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyTextValidCurrencyCodePercent() {
-        return monthlyTextValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid currency code percent check.
-     * @param monthlyTextValidCurrencyCodePercent String valid currency code percent check.
-     */
-    public void setMonthlyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCurrencyCodePercent, monthlyTextValidCurrencyCodePercent));
-        this.monthlyTextValidCurrencyCodePercent = monthlyTextValidCurrencyCodePercent;
-        propagateHierarchyIdToField(monthlyTextValidCurrencyCodePercent, "monthly_text_valid_currency_code_percent");
     }
 
 

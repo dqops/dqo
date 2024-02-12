@@ -9,3 +9,4 @@ spec:
     \ as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores\
     \ the most recent captured value for each month when the data quality check was\
     \ evaluated."
+  standard: true

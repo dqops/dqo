@@ -9,3 +9,4 @@ spec:
     \ as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes\
     \ every daily partition and creates a separate data quality check result with\
     \ the time period value that identifies the daily partition."
+  standard: true

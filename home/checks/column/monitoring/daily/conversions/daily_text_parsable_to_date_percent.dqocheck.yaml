@@ -9,3 +9,4 @@ spec:
     \ uses a safe_cast when possible, otherwise the text is verified using a regular\
     \ expression. Stores the most recent captured value for each day when the data\
     \ quality check was evaluated."
+  standard: true

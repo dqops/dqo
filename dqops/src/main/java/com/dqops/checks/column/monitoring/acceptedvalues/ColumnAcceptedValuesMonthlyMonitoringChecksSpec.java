@@ -46,6 +46,9 @@ public class ColumnAcceptedValuesMonthlyMonitoringChecksSpec extends AbstractChe
             put("monthly_expected_text_values_in_use_count", o -> o.monthlyExpectedTextValuesInUseCount);
             put("monthly_expected_texts_in_top_values_count", o -> o.monthlyExpectedTextsInTopValuesCount);
             put("monthly_expected_numbers_in_use_count", o -> o.monthlyExpectedNumbersInUseCount);
+
+            put("monthly_text_valid_country_code_percent", o -> o.monthlyTextValidCountryCodePercent);
+            put("monthly_text_valid_currency_code_percent", o -> o.monthlyTextValidCurrencyCodePercent);
         }
     };
 
@@ -63,6 +66,12 @@ public class ColumnAcceptedValuesMonthlyMonitoringChecksSpec extends AbstractChe
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnExpectedNumbersInUseCountCheckSpec monthlyExpectedNumbersInUseCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent;
 
 
     /**
@@ -153,6 +162,42 @@ public class ColumnAcceptedValuesMonthlyMonitoringChecksSpec extends AbstractChe
         this.setDirtyIf(!Objects.equals(this.monthlyExpectedNumbersInUseCount, monthlyExpectedNumbersInUseCount));
         this.monthlyExpectedNumbersInUseCount = monthlyExpectedNumbersInUseCount;
         propagateHierarchyIdToField(monthlyExpectedNumbersInUseCount, "monthly_expected_numbers_in_use_count");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnTextValidCountryCodePercentCheckSpec getMonthlyTextValidCountryCodePercent() {
+        return monthlyTextValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid country code percent check.
+     * @param monthlyTextValidCountryCodePercent String valid country code percent check.
+     */
+    public void setMonthlyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec monthlyTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCountryCodePercent, monthlyTextValidCountryCodePercent));
+        this.monthlyTextValidCountryCodePercent = monthlyTextValidCountryCodePercent;
+        propagateHierarchyIdToField(monthlyTextValidCountryCodePercent, "monthly_text_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnTextValidCurrencyCodePercentCheckSpec getMonthlyTextValidCurrencyCodePercent() {
+        return monthlyTextValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid currency code percent check.
+     * @param monthlyTextValidCurrencyCodePercent String valid currency code percent check.
+     */
+    public void setMonthlyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec monthlyTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextValidCurrencyCodePercent, monthlyTextValidCurrencyCodePercent));
+        this.monthlyTextValidCurrencyCodePercent = monthlyTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(monthlyTextValidCurrencyCodePercent, "monthly_text_valid_currency_code_percent");
     }
 
 

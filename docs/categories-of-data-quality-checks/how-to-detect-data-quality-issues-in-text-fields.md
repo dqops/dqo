@@ -27,8 +27,6 @@ How to detect text data quality issues.
 |[*text_length_in_range_percent*](../checks/column/text/text-length-in-range-percent.md)|Reasonableness|Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.| |
 |[*text_surrounded_by_whitespace*](../checks/column/text/text-surrounded-by-whitespace.md)|Validity|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
 |[*text_surrounded_by_whitespace_percent*](../checks/column/text/text-surrounded-by-whitespace-percent.md)|Validity|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
-|[*text_valid_country_code_percent*](../checks/column/text/text-valid-country-code-percent.md)|Validity|A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.| |
-|[*text_valid_currency_code_percent*](../checks/column/text/text-valid-currency-code-percent.md)|Validity|A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.| |
 
 
 **Reference and samples**

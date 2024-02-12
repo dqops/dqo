@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCountryCodePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextValidCurrencyCodePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -52,8 +54,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
 
             put("profile_text_surrounded_by_whitespace", o -> o.profileTextSurroundedByWhitespace);
             put("profile_text_surrounded_by_whitespace_percent", o -> o.profileTextSurroundedByWhitespacePercent);
-            put("profile_text_valid_country_code_percent", o -> o.profileTextValidCountryCodePercent);
-            put("profile_text_valid_currency_code_percent", o -> o.profileTextValidCurrencyCodePercent);
         }
     };
 
@@ -86,12 +86,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage")
     private ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent;
 
 
     /**
@@ -272,42 +266,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespacePercent, profileTextSurroundedByWhitespacePercent));
         this.profileTextSurroundedByWhitespacePercent = profileTextSurroundedByWhitespacePercent;
         propagateHierarchyIdToField(profileTextSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set count check.
-     * @return Minimum strings in set count check.
-     */
-    public ColumnTextValidCountryCodePercentCheckSpec getProfileTextValidCountryCodePercent() {
-        return profileTextValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid country code percent check.
-     * @param profileTextValidCountryCodePercent String valid country code percent check.
-     */
-    public void setProfileTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextValidCountryCodePercent, profileTextValidCountryCodePercent));
-        this.profileTextValidCountryCodePercent = profileTextValidCountryCodePercent;
-        propagateHierarchyIdToField(profileTextValidCountryCodePercent, "profile_text_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set percent check.
-     * @return Minimum strings in set percent check.
-     */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getProfileTextValidCurrencyCodePercent() {
-        return profileTextValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid currency code percent check.
-     * @param profileTextValidCurrencyCodePercent String valid currency code percent check.
-     */
-    public void setProfileTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextValidCurrencyCodePercent, profileTextValidCurrencyCodePercent));
-        this.profileTextValidCurrencyCodePercent = profileTextValidCurrencyCodePercent;
-        propagateHierarchyIdToField(profileTextValidCurrencyCodePercent, "profile_text_valid_currency_code_percent");
     }
 
 

@@ -53,7 +53,7 @@ public class CheckCategoryDocumentationConstants {
      */
     public static final Map<String, String> CATEGORY_LINK_NAMES = new LinkedHashMap<>() {{
         put("timeliness", "Timeliness and freshness");
-        put("schema", "Table schema drifts");
+        put("schema", "Table schema changes");
         put("pii", "PII values");
         put("integrity", "Referential integrity");
         put("comparisons", "Comparing tables");

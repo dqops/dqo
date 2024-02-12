@@ -318,6 +318,16 @@ A column-level check that counts unique values in a numeric column and counts ho
 
 
 
+### [text valid country code percent](./column/accepted_values/text-valid-country-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
+
+
+
+### [text valid currency code percent](./column/accepted_values/text-valid-currency-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
+
+
+
 
 
 
@@ -1046,16 +1056,6 @@ A column-level check that ensures that there are no more than a maximum number o
 
 ### [text surrounded by whitespace percent](./column/text/text-surrounded-by-whitespace-percent.md)
 A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text valid country code percent](./column/text/text-valid-country-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
-
-
-
-### [text valid currency code percent](./column/text/text-valid-currency-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
 
 
 
