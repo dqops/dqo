@@ -34,10 +34,11 @@ public class CheckCategoryDocumentationConstants {
         put("text", "how-to-detect-data-quality-issues-in-text-fields.md");
         put("bool", "how-to-detect-data-quality-issues-in-bool-fields.md");
         put("numeric", "how-to-detect-data-quality-issues-in-numeric-fields.md");
+        put("conversions", "how-to-verify-text-values-are-parsable.md");
         put("datetime", "how-to-detect-invalid-dates.md");
         put("datatype", "how-to-detect-data-type-changes.md");
         put("integrity", "how-to-detect-data-referential-integrity-issues.md");
-        put("blanks", "how-to-detect-blank-and-whitespace-values.md");
+        put("whitespace", "how-to-detect-blank-and-whitespace-values.md");
         put("availability", "how-to-table-availability-issues-and-downtimes.md");
         put("accepted_values", "how-to-validate-accepted-values-in-columns.md");
         put("volume", "how-to-detect-data-volume-issues-and-changes.md");
@@ -52,11 +53,11 @@ public class CheckCategoryDocumentationConstants {
      */
     public static final Map<String, String> CATEGORY_LINK_NAMES = new LinkedHashMap<>() {{
         put("timeliness", "Timeliness and freshness");
-        put("schema", "Table schema drifts");
+        put("schema", "Table schema changes");
         put("pii", "PII values");
         put("integrity", "Referential integrity");
         put("comparisons", "Comparing tables");
-        put("blanks", "Blanks and whitespaces");
+        put("whitespace", "Blanks and whitespaces");
         put("patterns", "Text patterns");
         put("datatype", "Data type detection");
         put("anomaly", "Anomaly detection");
@@ -64,6 +65,7 @@ public class CheckCategoryDocumentationConstants {
         put("bool", "Boolean values");
         put("numeric", "Numeric statistics");
         put("datetime", "Invalid dates");
+        put("conversions", "Data type conversions");
         put("text", "Text statistics");
         put("nulls", "Empty and incomplete columns");
         put("accuracy", "Data accuracy");
@@ -92,9 +94,10 @@ public class CheckCategoryDocumentationConstants {
     public static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
         put("nulls", "Checks for the presence of null or missing values in a column.");
         put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
-        put("text", "Validates that the data in a text column has a valid range, or can be parsed to other data types.");
+        put("text", "Validates that the data in a text column has a valid range.");
         put("patterns", "Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.");
-        put("blanks", "Detects text columns that contain blank values, or values that are used as placeholders for missing values: 'n/a', 'None', etc.");
+        put("whitespace", "Detects text columns that contain blank values, or values that are used as placeholders for missing values: 'n/a', 'None', etc.");
+        put("conversions", "Validates that the values in a text column can be parsed and converted to other data types.");
         put("datatype", "Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.");
         put("accepted_values", "Verifies if all values in the column are from a set of known values, such as country codes.");
         put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");

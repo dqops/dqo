@@ -20,10 +20,10 @@ import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.partitioned.acceptedvalues.ColumnAcceptedValuesMonthlyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.anomaly.ColumnAnomalyMonthlyPartitionedChecksSpec;
-import com.dqops.checks.column.partitioned.blanks.ColumnBlanksMonthlyPartitionedChecksSpec;
+import com.dqops.checks.column.partitioned.whitespace.ColumnWhitespaceMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.comparison.ColumnComparisonMonthlyPartitionedChecksSpecMap;
+import com.dqops.checks.column.partitioned.conversions.ColumnConversionsMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.customsql.ColumnCustomSqlMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datatype.ColumnDatatypeMonthlyPartitionedChecksSpec;
 import com.dqops.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
@@ -66,11 +66,12 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
-            put("blanks", o -> o.blanks);
+            put("whitespace", o -> o.whitespace);
+            put("conversions", o -> o.conversions);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
             put("numeric", o -> o.numeric);
-            put("anomaly", o -> o.anomaly);
+//            put("anomaly", o -> o.anomaly);
             put("datetime", o -> o.datetime);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
@@ -104,7 +105,12 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksMonthlyPartitionedChecksSpec blanks;
+    private ColumnWhitespaceMonthlyPartitionedChecksSpec whitespace;
+
+    @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConversionsMonthlyPartitionedChecksSpec conversions;
 
     @JsonPropertyDescription("Monthly partitioned pattern match checks on a column level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -121,10 +127,10 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyPartitionedChecksSpec numeric;
 
-    @JsonPropertyDescription("Monthly partitioned checks for anomalies in numeric columns")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAnomalyMonthlyPartitionedChecksSpec anomaly;
+//    @JsonPropertyDescription("Monthly partitioned checks for anomalies in numeric columns")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private ColumnAnomalyMonthlyPartitionedChecksSpec anomaly;
 
     @JsonPropertyDescription("Monthly partitioned checks of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -237,18 +243,36 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
      * Returns the blanks check configuration on a column level.
      * @return Blanks check configuration.
      */
-    public ColumnBlanksMonthlyPartitionedChecksSpec getBlanks() {
-        return blanks;
+    public ColumnWhitespaceMonthlyPartitionedChecksSpec getWhitespace() {
+        return whitespace;
     }
 
     /**
      * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
+     * @param whitespace New blanks checks configuration.
      */
-    public void setBlanks(ColumnBlanksMonthlyPartitionedChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
+    public void setWhitespace(ColumnWhitespaceMonthlyPartitionedChecksSpec whitespace) {
+        this.setDirtyIf(!Objects.equals(this.whitespace, whitespace));
+        this.whitespace = whitespace;
+        this.propagateHierarchyIdToField(whitespace, "whitespace");
+    }
+
+    /**
+     * Returns the container of conversion testing checks.
+     * @return Conversion testing checks.
+     */
+    public ColumnConversionsMonthlyPartitionedChecksSpec getConversions() {
+        return conversions;
+    }
+
+    /**
+     * Sets the container of conversion testing checks.
+     * @param conversions Conversion testing checks.
+     */
+    public void setConversions(ColumnConversionsMonthlyPartitionedChecksSpec conversions) {
+        this.setDirtyIf(!Objects.equals(this.conversions, conversions));
+        this.conversions = conversions;
+        this.propagateHierarchyIdToField(conversions, "conversions");
     }
 
     /**
@@ -305,23 +329,23 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         propagateHierarchyIdToField(numeric, "numeric");
     }
 
-    /**
-     * Returns a container of custom accuracy checks on a column.
-     * @return Custom accuracy checks.
-     */
-    public ColumnAnomalyMonthlyPartitionedChecksSpec getAnomaly() {
-        return anomaly;
-    }
-
-    /**
-     * Sets a reference to a container of custom anomaly checks.
-     * @param anomaly Custom anomaly checks.
-     */
-    public void setAnomaly(ColumnAnomalyMonthlyPartitionedChecksSpec anomaly) {
-        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
-        this.anomaly = anomaly;
-        propagateHierarchyIdToField(anomaly, "anomaly");
-    }
+//    /**
+//     * Returns a container of custom accuracy checks on a column.
+//     * @return Custom accuracy checks.
+//     */
+//    public ColumnAnomalyMonthlyPartitionedChecksSpec getAnomaly() {
+//        return anomaly;
+//    }
+//
+//    /**
+//     * Sets a reference to a container of custom anomaly checks.
+//     * @param anomaly Custom anomaly checks.
+//     */
+//    public void setAnomaly(ColumnAnomalyMonthlyPartitionedChecksSpec anomaly) {
+//        this.setDirtyIf(!Objects.equals(this.anomaly, anomaly));
+//        this.anomaly = anomaly;
+//        propagateHierarchyIdToField(anomaly, "anomaly");
+//    }
 
     /**
      * Returns the container of daily datetime data quality partitioned checks.

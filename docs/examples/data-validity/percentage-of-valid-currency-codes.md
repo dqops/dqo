@@ -13,7 +13,7 @@ The `valid_currency_code` column contains currency code data. We want to verify 
 
 **SOLUTION**
 
-We will verify the data of using monitoring [text_valid_currency_code_percent](../../checks/column/text/text-valid-currency-code-percent.md) column check.
+We will verify the data of using monitoring [text_valid_currency_code_percent](../../checks/column/accepted_values/text-valid-currency-code-percent.md) column check.
 Our goal is to verify if the percentage of valid currency code values in the `valid_currency_code` column does not fall below the set thresholds.
 
 In this example, we will set three minimum percentage thresholds levels for the check:
@@ -278,7 +278,7 @@ threshold level set in the error (65.0%).
 
 ```
 **************************************************
-Finished executing a sensor for a check text_valid_currency_code_percent on the table dqo_ai_test_data.nulls_and_uniqueness_8591349191461738589 using a sensor definition column/text/text_valid_currency_code_percent, sensor result count: 1
+Finished executing a sensor for a check text_valid_currency_code_percent on the table dqo_ai_test_data.nulls_and_uniqueness_8591349191461738589 using a sensor definition column/accepted_values/text_valid_currency_code_percent, sensor result count: 1
 
 Results returned by the sensor:
 +------------+------------------------+------------------------+
@@ -290,13 +290,13 @@ Results returned by the sensor:
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the validity of data in a column.
-By using the [text_valid_currency_code_percent](../../checks/column/text/text-valid-currency-code-percent.md) column check, we can monitor that
+By using the [text_valid_currency_code_percent](../../checks/column/accepted_values/text-valid-currency-code-percent.md) column check, we can monitor that
 the percentage of valid currency code strings in the monitored column does not fall below set thresholds. If it does, you will get a warning, error or fatal results.
 
 ## Next steps
 
 - You haven't installed DQOps yet? Check the detailed guide on how to [install DQOps using pip](../../dqops-installation/install-dqops-using-pip.md) or [run DQOps as a Docker container](../../dqops-installation/run-dqops-as-docker-container.md).
-- For details on the [text_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/text/text-valid-currency-code-percent.md).
+- For details on the [text_valid_currency_code_percent check used in this example, go to the check details section](../../checks/column/accepted_values/text-valid-currency-code-percent.md).
 - You might be interested in another validity check that [evaluates that the percentage of valid latitude and longitude values are above the set threshold](./percentage-of-valid-latitude-and-longitude.md).
 - Would you like to add your own connection? Here you can find [information about supported databases and how to add new connection](../../data-sources/index.md).
 - DQOps allows you to keep track of the issues that arise during data quality monitoring and send alert notifications directly to Slack. Learn more about [incidents](../../working-with-dqo/managing-data-quality-incidents-with-dqops.md) and [Slack notifications](../../integrations/slack/configuring-slack-notifications.md).

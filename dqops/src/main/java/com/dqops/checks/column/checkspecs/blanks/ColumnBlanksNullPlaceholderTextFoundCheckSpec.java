@@ -22,7 +22,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.rules.comparison.MaxCountRule0WarningParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule100ParametersSpec;
 import com.dqops.rules.comparison.MaxCountRule0ErrorParametersSpec;
-import com.dqops.sensors.column.blanks.ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec;
+import com.dqops.sensors.column.whitespace.ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,7 +41,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnBlanksNullPlaceholderTextFoundCheckSpec
-        extends AbstractCheckSpec<ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
+        extends AbstractCheckSpec<ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec, MaxCountRule0WarningParametersSpec, MaxCountRule0ErrorParametersSpec, MaxCountRule100ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnBlanksNullPlaceholderTextFoundCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -50,7 +50,7 @@ public class ColumnBlanksNullPlaceholderTextFoundCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec parameters = new ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec();
+    private ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec parameters = new ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec();
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +72,7 @@ public class ColumnBlanksNullPlaceholderTextFoundCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec getParameters() {
+    public ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnBlanksNullPlaceholderTextFoundCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

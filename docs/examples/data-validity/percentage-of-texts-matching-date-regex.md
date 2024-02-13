@@ -210,7 +210,7 @@ spec:
           patterns:
             daily_text_matching_date_pattern_percent:
               parameters:
-                date_formats: YYYY-MM-DD
+                date_format: YYYY-MM-DD
               warning:
                 min_percent: 99.0
               error:

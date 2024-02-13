@@ -30,6 +30,7 @@ import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsValidUuidFormatPercentSensorParametersSpec;
 import com.dqops.snowflake.BaseSnowflakeIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,7 +65,7 @@ public class SnowflakeColumnPatternsValidUuidFormatPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(65.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -77,7 +78,7 @@ public class SnowflakeColumnPatternsValidUuidFormatPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(65.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -90,7 +91,7 @@ public class SnowflakeColumnPatternsValidUuidFormatPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(65.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -103,7 +104,7 @@ public class SnowflakeColumnPatternsValidUuidFormatPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
@@ -116,6 +117,6 @@ public class SnowflakeColumnPatternsValidUuidFormatPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

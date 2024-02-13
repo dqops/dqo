@@ -196,7 +196,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`in_memory`</span>|To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*boolean*| | | |
+|<span class="no-wrap-code ">`read_mode`</span>|Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*in_memory*<br/>*files*<br/>| | |
+|<span class="no-wrap-code ">`source_files_type`</span>|Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*enum*|*csv*<br/>*json*<br/>*parquet*<br/>| | |
 |<span class="no-wrap-code ">`database`</span>|DuckDB database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|*string*| | | |
 |<span class="no-wrap-code ">`options`</span>|DuckDB connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DUCKDB_OPTIONS} configuration with a custom environment variable.|*string*| | | |
 |<span class="no-wrap-code ">`properties`</span>|A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.|*Dict[string, string]*| | | |

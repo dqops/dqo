@@ -112,7 +112,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensorWithDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
@@ -144,7 +144,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensorWithMonthDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthDayYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -176,7 +176,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensorWithDayMonthYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.DayMonthYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.DayMonthYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithDayMonthYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -208,7 +208,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensorWithYearMonthDayDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.YearMonthDay);
+        this.sut.setDateFormat(TextBuiltInDateFormats.YearMonthDay);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithYearMonthDayDateType();
         runParameters.setTimeSeries(null);
 
@@ -240,7 +240,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensorWithMonthNameDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthNameDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthNameDayYear);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthNameDayYearDateType();
         runParameters.setTimeSeries(null);
 
@@ -272,7 +272,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
@@ -312,7 +312,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -347,7 +347,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -385,7 +385,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataGroupings(
@@ -423,7 +423,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -462,7 +462,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -504,7 +504,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
@@ -552,7 +552,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenMonitoringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersMonitoring(CheckTimeScale.monthly);
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(
@@ -595,7 +595,7 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpecBi
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataGroupings(
                 DataGroupingConfigurationSpecObjectMother.create(

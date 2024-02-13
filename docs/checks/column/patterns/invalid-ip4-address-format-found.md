@@ -1,6 +1,7 @@
 # invalid ip4 address format found data quality checks
 
-A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
+This check detects invalid IP4 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 ___

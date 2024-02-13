@@ -8,7 +8,10 @@ T = TypeVar("T", bound="CsvFileFormatSpecColumns")
 
 @_attrs_define
 class CsvFileFormatSpecColumns:
-    """ """
+    """A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER',
+    'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.
+
+    """
 
     additional_properties: Dict[str, str] = _attrs_field(init=False, factory=dict)
 

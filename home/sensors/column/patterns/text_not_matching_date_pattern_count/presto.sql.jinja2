@@ -1,15 +1,15 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
 
-{% macro render_date_formats(date_formats) %}
-    {%- if date_formats == 'YYYY-MM-DD'-%}
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
         '%Y-%m-%d'
-    {%- elif date_formats == 'MM/DD/YYYY' -%}
+    {%- elif date_format == 'MM/DD/YYYY' -%}
         '%m/%d/%Y'
-    {%- elif date_formats == 'DD/MM/YYYY' -%}
+    {%- elif date_format == 'DD/MM/YYYY' -%}
         '%d/%m/%Y'
-    {%- elif date_formats == 'YYYY/MM/DD'-%}
+    {%- elif date_format == 'YYYY/MM/DD'-%}
         '%Y/%m/%d'
-    {%- elif date_formats == 'Month D, YYYY'-%}
+    {%- elif date_format == 'Month D, YYYY'-%}
         '%b %d, %Y'
     {%- endif -%}
 {% endmacro -%}
@@ -19,7 +19,7 @@ SELECT
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE CAST(SUM(
             CASE
-                WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                     THEN 1
                 ELSE 0
             END

@@ -22,9 +22,10 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.acceptedvalues.ColumnAcceptedValuesDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.accuracy.ColumnAccuracyDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.anomaly.ColumnAnomalyDailyMonitoringChecksSpec;
-import com.dqops.checks.column.monitoring.blanks.ColumnBlanksDailyMonitoringChecksSpec;
+import com.dqops.checks.column.monitoring.whitespace.ColumnWhitespaceDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.bool.ColumnBoolDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.comparison.ColumnComparisonDailyMonitoringChecksSpecMap;
+import com.dqops.checks.column.monitoring.conversions.ColumnConversionsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datatype.ColumnDatatypeDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.datetime.ColumnDatetimeDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.integrity.ColumnIntegrityDailyMonitoringChecksSpec;
@@ -68,7 +69,8 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
             put("uniqueness", o -> o.uniqueness);
             put("accepted_values", o -> o.acceptedValues);
             put("text", o -> o.text);
-            put("blanks", o -> o.blanks);
+            put("whitespace", o -> o.whitespace);
+            put("conversions", o -> o.conversions);
             put("patterns", o -> o.patterns);
             put("pii", o -> o.pii);
             put("numeric", o -> o.numeric);
@@ -107,7 +109,12 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
     @JsonPropertyDescription("Configuration of column level checks that detect blank and whitespace values")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnBlanksDailyMonitoringChecksSpec blanks;
+    private ColumnWhitespaceDailyMonitoringChecksSpec whitespace;
+
+    @JsonPropertyDescription("Configuration of conversion testing checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConversionsDailyMonitoringChecksSpec conversions;
 
     @JsonPropertyDescription("Daily monitoring checks of pattern matching on a column level")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -246,18 +253,36 @@ public class ColumnDailyMonitoringCheckCategoriesSpec extends AbstractRootChecks
      * Returns the blanks check configuration on a column level.
      * @return Blanks check configuration.
      */
-    public ColumnBlanksDailyMonitoringChecksSpec getBlanks() {
-        return blanks;
+    public ColumnWhitespaceDailyMonitoringChecksSpec getWhitespace() {
+        return whitespace;
     }
 
     /**
      * Sets the blanks check configuration on a column level.
-     * @param blanks New blanks checks configuration.
+     * @param whitespace New blanks checks configuration.
      */
-    public void setBlanks(ColumnBlanksDailyMonitoringChecksSpec blanks) {
-        this.setDirtyIf(!Objects.equals(this.blanks, blanks));
-        this.blanks = blanks;
-        this.propagateHierarchyIdToField(blanks, "blanks");
+    public void setWhitespace(ColumnWhitespaceDailyMonitoringChecksSpec whitespace) {
+        this.setDirtyIf(!Objects.equals(this.whitespace, whitespace));
+        this.whitespace = whitespace;
+        this.propagateHierarchyIdToField(whitespace, "whitespace");
+    }
+
+    /**
+     * Returns the container of conversion testing checks.
+     * @return Conversion testing checks.
+     */
+    public ColumnConversionsDailyMonitoringChecksSpec getConversions() {
+        return conversions;
+    }
+
+    /**
+     * Sets the container of conversion testing checks.
+     * @param conversions Conversion testing checks.
+     */
+    public void setConversions(ColumnConversionsDailyMonitoringChecksSpec conversions) {
+        this.setDirtyIf(!Objects.equals(this.conversions, conversions));
+        this.conversions = conversions;
+        this.propagateHierarchyIdToField(conversions, "conversions");
     }
 
     /**

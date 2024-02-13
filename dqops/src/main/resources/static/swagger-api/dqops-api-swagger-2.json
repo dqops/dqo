@@ -16258,6 +16258,14 @@
         "daily_expected_numbers_in_use_count" : {
           "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+        },
+        "daily_text_valid_country_code_percent" : {
+          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+        },
+        "daily_text_valid_currency_code_percent" : {
+          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -16290,6 +16298,14 @@
         "daily_partition_expected_numbers_in_use_count" : {
           "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+        },
+        "daily_partition_text_valid_country_code_percent" : {
+          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+        },
+        "daily_partition_text_valid_currency_code_percent" : {
+          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -16322,6 +16338,14 @@
         "monthly_expected_numbers_in_use_count" : {
           "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+        },
+        "monthly_text_valid_country_code_percent" : {
+          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+        },
+        "monthly_text_valid_currency_code_percent" : {
+          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -16354,6 +16378,14 @@
         "monthly_partition_expected_numbers_in_use_count" : {
           "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+        },
+        "monthly_partition_text_valid_country_code_percent" : {
+          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+        },
+        "monthly_partition_text_valid_currency_code_percent" : {
+          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -16386,6 +16418,14 @@
         "profile_expected_numbers_in_use_count" : {
           "description" : "Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing).",
           "$ref" : "#/definitions/ColumnExpectedNumbersInUseCountCheckSpec"
+        },
+        "profile_text_valid_country_code_percent" : {
+          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
+        },
+        "profile_text_valid_currency_code_percent" : {
+          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -17026,54 +17066,6 @@
         }
       }
     },
-    "ColumnAnomalyMonthlyMonitoringChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
-        },
-        "monthly_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
-        },
-        "monthly_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
-        }
-      }
-    },
-    "ColumnAnomalyMonthlyPartitionedChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_partition_sum_change" : {
-          "description" : "Verifies that the sum in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnSumChangeCheckSpec"
-        },
-        "monthly_partition_mean_change" : {
-          "description" : "Verifies that the mean value in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnMeanChangeCheckSpec"
-        },
-        "monthly_partition_median_change" : {
-          "description" : "Verifies that the median in a column changed in a fixed rate since the last readout.",
-          "$ref" : "#/definitions/ColumnMedianChangeCheckSpec"
-        }
-      }
-    },
     "ColumnAnomalyProfilingChecksSpec" : {
       "type" : "object",
       "properties" : {
@@ -17154,105 +17146,6 @@
         }
       }
     },
-    "ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksDailyMonitoringChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "daily_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "daily_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "daily_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "daily_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksDailyPartitionedChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "daily_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "daily_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "daily_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "daily_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "daily_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "daily_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksEmptyTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
     "ColumnBlanksEmptyTextFoundCheckSpec" : {
       "type" : "object",
       "properties" : {
@@ -17293,7 +17186,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17349,7 +17242,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceEmptyTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17362,87 +17255,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksEmptyTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnBlanksMonthlyMonitoringChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "monthly_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "monthly_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "monthly_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksMonthlyPartitionedChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "monthly_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "monthly_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "monthly_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "monthly_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "monthly_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "monthly_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         }
       }
     },
@@ -17486,7 +17298,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17542,7 +17354,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17555,51 +17367,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksProfilingChecksSpec" : {
-      "type" : "object",
-      "properties" : {
-        "custom_checks" : {
-          "type" : "object",
-          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
-          "additionalProperties" : {
-            "$ref" : "#/definitions/CustomCheckSpec"
-          }
-        },
-        "profile_empty_text_found" : {
-          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
-        },
-        "profile_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
-        },
-        "profile_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
-        },
-        "profile_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
-        },
-        "profile_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
-        },
-        "profile_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
-          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-        }
-      }
-    },
-    "ColumnBlanksWhitespaceTextCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -17643,7 +17410,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17699,7 +17466,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -17712,15 +17479,6 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxPercentRule5ParametersSpec"
-        }
-      }
-    },
-    "ColumnBlanksWhitespaceTextPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         }
       }
     },
@@ -18434,6 +18192,146 @@
         }
       }
     },
+    "ColumnConversionsDailyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_text_parsable_to_boolean_percent" : {
+          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+        },
+        "daily_text_parsable_to_integer_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+        },
+        "daily_text_parsable_to_float_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+        },
+        "daily_text_parsable_to_date_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnConversionsDailyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_partition_text_parsable_to_boolean_percent" : {
+          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+        },
+        "daily_partition_text_parsable_to_integer_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+        },
+        "daily_partition_text_parsable_to_float_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+        },
+        "daily_partition_text_parsable_to_date_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnConversionsMonthlyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_text_parsable_to_boolean_percent" : {
+          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+        },
+        "monthly_text_parsable_to_integer_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+        },
+        "monthly_text_parsable_to_float_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+        },
+        "monthly_text_parsable_to_date_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnConversionsMonthlyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_partition_text_parsable_to_boolean_percent" : {
+          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+        },
+        "monthly_partition_text_parsable_to_integer_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+        },
+        "monthly_partition_text_parsable_to_float_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+        },
+        "monthly_partition_text_parsable_to_date_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnConversionsProfilingChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "profile_text_parsable_to_boolean_percent" : {
+          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.",
+          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
+        },
+        "profile_text_parsable_to_integer_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
+        },
+        "profile_text_parsable_to_float_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
+        },
+        "profile_text_parsable_to_date_percent" : {
+          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression",
+          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
+        }
+      }
+    },
     "ColumnCurrentDataQualityStatusModel" : {
       "type" : "object",
       "properties" : {
@@ -18658,9 +18556,13 @@
           "description" : "Daily monitoring checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextDailyMonitoringChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksDailyMonitoringChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceDailyMonitoringChecksSpec"
+        },
+        "conversions" : {
+          "description" : "Configuration of conversion testing checks on a column level.",
+          "$ref" : "#/definitions/ColumnConversionsDailyMonitoringChecksSpec"
         },
         "patterns" : {
           "description" : "Daily monitoring checks of pattern matching on a column level",
@@ -18741,9 +18643,13 @@
           "description" : "Daily partitioned checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextDailyPartitionedChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksDailyPartitionedChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceDailyPartitionedChecksSpec"
+        },
+        "conversions" : {
+          "description" : "Configuration of conversion testing checks on a column level.",
+          "$ref" : "#/definitions/ColumnConversionsDailyPartitionedChecksSpec"
         },
         "patterns" : {
           "description" : "Daily partitioned pattern match checks on a column level",
@@ -22146,9 +22052,13 @@
           "description" : "Monthly monitoring checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextMonthlyMonitoringChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksMonthlyMonitoringChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceMonthlyMonitoringChecksSpec"
+        },
+        "conversions" : {
+          "description" : "Configuration of conversion testing checks on a column level.",
+          "$ref" : "#/definitions/ColumnConversionsMonthlyMonitoringChecksSpec"
         },
         "patterns" : {
           "description" : "Monthly monitoring checks of pattern matching on a column level",
@@ -22161,10 +22071,6 @@
         "numeric" : {
           "description" : "Monthly monitoring checks of numeric values in the column",
           "$ref" : "#/definitions/ColumnNumericMonthlyMonitoringChecksSpec"
-        },
-        "anomaly" : {
-          "description" : "Monthly monitoring checks of anomalies in numeric columns",
-          "$ref" : "#/definitions/ColumnAnomalyMonthlyMonitoringChecksSpec"
         },
         "datetime" : {
           "description" : "Monthly monitoring checks of datetime in the column",
@@ -22229,9 +22135,13 @@
           "description" : "Monthly partitioned checks of text values in the column",
           "$ref" : "#/definitions/ColumnTextMonthlyPartitionedChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values",
-          "$ref" : "#/definitions/ColumnBlanksMonthlyPartitionedChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceMonthlyPartitionedChecksSpec"
+        },
+        "conversions" : {
+          "description" : "Configuration of conversion testing checks on a column level.",
+          "$ref" : "#/definitions/ColumnConversionsMonthlyPartitionedChecksSpec"
         },
         "patterns" : {
           "description" : "Monthly partitioned pattern match checks on a column level",
@@ -22244,10 +22154,6 @@
         "numeric" : {
           "description" : "Monthly partitioned checks of numeric values in the column",
           "$ref" : "#/definitions/ColumnNumericMonthlyPartitionedChecksSpec"
-        },
-        "anomaly" : {
-          "description" : "Monthly partitioned checks for anomalies in numeric columns",
-          "$ref" : "#/definitions/ColumnAnomalyMonthlyPartitionedChecksSpec"
         },
         "datetime" : {
           "description" : "Monthly partitioned checks of datetime in the column",
@@ -24943,7 +24849,7 @@
           "type" : "string",
           "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         },
-        "date_formats" : {
+        "date_format" : {
           "type" : "string",
           "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
           "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
@@ -24966,7 +24872,7 @@
           "type" : "string",
           "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
         },
-        "date_formats" : {
+        "date_format" : {
           "type" : "string",
           "description" : "Desired date format. Sensor will try to parse the column records and cast the data using this format.",
           "enum" : [ "YYYY-MM-DD", "MM/DD/YYYY", "DD/MM/YYYY", "YYYY/MM/DD", "Month D, YYYY" ]
@@ -25911,9 +25817,13 @@
           "description" : "Configuration of column level checks that verify text values.",
           "$ref" : "#/definitions/ColumnTextProfilingChecksSpec"
         },
-        "blanks" : {
+        "whitespace" : {
           "description" : "Configuration of column level checks that detect blank and whitespace values.",
-          "$ref" : "#/definitions/ColumnBlanksProfilingChecksSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceProfilingChecksSpec"
+        },
+        "conversions" : {
+          "description" : "Configuration of conversion testing checks on a column level.",
+          "$ref" : "#/definitions/ColumnConversionsProfilingChecksSpec"
         },
         "patterns" : {
           "description" : "Configuration of pattern match checks on a column level.",
@@ -27250,38 +27160,6 @@
         "daily_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "daily_text_parsable_to_boolean_percent" : {
-          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-        },
-        "daily_text_parsable_to_integer_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-        },
-        "daily_text_parsable_to_float_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-        },
-        "daily_text_parsable_to_date_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        },
-        "daily_text_valid_country_code_percent" : {
-          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-        },
-        "daily_text_valid_currency_code_percent" : {
-          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -27326,38 +27204,6 @@
         "daily_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "daily_partition_text_parsable_to_boolean_percent" : {
-          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-        },
-        "daily_partition_text_parsable_to_integer_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-        },
-        "daily_partition_text_parsable_to_float_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-        },
-        "daily_partition_text_parsable_to_date_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "daily_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        },
-        "daily_partition_text_valid_country_code_percent" : {
-          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-        },
-        "daily_partition_text_valid_currency_code_percent" : {
-          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
-          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -28088,38 +27934,6 @@
         "monthly_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "monthly_text_parsable_to_boolean_percent" : {
-          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-        },
-        "monthly_text_parsable_to_integer_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-        },
-        "monthly_text_parsable_to_float_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-        },
-        "monthly_text_parsable_to_date_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        },
-        "monthly_text_valid_country_code_percent" : {
-          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-        },
-        "monthly_text_valid_currency_code_percent" : {
-          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
-          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -28164,38 +27978,6 @@
         "monthly_partition_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "monthly_partition_text_parsable_to_boolean_percent" : {
-          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-        },
-        "monthly_partition_text_parsable_to_integer_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-        },
-        "monthly_partition_text_parsable_to_float_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-        },
-        "monthly_partition_text_parsable_to_date_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "monthly_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        },
-        "monthly_partition_text_valid_country_code_percent" : {
-          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-        },
-        "monthly_partition_text_valid_currency_code_percent" : {
-          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
-          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -28576,38 +28358,6 @@
         "profile_text_length_in_range_percent" : {
           "description" : "The check measures the percentage of those text values with length in the range provided by the user in the column",
           "$ref" : "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
-        },
-        "profile_text_parsable_to_boolean_percent" : {
-          "description" : "Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.",
-          "$ref" : "#/definitions/ColumnTextParsableToBooleanPercentCheckSpec"
-        },
-        "profile_text_parsable_to_integer_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextParsableToIntegerPercentCheckSpec"
-        },
-        "profile_text_parsable_to_float_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextParsableToFloatPercentCheckSpec"
-        },
-        "profile_text_parsable_to_date_percent" : {
-          "description" : "Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression",
-          "$ref" : "#/definitions/ColumnTextParsableToDatePercentCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
-        },
-        "profile_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
-        },
-        "profile_text_valid_country_code_percent" : {
-          "description" : "Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextValidCountryCodePercentCheckSpec"
-        },
-        "profile_text_valid_currency_code_percent" : {
-          "description" : "Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage",
-          "$ref" : "#/definitions/ColumnTextValidCurrencyCodePercentCheckSpec"
         }
       }
     },
@@ -28672,7 +28422,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -28728,7 +28478,7 @@
         },
         "parameters" : {
           "description" : "Data quality check parameters",
-          "$ref" : "#/definitions/ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec"
+          "$ref" : "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec"
         },
         "warning" : {
           "description" : "Alerting threshold that raises a data quality warning that is considered as a passed data quality check",
@@ -28926,24 +28676,6 @@
       }
     },
     "ColumnTextTextParsableToIntegerPercentSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec" : {
-      "type" : "object",
-      "properties" : {
-        "filter" : {
-          "type" : "string",
-          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
-        }
-      }
-    },
-    "ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec" : {
       "type" : "object",
       "properties" : {
         "filter" : {
@@ -29775,6 +29507,298 @@
         }
       }
     },
+    "ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceDailyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceDailyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "daily_partition_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "daily_partition_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "daily_partition_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "daily_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "daily_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "daily_partition_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "daily_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceEmptyTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceEmptyTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceMonthlyMonitoringChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceMonthlyPartitionedChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "monthly_partition_empty_text_found" : {
+          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "monthly_partition_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "monthly_partition_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "monthly_partition_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "monthly_partition_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "monthly_partition_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "monthly_partition_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceProfilingChecksSpec" : {
+      "type" : "object",
+      "properties" : {
+        "custom_checks" : {
+          "type" : "object",
+          "description" : "Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.",
+          "additionalProperties" : {
+            "$ref" : "#/definitions/CustomCheckSpec"
+          }
+        },
+        "profile_empty_text_found" : {
+          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        },
+        "profile_whitespace_text_found" : {
+          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        },
+        "profile_null_placeholder_text_found" : {
+          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        },
+        "profile_empty_text_percent" : {
+          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        },
+        "profile_whitespace_text_percent" : {
+          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        },
+        "profile_null_placeholder_text_percent" : {
+          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
+          "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace" : {
+          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        },
+        "profile_text_surrounded_by_whitespace_percent" : {
+          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
+          "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        }
+      }
+    },
+    "ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceWhitespaceTextCountSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
+    "ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec" : {
+      "type" : "object",
+      "properties" : {
+        "filter" : {
+          "type" : "string",
+          "description" : "SQL WHERE clause added to the sensor query. Both the table level filter and a sensor query filter are added, separated by an AND operator."
+        }
+      }
+    },
     "CommentSpec" : {
       "type" : "object",
       "properties" : {
@@ -29946,6 +29970,10 @@
         "postgresql" : {
           "description" : "PostgreSQL connection parameters.",
           "$ref" : "#/definitions/PostgresqlParametersSpec"
+        },
+        "duckdb" : {
+          "description" : "DuckDB connection parameters.",
+          "$ref" : "#/definitions/DuckdbParametersSpec"
         },
         "redshift" : {
           "description" : "Redshift connection parameters.",
@@ -30176,59 +30204,76 @@
       "type" : "object",
       "properties" : {
         "all_varchar" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Option to skip type detection for CSV parsing and assume all columns to be of type VARCHAR."
         },
         "allow_quoted_nulls" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Option to allow the conversion of quoted values to NULL values."
         },
         "auto_detect" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Enables auto detection of CSV parameters."
         },
         "columns" : {
           "type" : "object",
+          "description" : "A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.",
           "additionalProperties" : {
             "type" : "string"
           }
         },
         "compression" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd."
         },
         "dateformat" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Specifies the date format to use when parsing dates."
         },
         "decimal_separator" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "The decimal separator of numbers."
         },
         "delim" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Specifies the string that separates columns within each row (line) of the file."
         },
         "escape" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Specifies the string that should appear before a data character sequence that matches the quote value."
         },
         "filename" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Whether or not an extra filename column should be included in the result."
         },
         "header" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Specifies that the file contains a header line with the names of each column in the file."
         },
         "hive_partitioning" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Whether or not to interpret the path as a hive partitioned path."
         },
         "ignore_errors" : {
-          "type" : "boolean"
+          "type" : "boolean",
+          "description" : "Option to ignore any parsing errors encountered - and instead ignore rows with errors."
         },
         "new_line" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Set the new line character(s) in the file. Options are '\\r','\\n', or '\\r\\n'."
         },
         "quote" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Specifies the quoting string to be used when a data value is quoted."
         },
         "skip" : {
           "type" : "integer",
-          "format" : "int64"
+          "format" : "int64",
+          "description" : "The number of lines at the top of the file to skip."
         },
         "timestampformat" : {
-          "type" : "string"
+          "type" : "string",
+          "description" : "Specifies the date format to use when parsing timestamps."
         }
       }
     },
@@ -31074,9 +31119,15 @@
     "DuckdbParametersSpec" : {
       "type" : "object",
       "properties" : {
-        "in_memory" : {
-          "type" : "boolean",
-          "description" : "To use the special value :memory: to create an in-memory database where no data is persisted to disk (i.e., all data is lost when you exit the process). The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
+        "read_mode" : {
+          "type" : "string",
+          "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+          "enum" : [ "in_memory", "files" ]
+        },
+        "source_files_type" : {
+          "type" : "string",
+          "description" : "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.",
+          "enum" : [ "csv", "json", "parquet" ]
         },
         "database" : {
           "type" : "string",
@@ -31681,7 +31732,65 @@
       }
     },
     "JsonFileFormatSpec" : {
-      "type" : "object"
+      "type" : "object",
+      "properties" : {
+        "auto_detect" : {
+          "type" : "boolean",
+          "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically"
+        },
+        "columns" : {
+          "type" : "object",
+          "description" : "A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred",
+          "additionalProperties" : {
+            "type" : "string"
+          }
+        },
+        "compression" : {
+          "type" : "string",
+          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
+        },
+        "convert_strings_to_integers" : {
+          "type" : "boolean",
+          "description" : "\tWhether strings representing integer values should be converted to a numerical type."
+        },
+        "dateformat" : {
+          "type" : "string",
+          "description" : "Specifies the date format to use when parsing dates."
+        },
+        "filename" : {
+          "type" : "boolean",
+          "description" : "Whether or not an extra filename column should be included in the result."
+        },
+        "format" : {
+          "type" : "string",
+          "description" : "\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array']."
+        },
+        "hive_partitioning" : {
+          "type" : "boolean",
+          "description" : "\tWhether or not to interpret the path as a hive partitioned path."
+        },
+        "ignore_errors" : {
+          "type" : "boolean",
+          "description" : "Whether to ignore parse errors (only possible when format is 'newline_delimited')."
+        },
+        "maximum_depth" : {
+          "type" : "integer",
+          "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
+        },
+        "maximum_object_size" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "\tThe maximum size of a JSON object (in bytes)"
+        },
+        "records" : {
+          "type" : "string",
+          "description" : "Can be one of ['auto', 'true', 'false']"
+        },
+        "timestampformat" : {
+          "type" : "string",
+          "description" : "\tSpecifies the date format to use when parsing timestamps."
+        }
+      }
     },
     "MaxCountRule0ErrorParametersSpec" : {
       "type" : "object",
@@ -32115,7 +32224,29 @@
       "description" : "Defines a single field that is a sensor parameter or a rule parameter."
     },
     "ParquetFileFormatSpec" : {
-      "type" : "object"
+      "type" : "object",
+      "properties" : {
+        "binary_as_string" : {
+          "type" : "boolean",
+          "description" : "Parquet files generated by legacy writers do not correctly set the UTF8 flag for strings, causing string columns to be loaded as BLOB instead. Set this to true to load binary columns as strings."
+        },
+        "filename" : {
+          "type" : "boolean",
+          "description" : "Whether or not an extra filename column should be included in the result."
+        },
+        "file_row_number" : {
+          "type" : "boolean",
+          "description" : "Whether or not to include the file_row_number column."
+        },
+        "hive_partitioning" : {
+          "type" : "boolean",
+          "description" : "Whether or not to interpret the path as a hive partitioned path."
+        },
+        "union_by_name" : {
+          "type" : "boolean",
+          "description" : "Whether the columns of multiple schemas should be unified by name, rather than by position."
+        }
+      }
     },
     "PartitionIncrementalTimeWindowSpec" : {
       "type" : "object",

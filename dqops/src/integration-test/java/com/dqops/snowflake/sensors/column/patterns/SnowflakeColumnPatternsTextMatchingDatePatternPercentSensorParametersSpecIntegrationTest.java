@@ -57,7 +57,7 @@ public class SnowflakeColumnPatternsTextMatchingDatePatternPercentSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "valid_string_70", this.checkSpec);
 
@@ -71,7 +71,7 @@ public class SnowflakeColumnPatternsTextMatchingDatePatternPercentSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.daily);
 
@@ -85,7 +85,7 @@ public class SnowflakeColumnPatternsTextMatchingDatePatternPercentSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.monthly);
 
@@ -99,7 +99,7 @@ public class SnowflakeColumnPatternsTextMatchingDatePatternPercentSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -113,7 +113,7 @@ public class SnowflakeColumnPatternsTextMatchingDatePatternPercentSensorParamete
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.MonthDayYear);
+        this.sut.setDateFormat(TextBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.monthly,"date");
 

@@ -403,6 +403,7 @@ spec:
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -429,6 +430,7 @@ spec:
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -993,6 +995,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1018,6 +1021,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -1671,6 +1675,7 @@ spec:
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1697,6 +1702,7 @@ spec:
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -2262,6 +2268,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2287,6 +2294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -2940,6 +2948,7 @@ spec:
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -2966,6 +2975,7 @@ spec:
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -3531,6 +3541,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -3556,6 +3567,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -4219,6 +4231,7 @@ spec:
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4245,6 +4258,7 @@ spec:
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -4824,6 +4838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -4849,6 +4864,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             
@@ -5510,6 +5526,7 @@ spec:
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -5536,6 +5553,7 @@ spec:
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
                 time_period,
@@ -6115,6 +6133,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -6140,6 +6159,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                         CASE
                             WHEN analyzed_table."target_column" > 0 THEN 1
                             ELSE 0
+                        END
                     ) AS DOUBLE) / COUNT(analyzed_table."target_column")
                 END AS actual_value,
             

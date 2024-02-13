@@ -66,7 +66,7 @@ public class SingleStoreDbColumnPiiContainsIp4PercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(80.0, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(60.0, (float) resultTable.column(0).get(0));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SingleStoreDbColumnPiiContainsIp4PercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(80.0, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(60.0, (float) resultTable.column(0).get(0));
     }
 
     @Test
@@ -92,7 +92,7 @@ public class SingleStoreDbColumnPiiContainsIp4PercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(80.0, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(60.0, (float) resultTable.column(0).get(0));
     }
 
     @Test

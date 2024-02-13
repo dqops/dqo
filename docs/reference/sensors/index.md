@@ -126,6 +126,9 @@
 
 
 
+
+
+
 ## Column sensors
 
 
@@ -157,6 +160,8 @@
 |[*expected_texts_in_top_values_count*](./column/accepted_values-column-sensors.md#expected-texts-in-top-values-count)|Column level sensor that counts how many expected string values are among the TOP most popular values in the column. The sensor will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter). Then, it will compare the list of most popular values to the given list of expected values that should be most popular. This sensor will return the number of expected values that were found within the &#x27;top&#x27; most popular column values. This sensor is useful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers. The sensor can detect if any of the most popular value (an expected value) is no longer one of the top X most popular values.|
 |[*number_found_in_set_percent*](./column/accepted_values-column-sensors.md#number-found-in-set-percent)|Column level sensor that calculates the percentage of rows for which the tested numeric column contains a value from the list of expected values. Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value). This sensor is useful for checking numeric columns that store numeric codes (such as status codes) that the only values found in the column are from a set of expected values.|
 |[*text_found_in_set_percent*](./column/accepted_values-column-sensors.md#text-found-in-set-percent)|Column level sensor that calculates the percentage of rows for which the tested string (text) column contains a value from the list of expected values. Columns with null values are also counted as a passing value (the sensor assumes that a &#x27;null&#x27; is also an expected and accepted value). This sensor is useful for testing that a string column with a low number of unique values (country, currency, state, gender, etc.) contains only values from a set of expected values.|
+|[*text_valid_country_code_percent*](./column/accepted_values-column-sensors.md#text-valid-country-code-percent)|Column level sensor that calculates the percentage of rows with text values with a valid country codes in an analyzed column.|
+|[*text_valid_currency_code_percent*](./column/accepted_values-column-sensors.md#text-valid-currency-code-percent)|Column level sensor that calculates the percentage of rows with text values that are valid currency codes in an analyzed column.|
 
 
 
@@ -174,26 +179,24 @@
 
 
 
-### **blanks**
-
-| Sensor name | Description |
-|-------------|-------------|
-|[*empty_text_count*](./column/blanks-column-sensors.md#empty-text-count)|Column level sensor that calculates the number of rows with an empty string.|
-|[*empty_text_percent*](./column/blanks-column-sensors.md#empty-text-percent)|Column level sensor that calculates the percentage of rows with an empty string.|
-|[*null_placeholder_text_count*](./column/blanks-column-sensors.md#null-placeholder-text-count)|Column level sensor that calculates the number of rows with a null placeholder string column value.|
-|[*null_placeholder_text_percent*](./column/blanks-column-sensors.md#null-placeholder-text-percent)|Column level sensor that calculates the percentage of rows with a null placeholder string column value.|
-|[*whitespace_text_count*](./column/blanks-column-sensors.md#whitespace-text-count)|Column level sensor that calculates the number of rows with a whitespace text column value.|
-|[*whitespace_text_percent*](./column/blanks-column-sensors.md#whitespace-text-percent)|Column level sensor that calculates the percentage of rows with a whitespace text column value.|
-
-
-
-
 ### **bool**
 
 | Sensor name | Description |
 |-------------|-------------|
 |[*false_percent*](./column/bool-column-sensors.md#false-percent)|Column level sensor that calculates the percentage of rows with a false value in a column.|
 |[*true_percent*](./column/bool-column-sensors.md#true-percent)|Column level sensor that calculates the percentage of rows with a true value in a column.|
+
+
+
+
+### **conversions**
+
+| Sensor name | Description |
+|-------------|-------------|
+|[*text_parsable_to_boolean_percent*](./column/conversions-column-sensors.md#text-parsable-to-boolean-percent)|Column level sensor that calculates the number of rows with a text value in a text column that is parsable to a boolean type or is a well-known boolean value placeholder: yes, no, true, false, t, f, y, n, 1, 0.|
+|[*text_parsable_to_date_percent*](./column/conversions-column-sensors.md#text-parsable-to-date-percent)|Column level sensor that ensures that there is at least a minimum percentage of rows with a text value that is parsable to a date in an analyzed column.|
+|[*text_parsable_to_float_percent*](./column/conversions-column-sensors.md#text-parsable-to-float-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to a float (numeric) value.|
+|[*text_parsable_to_integer_percent*](./column/conversions-column-sensors.md#text-parsable-to-integer-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to an integer value.|
 
 
 
@@ -355,14 +358,6 @@
 |[*text_max_length*](./column/text-column-sensors.md#text-max-length)|Column level sensor that ensures that the length of text values in a column does not exceed the maximum accepted length.|
 |[*text_mean_length*](./column/text-column-sensors.md#text-mean-length)|Column level sensor that ensures that the length of text values in a column does not exceed the mean accepted length.|
 |[*text_min_length*](./column/text-column-sensors.md#text-min-length)|Column level sensor that ensures that the length of text values in a column does not exceed the minimum accepted length.|
-|[*text_parsable_to_boolean_percent*](./column/text-column-sensors.md#text-parsable-to-boolean-percent)|Column level sensor that calculates the number of rows with a text value in a text column that is parsable to a boolean type or is a well-known boolean value placeholder: yes, no, true, false, t, f, y, n, 1, 0.|
-|[*text_parsable_to_date_percent*](./column/text-column-sensors.md#text-parsable-to-date-percent)|Column level sensor that ensures that there is at least a minimum percentage of rows with a text value that is parsable to a date in an analyzed column.|
-|[*text_parsable_to_float_percent*](./column/text-column-sensors.md#text-parsable-to-float-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to a float (numeric) value.|
-|[*text_parsable_to_integer_percent*](./column/text-column-sensors.md#text-parsable-to-integer-percent)|Column level sensor that calculates the percentage of rows with text values in an analyzed column that are parsable to an integer value.|
-|[*text_surrounded_by_whitespace_count*](./column/text-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
-|[*text_surrounded_by_whitespace_percent*](./column/text-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
-|[*text_valid_country_code_percent*](./column/text-column-sensors.md#text-valid-country-code-percent)|Column level sensor that calculates the percentage of rows with text values with a valid country codes in an analyzed column.|
-|[*text_valid_currency_code_percent*](./column/text-column-sensors.md#text-valid-currency-code-percent)|Column level sensor that calculates the percentage of rows with text values that are valid currency codes in an analyzed column.|
 
 
 
@@ -375,6 +370,22 @@
 |[*distinct_percent*](./column/uniqueness-column-sensors.md#distinct-percent)|Column level sensor that calculates the percentage of unique values in a column.|
 |[*duplicate_count*](./column/uniqueness-column-sensors.md#duplicate-count)|Column level sensor that calculates the number of duplicate values in a given column.|
 |[*duplicate_percent*](./column/uniqueness-column-sensors.md#duplicate-percent)|Column level sensor that calculates the percentage of rows that are duplicates.|
+
+
+
+
+### **whitespace**
+
+| Sensor name | Description |
+|-------------|-------------|
+|[*empty_text_count*](./column/whitespace-column-sensors.md#empty-text-count)|Column level sensor that calculates the number of rows with an empty string.|
+|[*empty_text_percent*](./column/whitespace-column-sensors.md#empty-text-percent)|Column level sensor that calculates the percentage of rows with an empty string.|
+|[*null_placeholder_text_count*](./column/whitespace-column-sensors.md#null-placeholder-text-count)|Column level sensor that calculates the number of rows with a null placeholder string column value.|
+|[*null_placeholder_text_percent*](./column/whitespace-column-sensors.md#null-placeholder-text-percent)|Column level sensor that calculates the percentage of rows with a null placeholder string column value.|
+|[*text_surrounded_by_whitespace_count*](./column/whitespace-column-sensors.md#text-surrounded-by-whitespace-count)|Column level sensor that calculates the number of rows with text values that are surrounded by whitespace characters in an analyzed column.|
+|[*text_surrounded_by_whitespace_percent*](./column/whitespace-column-sensors.md#text-surrounded-by-whitespace-percent)|Column level sensor that calculates the percentage of rows with text values that are surrounded by whitespace characters in an analyzed column.|
+|[*whitespace_text_count*](./column/whitespace-column-sensors.md#whitespace-text-count)|Column level sensor that calculates the number of rows with a whitespace text column value.|
+|[*whitespace_text_percent*](./column/whitespace-column-sensors.md#whitespace-text-percent)|Column level sensor that calculates the percentage of rows with a whitespace text column value.|
 
 
 

@@ -13,6 +13,7 @@ if TYPE_CHECKING:
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
+    from ..models.duckdb_parameters_spec import DuckdbParametersSpec
     from ..models.mysql_parameters_spec import MysqlParametersSpec
     from ..models.oracle_parameters_spec import OracleParametersSpec
     from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -43,6 +44,7 @@ class ConnectionModel:
         bigquery (Union[Unset, BigQueryParametersSpec]):
         snowflake (Union[Unset, SnowflakeParametersSpec]):
         postgresql (Union[Unset, PostgresqlParametersSpec]):
+        duckdb (Union[Unset, DuckdbParametersSpec]):
         redshift (Union[Unset, RedshiftParametersSpec]):
         sqlserver (Union[Unset, SqlServerParametersSpec]):
         presto (Union[Unset, PrestoParametersSpec]):
@@ -79,6 +81,7 @@ class ConnectionModel:
     bigquery: Union[Unset, "BigQueryParametersSpec"] = UNSET
     snowflake: Union[Unset, "SnowflakeParametersSpec"] = UNSET
     postgresql: Union[Unset, "PostgresqlParametersSpec"] = UNSET
+    duckdb: Union[Unset, "DuckdbParametersSpec"] = UNSET
     redshift: Union[Unset, "RedshiftParametersSpec"] = UNSET
     sqlserver: Union[Unset, "SqlServerParametersSpec"] = UNSET
     presto: Union[Unset, "PrestoParametersSpec"] = UNSET
@@ -121,6 +124,10 @@ class ConnectionModel:
         postgresql: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.postgresql, Unset):
             postgresql = self.postgresql.to_dict()
+
+        duckdb: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.duckdb, Unset):
+            duckdb = self.duckdb.to_dict()
 
         redshift: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.redshift, Unset):
@@ -209,6 +216,8 @@ class ConnectionModel:
             field_dict["snowflake"] = snowflake
         if postgresql is not UNSET:
             field_dict["postgresql"] = postgresql
+        if duckdb is not UNSET:
+            field_dict["duckdb"] = duckdb
         if redshift is not UNSET:
             field_dict["redshift"] = redshift
         if sqlserver is not UNSET:
@@ -266,6 +275,7 @@ class ConnectionModel:
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
+        from ..models.duckdb_parameters_spec import DuckdbParametersSpec
         from ..models.mysql_parameters_spec import MysqlParametersSpec
         from ..models.oracle_parameters_spec import OracleParametersSpec
         from ..models.postgresql_parameters_spec import PostgresqlParametersSpec
@@ -313,6 +323,13 @@ class ConnectionModel:
             postgresql = UNSET
         else:
             postgresql = PostgresqlParametersSpec.from_dict(_postgresql)
+
+        _duckdb = d.pop("duckdb", UNSET)
+        duckdb: Union[Unset, DuckdbParametersSpec]
+        if isinstance(_duckdb, Unset):
+            duckdb = UNSET
+        else:
+            duckdb = DuckdbParametersSpec.from_dict(_duckdb)
 
         _redshift = d.pop("redshift", UNSET)
         redshift: Union[Unset, RedshiftParametersSpec]
@@ -452,6 +469,7 @@ class ConnectionModel:
             bigquery=bigquery,
             snowflake=snowflake,
             postgresql=postgresql,
+            duckdb=duckdb,
             redshift=redshift,
             sqlserver=sqlserver,
             presto=presto,

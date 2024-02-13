@@ -19,6 +19,8 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespaceCheckSpec;
+import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespacePercentCheckSpec;
 import com.dqops.checks.column.checkspecs.text.*;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -49,16 +51,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
             put("daily_text_length_above_max_length", o -> o.dailyTextLengthAboveMaxLength);
             put("daily_text_length_above_max_length_percent", o -> o.dailyTextLengthAboveMaxLengthPercent);
             put("daily_text_length_in_range_percent", o -> o.dailyTextLengthInRangePercent);
-
-            put("daily_text_parsable_to_boolean_percent", o -> o.dailyTextParsableToBooleanPercent);
-            put("daily_text_parsable_to_integer_percent", o -> o.dailyTextParsableToIntegerPercent);
-            put("daily_text_parsable_to_float_percent", o -> o.dailyTextParsableToFloatPercent);
-            put("daily_text_parsable_to_date_percent", o -> o.dailyTextParsableToDatePercent);
-
-            put("daily_text_surrounded_by_whitespace", o -> o.dailyTextSurroundedByWhitespace);
-            put("daily_text_surrounded_by_whitespace_percent", o -> o.dailyTextSurroundedByWhitespacePercent);
-            put("daily_text_valid_country_code_percent", o -> o.dailyTextValidCountryCodePercent);
-            put("daily_text_valid_currency_code_percent", o -> o.dailyTextValidCurrencyCodePercent);
         }
     };
 
@@ -85,31 +77,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTextLengthInRangePercentCheckSpec dailyTextLengthInRangePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, " +
-            "text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToBooleanPercentCheckSpec dailyTextParsableToBooleanPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToIntegerPercentCheckSpec dailyTextParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToFloatPercentCheckSpec dailyTextParsableToFloatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextParsableToDatePercentCheckSpec dailyTextParsableToDatePercent;
-
-    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent;
 
 
     /**
@@ -256,150 +223,6 @@ public class ColumnTextDailyMonitoringChecksSpec extends AbstractCheckCategorySp
         propagateHierarchyIdToField(dailyTextLengthInRangePercent, "daily_text_length_in_range_percent");
     }
 
-    /**
-     * Returns a minimum string parsable to integer percent check.
-     * @return Minimum string parsable to integer percent check.
-     */
-    public ColumnTextParsableToBooleanPercentCheckSpec getDailyTextParsableToBooleanPercent() {
-        return dailyTextParsableToBooleanPercent;
-    }
-
-    /**
-     * Sets a new definition of a string boolean placeholder percent check.
-     * @param dailyTextParsableToBooleanPercent String boolean placeholder percent check.
-     */
-    public void setDailyTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec dailyTextParsableToBooleanPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToBooleanPercent, dailyTextParsableToBooleanPercent));
-        this.dailyTextParsableToBooleanPercent = dailyTextParsableToBooleanPercent;
-        propagateHierarchyIdToField(dailyTextParsableToBooleanPercent, "daily_text_parsable_to_boolean_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace count check.
-     * @return Maximum string surrounded by whitespace count check.
-     */
-    public ColumnTextParsableToIntegerPercentCheckSpec getDailyTextParsableToIntegerPercent() {
-        return dailyTextParsableToIntegerPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to integer percent check.
-     * @param dailyTextParsableToIntegerPercent String parsable to integer percent check.
-     */
-    public void setDailyTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec dailyTextParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToIntegerPercent, dailyTextParsableToIntegerPercent));
-        this.dailyTextParsableToIntegerPercent = dailyTextParsableToIntegerPercent;
-        propagateHierarchyIdToField(dailyTextParsableToIntegerPercent, "daily_text_parsable_to_integer_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace percent check.
-     * @return Maximum string surrounded by whitespace percent check.
-     */
-    public ColumnTextParsableToFloatPercentCheckSpec getDailyTextParsableToFloatPercent() {
-        return dailyTextParsableToFloatPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to float percent check.
-     * @param dailyTextParsableToFloatPercent String parsable to float percent check.
-     */
-    public void setDailyTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec dailyTextParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToFloatPercent, dailyTextParsableToFloatPercent));
-        this.dailyTextParsableToFloatPercent = dailyTextParsableToFloatPercent;
-        propagateHierarchyIdToField(dailyTextParsableToFloatPercent, "daily_text_parsable_to_float_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnTextParsableToDatePercentCheckSpec getDailyTextParsableToDatePercent() {
-        return dailyTextParsableToDatePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid dates percent check.
-     * @param dailyTextParsableToDatePercent String valid dates percent check.
-     */
-    public void setDailyTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec dailyTextParsableToDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextParsableToDatePercent, dailyTextParsableToDatePercent));
-        this.dailyTextParsableToDatePercent = dailyTextParsableToDatePercent;
-        propagateHierarchyIdToField(dailyTextParsableToDatePercent, "daily_text_parsable_to_date_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getDailyTextSurroundedByWhitespace() {
-        return dailyTextSurroundedByWhitespace;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace count check.
-     * @param dailyTextSurroundedByWhitespace String surrounded by whitespace count check.
-     */
-    public void setDailyTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec dailyTextSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespace, dailyTextSurroundedByWhitespace));
-        this.dailyTextSurroundedByWhitespace = dailyTextSurroundedByWhitespace;
-        propagateHierarchyIdToField(dailyTextSurroundedByWhitespace, "daily_text_surrounded_by_whitespace");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getDailyTextSurroundedByWhitespacePercent() {
-        return dailyTextSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param dailyTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
-     */
-    public void setDailyTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec dailyTextSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextSurroundedByWhitespacePercent, dailyTextSurroundedByWhitespacePercent));
-        this.dailyTextSurroundedByWhitespacePercent = dailyTextSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(dailyTextSurroundedByWhitespacePercent, "daily_text_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set count check.
-     * @return Minimum strings in set count check.
-     */
-    public ColumnTextValidCountryCodePercentCheckSpec getDailyTextValidCountryCodePercent() {
-        return dailyTextValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid country code percent check.
-     * @param dailyTextValidCountryCodePercent String valid country code percent check.
-     */
-    public void setDailyTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyTextValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextValidCountryCodePercent, dailyTextValidCountryCodePercent));
-        this.dailyTextValidCountryCodePercent = dailyTextValidCountryCodePercent;
-        propagateHierarchyIdToField(dailyTextValidCountryCodePercent, "daily_text_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set percent check.
-     * @return Minimum strings in set percent check.
-     */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyTextValidCurrencyCodePercent() {
-        return dailyTextValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid currency code percent check.
-     * @param dailyTextValidCurrencyCodePercent String valid currency code percent check.
-     */
-    public void setDailyTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyTextValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyTextValidCurrencyCodePercent, dailyTextValidCurrencyCodePercent));
-        this.dailyTextValidCurrencyCodePercent = dailyTextValidCurrencyCodePercent;
-        propagateHierarchyIdToField(dailyTextValidCurrencyCodePercent, "daily_text_valid_currency_code_percent");
-    }
-    
 
     /**
      * Returns the child map on the spec class with all fields.

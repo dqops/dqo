@@ -270,6 +270,9 @@ A table-level check that ensures that the row count changed by a fixed rate sinc
 
 
 
+
+
+
 ## column-level accepted_values checks
 Verifies if all values in the column are from a set of known values, such as country codes.
 
@@ -312,6 +315,16 @@ A column-level check that counts how many expected text values are among the TOP
 A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
  The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
  This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
+
+
+
+### [text valid country code percent](./column/accepted_values/text-valid-country-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
+
+
+
+### [text valid currency code percent](./column/accepted_values/text-valid-currency-code-percent.md)
+A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
 
 
 
@@ -447,42 +460,6 @@ A column-level check that ensures that the sum in a monitored column has changed
 
 
 
-## column-level blanks checks
-Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
-
-### [empty text found](./column/blanks/empty-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
-
-
-
-### [whitespace text found](./column/blanks/whitespace-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text found](./column/blanks/null-placeholder-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
-
-
-
-### [empty text percent](./column/blanks/empty-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
-
-
-
-### [whitespace text percent](./column/blanks/whitespace-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text percent](./column/blanks/null-placeholder-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
-
-
-
-
-
-
 ## column-level bool checks
 Calculates the percentage of data in boolean columns.
 
@@ -535,6 +512,32 @@ A column-level check that ensures that compares the count of not null values in 
 ### [null count match](./column/comparisons/null-count-match.md)
 A column-level check that ensures that compares the count of null values in the tested column to the count of null values in a reference column from the reference table.
  Compares the count of null values for each group of data. The data is grouped using a GROUP BY clause and groups are matched between the tested (parent) table and the reference table (the source of truth).
+
+
+
+
+
+
+## column-level conversions checks
+Validates that the values in a text column can be parsed and converted to other data types.
+
+### [text parsable to boolean percent](./column/conversions/text-parsable-to-boolean-percent.md)
+A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+
+
+
+### [text parsable to integer percent](./column/conversions/text-parsable-to-integer-percent.md)
+A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to float percent](./column/conversions/text-parsable-to-float-percent.md)
+A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+
+
+
+### [text parsable to date percent](./column/conversions/text-parsable-to-date-percent.md)
+A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
 
 
 
@@ -855,52 +858,62 @@ A column-level check that ensures that there are no more than a set percentage o
 Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.
 
 ### [text not matching regex found](./column/patterns/text-not-matching-regex-found.md)
-A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [texts matching regex percent](./column/patterns/texts-matching-regex-percent.md)
-A column-level that calculates the percentage of values that match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid email format found](./column/patterns/invalid-email-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid emails in a monitored column.
+This check detects invalid email addresses in text columns using a regular expression.
+ It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [text not matching date pattern found](./column/patterns/text-not-matching-date-pattern-found.md)
-A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
+This check detects dates in the wrong format inside text columns using a regular expression.
+ It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [text matching date pattern percent](./column/patterns/text-matching-date-pattern-percent.md)
-A column-level check that calculates the percentage of values that match the date regex in a monitored column.
+This check validates the date format of dates stored in text columns.
+ It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [text matching name pattern percent](./column/patterns/text-matching-name-pattern-percent.md)
-A column-level that calculates the percentage of values that match the name regex in a monitored column.
+This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
+ It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid uuid format found](./column/patterns/invalid-uuid-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
+This check detects invalid UUID identifiers in text columns using a regular expression.
+ It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [valid uuid format percent](./column/patterns/valid-uuid-format-percent.md)
-A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
+This check validates the format of UUID values in text columns.
+ It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid ip4 address format found](./column/patterns/invalid-ip4-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
+This check detects invalid IP4 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [invalid ip6 address format found](./column/patterns/invalid-ip6-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
+This check detects invalid IP6 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 
@@ -958,7 +971,7 @@ A column-level check that detects if the data type of the column has changed sin
 
 
 ## column-level text checks
-Validates that the data in a text column has a valid range, or can be parsed to other data types.
+Validates that the data in a text column has a valid range.
 
 ### [text max length](./column/text/text-max-length.md)
 A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
@@ -997,46 +1010,6 @@ A column-level check that ensures that the percentage of text values in the moni
 
 ### [text length in range percent](./column/text/text-length-in-range-percent.md)
 Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
-
-
-
-### [text parsable to boolean percent](./column/text/text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
-
-
-
-### [text parsable to integer percent](./column/text/text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to float percent](./column/text/text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to date percent](./column/text/text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
-
-
-
-### [text surrounded by whitespace](./column/text/text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text surrounded by whitespace percent](./column/text/text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text valid country code percent](./column/text/text-valid-country-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
-
-
-
-### [text valid currency code percent](./column/text/text-valid-currency-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
 
 
 
@@ -1113,6 +1086,52 @@ A column-level check that ensures that the distinct percent in a monitored colum
 
 ### [distinct percent change 30 days](./column/uniqueness/distinct-percent-change-30-days.md)
 A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
+
+
+
+
+
+
+## column-level whitespace checks
+Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
+
+### [empty text found](./column/whitespace/empty-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+
+
+
+### [whitespace text found](./column/whitespace/whitespace-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
+
+
+
+### [null placeholder text found](./column/whitespace/null-placeholder-text-found.md)
+A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
+
+
+
+### [empty text percent](./column/whitespace/empty-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
+
+
+
+### [whitespace text percent](./column/whitespace/whitespace-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
+
+
+
+### [null placeholder text percent](./column/whitespace/null-placeholder-text-percent.md)
+A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
+
+
+
+### [text surrounded by whitespace](./column/whitespace/text-surrounded-by-whitespace.md)
+A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+
+
+
+### [text surrounded by whitespace percent](./column/whitespace/text-surrounded-by-whitespace-percent.md)
+A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
 
 
 
