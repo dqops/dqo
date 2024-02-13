@@ -1,5 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -13,6 +15,7 @@ import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * Csv file format specification for querying data in the csv format files.
@@ -98,10 +101,11 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Formats the table options to be used in SQL query. The set (non null) options are added only.
+     *
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList){
+    public String buildSourceTableOptionsString(List<String> filePathList) {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_csv", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.allVarchar, allVarchar);
         tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
@@ -125,6 +129,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Returns the option that skip type detection for CSV parsing and assume all columns to be of type VARCHAR.
+     *
      * @return All varchar option.
      */
     public Boolean getAllVarchar() {
@@ -133,14 +138,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the option that skip type detection for CSV parsing and assume all columns to be of type VARCHAR.
+     *
      * @param allVarchar All varchar.
      */
     public void setAllVarchar(Boolean allVarchar) {
+        setDirtyIf(!Objects.equals(this.allVarchar, allVarchar));
         this.allVarchar = allVarchar;
     }
 
     /**
      * Returns the option that allow the conversion of quoted values to NULL values.
+     *
      * @return Allow quoted nulls option.
      */
     public Boolean getAllowQuotedNulls() {
@@ -149,14 +157,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the option that allow the conversion of quoted values to NULL values.
+     *
      * @param allowQuotedNulls Allow quoted nulls.
      */
     public void setAllowQuotedNulls(Boolean allowQuotedNulls) {
+        setDirtyIf(!Objects.equals(this.allowQuotedNulls, allowQuotedNulls));
         this.allowQuotedNulls = allowQuotedNulls;
     }
 
     /**
      * Returns the state of the option that enables auto detection of CSV parameters.
+     *
      * @return The auto detect option.
      */
     public Boolean getAutoDetect() {
@@ -165,14 +176,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the option that enables auto detection of CSV parameters.
+     *
      * @param autoDetect Auto detect option.
      */
     public void setAutoDetect(Boolean autoDetect) {
+        setDirtyIf(!Objects.equals(this.autoDetect, autoDetect));
         this.autoDetect = autoDetect;
     }
 
     /**
      * Returns the columns map.
+     *
      * @return Columns map.
      */
     public Map<String, String> getColumns() {
@@ -181,14 +195,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the columns map.
+     *
      * @param columns Columns map.
      */
     public void setColumns(Map<String, String> columns) {
+        setDirtyIf(!Objects.equals(this.columns, columns));
         this.columns = columns;
     }
 
     /**
      * Returns the compression type for the file. By default this will be detected automatically from the file extension
+     *
      * @return Compression type.
      */
     public String getCompression() {
@@ -197,14 +214,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the compression type for the file. By default this will be detected automatically from the file extension
+     *
      * @param compression Compression type.
      */
     public void setCompression(String compression) {
+        setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
 
     /**
      * Returns the date format to use when parsing dates.
+     *
      * @return Date format.
      */
     public String getDateformat() {
@@ -214,14 +234,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the date format to use when parsing dates.
+     *
      * @param dateformat Date format.
      */
     public void setDateformat(String dateformat) {
+        setDirtyIf(!Objects.equals(this.dateformat, dateformat));
         this.dateformat = dateformat;
     }
 
     /**
      * Returns the decimal separator of numbers.
+     *
      * @return Decimal separator.
      */
     public String getDecimalSeparator() {
@@ -230,14 +253,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the decimal separator of numbers.
+     *
      * @param decimalSeparator Decimal separator.
      */
     public void setDecimalSeparator(String decimalSeparator) {
+        setDirtyIf(!Objects.equals(this.decimalSeparator, decimalSeparator));
         this.decimalSeparator = decimalSeparator;
     }
 
     /**
      * Returns the string that separates columns within each row (line) of the file.
+     *
      * @return Delimiter.
      */
     public String getDelim() {
@@ -246,14 +272,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the string that separates columns within each row (line) of the file.
+     *
      * @param delim Delimiter.
      */
     public void setDelim(String delim) {
+        setDirtyIf(!Objects.equals(this.delim, delim));
         this.delim = delim;
     }
 
     /**
      * Returns the string that should appear before a data character sequence that matches the quote value.
+     *
      * @return Escape char sequence.
      */
     public String getEscape() {
@@ -262,14 +291,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the string that should appear before a data character sequence that matches the quote value.
+     *
      * @param escape Escape char sequence.
      */
     public void setEscape(String escape) {
+        setDirtyIf(!Objects.equals(this.escape, escape));
         this.escape = escape;
     }
 
     /**
      * Returns whether or not an extra filename column should be included in the result.
+     *
      * @return The filename option state.
      */
     public Boolean getFilename() {
@@ -278,14 +310,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets that an extra filename column should be included in the result.
+     *
      * @param filename The filename option state.
      */
     public void setFilename(Boolean filename) {
+        setDirtyIf(!Objects.equals(this.filename, filename));
         this.filename = filename;
     }
 
     /**
      * Returns that the file contains a header line with the names of each column is in the file.
+     *
      * @return The header option state.
      */
     public Boolean getHeader() {
@@ -294,14 +329,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets that the file contains a header line with the names of each column is in the file.
+     *
      * @param header The header option state.
      */
     public void setHeader(Boolean header) {
+        setDirtyIf(!Objects.equals(this.header, header));
         this.header = header;
     }
 
     /**
      * Returns whether or not to interpret the path as a hive partitioned path.
+     *
      * @return The hive partitioning option state.
      */
     public Boolean getHivePartitioning() {
@@ -310,14 +348,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets to interpret the path as a hive partitioned path.
+     *
      * @param hivePartitioning Hive partitioning option state.
      */
     public void setHivePartitioning(Boolean hivePartitioning) {
+        setDirtyIf(!Objects.equals(this.hivePartitioning, hivePartitioning));
         this.hivePartitioning = hivePartitioning;
     }
 
     /**
      * Returns option that ignore any parsing errors encountered - and instead ignore rows with errors.
+     *
      * @return Ignore errors option state.
      */
     public Boolean getIgnoreErrors() {
@@ -326,14 +367,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets option that ignore any parsing errors encountered - and instead ignore rows with errors.
+     *
      * @param ignoreErrors Ignore errors option state.
      */
     public void setIgnoreErrors(Boolean ignoreErrors) {
+        setDirtyIf(!Objects.equals(this.ignoreErrors, ignoreErrors));
         this.ignoreErrors = ignoreErrors;
     }
 
     /**
      * Returns the new line character(s) in the file.
+     *
      * @return New line value.
      */
     public String getNewLine() {
@@ -342,14 +386,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Set the new line character(s) in the file. Options are '\r','\n', or '\r\n'.
+     *
      * @param newLine New line value.
      */
     public void setNewLine(String newLine) {
+        setDirtyIf(!Objects.equals(this.newLine, newLine));
         this.newLine = newLine;
     }
 
     /**
      * Returns the quoting string to be used when a data value is quoted.
+     *
      * @return Quoting string.
      */
     public String getQuote() {
@@ -358,14 +405,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the quoting string to be used when a data value is quoted.
+     *
      * @param quote Quoting string.
      */
     public void setQuote(String quote) {
+        setDirtyIf(!Objects.equals(this.quote, quote));
         this.quote = quote;
     }
 
     /**
      * Returns the number of lines at the top of the file to skip.
+     *
      * @return Number of lines to skip.
      */
     public Long getSkip() {
@@ -374,14 +424,17 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the number of lines at the top of the file to skip.
+     *
      * @param skip Number of lines to skip.
      */
     public void setSkip(Long skip) {
+        setDirtyIf(!Objects.equals(this.skip, skip));
         this.skip = skip;
     }
 
     /**
      * Returns the date format to use when parsing timestamps.
+     *
      * @return Timestamp format.
      */
     public String getTimestampformat() {
@@ -390,9 +443,11 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     /**
      * Sets the date format to use when parsing timestamps.
+     *
      * @param timestampformat Timestamp format.
      */
     public void setTimestampformat(String timestampformat) {
+        setDirtyIf(!Objects.equals(this.timestampformat, timestampformat));
         this.timestampformat = timestampformat;
     }
 
@@ -404,5 +459,26 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates an expanded and trimmed deep copy of the spec.
+     * Configurable properties will be expanded if they contain environment variables or secrets.
+     *
+     * @param secretValueProvider Secret value provider.
+     * @param lookupContext       Secret value lookup context used to access shared credentials.
+     * @return Cloned, trimmed and expanded table specification.
+     */
+    public CsvFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
+        CsvFileFormatSpec cloned = (CsvFileFormatSpec) this.deepClone();
+        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
+        cloned.decimalSeparator = secretValueProvider.expandValue(cloned.decimalSeparator, lookupContext);
+        cloned.delim = secretValueProvider.expandValue(cloned.delim, lookupContext);
+        cloned.escape = secretValueProvider.expandValue(cloned.escape, lookupContext);
+        cloned.newLine = secretValueProvider.expandValue(cloned.newLine, lookupContext);
+        cloned.quote = secretValueProvider.expandValue(cloned.quote, lookupContext);
+        cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
+        return cloned;
     }
 }

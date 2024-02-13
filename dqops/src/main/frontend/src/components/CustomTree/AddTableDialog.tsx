@@ -17,7 +17,10 @@ import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
   CsvFileFormatSpec,
-  FileFormatSpec
+  JsonFileFormatSpec,
+  ParquetFileFormatSpec,
+  FileFormatSpec,
+  DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
@@ -27,16 +30,7 @@ interface AddTableDialogProps {
   node?: CustomTreeNode;
 }
 
-enum fileFormat {
-  csv = 'csv_file_format',
-  json = 'json_file_format',
-  parquet = 'parquet_file_format',
-  file_path = 'file_path'
-}
-
-type TConfiguration = CsvFileFormatSpec;
-//add json parquet type
-// type TConfiguration = CsvFileFormatSpec | JsonFileFormat | ParquetFileFormat etc
+type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
@@ -44,8 +38,8 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const { refreshNode } = useTree();
   const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setfileFormatType] = useState<fileFormat>(
-    fileFormat.csv
+  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+    DuckdbParametersSpecSourceFilesTypeEnum.csv
   );
   const [configuration, setConfiguration] = useState<TConfiguration>({});
 
@@ -154,7 +148,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
 
-  const onChangeFile = (val: fileFormat) => setfileFormatType(val);
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
 
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));

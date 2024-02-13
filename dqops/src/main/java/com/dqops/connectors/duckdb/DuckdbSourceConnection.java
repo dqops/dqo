@@ -25,6 +25,7 @@ import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -248,10 +249,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         try {
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             for (TableWrapper tableWrapper : tableWrappers) {
-                String firstFilePath = tableWrapper.getSpec().getFileFormat().getFilePaths().get(0);
-                String tableName = tableWrapper.getPhysicalTableName().getTableName();
 
-                tech.tablesaw.api.Table tableResult = queryForTableResult(tableName, firstFilePath);
+                FileFormatSpec fileFormatSpec = tableWrapper.getSpec().getFileFormat();
+                Table tableResult = queryForTableResult(fileFormatSpec);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -261,7 +261,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
                 for (Row colRow : tableResult) {
-                    String physicalTableName = tableName;
+                    String physicalTableName = tableWrapper.getPhysicalTableName().getTableName();
                     String columnName = colRow.getString("column_name");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
@@ -289,18 +289,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
-    private tech.tablesaw.api.Table queryForTableResult(String tableName, String firstFilePath){
-
-        String createQuery = String.format("CREATE TABLE %s AS SELECT * FROM read_csv_auto('%s');", tableName, firstFilePath);
-        this.executeCommand(createQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-        String describeQuery = String.format("DESCRIBE %s", tableName);
-        tech.tablesaw.api.Table tableResult = this.executeQuery(describeQuery, JobCancellationToken.createDummyJobCancellationToken(), null, false);
-
-        String dropQuery = String.format("DROP TABLE %s", tableName);
-        this.executeCommand(dropQuery, JobCancellationToken.createDummyJobCancellationToken());
-
-        return tableResult;
+    /**
+     * Retrieves a table result depending on the source files type.
+     * @param fileFormatSpec A file format specification with paths and format configuration.
+     * @return A table result with metadata of the given data file.
+     */
+    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec){
+        DuckdbSourceFilesType duckdbSourceFilesType = super.getConnectionSpec().getDuckdb().getSourceFilesType();
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType);
+        String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
+        return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }
 
 }

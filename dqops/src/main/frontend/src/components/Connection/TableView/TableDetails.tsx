@@ -20,24 +20,19 @@ import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
   CsvFileFormatSpec,
+  JsonFileFormatSpec,
+  ParquetFileFormatSpec,
   FileFormatSpec,
-  TableListModelProfilingChecksResultTruncationEnum
+  TableListModelProfilingChecksResultTruncationEnum,
+  DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../../api';
 import NumberInput from '../../NumberInput';
 import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-enum fileFormat {
-  csv = 'csv_file_format',
-  json = 'json_file_format',
-  parquet = 'parquet_file_format',
-  file_path = 'file_path'
-}
 
-type TConfiguration = CsvFileFormatSpec;
-//add json parquet type
-// type TConfiguration = CsvFileFormatSpec | JsonFileFormat | ParquetFileFormat etc
+type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
 const TableDetails = () => {
   const {
@@ -56,10 +51,10 @@ const TableDetails = () => {
   );
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setfileFormatType] = useState<fileFormat>(
+  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
     (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
       x.includes('format')
-    ) as fileFormat) ?? fileFormat.csv
+    ) as DuckdbParametersSpecSourceFilesTypeEnum) ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
   );
   const [configuration, setConfiguration] = useState<TConfiguration>(
     tableBasic?.file_format ?? {}
@@ -134,7 +129,7 @@ const TableDetails = () => {
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
 
-  const onChangeFile = (val: fileFormat) => setfileFormatType(val);
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
 
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));

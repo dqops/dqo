@@ -17,6 +17,7 @@ package com.dqops.duckdb.sensors.column.whitespace;
 
 import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksNullPlaceholderTextFoundCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -44,7 +45,7 @@ public class FileDuckdbColumnWhitespaceBlankNullPlaceholderTextCountSensorParame
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         String csvFileName = SampleCsvFileNames.string_test_data;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -56,7 +57,7 @@ public class FileDuckdbColumnWhitespaceBlankNullPlaceholderTextCountSensorParame
     @Test
     void runSensor_withUseOfLocalCsvFile_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "null_placeholder", this.checkSpec);
+                sampleTableMetadata, "null_placeholder:STRING", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
