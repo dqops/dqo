@@ -6,6 +6,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -58,7 +59,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String format;
+    private JsonFormatType format;
 
     @JsonPropertyDescription("\tWhether or not to interpret the path as a hive partitioned path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -211,18 +212,18 @@ public class JsonFileFormatSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the JSON format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].
+     * Returns the JSON format.
      * @return JSON format.
      */
-    public String getFormat() {
+    public JsonFormatType getFormat() {
         return format;
     }
 
     /**
-     * Sets the JSON format. Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].
+     * Sets the JSON format.
      * @param format JSON format.
      */
-    public void setFormat(String format) {
+    public void setFormat(JsonFormatType format) {
         setDirtyIf(!Objects.equals(this.format, format));
         this.format = format;
     }
@@ -353,7 +354,6 @@ public class JsonFileFormatSpec extends AbstractSpec {
         JsonFileFormatSpec cloned = (JsonFileFormatSpec) this.deepClone();
         cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
-        cloned.format = secretValueProvider.expandValue(cloned.format, lookupContext);
         cloned.records = secretValueProvider.expandValue(cloned.records, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;

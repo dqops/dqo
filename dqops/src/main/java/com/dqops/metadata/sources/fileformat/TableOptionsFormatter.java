@@ -39,7 +39,7 @@ public class TableOptionsFormatter {
         }
     }
 
-    public void formatStringWhenSet(String fieldName, String value){
+    public <T> void formatStringWhenSet(String fieldName, T value){
         if(value != null){
             sourceTable.append(commaNewLineIdentTwo)
                     .append(makeSnakeCase(fieldName)).append(" = '").append(value).append("'");

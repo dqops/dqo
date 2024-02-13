@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 
 import java.util.List;
@@ -57,6 +58,7 @@ public class FileFormatSpecObjectMother {
         return new FileFormatSpec() {{
             setJson(new JsonFileFormatSpec(){{
                 setAutoDetect(true);
+                setFormat(JsonFormatType.auto);
             }} );
             setFilePaths(new FilePathListSpec(){{
                 add(SampleDataFilesProvider.getFile(jsonFileName).toString());
