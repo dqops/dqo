@@ -104,13 +104,13 @@ check uses an additional parameter, one of the supported date formats.
 
 The supported date formats are:
 
-| Date format      | Example date       |
-|------------------|--------------------|
-| `YYYY-MM-DD`     | *2024-02-10*       |
-| `MM/DD/YYYY`     | *02/10/2024*       |
-| `DD/MM/YYYY`     | *10/02/2024*       |
-| `YYYY/MM/DD`     | *2024/02/10*       |
-| `Month D, YYYY ` | *January 10, 2024* |
+| Date format      | Example date        |
+|------------------|---------------------|
+| `YYYY-MM-DD`     | *2024-02-10*        |
+| `MM/DD/YYYY`     | *02/10/2024*        |
+| `DD/MM/YYYY`     | *10/02/2024*        |
+| `YYYY/MM/DD`     | *2024/02/10*        |
+| `Month D, YYYY ` | *February 10, 2024* |
 
 The following code sample shows a configured [*text_matching_date_pattern_percent*](../checks/column/patterns/text-matching-date-pattern-percent.md)
 check in a DQOps YAML file.
