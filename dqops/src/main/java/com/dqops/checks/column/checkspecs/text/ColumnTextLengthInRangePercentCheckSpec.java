@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
+ * This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
+ * It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

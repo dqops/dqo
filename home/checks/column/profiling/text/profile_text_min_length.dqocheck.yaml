@@ -3,7 +3,8 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/text/text_min_length
-  rule_name: comparison/min_value
-  help_text: Verifies that the length of a text in a column does not fall below the
-    minimum accepted length
+  rule_name: comparison/between_ints
+  help_text: "This check finds the length of the shortest text in a column. Then,\
+    \ it verifies that the minimum length is within an accepted range. It detects\
+    \ that the shortest text is too short."
   standard: true

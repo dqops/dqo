@@ -1,6 +1,7 @@
 # text length below min length percent data quality checks
 
-A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+This check finds texts that are shorter than the minimum accepted text length.
+ It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.
 
 
 ___
@@ -13,7 +14,7 @@ The **text length below min length percent** data quality check has the followin
 
 **Check description**
 
-The check measures the percentage of text values in the column that is below the length defined by the user as a parameter
+The check measures the percentage of text values in the column that is below the length defined by the user as a parameter.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

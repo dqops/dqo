@@ -1,6 +1,7 @@
 # text mean length data quality checks
 
-A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
+This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
+ DQOps raises an issue when the mean text length is outside a range of accepted values.
 
 
 ___
@@ -13,7 +14,7 @@ The **text mean length** data quality check has the following variants for each
 
 **Check description**
 
-Verifies that the length of a text in a column does not exceed the mean accepted length
+Verifies that the mean (average) length of texts in a column is within an accepted range.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1248,7 +1249,7 @@ ___
 
 **Check description**
 
-Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that the mean (average) length of texts in a column is within an accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -2485,7 +2486,7 @@ ___
 
 **Check description**
 
-Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.
+Verifies that the mean (average) length of texts in a column is within an accepted range. Stores the most recent captured value for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -3722,7 +3723,7 @@ ___
 
 **Check description**
 
-Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
+Verifies that the mean (average) length of texts in a column is within an accepted range. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -4981,7 +4982,7 @@ ___
 
 **Check description**
 
-Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
+Verifies that the mean (average) length of texts in a column is within an accepted range. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

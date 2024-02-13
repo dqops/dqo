@@ -3,8 +3,9 @@ apiVersion: dqo/v1
 kind: check
 spec:
   sensor_name: column/text/text_max_length
-  rule_name: comparison/max_value
-  help_text: Verifies that the length of a text in a column does not exceed the maximum
-    accepted length. Stores the most recent captured value for each day when the data
-    quality check was evaluated.
+  rule_name: comparison/between_ints
+  help_text: "This check finds the length of the longest text in a column. Then, it\
+    \ verifies that the maximum length is within an accepted range. It detects that\
+    \ the texts are too long or not long enough. Stores the most recent captured value\
+    \ for each day when the data quality check was evaluated."
   standard: true

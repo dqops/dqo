@@ -12621,6 +12621,19 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
+  BetweenIntsRuleParametersSpec:
+    type: "object"
+    properties:
+      from:
+        type: "integer"
+        format: "int64"
+        description: "Minimum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
+      to:
+        type: "integer"
+        format: "int64"
+        description: "Maximum accepted value for the actual_value returned by the\
+          \ sensor (inclusive)."
   BetweenPercentRuleParametersSpec:
     type: "object"
     properties:
@@ -25773,20 +25786,23 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_text_max_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the maximum accepted length. Stores the most recent captured value for\
-          \ each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       daily_text_min_length:
-        description: "Verifies that the length of a text in a column does not fall\
-          \ below the minimum accepted length. Stores the most recent captured value\
-          \ for each day when the data quality check was evaluated."
+        description: "This check finds the length of the shortest text in a column.\
+          \ Then, it verifies that the minimum length is within an accepted range.\
+          \ It detects that the shortest text is too short. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
+      daily_text_max_length:
+        description: "This check finds the length of the longest text in a column.\
+          \ Then, it verifies that the maximum length is within an accepted range.\
+          \ It detects that the texts are too long or not long enough. Stores the\
+          \ most recent captured value for each day when the data quality check was\
+          \ evaluated."
+        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       daily_text_mean_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the mean accepted length. Stores the most recent captured value for each\
-          \ day when the data quality check was evaluated."
+        description: "Verifies that the mean (average) length of texts in a column\
+          \ is within an accepted range. Stores the most recent captured value for\
+          \ each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
       daily_text_length_below_min_length:
         description: "The check counts the number of text values in the column that\
@@ -25826,22 +25842,24 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      daily_partition_text_max_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the maximum accepted length. Analyzes every daily partition and creates\
-          \ a separate data quality check result with the time period value that identifies\
-          \ the daily partition."
-        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       daily_partition_text_min_length:
-        description: "Verifies that the length of a text in a column does not fall\
-          \ below the minimum accepted length. Analyzes every daily partition and\
-          \ creates a separate data quality check result with the time period value\
-          \ that identifies the daily partition."
+        description: "This check finds the length of the shortest text in a column.\
+          \ Then, it verifies that the minimum length is within an accepted range.\
+          \ It detects that the shortest text is too short. Analyzes every daily partition\
+          \ and creates a separate data quality check result with the time period\
+          \ value that identifies the daily partition."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
+      daily_partition_text_max_length:
+        description: "This check finds the length of the longest text in a column.\
+          \ Then, it verifies that the maximum length is within an accepted range.\
+          \ It detects that the texts are too long or not long enough. Analyzes every\
+          \ daily partition and creates a separate data quality check result with\
+          \ the time period value that identifies the daily partition."
+        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       daily_partition_text_mean_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the mean accepted length. Analyzes every daily partition and creates a\
-          \ separate data quality check result with the time period value that identifies\
+        description: "Verifies that the mean (average) length of texts in a column\
+          \ is within an accepted range. Analyzes every daily partition and creates\
+          \ a separate data quality check result with the time period value that identifies\
           \ the daily partition."
         $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
       daily_partition_text_length_below_min_length:
@@ -26506,15 +26524,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
       error:
         description: "Default alerting threshold for a maximum number of rows with\
           \ nulls in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
   ColumnTextMeanLengthCheckSpec:
     type: "object"
     properties:
@@ -26628,15 +26646,15 @@ definitions:
       warning:
         description: "Alerting threshold that raises a data quality warning that is\
           \ considered as a passed data quality check"
-        $ref: "#/definitions/MinValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
       error:
         description: "Default alerting threshold for a minimum length of string in\
           \ a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MinValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
       fatal:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
-        $ref: "#/definitions/MinValueRuleParametersSpec"
+        $ref: "#/definitions/BetweenIntsRuleParametersSpec"
   ColumnTextMonthlyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -26648,20 +26666,23 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_text_max_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the maximum accepted length. Stores the most recent captured value for\
-          \ each month when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       monthly_text_min_length:
-        description: "Verifies that the length of a text in a column does not fall\
-          \ below the minimum accepted length. Stores the most recent captured value\
-          \ for each month when the data quality check was evaluated."
+        description: "This check finds the length of the shortest text in a column.\
+          \ Then, it verifies that the minimum length is within an accepted range.\
+          \ It detects that the shortest text is too short. Stores the most recent\
+          \ captured value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
+      monthly_text_max_length:
+        description: "This check finds the length of the longest text in a column.\
+          \ Then, it verifies that the maximum length is within an accepted range.\
+          \ It detects that the texts are too long or not long enough. Stores the\
+          \ most recent captured value for each month when the data quality check\
+          \ was evaluated."
+        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       monthly_text_mean_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the mean accepted length. Stores the most recent captured value for each\
-          \ month when the data quality check was evaluated."
+        description: "Verifies that the mean (average) length of texts in a column\
+          \ is within an accepted range. Stores the most recent captured value for\
+          \ each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
       monthly_text_length_below_min_length:
         description: "The check counts the number of text values in the column that\
@@ -26701,21 +26722,23 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      monthly_partition_text_max_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the maximum accepted length. Analyzes every monthly partition and creates\
-          \ a separate data quality check result with the time period value that identifies\
-          \ the monthly partition."
-        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       monthly_partition_text_min_length:
-        description: "Verifies that the length of a text in a column does not fall\
-          \ below the minimum accepted length. Analyzes every monthly partition and\
-          \ creates a separate data quality check result with the time period value\
-          \ that identifies the monthly partition."
+        description: "This check finds the length of the shortest text in a column.\
+          \ Then, it verifies that the minimum length is within an accepted range.\
+          \ It detects that the shortest text is too short. Analyzes every monthly\
+          \ partition and creates a separate data quality check result with the time\
+          \ period value that identifies the monthly partition."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
+      monthly_partition_text_max_length:
+        description: "This check finds the length of the longest text in a column.\
+          \ Then, it verifies that the maximum length is within an accepted range.\
+          \ It detects that the texts are too long or not long enough. Analyzes every\
+          \ monthly partition and creates a separate data quality check result with\
+          \ the time period value that identifies the monthly partition."
+        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       monthly_partition_text_mean_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the mean accepted length. Analyzes every monthly partition and creates\
+        description: "Verifies that the mean (average) length of texts in a column\
+          \ is within an accepted range. Analyzes every monthly partition and creates\
           \ a separate data quality check result with the time period value that identifies\
           \ the monthly partition."
         $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
@@ -27129,37 +27152,39 @@ definitions:
           \ rule for the custom check."
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
-      profile_text_max_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the maximum accepted length"
-        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       profile_text_min_length:
-        description: "Verifies that the length of a text in a column does not fall\
-          \ below the minimum accepted length"
+        description: "This check finds the length of the shortest text in a column.\
+          \ Then, it verifies that the minimum length is within an accepted range.\
+          \ It detects that the shortest text is too short."
         $ref: "#/definitions/ColumnTextMinLengthCheckSpec"
+      profile_text_max_length:
+        description: "This check finds the length of the longest text in a column.\
+          \ Then, it verifies that the maximum length is within an accepted range.\
+          \ It detects that the texts are too long or not long enough."
+        $ref: "#/definitions/ColumnTextMaxLengthCheckSpec"
       profile_text_mean_length:
-        description: "Verifies that the length of a text in a column does not exceed\
-          \ the mean accepted length"
+        description: "Verifies that the mean (average) length of texts in a column\
+          \ is within an accepted range."
         $ref: "#/definitions/ColumnTextMeanLengthCheckSpec"
       profile_text_length_below_min_length:
         description: "The check counts the number of text values in the column that\
-          \ is below the length defined by the user as a parameter"
+          \ is below the length defined by the user as a parameter."
         $ref: "#/definitions/ColumnTextLengthBelowMinLengthCheckSpec"
       profile_text_length_below_min_length_percent:
         description: "The check measures the percentage of text values in the column\
-          \ that is below the length defined by the user as a parameter"
+          \ that is below the length defined by the user as a parameter."
         $ref: "#/definitions/ColumnTextLengthBelowMinLengthPercentCheckSpec"
       profile_text_length_above_max_length:
         description: "The check counts the number of text values in the column that\
-          \ is above the length defined by the user as a parameter"
+          \ is above the length defined by the user as a parameter."
         $ref: "#/definitions/ColumnTextLengthAboveMaxLengthCheckSpec"
       profile_text_length_above_max_length_percent:
         description: "The check measures the percentage of text values in the column\
-          \ that is above the length defined by the user as a parameter"
+          \ that is above the length defined by the user as a parameter."
         $ref: "#/definitions/ColumnTextLengthAboveMaxLengthPercentCheckSpec"
       profile_text_length_in_range_percent:
         description: "The check measures the percentage of those text values with\
-          \ length in the range provided by the user in the column"
+          \ length in the range provided by the user in the column."
         $ref: "#/definitions/ColumnTextLengthInRangePercentCheckSpec"
   ColumnTextStatisticsCollectorsSpec:
     type: "object"
@@ -30182,13 +30207,13 @@ definitions:
   FileFormatSpec:
     type: "object"
     properties:
-      csv_file_format:
+      csv:
         description: "Csv file format specification."
         $ref: "#/definitions/CsvFileFormatSpec"
-      json_file_format:
+      json:
         description: "Json file format specification."
         $ref: "#/definitions/JsonFileFormatSpec"
-      parquet_file_format:
+      parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
       file_paths:
@@ -30495,6 +30520,11 @@ definitions:
         type: "string"
         description: "\tCan be one of ['auto', 'unstructured', 'newline_delimited',\
           \ 'array']."
+        enum:
+        - "auto"
+        - "unstructured"
+        - "newline_delimited"
+        - "array"
       hive_partitioning:
         type: "boolean"
         description: "\tWhether or not to interpret the path as a hive partitioned\
@@ -30664,14 +30694,6 @@ definitions:
         format: "double"
         description: "Maximum accepted value for the actual_value returned by the\
           \ sensor (inclusive)."
-  MaxValueRuleParametersSpec:
-    type: "object"
-    properties:
-      max_value:
-        type: "number"
-        format: "double"
-        description: "Maximum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
   MinCountRule1ParametersSpec:
     type: "object"
     properties:
@@ -30700,14 +30722,6 @@ definitions:
     type: "object"
     properties:
       min_percent:
-        type: "number"
-        format: "double"
-        description: "Minimum accepted value for the actual_value returned by the\
-          \ sensor (inclusive)."
-  MinValueRuleParametersSpec:
-    type: "object"
-    properties:
-      min_value:
         type: "number"
         format: "double"
         description: "Minimum accepted value for the actual_value returned by the\

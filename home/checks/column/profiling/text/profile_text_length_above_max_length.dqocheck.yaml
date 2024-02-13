@@ -5,4 +5,4 @@ spec:
   sensor_name: column/text/text_length_above_max_length_count
   rule_name: comparison/max_count
   help_text: The check counts the number of text values in the column that is above
-    the length defined by the user as a parameter
+    the length defined by the user as a parameter.

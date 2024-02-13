@@ -1,6 +1,7 @@
 # text length in range percent data quality checks
 
-Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
+This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
+ It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.
 
 
 ___
@@ -13,7 +14,7 @@ The **text length in range percent** data quality check has the following varian
 
 **Check description**
 
-The check measures the percentage of those text values with length in the range provided by the user in the column
+The check measures the percentage of those text values with length in the range provided by the user in the column.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.DefaultDataQualityDimensions;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import com.dqops.rules.comparison.BetweenIntsRuleParametersSpec;
 import com.dqops.rules.comparison.MinValueRuleParametersSpec;
 import com.dqops.sensors.column.text.ColumnTextTextMinLengthSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
@@ -33,13 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
+ * This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule.
+ * DQOps raises an issue when the minimum text length is outside a range of accepted values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnTextMinLengthCheckSpec
-        extends AbstractCheckSpec<ColumnTextTextMinLengthSensorParametersSpec, MinValueRuleParametersSpec,MinValueRuleParametersSpec,MinValueRuleParametersSpec> {
+        extends AbstractCheckSpec<ColumnTextTextMinLengthSensorParametersSpec, BetweenIntsRuleParametersSpec, BetweenIntsRuleParametersSpec,BetweenIntsRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMinLengthCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,17 +55,17 @@ public class ColumnTextMinLengthCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec warning;
+    private BetweenIntsRuleParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a minimum length of string in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec error;
+    private BetweenIntsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinValueRuleParametersSpec fatal;
+    private BetweenIntsRuleParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -90,7 +92,7 @@ public class ColumnTextMinLengthCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinValueRuleParametersSpec getWarning() {
+    public BetweenIntsRuleParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +100,7 @@ public class ColumnTextMinLengthCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinValueRuleParametersSpec warning) {
+    public void setWarning(BetweenIntsRuleParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +112,7 @@ public class ColumnTextMinLengthCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MinValueRuleParametersSpec getError() {
+    public BetweenIntsRuleParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +120,7 @@ public class ColumnTextMinLengthCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MinValueRuleParametersSpec error) {
+    public void setError(BetweenIntsRuleParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -130,7 +132,7 @@ public class ColumnTextMinLengthCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinValueRuleParametersSpec getFatal() {
+    public BetweenIntsRuleParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +140,7 @@ public class ColumnTextMinLengthCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinValueRuleParametersSpec fatal) {
+    public void setFatal(BetweenIntsRuleParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

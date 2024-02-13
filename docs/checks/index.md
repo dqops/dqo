@@ -973,43 +973,50 @@ A column-level check that detects if the data type of the column has changed sin
 ## column-level text checks
 Validates that the data in a text column has a valid range.
 
-### [text max length](./column/text/text-max-length.md)
-A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
-
-
-
 ### [text min length](./column/text/text-min-length.md)
-A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
+This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule.
+ DQOps raises an issue when the minimum text length is outside a range of accepted values.
+
+
+
+### [text max length](./column/text/text-max-length.md)
+This check finds the length of the longest text in a column. DQOps validates the maximum length using a range rule.
+ DQOps raises an issue when the maximum text length is outside a range of accepted values.
 
 
 
 ### [text mean length](./column/text/text-mean-length.md)
-A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
+This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
+ DQOps raises an issue when the mean text length is outside a range of accepted values.
 
 
 
 ### [text length below min length](./column/text/text-length-below-min-length.md)
-A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
+This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length below min length percent](./column/text/text-length-below-min-length-percent.md)
-A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+This check finds texts that are shorter than the minimum accepted text length.
+ It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length above max length](./column/text/text-length-above-max-length.md)
-A column-level check that ensures that the number of text values in the monitored column with a length above the length defined by the user as a parameter does not exceed set thresholds.
+This check finds texts that are longer than the maximum accepted text length.
+ It counts the number of texts that are too long and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length above max length percent](./column/text/text-length-above-max-length-percent.md)
-A column-level check that ensures that the percentage of text values in the monitored column with a length above the length defined by the user as a parameter does not fall below set thresholds.
+This check finds texts that are longer than the maximum accepted text length.
+ It measures the percentage of texts that are too long and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length in range percent](./column/text/text-length-in-range-percent.md)
-Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
+This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
+ It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.
 
 
 

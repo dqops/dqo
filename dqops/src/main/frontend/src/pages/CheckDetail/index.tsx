@@ -337,6 +337,7 @@ export const SensorDetail = () => {
                 value={checkName}
                 onChange={onChangecheckName}
                 error={!checkName}
+                className="min-w-64"
               />
             </div>
           </div>

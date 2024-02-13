@@ -1,6 +1,6 @@
 # text length below min length data quality checks
 
-A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
+This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.
 
 
 ___
@@ -13,7 +13,7 @@ The **text length below min length** data quality check has the following varian
 
 **Check description**
 
-The check counts the number of text values in the column that is below the length defined by the user as a parameter
+The check counts the number of text values in the column that is below the length defined by the user as a parameter.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

@@ -43,8 +43,8 @@ import java.util.Objects;
 public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_text_max_length", o -> o.dailyPartitionTextMaxLength);
             put("daily_partition_text_min_length", o -> o.dailyPartitionTextMinLength);
+            put("daily_partition_text_max_length", o -> o.dailyPartitionTextMaxLength);
             put("daily_partition_text_mean_length", o -> o.dailyPartitionTextMeanLength);
             put("daily_partition_text_length_below_min_length", o -> o.dailyPartitionTextLengthBelowMinLength);
             put("daily_partition_text_length_below_min_length_percent", o -> o.dailyPartitionTextLengthBelowMinLengthPercent);
@@ -55,13 +55,13 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
     };
 
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
-    private ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength;
-
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    @JsonPropertyDescription("This check finds the length of the shortest text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the shortest text is too short. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
     private ColumnTextMinLengthCheckSpec dailyPartitionTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    @JsonPropertyDescription("This check finds the length of the longest text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the texts are too long or not long enough. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    private ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength;
+
+    @JsonPropertyDescription("Verifies that the mean (average) length of texts in a column is within an accepted range. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
     private ColumnTextMeanLengthCheckSpec dailyPartitionTextMeanLength;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
@@ -81,24 +81,6 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
 
 
     /**
-     * Returns a maximum string length below check.
-     * @return Maximum string length below check.
-     */
-    public ColumnTextMaxLengthCheckSpec getDailyPartitionTextMaxLength() {
-        return dailyPartitionTextMaxLength;
-    }
-
-    /**
-     * Sets a new definition of a maximum string length check.
-     * @param dailyPartitionTextMaxLength Maximum string length check.
-     */
-    public void setDailyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMaxLength, dailyPartitionTextMaxLength));
-        this.dailyPartitionTextMaxLength = dailyPartitionTextMaxLength;
-        propagateHierarchyIdToField(dailyPartitionTextMaxLength, "daily_partition_text_max_length");
-    }
-
-    /**
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
@@ -114,6 +96,24 @@ public class ColumnTextDailyPartitionedChecksSpec extends AbstractCheckCategoryS
         this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMinLength, dailyPartitionTextMinLength));
         this.dailyPartitionTextMinLength = dailyPartitionTextMinLength;
         propagateHierarchyIdToField(dailyPartitionTextMinLength, "daily_partition_text_min_length");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnTextMaxLengthCheckSpec getDailyPartitionTextMaxLength() {
+        return dailyPartitionTextMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param dailyPartitionTextMaxLength Maximum string length check.
+     */
+    public void setDailyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec dailyPartitionTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMaxLength, dailyPartitionTextMaxLength));
+        this.dailyPartitionTextMaxLength = dailyPartitionTextMaxLength;
+        propagateHierarchyIdToField(dailyPartitionTextMaxLength, "daily_partition_text_max_length");
     }
 
     /**

@@ -1448,9 +1448,9 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`csv_file_format`](./TableYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./TableYaml.md#csvfileformatspec)*| | | |
-|<span class="no-wrap-code ">[`json_file_format`](./TableYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./TableYaml.md#jsonfileformatspec)*| | | |
-|<span class="no-wrap-code ">[`parquet_file_format`](./TableYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./TableYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`csv`](./TableYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./TableYaml.md#csvfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`json`](./TableYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./TableYaml.md#jsonfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`parquet`](./TableYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./TableYaml.md#parquetfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`file_paths`](./TableYaml.md#filepathlistspec)</span>|The list of paths to files with data that are used as a source.|*[FilePathListSpec](./TableYaml.md#filepathlistspec)*| | | |
 
 
@@ -1529,7 +1529,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`convert_strings_to_integers`</span>|	Whether strings representing integer values should be converted to a numerical type.|*boolean*| | | |
 |<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
 |<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
-|<span class="no-wrap-code ">`format`</span>|	Can be one of [&#x27;auto&#x27;, &#x27;unstructured&#x27;, &#x27;newline_delimited&#x27;, &#x27;array&#x27;].|*string*| | | |
+|<span class="no-wrap-code ">`format`</span>|	Can be one of [&#x27;auto&#x27;, &#x27;unstructured&#x27;, &#x27;newline_delimited&#x27;, &#x27;array&#x27;].|*enum*|*auto*<br/>*unstructured*<br/>*newline_delimited*<br/>*array*<br/>| | |
 |<span class="no-wrap-code ">`hive_partitioning`</span>|	Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
 |<span class="no-wrap-code ">`ignore_errors`</span>|Whether to ignore parse errors (only possible when format is &#x27;newline_delimited&#x27;).|*boolean*| | | |
 |<span class="no-wrap-code ">`maximum_object_size`</span>|	The maximum size of a JSON object (in bytes)|*long*| | | |

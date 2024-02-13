@@ -414,8 +414,8 @@ nav:
         - column type changed: 'checks/column/schema/column-type-changed.md'
       - text:
         - 'checks/column/text/index.md'
-        - text max length: 'checks/column/text/text-max-length.md'
         - text min length: 'checks/column/text/text-min-length.md'
+        - text max length: 'checks/column/text/text-max-length.md'
         - text mean length: 'checks/column/text/text-mean-length.md'
         - text length below min length: 'checks/column/text/text-length-below-min-length.md'
         - text length below min length percent: 'checks/column/text/text-length-below-min-length-percent.md'

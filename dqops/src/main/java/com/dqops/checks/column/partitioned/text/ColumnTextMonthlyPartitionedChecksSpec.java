@@ -43,8 +43,8 @@ import java.util.Objects;
 public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_text_max_length", o -> o.monthlyPartitionTextMaxLength);
             put("monthly_partition_text_min_length", o -> o.monthlyPartitionTextMinLength);
+            put("monthly_partition_text_max_length", o -> o.monthlyPartitionTextMaxLength);
             put("monthly_partition_text_mean_length", o -> o.monthlyPartitionTextMeanLength);
             put("monthly_partition_text_length_below_min_length", o -> o.monthlyPartitionTextLengthBelowMinLength);
             put("monthly_partition_text_length_below_min_length_percent", o -> o.monthlyPartitionTextLengthBelowMinLengthPercent);
@@ -55,13 +55,13 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
     };
 
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
-    private ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength;
-
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
+    @JsonPropertyDescription("This check finds the length of the shortest text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the shortest text is too short. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
     private ColumnTextMinLengthCheckSpec monthlyPartitionTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
+    @JsonPropertyDescription("This check finds the length of the longest text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the texts are too long or not long enough. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
+    private ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength;
+
+    @JsonPropertyDescription("Verifies that the mean (average) length of texts in a column is within an accepted range. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
     private ColumnTextMeanLengthCheckSpec monthlyPartitionTextMeanLength;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.")
@@ -81,24 +81,6 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
 
 
     /**
-     * Returns a maximum string length below check.
-     * @return Maximum string length below check.
-     */
-    public ColumnTextMaxLengthCheckSpec getMonthlyPartitionTextMaxLength() {
-        return monthlyPartitionTextMaxLength;
-    }
-
-    /**
-     * Sets a new definition of a maximum string length check.
-     * @param monthlyPartitionTextMaxLength Maximum string length check.
-     */
-    public void setMonthlyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMaxLength, monthlyPartitionTextMaxLength));
-        this.monthlyPartitionTextMaxLength = monthlyPartitionTextMaxLength;
-        propagateHierarchyIdToField(monthlyPartitionTextMaxLength, "monthly_partition_text_max_length");
-    }
-
-    /**
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
@@ -114,6 +96,24 @@ public class ColumnTextMonthlyPartitionedChecksSpec extends AbstractCheckCategor
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMinLength, monthlyPartitionTextMinLength));
         this.monthlyPartitionTextMinLength = monthlyPartitionTextMinLength;
         propagateHierarchyIdToField(monthlyPartitionTextMinLength, "monthly_partition_text_min_length");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnTextMaxLengthCheckSpec getMonthlyPartitionTextMaxLength() {
+        return monthlyPartitionTextMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param monthlyPartitionTextMaxLength Maximum string length check.
+     */
+    public void setMonthlyPartitionTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyPartitionTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionTextMaxLength, monthlyPartitionTextMaxLength));
+        this.monthlyPartitionTextMaxLength = monthlyPartitionTextMaxLength;
+        propagateHierarchyIdToField(monthlyPartitionTextMaxLength, "monthly_partition_text_max_length");
     }
 
     /**

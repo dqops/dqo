@@ -43,8 +43,8 @@ import java.util.Objects;
 public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextMonthlyMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_text_max_length", o -> o.monthlyTextMaxLength);
             put("monthly_text_min_length", o -> o.monthlyTextMinLength);
+            put("monthly_text_max_length", o -> o.monthlyTextMaxLength);
             put("monthly_text_mean_length", o -> o.monthlyTextMeanLength);
             put("monthly_text_length_below_min_length", o -> o.monthlyTextLengthBelowMinLength);
             put("monthly_text_length_below_min_length_percent", o -> o.monthlyTextLengthBelowMinLengthPercent);
@@ -55,13 +55,13 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
     };
 
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
-    private ColumnTextMaxLengthCheckSpec monthlyTextMaxLength;
-
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("This check finds the length of the shortest text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the shortest text is too short. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextMinLengthCheckSpec monthlyTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("This check finds the length of the longest text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the texts are too long or not long enough. Stores the most recent captured value for each month when the data quality check was evaluated.")
+    private ColumnTextMaxLengthCheckSpec monthlyTextMaxLength;
+
+    @JsonPropertyDescription("Verifies that the mean (average) length of texts in a column is within an accepted range. Stores the most recent captured value for each month when the data quality check was evaluated.")
     private ColumnTextMeanLengthCheckSpec monthlyTextMeanLength;
 
     @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter. Stores the most recent captured value for each month when the data quality check was evaluated.")
@@ -81,24 +81,6 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
 
 
     /**
-     * Returns a maximum string length below check.
-     * @return Maximum string length below check.
-     */
-    public ColumnTextMaxLengthCheckSpec getMonthlyTextMaxLength() {
-        return monthlyTextMaxLength;
-    }
-
-    /**
-     * Sets a new definition of a maximum string length check.
-     * @param monthlyTextMaxLength Maximum string length check.
-     */
-    public void setMonthlyTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyTextMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.monthlyTextMaxLength, monthlyTextMaxLength));
-        this.monthlyTextMaxLength = monthlyTextMaxLength;
-        propagateHierarchyIdToField(monthlyTextMaxLength, "monthly_text_max_length");
-    }
-
-    /**
      * Returns a minimum string length above check.
      * @return Minimum string length above check.
      */
@@ -114,6 +96,24 @@ public class ColumnTextMonthlyMonitoringChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyTextMinLength, monthlyTextMinLength));
         this.monthlyTextMinLength = monthlyTextMinLength;
         propagateHierarchyIdToField(monthlyTextMinLength, "monthly_text_min_length");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnTextMaxLengthCheckSpec getMonthlyTextMaxLength() {
+        return monthlyTextMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param monthlyTextMaxLength Maximum string length check.
+     */
+    public void setMonthlyTextMaxLength(ColumnTextMaxLengthCheckSpec monthlyTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTextMaxLength, monthlyTextMaxLength));
+        this.monthlyTextMaxLength = monthlyTextMaxLength;
+        propagateHierarchyIdToField(monthlyTextMaxLength, "monthly_text_max_length");
     }
 
     /**

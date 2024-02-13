@@ -43,8 +43,8 @@ import java.util.Objects;
 public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_text_max_length", o -> o.profileTextMaxLength);
             put("profile_text_min_length", o -> o.profileTextMinLength);
+            put("profile_text_max_length", o -> o.profileTextMaxLength);
             put("profile_text_mean_length", o -> o.profileTextMeanLength);
             put("profile_text_length_below_min_length", o -> o.profileTextLengthBelowMinLength);
             put("profile_text_length_below_min_length_percent", o -> o.profileTextLengthBelowMinLengthPercent);
@@ -54,48 +54,30 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length")
-    private ColumnTextMaxLengthCheckSpec profileTextMaxLength;
-
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length")
+    @JsonPropertyDescription("This check finds the length of the shortest text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the shortest text is too short.")
     private ColumnTextMinLengthCheckSpec profileTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length")
+    @JsonPropertyDescription("This check finds the length of the longest text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the texts are too long or not long enough.")
+    private ColumnTextMaxLengthCheckSpec profileTextMaxLength;
+
+    @JsonPropertyDescription("Verifies that the mean (average) length of texts in a column is within an accepted range.")
     private ColumnTextMeanLengthCheckSpec profileTextMeanLength;
 
-    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter.")
     private ColumnTextLengthBelowMinLengthCheckSpec profileTextLengthBelowMinLength;
 
-    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter.")
     private ColumnTextLengthBelowMinLengthPercentCheckSpec profileTextLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter.")
     private ColumnTextLengthAboveMaxLengthCheckSpec profileTextLengthAboveMaxLength;
 
-    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter.")
     private ColumnTextLengthAboveMaxLengthPercentCheckSpec profileTextLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column")
+    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column.")
     private ColumnTextLengthInRangePercentCheckSpec profileTextLengthInRangePercent;
 
-
-    /**
-     * Returns a maximum string length below check.
-     * @return Maximum string length below check.
-     */
-    public ColumnTextMaxLengthCheckSpec getProfileTextMaxLength() {
-        return profileTextMaxLength;
-    }
-
-    /**
-     * Sets a new definition of a maximum string length check.
-     * @param profileTextMaxLength Maximum string length check.
-     */
-    public void setProfileTextMaxLength(ColumnTextMaxLengthCheckSpec profileTextMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.profileTextMaxLength, profileTextMaxLength));
-        this.profileTextMaxLength = profileTextMaxLength;
-        propagateHierarchyIdToField(profileTextMaxLength, "profile_text_max_length");
-    }
 
     /**
      * Returns a minimum string length above check.
@@ -113,6 +95,24 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextMinLength, profileTextMinLength));
         this.profileTextMinLength = profileTextMinLength;
         propagateHierarchyIdToField(profileTextMinLength, "profile_text_min_length");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnTextMaxLengthCheckSpec getProfileTextMaxLength() {
+        return profileTextMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param profileTextMaxLength Maximum string length check.
+     */
+    public void setProfileTextMaxLength(ColumnTextMaxLengthCheckSpec profileTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.profileTextMaxLength, profileTextMaxLength));
+        this.profileTextMaxLength = profileTextMaxLength;
+        propagateHierarchyIdToField(profileTextMaxLength, "profile_text_max_length");
     }
 
     /**
