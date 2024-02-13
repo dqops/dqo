@@ -1,6 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -189,7 +191,28 @@ public class FileFormatSpec extends AbstractSpec {
         return (FileFormatSpec)super.deepClone();
     }
 
-
-
+    /**
+     * Creates an expanded and trimmed (no checks for columns, no comments) deep copy of the file format spec.
+     * Configurable properties will be expanded if they contain environment variables or secrets.
+     * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     * @return Cloned, trimmed and expanded file format specification.
+     */
+    public FileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
+        FileFormatSpec cloned = this.deepClone();
+        if (cloned.csv != null) {
+            cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, secretValueLookupContext);
+        }
+        if (cloned.json != null) {
+            cloned.json = cloned.json.expandAndTrim(secretValueProvider, secretValueLookupContext);
+        }
+        if (cloned.parquet != null) {
+            cloned.parquet = (ParquetFileFormatSpec) cloned.parquet.deepClone();
+        }
+        if (cloned.filePaths != null) {
+            cloned.filePaths = cloned.filePaths.deepClone();
+        }
+        return cloned;
+    }
 
 }
