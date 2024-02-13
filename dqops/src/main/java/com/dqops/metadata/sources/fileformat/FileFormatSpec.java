@@ -1,6 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -26,26 +28,26 @@ public class FileFormatSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<FileFormatSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("file_paths", o -> o.filePaths);
-            put("csv_file_format", o -> o.csvFileFormat);
-            put("json_file_format", o -> o.jsonFileFormat);
-            put("parquet_file_format", o -> o.parquetFileFormat);
+            put("csv", o -> o.csv);
+            put("json", o -> o.json);
+            put("parquet", o -> o.parquet);
         }
     };
 
     @JsonPropertyDescription("Csv file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private CsvFileFormatSpec csvFileFormat;
+    private CsvFileFormatSpec csv;
 
     @JsonPropertyDescription("Json file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private JsonFileFormatSpec jsonFileFormat;
+    private JsonFileFormatSpec json;
 
     @JsonPropertyDescription("Parquet file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ParquetFileFormatSpec parquetFileFormat;
+    private ParquetFileFormatSpec parquet;
 
     @JsonPropertyDescription("The list of paths to files with data that are used as a source.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -56,54 +58,54 @@ public class FileFormatSpec extends AbstractSpec {
      * Returns the csv file format specification.
      * @return Csv file format specification.
      */
-    public CsvFileFormatSpec getCsvFileFormat() {
-        return csvFileFormat;
+    public CsvFileFormatSpec getCsv() {
+        return csv;
     }
 
     /**
      * Sets the csv file format specification.
-     * @param csvFileFormat Csv file format specification.
+     * @param csv Csv file format specification.
      */
-    public void setCsvFileFormat(CsvFileFormatSpec csvFileFormat) {
-        setDirtyIf(!Objects.equals(this.csvFileFormat, csvFileFormat));
-        this.csvFileFormat = csvFileFormat;
-        propagateHierarchyIdToField(csvFileFormat, "csv_file_format");
+    public void setCsv(CsvFileFormatSpec csv) {
+        setDirtyIf(!Objects.equals(this.csv, csv));
+        this.csv = csv;
+        propagateHierarchyIdToField(csv, "csv");
     }
 
     /**
      * Returns the json file format specification.
      * @return Json file format specification.
      */
-    public JsonFileFormatSpec getJsonFileFormat() {
-        return jsonFileFormat;
+    public JsonFileFormatSpec getJson() {
+        return json;
     }
 
     /**
      * Sets the json file format specification.
-     * @param jsonFileFormat Json file format specification.
+     * @param json Json file format specification.
      */
-    public void setJsonFileFormat(JsonFileFormatSpec jsonFileFormat) {
-        setDirtyIf(!Objects.equals(this.jsonFileFormat, jsonFileFormat));
-        this.jsonFileFormat = jsonFileFormat;
-        propagateHierarchyIdToField(jsonFileFormat, "json_file_format");
+    public void setJson(JsonFileFormatSpec json) {
+        setDirtyIf(!Objects.equals(this.json, json));
+        this.json = json;
+        propagateHierarchyIdToField(json, "json");
     }
 
     /**
      * Returns the parquet file format specification.
      * @return Parquet file format specification.
      */
-    public ParquetFileFormatSpec getParquetFileFormat() {
-        return parquetFileFormat;
+    public ParquetFileFormatSpec getParquet() {
+        return parquet;
     }
 
     /**
      * Sets the parquet file format specification.
-     * @param parquetFileFormat Parquet file format specification.
+     * @param parquet Parquet file format specification.
      */
-    public void setParquetFileFormat(ParquetFileFormatSpec parquetFileFormat) {
-        setDirtyIf(!Objects.equals(this.parquetFileFormat, parquetFileFormat));
-        this.parquetFileFormat = parquetFileFormat;
-        propagateHierarchyIdToField(parquetFileFormat, "parquet_file_format");
+    public void setParquet(ParquetFileFormatSpec parquet) {
+        setDirtyIf(!Objects.equals(this.parquet, parquet));
+        this.parquet = parquet;
+        propagateHierarchyIdToField(parquet, "parquet");
     }
 
     /**
@@ -130,22 +132,22 @@ public class FileFormatSpec extends AbstractSpec {
      */
     public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
         if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.csv)){
-            if(csvFileFormat == null){
-                csvFileFormat = new CsvFileFormatSpec();
+            if(csv == null){
+                csv = new CsvFileFormatSpec();
             }
-            return csvFileFormat.buildSourceTableOptionsString(filePaths);
+            return csv.buildSourceTableOptionsString(filePaths);
         }
         if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.json)){
-            if(jsonFileFormat == null){
-                jsonFileFormat = new JsonFileFormatSpec();
+            if(json == null){
+                json = new JsonFileFormatSpec();
             }
-            return jsonFileFormat.buildSourceTableOptionsString(filePaths);
+            return json.buildSourceTableOptionsString(filePaths);
         }
         if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.parquet)){
-            if(parquetFileFormat == null){
-                parquetFileFormat = new ParquetFileFormatSpec();
+            if(parquet == null){
+                parquet = new ParquetFileFormatSpec();
             }
-            return parquetFileFormat.buildSourceTableOptionsString(filePaths);
+            return parquet.buildSourceTableOptionsString(filePaths);
         }
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
@@ -179,6 +181,38 @@ public class FileFormatSpec extends AbstractSpec {
         }
 
         return stringBuilder.toString();
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public FileFormatSpec deepClone() {
+        return (FileFormatSpec)super.deepClone();
+    }
+
+    /**
+     * Creates an expanded and trimmed (no checks for columns, no comments) deep copy of the file format spec.
+     * Configurable properties will be expanded if they contain environment variables or secrets.
+     * @param secretValueProvider Secret value provider.
+     * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
+     * @return Cloned, trimmed and expanded file format specification.
+     */
+    public FileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext secretValueLookupContext) {
+        FileFormatSpec cloned = this.deepClone();
+        if (cloned.csv != null) {
+            cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, secretValueLookupContext);
+        }
+        if (cloned.json != null) {
+            cloned.json = cloned.json.expandAndTrim(secretValueProvider, secretValueLookupContext);
+        }
+        if (cloned.parquet != null) {
+            cloned.parquet = (ParquetFileFormatSpec) cloned.parquet.deepClone();
+        }
+        if (cloned.filePaths != null) {
+            cloned.filePaths = cloned.filePaths.deepClone();
+        }
+        return cloned;
     }
 
 }

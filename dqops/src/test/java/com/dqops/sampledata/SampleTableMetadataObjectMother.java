@@ -41,12 +41,15 @@ import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
 import com.dqops.sampledata.files.CsvSampleFilesObjectMother;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
 import com.dqops.sampledata.files.SampleTableFromCsv;
-import com.dqops.sampledata.files.csv.CsvFileProvider;
 import org.junit.jupiter.api.Assertions;
 import tech.tablesaw.columns.Column;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -295,8 +298,8 @@ public class SampleTableMetadataObjectMother {
         });
 
         TableSpec tableSpec = new TableSpec();
-        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFiles(
-                CsvFileProvider.getFiles(csvFilesFolder).stream()
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForMultipleCsvFiles(
+                SampleDataFilesProvider.getCsvFiles(csvFilesFolder).stream()
                         .map(file -> file.toString()).collect(Collectors.toList()),
                 header
         );

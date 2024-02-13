@@ -24,8 +24,8 @@ import com.dqops.metadata.sources.ConnectionSpec;
 public class DuckdbConnectionSpecObjectMother {
 
     /**
-     * Creates a default connection spec to single store database.
-     * @return Connection spec to a cloud single store environment.
+     * Creates a default connection spec to DuckDB that works on files placed in memory.
+     * @return Connection spec to a DuckDB.
      */
     public static ConnectionSpec createForInMemory() {
         ConnectionSpec connectionSpec = new ConnectionSpec()
@@ -41,17 +41,17 @@ public class DuckdbConnectionSpecObjectMother {
     }
 
     /**
-     * Creates a default connection spec to single store database.
-     * @return Connection spec to a cloud single store environment.
+     * Creates a default connection spec to DuckDB.
+     * @return Connection spec to a DuckDB.
      */
-    public static ConnectionSpec createForCsv() {
+    public static ConnectionSpec createForFiles(DuckdbSourceFilesType duckdbSourceFilesType) {
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
             setProviderType(ProviderType.duckdb);
             setDuckdb(new DuckdbParametersSpec()
             {{
                 setReadMode(DuckdbReadMode.files);
-                setSourceFilesType(DuckdbSourceFilesType.csv);
+                setSourceFilesType(duckdbSourceFilesType);
             }});
         }};
 

@@ -17,6 +17,7 @@ package com.dqops.duckdb.sensors.column.acceptedvalues;
 
 import com.dqops.checks.column.checkspecs.acceptedvalues.ColumnTextFoundInSetPercentCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -47,7 +48,7 @@ public class FileDuckdbColumnAcceptedValuesTextFoundInSetPercentSensorParameters
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         String csvFileName = SampleCsvFileNames.test_data_values_in_set;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

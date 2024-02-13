@@ -21,7 +21,7 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-{%- if table.file_format.file_path_list | length > 0 -%}
+{%- if table.file_format.file_paths | length > 0 -%}
    {{ table_from_files }}
 {%- else -%}
    {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
@@ -29,8 +29,10 @@
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
-{%- if referenced_table.find(".") < 0 -%}
-   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}} {# todo: table_from_files for referenced table #}
+{%- if referenced_table.file_format.file_paths | length > 0 -%} {# todo: to test it - even not sure if works #}
+   {{ table_from_files }}
+{%- elif referenced_table.find(".") < 0 -%}
+   {{ quote_identifier(macro_schema_name) }}.{{- quote_identifier(referenced_table) -}}
 {%- else -%}
    {{ referenced_table }}
 {%- endif -%}

@@ -1,6 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
-import com.dqops.sampledata.files.csv.CsvFileProvider;
+import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
 
 import java.util.List;
 import java.util.Map;
@@ -16,11 +17,11 @@ public class FileFormatSpecObjectMother {
      */
     public static FileFormatSpec createForCsvFile(String csvFileName) {
         return new FileFormatSpec() {{
-            setCsvFileFormat( new CsvFileFormatSpec(){{
+            setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(true);
             }} );
             setFilePaths(new FilePathListSpec(){{
-                    add(CsvFileProvider.getFile(csvFileName).toString());
+                    add(SampleDataFilesProvider.getFile(csvFileName).toString());
             }});
         }};
     }
@@ -31,7 +32,7 @@ public class FileFormatSpecObjectMother {
      * @param headerNameTypeMap A header of the data.
      * @return FileFormatSpec
      */
-    public static FileFormatSpec createForCsvFiles(List<String> csvFileNames, Map<String, String> headerNameTypeMap) {
+    public static FileFormatSpec createForMultipleCsvFiles(List<String> csvFileNames, Map<String, String> headerNameTypeMap) {
 
         FilePathListSpec filePathListSpec = new FilePathListSpec();
         csvFileNames.stream()
@@ -39,7 +40,7 @@ public class FileFormatSpecObjectMother {
                 .forEach(fileName -> filePathListSpec.add(fileName));
 
         return new FileFormatSpec() {{
-            setCsvFileFormat( new CsvFileFormatSpec(){{
+            setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(true);
                 setHeader(false);
                 setColumns(headerNameTypeMap);
@@ -47,4 +48,36 @@ public class FileFormatSpecObjectMother {
             setFilePaths(filePathListSpec);
         }};
     }
+
+    /**
+     * Creates a FileFormatSpec for a single json file.
+     * @param jsonFileName Json file name.
+     * @return FileFormatSpec.
+     */
+    public static FileFormatSpec createForJsonFile(String jsonFileName) {
+        return new FileFormatSpec() {{
+            setJson(new JsonFileFormatSpec(){{
+                setAutoDetect(true);
+                setFormat(JsonFormatType.auto);
+            }} );
+            setFilePaths(new FilePathListSpec(){{
+                add(SampleDataFilesProvider.getFile(jsonFileName).toString());
+            }});
+        }};
+    }
+
+    /**
+     * Creates a FileFormatSpec for a single parquet file.
+     * @param parquetFileName Parquet file name.
+     * @return FileFormatSpec.
+     */
+    public static FileFormatSpec createForParquetFile(String parquetFileName) {
+        return new FileFormatSpec() {{
+            setParquet(new ParquetFileFormatSpec());
+            setFilePaths(new FilePathListSpec(){{
+                add(SampleDataFilesProvider.getFile(parquetFileName).toString());
+            }});
+        }};
+    }
+
 }

@@ -925,6 +925,9 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            if(cloned.fileFormat != null){
+                cloned.fileFormat = cloned.fileFormat.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
             return cloned;
         }
         catch (CloneNotSupportedException ex) {
@@ -982,7 +985,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
-            cloned.fileFormat = null;   // todo: not sure if valid
+            cloned.fileFormat = null;
             cloned.columns = null;
             cloned.statistics = null;
             cloned.incidentGrouping = null;

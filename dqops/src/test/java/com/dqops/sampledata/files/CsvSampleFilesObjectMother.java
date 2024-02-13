@@ -15,7 +15,6 @@
  */
 package com.dqops.sampledata.files;
 
-import com.dqops.sampledata.files.csv.CsvFileProvider;
 import com.dqops.sampledata.files.csv.HeaderEntry;
 import com.google.common.base.Strings;
 import org.junit.jupiter.api.Assertions;
@@ -62,7 +61,7 @@ public class CsvSampleFilesObjectMother {
      */
     public static CsvSampleFileContent loadTableCsv(String fileName) {
         try {
-            File sampleFile = CsvFileProvider.getFile(fileName);
+            File sampleFile = SampleDataFilesProvider.getFile(fileName);
             HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
             CsvReadOptions csvReadOptions = CsvReadOptions.builder(sampleFile)
@@ -131,7 +130,7 @@ public class CsvSampleFilesObjectMother {
      */
     public static CsvSampleFileContent loadTableFromFolderWithCsvFiles(String folderName) {
         try {
-            List<File> sampleFiles = CsvFileProvider.getFiles(folderName);
+            List<File> sampleFiles = SampleDataFilesProvider.getCsvFiles(folderName);
             HashMap<String, String> columnPhysicalDataTypes = new HashMap<>();
 
             Table convertedTable = Table.create(folderName);

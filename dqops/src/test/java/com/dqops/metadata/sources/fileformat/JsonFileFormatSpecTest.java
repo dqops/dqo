@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigInteger;
@@ -19,7 +20,7 @@ class JsonFileFormatSpecTest {
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
             setFilename(true);
-            setFormat("array");
+            setFormat(JsonFormatType.array);
             setHivePartitioning(true);
             setIgnoreErrors(true);
             setMaximumDepth(BigInteger.TEN);

@@ -3,6 +3,7 @@ package com.dqops.duckdb.sensors.table.volume;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -31,7 +32,7 @@ public class MultipleFilesDuckdbTableVolumeRowCountSensorParametersSpecIntegrati
 
     @BeforeEach
     void setUp() {
-        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForCsv();
+        ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         String csvFilesFolder = SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided;
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitMultipleCsvFiles(csvFilesFolder, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContext();
