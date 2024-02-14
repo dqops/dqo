@@ -42,7 +42,7 @@ The categories of table-level checks are shown when opening the data quality che
 ### **Column-level check editor**
 The categories of column-level checks are shown when opening the data quality check editor for a column.
 
-![column-level data quality check categories](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-level-data-quality-check-categories-min.png)
+![column-level data quality check categories](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/column-level-data-quality-check-categories-min1.png)
 
 
 ## Referencing check categories in YAML files
