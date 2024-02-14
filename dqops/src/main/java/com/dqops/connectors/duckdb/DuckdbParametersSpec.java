@@ -272,8 +272,12 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
-        cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, lookupContext);
-        cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
+        if(cloned.csv != null){
+            cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, lookupContext);
+        }
+        if(cloned.json != null){
+            cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
+        }
 
         return cloned;
     }
