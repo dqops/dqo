@@ -89,7 +89,7 @@ public class ColumnTextTextValidCurrencyCodePercentSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/text/text_valid_currency_code_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/accepted_values/text_valid_currency_code_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

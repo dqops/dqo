@@ -88,7 +88,7 @@ public class ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/text/text_surrounded_by_whitespace_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/whitespace/text_surrounded_by_whitespace_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

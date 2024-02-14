@@ -88,7 +88,7 @@ public class ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpecBi
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/blanks/null_placeholder_text_count", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/whitespace/null_placeholder_text_count", this.sut.getSensorDefinitionName());
     }
 
     @Test

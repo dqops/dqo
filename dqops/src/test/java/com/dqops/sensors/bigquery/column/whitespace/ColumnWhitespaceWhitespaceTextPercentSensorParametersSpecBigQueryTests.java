@@ -88,7 +88,7 @@ public class ColumnWhitespaceWhitespaceTextPercentSensorParametersSpecBigQueryTe
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/blanks/whitespace_text_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/whitespace/whitespace_text_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test

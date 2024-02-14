@@ -61,8 +61,8 @@ class TemplateRunner:
             if template_home_path is not None:
                 template_id = template_home_path
                 if request.get("home_type") == "USER_HOME":
-                    template_id = Path(request.get("user_home_path")).joinpath("sensors").joinpath(
-                        template_home_path)
+                    template_id = str(Path(request.get("user_home_path")).joinpath("sensors").joinpath(
+                        template_home_path))
 
                 if template_id not in self.templates or self.templates[template_id].template_last_modified != template_last_modified:
                     if request.get("home_type") == "DQO_HOME":
