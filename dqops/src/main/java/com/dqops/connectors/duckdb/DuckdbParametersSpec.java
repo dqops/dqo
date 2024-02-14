@@ -21,10 +21,13 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 import picocli.CommandLine;
 
@@ -42,6 +45,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<DuckdbParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
+            put("file_format", o -> o.fileFormat);
         }
     };
 
@@ -65,6 +69,11 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
+
+    @JsonPropertyDescription("File format with the specification used as a source data. If a file format is set on a table spec level, then that table spec will override this file format.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private FileFormatSpec fileFormat;
 
     /**
      * Returns a readMode value.
@@ -152,6 +161,24 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns a file format.
+     * @return A file format.
+     */
+    public FileFormatSpec getFileFormat() {
+        return fileFormat;
+    }
+
+    /**
+     * Sets a new file format.
+     * @param fileFormat A file format.
+     */
+    public void setFileFormat(FileFormatSpec fileFormat) {
+        setDirtyIf(!Objects.equals(this.fileFormat, fileFormat));
+        this.fileFormat = fileFormat;
+        propagateHierarchyIdToField(fileFormat, "file_format");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -181,6 +208,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
+        cloned.fileFormat = cloned.fileFormat.expandAndTrim(secretValueProvider, lookupContext);
 
         return cloned;
     }

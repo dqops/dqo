@@ -152,6 +152,20 @@ public class FileFormatSpec extends AbstractSpec {
         throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
 
+    /**
+     * Returns state that whether the file format for the specific file type is set.
+     * @param duckdbSourceFilesType Type of files.
+     * @return State that whether the file format for the specific file type is set.
+     */
+    public boolean isFormatSetForType(DuckdbSourceFilesType duckdbSourceFilesType){
+        switch(duckdbSourceFilesType){
+            case csv: return this.getCsv() != null;
+            case json: return this.getJson() != null;
+            case parquet: return this.getParquet() != null;
+            default: throw new RuntimeException("The file format is not supported : " + duckdbSourceFilesType);
+        }
+    }
+
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;

@@ -31,6 +31,7 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -129,11 +130,13 @@ public class JinjaTemplateRenderParameters {
      */
     public static JinjaTemplateRenderParameters createFromTrimmedObjects(SensorExecutionRunParameters sensorRunParameters,
 																		 SensorDefinitionFindResult sensorDefinitions) {
+        TableSpec tableSpec = sensorRunParameters.getTable();
+
         JinjaTemplateRenderParameters result = new JinjaTemplateRenderParameters()
         {{
 			setConnection(sensorRunParameters.getConnection().trim());
-			setTable(sensorRunParameters.getTable().trim());
-            setTargetTable(sensorRunParameters.getTable().getPhysicalTableName());
+			setTable(tableSpec.trim());
+            setTargetTable(tableSpec.getPhysicalTableName());
 			setColumn(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().trim() : null);
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
@@ -146,7 +149,6 @@ public class JinjaTemplateRenderParameters {
             setActualValueAlias(sensorRunParameters.getActualValueAlias());
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
             setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
-
         }};
 
         DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
@@ -154,8 +156,8 @@ public class JinjaTemplateRenderParameters {
             && duckdbParametersSpec.getSourceFilesType() != null
         ){
             DuckdbSourceFilesType duckdbSourceFilesType = duckdbParametersSpec.getSourceFilesType();
-            FileFormatSpec fileFormatSpec = sensorRunParameters.getTable().getFileFormat();
-            if(fileFormatSpec != null){
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+            if(!fileFormatSpec.getFilePaths().isEmpty()){
                 result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType));
             }
         }

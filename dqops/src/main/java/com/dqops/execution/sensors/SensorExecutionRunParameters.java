@@ -22,6 +22,8 @@ import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.checks.EffectiveSensorRuleNames;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.timeseries.TimePeriodGradient;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.search.CheckSearchFilters;
@@ -589,9 +591,10 @@ public class SensorExecutionRunParameters {
         }
 
         // todo: more and better info
-        if (this.table.getFileFormat() != null) {
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(this.connection.getDuckdb(), this.table);
+        if (fileFormatSpec != null) {
             stringBuilder.append(", file format: ");
-            stringBuilder.append(this.table.getFileFormat().toString());
+            stringBuilder.append(fileFormatSpec.toString());
         }
 
         return stringBuilder.toString();
