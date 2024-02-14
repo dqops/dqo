@@ -4,15 +4,19 @@ import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.metadata.sources.TableSpec;
 
+/**
+ * Provider for the File Format.
+ */
 public class FileFormatSpecProvider {
 
     /**
      * Resolves the file format based on table spec and parameters spec.
      * At first, tries to return file format from the table spec. If it is not available then tries to use a file format from parameters spec.
+     * Also file paths are always tries to be used from the table spec when set.
      *
-     * @param duckdbParametersSpec
-     * @param tableSpec
-     * @return
+     * @param duckdbParametersSpec duckdbParametersSpec
+     * @param tableSpec tableSpec
+     * @return FileFormatSpec
      */
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
 
@@ -22,14 +26,15 @@ public class FileFormatSpecProvider {
         }
 
         FilePathListSpec filePaths = new FilePathListSpec();
-        if(tableSpecFileFormat.getFilePaths() != null && !tableSpecFileFormat.getFilePaths().isEmpty()){
+        if(tableSpecFileFormat != null && tableSpecFileFormat.getFilePaths() != null && !tableSpecFileFormat.getFilePaths().isEmpty()){
             filePaths.addAll(tableSpecFileFormat.getFilePaths().deepClone());
         }
 
-        FileFormatSpec parametersFileFormat = duckdbParametersSpec.getFileFormat().deepClone();
+        FileFormatSpec parametersFileFormat = duckdbParametersSpec.getFileFormat();
         if(parametersFileFormat != null && parametersFileFormat.isFormatSetForType(duckdbParametersSpec.getSourceFilesType())){
-            parametersFileFormat.setFilePaths(filePaths);
-            return parametersFileFormat;
+            FileFormatSpec parametersFileFormatCloned = parametersFileFormat.deepClone();
+            parametersFileFormatCloned.setFilePaths(filePaths);
+            return parametersFileFormatCloned;
         }
 
         FileFormatSpec newFileFormat = FileFormatSpecProvider.getNewFileFormat(duckdbParametersSpec.getSourceFilesType());

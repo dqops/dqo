@@ -76,7 +76,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         this.connectionWrapper.setSpec(spec);
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(tableSchemaName, tableName));
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForJsonFile(SampleJsonFileNames.continuous_days_one_row_per_day);
-        tableWrapper.getSpec().setFileFormat(fileFormatSpec);
+        tableWrapper.getSpec().setFileFormatOverride(fileFormatSpec);
         List<String> tableNames = connectionWrapper
                 .getTables().toList().stream()
                 .map(tw -> tw.getPhysicalTableName().toString())

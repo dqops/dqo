@@ -1,0 +1,97 @@
+package com.dqops.metadata.sources.fileformat;
+
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.metadata.sources.TableSpec;
+import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+
+class FileFormatSpecProviderTest {
+
+    @Test
+    void resolveFileFormat_whenAvailableOnTableAndParameters_retunsFormTable() {
+
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setFileFormatOverride(FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day));
+
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
+            setCsv(new CsvFileFormatSpec(){{
+                setAutoDetect(false);
+            }} );
+        }});
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(1, fileFormatSpec.getFilePaths().size());
+        Assertions.assertTrue(fileFormatSpec.getCsv().getAutoDetect());
+    }
+
+    @Test
+    void resolveFileFormat_whenNotSetOnTable_retunsFormParameters() {
+
+        TableSpec tableSpec = new TableSpec();
+
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
+            setCsv(new CsvFileFormatSpec(){{
+                setAutoDetect(false);
+            }} );
+        }});
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(0, fileFormatSpec.getFilePaths().size());
+        Assertions.assertFalse(fileFormatSpec.getCsv().getAutoDetect());
+    }
+
+    @Test
+    void resolveFileFormat_whenOnlyPathsSetOnTable_retunsFormParametersWithPathsFormTable() {
+        String sampleFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setFileFormatOverride(
+            new FileFormatSpec() {{
+                setFilePaths(new FilePathListSpec(){{
+                    add(SampleDataFilesProvider.getFile(sampleFileName).toString());
+                }});
+        }});
+
+        DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
+        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
+            setCsv(new CsvFileFormatSpec(){{
+                setAutoDetect(false);
+            }} );
+        }});
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(1, fileFormatSpec.getFilePaths().size());
+        Assertions.assertFalse(fileFormatSpec.getCsv().getAutoDetect());
+    }
+
+    @Test
+    void resolveFileFormat_whenOnlyPathsSetOnTableAndFormatOnParamsNotSet_returnsNewFormatWithPaths() {
+        String sampleFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setFileFormatOverride(
+                new FileFormatSpec() {{
+                    setFilePaths(new FilePathListSpec(){{
+                        add(SampleDataFilesProvider.getFile(sampleFileName).toString());
+                    }});
+                }});
+
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec(){{setSourceFilesType(DuckdbSourceFilesType.csv);}};
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(1, fileFormatSpec.getFilePaths().size());
+        Assertions.assertTrue(fileFormatSpec.getCsv().getAutoDetect());
+    }
+}

@@ -131,25 +131,12 @@ public class FileFormatSpec extends AbstractSpec {
      * @return Table options string.
      */
     public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.csv)){
-            if(csv == null){
-                csv = new CsvFileFormatSpec();
-            }
-            return csv.buildSourceTableOptionsString(filePaths);
+        switch(duckdbSourceFilesType){
+            case csv: return csv.buildSourceTableOptionsString(filePaths);
+            case json: return json.buildSourceTableOptionsString(filePaths);
+            case parquet: return parquet.buildSourceTableOptionsString(filePaths);
+            default: throw new RuntimeException("Cant create table options string for the given files: " + duckdbSourceFilesType);
         }
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.json)){
-            if(json == null){
-                json = new JsonFileFormatSpec();
-            }
-            return json.buildSourceTableOptionsString(filePaths);
-        }
-        if(duckdbSourceFilesType.equals(DuckdbSourceFilesType.parquet)){
-            if(parquet == null){
-                parquet = new ParquetFileFormatSpec();
-            }
-            return parquet.buildSourceTableOptionsString(filePaths);
-        }
-        throw new RuntimeException("Cant create table options string for the given files. " + this.toString());
     }
 
     /**
