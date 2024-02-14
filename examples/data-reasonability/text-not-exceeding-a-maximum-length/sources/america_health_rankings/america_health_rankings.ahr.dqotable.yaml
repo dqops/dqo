@@ -23,7 +23,8 @@ spec:
           text:
             daily_text_max_length:
               error:
-                max_value: 30.0
+                from: 0
+                to: 30
     state_name:
       type_snapshot:
         column_type: STRING
