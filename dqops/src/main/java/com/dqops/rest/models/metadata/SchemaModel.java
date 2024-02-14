@@ -41,6 +41,9 @@ public class SchemaModel {
     @JsonPropertyDescription("Schema name.")
     private String schemaName;
 
+    @JsonPropertyDescription("Directory prefix.")
+    private String directoryPrefix;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this schema.")
     private CheckSearchFilters runChecksJobTemplate;
 
@@ -97,12 +100,14 @@ public class SchemaModel {
     public static SchemaModel fromSchemaNameStrings(
             String connectionName,
             String schemaName,
+            String directoryPrefix,
             boolean isEditor,
             boolean isOperator) {
         return new SchemaModel()
         {{
             setConnectionName(connectionName);
             setSchemaName(schemaName);
+            setDirectoryPrefix(directoryPrefix);
             setCanEdit(isEditor);
             setCanRunChecks(isOperator);
             setCanCollectStatistics(isOperator);

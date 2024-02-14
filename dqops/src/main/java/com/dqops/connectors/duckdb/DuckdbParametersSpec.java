@@ -34,6 +34,7 @@ import lombok.EqualsAndHashCode;
 import picocli.CommandLine;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -88,6 +89,10 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
+
+    @JsonPropertyDescription("Schema to directory mappings.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Map<String, String> directories = new HashMap<>();
 
     /**
      * Returns a readMode value.
@@ -226,6 +231,23 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         setDirtyIf(!Objects.equals(this.parquet, parquet));
         this.parquet = parquet;
         propagateHierarchyIdToField(parquet, "parquet");
+    }
+
+    /**
+     * Returns a key/value map of schema to directory mappings
+     * @return Key/value dictionary of schema to directory mappings
+     */
+    public Map<String, String> getDirectories() {
+        return directories;
+    }
+
+    /**
+     * Sets a dictionary of schema to directory mappings
+     * @param directories Key/value dictionary with schema to directory mappings
+     */
+    public void setDirectories(Map<String, String> directories) {
+        setDirtyIf(!Objects.equals(this.directories, directories));
+        this.directories = directories != null ? Collections.unmodifiableMap(directories) : null;
     }
 
     /**

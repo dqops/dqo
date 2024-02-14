@@ -18,9 +18,12 @@ package com.dqops.rest.controllers;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
 import com.dqops.core.principal.DqoPermissionNames;
 import com.dqops.metadata.sources.ConnectionList;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -104,10 +107,24 @@ public class SchemasController {
                 .sorted()
                 .collect(Collectors.toList());
 
+        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+
+        if(connectionSpec.getProviderType().equals(ProviderType.duckdb) && connectionSpec.getDuckdb() != null){
+            schemaNameList.addAll(connectionWrapper.getSpec().getDuckdb().getDirectories().keySet());
+        }
+
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
         boolean isOperator = principal.hasPrivilege(DqoPermissionGrantedAuthorities.OPERATE);
         Stream<SchemaModel> modelStream = schemaNameList.stream()
-                .map(s -> SchemaModel.fromSchemaNameStrings(connectionName, s, isEditor, isOperator));
+                .map(schemaName -> {
+                    String directoryPrefix = null;
+                    DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
+                    if(connectionSpec.getProviderType().equals(ProviderType.duckdb) && duckdbParametersSpec != null){
+                        directoryPrefix = duckdbParametersSpec.getDirectories().get(schemaName);
+                    }
+
+                    return SchemaModel.fromSchemaNameStrings(connectionName, schemaName, directoryPrefix, isEditor, isOperator);
+                });
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
     }
