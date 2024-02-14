@@ -108,9 +108,13 @@ public class SchemasController {
                 .collect(Collectors.toList());
 
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
+        DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
 
-        if(connectionSpec.getProviderType().equals(ProviderType.duckdb) && connectionSpec.getDuckdb() != null){
-            schemaNameList.addAll(connectionWrapper.getSpec().getDuckdb().getDirectories().keySet());
+        if(connectionSpec.getProviderType() != null
+                && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                && duckdbParametersSpec != null) {
+            schemaNameList.addAll(connectionWrapper.getSpec().getDuckdb().getDirectories().keySet().stream()
+                    .filter(s -> !schemaNameList.contains(s)).collect(Collectors.toList()));
         }
 
         boolean isEditor = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
@@ -118,8 +122,9 @@ public class SchemasController {
         Stream<SchemaModel> modelStream = schemaNameList.stream()
                 .map(schemaName -> {
                     String directoryPrefix = null;
-                    DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
-                    if(connectionSpec.getProviderType().equals(ProviderType.duckdb) && duckdbParametersSpec != null){
+                    if(connectionSpec.getProviderType() != null
+                            && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                            && duckdbParametersSpec != null){
                         directoryPrefix = duckdbParametersSpec.getDirectories().get(schemaName);
                     }
 

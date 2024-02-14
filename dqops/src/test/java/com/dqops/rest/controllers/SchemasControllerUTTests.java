@@ -26,6 +26,8 @@ import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
+import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.core.principal.DqoUserPrincipalObjectMother;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityObjectMother;
@@ -43,6 +45,7 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import com.dqops.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import com.dqops.metadata.userhome.UserHome;
+import com.dqops.rest.models.metadata.SchemaModel;
 import com.dqops.rules.comparison.*;
 import com.dqops.services.check.CheckFlatConfigurationFactory;
 import com.dqops.services.check.CheckFlatConfigurationFactoryImpl;
@@ -62,6 +65,7 @@ import org.springframework.http.ResponseEntity;
 import reactor.core.publisher.Flux;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -307,4 +311,27 @@ public class SchemasControllerUTTests extends BaseTest {
                 resultAllColumns.stream().map(CheckConfigurationModel::getColumnName).sorted().collect(Collectors.toList())
         );
     }
+
+    @Test
+    void getSchemas_whenTableHasTheSameSchemaAsOneDuckdbDirectory_thenReturnsWithNoDuplicates() {
+        String connectionName = "conn";
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew(connectionName);
+        connectionWrapper.setSpec(DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv));
+        connectionWrapper.getSpec().getDuckdb().setDirectories(Map.of("schema1", "/dev/data"));
+        connectionWrapper.getTables().createAndAddNew(
+                new PhysicalTableName("schema1", "tab1"));
+        userHomeContext.flush();
+
+        ResponseEntity<Flux<SchemaModel>> responseEntity = this.sut.getSchemas(
+                DqoUserPrincipalObjectMother.createStandaloneAdmin(),
+                connectionName);
+        Assertions.assertNotNull(responseEntity.getBody());
+
+        List<SchemaModel> result = responseEntity.getBody().toStream().collect(Collectors.toList());
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(1, result.size());
+    }
+
 }
