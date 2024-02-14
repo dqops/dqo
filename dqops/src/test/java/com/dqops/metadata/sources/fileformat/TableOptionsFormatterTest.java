@@ -1,12 +1,15 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 
-class TableOptionsFormatterTest {
+@SpringBootTest
+public class TableOptionsFormatterTest extends BaseTest {
 
     @Test
     void formatFilePaths_forOneFile_formatsIt() {

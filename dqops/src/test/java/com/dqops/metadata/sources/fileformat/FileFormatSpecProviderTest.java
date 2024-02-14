@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.BaseTest;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
@@ -8,8 +9,10 @@ import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-class FileFormatSpecProviderTest {
+@SpringBootTest
+public class FileFormatSpecProviderTest extends BaseTest {
 
     @Test
     void resolveFileFormat_whenAvailableOnTableAndParameters_retunsFormTable() {
