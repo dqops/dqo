@@ -343,6 +343,14 @@ public class JsonFileFormatSpec extends AbstractSpec {
     }
 
     /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public JsonFileFormatSpec deepClone() {
+        return (JsonFileFormatSpec)super.deepClone();
+    }
+
+    /**
      * Creates an expanded and trimmed deep copy of the spec.
      * Configurable properties will be expanded if they contain environment variables or secrets.
      *

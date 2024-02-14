@@ -81,7 +81,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
-            put("file_format_override", o -> o.fileFormatOverride);
+            put("file_format", o -> o.fileFormat);
         }
     };
 
@@ -201,7 +201,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     @JsonPropertyDescription("File format with the specification used as a source data. It overrides the connection spec's file format when it is set")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private FileFormatSpec fileFormatOverride;
+    private FileFormatSpec fileFormat;
 
     /**
      * Sets a value that indicates that the YAML file deserialized into this object has a parsing error.
@@ -564,18 +564,18 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
      * Returns a file format.
      * @return A file format.
      */
-    public FileFormatSpec getFileFormatOverride() {
-        return fileFormatOverride;
+    public FileFormatSpec getFileFormat() {
+        return fileFormat;
     }
 
     /**
      * Sets a new file format.
-     * @param fileFormatOverride A file format.
+     * @param fileFormat A file format.
      */
-    public void setFileFormatOverride(FileFormatSpec fileFormatOverride) {
-        setDirtyIf(!Objects.equals(this.fileFormatOverride, fileFormatOverride));
-        this.fileFormatOverride = fileFormatOverride;
-        propagateHierarchyIdToField(fileFormatOverride, "file_format_override");
+    public void setFileFormat(FileFormatSpec fileFormat) {
+        setDirtyIf(!Objects.equals(this.fileFormat, fileFormat));
+        this.fileFormat = fileFormat;
+        propagateHierarchyIdToField(fileFormat, "file_format");
     }
 
     /**
@@ -925,8 +925,8 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
                 cloned.incidentGrouping = cloned.incidentGrouping.expandAndTrim(secretValueProvider);
             }
             cloned.columns = this.columns.expandAndTrim(secretValueProvider, secretValueLookupContext);
-            if(cloned.fileFormatOverride != null){
-                cloned.fileFormatOverride = cloned.fileFormatOverride.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            if(cloned.fileFormat != null){
+                cloned.fileFormat = cloned.fileFormat.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             return cloned;
         }
@@ -985,7 +985,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
             cloned.tableComparisons = null;
             cloned.labels = null;
             cloned.comments = null;
-            cloned.fileFormatOverride = null;
+            cloned.fileFormat = null;
             cloned.columns = null;
             cloned.statistics = null;
             cloned.incidentGrouping = null;

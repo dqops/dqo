@@ -15,13 +15,11 @@ class FileFormatSpecProviderTest {
     void resolveFileFormat_whenAvailableOnTableAndParameters_retunsFormTable() {
 
         TableSpec tableSpec = new TableSpec();
-        tableSpec.setFileFormatOverride(FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day));
+        tableSpec.setFileFormat(FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day));
 
         DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
-        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
-            setCsv(new CsvFileFormatSpec(){{
+        duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
-            }} );
         }});
 
         FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
@@ -37,10 +35,8 @@ class FileFormatSpecProviderTest {
         TableSpec tableSpec = new TableSpec();
 
         DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
-        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
-            setCsv(new CsvFileFormatSpec(){{
+        duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
-            }} );
         }});
 
         FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
@@ -51,10 +47,10 @@ class FileFormatSpecProviderTest {
     }
 
     @Test
-    void resolveFileFormat_whenOnlyPathsSetOnTable_retunsFormParametersWithPathsFormTable() {
+    void resolveFileFormat_whenOnlyPathsSetOnFileFormat_retunsFormParametersWithPathsFormTable() {
         String sampleFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
         TableSpec tableSpec = new TableSpec();
-        tableSpec.setFileFormatOverride(
+        tableSpec.setFileFormat(
             new FileFormatSpec() {{
                 setFilePaths(new FilePathListSpec(){{
                     add(SampleDataFilesProvider.getFile(sampleFileName).toString());
@@ -62,10 +58,8 @@ class FileFormatSpecProviderTest {
         }});
 
         DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
-        duckdbParametersSpec.setFileFormat(new FileFormatSpec() {{
-            setCsv(new CsvFileFormatSpec(){{
+        duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
-            }} );
         }});
 
         FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
@@ -79,7 +73,7 @@ class FileFormatSpecProviderTest {
     void resolveFileFormat_whenOnlyPathsSetOnTableAndFormatOnParamsNotSet_returnsNewFormatWithPaths() {
         String sampleFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
         TableSpec tableSpec = new TableSpec();
-        tableSpec.setFileFormatOverride(
+        tableSpec.setFileFormat(
                 new FileFormatSpec() {{
                     setFilePaths(new FilePathListSpec(){{
                         add(SampleDataFilesProvider.getFile(sampleFileName).toString());

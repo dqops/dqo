@@ -19,36 +19,31 @@ public class FileFormatSpecProvider {
      * @return FileFormatSpec
      */
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
-
-        FileFormatSpec tableSpecFileFormat = tableSpec.getFileFormatOverride();
-        if(tableSpecFileFormat != null && tableSpecFileFormat.isFormatSetForType(duckdbParametersSpec.getSourceFilesType())){
-            return tableSpecFileFormat;
+        DuckdbSourceFilesType filesType = duckdbParametersSpec.getSourceFilesType();
+        FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat();
+        if(fileFormat.isFormatSetForType(filesType)){
+            return fileFormat;
+        }
+        FileFormatSpec fileFormatCloned = fileFormat.deepClone();
+        if(duckdbParametersSpec.isFormatSetForType(filesType)){
+            switch(filesType){
+                case csv: fileFormatCloned.setCsv(duckdbParametersSpec.getCsv().deepClone()); break;
+                case json: fileFormatCloned.setJson(duckdbParametersSpec.getJson().deepClone()); break;
+                case parquet: fileFormatCloned.setParquet(duckdbParametersSpec.getParquet().deepClone()); break;
+            }
+            return fileFormatCloned;
         }
 
-        FilePathListSpec filePaths = new FilePathListSpec();
-        if(tableSpecFileFormat != null && tableSpecFileFormat.getFilePaths() != null && !tableSpecFileFormat.getFilePaths().isEmpty()){
-            filePaths.addAll(tableSpecFileFormat.getFilePaths().deepClone());
-        }
-
-        FileFormatSpec parametersFileFormat = duckdbParametersSpec.getFileFormat();
-        if(parametersFileFormat != null && parametersFileFormat.isFormatSetForType(duckdbParametersSpec.getSourceFilesType())){
-            FileFormatSpec parametersFileFormatCloned = parametersFileFormat.deepClone();
-            parametersFileFormatCloned.setFilePaths(filePaths);
-            return parametersFileFormatCloned;
-        }
-
-        FileFormatSpec newFileFormat = FileFormatSpecProvider.getNewFileFormat(duckdbParametersSpec.getSourceFilesType());
-        newFileFormat.setFilePaths(filePaths);
-
-        return newFileFormat;
+        fillDefaultFileFormat(fileFormatCloned, filesType);
+        return fileFormatCloned;
     }
 
-    private static FileFormatSpec getNewFileFormat(DuckdbSourceFilesType duckdbSourceFilesType){
+    private static void fillDefaultFileFormat(FileFormatSpec fileFormatSpec, DuckdbSourceFilesType duckdbSourceFilesType){
         switch(duckdbSourceFilesType){
-            case csv: return new FileFormatSpec(){{ setCsv(new CsvFileFormatSpec()); }};
-            case json: return new FileFormatSpec(){{ setJson(new JsonFileFormatSpec()); }};
-            case parquet: return new FileFormatSpec(){{ setParquet(new ParquetFileFormatSpec()); }};
-            default: throw new RuntimeException("Cant create table options string for the given files. " + duckdbSourceFilesType);
+            case csv: fileFormatSpec.setCsv(new CsvFileFormatSpec()); break;
+            case json: fileFormatSpec.setJson(new JsonFileFormatSpec()); break;
+            case parquet: fileFormatSpec.setParquet(new ParquetFileFormatSpec()); break;
+            default: throw new RuntimeException("Cant fill default file format for files type: " + duckdbSourceFilesType);
         }
     }
 

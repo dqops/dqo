@@ -21,7 +21,9 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.sources.BaseProviderParametersSpec;
-import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
+import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -45,7 +47,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         implements ConnectionProviderSpecificParameters {
     private static final ChildHierarchyNodeFieldMapImpl<DuckdbParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(BaseProviderParametersSpec.FIELDS) {
         {
-            put("file_format", o -> o.fileFormat);
+            put("csv", o -> o.csv);
+            put("json", o -> o.json);
+            put("parquet", o -> o.parquet);
         }
     };
 
@@ -70,10 +74,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
-    @JsonPropertyDescription("File format with the specification used as a source data. If a file format is set on a table spec level, then that table spec will override this file format.")
+    @JsonPropertyDescription("Csv file format specification.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private FileFormatSpec fileFormat;
+    private CsvFileFormatSpec csv;
+
+    @JsonPropertyDescription("Json file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private JsonFileFormatSpec json;
+
+    @JsonPropertyDescription("Parquet file format specification.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ParquetFileFormatSpec parquet;
 
     /**
      * Returns a readMode value.
@@ -161,21 +175,71 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns a file format.
-     * @return A file format.
+     * Returns the csv file format specification.
+     * @return Csv file format specification.
      */
-    public FileFormatSpec getFileFormat() {
-        return fileFormat;
+    public CsvFileFormatSpec getCsv() {
+        return csv;
     }
 
     /**
-     * Sets a new file format.
-     * @param fileFormat A file format.
+     * Sets the csv file format specification.
+     * @param csv Csv file format specification.
      */
-    public void setFileFormat(FileFormatSpec fileFormat) {
-        setDirtyIf(!Objects.equals(this.fileFormat, fileFormat));
-        this.fileFormat = fileFormat;
-        propagateHierarchyIdToField(fileFormat, "file_format");
+    public void setCsv(CsvFileFormatSpec csv) {
+        setDirtyIf(!Objects.equals(this.csv, csv));
+        this.csv = csv;
+        propagateHierarchyIdToField(csv, "csv");
+    }
+
+    /**
+     * Returns the json file format specification.
+     * @return Json file format specification.
+     */
+    public JsonFileFormatSpec getJson() {
+        return json;
+    }
+
+    /**
+     * Sets the json file format specification.
+     * @param json Json file format specification.
+     */
+    public void setJson(JsonFileFormatSpec json) {
+        setDirtyIf(!Objects.equals(this.json, json));
+        this.json = json;
+        propagateHierarchyIdToField(json, "json");
+    }
+
+    /**
+     * Returns the parquet file format specification.
+     * @return Parquet file format specification.
+     */
+    public ParquetFileFormatSpec getParquet() {
+        return parquet;
+    }
+
+    /**
+     * Sets the parquet file format specification.
+     * @param parquet Parquet file format specification.
+     */
+    public void setParquet(ParquetFileFormatSpec parquet) {
+        setDirtyIf(!Objects.equals(this.parquet, parquet));
+        this.parquet = parquet;
+        propagateHierarchyIdToField(parquet, "parquet");
+    }
+
+    /**
+     * Returns state that whether the file format for the specific file type is set.
+     * @param duckdbSourceFilesType Type of files.
+     * @return State that whether the file format for the specific file type is set.
+     */
+    public boolean isFormatSetForType(DuckdbSourceFilesType duckdbSourceFilesType){
+        switch(duckdbSourceFilesType){
+            case csv: return this.getCsv() != null;
+            case json: return this.getJson() != null;
+            case parquet: return this.getParquet() != null;
+            default: throw new RuntimeException("The file format is not supported : " + duckdbSourceFilesType);
+        }
     }
 
     /**
@@ -208,7 +272,8 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
-        cloned.fileFormat = cloned.fileFormat.expandAndTrim(secretValueProvider, lookupContext);
+        cloned.csv = cloned.csv.expandAndTrim(secretValueProvider, lookupContext);
+        cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
 
         return cloned;
     }

@@ -256,7 +256,7 @@ public class SampleTableMetadataObjectMother {
 
         TableSpec tableSpec = new TableSpec();
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(csvFileName);
-        tableSpec.setFileFormatOverride(fileFormatSpec);
+        tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
 
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();
@@ -303,7 +303,7 @@ public class SampleTableMetadataObjectMother {
                         .map(file -> file.toString()).collect(Collectors.toList()),
                 header
         );
-        tableSpec.setFileFormatOverride(fileFormatSpec);
+        tableSpec.setFileFormat(fileFormatSpec);
         tableSpec.setPhysicalTableName(new PhysicalTableName("a_random_schema_name", "a_random_table_name"));
 
         DataGroupingConfigurationSpec dataGroupingConfigurationSpec = new DataGroupingConfigurationSpec();

@@ -302,7 +302,7 @@ public class TableListModel {
             setFilter(tableSpec.getFilter());
             setPriority(tableSpec.getPriority());
             setOwner(tableSpec.getOwner());
-            setFileFormat(tableSpec.getFileFormatOverride());
+            setFileFormat(tableSpec.getFileFormat());
             setProfilingChecksResultTruncation(tableSpec.getProfilingChecks() != null ? tableSpec.getProfilingChecks().getResultTruncation() : null);
             setPartitioningConfigurationMissing(tableSpec.getTimestampColumns() == null ||
                     Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn()));
@@ -369,7 +369,7 @@ public class TableListModel {
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setPriority(this.getPriority());
         targetTableSpec.setOwner(this.getOwner());
-        targetTableSpec.setFileFormatOverride(this.getFileFormat());
+        targetTableSpec.setFileFormat(this.getFileFormat());
 
         if (targetTableSpec.getProfilingChecks() == null) {
             targetTableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
