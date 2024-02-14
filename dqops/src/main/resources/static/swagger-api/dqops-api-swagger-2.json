@@ -31158,6 +31158,18 @@
           "additionalProperties" : {
             "type" : "string"
           }
+        },
+        "csv" : {
+          "description" : "Csv file format specification.",
+          "$ref" : "#/definitions/CsvFileFormatSpec"
+        },
+        "json" : {
+          "description" : "Json file format specification.",
+          "$ref" : "#/definitions/JsonFileFormatSpec"
+        },
+        "parquet" : {
+          "description" : "Parquet file format specification.",
+          "$ref" : "#/definitions/ParquetFileFormatSpec"
         }
       }
     },
@@ -36135,7 +36147,7 @@
           }
         },
         "file_format" : {
-          "description" : "File format with the specification used as a source data.",
+          "description" : "File format with the specification used as a source data. It overrides the connection spec's file format when it is set",
           "$ref" : "#/definitions/FileFormatSpec"
         }
       }

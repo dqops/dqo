@@ -63,7 +63,7 @@ Enable the `_found` data quality checks to find blank values or accept a limited
 ### Configure checks in UI
 The blank detection checks are standard data quality checks in the "whitespace" category.
 
-![Enable whitespace and null placeholder values detection in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-whitespace-and-null-placeholder-detection-data-quality-checks-min.png){ loading=lazy }
+![Enable whitespace and null placeholder values detection in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-whitespace-and-null-placeholder-detection-data-quality-checks-min1.png){ loading=lazy }
 
 ### Configure checks in YAML
 The blank detection checks are configured in the YAML file inside the `whitespace` node.
@@ -100,7 +100,7 @@ The blank percent measurement checks are advanced checks, not always visible in 
 ### Configure checks in UI
 Turn on the "Advanced checks" checkbox. DQOps will also show non-standard checks, revealing the percentage of whitespace checks.
 
-![Measure percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/measure-whitespace-and-null-placeholder-percent-data-quality-checks-min.png){ loading=lazy }
+![Enable percentage of empty values, whitespace only values and null placeholders using data quality checks](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/enable-empty-values-whitespace-only-values-and-null-placeholders-data-quality-checks-min.png){ loading=lazy }
 
 ### Configure checks in YAML
 The percentage checks are easy to configure in a YAML file. The parameter `max_percent` controls the maximum accepted percentage.

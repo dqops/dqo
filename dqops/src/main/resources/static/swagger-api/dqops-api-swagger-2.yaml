@@ -29966,6 +29966,15 @@ definitions:
           \ JDBC connection string, a key/value dictionary."
         additionalProperties:
           type: "string"
+      csv:
+        description: "Csv file format specification."
+        $ref: "#/definitions/CsvFileFormatSpec"
+      json:
+        description: "Json file format specification."
+        $ref: "#/definitions/JsonFileFormatSpec"
+      parquet:
+        description: "Parquet file format specification."
+        $ref: "#/definitions/ParquetFileFormatSpec"
   Duration:
     type: "object"
     properties:
@@ -35081,7 +35090,8 @@ definitions:
         items:
           $ref: "#/definitions/CommentSpec"
       file_format:
-        description: "File format with the specification used as a source data."
+        description: "File format with the specification used as a source data. It\
+          \ overrides the connection spec's file format when it is set"
         $ref: "#/definitions/FileFormatSpec"
   TableSqlAggregateExpressionCheckSpec:
     type: "object"

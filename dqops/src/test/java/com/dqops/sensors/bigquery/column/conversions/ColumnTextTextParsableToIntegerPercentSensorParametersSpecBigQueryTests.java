@@ -88,7 +88,7 @@ public class ColumnTextTextParsableToIntegerPercentSensorParametersSpecBigQueryT
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/text/text_parsable_to_integer_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/conversions/text_parsable_to_integer_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
