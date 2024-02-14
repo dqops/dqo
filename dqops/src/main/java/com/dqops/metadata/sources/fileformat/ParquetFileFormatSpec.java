@@ -152,4 +152,13 @@ public class ParquetFileFormatSpec extends AbstractSpec {
         return visitor.accept(this, parameter);
     }
 
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public ParquetFileFormatSpec deepClone() {
+        return (ParquetFileFormatSpec)super.deepClone();
+    }
+
 }

@@ -26,6 +26,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -250,7 +251,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
             for (TableWrapper tableWrapper : tableWrappers) {
 
-                FileFormatSpec fileFormatSpec = tableWrapper.getSpec().getFileFormat();
+                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableWrapper.getSpec());
                 Table tableResult = queryForTableResult(fileFormatSpec);
 
                 Column<?>[] columns = tableResult.columnArray();

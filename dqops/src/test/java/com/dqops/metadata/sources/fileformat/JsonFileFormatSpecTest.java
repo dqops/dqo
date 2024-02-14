@@ -1,7 +1,9 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.BaseTest;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -9,7 +11,8 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class JsonFileFormatSpecTest {
+@SpringBootTest
+public class JsonFileFormatSpecTest extends BaseTest {
 
     @Test
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {

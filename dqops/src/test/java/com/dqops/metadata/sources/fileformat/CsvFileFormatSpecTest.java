@@ -1,13 +1,16 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.BaseTest;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CsvFileFormatSpecTest {
+@SpringBootTest
+public class CsvFileFormatSpecTest extends BaseTest {
 
     @Test
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {

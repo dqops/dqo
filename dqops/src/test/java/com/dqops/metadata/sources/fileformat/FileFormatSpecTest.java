@@ -1,11 +1,14 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.BaseTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-class FileFormatSpecTest {
+@SpringBootTest
+public class FileFormatSpecTest extends BaseTest {
 
     @Test
     void formatFilePaths_forOneFile_formatsIt() {

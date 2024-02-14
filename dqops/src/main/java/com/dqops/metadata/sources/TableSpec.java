@@ -198,7 +198,7 @@ public class TableSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     @JsonIgnore
     private String yamlParsingError;
 
-    @JsonPropertyDescription("File format with the specification used as a source data.")
+    @JsonPropertyDescription("File format with the specification used as a source data. It overrides the connection spec's file format when it is set")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private FileFormatSpec fileFormat;

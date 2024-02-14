@@ -41,7 +41,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Enables auto detection of CSV parameters.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Boolean autoDetect;
+    private Boolean autoDetect = true;
 
     @JsonPropertyDescription("A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -459,6 +459,14 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public CsvFileFormatSpec deepClone() {
+        return (CsvFileFormatSpec)super.deepClone();
     }
 
     /**
