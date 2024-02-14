@@ -29975,6 +29975,11 @@ definitions:
       parquet:
         description: "Parquet file format specification."
         $ref: "#/definitions/ParquetFileFormatSpec"
+      directories:
+        type: "object"
+        description: "Schema to directory mappings."
+        additionalProperties:
+          type: "string"
   Duration:
     type: "object"
     properties:
@@ -31589,6 +31594,9 @@ definitions:
       schema_name:
         type: "string"
         description: "Schema name."
+      directory_prefix:
+        type: "string"
+        description: "Directory prefix."
       run_checks_job_template:
         description: "Configured parameters for the \"check run\" job that should\
           \ be pushed to the job queue in order to run all checks within this schema."
