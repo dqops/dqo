@@ -36,10 +36,12 @@ accepted count. As a template for the custom check, we will use the [daily_inval
 
 ### **Navigate to custom checks, sensors, and rule editors**
 
-To navigate to custom check, sensor, and rule editors using the [user interface](../dqo-concepts/dqops-user-interface-overview.md):
 
-1. Go to the **Configuration** section.
-2. From the tree view on the left, select the check, sensor or rule that you want to modify
+To create your own customized checks, sensors, and rules using the [user interface](../dqo-concepts/dqops-user-interface-overview.md),
+navigate to the **Configuration** section.
+
+On the tree view on the left, you will see a complete list of all checks, sensors, and rules that are available in DQOps.
+Clicking on any of these elements will open up a check editor in the main workspace.
 
 
 !!! tip "Navigating tabs"
@@ -56,15 +58,27 @@ The below example shows a check editor of the `daily_invalid_email_format_found`
 
 ### **Create a custom sensor**
 
-To create a custom sensor, copy a sensor that you will use as a template, following the steps below:
+To create a custom sensor, you can copy an existing sensor and use it as a template (recommended) or create a new sensor.
+
+To copy an existing sensor:
 
 1. On the **Configuration** section, select a sensor from the tree view on the left, that you will use as a template.
 2. Make a copy of the sensor, by clicking on the **Copy** button.
 3. Enter a new name and modify the sensor configuration.
 4. Click the **Save** button to save the changes.
 
+To create a new sensor:
+
+1. Click on the three dots icon next to the name of the sensor category, and click on the **Add new sensor** option.
+2. Enter a new name and modify the sensor configuration.
+3. Click the **Save** button to save the changes.
+
+
+![Add a new sensor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-sensor.png)
+
+
 In our example, we want to modify the `invalid-email-count` sensor, which is located in the *sensors/column/patterns* folder.
-On the sensor configuration screen, you can see a tab with the **Sensor definition** when you can choose to set that a check requires 
+On the sensor configuration screen, you can see a tab with the **Sensor definition** when you can choose to set that a check requires
 event and ingestion timestamps columns, set the default value when the table is empty and modify the sensor fields and parameters.
 
 ![Custom sensor editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-sensor-editor.png)
@@ -119,28 +133,54 @@ Below is an example of Jinja2 SQL query before and after modification.
 
 
 ### **Create a custom rule**
-To create a custom rule, copy a rule that you will use as a template, following the steps below:
+To create a custom rule, you can copy an existing rule and use it as a template (recommended) or create a new rule.
+
+To copy an existing rule:
 
 1. On the **Configuration** section, select a rule from the tree view on the left, that you will use as a template.
 2. Make a copy of the rule, by clicking on the **Copy** button.
 3. Enter a new name and modify the rule configuration.
 4. Click the **Save** button to save the changes.
 
-The custom rule screen contains two tabs **Rule definition** and **Python code** which can be modified and allows customization of the rule.
+To create a new rule:
+
+1. Click on the three dots icon next to the name of the rule category, and click on the **Add new rule** option.
+2. Enter a new name and modify the rule configuration.
+3. Click the **Save** button to save the changes.
+
+
+![Add a new rule](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-rule.png)
+
+
+The custom rule screen contains two tabs **Rule definition** and **Python code** which can be modified and allows customization of both
+the existing and new rules.
 
 ![Custom rule editor](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/custom-rule-editor.png)
 
 
 ### **Create a custom check**
+To create a custom check, you can copy an existing check and use it as a template or create a new check.
 
-To create a custom check, copy a check, which you will use as a template, following the steps below:
+To copy an existing check:
 
-1. Click on the **Copy** button.
-2. Enter a new check name.
-3. Modify the check configuration (sensors and/or rules).
-4. Click on the **Save** button, to save the changes.
+1. On the **Configuration** section, select a check from the tree view on the left, that you will use as a template.
+2. Click on the **Copy** button.
+3. Enter a new check name.
+4. Modify the check configuration by selecting sensor and rule from the dropdown menu.
+5. Click on the **Save** button, to save the changes.
 
-You cannot modify the configuration of the built-in checks, but you can modify the check that has been added.
+To create a new check:
+
+1. Click on the three dots icon next to the name of the existing check category or in the `custom` category, and click on the **Add new check** option.
+2. Enter a new name and modify the check configuration by selecting sensor and rule from the dropdown menu.
+3. Click the **Save** button to save the changes.
+
+![Add a new check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/add-new-check.png)
+
+!!! tip "Check modification"
+
+    You cannot modify the configuration of the built-in checks, but you can modify the check that has been added.
+    The checks that have been added are shown on the tree view in bold.
 
 As an example, we will show how to modify the [daily_invalid_email_format_found](../checks/column/patterns/invalid-email-format-found.md) check,
 which is located in the *column/monitoring/daily/patterns/* folder.
@@ -158,7 +198,7 @@ In our example, we copied the [daily_invalid_email_format_found](../checks/colum
 and named it `daily_invalid_duns_format_found`). 
 
 The copied check will appear in the tree view in the same folder as the check used as a template. 
-The checks which have been added are shown on the tree view in bold.
+The checks that have been added are shown on the tree view in bold.
 
 ![Create a copy of data quality check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/create-a-copy-of-check.png)
 
@@ -174,12 +214,104 @@ After saving changes, the new check is now visible on the Check editor and can b
 ![Assign new sensor to a check](https://dqops.com/docs/images/working-with-dqo/creating-custom-data-quality-checks/daily-invalid-duns-format-found-check-in-check-editor.png)
 
 
-### **Storing definitions of custom checks, sensors, and rules**
-All the added custom checks, sensors, and rules are stored in the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md)
+### **Create an anomaly detection custom check**
+In DQOps, we can detect two types of anomalies in numeric columns using built-in checks. We can detect outliers,
+which are new minimum and maximum values, or we can detect if the typical values such as mean (average), median, or sum
+have changed. For more information on [how to detect anomalies](../categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md), follow the link.
 
-* The *checks* folder stores the definition of custom data quality [checks](../dqo-concepts/definition-of-data-quality-checks/index.md) as YAML files (`*.dqocheck.yaml`). 
-* The *sensors* folder stores the definition of custom and overwritten data quality [sensors](../dqo-concepts/definition-of-data-quality-sensors.md).
-* The *rules* folder stores the definition of custom and overwritten data quality [rules](../dqo-concepts/definition-of-data-quality-rules.md).
+Besides the build-in checks for detecting anomalies, we can turn any check into anomaly detection check, by
+copying it and assigning an anomaly rule:
+
+- [anomaly differencing percentile moving average](../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)
+- [anomaly differencing percentile moving average 30 days](../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average-30-days)
+- [anomaly stationary percentile moving average](../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)
+- [anomaly stationary percentile moving average 30 days](../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average-30-days)
+
+For example, we can create a check detecting anomalies in percentage of blank and whitespace values, such as 'None', 'n/a', '', by
+changing the rule of the `daily_whitespace_text_percent` from `comparison/max_percent` 
+to `percentile/anomaly_stationary_percentile_moving_average`.
+
+
+## Storing definitions of custom sensors
+All the added custom sensors are stored in the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md)
+
+The configuration of custom and overwritten data quality [sensors](../dqo-concepts/definition-of-data-quality-sensors.md)
+are stored in the *sensors* folder.
+The configuration for each data source is stored in two files:
+
+* *sensors/**/<data_source_type>.dqoprovidersensor.yaml* specification file with additional configuration for that data source type.
+* Jinja2 file stored in the *sensors/**/<data_source_type>.sql.jinja2* file.
+
+## Storing definitions of custom rules
+All the added custom rules are stored in the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md)
+
+The definition of custom and overwritten data quality [rules](../dqo-concepts/definition-of-data-quality-rules.md)
+are stored in the *rules* folder.
+
+
+## Storing definitions of custom checks
+The definitions of custom [checks](../dqo-concepts/definition-of-data-quality-checks/index.md) are saved in YAML files (`*.dqocheck.yaml`).,
+just like any other check. The YAML files are stored in the *checks* folder in the [DQOps user home folder](../dqo-concepts/dqops-user-home-folder.md).
+
+The custom check configuration in the YAML files differs based on whether you have configured a check inside an existing check category or in the 
+special `custom` folder.
+
+For instance, here is an example of a YAML file that contains a custom column check called `daily_invalid_duns_format_found`, created within an existing `patterns` check category.
+
+```yaml hl_lines="18-24"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  profiling_checks:
+    volume:
+      profile_row_count:
+        error:
+          min_count: 0
+  columns:
+    alpha_2_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          patterns:
+            custom_checks:
+              daily_invalid_duns_format_found:
+                error:
+                  max_count: 0
+```
+
+Below is an example of a YAML with a custom column check `daily_invalid_duns_format_found` created within a special `custom` check category
+
+```yaml hl_lines="18-23"
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  incremental_time_window:
+    daily_partitioning_recent_days: 7
+    monthly_partitioning_recent_months: 1
+  profiling_checks:
+    volume:
+      profile_row_count:
+        error:
+          min_count: 0
+  columns:
+    alpha_2_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          custom:
+            daily_invalid_duns_format_found:
+              error:
+                max_count: 0
+```
 
 
 ## What's more
