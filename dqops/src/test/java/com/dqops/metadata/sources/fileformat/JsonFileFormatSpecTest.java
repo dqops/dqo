@@ -19,7 +19,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
             setColumns(Map.of("col1", "type1", "col2", "type2"));
-            setCompression("gzip");
+            setCompression(CompressionType.gzip);
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
             setFilename(true);

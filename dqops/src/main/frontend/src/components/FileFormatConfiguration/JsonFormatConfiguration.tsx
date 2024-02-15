@@ -1,5 +1,9 @@
 import React, { useMemo } from 'react';
-import { JsonFileFormatSpec, JsonFileFormatSpecFormatEnum } from '../../api';
+import { 
+  JsonFileFormatSpec, 
+  JsonFileFormatSpecFormatEnum, 
+  JsonFileFormatSpecCompressionEnum
+} from '../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
 import FormatConfigurationRenderer from './FormatConfigurationRenderer'
@@ -15,22 +19,22 @@ export default function JsonFormatConfiguration({
 }: TJsonConfigurationProps) {
   const jsonConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      // auto, none, gzip, zstd // todo add enum on backend
-      // {
-      //   label: 'Compression',
-      //   value: configuration.compression,
-      //   onChange: (str) => onChangeConfiguration({ compression: str })
-      // },
+      { // todo: this is an enum, the field should be a combo box
+        label: 'Compression',
+        value: configuration.compression,
+        onChange: (str) => onChangeConfiguration({ compression: str as keyof typeof JsonFileFormatSpecCompressionEnum }),
+        defaultValue: JsonFileFormatSpecCompressionEnum.auto
+      },
       {
         label: 'Date format',
         value: configuration.dateformat,
         onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
         defaultValue: 'iso'
       },
-      {
+      { // todo: this is an enum, the field should be a combo box
         label: 'Json format',
-        value: configuration.dateformat,
-        onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
+        value: configuration.format,
+        onChange: (str) => onChangeConfiguration({ format: str as keyof typeof JsonFileFormatSpecFormatEnum }),
         defaultValue: JsonFileFormatSpecFormatEnum.array
       },
       {
@@ -40,12 +44,23 @@ export default function JsonFormatConfiguration({
         defaultValue: -1
       },
       {
-        label: 'Maximum object size',
+        label: 'Maximum object size (in bytes)',
         value: configuration.maximum_object_size,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ maximum_object_size: Number(str) }) : undefined },
         defaultValue: 16777216
       },
-      // records  // todo: enum on backend
+      {
+        label: 'Records',
+        value: configuration.records,
+        onChange: (str) => onChangeConfiguration({ records: str.toString() }),
+        defaultValue: 'records' // todo: it should be an enum from backend but the duckdb docs does not clearly explain this option and its values
+      },
+      {
+        label: 'Sample size',
+        value: configuration.sample_size,
+        onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ sample_size: Number(str) }) : undefined },
+        defaultValue: 20480
+      },
       {
         label: 'Timestamp Format',
         value: configuration.timestampformat,

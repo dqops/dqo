@@ -1,5 +1,8 @@
 import React, { useMemo } from 'react';
-import { CsvFileFormatSpec } from '../../api';
+import {
+  CsvFileFormatSpec,
+  CsvFileFormatSpecCompressionEnum
+} from '../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
 import FormatConfigurationRenderer from './FormatConfigurationRenderer'
@@ -16,12 +19,12 @@ export default function CsvFormatConfiguration({
   
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      // auto, none, gzip, zstd // todo add enum on backend
-      // {
-      //   label: 'Compression',
-      //   value: configuration.compression,
-      //   onChange: (str) => onChangeConfiguration({ compression: str })
-      // },
+      { // todo: this is an enum, the field should be a combo box
+        label: 'Compression',
+        value: configuration.compression,
+        onChange: (str) => onChangeConfiguration({ compression: str as keyof typeof CsvFileFormatSpecCompressionEnum }),
+        defaultValue: CsvFileFormatSpecCompressionEnum.auto
+      },
       {
         label: 'Date format',
         value: configuration?.dateformat,
@@ -58,7 +61,12 @@ export default function CsvFormatConfiguration({
         onChange: (str) => onChangeConfiguration({ quote: str.toString() }),
         defaultValue: '"'
       },
-      // todo: add sample size on backend
+      {
+        label: 'Sample size',
+        value: configuration.sample_size,
+        onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ sample_size: Number(str) }) : undefined },
+        defaultValue: 20480
+      },
       {
         label: 'Skip',
         value: configuration.skip,
