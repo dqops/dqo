@@ -12,18 +12,41 @@ type TCsvConfigurationProps = {
   onChangeConfiguration: (params: Partial<CsvFileFormatSpec>) => void;
 };
 
+const compressionEnumOptions = [
+  {
+    value: CsvFileFormatSpecCompressionEnum.auto,
+    label: CsvFileFormatSpecCompressionEnum.auto
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.gzip,
+    label: CsvFileFormatSpecCompressionEnum.gzip
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.none,
+    label: CsvFileFormatSpecCompressionEnum.none
+  },
+  {
+    value: CsvFileFormatSpecCompressionEnum.zstd,
+    label: CsvFileFormatSpecCompressionEnum.zstd
+  },
+]
+
 export default function CsvFormatConfiguration({
   configuration,
   onChangeConfiguration
 }: TCsvConfigurationProps) {
-  
+
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      { // todo: this is an enum, the field should be a combo box
+      {
         label: 'Compression',
-        value: configuration.compression,
-        onChange: (str) => onChangeConfiguration({ compression: str as keyof typeof CsvFileFormatSpecCompressionEnum }),
-        defaultValue: CsvFileFormatSpecCompressionEnum.auto
+        value: configuration?.compression,
+        onChange: (str) => {
+          onChangeConfiguration({ compression: str as CsvFileFormatSpecCompressionEnum })
+        },
+        defaultValue: CsvFileFormatSpecCompressionEnum.auto,
+        isEnum: true,
+        options: compressionEnumOptions
       },
       {
         label: 'Date format',
@@ -33,19 +56,19 @@ export default function CsvFormatConfiguration({
       },
       {
         label: 'Decimal Separator',
-        value: configuration.decimal_separator,
+        value: configuration?.decimal_separator,
         onChange: (str) => onChangeConfiguration({ decimal_separator: str.toString() }),
         defaultValue: '.'
       },
       {
         label: 'Delimiter',
-        value: configuration.delim,
+        value: configuration?.delim,
         onChange: (str) => onChangeConfiguration({ delim: str.toString() }),
         defaultValue: ','
       },
       {
         label: 'Escape Character/String',
-        value: configuration.escape,
+        value: configuration?.escape,
         onChange: (str) => onChangeConfiguration({ escape: str.toString() }),
         defaultValue: '"'
       },
@@ -57,25 +80,25 @@ export default function CsvFormatConfiguration({
       },
       {
         label: 'Quote',
-        value: configuration.quote,
+        value: configuration?.quote,
         onChange: (str) => onChangeConfiguration({ quote: str.toString() }),
         defaultValue: '"'
       },
       {
         label: 'Sample size',
-        value: configuration.sample_size,
+        value: configuration?.sample_size,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ sample_size: Number(str) }) : undefined },
         defaultValue: 20480
       },
       {
         label: 'Skip',
-        value: configuration.skip,
+        value: configuration?.skip,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ skip: Number(str) }) : undefined },
         defaultValue: 0
       },
       {
         label: 'Timestamp Format',
-        value: configuration.timestampformat,
+        value: configuration?.timestampformat,
         onChange: (str) => onChangeConfiguration({ timestampformat: str.toString() }),
         defaultValue: ''
       }
@@ -86,37 +109,37 @@ export default function CsvFormatConfiguration({
     return [
       {
         label: 'Treat all columns as varchar',
-        value: configuration.all_varchar,
+        value: configuration?.all_varchar,
         onChange: (value) => onChangeConfiguration({ all_varchar: value }),
         defaultValue: false
       },
       {
         label: 'Allow quoted nulls',
-        value: configuration.allow_quoted_nulls,
+        value: configuration?.allow_quoted_nulls,
         onChange: (value) => onChangeConfiguration({ allow_quoted_nulls: value }),
         defaultValue: true
       },
       {
         label: 'Filename',
-        value: configuration.filename,
+        value: configuration?.filename,
         onChange: (value) => onChangeConfiguration({ filename: value }),
         defaultValue: false
       },
       {
         label: 'Header',
-        value: configuration.header,
+        value: configuration?.header,
         onChange: (value) => onChangeConfiguration({ header: value }),
         defaultValue: false
       },
       {
         label: 'Hive partitioning',
-        value: configuration.hive_partitioning,
+        value: configuration?.hive_partitioning,
         onChange: (value) => onChangeConfiguration({ hive_partitioning: value }),
         defaultValue: false
       },
       {
         label: 'Ignore errors',
-        value: configuration.ignore_errors,
+        value: configuration?.ignore_errors,
         onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
         defaultValue: false
       }

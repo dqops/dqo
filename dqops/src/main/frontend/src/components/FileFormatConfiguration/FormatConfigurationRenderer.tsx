@@ -32,6 +32,8 @@ export default function FormatConfigurationRenderer({
               value={x.value}
               onChange={x.onChange}
               defaultValue={x.defaultValue}
+              isEnum={x.isEnum}
+              options={x.options}
             />
           ))}
         </div>

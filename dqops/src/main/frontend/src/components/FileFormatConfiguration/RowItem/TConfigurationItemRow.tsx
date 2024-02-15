@@ -3,4 +3,6 @@ export type TConfigurationItemRow = {
   value?: string | number;
   onChange: (str: string | number) => void;
   defaultValue: string | number;
+  isEnum?: boolean;
+  options?: any,
 };
