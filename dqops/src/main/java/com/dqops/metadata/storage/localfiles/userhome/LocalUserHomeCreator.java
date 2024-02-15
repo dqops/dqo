@@ -21,8 +21,9 @@ package com.dqops.metadata.storage.localfiles.userhome;
 public interface LocalUserHomeCreator {
     /**
      * Initializes the DQOps user home at the default location.
+     * @return True when the user home was initialized, false when it cannot be initialized.
      */
-    void initializeDefaultDqoUserHome();
+    boolean initializeDefaultDqoUserHome();
 
     /**
      * Checks the default DQO_USER_HOME path if it points to a valid and initialized DQOps user home.
