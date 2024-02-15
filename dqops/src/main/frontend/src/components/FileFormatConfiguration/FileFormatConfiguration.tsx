@@ -1,12 +1,7 @@
 import React from 'react';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
-import { 
-  CsvFileFormatSpec, 
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
-  DuckdbParametersSpecSourceFilesTypeEnum
-} from '../../api';
+import { DuckdbParametersSpecSourceFilesTypeEnum } from '../../api';
 import CsvFormatConfiguration from './CsvFormatConfiguration';
 import JsonFormatConfiguration from './JsonFormatConfiguration';
 import ParquetFormatConfiguration from './ParquetFormatConfiguration';

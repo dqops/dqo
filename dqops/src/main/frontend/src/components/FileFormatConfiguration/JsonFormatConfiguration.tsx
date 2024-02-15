@@ -1,7 +1,8 @@
 import React, { useMemo } from 'react';
-import { JsonFileFormatSpec } from '../../api';
-import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
+import { JsonFileFormatSpec, JsonFileFormatSpecFormatEnum } from '../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
+import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
+import FormatConfigurationRenderer from './FormatConfigurationRenderer'
 
 type TJsonConfigurationProps = {
   configuration: JsonFileFormatSpec;
@@ -14,49 +15,79 @@ export default function JsonFormatConfiguration({
 }: TJsonConfigurationProps) {
   const jsonConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
+      // auto, none, gzip, zstd // todo add enum on backend
       // {
       //   label: 'Compression',
       //   value: configuration.compression,
       //   onChange: (str) => onChangeConfiguration({ compression: str })
       // },
-      // // convertStringsToIntegers
-      // {
-      //   label: 'Date format',
-      //   value: configuration.dateformat,
-      //   onChange: (str) => onChangeConfiguration({ dateformat: str })
-      // },
-      // filename
-      // format
-      // hivePartitioning
-      // ignoreErrors
-      // maximumDepth
-      // maximumObjectSize
-      // records
-      // {
-      //   label: 'Timestamp Format',
-      //   value: configuration.timestampformat,
-      //   onChange: (str) => onChangeConfiguration({ timestampformat: str })
-      // }
+      {
+        label: 'Date format',
+        value: configuration.dateformat,
+        onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
+        defaultValue: 'iso'
+      },
+      {
+        label: 'Json format',
+        value: configuration.dateformat,
+        onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
+        defaultValue: JsonFileFormatSpecFormatEnum.array
+      },
+      {
+        label: 'Maximum depth',
+        value: configuration.maximum_depth,
+        onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ maximum_depth: Number(str) }) : undefined },
+        defaultValue: -1
+      },
+      {
+        label: 'Maximum object size',
+        value: configuration.maximum_object_size,
+        onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ maximum_object_size: Number(str) }) : undefined },
+        defaultValue: 16777216
+      },
+      // records  // todo: enum on backend
+      {
+        label: 'Timestamp Format',
+        value: configuration.timestampformat,
+        onChange: (str) => onChangeConfiguration({ timestampformat: str.toString() }),
+        defaultValue: ''
+      }
+    ];
+  }, [configuration]);
+
+  const jsonConfigurationBoolean: TConfigurationItemRowBoolean[] = useMemo(() => {
+    return [
+      {
+        label: 'Convert strings to integers',
+        value: configuration.convert_strings_to_integers,
+        onChange: (value) => onChangeConfiguration({ convert_strings_to_integers: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Filename',
+        value: configuration.filename,
+        onChange: (value) => onChangeConfiguration({ filename: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Hive partitioning',
+        value: configuration.hive_partitioning,
+        onChange: (value) => onChangeConfiguration({ hive_partitioning: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Ignore errors',
+        value: configuration.ignore_errors,
+        onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
+        defaultValue: false
+      }
     ];
   }, [configuration]);
 
   return (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '16px'
-      }}
-    >
-      {jsonConfiguration.map((x, index) => (
-        <ConfigurationItemRow
-          key={index}
-          label={x.label}
-          value={x.value}
-          onChange={x.onChange}
-          defaultValue={x.defaultValue}
-        />
-      ))}
-    </div>
+    <FormatConfigurationRenderer 
+      configuraitonStrings={jsonConfiguration}
+      configurationBooleans={jsonConfigurationBoolean}
+    />
   );
 }

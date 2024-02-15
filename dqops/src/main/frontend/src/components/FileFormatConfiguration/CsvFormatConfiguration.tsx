@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { CsvFileFormatSpec } from '../../api';
-import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
-import ConfigurationItemRowBoolean from './RowItem/ConfigurationItemRowBoolean';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
+import FormatConfigurationRenderer from './FormatConfigurationRenderer'
 
 type TCsvConfigurationProps = {
   configuration: CsvFileFormatSpec;
@@ -14,47 +13,7 @@ export default function CsvFormatConfiguration({
   configuration,
   onChangeConfiguration
 }: TCsvConfigurationProps) {
-  const csvConfigurationBoolean: TConfigurationItemRowBoolean[] = useMemo(() => {
-    return [
-      {
-        label: 'Treat all columns as varchar',
-        value: configuration.all_varchar,
-        onChange: (value) => onChangeConfiguration({ all_varchar: value }),
-        defaultValue: false
-      },
-      {
-        label: 'Allow quoted nulls',
-        value: configuration.allow_quoted_nulls,
-        onChange: (value) => onChangeConfiguration({ allow_quoted_nulls: value }),
-        defaultValue: true
-      },
-      {
-        label: 'Filename',
-        value: configuration.filename,
-        onChange: (value) => onChangeConfiguration({ filename: value }),
-        defaultValue: false
-      },
-      {
-        label: 'Header',
-        value: configuration.header,
-        onChange: (value) => onChangeConfiguration({ header: value }),
-        defaultValue: false
-      },
-      {
-        label: 'Hive partitioning',
-        value: configuration.hive_partitioning,
-        onChange: (value) => onChangeConfiguration({ hive_partitioning: value }),
-        defaultValue: false
-      },
-      {
-        label: 'Ignore errors',
-        value: configuration.ignore_errors,
-        onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
-        defaultValue: false
-      }
-    ];
-  }, [configuration]);
-
+  
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
       // auto, none, gzip, zstd // todo add enum on backend
@@ -115,44 +74,51 @@ export default function CsvFormatConfiguration({
     ];
   }, [configuration]);
 
+  const csvConfigurationBoolean: TConfigurationItemRowBoolean[] = useMemo(() => {
+    return [
+      {
+        label: 'Treat all columns as varchar',
+        value: configuration.all_varchar,
+        onChange: (value) => onChangeConfiguration({ all_varchar: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Allow quoted nulls',
+        value: configuration.allow_quoted_nulls,
+        onChange: (value) => onChangeConfiguration({ allow_quoted_nulls: value }),
+        defaultValue: true
+      },
+      {
+        label: 'Filename',
+        value: configuration.filename,
+        onChange: (value) => onChangeConfiguration({ filename: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Header',
+        value: configuration.header,
+        onChange: (value) => onChangeConfiguration({ header: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Hive partitioning',
+        value: configuration.hive_partitioning,
+        onChange: (value) => onChangeConfiguration({ hive_partitioning: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Ignore errors',
+        value: configuration.ignore_errors,
+        onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
+        defaultValue: false
+      }
+    ];
+  }, [configuration]);
+
   return (
-    <>
-    <br/>
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '16px'
-      }}
-    >
-      {csvConfiguration.map((x, index) => (
-        <ConfigurationItemRow
-          key={index}
-          label={x.label}
-          value={x.value}
-          onChange={x.onChange}
-          defaultValue={x.defaultValue}
-        />
-      ))}
-    </div>
-    <br/>
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: '1fr 1fr 1fr',
-        gap: '16px'
-      }}
-    >
-      {csvConfigurationBoolean.map((x, index) => (
-        <ConfigurationItemRowBoolean
-          key={index}
-          label={x.label}
-          value={x.value}
-          onChange={x.onChange}
-          defaultValue={x.defaultValue}
-        />
-      ))}
-    </div>
-    </>
+    <FormatConfigurationRenderer 
+      configuraitonStrings={csvConfiguration}
+      configurationBooleans={csvConfigurationBoolean}
+    />
   );
 }
