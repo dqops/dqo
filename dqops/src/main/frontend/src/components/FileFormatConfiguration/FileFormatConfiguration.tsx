@@ -11,6 +11,7 @@ import CsvFormatConfiguration from './CsvFormatConfiguration';
 import JsonFormatConfiguration from './JsonFormatConfiguration';
 import ParquetFormatConfiguration from './ParquetFormatConfiguration';
 import FilePath from './FilePath';
+import { TConfiguration } from './TConfiguration';
 
 type TFileFormatConfigurationProps = {
   paths: string[];
@@ -22,16 +23,8 @@ type TFileFormatConfigurationProps = {
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
   onDeletePath: (index: number) => void;
+  renderOptions: boolean;
 };
-
-// enum fileFormat {
-//   csv = 'csv_file_format',
-//   json = 'json_file_format',
-//   parquet = 'parquet_file_format',
-//   file_path = 'file_path'
-// }
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
 export default function FileFormatConfiguration({
   paths,
@@ -42,7 +35,8 @@ export default function FileFormatConfiguration({
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  onDeletePath
+  onDeletePath,
+  renderOptions
 }: TFileFormatConfigurationProps) {
 
   const renderConfiguration = () => {
@@ -74,6 +68,21 @@ export default function FileFormatConfiguration({
     }
   };
 
+  const sourceFilesTypeOptions = [
+    {
+      label: 'CSV',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.csv
+    },
+    {
+      label: 'JSON',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.json
+    },
+    {
+      label: 'Parquet',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.parquet
+    }
+  ];
+
   return (
     <SectionWrapper
       title="File format configuration"
@@ -87,11 +96,8 @@ export default function FileFormatConfiguration({
       />
       <div className="flex items-center gap-x-5">
         <div>File format</div>{' '}
-        <SelectInput
-          options={Object.values(DuckdbParametersSpecSourceFilesTypeEnum).map((x) => ({
-            label: x,
-            value: x
-          }))}
+        <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
+          options={sourceFilesTypeOptions}
           onChange={(value) => {
             onChangeFile(value);
             cleanConfiguration();
@@ -99,7 +105,7 @@ export default function FileFormatConfiguration({
           value={fileFormatType}
         />{' '}
       </div>
-      {renderConfiguration()}
+      {renderOptions && renderConfiguration()}
     </SectionWrapper>
   );
 }

@@ -23,14 +23,13 @@ import {
   DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
+import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
 
 interface AddTableDialogProps {
   open: boolean;
   onClose: () => void;
   node?: CustomTreeNode;
 }
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
@@ -42,20 +41,15 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     DuckdbParametersSpecSourceFilesTypeEnum.csv
   );
   const [configuration, setConfiguration] = useState<TConfiguration>({});
-
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setConfiguration((prev) => ({
       ...prev,
       ...params
     }));
   };
+  const cleanConfiguration = () => { setConfiguration({}); };
 
-  const cleanConfiguration = () => {
-    setConfiguration({});
-  };
-
-  const { connection, schema }: { connection: string; schema: string } =
-    useParams();
+  const { connection, schema }: { connection: string; schema: string } = useParams();
   const dispatch = useActionDispatch();
   const history = useHistory();
 
@@ -140,18 +134,15 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     }
   }, [open]);
 
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
   const onChangePath = (value: string) => {
     const copiedPaths = [...paths];
     copiedPaths[paths.length - 1] = value;
     setPaths(copiedPaths);
   };
-
-  const onAddPath = () => setPaths((prev) => [...prev, '']);
+  const onDeletePath = (index: number) => setPaths((prev) => prev.filter((x, i) => i !== index));
 
   const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
-
-  const onDeletePath = (index: number) =>
-    setPaths((prev) => prev.filter((x, i) => i !== index));
 
   return (
     <Dialog open={open} handler={onClose}>
@@ -178,6 +169,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             onChangeConfiguration={onChangeConfiguration}
             cleanConfiguration={cleanConfiguration}
             onDeletePath={onDeletePath}
+            renderOptions={true}
           />
         ) : (
           <></>

@@ -1,92 +1,123 @@
 import React, { useMemo } from 'react';
 import { CsvFileFormatSpec } from '../../api';
-import ConfigurationItemRow from './ConfigurationItemRow';
+import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
+import ConfigurationItemRowBoolean from './RowItem/ConfigurationItemRowBoolean';
+import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
+import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
 
 type TCsvConfigurationProps = {
   configuration: CsvFileFormatSpec;
   onChangeConfiguration: (params: Partial<CsvFileFormatSpec>) => void;
 };
-type TConfigurationItemRow = {
-  label: string;
-  value?: string | number;
-  onChange: (str: string) => void;
-};
-
-// todo: set input fields as in duckdb docs defaults to csv
 
 export default function CsvFormatConfiguration({
   configuration,
   onChangeConfiguration
 }: TCsvConfigurationProps) {
+  const csvConfigurationBoolean: TConfigurationItemRowBoolean[] = useMemo(() => {
+    return [
+      {
+        label: 'Treat all columns as varchar',
+        value: configuration.all_varchar,
+        onChange: (value) => onChangeConfiguration({ all_varchar: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Allow quoted nulls',
+        value: configuration.allow_quoted_nulls,
+        onChange: (value) => onChangeConfiguration({ allow_quoted_nulls: value }),
+        defaultValue: true
+      },
+      {
+        label: 'Filename',
+        value: configuration.filename,
+        onChange: (value) => onChangeConfiguration({ filename: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Header',
+        value: configuration.header,
+        onChange: (value) => onChangeConfiguration({ header: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Hive partitioning',
+        value: configuration.hive_partitioning,
+        onChange: (value) => onChangeConfiguration({ hive_partitioning: value }),
+        defaultValue: false
+      },
+      {
+        label: 'Ignore errors',
+        value: configuration.ignore_errors,
+        onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
+        defaultValue: false
+      }
+    ];
+  }, [configuration]);
+
   const csvConfiguration: TConfigurationItemRow[] = useMemo(() => {
     return [
-      // {
-      //   label: 'Treat all columns as varchar',
-      //   value: configuration.all_varchar,
-      //   onChange: (str) => onChangeConfiguration({ all_varchar: str })
-      // },
-      // {
-      //   label: 'Allow quoted nulls',
-      //   value: configuration.allow_quoted_nulls,
-      //   onChange: (str) => onChangeConfiguration({ allow_quoted_nulls: str })
-      // },
+      // auto, none, gzip, zstd // todo add enum on backend
       // {
       //   label: 'Compression',
       //   value: configuration.compression,
       //   onChange: (str) => onChangeConfiguration({ compression: str })
       // },
-      // {
-      //   label: 'Date format',
-      //   value: configuration.dateformat,
-      //   onChange: (str) => onChangeConfiguration({ dateformat: str })
-      // },
-      // {
-      //   label: 'Decimal Separator',
-      //   value: configuration.decimal_separator,
-      //   onChange: (str) => onChangeConfiguration({ decimal_separator: str })
-      // },
-      // {
-      //   label: 'Delimiter',
-      //   value: configuration.delim,
-      //   onChange: (str) => onChangeConfiguration({ delim: str })
-      // },
-      // {
-      //   label: 'Escape Character/String',
-      //   value: configuration.escape,
-      //   onChange: (str) => onChangeConfiguration({ escape: str })
-      // },
-      // filename
-      // header
-      // hivePartitioning
-      // ignoreErrors
-      // {
-      //   label: 'New Line',
-      //   value: configuration.new_line,
-      //   onChange: (str) => onChangeConfiguration({ new_line: str })
-      // },
-      // {
-      //   label: 'Quote',
-      //   value: configuration.quote,
-      //   onChange: (str) => onChangeConfiguration({ quote: str })
-      // },
-      // {
-      //   label: 'Skip',
-      //   value: configuration.skip,
-      //   onChange: (str) => {
-      //     !isNaN(Number(str))
-      //       ? onChangeConfiguration({ skip: Number(str) })
-      //       : undefined;
-      //   }
-      // },
-      // {
-      //   label: 'Timestamp Format',
-      //   value: configuration.timestampformat,
-      //   onChange: (str) => onChangeConfiguration({ timestampformat: str })
-      // }
+      {
+        label: 'Date format',
+        value: configuration?.dateformat,
+        onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
+        defaultValue: ''
+      },
+      {
+        label: 'Decimal Separator',
+        value: configuration.decimal_separator,
+        onChange: (str) => onChangeConfiguration({ decimal_separator: str.toString() }),
+        defaultValue: '.'
+      },
+      {
+        label: 'Delimiter',
+        value: configuration.delim,
+        onChange: (str) => onChangeConfiguration({ delim: str.toString() }),
+        defaultValue: ','
+      },
+      {
+        label: 'Escape Character/String',
+        value: configuration.escape,
+        onChange: (str) => onChangeConfiguration({ escape: str.toString() }),
+        defaultValue: '"'
+      },
+      {
+        label: 'New line',
+        value: configuration?.new_line,
+        onChange: (str) => onChangeConfiguration({ new_line: str.toString() }),
+        defaultValue: ''
+      },
+      {
+        label: 'Quote',
+        value: configuration.quote,
+        onChange: (str) => onChangeConfiguration({ quote: str.toString() }),
+        defaultValue: '"'
+      },
+      // todo: add sample size on backend
+      {
+        label: 'Skip',
+        value: configuration.skip,
+        onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ skip: Number(str) }) : undefined },
+        defaultValue: 0
+      },
+      {
+        label: 'Timestamp Format',
+        value: configuration.timestampformat,
+        onChange: (str) => onChangeConfiguration({ timestampformat: str.toString() }),
+        defaultValue: ''
+      }
     ];
   }, [configuration]);
 
   return (
+    <>
+    <br/>
     <div
       style={{
         display: 'grid',
@@ -100,8 +131,28 @@ export default function CsvFormatConfiguration({
           label={x.label}
           value={x.value}
           onChange={x.onChange}
+          defaultValue={x.defaultValue}
         />
       ))}
     </div>
+    <br/>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: '1fr 1fr 1fr',
+        gap: '16px'
+      }}
+    >
+      {csvConfigurationBoolean.map((x, index) => (
+        <ConfigurationItemRowBoolean
+          key={index}
+          label={x.label}
+          value={x.value}
+          onChange={x.onChange}
+          defaultValue={x.defaultValue}
+        />
+      ))}
+    </div>
+    </>
   );
 }

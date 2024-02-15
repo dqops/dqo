@@ -31,8 +31,7 @@ import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
+import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
 
 const TableDetails = () => {
   const {
@@ -253,6 +252,7 @@ const TableDetails = () => {
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
           onDeletePath={onDeletePath}
+          renderOptions={false} // todo: it should be an another component since it will have no options and another path field config
         />
       ) : (
         <></>

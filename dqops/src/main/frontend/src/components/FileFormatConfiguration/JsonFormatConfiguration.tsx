@@ -1,18 +1,12 @@
 import React, { useMemo } from 'react';
 import { JsonFileFormatSpec } from '../../api';
-import ConfigurationItemRow from './ConfigurationItemRow';
+import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
+import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 
 type TJsonConfigurationProps = {
   configuration: JsonFileFormatSpec;
   onChangeConfiguration: (params: Partial<JsonFileFormatSpec>) => void;
 };
-type TConfigurationItemRow = {
-  label: string;
-  value?: string | number;
-  onChange: (str: string) => void;
-};
-
-// todo: set input fields as in duckdb docs defaults to json
 
 export default function JsonFormatConfiguration({
   configuration,
@@ -60,6 +54,7 @@ export default function JsonFormatConfiguration({
           label={x.label}
           value={x.value}
           onChange={x.onChange}
+          defaultValue={x.defaultValue}
         />
       ))}
     </div>

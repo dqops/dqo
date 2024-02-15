@@ -1,18 +1,12 @@
 import React, { useMemo } from 'react';
 import { ParquetFileFormatSpec } from '../../api';
-import ConfigurationItemRow from './ConfigurationItemRow';
+import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
+import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 
 type TParquetConfigurationProps = {
   configuration: ParquetFileFormatSpec;
   onChangeConfiguration: (params: Partial<ParquetFileFormatSpec>) => void;
 };
-type TConfigurationItemRow = {
-  label: string;
-  value?: string | number;
-  onChangeBoolean: (str: string) => void;
-};
-
-// todo: set input fields as in duckdb docs defaults to parquet
 
 export default function ParquetFormatConfiguration({
   configuration,
@@ -47,7 +41,8 @@ export default function ParquetFormatConfiguration({
           key={index}
           label={x.label}
           value={x.value}
-          onChange={x.onChangeBoolean}
+          onChange={x.onChange}
+          defaultValue={x.defaultValue}
         />
       ))}
     </div>

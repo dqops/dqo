@@ -37,6 +37,9 @@ import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksC
 import PrestoConnection from '../../Dashboard/DatabaseConnection/PrestoConnection';
 import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
 import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
+import IKeyValuePropertyItemProps from '../../FileFormatConfiguration/IKeyValuePropertyItemProps';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
+import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
@@ -78,13 +81,8 @@ const ConnectionDetail = () => {
     if (!connectionBasic) {
       return;
     }
-
-    await dispatch(
-      updateConnectionBasic(checkTypes, activeTab, connection, connectionBasic)
-    );
-
+    await dispatch(updateConnectionBasic(checkTypes, activeTab, connection, connectionBasic));
     dispatch(getConnectionBasic(checkTypes, activeTab, connection));
-
     dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, false));
     setShowConfirm(false);
   };
@@ -93,7 +91,6 @@ const ConnectionDetail = () => {
     if (!connectionBasic) {
       return;
     }
-
 
     setIsTesting(true);
     const testRes = await DataSourcesApi.testConnection(false, connectionBasic);
@@ -271,7 +268,33 @@ const ConnectionDetail = () => {
             />
           )
         }
+        {connectionBasic?.provider_type === ConnectionSpecProviderTypeEnum.duckdb && (
+          <>
+            <DuckdbConnection
+              duckdb={connectionBasic?.duckdb}
+              onChange={(duckdb) => onChange({ duckdb })}
+              sharedCredentials = {sharedCredentials}
+            />
 
+            {/* <IKeyValuePropertyItemProps
+              // trino={connectionBasic?.duckdb}
+              onChange={(duckdb) => onChange({ duckdb })}
+              // sharedCredentials = {sharedCredentials}
+            /> */}
+
+            {/* <FileFormatConfiguration
+              paths={paths}
+              onAddPath={onAddPath}
+              onChangePath={onChangePath}
+              fileFormatType={fileFormatType}
+              onChangeFile={onChangeFile}
+              configuration={configuration}
+              onChangeConfiguration={onChangeConfiguration}
+              cleanConfiguration={cleanConfiguration}
+              onDeletePath={onDeletePath}
+            /> */}
+          </>
+        )}
       </div>
 
       <div className="flex space-x-4 justify-end items-center mt-6 px-4 mb-5">

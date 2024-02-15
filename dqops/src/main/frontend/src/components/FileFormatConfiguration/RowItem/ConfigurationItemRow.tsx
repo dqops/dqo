@@ -1,17 +1,14 @@
 import React from 'react';
-import Input from '../Input';
-
-type TConfigurationItemRowProps = {
-  label: string;
-  value?: string | number;
-  onChange: (str: string) => void;
-};
+import Input from '../../Input';
+import Checkbox from '../../Checkbox';
+import { TConfigurationItemRow } from './TConfigurationItemRow'
 
 export default function ConfigurationItemRow({
   label,
   value,
-  onChange
-}: TConfigurationItemRowProps) {
+  onChange,
+  defaultValue
+}: TConfigurationItemRow) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onChange(e.target.value);
   };
@@ -19,7 +16,9 @@ export default function ConfigurationItemRow({
   return (
     <div>
       <div className="py-1">{label}</div>
-      <Input value={value} onChange={handleChange} />
+      <Input 
+        value={value ?? defaultValue}
+        onChange={handleChange} />
     </div>
   );
 }
