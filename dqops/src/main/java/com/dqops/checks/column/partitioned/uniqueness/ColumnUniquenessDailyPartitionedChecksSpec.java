@@ -61,7 +61,7 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each daily partition.")
     private ColumnDistinctCountCheckSpec dailyPartitionDistinctCount;
 
     @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each daily partition.")

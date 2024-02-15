@@ -1,6 +1,7 @@
 # distinct count change 7 days data quality checks
 
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.
+This check monitors the count of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 ___

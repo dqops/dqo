@@ -1,6 +1,6 @@
 # distinct count change data quality checks
 
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
+This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 ___

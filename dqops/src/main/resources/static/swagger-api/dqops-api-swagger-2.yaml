@@ -27774,9 +27774,9 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_distinct_count:
-        description: "Verifies that the number of distinct values in a column does\
-          \ not fall below the minimum accepted count. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
+        description: "Verifies that the number of distinct values stays within an\
+          \ accepted range. Stores the most recent captured value for each day when\
+          \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnDistinctCountCheckSpec"
       daily_distinct_percent:
         description: "Verifies that the percentage of distinct values in a column\
@@ -27846,9 +27846,9 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_partition_distinct_count:
-        description: "Verifies that the number of distinct values in a column does\
-          \ not fall below the minimum accepted count. Stores a separate data quality\
-          \ check result for each daily partition."
+        description: "Verifies  that the number of distinct values stays within an\
+          \ accepted range. Stores a separate data quality check result for each daily\
+          \ partition."
         $ref: "#/definitions/ColumnDistinctCountCheckSpec"
       daily_partition_distinct_percent:
         description: "Verifies that the percentage of distinct values in a column\
@@ -27986,9 +27986,9 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_distinct_count:
-        description: "Verifies that the number of distinct values in a column does\
-          \ not fall below the minimum accepted count. Stores the most recent check\
-          \ result for each month when the data quality check was evaluated."
+        description: "Verifies  that the number of distinct values stays within an\
+          \ accepted range. Stores the most recent check result for each month when\
+          \ the data quality check was evaluated."
         $ref: "#/definitions/ColumnDistinctCountCheckSpec"
       monthly_distinct_percent:
         description: "Verifies that the percentage of distinct values in a column\
@@ -28025,9 +28025,9 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_partition_distinct_count:
-        description: "Verifies that the number of distinct values in a column does\
-          \ not fall below the minimum accepted count. Stores a separate data quality\
-          \ check result for each monthly partition."
+        description: "Verifies  that the number of distinct values stays within an\
+          \ accepted range. Stores a separate data quality check result for each monthly\
+          \ partition."
         $ref: "#/definitions/ColumnDistinctCountCheckSpec"
       monthly_partition_distinct_percent:
         description: "Verifies that the percentage of distinct values in a column\
@@ -28064,8 +28064,8 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       profile_distinct_count:
-        description: "Verifies that the number of distinct values in a column does\
-          \ not fall below the minimum accepted count."
+        description: "Verifies that the number of distinct values stays within an\
+          \ accepted range."
         $ref: "#/definitions/ColumnDistinctCountCheckSpec"
       profile_distinct_percent:
         description: "Verifies that the percentage of distinct values in a column\

@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
+ * This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.
+ * It raises a data quality issue when the change exceeds an accepted threshold.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

@@ -1,6 +1,7 @@
 # duplicate count data quality checks
 
-A column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
+This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.
+ The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.
 
 
 ___

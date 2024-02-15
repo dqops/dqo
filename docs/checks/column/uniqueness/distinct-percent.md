@@ -1,6 +1,7 @@
 # distinct percent data quality checks
 
-A column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
+This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.
+ The default value of 100% distinct values ensures the column has no duplicate values.
 
 
 ___

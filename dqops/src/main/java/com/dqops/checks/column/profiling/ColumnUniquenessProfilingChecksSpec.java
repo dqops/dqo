@@ -62,7 +62,7 @@ public class ColumnUniquenessProfilingChecksSpec extends AbstractCheckCategorySp
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count.")
+    @JsonPropertyDescription("Verifies that the number of distinct values stays within an accepted range.")
     private ColumnDistinctCountCheckSpec profileDistinctCount;
 
     @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent.")
