@@ -251,6 +251,63 @@ spec:
                 anomaly_percent: 1.0
 ```
 
+## Multi-column duplicates
+DQOps can also detect multi-column duplicates.
+The following data comes from a public dataset containing annual health measures for each state in the US. 
+The table does not have a primary key column.
+
+The records should be unique for each combination of the *edition*, *report_type*, *measure_name*, *state_name*, and *subpopulation*.
+
+| edition | report_type             | measure_name   | state_name           | subpopulation                 | value  | lower_ci | upper_ci | source                                              | source_date |
+|---------|-------------------------|----------------|----------------------|-------------------------------|--------|----------|----------|-----------------------------------------------------|-------------|
+| 2021    | 2021 Health Disparities | Able-Bodied    | West Virginia        | American Indian/Alaska Native | 57.0   | 45.0     | 69.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
+| 2021    | 2021 Health Disparities | Able-Bodied    | Vermont              | American Indian/Alaska Native | 58.0   | 47.0     | 70.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
+| 2021    | 2021 Health Disparities | Able-Bodied    | Kentucky             | American Indian/Alaska Native | 60.0   | 54.0     | 65.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
+| 2021    | 2021 Health Disparities | Able-Bodied    | West Virginia        | Less Than High School         | 61.0   | 60.0     | 63.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
+| 2021    | 2021 Health Disparities | Able-Bodied    | District of Columbia | American Indian/Alaska Native | 62.0   | 49.0     | 75.0     | U.S. Census Bureau, American Community Survey PUMS  | 2015-2019   |
+
+### Configuring multi-column duplicate checks
+The uniqueness checks in DQOps operate on single columns. To detect duplicates in a combination of columns, 
+we have to define a [calculated column](../dqo-concepts/configuring-table-metadata.md#calculated-columns)
+derived as a concatenation of all columns that should be unique when combined.
+
+The SQL expression that concatenates the values will use a `||` concatenation operator, as shown below. 
+DQOps replaces the `{alias}.` token with the alias of the table.
+
+`{alias}.edition || {alias}.report_type || {alias}.measure_name || {alias}.state_name || {alias}.subpopulation`
+
+### Detect multi-column duplicates in UI
+We have to add a virtual column to the monitored table. The column will be calculated using the SQL expression shown above.
+
+![Adding calculated column for concatenating values for multi-column duplicate detection in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/adding-calculated-column-concatenated-unique-values-in-dqops-min.png){ loading=lazy }
+
+After adding a calculated column,
+DQOps will show it in the metadata tree. We can now configure the [*duplicate_count*](../checks/column/uniqueness/duplicate-count.md)
+data quality check.
+
+![Duplicate count detection in DQOps on multiple columns using a data quality check editor](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/duplicate-detection-check-in-dqops-on-multiple-columns-min.png){ loading=lazy }
+
+### Detect multi-column duplicates in YAML
+We must add our calculated column to the list of columns to detect duplicates on multiple other columns. 
+This column will have an additional configuration, the SQL expression discussed before.
+
+``` { .yaml linenums="1" hl_lines="7-8 12-14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    unique_columns:
+      sql_expression: "{alias}.edition || {alias}.report_type || {alias}.measure_name\
+        \ || {alias}.state_name || {alias}.subpopulation"
+      monitoring_checks:
+        daily:
+          uniqueness:
+            daily_duplicate_count:
+              error:
+                max_count: 0 
+```
+
 ## Configuring other uniqueness checks
 The DQOps data quality check editor shows the remaining uniqueness checks after clicking the *Show advanced checks* checkbox.
 
