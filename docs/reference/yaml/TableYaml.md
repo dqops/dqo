@@ -66,7 +66,7 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`columns`](./TableYaml.md#columnspecmap)</span>|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|*[ColumnSpecMap](./TableYaml.md#columnspecmap)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments used for change tracking and documenting changes directly in the table data quality specification file.|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
-|<span class="no-wrap-code ">[`file_format`](./TableYaml.md#fileformatspec)</span>|File format with the specification used as a source data.|*[FileFormatSpec](./TableYaml.md#fileformatspec)*| | | |
+|<span class="no-wrap-code ">[`file_format`](./TableYaml.md#fileformatspec)</span>|File format with the specification used as a source data. It overrides the connection spec&#x27;s file format when it is set|*[FileFormatSpec](./TableYaml.md#fileformatspec)*| | | |
 
 
 
@@ -1448,125 +1448,10 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`csv`](./TableYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./TableYaml.md#csvfileformatspec)*| | | |
-|<span class="no-wrap-code ">[`json`](./TableYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./TableYaml.md#jsonfileformatspec)*| | | |
-|<span class="no-wrap-code ">[`parquet`](./TableYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./TableYaml.md#parquetfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`csv`](./ConnectionYaml.md#csvfileformatspec)</span>|Csv file format specification.|*[CsvFileFormatSpec](./ConnectionYaml.md#csvfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`json`](./ConnectionYaml.md#jsonfileformatspec)</span>|Json file format specification.|*[JsonFileFormatSpec](./ConnectionYaml.md#jsonfileformatspec)*| | | |
+|<span class="no-wrap-code ">[`parquet`](./ConnectionYaml.md#parquetfileformatspec)</span>|Parquet file format specification.|*[ParquetFileFormatSpec](./ConnectionYaml.md#parquetfileformatspec)*| | | |
 |<span class="no-wrap-code ">[`file_paths`](./TableYaml.md#filepathlistspec)</span>|The list of paths to files with data that are used as a source.|*[FilePathListSpec](./TableYaml.md#filepathlistspec)*| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## CsvFileFormatSpec
-Csv file format specification for querying data in the csv format files.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`all_varchar`</span>|Option to skip type detection for CSV parsing and assume all columns to be of type VARCHAR.|*boolean*| | | |
-|<span class="no-wrap-code ">`allow_quoted_nulls`</span>|Option to allow the conversion of quoted values to NULL values.|*boolean*| | | |
-|<span class="no-wrap-code ">`auto_detect`</span>|Enables auto detection of CSV parameters.|*boolean*| | | |
-|<span class="no-wrap-code ">`columns`</span>|A struct that specifies the column names and column types contained within the CSV file (e.g., {&#x27;col1&#x27;: &#x27;INTEGER&#x27;, &#x27;col2&#x27;: &#x27;VARCHAR&#x27;}). Using this option implies that auto detection is not used.|*Dict[string, string]*| | | |
-|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.|*string*| | | |
-|<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
-|<span class="no-wrap-code ">`decimal_separator`</span>|The decimal separator of numbers.|*string*| | | |
-|<span class="no-wrap-code ">`delim`</span>|Specifies the string that separates columns within each row (line) of the file.|*string*| | | |
-|<span class="no-wrap-code ">`escape`</span>|Specifies the string that should appear before a data character sequence that matches the quote value.|*string*| | | |
-|<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
-|<span class="no-wrap-code ">`header`</span>|Specifies that the file contains a header line with the names of each column in the file.|*boolean*| | | |
-|<span class="no-wrap-code ">`hive_partitioning`</span>|Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
-|<span class="no-wrap-code ">`ignore_errors`</span>|Option to ignore any parsing errors encountered - and instead ignore rows with errors.|*boolean*| | | |
-|<span class="no-wrap-code ">`new_line`</span>|Set the new line character(s) in the file. Options are &#x27;\r&#x27;,&#x27;\n&#x27;, or &#x27;\r\n&#x27;.|*string*| | | |
-|<span class="no-wrap-code ">`quote`</span>|Specifies the quoting string to be used when a data value is quoted.|*string*| | | |
-|<span class="no-wrap-code ">`skip`</span>|The number of lines at the top of the file to skip.|*long*| | | |
-|<span class="no-wrap-code ">`timestampformat`</span>|Specifies the date format to use when parsing timestamps.|*string*| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## JsonFileFormatSpec
-Json file format specification for querying data in the json format files.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`auto_detect`</span>|Whether to auto-detect detect the names of the keys and data types of the values automatically|*boolean*| | | |
-|<span class="no-wrap-code ">`columns`</span>|A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: &#x27;INTEGER&#x27;, key2: &#x27;VARCHAR&#x27;}). If auto_detect is enabled these will be inferred|*Dict[string, string]*| | | |
-|<span class="no-wrap-code ">`compression`</span>|The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are &#x27;none&#x27;, &#x27;gzip&#x27;, &#x27;zstd&#x27;, and &#x27;auto&#x27;.|*string*| | | |
-|<span class="no-wrap-code ">`convert_strings_to_integers`</span>|	Whether strings representing integer values should be converted to a numerical type.|*boolean*| | | |
-|<span class="no-wrap-code ">`dateformat`</span>|Specifies the date format to use when parsing dates.|*string*| | | |
-|<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
-|<span class="no-wrap-code ">`format`</span>|	Can be one of [&#x27;auto&#x27;, &#x27;unstructured&#x27;, &#x27;newline_delimited&#x27;, &#x27;array&#x27;].|*enum*|*auto*<br/>*unstructured*<br/>*newline_delimited*<br/>*array*<br/>| | |
-|<span class="no-wrap-code ">`hive_partitioning`</span>|	Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
-|<span class="no-wrap-code ">`ignore_errors`</span>|Whether to ignore parse errors (only possible when format is &#x27;newline_delimited&#x27;).|*boolean*| | | |
-|<span class="no-wrap-code ">`maximum_object_size`</span>|	The maximum size of a JSON object (in bytes)|*long*| | | |
-|<span class="no-wrap-code ">`records`</span>|Can be one of [&#x27;auto&#x27;, &#x27;true&#x27;, &#x27;false&#x27;]|*string*| | | |
-|<span class="no-wrap-code ">`timestampformat`</span>|	Specifies the date format to use when parsing timestamps.|*string*| | | |
-
-
-
-
-
-
-
-
-
-___
-
-
-## ParquetFileFormatSpec
-Parquet file format specification for querying data in the parquet format files.
-
-
-
-
-
-
-
-
-
-The structure of this object is described below
-
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">`binary_as_string`</span>|Parquet files generated by legacy writers do not correctly set the UTF8 flag for strings, causing string columns to be loaded as BLOB instead. Set this to true to load binary columns as strings.|*boolean*| | | |
-|<span class="no-wrap-code ">`filename`</span>|Whether or not an extra filename column should be included in the result.|*boolean*| | | |
-|<span class="no-wrap-code ">`file_row_number`</span>|Whether or not to include the file_row_number column.|*boolean*| | | |
-|<span class="no-wrap-code ">`hive_partitioning`</span>|Whether or not to interpret the path as a hive partitioned path.|*boolean*| | | |
-|<span class="no-wrap-code ">`union_by_name`</span>|Whether the columns of multiple schemas should be unified by name, rather than by position.|*boolean*| | | |
 
 
 

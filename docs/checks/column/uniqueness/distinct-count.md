@@ -1,6 +1,6 @@
 # distinct count data quality checks
 
-A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.
 
 
 ___
@@ -13,7 +13,7 @@ The **distinct count** data quality check has the following variants for each
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count.
+Verifies that the number of distinct values stays within an accepted range.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -990,7 +990,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that the number of distinct values stays within an accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1969,7 +1969,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
+Verifies  that the number of distinct values stays within an accepted range. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -2948,7 +2948,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.
+Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -3949,7 +3949,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.
+Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

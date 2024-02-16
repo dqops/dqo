@@ -264,19 +264,19 @@ function DefinitionProvider(props: any) {
 
   const sortItemsTreeAlphabetically = (array: TTreeItems) => {
     if (!array) return [];
-    if ('sensor_name' in array[0] ?? {}) {
+    if ('sensor_name' in (array.length > 0 ? array[0] : {}) ?? {}) {
       return array.slice().sort((a, b) => {
         const sensorNameA = (a as SensorListModel).sensor_name ?? '';
         const sensorNameB = (b as SensorListModel).sensor_name ?? '';
         return sensorNameA.localeCompare(sensorNameB);
       });
-    } else if ('rule_name' in array[0] ?? {}) {
+    } else if ('rule_name' in (array.length > 0 ? array[0] : {}) ?? {}) {
       return array.slice().sort((a, b) => {
         const ruleNameA = (a as RuleListModel).rule_name ?? '';
         const ruleNameB = (b as RuleListModel).rule_name ?? '';
         return ruleNameA.localeCompare(ruleNameB);
       });
-    } else if ('check_name' in array[0] ?? {}) {
+    } else if ('check_name' in (array.length > 0 ? array[0] : {}) ?? {}) {
       return array.slice().sort((a, b) => {
         const checkNameA = (a as CheckDefinitionListModel).check_name ?? '';
         const checkNameB = (b as CheckDefinitionListModel).check_name ?? '';

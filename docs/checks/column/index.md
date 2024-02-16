@@ -759,72 +759,81 @@ This check verifies that the minimum and maximum lengths of text values are in t
 Counts the number or percent of duplicate or unique values in a column.
 
 ### [distinct count](./uniqueness/distinct-count.md)
-A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.
 
 
 
 ### [distinct percent](./uniqueness/distinct-percent.md)
-A column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
+This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.
+ The default value of 100% distinct values ensures the column has no duplicate values.
 
 
 
 ### [duplicate count](./uniqueness/duplicate-count.md)
-A column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
+This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.
+ The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.
 
 
 
 ### [duplicate percent](./uniqueness/duplicate-percent.md)
-A column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold.
+ The default threshold is 0% duplicate values.
 
 
 
 ### [distinct count anomaly](./uniqueness/distinct-count-anomaly.md)
-A column-level check that ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window.
+ The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
 
 
 
 ### [distinct percent anomaly](./uniqueness/distinct-percent-anomaly.md)
-A column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window.
+ The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
 
 
 
 ### [distinct count change](./uniqueness/distinct-count-change.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
+This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 1 day](./uniqueness/distinct-count-change-1-day.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check monitors the count of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 7 days](./uniqueness/distinct-count-change-7-days.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.
+This check monitors the count of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 30 days](./uniqueness/distinct-count-change-30-days.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.
+This check monitors the count of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change](./uniqueness/distinct-percent-change.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
+This check monitors the percentage of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 1 day](./uniqueness/distinct-percent-change-1-day.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 7 days](./uniqueness/distinct-percent-change-7-days.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
+This check monitors the percentage of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 30 days](./uniqueness/distinct-percent-change-30-days.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
+This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 

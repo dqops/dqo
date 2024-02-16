@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+ * This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window.
+ * The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

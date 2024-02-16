@@ -1,6 +1,6 @@
 # distinct percent change 1 day data quality checks
 
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 ___
