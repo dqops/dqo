@@ -162,6 +162,6 @@ public class ColumnTextSurroundedByWhitespaceCheckSpec extends
      */
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
-        return DefaultDataQualityDimensions.Validity;
+        return DefaultDataQualityDimensions.Consistency;
     }
 }

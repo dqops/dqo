@@ -130,6 +130,74 @@ spec:
 ```
 
 
+## Text surrounded by whitespace
+DQOps has dedicated data quality checks to detect text values surrounded by whitespace characters such as space or tab.
+Additional whitespace can appear when the data is entered manually and the user accidentally adds extra space.
+
+There is another problem with the data that is stored in legacy databases. 
+Old databases used fixed-width character data types, such as *CHAR(10)*.
+Text values stored in these old databases were filled with extra spaces to fill the remaining character positions. 
+Text values extracted from these databases will contain additional space characters at the end of shorter texts.
+
+The following table shows an example of a data quality issue related to the inconsistent presence of space characters around a text value.
+
+| state_id | state_name             |   Whitespace before   |   Whitespace after    |
+|----------|------------------------|:---------------------:|:---------------------:|
+| 1        | _null_                 |                       |                       |
+| 2        | `'California'`         |                       |                       |
+| 3        | **`'  Arizona'`**      | :material-check-bold: |                       |
+| 4        | **`'Colorado    '`**   |                       | :material-check-bold: |
+| 5        | **`'   Florida    '`** | :material-check-bold: | :material-check-bold: |
+
+Additional whitespace around values causes the following issues.
+
+- Two values that differ by extra whitespace around the text are not equal, leading to data duplication.
+
+- SQL queries using a GROUP BY clause will return additional rows.
+
+- SQL queries using joins will return no records when the columns that are joined differ by extra whitespace.
+
+- The database will need additional space to store the values.
+
+DQOps supports two very similar checks that detect texts surrounded by whitespace.
+
+- [*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)  check finds and counts texts surrounded by whitespace.
+
+- [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check finds and measures the percentage of texts surrounded by whitespace.
+
+### Detecting text surrounded by whitespace in UI
+The [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check takes one parameter, the *max_percent*. 
+When the default value 0% is used, DQOps will raise a data quality issue when any value surrounded by whitespace is found.
+
+Please note that the [DQOps data quality check editor](../dqo-concepts/dqops-user-interface-overview.md#check-editor)
+shows this check after clicking the *Show advanced checks* checkbox.
+
+![Detect texts surrounded by whitespace characters using DQOps data quality check](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/detect-text-surrounded-with-whitespace-data-quality-check-in-dqops-min.png){ loading=lazy }
+
+The results in DQOps show that 75% of non-null values (three out of four) contained whitespace characters around the text.
+
+### Detecting text surrounded by whitespace in YAML
+The configuration of the [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check is straightforward.
+
+``` { .yaml linenums="1" hl_lines="13-15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    state_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          whitespace:
+            daily_text_surrounded_by_whitespace_percent:
+              error:
+                max_percent: 0.0
+```
+
+
 ## List of whitespace checks at a column level
 | Data quality check name | Data quality dimension | Description | Standard check |
 |-------------------------|------------------------|-------------|-------|
@@ -139,8 +207,8 @@ spec:
 |[*empty_text_percent*](../checks/column/whitespace/empty-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.| |
 |[*whitespace_text_percent*](../checks/column/whitespace/whitespace-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.| |
 |[*null_placeholder_text_percent*](../checks/column/whitespace/null-placeholder-text-percent.md)|Completeness|A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.| |
-|[*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)|Validity|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
-|[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|Validity|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
+|[*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)|Consistency|A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.| |
+|[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|Consistency|A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.| |
 
 
 **Reference and samples**
