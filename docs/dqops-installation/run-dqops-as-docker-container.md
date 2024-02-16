@@ -1,5 +1,5 @@
 # Run DQOps in Docker
-This guide shows how to pull DQOps docker image from Docker Hub, and how to pass the right parameters to the container to start it in a production mode.
+This guide shows how to pull [DQOps docker image from Docker Hub](https://hub.docker.com/r/dqops/dqo), and how to pass the right parameters to the container to start it in a production mode.
 
 ## Overview
 
@@ -29,7 +29,7 @@ To run DQOps as a Docker container you need
 
 To start DQOps in a [Shell mode](../dqo-concepts/command-line-interface.md) follow the steps below.
 
-1.  Download the DQOps image from DockerHub by running the following command in a terminal:
+1.  Download the [DQOps image from Docker Hub](https://hub.docker.com/r/dqops/dqo) by running the following command in a terminal:
 
     ```
     docker pull dqops/dqo
