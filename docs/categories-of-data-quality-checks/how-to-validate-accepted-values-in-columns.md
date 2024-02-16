@@ -207,7 +207,7 @@ The parameter value 1 allows one missing value, and so on.
 The configuration of the [*expected_texts_in_top_values_count*](../checks/column/accepted_values/expected-texts-in-top-values-count.md)
 check in YAML is straightforward.
 
-``` { .yaml linenums="1" hl_lines="12-16" }
+``` { .yaml linenums="1" hl_lines="9-16" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -226,12 +226,51 @@ spec:
                 max_missing: 0
 ```
 
+## Validating country codes
+DQOps also has built-in data quality checks for validating two-letter country codes and currency names. 
+These checks were tested to work on all supported data sources.
+
+If you need to [create a custom data quality check](../working-with-dqo/creating-custom-data-quality-checks.md)
+that is easy to activate, the best way is by making a copy of 
+the [*text_valid_country_code_percent*](../checks/column/accepted_values/text-valid-country-code-percent.md) check 
+and adapting the list of accepted values used in the query template (the data quality sensor).
+
+### Activating country code validation in UI
+The [*text_valid_country_code_percent*](../checks/column/accepted_values/text-valid-country-code-percent.md) check takes one parameter *min_percent*. 
+This parameter sets the minimum percentage of values that must be valid country codes.
+
+The following example shows that a public dataset showing the daily count of COVID-19 cases
+per country uses some invalid country codes.
+
+![DQOps data quality check that validates two letter country codes in column values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/country-code-validation-check-in-dqops-min.png){ loading=lazy }
+
+### Activating country code validation in UI
+The [*text_valid_country_code_percent*](../checks/column/accepted_values/text-valid-country-code-percent.md) check is easy to configure.
+It does not require a list of accepted values because the list is already included in the SQL query template.
+
+``` { .yaml linenums="1" hl_lines="13-15" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  columns:
+    country_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      monitoring_checks:
+        daily:
+          accepted_values:
+            daily_text_valid_country_code_percent:
+              error:
+                min_percent: 100.0 
+```
 
 ## Use cases
-| **Name of the example**                                                                                                       | **Description**                                                                                                                                                                                                                                    |
-|:------------------------------------------------------------------------------------------------------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [Percentage of rows having only accepted values](../examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that a text column contains only accepted values using the [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check.                                                      |
-| [Percentage of valid currency codes](../examples/data-validity/percentage-of-valid-currency-codes.md)                         | This example shows how to detect that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../checks/column/accepted_values/text-valid-currency-code-percent.md) check. |
+| **Name of the example**                                                                                                       | **Description**                                                                                                                                                                                                                                     |
+|:------------------------------------------------------------------------------------------------------------------------------|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [Percentage of rows having only accepted values](../examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md) | This example shows how to verify that a text column contains only accepted values using the [text_found_in_set_percent](../checks/column/accepted_values/text-found-in-set-percent.md) check.                                                       |
+| [Percentage of valid currency codes](../examples/data-validity/percentage-of-valid-currency-codes.md)                         | This example shows how to measure that the percentage of valid currency codes in a column does not fall below a set threshold using [text_valid_currency_code_percent](../checks/column/accepted_values/text-valid-currency-code-percent.md) check. |
 
 
 ## List of accepted values checks at a column level
