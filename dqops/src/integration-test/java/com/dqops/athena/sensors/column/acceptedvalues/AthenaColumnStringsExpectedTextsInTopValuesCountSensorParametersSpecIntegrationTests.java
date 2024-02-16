@@ -100,6 +100,7 @@ public class AthenaColumnStringsExpectedTextsInTopValuesCountSensorParametersSpe
         Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
+    // todo: test fails due to grouping level value, it is just a year instead of a timestamp, and a row count is 1 instead of 3
     @Test
     void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
         List<String> values = new ArrayList<>();

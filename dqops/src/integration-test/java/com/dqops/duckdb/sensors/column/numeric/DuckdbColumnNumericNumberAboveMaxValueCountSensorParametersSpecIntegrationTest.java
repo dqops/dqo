@@ -16,7 +16,7 @@
 package com.dqops.duckdb.sensors.column.numeric;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.numeric.ColumnNumberAboveMaxValuePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.numeric.ColumnNumberAboveMaxValueCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import com.dqops.sampledata.IntegrationTestSampleDataObjectMother;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
-import com.dqops.sensors.column.numeric.ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec;
+import com.dqops.sensors.column.numeric.ColumnNumericNumberAboveMaxValueCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
-    private ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec sut;
+public class DuckdbColumnNumericNumberAboveMaxValueCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+    private ColumnNumericNumberAboveMaxValueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNumberAboveMaxValuePercentCheckSpec checkSpec;
+    private ColumnNumberAboveMaxValueCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.duckdb);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericNumberAboveMaxValuePercentSensorParametersSpec();
-        this.checkSpec = new ColumnNumberAboveMaxValuePercentCheckSpec();
+        this.sut = new ColumnNumericNumberAboveMaxValueCountSensorParametersSpec();
+        this.checkSpec = new ColumnNumberAboveMaxValueCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -66,7 +66,7 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(4L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(4L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(20.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(4L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ public class DuckdbColumnMaxValueAboveMaxValuePercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 }
