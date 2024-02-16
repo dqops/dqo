@@ -4,16 +4,9 @@ import SectionWrapper from '../../SectionWrapper';
 import {
   DuckdbParametersSpec,
   SharedCredentialListModel,
-  DuckdbParametersSpecSourceFilesTypeEnum,
-  CsvFileFormatSpec,
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
+  DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../../../api';
-import JdbcPropertiesView from '../JdbcProperties';
-import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
-import Select from '../../../Select';
-import IKeyValuePropertyItemProps from '../../../FileFormatConfiguration/IKeyValuePropertyItemProps';
-import CsvFormatConfiguration from '../../../FileFormatConfiguration/CsvFormatConfiguration';
+import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration'
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
 
@@ -66,14 +59,8 @@ const DuckdbConnection = ({
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-      {/* 
-      <IKeyValuePropertyItemProps
-          // trino={connectionBasic?.duckdb}
-          onChange={(duckdb) => onChange({ duckdb })}
-          // sharedCredentials = {sharedCredentials}
-        /> */}
-
-      <FileFormatConfiguration
+      
+      <FileFormatConfiguration 
         paths={paths}
         onAddPath={onAddPath}
         onChangePath={onChangePath}

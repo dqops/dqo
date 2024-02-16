@@ -2,7 +2,8 @@ export type TConfigurationItemRow = {
   label: string;
   value?: string | number;
   onChange: (str: string | number) => void;
-  defaultValue: string | number;
+  defaultValue?: string | number;
   isEnum?: boolean;
-  options?: any,
+  options?: any;
+  className?: string;
 };

@@ -1,26 +1,22 @@
 import React from 'react';
-import KeyValuePropertyItem from './IKeyValuePropertyItemProps';
+import KeyValuePropertyItem from './KeyValuePropertyItem';
 import { convertArrayToObject, convertObjectToArray } from "../../../utils/object";
 import { SharedCredentialListModel } from '../../../api';
 
-interface IProperties {
-  [key: string]: string;
-}
-
-interface IKeyValuePropertyItemProps {
-  properties?: IProperties;
-  onChange: (properties: IProperties) => void;
+interface IKeyValueProperties {
+  properties?: { [key: string]: string; };
+  onChange: (properties: { [key: string]: string; }) => void;
   sharedCredentials ?: SharedCredentialListModel[];
 }
 
-const JdbcPropertiesView = ({ properties, onChange, sharedCredentials }: IKeyValuePropertyItemProps) => {
+const KeyValueProperties = ({ properties, onChange, sharedCredentials }: IKeyValueProperties) => {
   const entries: [string, string][] = convertObjectToArray(properties).concat([['', '']]);
 
   const onRemove = (key: number) => {
     onChange(convertArrayToObject(entries.filter((item, index) => index !== key)));
   };
 
-  const onChangeProperty = (key: number, val: [string, string]) => {
+  const onChangeDict = (key: number, val: [string, string]) => {
     onChange(convertArrayToObject(entries.map((item, index) => index === key ? val : item)));
   };
 
@@ -43,7 +39,7 @@ const JdbcPropertiesView = ({ properties, onChange, sharedCredentials }: IKeyVal
               value={value}
               isLast={index === entries.length - 1}
               onRemove={onRemove}
-              onChange={onChangeProperty}
+              onChange={onChangeDict}
               sharedCredentials={sharedCredentials}
             />
           ))}
@@ -53,4 +49,4 @@ const JdbcPropertiesView = ({ properties, onChange, sharedCredentials }: IKeyVal
   );
 };
 
-export default JdbcPropertiesView;
+export default KeyValueProperties;

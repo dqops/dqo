@@ -34,15 +34,11 @@ const KeyValuePropertyItem = ({
         />
       </td>
       <td className="pr-4 min-w-40 py-2 w-1/2">
-        {/* <FieldTypeInput
+        <FieldTypeInput
           value={value}
           onChange={(val) => onChange(idx, [name, val])}
           credential={true}
           data={sharedCredentials}
-        /> */}
-        <Input
-          value={name}
-          onChange={(e) => onChange(idx, [e.target.value, value])}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">

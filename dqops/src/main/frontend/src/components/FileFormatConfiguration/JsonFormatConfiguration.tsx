@@ -77,7 +77,6 @@ export default function JsonFormatConfiguration({
         label: 'Compression',
         value: configuration?.compression,
         onChange: (str) => onChangeConfiguration({ compression: str as JsonFileFormatSpecCompressionEnum }),
-        defaultValue: JsonFileFormatSpecCompressionEnum.auto,
         isEnum: true,
         options: compressionEnumOptions
       },
@@ -85,13 +84,11 @@ export default function JsonFormatConfiguration({
         label: 'Date format',
         value: configuration?.dateformat,
         onChange: (str) => onChangeConfiguration({ dateformat: str.toString() }),
-        defaultValue: 'iso'
       },
       {
         label: 'Json format',
         value: configuration?.format,
         onChange: (str) => onChangeConfiguration({ format: str as JsonFileFormatSpecFormatEnum }),
-        defaultValue: JsonFileFormatSpecFormatEnum.array,
         isEnum: true,
         options: jsonFormatOptions
       },
@@ -99,13 +96,11 @@ export default function JsonFormatConfiguration({
         label: 'Maximum depth',
         value: configuration?.maximum_depth,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ maximum_depth: Number(str) }) : undefined },
-        defaultValue: -1
       },
       {
         label: 'Maximum object size (in bytes)',
         value: configuration?.maximum_object_size,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ maximum_object_size: Number(str) }) : undefined },
-        defaultValue: 16777216
       },
       {
         label: 'Records',
@@ -118,13 +113,11 @@ export default function JsonFormatConfiguration({
         label: 'Sample size',
         value: configuration?.sample_size,
         onChange: (str) => { !isNaN(Number(str)) ? onChangeConfiguration({ sample_size: Number(str) }) : undefined },
-        defaultValue: 20480
       },
       {
         label: 'Timestamp Format',
         value: configuration?.timestampformat,
         onChange: (str) => onChangeConfiguration({ timestampformat: str.toString() }),
-        defaultValue: ''
       }
     ];
   }, [configuration]);
