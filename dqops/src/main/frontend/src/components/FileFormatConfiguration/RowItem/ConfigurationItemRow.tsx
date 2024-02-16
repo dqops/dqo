@@ -9,7 +9,8 @@ export default function ConfigurationItemRow({
   onChange,
   defaultValue, 
   isEnum,
-  options
+  options,
+  className
 }: TConfigurationItemRow) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string) => {
     if (typeof e === 'string') {
@@ -21,19 +22,24 @@ export default function ConfigurationItemRow({
 
   return (
     <div>
-      <div className="py-1">{label}</div>
       { !isEnum &&
-        <Input 
-          value={value ?? defaultValue}
-          onChange={handleChange} />
+        <div className={className}>
+          <div>{label}</div>
+          <Input 
+            value={value ?? defaultValue}
+            onChange={handleChange} 
+          />
+        </div>
       }
       { isEnum && options &&
-        <Select
-          options={options}
-          className="mb-4"
-          value={value ?? defaultValue}
-          onChange={handleChange}
-        />
+        <div className={className}>
+          <div>{label}</div>
+          <Select
+            options={options}
+            value={value ?? defaultValue}
+            onChange={handleChange}
+          />
+        </div>
       }
     </div>
   );

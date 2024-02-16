@@ -4,27 +4,27 @@ import ConfigurationItemRowBoolean from './RowItem/ConfigurationItemRowBoolean';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
 
-type TCsvConfigurationProps = {
+type TConfigurationProps = {
   configuraitonStrings?: TConfigurationItemRow[],
   configurationBooleans?: TConfigurationItemRowBoolean[]
 };
 
+const divStyle = {
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr 1fr',
+  gap: '16px'
+}
+
 export default function FormatConfigurationRenderer({
    configuraitonStrings,
    configurationBooleans
-}: TCsvConfigurationProps) {
+}: TConfigurationProps) {
 
   return (
     <>
-      {configuraitonStrings && <>
-        <br/>
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gap: '16px'
-          }}
-        >
+      <div className="py-2"/>
+      {configuraitonStrings &&
+        <div style={divStyle}>
           {configuraitonStrings.map((x, index) => (
             <ConfigurationItemRow
               key={index}
@@ -37,17 +37,10 @@ export default function FormatConfigurationRenderer({
             />
           ))}
         </div>
-      </>}
+      }
 
-      {configurationBooleans && <>
-        <br/>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              gap: '16px'
-            }}
-          >
+      {configurationBooleans &&
+        <div style={divStyle} className='py-5'>
           {configurationBooleans.map((x, index) => (
             <ConfigurationItemRowBoolean
               key={index}
@@ -58,7 +51,7 @@ export default function FormatConfigurationRenderer({
             />
           ))}
         </div>
-      </>}
+      }
     </>
   );
 }
