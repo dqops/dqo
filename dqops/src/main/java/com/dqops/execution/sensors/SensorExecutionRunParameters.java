@@ -591,10 +591,13 @@ public class SensorExecutionRunParameters {
         }
 
         // todo: more and better info
-        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(this.connection.getDuckdb(), this.table);
-        if (fileFormatSpec != null) {
-            stringBuilder.append(", file format: ");
-            stringBuilder.append(fileFormatSpec.toString());
+
+        if(this.connection.getDuckdb() != null){
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(this.connection.getDuckdb(), this.table);
+            if (fileFormatSpec != null) {
+                stringBuilder.append(", file format: ");
+                stringBuilder.append(fileFormatSpec.toString());
+            }
         }
 
         return stringBuilder.toString();

@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class DuckdbColumnMaxValueBelowMinValueCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
+public class DuckdbColumnNumericNumberBelowMinValueCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private ColumnNumericNumberBelowMinValueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNumberBelowMinValueCheckSpec checkSpec;
