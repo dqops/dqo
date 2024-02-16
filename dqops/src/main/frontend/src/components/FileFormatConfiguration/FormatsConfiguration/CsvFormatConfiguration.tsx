@@ -2,10 +2,10 @@ import React, { useMemo } from 'react';
 import {
   CsvFileFormatSpec,
   CsvFileFormatSpecCompressionEnum
-} from '../../api';
+} from '../../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
-import FormatConfigurationRenderer from './FormatConfigurationRenderer'
+import FormatConfigurationRenderer from '../FormatConfigurationRenderer'
 
 type TCsvConfigurationProps = {
   configuration: CsvFileFormatSpec;

@@ -16,14 +16,12 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
-  CsvFileFormatSpec,
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
   FileFormatSpec,
   DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -157,23 +155,27 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
             />
           </div>
         </div>
-        {connectionModel.provider_type ===
-        ConnectionSpecProviderTypeEnum.duckdb ? (
-          <FileFormatConfiguration
-            paths={paths}
-            onAddPath={onAddPath}
-            onChangePath={onChangePath}
-            fileFormatType={fileFormatType}
-            onChangeFile={onChangeFile}
-            configuration={configuration}
-            onChangeConfiguration={onChangeConfiguration}
-            cleanConfiguration={cleanConfiguration}
-            onDeletePath={onDeletePath}
-            renderOptions={true}
-          />
-        ) : (
-          <></>
-        )}
+        {connectionModel.provider_type === ConnectionSpecProviderTypeEnum.duckdb &&
+          <SectionWrapper
+            title="File format configuration"
+            className="text-sm my-4 text-black"
+          >
+          {/*  todo: add filepaths */}
+
+            <FileFormatConfiguration
+              // paths={paths}
+              // onAddPath={onAddPath}
+              // onChangePath={onChangePath}
+              fileFormatType={fileFormatType}
+              onChangeFile={onChangeFile}
+              configuration={configuration}
+              onChangeConfiguration={onChangeConfiguration}
+              cleanConfiguration={cleanConfiguration}
+              // onDeletePath={onDeletePath}
+              freezeFileType={true}
+            />
+          </SectionWrapper>
+        }
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button

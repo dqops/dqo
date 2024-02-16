@@ -32,6 +32,7 @@ import { IRootState } from '../../../redux/reducers';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
 
 const TableDetails = () => {
   const {
@@ -238,23 +239,26 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
-      {connectionModel.provider_type ===
-      ConnectionSpecProviderTypeEnum.duckdb ? (
-        <FileFormatConfiguration
-          paths={paths}
-          onAddPath={onAddPath}
-          onChangePath={onChangePath}
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-          configuration={configuration}
-          onChangeConfiguration={onChangeConfiguration}
-          cleanConfiguration={cleanConfiguration}
-          onDeletePath={onDeletePath}
-          renderOptions={false} // todo: it should be an another component since it will have no options and another path field config
-        />
-      ) : (
-        <></>
-      )}
+      {connectionModel.provider_type === ConnectionSpecProviderTypeEnum.duckdb &&
+        <SectionWrapper
+            title="File format configuration"
+            className="text-sm my-4 text-black"
+          >
+        {/* // todo: filepaths */}
+          <FileFormatConfiguration
+            // paths={paths}
+            // onAddPath={onAddPath}
+            // onChangePath={onChangePath}
+            fileFormatType={fileFormatType}
+            onChangeFile={onChangeFile}
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+            cleanConfiguration={cleanConfiguration}
+            // onDeletePath={onDeletePath}
+            freezeFileType={true}
+          />
+        </SectionWrapper>
+      }
     </div>
   );
 };

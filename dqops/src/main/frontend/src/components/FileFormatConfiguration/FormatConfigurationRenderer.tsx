@@ -1,8 +1,8 @@
 import React from 'react';
-import ConfigurationItemRow from './RowItem/ConfigurationItemRow';
-import ConfigurationItemRowBoolean from './RowItem/ConfigurationItemRowBoolean';
-import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
-import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
+import ConfigurationItemRow from './FormatsConfiguration/RowItem/ConfigurationItemRow';
+import ConfigurationItemRowBoolean from './FormatsConfiguration/RowItem/ConfigurationItemRowBoolean';
+import { TConfigurationItemRow } from './FormatsConfiguration/RowItem/TConfigurationItemRow'
+import { TConfigurationItemRowBoolean } from './FormatsConfiguration/RowItem/TConfigurationItemRowBoolean'
 
 type TConfigurationProps = {
   configuraitonStrings?: TConfigurationItemRow[],

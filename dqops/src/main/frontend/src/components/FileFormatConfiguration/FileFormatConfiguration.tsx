@@ -2,37 +2,29 @@ import React from 'react';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
 import { DuckdbParametersSpecSourceFilesTypeEnum } from '../../api';
-import CsvFormatConfiguration from './CsvFormatConfiguration';
-import JsonFormatConfiguration from './JsonFormatConfiguration';
-import ParquetFormatConfiguration from './ParquetFormatConfiguration';
+import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
+import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
+import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
 import FilePath from './FilePath';
 import { TConfiguration } from './TConfiguration';
 import KeyValueProperties from './KeyValueProperties';
 
 type TFileFormatConfigurationProps = {
-  paths: string[];
-  onChangePath: (val: string) => void;
-  onAddPath: () => void;
   fileFormatType: DuckdbParametersSpecSourceFilesTypeEnum;
-  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
   configuration: TConfiguration;
+  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
-  onDeletePath: (index: number) => void;
-  renderOptions: boolean;
+  freezeFileType: boolean;
 };
 
 export default function FileFormatConfiguration({
-  paths,
-  onAddPath,
-  onChangePath,
   fileFormatType,
   onChangeFile,
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  onDeletePath,
-  renderOptions
+  freezeFileType
 }: TFileFormatConfigurationProps) {
 
   const renderConfiguration = () => {
@@ -80,35 +72,24 @@ export default function FileFormatConfiguration({
   ];
 
   return (
-    <SectionWrapper
-      title="File format configuration"
-      className="text-sm my-4 text-black"
-    >
-      <FilePath
-        paths={paths}
-        onAddPath={onAddPath}
-        onChangePath={onChangePath}
-        onDeletePath={onDeletePath}
-      />
-
-      {/* <KeyValueProperties
-        properties={duckdb?.directories}
-        onChange={handleChange}
-        sharedCredentials = {sharedCredentials}
-      /> */}
-
+    <>
       <div className="flex items-center gap-x-5">
-        <div>File format</div>{' '}
-        <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
-          options={sourceFilesTypeOptions}
-          onChange={(value) => {
-            onChangeFile(value);
-            cleanConfiguration();
-          }}
-          value={fileFormatType}
-        />{' '}
+        <div>File format</div>
+        {!freezeFileType && 
+          <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
+            options={sourceFilesTypeOptions}
+            onChange={(value) => {
+              onChangeFile(value);
+              cleanConfiguration();
+            }}
+            value={fileFormatType}
+          />
+        }
+        {freezeFileType && 
+          <div>{fileFormatType}</div>
+        }
       </div>
-      {renderOptions && renderConfiguration()}
-    </SectionWrapper>
+      {renderConfiguration()}
+    </>
   );
 }

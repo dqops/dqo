@@ -4,10 +4,10 @@ import {
   JsonFileFormatSpecFormatEnum, 
   JsonFileFormatSpecCompressionEnum,
   JsonFileFormatSpecRecordsEnum
-} from '../../api';
+} from '../../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
-import FormatConfigurationRenderer from './FormatConfigurationRenderer'
+import FormatConfigurationRenderer from '../FormatConfigurationRenderer'
 
 type TJsonConfigurationProps = {
   configuration: JsonFileFormatSpec;

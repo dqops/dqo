@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import { ParquetFileFormatSpec } from '../../api';
+import { ParquetFileFormatSpec } from '../../../api';
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
-import FormatConfigurationRenderer from './FormatConfigurationRenderer'
+import FormatConfigurationRenderer from '../FormatConfigurationRenderer'
 
 type TParquetConfigurationProps = {
   configuration: ParquetFileFormatSpec;

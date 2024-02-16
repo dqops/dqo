@@ -1,6 +1,6 @@
 import React from 'react';
-import Input from '../../Input';
-import Select from '../../Select';
+import Input from '../../../Input';
+import Select from '../../../Select';
 import { TConfigurationItemRow } from './TConfigurationItemRow'
 
 export default function ConfigurationItemRow({

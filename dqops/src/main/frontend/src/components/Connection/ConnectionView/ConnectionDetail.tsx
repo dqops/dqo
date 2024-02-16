@@ -37,8 +37,6 @@ import DatabricksConnection from '../../Dashboard/DatabaseConnection/DatabricksC
 import PrestoConnection from '../../Dashboard/DatabaseConnection/PrestoConnection';
 import SparkConnection from '../../Dashboard/DatabaseConnection/SparkConnection';
 import TrinoConnection from '../../Dashboard/DatabaseConnection/TrinoConnection';
-import IKeyValuePropertyItemProps from '../../FileFormatConfiguration/KeyValueProperties';
-import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import DuckdbConnection from '../../Dashboard/DatabaseConnection/DuckDBConnection';
 
 const ConnectionDetail = () => {

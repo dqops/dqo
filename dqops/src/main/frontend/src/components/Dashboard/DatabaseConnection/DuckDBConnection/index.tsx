@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import SectionWrapper from '../../SectionWrapper';
 import {
@@ -6,7 +6,6 @@ import {
   SharedCredentialListModel,
   DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../../../api';
-import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration'
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
 
@@ -14,16 +13,14 @@ interface IDuckdbConnectionProps {
   duckdb?: DuckdbParametersSpec;
   onChange?: (obj: DuckdbParametersSpec) => void;
   sharedCredentials?: SharedCredentialListModel[];
-  nameOfDatabase?: string;
-  onNameOfDatabaseChange?: (name: string) => void;
+  freezeFileType?: boolean;
 }
 
 const DuckdbConnection = ({
   duckdb,
   onChange,
   sharedCredentials,
-  nameOfDatabase,
-  onNameOfDatabaseChange
+  freezeFileType = false
 }: IDuckdbConnectionProps) => {
   const handleChange = (obj: Partial<DuckdbParametersSpec>) => {
     if (!onChange) return;
@@ -59,20 +56,24 @@ const DuckdbConnection = ({
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-      
-      <FileFormatConfiguration 
-        paths={paths}
-        onAddPath={onAddPath}
-        onChangePath={onChangePath}
-        fileFormatType={fileFormatType}
-        onChangeFile={onChangeFile}
-        configuration={configuration}
-        onChangeConfiguration={onChangeConfiguration}
-        cleanConfiguration={cleanConfiguration}
-        onDeletePath={onDeletePath}
-        renderOptions={true}
-      />
-
+      {/* // todo: paths */}
+      <SectionWrapper
+            title="File format configuration"
+            className="text-sm my-4 text-black"
+          >
+        <FileFormatConfiguration 
+          // paths={paths}
+          // onAddPath={onAddPath}
+          // onChangePath={onChangePath}
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
+          configuration={configuration}
+          onChangeConfiguration={onChangeConfiguration}
+          cleanConfiguration={cleanConfiguration}
+          // onDeletePath={onDeletePath}
+          freezeFileType={freezeFileType}
+        />
+      </SectionWrapper>
     </SectionWrapper>
   );
 };

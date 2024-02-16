@@ -1,6 +1,6 @@
 import React from 'react';
-import Input from '../../Input';
-import Checkbox from '../../Checkbox';
+import Input from '../../../Input';
+import Checkbox from '../../../Checkbox';
 import { TConfigurationItemRowBoolean } from './TConfigurationItemRowBoolean'
 
 export default function ConfigurationItemRow({
