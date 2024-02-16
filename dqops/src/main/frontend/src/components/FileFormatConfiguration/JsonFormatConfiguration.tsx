@@ -2,7 +2,8 @@ import React, { useMemo } from 'react';
 import { 
   JsonFileFormatSpec, 
   JsonFileFormatSpecFormatEnum, 
-  JsonFileFormatSpecCompressionEnum
+  JsonFileFormatSpecCompressionEnum,
+  JsonFileFormatSpecRecordsEnum
 } from '../../api';
 import { TConfigurationItemRow } from './RowItem/TConfigurationItemRow'
 import { TConfigurationItemRowBoolean } from './RowItem/TConfigurationItemRowBoolean'
@@ -51,6 +52,21 @@ const jsonFormatOptions = [
   },
 ]
 
+const jsonRecordsOptions = [
+  {
+    value: JsonFileFormatSpecRecordsEnum.auto,
+    label: JsonFileFormatSpecRecordsEnum.auto
+  },
+  {
+    value: JsonFileFormatSpecRecordsEnum.false,
+    label: JsonFileFormatSpecRecordsEnum.false
+  },
+  {
+    value: JsonFileFormatSpecRecordsEnum.true,
+    label: JsonFileFormatSpecRecordsEnum.true
+  },
+]
+
 export default function JsonFormatConfiguration({
   configuration,
   onChangeConfiguration
@@ -94,8 +110,9 @@ export default function JsonFormatConfiguration({
       {
         label: 'Records',
         value: configuration?.records,
-        onChange: (str) => onChangeConfiguration({ records: str.toString() }),
-        defaultValue: 'records' // todo: it should be an enum from backend but the duckdb docs does not clearly explain this option and its values
+        onChange: (str) => onChangeConfiguration({ records: str as JsonFileFormatSpecRecordsEnum }),
+        isEnum: true,
+        options: jsonRecordsOptions
       },
       {
         label: 'Sample size',

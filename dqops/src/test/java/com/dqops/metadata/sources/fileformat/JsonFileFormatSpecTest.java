@@ -2,6 +2,7 @@ package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.BaseTest;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
+import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -28,7 +29,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setIgnoreErrors(true);
             setMaximumDepth(BigInteger.TEN);
             setMaximumObjectSize(200L);
-            setRecords("auto");
+            setRecords(JsonRecordsType.auto);
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
         }};
 
