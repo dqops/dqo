@@ -75,7 +75,7 @@ The date column used for grouping by a time period in the example above is the `
 The column name must be configured, which is described in the [setting up date partitioning column](#setting-up-date-partitioning-column) later.
 
 
-### **Partitioned checks in DQOps user interface**
+## Partitioned checks in DQOps user interface
 ### **Daily partitioning**
 Daily partitioned checks truncate the column used for partitioning to the beginning of the day.
 The following example uses a sample table with a history of 911 service requests, the data is partitioned by the `created_date` column.
