@@ -15315,14 +15315,14 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_true_percent:
-        description: "Verifies that the percentage of true values in a column does\
-          \ not exceed the minimum accepted percentage. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
+        description: "Measures the percentage of **true** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTruePercentCheckSpec"
       daily_false_percent:
-        description: "Verifies that the percentage of false values in a column does\
-          \ not exceed the minimum accepted percentage. Stores the most recent captured\
-          \ value for each day when the data quality check was evaluated."
+        description: "Measures the percentage of **false** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores the most recent\
+          \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnFalsePercentCheckSpec"
   ColumnBoolDailyPartitionedChecksSpec:
     type: "object"
@@ -15336,14 +15336,14 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_partition_true_percent:
-        description: "Verifies that the percentage of true values in a column does\
-          \ not exceed the minimum accepted percentage. Stores a separate data quality\
-          \ check result for each daily partition."
+        description: "Measures the percentage of **true** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores a separate data\
+          \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnTruePercentCheckSpec"
       daily_partition_false_percent:
-        description: "Verifies that the percentage of false values in a column does\
-          \ not exceed the minimum accepted percentage. Stores a separate data quality\
-          \ check result for each daily partition."
+        description: "Measures the percentage of **false** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores a separate data\
+          \ quality check result for each daily partition."
         $ref: "#/definitions/ColumnFalsePercentCheckSpec"
   ColumnBoolFalsePercentSensorParametersSpec:
     type: "object"
@@ -15364,14 +15364,14 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_true_percent:
-        description: "Verifies that the percentage of true values in a column does\
-          \ not exceed the minimum accepted percentage. Stores the most recent check\
-          \ result for each month when the data quality check was evaluated."
+        description: "Measures the percentage of **true** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores the most recent\
+          \ check result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnTruePercentCheckSpec"
       monthly_false_percent:
-        description: "Verifies that the percentage of false values in a column does\
-          \ not exceed the minimum accepted percentage. Stores the most recent check\
-          \ result for each month when the data quality check was evaluated."
+        description: "Measures the percentage of **false** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores the most recent\
+          \ check result for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnFalsePercentCheckSpec"
   ColumnBoolMonthlyPartitionedChecksSpec:
     type: "object"
@@ -15385,14 +15385,14 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_partition_true_percent:
-        description: "Verifies that the percentage of true values in a column does\
-          \ not exceed the minimum accepted percentage. Stores a separate data quality\
-          \ check result for each monthly partition."
+        description: "Measures the percentage of **true** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores a separate data\
+          \ quality check result for each monthly partition."
         $ref: "#/definitions/ColumnTruePercentCheckSpec"
       monthly_partition_false_percent:
-        description: "Verifies that the percentage of false values in a column does\
-          \ not exceed the minimum accepted percentage. Stores a separate data quality\
-          \ check result for each monthly partition."
+        description: "Measures the percentage of **false** values in a boolean column\
+          \ and verifies that it is within the accepted range. Stores a separate data\
+          \ quality check result for each monthly partition."
         $ref: "#/definitions/ColumnFalsePercentCheckSpec"
   ColumnBoolProfilingChecksSpec:
     type: "object"
@@ -15406,12 +15406,12 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       profile_true_percent:
-        description: "Verifies that the percentage of true values in a column does\
-          \ not exceed the minimum accepted percentage."
+        description: "Measures the percentage of **true** values in a boolean column\
+          \ and verifies that it is within the accepted range."
         $ref: "#/definitions/ColumnTruePercentCheckSpec"
       profile_false_percent:
-        description: "Verifies that the percentage of false values in a column does\
-          \ not exceed the minimum accepted percentage."
+        description: "Measures the percentage of **false** values in a boolean column\
+          \ and verifies that it is within the accepted range."
         $ref: "#/definitions/ColumnFalsePercentCheckSpec"
   ColumnBoolTruePercentSensorParametersSpec:
     type: "object"

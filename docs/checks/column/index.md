@@ -213,12 +213,12 @@ This check detects that the sum of numeric values has changed more than *max_per
 Calculates the percentage of data in boolean columns.
 
 ### [true percent](./bool/true-percent.md)
-A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.
+This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 
 
 
 ### [false percent](./bool/false-percent.md)
-A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.
+This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 
 
 

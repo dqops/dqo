@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/bool/false_percent
   rule_name: comparison/between_percent
-  help_text: Verifies that the percentage of false values in a column does not exceed
-    the minimum accepted percentage.
+  help_text: Measures the percentage of **false** values in a boolean column and verifies
+    that it is within the accepted range.
   standard: true

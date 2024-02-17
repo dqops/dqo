@@ -484,8 +484,8 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`profile_true_percent`](../../../checks/column/bool/true-percent.md)</span>|Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.|*[ColumnTruePercentCheckSpec](../../../checks/column/bool/true-percent.md)*| | | |
-|<span class="no-wrap-code ">[`profile_false_percent`](../../../checks/column/bool/false-percent.md)</span>|Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.|*[ColumnFalsePercentCheckSpec](../../../checks/column/bool/false-percent.md)*| | | |
+|<span class="no-wrap-code ">[`profile_true_percent`](../../../checks/column/bool/true-percent.md)</span>|Measures the percentage of **true** values in a boolean column and verifies that it is within the accepted range.|*[ColumnTruePercentCheckSpec](../../../checks/column/bool/true-percent.md)*| | | |
+|<span class="no-wrap-code ">[`profile_false_percent`](../../../checks/column/bool/false-percent.md)</span>|Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range.|*[ColumnFalsePercentCheckSpec](../../../checks/column/bool/false-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](./table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](./table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 
