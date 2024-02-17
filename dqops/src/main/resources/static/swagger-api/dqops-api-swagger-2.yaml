@@ -22046,12 +22046,12 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_number_below_min_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ below the value defined by the user as a parameter. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       daily_number_above_max_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ above the value defined by the user as a parameter. Stores the most recent\
           \ captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
@@ -22067,12 +22067,12 @@ definitions:
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
       daily_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is below the value defined by the user as a parameter. Stores the most\
+          \ are below the value defined by the user as a parameter. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       daily_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is above the value defined by the user as a parameter. Stores the most\
+          \ are above the value defined by the user as a parameter. Stores the most\
           \ recent captured value for each day when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       daily_number_in_range_percent:
@@ -22198,12 +22198,12 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       daily_partition_number_below_min_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ below the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       daily_partition_number_above_max_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ above the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
@@ -22219,12 +22219,12 @@ definitions:
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
       daily_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is below the value defined by the user as a parameter. Stores a separate\
+          \ are below the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       daily_partition_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is above the value defined by the user as a parameter. Stores a separate\
+          \ are above the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each daily partition."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       daily_partition_number_in_range_percent:
@@ -22424,12 +22424,12 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_number_below_min_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ below the value defined by the user as a parameter. Stores the most recent\
           \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       monthly_number_above_max_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ above the value defined by the user as a parameter. Stores the most recent\
           \ value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
@@ -22445,12 +22445,12 @@ definitions:
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
       monthly_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is below the value defined by the user as a parameter. Stores the most\
+          \ are below the value defined by the user as a parameter. Stores the most\
           \ recent value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       monthly_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is above the value defined by the user as a parameter. Stores the most\
+          \ are above the value defined by the user as a parameter. Stores the most\
           \ recent value for each month when the data quality check was evaluated."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       monthly_number_in_range_percent:
@@ -22575,12 +22575,12 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       monthly_partition_number_below_min_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ below the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       monthly_partition_number_above_max_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ above the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
@@ -22596,12 +22596,12 @@ definitions:
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
       monthly_partition_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is below the value defined by the user as a parameter. Stores a separate\
+          \ are below the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       monthly_partition_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is above the value defined by the user as a parameter. Stores a separate\
+          \ are above the value defined by the user as a parameter. Stores a separate\
           \ data quality check result for each monthly partition."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       monthly_partition_number_in_range_percent:
@@ -22905,11 +22905,11 @@ definitions:
         additionalProperties:
           $ref: "#/definitions/CustomCheckSpec"
       profile_number_below_min_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ below the value defined by the user as a parameter."
         $ref: "#/definitions/ColumnNumberBelowMinValueCheckSpec"
       profile_number_above_max_value:
-        description: "The check counts the number of values in the column that is\
+        description: "The check counts the number of values in the column that are\
           \ above the value defined by the user as a parameter."
         $ref: "#/definitions/ColumnNumberAboveMaxValueCheckSpec"
       profile_negative_values:
@@ -22922,11 +22922,11 @@ definitions:
         $ref: "#/definitions/ColumnNegativePercentCheckSpec"
       profile_number_below_min_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is below the value defined by the user as a parameter."
+          \ are below the value defined by the user as a parameter."
         $ref: "#/definitions/ColumnNumberBelowMinValuePercentCheckSpec"
       profile_number_above_max_value_percent:
         description: "The check counts the percentage of values in the column that\
-          \ is above the value defined by the user as a parameter."
+          \ are above the value defined by the user as a parameter."
         $ref: "#/definitions/ColumnNumberAboveMaxValuePercentCheckSpec"
       profile_number_in_range_percent:
         description: "Verifies that the percentage of values from range in a column\

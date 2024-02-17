@@ -1,6 +1,7 @@
 # integer in range percent data quality checks
 
-A column-level check that ensures that there are no more than a set number of values from range in a monitored column.
+This check verifies that numeric values are within a range of accepted values.
+ It measures the percentage of values in the range and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 ___

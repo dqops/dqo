@@ -1,6 +1,6 @@
 # negative values data quality checks
 
-A column-level check that ensures that there are no more than a set number of negative values in a monitored column.
+This check finds and counts negative values in a numeric column. It raises a data quality issue when the count of negative values is above the maximum accepted count.
 
 
 ___

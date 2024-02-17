@@ -1,6 +1,8 @@
 # valid latitude percent data quality checks
 
-A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
+This check verifies that numeric values are valid latitude coordinates.
+ A valid latitude coordinate is in the range -90...90. It measures the percentage of values within a valid range for a latitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
 
 
 ___

@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/numeric/number_below_min_value_percent
   rule_name: comparison/max_percent
-  help_text: The check counts the percentage of values in the column that is below
+  help_text: The check counts the percentage of values in the column that are below
     the value defined by the user as a parameter. Stores a separate data quality check
     result for each daily partition.

@@ -72,10 +72,10 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberBelowMinValueCheckSpec dailyPartitionNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberAboveMaxValueCheckSpec dailyPartitionNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.")
@@ -84,10 +84,10 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
     private ColumnNegativePercentCheckSpec dailyPartitionNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are below the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec dailyPartitionNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.")
     private ColumnNumberAboveMaxValuePercentCheckSpec dailyPartitionNumberAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each daily partition.")

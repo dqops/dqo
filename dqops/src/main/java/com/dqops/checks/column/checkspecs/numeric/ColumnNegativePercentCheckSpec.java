@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+ * This check finds negative values in a numeric column. It measures the percentage of negative values and raises a data quality issue
+ * when the rate of negative values exceeds the maximum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

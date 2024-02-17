@@ -1,6 +1,7 @@
 # percentile in range data quality checks
 
-A column-level check that ensures that the percentile of values in a monitored columnis within the expected range.
+This check finds a requested percentile value of numeric values. The percentile is configured as a value in the range [0, 1]. This check verifies that the given percentile is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 ___

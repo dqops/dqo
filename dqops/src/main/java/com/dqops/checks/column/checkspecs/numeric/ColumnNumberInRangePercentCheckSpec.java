@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
+ * This check verifies that values in a numeric column are within an accepted range.
+ * It measures the percentage of values within the valid range and raises a data quality issue when the rate of valid values is below a minimum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

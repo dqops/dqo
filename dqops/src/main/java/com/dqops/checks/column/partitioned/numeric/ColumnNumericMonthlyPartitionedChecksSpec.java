@@ -72,10 +72,10 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberBelowMinValueCheckSpec monthlyPartitionNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberAboveMaxValueCheckSpec monthlyPartitionNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.")
@@ -84,10 +84,10 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.")
     private ColumnNegativePercentCheckSpec monthlyPartitionNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are below the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberBelowMinValuePercentCheckSpec monthlyPartitionNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.")
     private ColumnNumberAboveMaxValuePercentCheckSpec monthlyPartitionNumberAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores a separate data quality check result for each monthly partition.")

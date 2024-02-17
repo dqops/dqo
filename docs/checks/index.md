@@ -736,142 +736,170 @@ Detects relative increases or decreases in the percentage of null values since t
 Validates that the data in a numeric column is in the expected format or within predefined ranges.
 
 ### [number below min value](./column/numeric/number-below-min-value.md)
-A column-level check that ensures that the number of values in the monitored column with a value below a user-defined value as a parameter does not exceed set thresholds.
+This check finds numeric values smaller than the minimum accepted value. It counts the values that are too small.
+ This check raises a data quality issue when the count of too small values exceeds the maximum accepted count.
 
 
 
 ### [number above max value](./column/numeric/number-above-max-value.md)
-A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
+This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.
+ This check raises a data quality issue when the count of too big values exceeds the maximum accepted count.
 
 
 
 ### [negative values](./column/numeric/negative-values.md)
-A column-level check that ensures that there are no more than a set number of negative values in a monitored column.
+This check finds and counts negative values in a numeric column. It raises a data quality issue when the count of negative values is above the maximum accepted count.
 
 
 
 ### [negative values percent](./column/numeric/negative-values-percent.md)
-A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+This check finds negative values in a numeric column. It measures the percentage of negative values and raises a data quality issue
+ when the rate of negative values exceeds the maximum accepted percentage.
 
 
 
 ### [number below min value percent](./column/numeric/number-below-min-value-percent.md)
-A column-level check that ensures that the percentage of values in the monitored column with a value below a user-defined value as a parameter does not fall below set thresholds.
+This check finds numeric values smaller than the minimum accepted value. It measures the percentage of values that are too small.
+ This check raises a data quality issue when the percentage of values that are too small exceeds the maximum accepted percentage.
 
 
 
 ### [number above max value percent](./column/numeric/number-above-max-value-percent.md)
-A column-level check that ensures that the percentage of values in the monitored column with a value above a user-defined value as a parameter does not fall below set thresholds.
+This check finds numeric values bigger than the maximum accepted value. It measures the percentage of values that are too big.
+ This check raises a data quality issue when the percentage of values that are too big exceeds the maximum accepted percentage.
 
 
 
 ### [number in range percent](./column/numeric/number-in-range-percent.md)
-A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
+This check verifies that values in a numeric column are within an accepted range.
+ It measures the percentage of values within the valid range and raises a data quality issue when the rate of valid values is below a minimum accepted percentage.
 
 
 
 ### [integer in range percent](./column/numeric/integer-in-range-percent.md)
-A column-level check that ensures that there are no more than a set number of values from range in a monitored column.
+This check verifies that numeric values are within a range of accepted values.
+ It measures the percentage of values in the range and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
 ### [min in range](./column/numeric/min-in-range.md)
-A column-level check that ensures that the minimum values are within the expected range in the monitored column.
+This check finds a minimum value in a numeric column. It verifies that the minimum value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [max in range](./column/numeric/max-in-range.md)
-A column-level check that ensures that the maximum values are within the expected range in the monitored column.
+This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sum in range](./column/numeric/sum-in-range.md)
-A column-level check that ensures that the sum value in the monitored column is within the expected range.
+This check calculates a sum of numeric values. It verifies that the sum is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [mean in range](./column/numeric/mean-in-range.md)
-A column-level check that ensures that the average (mean) value in the monitored column is within the expected range.
+This check calculates a mean (average) value in a numeric column. It verifies that the average value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [median in range](./column/numeric/median-in-range.md)
-A column-level check that ensures that the median value in the monitored column is within the expected range.
+This check finds a median value in a numeric column. It verifies that the median value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile in range](./column/numeric/percentile-in-range.md)
-A column-level check that ensures that the percentile of values in a monitored columnis within the expected range.
+This check finds a requested percentile value of numeric values. The percentile is configured as a value in the range [0, 1]. This check verifies that the given percentile is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 10 in range](./column/numeric/percentile-10-in-range.md)
-A column-level check that ensures that the 10th percentile of values in the monitored column is within the expected range.
+This check finds the 10th percentile value in a numeric column. The 10th percentile is a value greater than 10% of the smallest values and smaller than the remaining 90% of other values.
+ This check verifies that the 10th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 25 in range](./column/numeric/percentile-25-in-range.md)
-A column-level check that ensures that the 25th percentile of values in the monitored column is within the expected range.
+This check finds the 25th percentile value in a numeric column. The 10th percentile is a value greater than 25% of the smallest values and smaller than the remaining 75% of other values.
+ This check verifies that the 25th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 75 in range](./column/numeric/percentile-75-in-range.md)
-A column-level check that ensures that the 75th percentile of values in the monitored column is within the expected range.
+This check finds the 75th percentile value in a numeric column. The 75th percentile is a value greater than 75% of the smallest values and smaller than the remaining 25% of other values.
+ This check verifies that the 75th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 90 in range](./column/numeric/percentile-90-in-range.md)
-A column-level check that ensures that the 90th percentile of values in the monitored column is within the expected range.
+This check finds the 90th percentile value in a numeric column. The 90th percentile is a value greater than 90% of the smallest values and smaller than the remaining 10% of other values.
+ This check verifies that the 90th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sample stddev in range](./column/numeric/sample-stddev-in-range.md)
-A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
+This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [population stddev in range](./column/numeric/population-stddev-in-range.md)
-A column-level check that ensures that the population standard deviationis within the expected range in a monitored column.
+This check calculates the population standard deviation of numeric values. It verifies that the population standard deviation is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sample variance in range](./column/numeric/sample-variance-in-range.md)
-A column-level check that ensures the sample varianceis within the expected range in a monitored column.
+This check calculates a sample variance of numeric values. It verifies that the sample variance is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [population variance in range](./column/numeric/population-variance-in-range.md)
-A column-level check that ensures that the population varianceis within the expected range in a monitored column.
+This check calculates a population variance of numeric values. It verifies that the population variance is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.o
 
 
 
 ### [invalid latitude](./column/numeric/invalid-latitude.md)
-A column-level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+This check finds numeric values that are not valid latitude coordinates. A valid latitude coordinate is in the range -90...90. It counts the values outside a valid range for a latitude.
+ This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.
 
 
 
 ### [valid latitude percent](./column/numeric/valid-latitude-percent.md)
-A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
+This check verifies that numeric values are valid latitude coordinates.
+ A valid latitude coordinate is in the range -90...90. It measures the percentage of values within a valid range for a latitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
 
 
 
 ### [invalid longitude](./column/numeric/invalid-longitude.md)
-A column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
+This check finds numeric values that are not valid longitude coordinates. A valid longitude coordinate is in the range -180...180. It counts the values outside a valid range for a longitude.
+ This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.
 
 
 
 ### [valid longitude percent](./column/numeric/valid-longitude-percent.md)
-A column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
+ It measures the percentage of values within a valid range for a longitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
 
 
 
 ### [non negative values](./column/numeric/non-negative-values.md)
-A column-level check that ensures that there are no more than a maximum number of non-negative values in a monitored column.
+This check finds and counts non0negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
 
 
 
 ### [non negative values percent](./column/numeric/non-negative-values-percent.md)
-A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+This check finds non-negative values in a numeric column.
+ It measures the percentage of non-negative values and raises a data quality issue when the rate of non-negative values exceeds the maximum accepted percentage.
 
 
 

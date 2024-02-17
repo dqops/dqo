@@ -1,6 +1,7 @@
 # invalid latitude data quality checks
 
-A column-level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+This check finds numeric values that are not valid latitude coordinates. A valid latitude coordinate is in the range -90...90. It counts the values outside a valid range for a latitude.
+ This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.
 
 
 ___

@@ -1,6 +1,7 @@
 # max in range data quality checks
 
-A column-level check that ensures that the maximum values are within the expected range in the monitored column.
+This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 ___

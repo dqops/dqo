@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
+ * This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values
+ * and raises a data quality issue when it is not within a valid range.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

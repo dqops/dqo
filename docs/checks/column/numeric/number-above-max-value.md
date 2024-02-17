@@ -1,6 +1,7 @@
 # number above max value data quality checks
 
-A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
+This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.
+ This check raises a data quality issue when the count of too big values exceeds the maximum accepted count.
 
 
 ___
@@ -13,7 +14,7 @@ The **number above max value** data quality check has the following variants for
 
 **Check description**
 
-The check counts the number of values in the column that is above the value defined by the user as a parameter.
+The check counts the number of values in the column that are above the value defined by the user as a parameter.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1152,7 +1153,7 @@ ___
 
 **Check description**
 
-The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
+The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -2293,7 +2294,7 @@ ___
 
 **Check description**
 
-The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.
+The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -3434,7 +3435,7 @@ ___
 
 **Check description**
 
-The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.
+The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -4597,7 +4598,7 @@ ___
 
 **Check description**
 
-The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.
+The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

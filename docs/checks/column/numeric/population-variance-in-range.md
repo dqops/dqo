@@ -1,6 +1,7 @@
 # population variance in range data quality checks
 
-A column-level check that ensures that the population varianceis within the expected range in a monitored column.
+This check calculates a population variance of numeric values. It verifies that the population variance is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.o
 
 
 ___

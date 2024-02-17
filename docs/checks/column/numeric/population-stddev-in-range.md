@@ -1,6 +1,7 @@
 # population stddev in range data quality checks
 
-A column-level check that ensures that the population standard deviationis within the expected range in a monitored column.
+This check calculates the population standard deviation of numeric values. It verifies that the population standard deviation is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 ___

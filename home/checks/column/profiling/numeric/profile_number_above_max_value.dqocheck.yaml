@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/numeric/number_above_max_value_count
   rule_name: comparison/max_count
-  help_text: The check counts the number of values in the column that is above the
+  help_text: The check counts the number of values in the column that are above the
     value defined by the user as a parameter.
   standard: true
