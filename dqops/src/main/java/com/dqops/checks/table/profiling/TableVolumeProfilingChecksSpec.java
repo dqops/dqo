@@ -54,26 +54,25 @@ public class TableVolumeProfilingChecksSpec extends AbstractCheckCategorySpec {
     };
 
     @JsonPropertyDescription("Verifies that the tested table has at least a minimum accepted number of rows. " +
-            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. " +
-            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the table is not empty.")
     private TableRowCountCheckSpec profileRowCount;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.")
+    @JsonPropertyDescription("Detects when the row count has changed too much since the previous day. It uses time series anomaly detection to find the biggest volume changes during the last 90 days.")
     private TableRowCountAnomalyDifferencingCheckSpec profileRowCountAnomaly;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    @JsonPropertyDescription("Detects when the volume's (row count) change since the last known row count exceeds the maximum accepted change percentage.")
     private TableRowCountChangeCheckSpec profileRowCountChange;
 
     @JsonProperty("profile_row_count_change_1_day")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")
+    @JsonPropertyDescription("Detects when the volume's change (increase or decrease of the row count) since the previous day exceeds the maximum accepted change percentage.")
     private TableRowCountChange1DayCheckSpec profileRowCountChange1Day;
 
     @JsonProperty("profile_row_count_change_7_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
+    @JsonPropertyDescription("This check verifies that the percentage of change in the table's volume (row count) since seven days ago is below the maximum accepted percentage. Verifying a volume change since a value a week ago overcomes the effect of weekly seasonability. ")
     private TableRowCountChange7DaysCheckSpec profileRowCountChange7Days;
 
     @JsonProperty("profile_row_count_change_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
+    @JsonPropertyDescription("This check verifies that the percentage of change in the table's volume (row count) since thirty days ago is below the maximum accepted percentage. Comparing the current row count to a value 30 days ago overcomes the effect of monthly seasonability.")
     private TableRowCountChange30DaysCheckSpec profileRowCountChange30Days;
 
     

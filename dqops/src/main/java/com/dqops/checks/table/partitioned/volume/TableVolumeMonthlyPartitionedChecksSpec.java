@@ -51,13 +51,12 @@ public class TableVolumeMonthlyPartitionedChecksSpec extends AbstractCheckCatego
     };
 
     @JsonPropertyDescription("Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. " +
-            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. " +
-            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the partition is not empty.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec monthlyPartitionRowCount;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    @JsonPropertyDescription("Detects when the partition's volume (row count) change between the current monthly partition and the previous partition exceeds the maximum accepted change percentage.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountChangeCheckSpec monthlyPartitionRowCountChange;

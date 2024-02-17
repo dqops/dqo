@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: table/volume/row_count
   rule_name: change/change_percent_30_days
-  help_text: Verifies that the total row count of the tested table has changed by
-    a fixed rate since the last readout from last month. Allows for exact match to
-    readouts from 30 days ago or past readouts lookup.
+  help_text: This check verifies that the percentage of change in the table's volume
+    (row count) since thirty days ago is below the maximum accepted percentage. Comparing
+    the current row count to a value 30 days ago overcomes the effect of monthly seasonability.

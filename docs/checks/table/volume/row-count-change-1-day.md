@@ -1,6 +1,7 @@
 # row count change 1 day data quality checks
 
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
+This check compares the current table volume (the row count) to the row count from the previous day.
+ It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.
 
 
 ___
@@ -13,7 +14,7 @@ The **row count change 1 day** data quality check has the following variants for
 
 **Check description**
 
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
+Detects when the volume&#x27;s change (increase or decrease of the row count) since the previous day exceeds the maximum accepted change percentage.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -878,7 +879,7 @@ ___
 
 **Check description**
 
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
+Detects when the volume&#x27;s change (increase or decrease of the row count) since the previous day exceeds the maximum accepted change percentage. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1745,7 +1746,7 @@ ___
 
 **Check description**
 
-Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.
+Detects when the partition volume change (increase or decrease of the row count) since yesterday&#x27;s daily partition exceeds the maximum accepted change percentage. 
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|

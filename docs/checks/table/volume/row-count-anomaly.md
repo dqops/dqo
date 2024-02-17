@@ -1,6 +1,8 @@
 # row count anomaly data quality checks
 
-A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+This check detects anomalies in the day-to-day changes to the table volume (the row count).
+ It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.
+ This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.
 
 
 ___
@@ -13,11 +15,11 @@ The **row count anomaly** data quality check has the following variants for each
 
 **Check description**
 
-Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.
+Detects when the row count has changed too much since the previous day. It uses time series anomaly detection to find the biggest volume changes during the last 90 days.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
+|<span class="no-wrap-code">`profile_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -872,11 +874,11 @@ ___
 
 **Check description**
 
-Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.
+Detects when the row count has changed too much since the previous day. It uses time series anomaly detection to find the biggest volume changes during the last 90 days.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)| |
+|<span class="no-wrap-code">`daily_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_differencing_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-differencing-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1733,11 +1735,11 @@ ___
 
 **Check description**
 
-Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.
+Detects outstanding partitions whose volume (the row count) differs too much from the average daily partition size. It uses time series anomaly detection to find the outliers in the partition volume during the last 90 days.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)| |
+|<span class="no-wrap-code">`daily_partition_row_count_anomaly`</span>|[volume](../../../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*row_count*](../../../reference/sensors/table/volume-table-sensors.md#row-count)|[*anomaly_stationary_percentile_moving_average*](../../../reference/rules/Percentile.md#anomaly-stationary-percentile-moving-average)|:material-check-bold:|
 
 **Command-line examples**
 

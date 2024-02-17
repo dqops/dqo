@@ -36643,27 +36643,27 @@
           }
         },
         "daily_row_count" : {
-          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each day when the row count was evaluated.",
+          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the table is not empty. Stores the most recent captured row count value for each day when the row count was evaluated.",
           "$ref" : "#/definitions/TableRowCountCheckSpec"
         },
         "daily_row_count_anomaly" : {
-          "description" : "Verifies that the total row count of the tested table changes in a rate within a percentile boundary during the last 90 days.",
+          "description" : "Detects when the row count has changed too much since the previous day. It uses time series anomaly detection to find the biggest volume changes during the last 90 days.",
           "$ref" : "#/definitions/TableRowCountAnomalyDifferencingCheckSpec"
         },
         "daily_row_count_change" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last day with a row count captured.",
+          "description" : "Detects when the volume's (row count) change since the last known row count exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChangeCheckSpec"
         },
         "daily_row_count_change_1_day" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.",
+          "description" : "Detects when the volume's change (increase or decrease of the row count) since the previous day exceeds the maximum accepted change percentage. ",
           "$ref" : "#/definitions/TableRowCountChange1DayCheckSpec"
         },
         "daily_row_count_change_7_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the table's volume (row count) since seven days ago is below the maximum accepted percentage. Verifying a volume change since a value a week ago overcomes the effect of weekly seasonability.",
           "$ref" : "#/definitions/TableRowCountChange7DaysCheckSpec"
         },
         "daily_row_count_change_30_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from the last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the table's volume (row count) since thirty days ago is below the maximum accepted percentage. Comparing the current row count to a value 30 days ago overcomes the effect of monthly seasonability.",
           "$ref" : "#/definitions/TableRowCountChange30DaysCheckSpec"
         }
       }
@@ -36679,27 +36679,27 @@
           }
         },
         "daily_partition_row_count" : {
-          "description" : "Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.",
+          "description" : "Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the partition is not empty.",
           "$ref" : "#/definitions/TableRowCountCheckSpec"
         },
         "daily_partition_row_count_anomaly" : {
-          "description" : "Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.",
+          "description" : "Detects outstanding partitions whose volume (the row count) differs too much from the average daily partition size. It uses time series anomaly detection to find the outliers in the partition volume during the last 90 days.",
           "$ref" : "#/definitions/TableRowCountAnomalyStationaryPartitionCheckSpec"
         },
         "daily_partition_row_count_change" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.",
+          "description" : "Detects when the partition's volume (row count) change between the current daily partition and the previous partition exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChangeCheckSpec"
         },
         "daily_partition_row_count_change_1_day" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.",
+          "description" : "Detects when the partition volume change (increase or decrease of the row count) since yesterday's daily partition exceeds the maximum accepted change percentage. ",
           "$ref" : "#/definitions/TableRowCountChange1DayCheckSpec"
         },
         "daily_partition_row_count_change_7_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the partition's volume (row count) since seven days ago is below the maximum accepted percentage. Verifying a volume change since a value a week ago overcomes the effect of weekly seasonability.",
           "$ref" : "#/definitions/TableRowCountChange7DaysCheckSpec"
         },
         "daily_partition_row_count_change_30_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the partition's volume (row count) since thirty days ago is below the maximum accepted percentage. Comparing the current row count to a value 30 days ago overcomes the effect of monthly seasonability.",
           "$ref" : "#/definitions/TableRowCountChange30DaysCheckSpec"
         }
       }
@@ -36715,11 +36715,11 @@
           }
         },
         "monthly_row_count" : {
-          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.Stores the most recent captured row count value for each month when the row count was evaluated.",
+          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the table is not empty. Stores the most recent captured row count value for each month when the row count was evaluated.",
           "$ref" : "#/definitions/TableRowCountCheckSpec"
         },
         "monthly_row_count_change" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last month.",
+          "description" : "Detects when the volume (row count) changes since the last known row count from a previous month exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChangeCheckSpec"
         }
       }
@@ -36735,11 +36735,11 @@
           }
         },
         "monthly_partition_row_count" : {
-          "description" : "Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.",
+          "description" : "Verifies that each monthly partition in the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the partition is not empty.",
           "$ref" : "#/definitions/TableRowCountCheckSpec"
         },
         "monthly_partition_row_count_change" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.",
+          "description" : "Detects when the partition's volume (row count) change between the current monthly partition and the previous partition exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChangeCheckSpec"
         }
       }
@@ -36755,27 +36755,27 @@
           }
         },
         "profile_row_count" : {
-          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.",
+          "description" : "Verifies that the tested table has at least a minimum accepted number of rows. The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the table is not empty.",
           "$ref" : "#/definitions/TableRowCountCheckSpec"
         },
         "profile_row_count_anomaly" : {
-          "description" : "Verifies that the total row count of the tested table changes in a rate within a percentile boundary during last 90 days.",
+          "description" : "Detects when the row count has changed too much since the previous day. It uses time series anomaly detection to find the biggest volume changes during the last 90 days.",
           "$ref" : "#/definitions/TableRowCountAnomalyDifferencingCheckSpec"
         },
         "profile_row_count_change" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.",
+          "description" : "Detects when the volume's (row count) change since the last known row count exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChangeCheckSpec"
         },
         "profile_row_count_change_1_day" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.",
+          "description" : "Detects when the volume's change (increase or decrease of the row count) since the previous day exceeds the maximum accepted change percentage.",
           "$ref" : "#/definitions/TableRowCountChange1DayCheckSpec"
         },
         "profile_row_count_change_7_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the table's volume (row count) since seven days ago is below the maximum accepted percentage. Verifying a volume change since a value a week ago overcomes the effect of weekly seasonability. ",
           "$ref" : "#/definitions/TableRowCountChange7DaysCheckSpec"
         },
         "profile_row_count_change_30_days" : {
-          "description" : "Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.",
+          "description" : "This check verifies that the percentage of change in the table's volume (row count) since thirty days ago is below the maximum accepted percentage. Comparing the current row count to a value 30 days ago overcomes the effect of monthly seasonability.",
           "$ref" : "#/definitions/TableRowCountChange30DaysCheckSpec"
         }
       }

@@ -6,9 +6,7 @@ spec:
   rule_name: comparison/min_count
   help_text: "Verifies that the tested table has at least a minimum accepted number\
     \ of rows. The default configuration of the warning, error and fatal severity\
-    \ rules verifies a minimum row count of one row, which checks if the table is\
-    \ not empty. When the data grouping is configured, this check will count rows\
-    \ using a GROUP BY clause and verify that each data grouping has an expected minimum\
-    \ number of rows.Stores the most recent captured row count value for each month\
+    \ rules verifies a minimum row count of one row, which ensures that the table\
+    \ is not empty. Stores the most recent captured row count value for each month\
     \ when the row count was evaluated."
   standard: true

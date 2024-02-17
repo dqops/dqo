@@ -34,8 +34,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A table-level check that ensures that the tested table has at least a minimum accepted number of rows. Using the default configuration, detects empty tables.
- * The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
+ * This check detects empty or too-small tables. It captures the row count of a tested table.
+ * This check raises a data quality issue when the row count is below a minimum accepted value.
+ * The default value of the rule parameter **min_count** is 1 (row), which detects empty tables.
+ * When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
