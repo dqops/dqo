@@ -1,8 +1,10 @@
 # detected datatype in text changed data quality checks
 
-A column-level check that scans all values in a string column, finds the right data type and detects when the desired data type changes. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
- The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
- For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
+A column-level check that scans all values in a text column, finds the right data type and detects when the desired data type changes.
+ The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run.
+ For daily monitoring checks, it compares the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it compares the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 
 ___

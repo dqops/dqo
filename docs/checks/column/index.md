@@ -271,22 +271,27 @@ A column-level check that ensures that compares the count of null values in the 
 Validates that the values in a text column can be parsed and converted to other data types.
 
 ### [text parsable to boolean percent](./conversions/text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+Verifies that values in a text column are convertible to a boolean value.
+ Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
 ### [text parsable to integer percent](./conversions/text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
+Verifies that values in a text column can be parsed and converted to an integer type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
 ### [text parsable to float percent](./conversions/text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+Verifies that values in a text column can be parsed and converted to a float (or numeric) type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
 ### [text parsable to date percent](./conversions/text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
+Verifies that values in a text column can be parsed and converted to a date type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
@@ -331,15 +336,17 @@ Column level check that uses a custom SQL SELECT statement to retrieve a result 
 Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
 ### [detected datatype in text](./datatype/detected-datatype-in-text.md)
-A column-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+A column-level check that scans all values in a text column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
  The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
 ### [detected datatype in text changed](./datatype/detected-datatype-in-text-changed.md)
-A column-level check that scans all values in a string column, finds the right data type and detects when the desired data type changes. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
- The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
- For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
+A column-level check that scans all values in a text column, finds the right data type and detects when the desired data type changes.
+ The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run.
+ For daily monitoring checks, it compares the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it compares the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 
 

@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -50,7 +50,7 @@ public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec
     private ColumnDetectedDatatypeInTextCheckSpec profileDetectedDatatypeInText;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected data type of a column: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec profileDetectedDatatypeInTextChanged;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec profileDetectedDatatypeInTextChanged;
 
     /**
      * Returns a count of expected values in datatype detected check.
@@ -74,7 +74,7 @@ public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getProfileDetectedDatatypeInTextChanged() {
+    public ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec getProfileDetectedDatatypeInTextChanged() {
         return profileDetectedDatatypeInTextChanged;
     }
 
@@ -82,7 +82,7 @@ public class ColumnDatatypeProfilingChecksSpec extends AbstractCheckCategorySpec
      * Sets a new definition of a datatype changed check.
      * @param profileDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setProfileDetectedDatatypeInTextChanged(ColumnDatatypeStringDatatypeChangedCheckSpec profileDetectedDatatypeInTextChanged) {
+    public void setProfileDetectedDatatypeInTextChanged(ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec profileDetectedDatatypeInTextChanged) {
         this.setDirtyIf(!Objects.equals(this.profileDetectedDatatypeInTextChanged, profileDetectedDatatypeInTextChanged));
         this.profileDetectedDatatypeInTextChanged = profileDetectedDatatypeInTextChanged;
         propagateHierarchyIdToField(profileDetectedDatatypeInTextChanged, "profile_detected_datatype_in_text_changed");

@@ -9,7 +9,9 @@ This is a list of conversions column data quality checks supported by DQOps and 
 Validates that the values in a text column can be parsed and converted to other data types.
 
 ### [text parsable to boolean percent](./text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
+Verifies that values in a text column are convertible to a boolean value.
+ Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -23,7 +25,8 @@ A column-level check that ensures that the percentage of boolean placeholder tex
 
 
 ### [text parsable to integer percent](./text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
+Verifies that values in a text column can be parsed and converted to an integer type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -37,7 +40,8 @@ A column-level check that ensures that the percentage of text values that are pa
 
 
 ### [text parsable to float percent](./text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+Verifies that values in a text column can be parsed and converted to a float (or numeric) type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -51,7 +55,8 @@ A column-level check that ensures that the percentage of strings that are parsab
 
 
 ### [text parsable to date percent](./text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
+Verifies that values in a text column can be parsed and converted to a date type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |

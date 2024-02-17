@@ -18,7 +18,7 @@ package com.dqops.checks.defaults.services;
 
 import com.dqops.checks.column.checkspecs.anomaly.ColumnSumAnomalyDifferencingCheckSpec;
 import com.dqops.checks.column.checkspecs.anomaly.ColumnMeanAnomalyStationaryCheckSpec;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.nulls.*;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaColumnExistsCheckSpec;
 import com.dqops.checks.column.checkspecs.schema.ColumnSchemaTypeChangedCheckSpec;
@@ -95,7 +95,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         defaultSettings.getTable().setVolume(tableVolume);
 
         ColumnDatatypeDailyMonitoringChecksSpec columnDatatype = new ColumnDatatypeDailyMonitoringChecksSpec();
-        columnDatatype.setDailyDetectedDatatypeInTextChanged(new ColumnDatatypeStringDatatypeChangedCheckSpec() {{
+        columnDatatype.setDailyDetectedDatatypeInTextChanged(new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec() {{
             setWarning(new ValueChangedRuleParametersSpec());
         }});
         defaultSettings.getColumn().setDatatype(columnDatatype);

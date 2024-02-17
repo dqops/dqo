@@ -16,7 +16,7 @@
 package com.dqops.duckdb.sensors.column.datatype;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private ColumnDatatypeStringDatatypeDetectSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDatatypeStringDatatypeChangedCheckSpec checkSpec;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -52,7 +52,7 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDatatypeStringDatatypeDetectSensorParametersSpec();
-        this.checkSpec = new ColumnDatatypeStringDatatypeChangedCheckSpec();
+        this.checkSpec = new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

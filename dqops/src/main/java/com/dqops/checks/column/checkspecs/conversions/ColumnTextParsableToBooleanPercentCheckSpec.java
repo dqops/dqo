@@ -35,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the percentage of boolean placeholder texts ('0', '1', 'true', 'false', 'yes', 'no', 'y', 'n') in the monitored column does not fall below the minimum percentage.
+ * Verifies that values in a text column are convertible to a boolean value.
+ * Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: '0', '1', 'true', 'false', 'yes', 'no', 'y', 'n'.
+ * This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

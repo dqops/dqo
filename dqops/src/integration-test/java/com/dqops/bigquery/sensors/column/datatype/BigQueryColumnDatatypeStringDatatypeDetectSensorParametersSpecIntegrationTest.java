@@ -17,7 +17,7 @@ package com.dqops.bigquery.sensors.column.datatype;
 
 import com.dqops.bigquery.BaseBigQueryIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class BigQueryColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private ColumnDatatypeStringDatatypeDetectSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDatatypeStringDatatypeChangedCheckSpec checkSpec;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,7 +51,7 @@ public class BigQueryColumnDatatypeStringDatatypeDetectSensorParametersSpecInteg
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnDatatypeStringDatatypeDetectSensorParametersSpec();
-		this.checkSpec = new ColumnDatatypeStringDatatypeChangedCheckSpec();
+		this.checkSpec = new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

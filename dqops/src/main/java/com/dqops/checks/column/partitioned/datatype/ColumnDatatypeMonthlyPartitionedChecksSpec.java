@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,7 +51,7 @@ public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCat
     private ColumnDetectedDatatypeInTextCheckSpec monthlyPartitionDetectedDatatypeInText;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed when compared to an earlier not empty partition. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores a separate data quality check result for each monthly partition.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged;
 
     /**
      * Returns a count of expected values in datatype detected check.
@@ -75,7 +75,7 @@ public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCat
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getMonthlyPartitionDetectedDatatypeInTextChanged() {
+    public ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec getMonthlyPartitionDetectedDatatypeInTextChanged() {
         return monthlyPartitionDetectedDatatypeInTextChanged;
     }
 
@@ -83,7 +83,7 @@ public class ColumnDatatypeMonthlyPartitionedChecksSpec extends AbstractCheckCat
      * Sets a new definition of a datatype changed check.
      * @param monthlyPartitionDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setMonthlyPartitionDetectedDatatypeInTextChanged(ColumnDatatypeStringDatatypeChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged) {
+    public void setMonthlyPartitionDetectedDatatypeInTextChanged(ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec monthlyPartitionDetectedDatatypeInTextChanged) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionDetectedDatatypeInTextChanged, monthlyPartitionDetectedDatatypeInTextChanged));
         this.monthlyPartitionDetectedDatatypeInTextChanged = monthlyPartitionDetectedDatatypeInTextChanged;
         propagateHierarchyIdToField(monthlyPartitionDetectedDatatypeInTextChanged, "monthly_partition_detected_datatype_in_text_changed");

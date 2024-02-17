@@ -19,7 +19,7 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.checks.column.checkspecs.datatype.ColumnDetectedDatatypeInTextCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,7 +51,7 @@ public class ColumnDatatypeDailyMonitoringChecksSpec extends AbstractCheckCatego
     private ColumnDetectedDatatypeInTextCheckSpec dailyDetectedDatatypeInText;
 
     @JsonPropertyDescription("Detects that the data type of texts stored in a text column has changed since the last verification. The sensor returns the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Stores the most recent captured value for each day when the data quality check was evaluated.")
-    private ColumnDatatypeStringDatatypeChangedCheckSpec dailyDetectedDatatypeInTextChanged;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec dailyDetectedDatatypeInTextChanged;
 
     /**
      * Returns a count of expected values in datatype detected check.
@@ -75,7 +75,7 @@ public class ColumnDatatypeDailyMonitoringChecksSpec extends AbstractCheckCatego
      * Returns a count of expected values in datatype changed check.
      * @return Datatype changed check.
      */
-    public ColumnDatatypeStringDatatypeChangedCheckSpec getDailyDetectedDatatypeInTextChanged() {
+    public ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec getDailyDetectedDatatypeInTextChanged() {
         return dailyDetectedDatatypeInTextChanged;
     }
 
@@ -83,7 +83,7 @@ public class ColumnDatatypeDailyMonitoringChecksSpec extends AbstractCheckCatego
      * Sets a new definition of a datatype changed check.
      * @param dailyDetectedDatatypeInTextChanged Datatype changed check.
      */
-    public void setDailyDetectedDatatypeInTextChanged(ColumnDatatypeStringDatatypeChangedCheckSpec dailyDetectedDatatypeInTextChanged) {
+    public void setDailyDetectedDatatypeInTextChanged(ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec dailyDetectedDatatypeInTextChanged) {
         this.setDirtyIf(!Objects.equals(this.dailyDetectedDatatypeInTextChanged, dailyDetectedDatatypeInTextChanged));
         this.dailyDetectedDatatypeInTextChanged = dailyDetectedDatatypeInTextChanged;
         propagateHierarchyIdToField(dailyDetectedDatatypeInTextChanged, "daily_detected_datatype_in_text_changed");

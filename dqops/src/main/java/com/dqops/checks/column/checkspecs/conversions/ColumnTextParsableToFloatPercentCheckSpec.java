@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
+ * Verifies that values in a text column can be parsed and converted to a float (or numeric) type.
+ * This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

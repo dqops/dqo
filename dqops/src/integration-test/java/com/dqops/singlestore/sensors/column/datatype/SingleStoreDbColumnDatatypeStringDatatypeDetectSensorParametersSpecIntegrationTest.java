@@ -16,7 +16,7 @@
 package com.dqops.singlestore.sensors.column.datatype;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeStringDatatypeChangedCheckSpec;
+import com.dqops.checks.column.checkspecs.datatype.ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -43,7 +43,7 @@ import tech.tablesaw.api.Table;
 public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
     private ColumnDatatypeStringDatatypeDetectSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnDatatypeStringDatatypeChangedCheckSpec checkSpec;
+    private ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class SingleStoreDbColumnDatatypeStringDatatypeDetectSensorParametersSpec
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnDatatypeStringDatatypeDetectSensorParametersSpec();
-		this.checkSpec = new ColumnDatatypeStringDatatypeChangedCheckSpec();
+		this.checkSpec = new ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

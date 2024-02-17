@@ -1,6 +1,7 @@
 # text parsable to date percent data quality checks
 
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
+Verifies that values in a text column can be parsed and converted to a date type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 ___
