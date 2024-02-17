@@ -156,7 +156,7 @@ const DeleteStoredDataExtendedPopUp = ({
       <DialogHeader className="font-bold text-center justify-center">
         Delete data
       </DialogHeader>
-      <DialogBody>
+      <DialogBody className="text-sm">
         <div className="flex flex-col">
           <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
             {hierarchiArray?.[0] && (
