@@ -4,7 +4,7 @@ kind: check
 spec:
   sensor_name: column/whitespace/whitespace_text_count
   rule_name: comparison/max_count
-  help_text: Verifies that the number of whitespace strings in a column does not exceed
-    the maximum accepted count. Stores a separate data quality check result for each
-    monthly partition.
+  help_text: Detects texts that contain only spaces and other whitespace characters.
+    It raises a data quality issue when their count exceeds a *max_count* parameter
+    value. Stores a separate data quality check result for each monthly partition.
   standard: true

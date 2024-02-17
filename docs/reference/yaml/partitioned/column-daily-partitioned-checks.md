@@ -251,14 +251,14 @@ The structure of this object is described below
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|<span class="no-wrap-code ">[`daily_partition_empty_text_found`](../../../checks/column/whitespace/empty-text-found.md)</span>|Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksEmptyTextFoundCheckSpec](../../../checks/column/whitespace/empty-text-found.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_whitespace_text_found`](../../../checks/column/whitespace/whitespace-text-found.md)</span>|Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksWhitespaceTextFoundCheckSpec](../../../checks/column/whitespace/whitespace-text-found.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_null_placeholder_text_found`](../../../checks/column/whitespace/null-placeholder-text-found.md)</span>|Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksNullPlaceholderTextFoundCheckSpec](../../../checks/column/whitespace/null-placeholder-text-found.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_empty_text_percent`](../../../checks/column/whitespace/empty-text-percent.md)</span>|Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksEmptyTextPercentCheckSpec](../../../checks/column/whitespace/empty-text-percent.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_whitespace_text_percent`](../../../checks/column/whitespace/whitespace-text-percent.md)</span>|Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksWhitespaceTextPercentCheckSpec](../../../checks/column/whitespace/whitespace-text-percent.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_null_placeholder_text_percent`](../../../checks/column/whitespace/null-placeholder-text-percent.md)</span>|Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksNullPlaceholderTextPercentCheckSpec](../../../checks/column/whitespace/null-placeholder-text-percent.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_text_surrounded_by_whitespace`](../../../checks/column/whitespace/text-surrounded-by-whitespace.md)</span>|The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|*[ColumnTextSurroundedByWhitespaceCheckSpec](../../../checks/column/whitespace/text-surrounded-by-whitespace.md)*| | | |
-|<span class="no-wrap-code ">[`daily_partition_text_surrounded_by_whitespace_percent`](../../../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)</span>|Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|*[ColumnTextSurroundedByWhitespacePercentCheckSpec](../../../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_empty_text_found`](../../../checks/column/whitespace/empty-text-found.md)</span>|Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksEmptyTextFoundCheckSpec](../../../checks/column/whitespace/empty-text-found.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_whitespace_text_found`](../../../checks/column/whitespace/whitespace-text-found.md)</span>|Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksWhitespaceTextFoundCheckSpec](../../../checks/column/whitespace/whitespace-text-found.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_null_placeholder_text_found`](../../../checks/column/whitespace/null-placeholder-text-found.md)</span>|Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksNullPlaceholderTextFoundCheckSpec](../../../checks/column/whitespace/null-placeholder-text-found.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_empty_text_percent`](../../../checks/column/whitespace/empty-text-percent.md)</span>|Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksEmptyTextPercentCheckSpec](../../../checks/column/whitespace/empty-text-percent.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_whitespace_text_percent`](../../../checks/column/whitespace/whitespace-text-percent.md)</span>|Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksWhitespaceTextPercentCheckSpec](../../../checks/column/whitespace/whitespace-text-percent.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_null_placeholder_text_percent`](../../../checks/column/whitespace/null-placeholder-text-percent.md)</span>|Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each daily partition.|*[ColumnBlanksNullPlaceholderTextPercentCheckSpec](../../../checks/column/whitespace/null-placeholder-text-percent.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_text_surrounded_by_whitespace`](../../../checks/column/whitespace/text-surrounded-by-whitespace.md)</span>|Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|*[ColumnTextSurroundedByWhitespaceCheckSpec](../../../checks/column/whitespace/text-surrounded-by-whitespace.md)*| | | |
+|<span class="no-wrap-code ">[`daily_partition_text_surrounded_by_whitespace_percent`](../../../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)</span>|This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.|*[ColumnTextSurroundedByWhitespacePercentCheckSpec](../../../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)*| | | |
 |<span class="no-wrap-code ">[`custom_checks`](../profiling/table-profiling-checks.md#customcategorycheckspecmap)</span>|Dictionary of additional custom checks within this category. The keys are check names defined in the definition section. The sensor parameters and rules should match the type of the configured sensor and rule for the custom check.|*[CustomCategoryCheckSpecMap](../profiling/table-profiling-checks.md#customcategorycheckspecmap)*| | | |
 
 
@@ -477,7 +477,9 @@ ___
 
 
 ## ColumnSumAnomalyStationaryPartitionCheckSpec
-A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
+ It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
@@ -516,9 +518,10 @@ ___
 
 
 ## ColumnMinAnomalyStationaryCheckSpec
-A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
- This variant of the check is used only for partitioned data in partitioned data quality checks, detecting that the minimum value in a daily partition is different from minimum values of other partitions.
+This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
+ It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new minimum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
@@ -557,9 +560,10 @@ ___
 
 
 ## ColumnMaxAnomalyStationaryCheckSpec
-A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
- This variant of the check is used only for partitioned data in partitioned data quality checks, detecting that the maximum value in a daily partition is different from maximum values of other partitions.
+This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
+ It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new maximum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 

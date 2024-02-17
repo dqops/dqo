@@ -34,7 +34,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+ * This check detects text values that contain additional whitespace characters before or after the text.
+ * This check counts text values surrounded by whitespace characters (on any side) and
+ * raises a data quality issue when their count exceeds a *max_count* parameter value.
+ * Whitespace-surrounded texts should be trimmed before loading to another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

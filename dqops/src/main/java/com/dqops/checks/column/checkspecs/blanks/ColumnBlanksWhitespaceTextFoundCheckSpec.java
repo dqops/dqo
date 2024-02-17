@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
+ * This check detects empty texts containing only spaces and other whitespace characters.
+ * This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

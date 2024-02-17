@@ -1,6 +1,6 @@
 # text valid currency code percent data quality checks
 
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
+This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.
 
 
 ___

@@ -1,6 +1,7 @@
 # mean change 7 days data quality checks
 
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 ___

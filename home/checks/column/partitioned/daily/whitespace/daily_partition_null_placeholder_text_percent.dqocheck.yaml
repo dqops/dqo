@@ -4,6 +4,7 @@ kind: check
 spec:
   sensor_name: column/whitespace/null_placeholder_text_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of null placeholders in a column does not
-    exceed the maximum accepted percentage. Stores a separate data quality check result
-    for each daily partition.
+  help_text: "Detects texts that are well-known placeholders of null values, such\
+    \ as *None*, *null*, *n/a*, and measures their percentage in the column. It raises\
+    \ a data quality issue when their rate exceeds a *max_percent* parameter value.\
+    \ Stores a separate data quality check result for each daily partition."

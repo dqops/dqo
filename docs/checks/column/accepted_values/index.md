@@ -96,7 +96,8 @@ A column-level check that counts unique values in a numeric column and counts ho
 
 
 ### [text valid country code percent](./text-valid-country-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
+This check measures the percentage of text values that are valid two-letter country codes.
+ It raises a data quality issue when the percentage of valid country codes (excluding null values) falls below a minimum accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -110,7 +111,7 @@ A column-level check that ensures that the percentage of text values that are va
 
 
 ### [text valid currency code percent](./text-valid-currency-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
+This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.
 
 
 | Data quality check name | Check type | Description | Standard |

@@ -35,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+ * This check detects empty texts that are not null. Empty texts have a length of zero.
+ * The database treats them as values different than nulls, and some databases allow the storage of both null and empty values.
+ * This check counts empty texts and raises a data quality issue when the number of empty values exceeds a *max_count* parameter value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

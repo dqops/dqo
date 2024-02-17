@@ -35,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+ * This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
+ * It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ * This data quality check uses a 90-day time window and requires a history of at least 30 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

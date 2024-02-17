@@ -1,6 +1,8 @@
 # median anomaly data quality checks
 
-A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
+ It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 ___

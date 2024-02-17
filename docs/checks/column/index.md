@@ -51,12 +51,13 @@ A column-level check that counts unique values in a numeric column and counts ho
 
 
 ### [text valid country code percent](./accepted_values/text-valid-country-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
+This check measures the percentage of text values that are valid two-letter country codes.
+ It raises a data quality issue when the percentage of valid country codes (excluding null values) falls below a minimum accepted rate.
 
 
 
 ### [text valid currency code percent](./accepted_values/text-valid-currency-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
+This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.
 
 
 
@@ -103,89 +104,105 @@ A column-level check that ensures that the difference between the count of null 
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
 ### [sum anomaly](./anomaly/sum-anomaly.md)
-A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
+ It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [mean anomaly](./anomaly/mean-anomaly.md)
-A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.
+ It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [median anomaly](./anomaly/median-anomaly.md)
-A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
+ It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [min anomaly](./anomaly/min-anomaly.md)
-A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
+ It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new minimum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [max anomaly](./anomaly/max-anomaly.md)
-A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
+This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
+ It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new maximum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [mean change](./anomaly/mean-change.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.
 
 
 
 ### [mean change 1 day](./anomaly/mean-change-1-day.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).
 
 
 
 ### [mean change 7 days](./anomaly/mean-change-7-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [mean change 30 days](./anomaly/mean-change-30-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
 ### [median change](./anomaly/median-change.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.
 
 
 
 ### [median change 1 day](./anomaly/median-change-1-day.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).
 
 
 
 ### [median change 7 days](./anomaly/median-change-7-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [median change 30 days](./anomaly/median-change-30-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
 ### [sum change](./anomaly/sum-change.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.
 
 
 
 ### [sum change 1 day](./anomaly/sum-change-1-day.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).
 
 
 
 ### [sum change 7 days](./anomaly/sum-change-7-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [sum change 30 days](./anomaly/sum-change-30-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
@@ -844,42 +861,54 @@ This check monitors the percentage of distinct values and compares it to the mea
 Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
 
 ### [empty text found](./whitespace/empty-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
+This check detects empty texts that are not null. Empty texts have a length of zero.
+ The database treats them as values different than nulls, and some databases allow the storage of both null and empty values.
+ This check counts empty texts and raises a data quality issue when the number of empty values exceeds a *max_count* parameter value.
 
 
 
 ### [whitespace text found](./whitespace/whitespace-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
+This check detects empty texts containing only spaces and other whitespace characters.
+ This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.
 
 
 
 ### [null placeholder text found](./whitespace/null-placeholder-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
+This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
+ This check counts null placeholder values and raises a data quality issue when their count exceeds a *max_count* parameter value.
 
 
 
 ### [empty text percent](./whitespace/empty-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
+This check detects empty texts that are not null. Empty texts have a length of zero.
+ This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.
 
 
 
 ### [whitespace text percent](./whitespace/whitespace-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
+This check detects empty texts containing only spaces and other whitespace characters.
+ This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.
 
 
 
 ### [null placeholder text percent](./whitespace/null-placeholder-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
+This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
+ This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.
 
 
 
 ### [text surrounded by whitespace](./whitespace/text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
+This check detects text values that contain additional whitespace characters before or after the text.
+ This check counts text values surrounded by whitespace characters (on any side) and
+ raises a data quality issue when their count exceeds a *max_count* parameter value.
+ Whitespace-surrounded texts should be trimmed before loading to another table.
 
 
 
 ### [text surrounded by whitespace percent](./whitespace/text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
+This check detects text values that contain additional whitespace characters before or after the text.
+ This check measures the percentage of text value surrounded by whitespace characters (on any side) and
+ raises a data quality issue when their rate exceeds a *max_percent* parameter value.
 
 
 

@@ -1,6 +1,6 @@
 # sum change data quality checks
 
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.
 
 
 ___

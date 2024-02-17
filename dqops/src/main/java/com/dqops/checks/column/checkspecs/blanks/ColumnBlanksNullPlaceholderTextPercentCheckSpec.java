@@ -34,7 +34,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
+ * This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
+ * This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

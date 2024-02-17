@@ -35,9 +35,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
- * If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
- * This variant of the check is used only for partitioned data in partitioned data quality checks, detecting that the minimum value in a daily partition is different from minimum values of other partitions.
+ * This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
+ * It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
+ * values in the time series (it is a new minimum value, far from the previous one).
+ * This data quality check uses a 90-day time window and requires a history of at least 30 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

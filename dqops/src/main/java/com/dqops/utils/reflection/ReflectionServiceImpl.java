@@ -85,7 +85,12 @@ public class ReflectionServiceImpl implements ReflectionService {
                 .findFirst()
                 .orElse(null);
         if (parameterlessConstructor != null) {
-            parameterlessConstructor.setAccessible(true);
+            try {
+                parameterlessConstructor.setAccessible(true);
+            }
+            catch (InaccessibleObjectException ioe) {
+                // ignore
+            }
         }
 
         String metaDescription = targetClass.isAnnotationPresent(MetaDescription.class) ?

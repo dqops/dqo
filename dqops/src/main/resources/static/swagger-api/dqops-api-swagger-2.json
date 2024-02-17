@@ -29551,35 +29551,35 @@
           }
         },
         "daily_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "daily_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "daily_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "daily_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "daily_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "daily_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         },
         "daily_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
         "daily_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
@@ -29595,35 +29595,35 @@
           }
         },
         "daily_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "daily_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "daily_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "daily_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "daily_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "daily_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each daily partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         },
         "daily_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "description" : "Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
         "daily_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
+          "description" : "This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
@@ -29657,35 +29657,35 @@
           }
         },
         "monthly_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "monthly_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "monthly_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "monthly_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "monthly_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "monthly_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores the most recent captured value for each day when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         },
         "monthly_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "description" : "Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
         "monthly_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.",
+          "description" : "This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value. Stores the most recent captured value for each month when the data quality check was evaluated.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
@@ -29701,35 +29701,35 @@
           }
         },
         "monthly_partition_empty_text_found" : {
-          "description" : "Verifies that the number of empty strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "monthly_partition_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "monthly_partition_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "monthly_partition_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "monthly_partition_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the maximum accepted percent. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "monthly_partition_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each monthly partition.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value. Stores a separate data quality check result for each monthly partition.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         },
         "monthly_partition_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "description" : "Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
         "monthly_partition_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
+          "description" : "This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
@@ -29745,35 +29745,35 @@
           }
         },
         "profile_empty_text_found" : {
-          "description" : "Verifies that empty strings in a column does not exceed the maximum accepted count.",
+          "description" : "Detects empty texts (not null, zero-length texts). This check counts empty and raises a data quality issue when their count exceeds a *max_count* parameter value.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
         },
         "profile_whitespace_text_found" : {
-          "description" : "Verifies that the number of whitespace strings in a column does not exceed the maximum accepted count.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters. It raises a data quality issue when their count exceeds a *max_count* parameter value.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
         },
         "profile_null_placeholder_text_found" : {
-          "description" : "Verifies that the number of null placeholders in a column does not exceed the maximum accepted count.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*. It counts null placeholders and raises a data quality issue when their count exceeds a *max_count* parameter value.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
         },
         "profile_empty_text_percent" : {
-          "description" : "Verifies that the percentage of empty strings in a column does not exceed the maximum accepted percentage.",
+          "description" : "Detects empty texts (not null, zero-length texts) and measures their percentage in the column. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage. This check verifies that the rate of empty strings in a column does not exceed the maximum accepted percentage.",
           "$ref" : "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
         },
         "profile_whitespace_text_percent" : {
-          "description" : "Verifies that the percentage of whitespace strings in a column does not exceed the minimum accepted percentage.",
+          "description" : "Detects texts that contain only spaces and other whitespace characters and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value.",
           "$ref" : "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
         },
         "profile_null_placeholder_text_percent" : {
-          "description" : "Verifies that the percentage of null placeholders in a column does not exceed the maximum accepted percentage.",
+          "description" : "Detects texts that are well-known placeholders of null values, such as *None*, *null*, *n/a*, and measures their percentage in the column. It raises a data quality issue when their rate exceeds a *max_percent* parameter value.",
           "$ref" : "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
         },
         "profile_text_surrounded_by_whitespace" : {
-          "description" : "The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table",
+          "description" : "Detects text values that are surrounded by whitespace characters on any side. This check counts whitespace-surrounded texts and raises a data quality issue when their count exceeds the *max_count* parameter value.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
         },
         "profile_text_surrounded_by_whitespace_percent" : {
-          "description" : "Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage",
+          "description" : "This check detects text values that are surrounded by whitespace characters on any side and measures their percentage. This check raises a data quality issue when their percentage exceeds the *max_percent* parameter value.",
           "$ref" : "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
         }
       }
