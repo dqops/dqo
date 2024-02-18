@@ -124,15 +124,25 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
     public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
+                boolean maxRowsSupported = true;
+
                 if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    try {
+                        statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    }
+                    catch (Exception ex) {
+                        maxRowsSupported = false;
+                    }
                 }
 
                 try (JobCancellationListenerHandle cancellationListenerHandle =
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        Table resultTable = rawTableResultFromResultSet(results, sqlQueryStatement);
+                        ResultSet rowCountLimitedResultSet = maxRows != null ?
+                                new MaxRowsLimitingResultSet(results, maxRows + 1) : results;
+
+                        Table resultTable = rawTableResultFromResultSet(rowCountLimitedResultSet, sqlQueryStatement);
                         if (maxRows != null && resultTable.rowCount() > maxRows) {
                             throw new RowCountLimitExceededException(maxRows);
                         }
