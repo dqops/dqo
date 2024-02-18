@@ -20,13 +20,18 @@ public class FileFormatSpecProvider {
      */
     public static FileFormatSpec resolveFileFormat(DuckdbParametersSpec duckdbParametersSpec, TableSpec tableSpec) {
         DuckdbSourceFilesType filesType = duckdbParametersSpec.getSourceFilesType();
+        if (filesType == null) {
+            return null;
+        }
+
         FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat();
-        if(fileFormat.isFormatSetForType(filesType)){
+        if (fileFormat.isFormatSetForType(filesType)) {
             return fileFormat;
         }
+
         FileFormatSpec fileFormatCloned = fileFormat.deepClone();
-        if(duckdbParametersSpec.isFormatSetForType(filesType)){
-            switch(filesType){
+        if (duckdbParametersSpec.isFormatSetForType(filesType)) {
+            switch (filesType) {
                 case csv: fileFormatCloned.setCsv(duckdbParametersSpec.getCsv().deepClone()); break;
                 case json: fileFormatCloned.setJson(duckdbParametersSpec.getJson().deepClone()); break;
                 case parquet: fileFormatCloned.setParquet(duckdbParametersSpec.getParquet().deepClone()); break;
