@@ -9,14 +9,11 @@ if TYPE_CHECKING:
     from ..models.column_accepted_values_monthly_partitioned_checks_spec import (
         ColumnAcceptedValuesMonthlyPartitionedChecksSpec,
     )
-    from ..models.column_anomaly_monthly_partitioned_checks_spec import (
-        ColumnAnomalyMonthlyPartitionedChecksSpec,
-    )
-    from ..models.column_blanks_monthly_partitioned_checks_spec import (
-        ColumnBlanksMonthlyPartitionedChecksSpec,
-    )
     from ..models.column_bool_monthly_partitioned_checks_spec import (
         ColumnBoolMonthlyPartitionedChecksSpec,
+    )
+    from ..models.column_conversions_monthly_partitioned_checks_spec import (
+        ColumnConversionsMonthlyPartitionedChecksSpec,
     )
     from ..models.column_custom_sql_monthly_partitioned_checks_spec import (
         ColumnCustomSqlMonthlyPartitionedChecksSpec,
@@ -54,6 +51,9 @@ if TYPE_CHECKING:
     from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
         ColumnUniquenessMonthlyPartitionedChecksSpec,
     )
+    from ..models.column_whitespace_monthly_partitioned_checks_spec import (
+        ColumnWhitespaceMonthlyPartitionedChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnMonthlyPartitionedCheckCategoriesSpec")
@@ -69,11 +69,11 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         uniqueness (Union[Unset, ColumnUniquenessMonthlyPartitionedChecksSpec]):
         accepted_values (Union[Unset, ColumnAcceptedValuesMonthlyPartitionedChecksSpec]):
         text (Union[Unset, ColumnTextMonthlyPartitionedChecksSpec]):
-        blanks (Union[Unset, ColumnBlanksMonthlyPartitionedChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceMonthlyPartitionedChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsMonthlyPartitionedChecksSpec]):
         patterns (Union[Unset, ColumnPatternsMonthlyPartitionedChecksSpec]):
         pii (Union[Unset, ColumnPiiMonthlyPartitionedChecksSpec]):
         numeric (Union[Unset, ColumnNumericMonthlyPartitionedChecksSpec]):
-        anomaly (Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]):
         datetime_ (Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]):
         bool_ (Union[Unset, ColumnBoolMonthlyPartitionedChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityMonthlyPartitionedChecksSpec]):
@@ -91,11 +91,11 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         Unset, "ColumnAcceptedValuesMonthlyPartitionedChecksSpec"
     ] = UNSET
     text: Union[Unset, "ColumnTextMonthlyPartitionedChecksSpec"] = UNSET
-    blanks: Union[Unset, "ColumnBlanksMonthlyPartitionedChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceMonthlyPartitionedChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsMonthlyPartitionedChecksSpec"] = UNSET
     patterns: Union[Unset, "ColumnPatternsMonthlyPartitionedChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiMonthlyPartitionedChecksSpec"] = UNSET
     numeric: Union[Unset, "ColumnNumericMonthlyPartitionedChecksSpec"] = UNSET
-    anomaly: Union[Unset, "ColumnAnomalyMonthlyPartitionedChecksSpec"] = UNSET
     datetime_: Union[Unset, "ColumnDatetimeMonthlyPartitionedChecksSpec"] = UNSET
     bool_: Union[Unset, "ColumnBoolMonthlyPartitionedChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityMonthlyPartitionedChecksSpec"] = UNSET
@@ -127,9 +127,13 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         if not isinstance(self.text, Unset):
             text = self.text.to_dict()
 
-        blanks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.blanks, Unset):
-            blanks = self.blanks.to_dict()
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
 
         patterns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.patterns, Unset):
@@ -142,10 +146,6 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         numeric: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.numeric, Unset):
             numeric = self.numeric.to_dict()
-
-        anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.anomaly, Unset):
-            anomaly = self.anomaly.to_dict()
 
         datetime_: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.datetime_, Unset):
@@ -184,16 +184,16 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
             field_dict["accepted_values"] = accepted_values
         if text is not UNSET:
             field_dict["text"] = text
-        if blanks is not UNSET:
-            field_dict["blanks"] = blanks
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
         if patterns is not UNSET:
             field_dict["patterns"] = patterns
         if pii is not UNSET:
             field_dict["pii"] = pii
         if numeric is not UNSET:
             field_dict["numeric"] = numeric
-        if anomaly is not UNSET:
-            field_dict["anomaly"] = anomaly
         if datetime_ is not UNSET:
             field_dict["datetime"] = datetime_
         if bool_ is not UNSET:
@@ -214,14 +214,11 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         from ..models.column_accepted_values_monthly_partitioned_checks_spec import (
             ColumnAcceptedValuesMonthlyPartitionedChecksSpec,
         )
-        from ..models.column_anomaly_monthly_partitioned_checks_spec import (
-            ColumnAnomalyMonthlyPartitionedChecksSpec,
-        )
-        from ..models.column_blanks_monthly_partitioned_checks_spec import (
-            ColumnBlanksMonthlyPartitionedChecksSpec,
-        )
         from ..models.column_bool_monthly_partitioned_checks_spec import (
             ColumnBoolMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_conversions_monthly_partitioned_checks_spec import (
+            ColumnConversionsMonthlyPartitionedChecksSpec,
         )
         from ..models.column_custom_sql_monthly_partitioned_checks_spec import (
             ColumnCustomSqlMonthlyPartitionedChecksSpec,
@@ -258,6 +255,9 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         )
         from ..models.column_uniqueness_monthly_partitioned_checks_spec import (
             ColumnUniquenessMonthlyPartitionedChecksSpec,
+        )
+        from ..models.column_whitespace_monthly_partitioned_checks_spec import (
+            ColumnWhitespaceMonthlyPartitionedChecksSpec,
         )
 
         d = src_dict.copy()
@@ -304,12 +304,23 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
         else:
             text = ColumnTextMonthlyPartitionedChecksSpec.from_dict(_text)
 
-        _blanks = d.pop("blanks", UNSET)
-        blanks: Union[Unset, ColumnBlanksMonthlyPartitionedChecksSpec]
-        if isinstance(_blanks, Unset):
-            blanks = UNSET
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceMonthlyPartitionedChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
         else:
-            blanks = ColumnBlanksMonthlyPartitionedChecksSpec.from_dict(_blanks)
+            whitespace = ColumnWhitespaceMonthlyPartitionedChecksSpec.from_dict(
+                _whitespace
+            )
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsMonthlyPartitionedChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsMonthlyPartitionedChecksSpec.from_dict(
+                _conversions
+            )
 
         _patterns = d.pop("patterns", UNSET)
         patterns: Union[Unset, ColumnPatternsMonthlyPartitionedChecksSpec]
@@ -331,13 +342,6 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
             numeric = UNSET
         else:
             numeric = ColumnNumericMonthlyPartitionedChecksSpec.from_dict(_numeric)
-
-        _anomaly = d.pop("anomaly", UNSET)
-        anomaly: Union[Unset, ColumnAnomalyMonthlyPartitionedChecksSpec]
-        if isinstance(_anomaly, Unset):
-            anomaly = UNSET
-        else:
-            anomaly = ColumnAnomalyMonthlyPartitionedChecksSpec.from_dict(_anomaly)
 
         _datetime_ = d.pop("datetime", UNSET)
         datetime_: Union[Unset, ColumnDatetimeMonthlyPartitionedChecksSpec]
@@ -397,11 +401,11 @@ class ColumnMonthlyPartitionedCheckCategoriesSpec:
             uniqueness=uniqueness,
             accepted_values=accepted_values,
             text=text,
-            blanks=blanks,
+            whitespace=whitespace,
+            conversions=conversions,
             patterns=patterns,
             pii=pii,
             numeric=numeric,
-            anomaly=anomaly,
             datetime_=datetime_,
             bool_=bool_,
             integrity=integrity,

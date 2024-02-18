@@ -17,7 +17,7 @@ package com.dqops.presto.sensors.column.whitespace;
 
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksWhitespaceTextPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceWhitespaceTextPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class PrestoColumnWhitespaceWhitespaceTextPercentSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
     private ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksWhitespaceTextPercentCheckSpec checkSpec;
+    private ColumnWhitespaceWhitespaceTextPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class PrestoColumnWhitespaceWhitespaceTextPercentSensorParametersSpecInte
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec();
-		this.checkSpec = new ColumnBlanksWhitespaceTextPercentCheckSpec();
+		this.checkSpec = new ColumnWhitespaceWhitespaceTextPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -16,7 +16,7 @@
 package com.dqops.redshift.sensors.column.whitespace;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksNullPlaceholderTextPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceNullPlaceholderTextPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class RedshiftColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
     private ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksNullPlaceholderTextPercentCheckSpec checkSpec;
+    private ColumnWhitespaceNullPlaceholderTextPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -51,7 +51,7 @@ public class RedshiftColumnWhitespaceBlankNullPlaceholderTextPercentSensorParame
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec();
-		this.checkSpec = new ColumnBlanksNullPlaceholderTextPercentCheckSpec();
+		this.checkSpec = new ColumnWhitespaceNullPlaceholderTextPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

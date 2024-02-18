@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+        ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+    )
     from ..models.column_datatype_monthly_partitioned_checks_spec_custom_checks import (
         ColumnDatatypeMonthlyPartitionedChecksSpecCustomChecks,
-    )
-    from ..models.column_datatype_string_datatype_changed_check_spec import (
-        ColumnDatatypeStringDatatypeChangedCheckSpec,
     )
     from ..models.column_detected_datatype_in_text_check_spec import (
         ColumnDetectedDatatypeInTextCheckSpec,
@@ -29,7 +29,7 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_partition_detected_datatype_in_text (Union[Unset, ColumnDetectedDatatypeInTextCheckSpec]):
         monthly_partition_detected_datatype_in_text_changed (Union[Unset,
-            ColumnDatatypeStringDatatypeChangedCheckSpec]):
+            ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec]):
     """
 
     custom_checks: Union[
@@ -39,7 +39,7 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
         Unset, "ColumnDetectedDatatypeInTextCheckSpec"
     ] = UNSET
     monthly_partition_detected_datatype_in_text_changed: Union[
-        Unset, "ColumnDatatypeStringDatatypeChangedCheckSpec"
+        Unset, "ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -84,11 +84,11 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+            ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+        )
         from ..models.column_datatype_monthly_partitioned_checks_spec_custom_checks import (
             ColumnDatatypeMonthlyPartitionedChecksSpecCustomChecks,
-        )
-        from ..models.column_datatype_string_datatype_changed_check_spec import (
-            ColumnDatatypeStringDatatypeChangedCheckSpec,
         )
         from ..models.column_detected_datatype_in_text_check_spec import (
             ColumnDetectedDatatypeInTextCheckSpec,
@@ -127,13 +127,13 @@ class ColumnDatatypeMonthlyPartitionedChecksSpec:
             "monthly_partition_detected_datatype_in_text_changed", UNSET
         )
         monthly_partition_detected_datatype_in_text_changed: Union[
-            Unset, ColumnDatatypeStringDatatypeChangedCheckSpec
+            Unset, ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec
         ]
         if isinstance(_monthly_partition_detected_datatype_in_text_changed, Unset):
             monthly_partition_detected_datatype_in_text_changed = UNSET
         else:
             monthly_partition_detected_datatype_in_text_changed = (
-                ColumnDatatypeStringDatatypeChangedCheckSpec.from_dict(
+                ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec.from_dict(
                     _monthly_partition_detected_datatype_in_text_changed
                 )
             )

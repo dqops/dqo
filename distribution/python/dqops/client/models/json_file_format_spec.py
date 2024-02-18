@@ -3,6 +3,7 @@ from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.json_format_type import JsonFormatType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
@@ -28,7 +29,7 @@ class JsonFileFormatSpec:
             converted to a numerical type.
         dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
         filename (Union[Unset, bool]): Whether or not an extra filename column should be included in the result.
-        format_ (Union[Unset, str]): 	Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].
+        format_ (Union[Unset, JsonFormatType]):
         hive_partitioning (Union[Unset, bool]): 	Whether or not to interpret the path as a hive partitioned path.
         ignore_errors (Union[Unset, bool]): Whether to ignore parse errors (only possible when format is
             'newline_delimited').
@@ -45,7 +46,7 @@ class JsonFileFormatSpec:
     convert_strings_to_integers: Union[Unset, bool] = UNSET
     dateformat: Union[Unset, str] = UNSET
     filename: Union[Unset, bool] = UNSET
-    format_: Union[Unset, str] = UNSET
+    format_: Union[Unset, JsonFormatType] = UNSET
     hive_partitioning: Union[Unset, bool] = UNSET
     ignore_errors: Union[Unset, bool] = UNSET
     maximum_depth: Union[Unset, int] = UNSET
@@ -64,7 +65,10 @@ class JsonFileFormatSpec:
         convert_strings_to_integers = self.convert_strings_to_integers
         dateformat = self.dateformat
         filename = self.filename
-        format_ = self.format_
+        format_: Union[Unset, str] = UNSET
+        if not isinstance(self.format_, Unset):
+            format_ = self.format_.value
+
         hive_partitioning = self.hive_partitioning
         ignore_errors = self.ignore_errors
         maximum_depth = self.maximum_depth
@@ -126,7 +130,12 @@ class JsonFileFormatSpec:
 
         filename = d.pop("filename", UNSET)
 
-        format_ = d.pop("format", UNSET)
+        _format_ = d.pop("format", UNSET)
+        format_: Union[Unset, JsonFormatType]
+        if isinstance(_format_, Unset):
+            format_ = UNSET
+        else:
+            format_ = JsonFormatType(_format_)
 
         hive_partitioning = d.pop("hive_partitioning", UNSET)
 

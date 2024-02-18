@@ -16,7 +16,7 @@
 package com.dqops.athena.sensors.column.whitespace;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksEmptyTextFoundCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceEmptyTextFoundCheckSpec;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class AthenaColumnWhitespaceEmptyTextCountSensorParametersSpecIntegrationTest extends BaseAthenaIntegrationTest {
     private ColumnWhitespaceEmptyTextCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksEmptyTextFoundCheckSpec checkSpec;
+    private ColumnWhitespaceEmptyTextFoundCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -52,7 +52,7 @@ public class AthenaColumnWhitespaceEmptyTextCountSensorParametersSpecIntegration
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceEmptyTextCountSensorParametersSpec();
-		this.checkSpec = new ColumnBlanksEmptyTextFoundCheckSpec();
+		this.checkSpec = new ColumnWhitespaceEmptyTextFoundCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

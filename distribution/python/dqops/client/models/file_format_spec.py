@@ -18,30 +18,30 @@ T = TypeVar("T", bound="FileFormatSpec")
 class FileFormatSpec:
     """
     Attributes:
-        csv_file_format (Union[Unset, CsvFileFormatSpec]):
-        json_file_format (Union[Unset, JsonFileFormatSpec]):
-        parquet_file_format (Union[Unset, ParquetFileFormatSpec]):
+        csv (Union[Unset, CsvFileFormatSpec]):
+        json (Union[Unset, JsonFileFormatSpec]):
+        parquet (Union[Unset, ParquetFileFormatSpec]):
         file_paths (Union[Unset, List[str]]): The list of paths to files with data that are used as a source.
     """
 
-    csv_file_format: Union[Unset, "CsvFileFormatSpec"] = UNSET
-    json_file_format: Union[Unset, "JsonFileFormatSpec"] = UNSET
-    parquet_file_format: Union[Unset, "ParquetFileFormatSpec"] = UNSET
+    csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
+    json: Union[Unset, "JsonFileFormatSpec"] = UNSET
+    parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
     file_paths: Union[Unset, List[str]] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
-        csv_file_format: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.csv_file_format, Unset):
-            csv_file_format = self.csv_file_format.to_dict()
+        csv: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.csv, Unset):
+            csv = self.csv.to_dict()
 
-        json_file_format: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.json_file_format, Unset):
-            json_file_format = self.json_file_format.to_dict()
+        json: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.json, Unset):
+            json = self.json.to_dict()
 
-        parquet_file_format: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.parquet_file_format, Unset):
-            parquet_file_format = self.parquet_file_format.to_dict()
+        parquet: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.parquet, Unset):
+            parquet = self.parquet.to_dict()
 
         file_paths: Union[Unset, List[str]] = UNSET
         if not isinstance(self.file_paths, Unset):
@@ -50,12 +50,12 @@ class FileFormatSpec:
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
-        if csv_file_format is not UNSET:
-            field_dict["csv_file_format"] = csv_file_format
-        if json_file_format is not UNSET:
-            field_dict["json_file_format"] = json_file_format
-        if parquet_file_format is not UNSET:
-            field_dict["parquet_file_format"] = parquet_file_format
+        if csv is not UNSET:
+            field_dict["csv"] = csv
+        if json is not UNSET:
+            field_dict["json"] = json
+        if parquet is not UNSET:
+            field_dict["parquet"] = parquet
         if file_paths is not UNSET:
             field_dict["file_paths"] = file_paths
 
@@ -68,33 +68,33 @@ class FileFormatSpec:
         from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
         d = src_dict.copy()
-        _csv_file_format = d.pop("csv_file_format", UNSET)
-        csv_file_format: Union[Unset, CsvFileFormatSpec]
-        if isinstance(_csv_file_format, Unset):
-            csv_file_format = UNSET
+        _csv = d.pop("csv", UNSET)
+        csv: Union[Unset, CsvFileFormatSpec]
+        if isinstance(_csv, Unset):
+            csv = UNSET
         else:
-            csv_file_format = CsvFileFormatSpec.from_dict(_csv_file_format)
+            csv = CsvFileFormatSpec.from_dict(_csv)
 
-        _json_file_format = d.pop("json_file_format", UNSET)
-        json_file_format: Union[Unset, JsonFileFormatSpec]
-        if isinstance(_json_file_format, Unset):
-            json_file_format = UNSET
+        _json = d.pop("json", UNSET)
+        json: Union[Unset, JsonFileFormatSpec]
+        if isinstance(_json, Unset):
+            json = UNSET
         else:
-            json_file_format = JsonFileFormatSpec.from_dict(_json_file_format)
+            json = JsonFileFormatSpec.from_dict(_json)
 
-        _parquet_file_format = d.pop("parquet_file_format", UNSET)
-        parquet_file_format: Union[Unset, ParquetFileFormatSpec]
-        if isinstance(_parquet_file_format, Unset):
-            parquet_file_format = UNSET
+        _parquet = d.pop("parquet", UNSET)
+        parquet: Union[Unset, ParquetFileFormatSpec]
+        if isinstance(_parquet, Unset):
+            parquet = UNSET
         else:
-            parquet_file_format = ParquetFileFormatSpec.from_dict(_parquet_file_format)
+            parquet = ParquetFileFormatSpec.from_dict(_parquet)
 
         file_paths = cast(List[str], d.pop("file_paths", UNSET))
 
         file_format_spec = cls(
-            csv_file_format=csv_file_format,
-            json_file_format=json_file_format,
-            parquet_file_format=parquet_file_format,
+            csv=csv,
+            json=json,
+            parquet=parquet,
             file_paths=file_paths,
         )
 

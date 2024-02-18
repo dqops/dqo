@@ -17,7 +17,7 @@ package com.dqops.presto.sensors.column.whitespace;
 
 import com.dqops.presto.BasePrestoIntegrationTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksNullPlaceholderTextFoundCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceNullPlaceholderTextFoundCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class PrestoColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpecIntegrationTest extends BasePrestoIntegrationTest {
     private ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksNullPlaceholderTextFoundCheckSpec checkSpec;
+    private ColumnWhitespaceNullPlaceholderTextFoundCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class PrestoColumnWhitespaceBlankNullPlaceholderTextCountSensorParameters
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec();
-		this.checkSpec = new ColumnBlanksNullPlaceholderTextFoundCheckSpec();
+		this.checkSpec = new ColumnWhitespaceNullPlaceholderTextFoundCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

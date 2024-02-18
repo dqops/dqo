@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.between_ints_rule_parameters_spec import BetweenIntsRuleParametersSpec
     from ..models.column_text_text_max_length_sensor_parameters_spec import (
         ColumnTextTextMaxLengthSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.max_value_rule_parameters_spec import MaxValueRuleParametersSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -43,9 +43,9 @@ class ColumnTextMaxLengthCheckSpec:
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnTextTextMaxLengthSensorParametersSpec]):
-        warning (Union[Unset, MaxValueRuleParametersSpec]):
-        error (Union[Unset, MaxValueRuleParametersSpec]):
-        fatal (Union[Unset, MaxValueRuleParametersSpec]):
+        warning (Union[Unset, BetweenIntsRuleParametersSpec]):
+        error (Union[Unset, BetweenIntsRuleParametersSpec]):
+        fatal (Union[Unset, BetweenIntsRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -57,9 +57,9 @@ class ColumnTextMaxLengthCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnTextTextMaxLengthSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MaxValueRuleParametersSpec"] = UNSET
-    error: Union[Unset, "MaxValueRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "MaxValueRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
+    error: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -129,11 +129,13 @@ class ColumnTextMaxLengthCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.between_ints_rule_parameters_spec import (
+            BetweenIntsRuleParametersSpec,
+        )
         from ..models.column_text_text_max_length_sensor_parameters_spec import (
             ColumnTextTextMaxLengthSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.max_value_rule_parameters_spec import MaxValueRuleParametersSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
@@ -173,25 +175,25 @@ class ColumnTextMaxLengthCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MaxValueRuleParametersSpec]
+        warning: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MaxValueRuleParametersSpec.from_dict(_warning)
+            warning = BetweenIntsRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MaxValueRuleParametersSpec]
+        error: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MaxValueRuleParametersSpec.from_dict(_error)
+            error = BetweenIntsRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MaxValueRuleParametersSpec]
+        fatal: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MaxValueRuleParametersSpec.from_dict(_fatal)
+            fatal = BetweenIntsRuleParametersSpec.from_dict(_fatal)
 
         column_text_max_length_check_spec = cls(
             schedule_override=schedule_override,

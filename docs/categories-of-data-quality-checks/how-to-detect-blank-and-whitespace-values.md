@@ -161,9 +161,11 @@ Additional whitespace around values causes the following issues.
 
 DQOps supports two very similar checks that detect texts surrounded by whitespace.
 
-- [*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)  check finds and counts texts surrounded by whitespace.
+- The [*text_surrounded_by_whitespace_found*](../checks/column/whitespace/text-surrounded-by-whitespace-found.md) check
+  finds and counts texts surrounded by whitespace characters.
 
-- [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check finds and measures the percentage of texts surrounded by whitespace.
+- The [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check 
+  finds and measures the percentage of texts surrounded by whitespace characters.
 
 ### Detecting text surrounded by whitespace in UI
 The [*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md) check takes one parameter, the *max_percent*. 
@@ -207,7 +209,7 @@ spec:
 |[*empty_text_percent*](../checks/column/whitespace/empty-text-percent.md)|Completeness|This check detects empty texts that are not null. Empty texts have a length of zero. This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.| |
 |[*whitespace_text_percent*](../checks/column/whitespace/whitespace-text-percent.md)|Completeness|This check detects empty texts containing only spaces and other whitespace characters. This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
 |[*null_placeholder_text_percent*](../checks/column/whitespace/null-placeholder-text-percent.md)|Completeness|This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*. This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
-|[*text_surrounded_by_whitespace*](../checks/column/whitespace/text-surrounded-by-whitespace.md)|Consistency|This check detects text values that contain additional whitespace characters before or after the text. This check counts text values surrounded by whitespace characters (on any side) and raises a data quality issue when their count exceeds a *max_count* parameter value. Whitespace-surrounded texts should be trimmed before loading to another table.| |
+|[*text_surrounded_by_whitespace_found*](../checks/column/whitespace/text-surrounded-by-whitespace-found.md)|Consistency|This check detects text values that contain additional whitespace characters before or after the text. This check counts text values surrounded by whitespace characters (on any side) and raises a data quality issue when their count exceeds a *max_count* parameter value. Whitespace-surrounded texts should be trimmed before loading to another table.| |
 |[*text_surrounded_by_whitespace_percent*](../checks/column/whitespace/text-surrounded-by-whitespace-percent.md)|Consistency|This check detects text values that contain additional whitespace characters before or after the text. This check measures the percentage of text value surrounded by whitespace characters (on any side) and raises a data quality issue when their rate exceeds a *max_percent* parameter value.| |
 
 

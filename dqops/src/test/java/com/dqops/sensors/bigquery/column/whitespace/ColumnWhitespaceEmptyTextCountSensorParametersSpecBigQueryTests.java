@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.whitespace;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksEmptyTextFoundCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceEmptyTextFoundCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnWhitespaceEmptyTextCountSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnWhitespaceEmptyTextCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksEmptyTextFoundCheckSpec checkSpec;
+    private ColumnWhitespaceEmptyTextFoundCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnWhitespaceEmptyTextCountSensorParametersSpecBigQueryTests ext
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnBlanksEmptyTextFoundCheckSpec();
+        this.checkSpec = new ColumnWhitespaceEmptyTextFoundCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

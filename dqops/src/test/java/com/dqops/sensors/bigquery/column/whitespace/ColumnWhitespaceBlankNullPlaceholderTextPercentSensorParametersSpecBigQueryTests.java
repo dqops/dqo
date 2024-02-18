@@ -17,7 +17,7 @@ package com.dqops.sensors.bigquery.column.whitespace;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksNullPlaceholderTextPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceNullPlaceholderTextPercentCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -43,7 +43,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 public class ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksNullPlaceholderTextPercentCheckSpec checkSpec;
+    private ColumnWhitespaceNullPlaceholderTextPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -53,7 +53,7 @@ public class ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnBlanksNullPlaceholderTextPercentCheckSpec();
+        this.checkSpec = new ColumnWhitespaceNullPlaceholderTextPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

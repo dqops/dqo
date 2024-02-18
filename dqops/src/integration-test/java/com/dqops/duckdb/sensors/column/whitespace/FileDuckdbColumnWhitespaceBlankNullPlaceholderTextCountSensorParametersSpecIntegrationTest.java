@@ -15,7 +15,7 @@
  */
 package com.dqops.duckdb.sensors.column.whitespace;
 
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksNullPlaceholderTextFoundCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceNullPlaceholderTextFoundCheckSpec;
 import com.dqops.connectors.duckdb.DuckdbConnectionSpecObjectMother;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.duckdb.BaseDuckdbIntegrationTest;
@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
 public class FileDuckdbColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpecIntegrationTest extends BaseDuckdbIntegrationTest {
     private ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksNullPlaceholderTextFoundCheckSpec checkSpec;
+    private ColumnWhitespaceNullPlaceholderTextFoundCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class FileDuckdbColumnWhitespaceBlankNullPlaceholderTextCountSensorParame
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForExplicitCsvFile(csvFileName, connectionSpec);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec();
-        this.checkSpec = new ColumnBlanksNullPlaceholderTextFoundCheckSpec();
+        this.checkSpec = new ColumnWhitespaceNullPlaceholderTextFoundCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+        ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+    )
     from ..models.column_datatype_profiling_checks_spec_custom_checks import (
         ColumnDatatypeProfilingChecksSpecCustomChecks,
-    )
-    from ..models.column_datatype_string_datatype_changed_check_spec import (
-        ColumnDatatypeStringDatatypeChangedCheckSpec,
     )
     from ..models.column_detected_datatype_in_text_check_spec import (
         ColumnDetectedDatatypeInTextCheckSpec,
@@ -28,7 +28,7 @@ class ColumnDatatypeProfilingChecksSpec:
             checks within this category. The keys are check names defined in the definition section. The sensor parameters
             and rules should match the type of the configured sensor and rule for the custom check.
         profile_detected_datatype_in_text (Union[Unset, ColumnDetectedDatatypeInTextCheckSpec]):
-        profile_detected_datatype_in_text_changed (Union[Unset, ColumnDatatypeStringDatatypeChangedCheckSpec]):
+        profile_detected_datatype_in_text_changed (Union[Unset, ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec]):
     """
 
     custom_checks: Union[Unset, "ColumnDatatypeProfilingChecksSpecCustomChecks"] = UNSET
@@ -36,7 +36,7 @@ class ColumnDatatypeProfilingChecksSpec:
         Unset, "ColumnDetectedDatatypeInTextCheckSpec"
     ] = UNSET
     profile_detected_datatype_in_text_changed: Union[
-        Unset, "ColumnDatatypeStringDatatypeChangedCheckSpec"
+        Unset, "ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -75,11 +75,11 @@ class ColumnDatatypeProfilingChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+            ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+        )
         from ..models.column_datatype_profiling_checks_spec_custom_checks import (
             ColumnDatatypeProfilingChecksSpecCustomChecks,
-        )
-        from ..models.column_datatype_string_datatype_changed_check_spec import (
-            ColumnDatatypeStringDatatypeChangedCheckSpec,
         )
         from ..models.column_detected_datatype_in_text_check_spec import (
             ColumnDetectedDatatypeInTextCheckSpec,
@@ -114,13 +114,13 @@ class ColumnDatatypeProfilingChecksSpec:
             "profile_detected_datatype_in_text_changed", UNSET
         )
         profile_detected_datatype_in_text_changed: Union[
-            Unset, ColumnDatatypeStringDatatypeChangedCheckSpec
+            Unset, ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec
         ]
         if isinstance(_profile_detected_datatype_in_text_changed, Unset):
             profile_detected_datatype_in_text_changed = UNSET
         else:
             profile_detected_datatype_in_text_changed = (
-                ColumnDatatypeStringDatatypeChangedCheckSpec.from_dict(
+                ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec.from_dict(
                     _profile_detected_datatype_in_text_changed
                 )
             )

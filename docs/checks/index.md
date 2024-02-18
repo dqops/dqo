@@ -1210,7 +1210,7 @@ This check detects text values that are well-known equivalents (placeholders) of
 
 
 
-### [text surrounded by whitespace](./column/whitespace/text-surrounded-by-whitespace.md)
+### [text surrounded by whitespace found](./column/whitespace/text-surrounded-by-whitespace-found.md)
 This check detects text values that contain additional whitespace characters before or after the text.
  This check counts text values surrounded by whitespace characters (on any side) and
  raises a data quality issue when their count exceeds a *max_count* parameter value.

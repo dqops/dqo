@@ -446,7 +446,7 @@ nav:
         - empty text percent: 'checks/column/whitespace/empty-text-percent.md'
         - whitespace text percent: 'checks/column/whitespace/whitespace-text-percent.md'
         - null placeholder text percent: 'checks/column/whitespace/null-placeholder-text-percent.md'
-        - text surrounded by whitespace: 'checks/column/whitespace/text-surrounded-by-whitespace.md'
+        - text surrounded by whitespace found: 'checks/column/whitespace/text-surrounded-by-whitespace-found.md'
         - text surrounded by whitespace percent: 'checks/column/whitespace/text-surrounded-by-whitespace-percent.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:

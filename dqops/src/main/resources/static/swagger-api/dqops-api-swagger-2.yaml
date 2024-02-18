@@ -14935,374 +14935,6 @@ definitions:
         description: "Verifies that the sum in a column changed in a fixed rate since\
           \ the last readout from last month."
         $ref: "#/definitions/ColumnSumChange30DaysCheckSpec"
-  ColumnBlanksEmptyTextFoundCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ empty strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnBlanksEmptyTextPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ empty strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
-  ColumnBlanksNullPlaceholderTextFoundCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ a null placeholder strings in a column that raises a data quality error\
-          \ (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnBlanksNullPlaceholderTextPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum percentage of rows\
-          \ with a null placeholder strings in a column that raises a data quality\
-          \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
-  ColumnBlanksWhitespaceTextFoundCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ whitespace strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnBlanksWhitespaceTextPercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ whitespace strings in a column that raises a data quality error (alert)."
-        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnBoolDailyMonitoringChecksSpec:
     type: "object"
     properties:
@@ -27201,130 +26833,6 @@ definitions:
       text_datatype_detect:
         description: "Configuration of the profiler that detects datatype."
         $ref: "#/definitions/ColumnTextTextDatatypeDetectStatisticsCollectorSpec"
-  ColumnTextSurroundedByWhitespaceCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ surrounded by whitespace strings in a column that raises a data quality\
-          \ error (alert)."
-        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxCountRule100ParametersSpec"
-  ColumnTextSurroundedByWhitespacePercentCheckSpec:
-    type: "object"
-    properties:
-      schedule_override:
-        description: "Run check scheduling configuration. Specifies the schedule (a\
-          \ cron expression) when the data quality checks are executed by the scheduler."
-        $ref: "#/definitions/MonitoringScheduleSpec"
-      comments:
-        type: "array"
-        description: "Comments for change tracking. Please put comments in this collection\
-          \ because YAML comments may be removed when the YAML file is modified by\
-          \ the tool (serialization and deserialization will remove non tracked comments)."
-        items:
-          $ref: "#/definitions/CommentSpec"
-      disabled:
-        type: "boolean"
-        description: "Disables the data quality check. Only enabled data quality checks\
-          \ and monitorings are executed. The check should be disabled if it should\
-          \ not work, but the configuration of the sensor and rules should be preserved\
-          \ in the configuration."
-      exclude_from_kpi:
-        type: "boolean"
-        description: "Data quality check results (alerts) are included in the data\
-          \ quality KPI calculation by default. Set this field to true in order to\
-          \ exclude this data quality check from the data quality KPI calculation."
-      include_in_sla:
-        type: "boolean"
-        description: "Marks the data quality check as part of a data quality SLA (Data\
-          \ Contract). The data quality SLA is a set of critical data quality checks\
-          \ that must always pass and are considered as a Data Contract for the dataset."
-      quality_dimension:
-        type: "string"
-        description: "Configures a custom data quality dimension name that is different\
-          \ than the built-in dimensions (Timeliness, Validity, etc.)."
-      display_name:
-        type: "string"
-        description: "Data quality check display name that can be assigned to the\
-          \ check, otherwise the check_display_name stored in the parquet result files\
-          \ is the check_name."
-      data_grouping:
-        type: "string"
-        description: "Data grouping configuration name that should be applied to this\
-          \ data quality check. The data grouping is used to group the check's result\
-          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
-          \ group of rows. Use the name of one of data grouping configurations defined\
-          \ on the parent table."
-      parameters:
-        description: "Data quality check parameters"
-        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec"
-      warning:
-        description: "Alerting threshold that raises a data quality warning that is\
-          \ considered as a passed data quality check"
-        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
-      error:
-        description: "Default alerting threshold for a maximum number of rows with\
-          \ surrounded by whitespace strings in a column that raises a data quality\
-          \ error (alert)."
-        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
-      fatal:
-        description: "Alerting threshold that raises a fatal data quality issue which\
-          \ indicates a serious data quality problem"
-        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnTextTextDatatypeDetectStatisticsCollectorSpec:
     type: "object"
     properties:
@@ -28350,55 +27858,55 @@ definitions:
           \ counts empty and raises a data quality issue when their count exceeds\
           \ a *max_count* parameter value. Stores the most recent captured value for\
           \ each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextFoundCheckSpec"
       daily_whitespace_text_found:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters. It raises a data quality issue when their count exceeds a\
           \ *max_count* parameter value. Stores the most recent captured value for\
           \ each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextFoundCheckSpec"
       daily_null_placeholder_text_found:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*. It counts null placeholders and raises\
           \ a data quality issue when their count exceeds a *max_count* parameter\
           \ value. Stores the most recent captured value for each day when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextFoundCheckSpec"
       daily_empty_text_percent:
         description: "Detects empty texts (not null, zero-length texts) and measures\
           \ their percentage in the column. This check verifies that the rate of empty\
           \ strings in a column does not exceed the maximum accepted percentage. Stores\
           \ the most recent captured value for each day when the data quality check\
           \ was evaluated."
-        $ref: "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentCheckSpec"
       daily_whitespace_text_percent:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters and measures their percentage in the column. It raises a data\
           \ quality issue when their rate exceeds a *max_percent* parameter value.\
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentCheckSpec"
       daily_null_placeholder_text_percent:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*, and measures their percentage in the column.\
           \ It raises a data quality issue when their rate exceeds a *max_percent*\
           \ parameter value. Stores the most recent captured value for each day when\
           \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-      daily_text_surrounded_by_whitespace:
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextPercentCheckSpec"
+      daily_text_surrounded_by_whitespace_found:
         description: "Detects text values that are surrounded by whitespace characters\
           \ on any side. This check counts whitespace-surrounded texts and raises\
           \ a data quality issue when their count exceeds the *max_count* parameter\
           \ value. Stores the most recent captured value for each day when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec"
       daily_text_surrounded_by_whitespace_percent:
         description: "This check detects text values that are surrounded by whitespace\
           \ characters on any side and measures their percentage. This check raises\
           \ a data quality issue when their percentage exceeds the *max_percent* parameter\
           \ value. Stores the most recent captured value for each day when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec"
   ColumnWhitespaceDailyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -28415,52 +27923,52 @@ definitions:
           \ counts empty and raises a data quality issue when their count exceeds\
           \ a *max_count* parameter value. Stores a separate data quality check result\
           \ for each daily partition."
-        $ref: "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextFoundCheckSpec"
       daily_partition_whitespace_text_found:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters. It raises a data quality issue when their count exceeds a\
           \ *max_count* parameter value. Stores a separate data quality check result\
           \ for each daily partition."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextFoundCheckSpec"
       daily_partition_null_placeholder_text_found:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*. It counts null placeholders and raises\
           \ a data quality issue when their count exceeds a *max_count* parameter\
           \ value. Stores a separate data quality check result for each daily partition."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextFoundCheckSpec"
       daily_partition_empty_text_percent:
         description: "Detects empty texts (not null, zero-length texts) and measures\
           \ their percentage in the column. This check verifies that the rate of empty\
           \ strings in a column does not exceed the maximum accepted percentage. Stores\
           \ a separate data quality check result for each daily partition."
-        $ref: "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentCheckSpec"
       daily_partition_whitespace_text_percent:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters and measures their percentage in the column. It raises a data\
           \ quality issue when their rate exceeds a *max_percent* parameter value.\
           \ Stores a separate data quality check result for each daily partition."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentCheckSpec"
       daily_partition_null_placeholder_text_percent:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*, and measures their percentage in the column.\
           \ It raises a data quality issue when their rate exceeds a *max_percent*\
           \ parameter value. Stores a separate data quality check result for each\
           \ daily partition."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-      daily_partition_text_surrounded_by_whitespace:
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextPercentCheckSpec"
+      daily_partition_text_surrounded_by_whitespace_found:
         description: "Detects text values that are surrounded by whitespace characters\
           \ on any side. This check counts whitespace-surrounded texts and raises\
           \ a data quality issue when their count exceeds the *max_count* parameter\
           \ value. Analyzes every daily partition and creates a separate data quality\
           \ check result with the time period value that identifies the daily partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec"
       daily_partition_text_surrounded_by_whitespace_percent:
         description: "This check detects text values that are surrounded by whitespace\
           \ characters on any side and measures their percentage. This check raises\
           \ a data quality issue when their percentage exceeds the *max_percent* parameter\
           \ value. Analyzes every daily partition and creates a separate data quality\
           \ check result with the time period value that identifies the daily partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec"
   ColumnWhitespaceEmptyTextCountSensorParametersSpec:
     type: "object"
     properties:
@@ -28468,6 +27976,128 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnWhitespaceEmptyTextFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ empty strings in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnWhitespaceEmptyTextPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ empty strings in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnWhitespaceEmptyTextPercentSensorParametersSpec:
     type: "object"
     properties:
@@ -28491,55 +28121,55 @@ definitions:
           \ counts empty and raises a data quality issue when their count exceeds\
           \ a *max_count* parameter value. Stores the most recent captured value for\
           \ each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextFoundCheckSpec"
       monthly_whitespace_text_found:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters. It raises a data quality issue when their count exceeds a\
           \ *max_count* parameter value. Stores the most recent captured value for\
           \ each day when the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextFoundCheckSpec"
       monthly_null_placeholder_text_found:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*. It counts null placeholders and raises\
           \ a data quality issue when their count exceeds a *max_count* parameter\
           \ value. Stores the most recent captured value for each day when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextFoundCheckSpec"
       monthly_empty_text_percent:
         description: "Detects empty texts (not null, zero-length texts) and measures\
           \ their percentage in the column. This check verifies that the rate of empty\
           \ strings in a column does not exceed the maximum accepted percentage. Stores\
           \ the most recent captured value for each day when the data quality check\
           \ was evaluated."
-        $ref: "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentCheckSpec"
       monthly_whitespace_text_percent:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters and measures their percentage in the column. It raises a data\
           \ quality issue when their rate exceeds a *max_percent* parameter value.\
           \ Stores the most recent captured value for each day when the data quality\
           \ check was evaluated."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentCheckSpec"
       monthly_null_placeholder_text_percent:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*, and measures their percentage in the column.\
           \ It raises a data quality issue when their rate exceeds a *max_percent*\
           \ parameter value. Stores the most recent captured value for each day when\
           \ the data quality check was evaluated."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-      monthly_text_surrounded_by_whitespace:
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextPercentCheckSpec"
+      monthly_text_surrounded_by_whitespace_found:
         description: "Detects text values that are surrounded by whitespace characters\
           \ on any side. This check counts whitespace-surrounded texts and raises\
           \ a data quality issue when their count exceeds the *max_count* parameter\
           \ value. Stores the most recent captured value for each month when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec"
       monthly_text_surrounded_by_whitespace_percent:
         description: "This check detects text values that are surrounded by whitespace\
           \ characters on any side and measures their percentage. This check raises\
           \ a data quality issue when their percentage exceeds the *max_percent* parameter\
           \ value. Stores the most recent captured value for each month when the data\
           \ quality check was evaluated."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec"
   ColumnWhitespaceMonthlyPartitionedChecksSpec:
     type: "object"
     properties:
@@ -28556,52 +28186,176 @@ definitions:
           \ counts empty and raises a data quality issue when their count exceeds\
           \ a *max_count* parameter value. Stores a separate data quality check result\
           \ for each monthly partition."
-        $ref: "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextFoundCheckSpec"
       monthly_partition_whitespace_text_found:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters. It raises a data quality issue when their count exceeds a\
           \ *max_count* parameter value. Stores a separate data quality check result\
           \ for each monthly partition."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextFoundCheckSpec"
       monthly_partition_null_placeholder_text_found:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*. It counts null placeholders and raises\
           \ a data quality issue when their count exceeds a *max_count* parameter\
           \ value. Stores a separate data quality check result for each monthly partition."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextFoundCheckSpec"
       monthly_partition_empty_text_percent:
         description: "Detects empty texts (not null, zero-length texts) and measures\
           \ their percentage in the column. This check verifies that the rate of empty\
           \ strings in a column does not exceed the maximum accepted percentage. Stores\
           \ a separate data quality check result for each monthly partition."
-        $ref: "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentCheckSpec"
       monthly_partition_whitespace_text_percent:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters and measures their percentage in the column. It raises a data\
           \ quality issue when their rate exceeds a *max_percent* parameter value.\
           \ Stores a separate data quality check result for each monthly partition."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentCheckSpec"
       monthly_partition_null_placeholder_text_percent:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*, and measures their percentage in the column.\
           \ It raises a data quality issue when their rate exceeds a *max_percent*\
           \ parameter value. Stores a separate data quality check result for each\
           \ monthly partition."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-      monthly_partition_text_surrounded_by_whitespace:
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextPercentCheckSpec"
+      monthly_partition_text_surrounded_by_whitespace_found:
         description: "Detects text values that are surrounded by whitespace characters\
           \ on any side. This check counts whitespace-surrounded texts and raises\
           \ a data quality issue when their count exceeds the *max_count* parameter\
           \ value. Analyzes every monthly partition and creates a separate data quality\
           \ check result with the time period value that identifies the monthly partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec"
       monthly_partition_text_surrounded_by_whitespace_percent:
         description: "This check detects text values that are surrounded by whitespace\
           \ characters on any side and measures their percentage. This check raises\
           \ a data quality issue when their percentage exceeds the *max_percent* parameter\
           \ value. Analyzes every monthly partition and creates a separate data quality\
           \ check result with the time period value that identifies the monthly partition."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec"
+  ColumnWhitespaceNullPlaceholderTextFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ a null placeholder strings in a column that raises a data quality error\
+          \ (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnWhitespaceNullPlaceholderTextPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum percentage of rows\
+          \ with a null placeholder strings in a column that raises a data quality\
+          \ error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnWhitespaceProfilingChecksSpec:
     type: "object"
     properties:
@@ -28617,48 +28371,48 @@ definitions:
         description: "Detects empty texts (not null, zero-length texts). This check\
           \ counts empty and raises a data quality issue when their count exceeds\
           \ a *max_count* parameter value."
-        $ref: "#/definitions/ColumnBlanksEmptyTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextFoundCheckSpec"
       profile_whitespace_text_found:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters. It raises a data quality issue when their count exceeds a\
           \ *max_count* parameter value."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextFoundCheckSpec"
       profile_null_placeholder_text_found:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*. It counts null placeholders and raises\
           \ a data quality issue when their count exceeds a *max_count* parameter\
           \ value."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextFoundCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextFoundCheckSpec"
       profile_empty_text_percent:
         description: "Detects empty texts (not null, zero-length texts) and measures\
           \ their percentage in the column. This check verifies that the rate of empty\
           \ strings in a column does not exceed the maximum accepted percentage. This\
           \ check verifies that the rate of empty strings in a column does not exceed\
           \ the maximum accepted percentage."
-        $ref: "#/definitions/ColumnBlanksEmptyTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceEmptyTextPercentCheckSpec"
       profile_whitespace_text_percent:
         description: "Detects texts that contain only spaces and other whitespace\
           \ characters and measures their percentage in the column. It raises a data\
           \ quality issue when their rate exceeds a *max_percent* parameter value."
-        $ref: "#/definitions/ColumnBlanksWhitespaceTextPercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentCheckSpec"
       profile_null_placeholder_text_percent:
         description: "Detects texts that are well-known placeholders of null values,\
           \ such as *None*, *null*, *n/a*, and measures their percentage in the column.\
           \ It raises a data quality issue when their rate exceeds a *max_percent*\
           \ parameter value."
-        $ref: "#/definitions/ColumnBlanksNullPlaceholderTextPercentCheckSpec"
-      profile_text_surrounded_by_whitespace:
+        $ref: "#/definitions/ColumnWhitespaceNullPlaceholderTextPercentCheckSpec"
+      profile_text_surrounded_by_whitespace_found:
         description: "Detects text values that are surrounded by whitespace characters\
           \ on any side. This check counts whitespace-surrounded texts and raises\
           \ a data quality issue when their count exceeds the *max_count* parameter\
           \ value."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespaceCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec"
       profile_text_surrounded_by_whitespace_percent:
         description: "This check detects text values that are surrounded by whitespace\
           \ characters on any side and measures their percentage. This check raises\
           \ a data quality issue when their percentage exceeds the *max_percent* parameter\
           \ value."
-        $ref: "#/definitions/ColumnTextSurroundedByWhitespacePercentCheckSpec"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec"
   ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec:
     type: "object"
     properties:
@@ -28666,6 +28420,130 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ surrounded by whitespace strings in a column that raises a data quality\
+          \ error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ surrounded by whitespace strings in a column that raises a data quality\
+          \ error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec:
     type: "object"
     properties:
@@ -28680,6 +28558,128 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
+  ColumnWhitespaceWhitespaceTextFoundCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextCountSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxCountRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ whitespace strings in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxCountRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxCountRule100ParametersSpec"
+  ColumnWhitespaceWhitespaceTextPercentCheckSpec:
+    type: "object"
+    properties:
+      schedule_override:
+        description: "Run check scheduling configuration. Specifies the schedule (a\
+          \ cron expression) when the data quality checks are executed by the scheduler."
+        $ref: "#/definitions/MonitoringScheduleSpec"
+      comments:
+        type: "array"
+        description: "Comments for change tracking. Please put comments in this collection\
+          \ because YAML comments may be removed when the YAML file is modified by\
+          \ the tool (serialization and deserialization will remove non tracked comments)."
+        items:
+          $ref: "#/definitions/CommentSpec"
+      disabled:
+        type: "boolean"
+        description: "Disables the data quality check. Only enabled data quality checks\
+          \ and monitorings are executed. The check should be disabled if it should\
+          \ not work, but the configuration of the sensor and rules should be preserved\
+          \ in the configuration."
+      exclude_from_kpi:
+        type: "boolean"
+        description: "Data quality check results (alerts) are included in the data\
+          \ quality KPI calculation by default. Set this field to true in order to\
+          \ exclude this data quality check from the data quality KPI calculation."
+      include_in_sla:
+        type: "boolean"
+        description: "Marks the data quality check as part of a data quality SLA (Data\
+          \ Contract). The data quality SLA is a set of critical data quality checks\
+          \ that must always pass and are considered as a Data Contract for the dataset."
+      quality_dimension:
+        type: "string"
+        description: "Configures a custom data quality dimension name that is different\
+          \ than the built-in dimensions (Timeliness, Validity, etc.)."
+      display_name:
+        type: "string"
+        description: "Data quality check display name that can be assigned to the\
+          \ check, otherwise the check_display_name stored in the parquet result files\
+          \ is the check_name."
+      data_grouping:
+        type: "string"
+        description: "Data grouping configuration name that should be applied to this\
+          \ data quality check. The data grouping is used to group the check's result\
+          \ by a GROUP BY clause in SQL, evaluating the data quality check for each\
+          \ group of rows. Use the name of one of data grouping configurations defined\
+          \ on the parent table."
+      parameters:
+        description: "Data quality check parameters"
+        $ref: "#/definitions/ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec"
+      warning:
+        description: "Alerting threshold that raises a data quality warning that is\
+          \ considered as a passed data quality check"
+        $ref: "#/definitions/MaxPercentRule0WarningParametersSpec"
+      error:
+        description: "Default alerting threshold for a maximum number of rows with\
+          \ whitespace strings in a column that raises a data quality error (alert)."
+        $ref: "#/definitions/MaxPercentRule0ErrorParametersSpec"
+      fatal:
+        description: "Alerting threshold that raises a fatal data quality issue which\
+          \ indicates a serious data quality problem"
+        $ref: "#/definitions/MaxPercentRule5ParametersSpec"
   ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec:
     type: "object"
     properties:

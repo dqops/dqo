@@ -24,6 +24,12 @@ if TYPE_CHECKING:
     from ..models.column_text_found_in_set_percent_check_spec import (
         ColumnTextFoundInSetPercentCheckSpec,
     )
+    from ..models.column_text_valid_country_code_percent_check_spec import (
+        ColumnTextValidCountryCodePercentCheckSpec,
+    )
+    from ..models.column_text_valid_currency_code_percent_check_spec import (
+        ColumnTextValidCurrencyCodePercentCheckSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnAcceptedValuesDailyMonitoringChecksSpec")
@@ -41,6 +47,8 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
         daily_expected_text_values_in_use_count (Union[Unset, ColumnExpectedTextValuesInUseCountCheckSpec]):
         daily_expected_texts_in_top_values_count (Union[Unset, ColumnExpectedTextsInTopValuesCountCheckSpec]):
         daily_expected_numbers_in_use_count (Union[Unset, ColumnExpectedNumbersInUseCountCheckSpec]):
+        daily_text_valid_country_code_percent (Union[Unset, ColumnTextValidCountryCodePercentCheckSpec]):
+        daily_text_valid_currency_code_percent (Union[Unset, ColumnTextValidCurrencyCodePercentCheckSpec]):
     """
 
     custom_checks: Union[
@@ -60,6 +68,12 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
     ] = UNSET
     daily_expected_numbers_in_use_count: Union[
         Unset, "ColumnExpectedNumbersInUseCountCheckSpec"
+    ] = UNSET
+    daily_text_valid_country_code_percent: Union[
+        Unset, "ColumnTextValidCountryCodePercentCheckSpec"
+    ] = UNSET
+    daily_text_valid_currency_code_percent: Union[
+        Unset, "ColumnTextValidCurrencyCodePercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -98,6 +112,18 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
                 self.daily_expected_numbers_in_use_count.to_dict()
             )
 
+        daily_text_valid_country_code_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_text_valid_country_code_percent, Unset):
+            daily_text_valid_country_code_percent = (
+                self.daily_text_valid_country_code_percent.to_dict()
+            )
+
+        daily_text_valid_currency_code_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_text_valid_currency_code_percent, Unset):
+            daily_text_valid_currency_code_percent = (
+                self.daily_text_valid_currency_code_percent.to_dict()
+            )
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -123,6 +149,14 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
             field_dict[
                 "daily_expected_numbers_in_use_count"
             ] = daily_expected_numbers_in_use_count
+        if daily_text_valid_country_code_percent is not UNSET:
+            field_dict[
+                "daily_text_valid_country_code_percent"
+            ] = daily_text_valid_country_code_percent
+        if daily_text_valid_currency_code_percent is not UNSET:
+            field_dict[
+                "daily_text_valid_currency_code_percent"
+            ] = daily_text_valid_currency_code_percent
 
         return field_dict
 
@@ -145,6 +179,12 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
         )
         from ..models.column_text_found_in_set_percent_check_spec import (
             ColumnTextFoundInSetPercentCheckSpec,
+        )
+        from ..models.column_text_valid_country_code_percent_check_spec import (
+            ColumnTextValidCountryCodePercentCheckSpec,
+        )
+        from ..models.column_text_valid_currency_code_percent_check_spec import (
+            ColumnTextValidCurrencyCodePercentCheckSpec,
         )
 
         d = src_dict.copy()
@@ -236,6 +276,36 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
                 )
             )
 
+        _daily_text_valid_country_code_percent = d.pop(
+            "daily_text_valid_country_code_percent", UNSET
+        )
+        daily_text_valid_country_code_percent: Union[
+            Unset, ColumnTextValidCountryCodePercentCheckSpec
+        ]
+        if isinstance(_daily_text_valid_country_code_percent, Unset):
+            daily_text_valid_country_code_percent = UNSET
+        else:
+            daily_text_valid_country_code_percent = (
+                ColumnTextValidCountryCodePercentCheckSpec.from_dict(
+                    _daily_text_valid_country_code_percent
+                )
+            )
+
+        _daily_text_valid_currency_code_percent = d.pop(
+            "daily_text_valid_currency_code_percent", UNSET
+        )
+        daily_text_valid_currency_code_percent: Union[
+            Unset, ColumnTextValidCurrencyCodePercentCheckSpec
+        ]
+        if isinstance(_daily_text_valid_currency_code_percent, Unset):
+            daily_text_valid_currency_code_percent = UNSET
+        else:
+            daily_text_valid_currency_code_percent = (
+                ColumnTextValidCurrencyCodePercentCheckSpec.from_dict(
+                    _daily_text_valid_currency_code_percent
+                )
+            )
+
         column_accepted_values_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             daily_text_found_in_set_percent=daily_text_found_in_set_percent,
@@ -243,6 +313,8 @@ class ColumnAcceptedValuesDailyMonitoringChecksSpec:
             daily_expected_text_values_in_use_count=daily_expected_text_values_in_use_count,
             daily_expected_texts_in_top_values_count=daily_expected_texts_in_top_values_count,
             daily_expected_numbers_in_use_count=daily_expected_numbers_in_use_count,
+            daily_text_valid_country_code_percent=daily_text_valid_country_code_percent,
+            daily_text_valid_currency_code_percent=daily_text_valid_currency_code_percent,
         )
 
         column_accepted_values_daily_monitoring_checks_spec.additional_properties = d

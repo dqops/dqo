@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+        ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+    )
     from ..models.column_datatype_monthly_monitoring_checks_spec_custom_checks import (
         ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks,
-    )
-    from ..models.column_datatype_string_datatype_changed_check_spec import (
-        ColumnDatatypeStringDatatypeChangedCheckSpec,
     )
     from ..models.column_detected_datatype_in_text_check_spec import (
         ColumnDetectedDatatypeInTextCheckSpec,
@@ -28,7 +28,7 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         monthly_detected_datatype_in_text (Union[Unset, ColumnDetectedDatatypeInTextCheckSpec]):
-        monthly_detected_datatype_in_text_changed (Union[Unset, ColumnDatatypeStringDatatypeChangedCheckSpec]):
+        monthly_detected_datatype_in_text_changed (Union[Unset, ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec]):
     """
 
     custom_checks: Union[
@@ -38,7 +38,7 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
         Unset, "ColumnDetectedDatatypeInTextCheckSpec"
     ] = UNSET
     monthly_detected_datatype_in_text_changed: Union[
-        Unset, "ColumnDatatypeStringDatatypeChangedCheckSpec"
+        Unset, "ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -77,11 +77,11 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_datatype_detected_datatype_in_text_changed_check_spec import (
+            ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+        )
         from ..models.column_datatype_monthly_monitoring_checks_spec_custom_checks import (
             ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks,
-        )
-        from ..models.column_datatype_string_datatype_changed_check_spec import (
-            ColumnDatatypeStringDatatypeChangedCheckSpec,
         )
         from ..models.column_detected_datatype_in_text_check_spec import (
             ColumnDetectedDatatypeInTextCheckSpec,
@@ -120,13 +120,13 @@ class ColumnDatatypeMonthlyMonitoringChecksSpec:
             "monthly_detected_datatype_in_text_changed", UNSET
         )
         monthly_detected_datatype_in_text_changed: Union[
-            Unset, ColumnDatatypeStringDatatypeChangedCheckSpec
+            Unset, ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec
         ]
         if isinstance(_monthly_detected_datatype_in_text_changed, Unset):
             monthly_detected_datatype_in_text_changed = UNSET
         else:
             monthly_detected_datatype_in_text_changed = (
-                ColumnDatatypeStringDatatypeChangedCheckSpec.from_dict(
+                ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec.from_dict(
                     _monthly_detected_datatype_in_text_changed
                 )
             )

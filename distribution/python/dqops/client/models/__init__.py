@@ -25,6 +25,7 @@ from .anomaly_stationary_percentile_moving_average_rule_warning_1_pct_parameters
 from .athena_authentication_mode import AthenaAuthenticationMode
 from .authenticated_dashboard_model import AuthenticatedDashboardModel
 from .between_floats_rule_parameters_spec import BetweenFloatsRuleParametersSpec
+from .between_ints_rule_parameters_spec import BetweenIntsRuleParametersSpec
 from .between_percent_rule_parameters_spec import BetweenPercentRuleParametersSpec
 from .big_query_authentication_mode import BigQueryAuthenticationMode
 from .big_query_jobs_create_project import BigQueryJobsCreateProject
@@ -186,85 +187,9 @@ from .column_anomaly_daily_partitioned_checks_spec import (
 from .column_anomaly_daily_partitioned_checks_spec_custom_checks import (
     ColumnAnomalyDailyPartitionedChecksSpecCustomChecks,
 )
-from .column_anomaly_monthly_monitoring_checks_spec import (
-    ColumnAnomalyMonthlyMonitoringChecksSpec,
-)
-from .column_anomaly_monthly_monitoring_checks_spec_custom_checks import (
-    ColumnAnomalyMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .column_anomaly_monthly_partitioned_checks_spec import (
-    ColumnAnomalyMonthlyPartitionedChecksSpec,
-)
-from .column_anomaly_monthly_partitioned_checks_spec_custom_checks import (
-    ColumnAnomalyMonthlyPartitionedChecksSpecCustomChecks,
-)
 from .column_anomaly_profiling_checks_spec import ColumnAnomalyProfilingChecksSpec
 from .column_anomaly_profiling_checks_spec_custom_checks import (
     ColumnAnomalyProfilingChecksSpecCustomChecks,
-)
-from .column_blanks_blank_null_placeholder_text_count_sensor_parameters_spec import (
-    ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec,
-)
-from .column_blanks_blank_null_placeholder_text_percent_sensor_parameters_spec import (
-    ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec,
-)
-from .column_blanks_daily_monitoring_checks_spec import (
-    ColumnBlanksDailyMonitoringChecksSpec,
-)
-from .column_blanks_daily_monitoring_checks_spec_custom_checks import (
-    ColumnBlanksDailyMonitoringChecksSpecCustomChecks,
-)
-from .column_blanks_daily_partitioned_checks_spec import (
-    ColumnBlanksDailyPartitionedChecksSpec,
-)
-from .column_blanks_daily_partitioned_checks_spec_custom_checks import (
-    ColumnBlanksDailyPartitionedChecksSpecCustomChecks,
-)
-from .column_blanks_empty_text_count_sensor_parameters_spec import (
-    ColumnBlanksEmptyTextCountSensorParametersSpec,
-)
-from .column_blanks_empty_text_found_check_spec import (
-    ColumnBlanksEmptyTextFoundCheckSpec,
-)
-from .column_blanks_empty_text_percent_check_spec import (
-    ColumnBlanksEmptyTextPercentCheckSpec,
-)
-from .column_blanks_empty_text_percent_sensor_parameters_spec import (
-    ColumnBlanksEmptyTextPercentSensorParametersSpec,
-)
-from .column_blanks_monthly_monitoring_checks_spec import (
-    ColumnBlanksMonthlyMonitoringChecksSpec,
-)
-from .column_blanks_monthly_monitoring_checks_spec_custom_checks import (
-    ColumnBlanksMonthlyMonitoringChecksSpecCustomChecks,
-)
-from .column_blanks_monthly_partitioned_checks_spec import (
-    ColumnBlanksMonthlyPartitionedChecksSpec,
-)
-from .column_blanks_monthly_partitioned_checks_spec_custom_checks import (
-    ColumnBlanksMonthlyPartitionedChecksSpecCustomChecks,
-)
-from .column_blanks_null_placeholder_text_found_check_spec import (
-    ColumnBlanksNullPlaceholderTextFoundCheckSpec,
-)
-from .column_blanks_null_placeholder_text_percent_check_spec import (
-    ColumnBlanksNullPlaceholderTextPercentCheckSpec,
-)
-from .column_blanks_profiling_checks_spec import ColumnBlanksProfilingChecksSpec
-from .column_blanks_profiling_checks_spec_custom_checks import (
-    ColumnBlanksProfilingChecksSpecCustomChecks,
-)
-from .column_blanks_whitespace_text_count_sensor_parameters_spec import (
-    ColumnBlanksWhitespaceTextCountSensorParametersSpec,
-)
-from .column_blanks_whitespace_text_found_check_spec import (
-    ColumnBlanksWhitespaceTextFoundCheckSpec,
-)
-from .column_blanks_whitespace_text_percent_check_spec import (
-    ColumnBlanksWhitespaceTextPercentCheckSpec,
-)
-from .column_blanks_whitespace_text_percent_sensor_parameters_spec import (
-    ColumnBlanksWhitespaceTextPercentSensorParametersSpec,
 )
 from .column_bool_daily_monitoring_checks_spec import (
     ColumnBoolDailyMonitoringChecksSpec,
@@ -345,6 +270,36 @@ from .column_comparison_profiling_checks_spec_custom_checks import (
     ColumnComparisonProfilingChecksSpecCustomChecks,
 )
 from .column_comparison_sum_match_check_spec import ColumnComparisonSumMatchCheckSpec
+from .column_conversions_daily_monitoring_checks_spec import (
+    ColumnConversionsDailyMonitoringChecksSpec,
+)
+from .column_conversions_daily_monitoring_checks_spec_custom_checks import (
+    ColumnConversionsDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_conversions_daily_partitioned_checks_spec import (
+    ColumnConversionsDailyPartitionedChecksSpec,
+)
+from .column_conversions_daily_partitioned_checks_spec_custom_checks import (
+    ColumnConversionsDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_conversions_monthly_monitoring_checks_spec import (
+    ColumnConversionsMonthlyMonitoringChecksSpec,
+)
+from .column_conversions_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnConversionsMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_conversions_monthly_partitioned_checks_spec import (
+    ColumnConversionsMonthlyPartitionedChecksSpec,
+)
+from .column_conversions_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnConversionsMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_conversions_profiling_checks_spec import (
+    ColumnConversionsProfilingChecksSpec,
+)
+from .column_conversions_profiling_checks_spec_custom_checks import (
+    ColumnConversionsProfilingChecksSpecCustomChecks,
+)
 from .column_current_data_quality_status_model import (
     ColumnCurrentDataQualityStatusModel,
 )
@@ -409,6 +364,9 @@ from .column_datatype_daily_partitioned_checks_spec import (
 from .column_datatype_daily_partitioned_checks_spec_custom_checks import (
     ColumnDatatypeDailyPartitionedChecksSpecCustomChecks,
 )
+from .column_datatype_detected_datatype_in_text_changed_check_spec import (
+    ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec,
+)
 from .column_datatype_monthly_monitoring_checks_spec import (
     ColumnDatatypeMonthlyMonitoringChecksSpec,
 )
@@ -424,9 +382,6 @@ from .column_datatype_monthly_partitioned_checks_spec_custom_checks import (
 from .column_datatype_profiling_checks_spec import ColumnDatatypeProfilingChecksSpec
 from .column_datatype_profiling_checks_spec_custom_checks import (
     ColumnDatatypeProfilingChecksSpecCustomChecks,
-)
-from .column_datatype_string_datatype_changed_check_spec import (
-    ColumnDatatypeStringDatatypeChangedCheckSpec,
 )
 from .column_datatype_string_datatype_detect_sensor_parameters_spec import (
     ColumnDatatypeStringDatatypeDetectSensorParametersSpec,
@@ -1142,12 +1097,6 @@ from .column_text_profiling_checks_spec_custom_checks import (
     ColumnTextProfilingChecksSpecCustomChecks,
 )
 from .column_text_statistics_collectors_spec import ColumnTextStatisticsCollectorsSpec
-from .column_text_surrounded_by_whitespace_check_spec import (
-    ColumnTextSurroundedByWhitespaceCheckSpec,
-)
-from .column_text_surrounded_by_whitespace_percent_check_spec import (
-    ColumnTextSurroundedByWhitespacePercentCheckSpec,
-)
 from .column_text_text_datatype_detect_statistics_collector_spec import (
     ColumnTextTextDatatypeDetectStatisticsCollectorSpec,
 )
@@ -1195,12 +1144,6 @@ from .column_text_text_parsable_to_float_percent_sensor_parameters_spec import (
 )
 from .column_text_text_parsable_to_integer_percent_sensor_parameters_spec import (
     ColumnTextTextParsableToIntegerPercentSensorParametersSpec,
-)
-from .column_text_text_surrounded_by_whitespace_count_sensor_parameters_spec import (
-    ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec,
-)
-from .column_text_text_surrounded_by_whitespace_percent_sensor_parameters_spec import (
-    ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec,
 )
 from .column_text_text_valid_country_code_percent_sensor_parameters_spec import (
     ColumnTextTextValidCountryCodePercentSensorParametersSpec,
@@ -1283,6 +1226,82 @@ from .column_valid_longitude_percent_check_spec import (
 from .column_valid_uuid_format_percent_check_spec import (
     ColumnValidUuidFormatPercentCheckSpec,
 )
+from .column_whitespace_blank_null_placeholder_text_count_sensor_parameters_spec import (
+    ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec,
+)
+from .column_whitespace_blank_null_placeholder_text_percent_sensor_parameters_spec import (
+    ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec,
+)
+from .column_whitespace_daily_monitoring_checks_spec import (
+    ColumnWhitespaceDailyMonitoringChecksSpec,
+)
+from .column_whitespace_daily_monitoring_checks_spec_custom_checks import (
+    ColumnWhitespaceDailyMonitoringChecksSpecCustomChecks,
+)
+from .column_whitespace_daily_partitioned_checks_spec import (
+    ColumnWhitespaceDailyPartitionedChecksSpec,
+)
+from .column_whitespace_daily_partitioned_checks_spec_custom_checks import (
+    ColumnWhitespaceDailyPartitionedChecksSpecCustomChecks,
+)
+from .column_whitespace_empty_text_count_sensor_parameters_spec import (
+    ColumnWhitespaceEmptyTextCountSensorParametersSpec,
+)
+from .column_whitespace_empty_text_found_check_spec import (
+    ColumnWhitespaceEmptyTextFoundCheckSpec,
+)
+from .column_whitespace_empty_text_percent_check_spec import (
+    ColumnWhitespaceEmptyTextPercentCheckSpec,
+)
+from .column_whitespace_empty_text_percent_sensor_parameters_spec import (
+    ColumnWhitespaceEmptyTextPercentSensorParametersSpec,
+)
+from .column_whitespace_monthly_monitoring_checks_spec import (
+    ColumnWhitespaceMonthlyMonitoringChecksSpec,
+)
+from .column_whitespace_monthly_monitoring_checks_spec_custom_checks import (
+    ColumnWhitespaceMonthlyMonitoringChecksSpecCustomChecks,
+)
+from .column_whitespace_monthly_partitioned_checks_spec import (
+    ColumnWhitespaceMonthlyPartitionedChecksSpec,
+)
+from .column_whitespace_monthly_partitioned_checks_spec_custom_checks import (
+    ColumnWhitespaceMonthlyPartitionedChecksSpecCustomChecks,
+)
+from .column_whitespace_null_placeholder_text_found_check_spec import (
+    ColumnWhitespaceNullPlaceholderTextFoundCheckSpec,
+)
+from .column_whitespace_null_placeholder_text_percent_check_spec import (
+    ColumnWhitespaceNullPlaceholderTextPercentCheckSpec,
+)
+from .column_whitespace_profiling_checks_spec import ColumnWhitespaceProfilingChecksSpec
+from .column_whitespace_profiling_checks_spec_custom_checks import (
+    ColumnWhitespaceProfilingChecksSpecCustomChecks,
+)
+from .column_whitespace_text_surrounded_by_whitespace_count_sensor_parameters_spec import (
+    ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec,
+)
+from .column_whitespace_text_surrounded_by_whitespace_found_check_spec import (
+    ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec,
+)
+from .column_whitespace_text_surrounded_by_whitespace_percent_check_spec import (
+    ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec,
+)
+from .column_whitespace_text_surrounded_by_whitespace_percent_sensor_parameters_spec import (
+    ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec,
+)
+from .column_whitespace_whitespace_text_count_sensor_parameters_spec import (
+    ColumnWhitespaceWhitespaceTextCountSensorParametersSpec,
+)
+from .column_whitespace_whitespace_text_found_check_spec import (
+    ColumnWhitespaceWhitespaceTextFoundCheckSpec,
+)
+from .column_whitespace_whitespace_text_percent_check_spec import (
+    ColumnWhitespaceWhitespaceTextPercentCheckSpec,
+)
+from .column_whitespace_whitespace_text_percent_sensor_parameters_spec import (
+    ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec,
+)
 from .comment_spec import CommentSpec
 from .common_column_model import CommonColumnModel
 from .compare_thresholds_model import CompareThresholdsModel
@@ -1349,6 +1368,7 @@ from .dqo_settings_model_properties_additional_property import (
 from .dqo_user_profile_model import DqoUserProfileModel
 from .dqo_user_role import DqoUserRole
 from .duckdb_parameters_spec import DuckdbParametersSpec
+from .duckdb_parameters_spec_directories import DuckdbParametersSpecDirectories
 from .duckdb_parameters_spec_properties import DuckdbParametersSpecProperties
 from .duckdb_read_mode import DuckdbReadMode
 from .duckdb_source_files_type import DuckdbSourceFilesType
@@ -1385,6 +1405,7 @@ from .incident_webhook_notifications_spec import IncidentWebhookNotificationsSpe
 from .incidents_per_connection_model import IncidentsPerConnectionModel
 from .json_file_format_spec import JsonFileFormatSpec
 from .json_file_format_spec_columns import JsonFileFormatSpecColumns
+from .json_format_type import JsonFormatType
 from .max_count_rule_0_error_parameters_spec import MaxCountRule0ErrorParametersSpec
 from .max_count_rule_0_warning_parameters_spec import MaxCountRule0WarningParametersSpec
 from .max_count_rule_100_parameters_spec import MaxCountRule100ParametersSpec
@@ -1407,7 +1428,6 @@ from .max_percent_rule_0_warning_parameters_spec import (
     MaxPercentRule0WarningParametersSpec,
 )
 from .max_percent_rule_5_parameters_spec import MaxPercentRule5ParametersSpec
-from .max_value_rule_parameters_spec import MaxValueRuleParametersSpec
 from .min_count_rule_1_parameters_spec import MinCountRule1ParametersSpec
 from .min_percent_rule_95_parameters_spec import MinPercentRule95ParametersSpec
 from .min_percent_rule_100_error_parameters_spec import (
@@ -1416,7 +1436,6 @@ from .min_percent_rule_100_error_parameters_spec import (
 from .min_percent_rule_100_warning_parameters_spec import (
     MinPercentRule100WarningParametersSpec,
 )
-from .min_value_rule_parameters_spec import MinValueRuleParametersSpec
 from .minimum_grouping_severity_level import MinimumGroupingSeverityLevel
 from .monitoring_schedule_spec import MonitoringScheduleSpec
 from .mono import Mono
@@ -1887,6 +1906,7 @@ __all__ = (
     "AthenaAuthenticationMode",
     "AuthenticatedDashboardModel",
     "BetweenFloatsRuleParametersSpec",
+    "BetweenIntsRuleParametersSpec",
     "BetweenPercentRuleParametersSpec",
     "BigQueryAuthenticationMode",
     "BigQueryJobsCreateProject",
@@ -1964,34 +1984,8 @@ __all__ = (
     "ColumnAnomalyDailyMonitoringChecksSpecCustomChecks",
     "ColumnAnomalyDailyPartitionedChecksSpec",
     "ColumnAnomalyDailyPartitionedChecksSpecCustomChecks",
-    "ColumnAnomalyMonthlyMonitoringChecksSpec",
-    "ColumnAnomalyMonthlyMonitoringChecksSpecCustomChecks",
-    "ColumnAnomalyMonthlyPartitionedChecksSpec",
-    "ColumnAnomalyMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnAnomalyProfilingChecksSpec",
     "ColumnAnomalyProfilingChecksSpecCustomChecks",
-    "ColumnBlanksBlankNullPlaceholderTextCountSensorParametersSpec",
-    "ColumnBlanksBlankNullPlaceholderTextPercentSensorParametersSpec",
-    "ColumnBlanksDailyMonitoringChecksSpec",
-    "ColumnBlanksDailyMonitoringChecksSpecCustomChecks",
-    "ColumnBlanksDailyPartitionedChecksSpec",
-    "ColumnBlanksDailyPartitionedChecksSpecCustomChecks",
-    "ColumnBlanksEmptyTextCountSensorParametersSpec",
-    "ColumnBlanksEmptyTextFoundCheckSpec",
-    "ColumnBlanksEmptyTextPercentCheckSpec",
-    "ColumnBlanksEmptyTextPercentSensorParametersSpec",
-    "ColumnBlanksMonthlyMonitoringChecksSpec",
-    "ColumnBlanksMonthlyMonitoringChecksSpecCustomChecks",
-    "ColumnBlanksMonthlyPartitionedChecksSpec",
-    "ColumnBlanksMonthlyPartitionedChecksSpecCustomChecks",
-    "ColumnBlanksNullPlaceholderTextFoundCheckSpec",
-    "ColumnBlanksNullPlaceholderTextPercentCheckSpec",
-    "ColumnBlanksProfilingChecksSpec",
-    "ColumnBlanksProfilingChecksSpecCustomChecks",
-    "ColumnBlanksWhitespaceTextCountSensorParametersSpec",
-    "ColumnBlanksWhitespaceTextFoundCheckSpec",
-    "ColumnBlanksWhitespaceTextPercentCheckSpec",
-    "ColumnBlanksWhitespaceTextPercentSensorParametersSpec",
     "ColumnBoolDailyMonitoringChecksSpec",
     "ColumnBoolDailyMonitoringChecksSpecCustomChecks",
     "ColumnBoolDailyPartitionedChecksSpec",
@@ -2023,6 +2017,16 @@ __all__ = (
     "ColumnComparisonProfilingChecksSpec",
     "ColumnComparisonProfilingChecksSpecCustomChecks",
     "ColumnComparisonSumMatchCheckSpec",
+    "ColumnConversionsDailyMonitoringChecksSpec",
+    "ColumnConversionsDailyMonitoringChecksSpecCustomChecks",
+    "ColumnConversionsDailyPartitionedChecksSpec",
+    "ColumnConversionsDailyPartitionedChecksSpecCustomChecks",
+    "ColumnConversionsMonthlyMonitoringChecksSpec",
+    "ColumnConversionsMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnConversionsMonthlyPartitionedChecksSpec",
+    "ColumnConversionsMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnConversionsProfilingChecksSpec",
+    "ColumnConversionsProfilingChecksSpecCustomChecks",
     "ColumnCurrentDataQualityStatusModel",
     "ColumnCurrentDataQualityStatusModelChecks",
     "ColumnCustomSqlDailyMonitoringChecksSpec",
@@ -2045,13 +2049,13 @@ __all__ = (
     "ColumnDatatypeDailyMonitoringChecksSpecCustomChecks",
     "ColumnDatatypeDailyPartitionedChecksSpec",
     "ColumnDatatypeDailyPartitionedChecksSpecCustomChecks",
+    "ColumnDatatypeDetectedDatatypeInTextChangedCheckSpec",
     "ColumnDatatypeMonthlyMonitoringChecksSpec",
     "ColumnDatatypeMonthlyMonitoringChecksSpecCustomChecks",
     "ColumnDatatypeMonthlyPartitionedChecksSpec",
     "ColumnDatatypeMonthlyPartitionedChecksSpecCustomChecks",
     "ColumnDatatypeProfilingChecksSpec",
     "ColumnDatatypeProfilingChecksSpecCustomChecks",
-    "ColumnDatatypeStringDatatypeChangedCheckSpec",
     "ColumnDatatypeStringDatatypeDetectSensorParametersSpec",
     "ColumnDateInRangePercentCheckSpec",
     "ColumnDateInRangePercentSensorParametersSpec",
@@ -2335,8 +2339,6 @@ __all__ = (
     "ColumnTextProfilingChecksSpecCustomChecks",
     "ColumnTextsMatchingRegexPercentCheckSpec",
     "ColumnTextStatisticsCollectorsSpec",
-    "ColumnTextSurroundedByWhitespaceCheckSpec",
-    "ColumnTextSurroundedByWhitespacePercentCheckSpec",
     "ColumnTextTextDatatypeDetectStatisticsCollectorSpec",
     "ColumnTextTextLengthAboveMaxLengthCountSensorParametersSpec",
     "ColumnTextTextLengthAboveMaxLengthPercentSensorParametersSpec",
@@ -2353,8 +2355,6 @@ __all__ = (
     "ColumnTextTextParsableToDatePercentSensorParametersSpec",
     "ColumnTextTextParsableToFloatPercentSensorParametersSpec",
     "ColumnTextTextParsableToIntegerPercentSensorParametersSpec",
-    "ColumnTextTextSurroundedByWhitespaceCountSensorParametersSpec",
-    "ColumnTextTextSurroundedByWhitespacePercentSensorParametersSpec",
     "ColumnTextTextValidCountryCodePercentSensorParametersSpec",
     "ColumnTextTextValidCurrencyCodePercentSensorParametersSpec",
     "ColumnTextValidCountryCodePercentCheckSpec",
@@ -2383,6 +2383,32 @@ __all__ = (
     "ColumnValidLatitudePercentCheckSpec",
     "ColumnValidLongitudePercentCheckSpec",
     "ColumnValidUuidFormatPercentCheckSpec",
+    "ColumnWhitespaceBlankNullPlaceholderTextCountSensorParametersSpec",
+    "ColumnWhitespaceBlankNullPlaceholderTextPercentSensorParametersSpec",
+    "ColumnWhitespaceDailyMonitoringChecksSpec",
+    "ColumnWhitespaceDailyMonitoringChecksSpecCustomChecks",
+    "ColumnWhitespaceDailyPartitionedChecksSpec",
+    "ColumnWhitespaceDailyPartitionedChecksSpecCustomChecks",
+    "ColumnWhitespaceEmptyTextCountSensorParametersSpec",
+    "ColumnWhitespaceEmptyTextFoundCheckSpec",
+    "ColumnWhitespaceEmptyTextPercentCheckSpec",
+    "ColumnWhitespaceEmptyTextPercentSensorParametersSpec",
+    "ColumnWhitespaceMonthlyMonitoringChecksSpec",
+    "ColumnWhitespaceMonthlyMonitoringChecksSpecCustomChecks",
+    "ColumnWhitespaceMonthlyPartitionedChecksSpec",
+    "ColumnWhitespaceMonthlyPartitionedChecksSpecCustomChecks",
+    "ColumnWhitespaceNullPlaceholderTextFoundCheckSpec",
+    "ColumnWhitespaceNullPlaceholderTextPercentCheckSpec",
+    "ColumnWhitespaceProfilingChecksSpec",
+    "ColumnWhitespaceProfilingChecksSpecCustomChecks",
+    "ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec",
+    "ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec",
+    "ColumnWhitespaceTextSurroundedByWhitespacePercentCheckSpec",
+    "ColumnWhitespaceTextSurroundedByWhitespacePercentSensorParametersSpec",
+    "ColumnWhitespaceWhitespaceTextCountSensorParametersSpec",
+    "ColumnWhitespaceWhitespaceTextFoundCheckSpec",
+    "ColumnWhitespaceWhitespaceTextPercentCheckSpec",
+    "ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec",
     "CommentSpec",
     "CommonColumnModel",
     "CompareThresholdsModel",
@@ -2439,6 +2465,7 @@ __all__ = (
     "DqoUserProfileModel",
     "DqoUserRole",
     "DuckdbParametersSpec",
+    "DuckdbParametersSpecDirectories",
     "DuckdbParametersSpecProperties",
     "DuckdbReadMode",
     "DuckdbSourceFilesType",
@@ -2475,6 +2502,7 @@ __all__ = (
     "IncidentWebhookNotificationsSpec",
     "JsonFileFormatSpec",
     "JsonFileFormatSpecColumns",
+    "JsonFormatType",
     "MaxCountRule0ErrorParametersSpec",
     "MaxCountRule0WarningParametersSpec",
     "MaxCountRule100ParametersSpec",
@@ -2493,13 +2521,11 @@ __all__ = (
     "MaxPercentRule0ErrorParametersSpec",
     "MaxPercentRule0WarningParametersSpec",
     "MaxPercentRule5ParametersSpec",
-    "MaxValueRuleParametersSpec",
     "MinCountRule1ParametersSpec",
     "MinimumGroupingSeverityLevel",
     "MinPercentRule100ErrorParametersSpec",
     "MinPercentRule100WarningParametersSpec",
     "MinPercentRule95ParametersSpec",
-    "MinValueRuleParametersSpec",
     "MonitoringScheduleSpec",
     "Mono",
     "MonoDqoQueueJobId",

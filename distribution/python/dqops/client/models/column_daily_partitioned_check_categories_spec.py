@@ -12,11 +12,11 @@ if TYPE_CHECKING:
     from ..models.column_anomaly_daily_partitioned_checks_spec import (
         ColumnAnomalyDailyPartitionedChecksSpec,
     )
-    from ..models.column_blanks_daily_partitioned_checks_spec import (
-        ColumnBlanksDailyPartitionedChecksSpec,
-    )
     from ..models.column_bool_daily_partitioned_checks_spec import (
         ColumnBoolDailyPartitionedChecksSpec,
+    )
+    from ..models.column_conversions_daily_partitioned_checks_spec import (
+        ColumnConversionsDailyPartitionedChecksSpec,
     )
     from ..models.column_custom_sql_daily_partitioned_checks_spec import (
         ColumnCustomSqlDailyPartitionedChecksSpec,
@@ -54,6 +54,9 @@ if TYPE_CHECKING:
     from ..models.column_uniqueness_daily_partitioned_checks_spec import (
         ColumnUniquenessDailyPartitionedChecksSpec,
     )
+    from ..models.column_whitespace_daily_partitioned_checks_spec import (
+        ColumnWhitespaceDailyPartitionedChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnDailyPartitionedCheckCategoriesSpec")
@@ -69,7 +72,8 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         uniqueness (Union[Unset, ColumnUniquenessDailyPartitionedChecksSpec]):
         accepted_values (Union[Unset, ColumnAcceptedValuesDailyPartitionedChecksSpec]):
         text (Union[Unset, ColumnTextDailyPartitionedChecksSpec]):
-        blanks (Union[Unset, ColumnBlanksDailyPartitionedChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceDailyPartitionedChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsDailyPartitionedChecksSpec]):
         patterns (Union[Unset, ColumnPatternsDailyPartitionedChecksSpec]):
         pii (Union[Unset, ColumnPiiDailyPartitionedChecksSpec]):
         numeric (Union[Unset, ColumnNumericDailyPartitionedChecksSpec]):
@@ -91,7 +95,8 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         Unset, "ColumnAcceptedValuesDailyPartitionedChecksSpec"
     ] = UNSET
     text: Union[Unset, "ColumnTextDailyPartitionedChecksSpec"] = UNSET
-    blanks: Union[Unset, "ColumnBlanksDailyPartitionedChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceDailyPartitionedChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsDailyPartitionedChecksSpec"] = UNSET
     patterns: Union[Unset, "ColumnPatternsDailyPartitionedChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiDailyPartitionedChecksSpec"] = UNSET
     numeric: Union[Unset, "ColumnNumericDailyPartitionedChecksSpec"] = UNSET
@@ -127,9 +132,13 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         if not isinstance(self.text, Unset):
             text = self.text.to_dict()
 
-        blanks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.blanks, Unset):
-            blanks = self.blanks.to_dict()
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
 
         patterns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.patterns, Unset):
@@ -184,8 +193,10 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
             field_dict["accepted_values"] = accepted_values
         if text is not UNSET:
             field_dict["text"] = text
-        if blanks is not UNSET:
-            field_dict["blanks"] = blanks
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
         if patterns is not UNSET:
             field_dict["patterns"] = patterns
         if pii is not UNSET:
@@ -217,11 +228,11 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         from ..models.column_anomaly_daily_partitioned_checks_spec import (
             ColumnAnomalyDailyPartitionedChecksSpec,
         )
-        from ..models.column_blanks_daily_partitioned_checks_spec import (
-            ColumnBlanksDailyPartitionedChecksSpec,
-        )
         from ..models.column_bool_daily_partitioned_checks_spec import (
             ColumnBoolDailyPartitionedChecksSpec,
+        )
+        from ..models.column_conversions_daily_partitioned_checks_spec import (
+            ColumnConversionsDailyPartitionedChecksSpec,
         )
         from ..models.column_custom_sql_daily_partitioned_checks_spec import (
             ColumnCustomSqlDailyPartitionedChecksSpec,
@@ -258,6 +269,9 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         )
         from ..models.column_uniqueness_daily_partitioned_checks_spec import (
             ColumnUniquenessDailyPartitionedChecksSpec,
+        )
+        from ..models.column_whitespace_daily_partitioned_checks_spec import (
+            ColumnWhitespaceDailyPartitionedChecksSpec,
         )
 
         d = src_dict.copy()
@@ -300,12 +314,23 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
         else:
             text = ColumnTextDailyPartitionedChecksSpec.from_dict(_text)
 
-        _blanks = d.pop("blanks", UNSET)
-        blanks: Union[Unset, ColumnBlanksDailyPartitionedChecksSpec]
-        if isinstance(_blanks, Unset):
-            blanks = UNSET
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceDailyPartitionedChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
         else:
-            blanks = ColumnBlanksDailyPartitionedChecksSpec.from_dict(_blanks)
+            whitespace = ColumnWhitespaceDailyPartitionedChecksSpec.from_dict(
+                _whitespace
+            )
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsDailyPartitionedChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsDailyPartitionedChecksSpec.from_dict(
+                _conversions
+            )
 
         _patterns = d.pop("patterns", UNSET)
         patterns: Union[Unset, ColumnPatternsDailyPartitionedChecksSpec]
@@ -389,7 +414,8 @@ class ColumnDailyPartitionedCheckCategoriesSpec:
             uniqueness=uniqueness,
             accepted_values=accepted_values,
             text=text,
-            blanks=blanks,
+            whitespace=whitespace,
+            conversions=conversions,
             patterns=patterns,
             pii=pii,
             numeric=numeric,

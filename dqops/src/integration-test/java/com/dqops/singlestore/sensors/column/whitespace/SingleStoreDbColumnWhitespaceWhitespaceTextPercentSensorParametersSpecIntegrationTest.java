@@ -16,7 +16,7 @@
 package com.dqops.singlestore.sensors.column.whitespace;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnBlanksWhitespaceTextPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceWhitespaceTextPercentCheckSpec;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -42,7 +42,7 @@ import tech.tablesaw.api.Table;
 public class SingleStoreDbColumnWhitespaceWhitespaceTextPercentSensorParametersSpecIntegrationTest extends BaseSingleStoreDbIntegrationTest {
     private ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnBlanksWhitespaceTextPercentCheckSpec checkSpec;
+    private ColumnWhitespaceWhitespaceTextPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -52,7 +52,7 @@ public class SingleStoreDbColumnWhitespaceWhitespaceTextPercentSensorParametersS
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceWhitespaceTextPercentSensorParametersSpec();
-		this.checkSpec = new ColumnBlanksWhitespaceTextPercentCheckSpec();
+		this.checkSpec = new ColumnWhitespaceWhitespaceTextPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

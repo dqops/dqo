@@ -16,7 +16,7 @@
 package com.dqops.sqlserver.sensors.column.whitespace;
 
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.column.checkspecs.blanks.ColumnTextSurroundedByWhitespaceCheckSpec;
+import com.dqops.checks.column.checkspecs.whitespace.ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
@@ -41,7 +41,7 @@ import tech.tablesaw.api.Table;
 public class SqlServerColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
     private ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnTextSurroundedByWhitespaceCheckSpec checkSpec;
+    private ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -50,7 +50,7 @@ public class SqlServerColumnWhitespaceTextSurroundedByWhitespaceCountSensorParam
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
 		this.sut = new ColumnWhitespaceTextSurroundedByWhitespaceCountSensorParametersSpec();
-		this.checkSpec = new ColumnTextSurroundedByWhitespaceCheckSpec();
+		this.checkSpec = new ColumnWhitespaceTextSurroundedByWhitespaceFoundCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

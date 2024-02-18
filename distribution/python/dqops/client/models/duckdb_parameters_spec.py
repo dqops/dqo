@@ -8,9 +8,15 @@ from ..models.duckdb_source_files_type import DuckdbSourceFilesType
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.csv_file_format_spec import CsvFileFormatSpec
+    from ..models.duckdb_parameters_spec_directories import (
+        DuckdbParametersSpecDirectories,
+    )
     from ..models.duckdb_parameters_spec_properties import (
         DuckdbParametersSpecProperties,
     )
+    from ..models.json_file_format_spec import JsonFileFormatSpec
+    from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
 
 T = TypeVar("T", bound="DuckdbParametersSpec")
@@ -29,6 +35,10 @@ class DuckdbParametersSpec:
             a ${DUCKDB_OPTIONS} configuration with a custom environment variable.
         properties (Union[Unset, DuckdbParametersSpecProperties]): A dictionary of custom JDBC parameters that are added
             to the JDBC connection string, a key/value dictionary.
+        csv (Union[Unset, CsvFileFormatSpec]):
+        json (Union[Unset, JsonFileFormatSpec]):
+        parquet (Union[Unset, ParquetFileFormatSpec]):
+        directories (Union[Unset, DuckdbParametersSpecDirectories]): Schema to directory mappings.
     """
 
     read_mode: Union[Unset, DuckdbReadMode] = UNSET
@@ -36,6 +46,10 @@ class DuckdbParametersSpec:
     database: Union[Unset, str] = UNSET
     options: Union[Unset, str] = UNSET
     properties: Union[Unset, "DuckdbParametersSpecProperties"] = UNSET
+    csv: Union[Unset, "CsvFileFormatSpec"] = UNSET
+    json: Union[Unset, "JsonFileFormatSpec"] = UNSET
+    parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
+    directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -53,6 +67,22 @@ class DuckdbParametersSpec:
         if not isinstance(self.properties, Unset):
             properties = self.properties.to_dict()
 
+        csv: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.csv, Unset):
+            csv = self.csv.to_dict()
+
+        json: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.json, Unset):
+            json = self.json.to_dict()
+
+        parquet: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.parquet, Unset):
+            parquet = self.parquet.to_dict()
+
+        directories: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.directories, Unset):
+            directories = self.directories.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -66,14 +96,28 @@ class DuckdbParametersSpec:
             field_dict["options"] = options
         if properties is not UNSET:
             field_dict["properties"] = properties
+        if csv is not UNSET:
+            field_dict["csv"] = csv
+        if json is not UNSET:
+            field_dict["json"] = json
+        if parquet is not UNSET:
+            field_dict["parquet"] = parquet
+        if directories is not UNSET:
+            field_dict["directories"] = directories
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.csv_file_format_spec import CsvFileFormatSpec
+        from ..models.duckdb_parameters_spec_directories import (
+            DuckdbParametersSpecDirectories,
+        )
         from ..models.duckdb_parameters_spec_properties import (
             DuckdbParametersSpecProperties,
         )
+        from ..models.json_file_format_spec import JsonFileFormatSpec
+        from ..models.parquet_file_format_spec import ParquetFileFormatSpec
 
         d = src_dict.copy()
         _read_mode = d.pop("read_mode", UNSET)
@@ -101,12 +145,44 @@ class DuckdbParametersSpec:
         else:
             properties = DuckdbParametersSpecProperties.from_dict(_properties)
 
+        _csv = d.pop("csv", UNSET)
+        csv: Union[Unset, CsvFileFormatSpec]
+        if isinstance(_csv, Unset):
+            csv = UNSET
+        else:
+            csv = CsvFileFormatSpec.from_dict(_csv)
+
+        _json = d.pop("json", UNSET)
+        json: Union[Unset, JsonFileFormatSpec]
+        if isinstance(_json, Unset):
+            json = UNSET
+        else:
+            json = JsonFileFormatSpec.from_dict(_json)
+
+        _parquet = d.pop("parquet", UNSET)
+        parquet: Union[Unset, ParquetFileFormatSpec]
+        if isinstance(_parquet, Unset):
+            parquet = UNSET
+        else:
+            parquet = ParquetFileFormatSpec.from_dict(_parquet)
+
+        _directories = d.pop("directories", UNSET)
+        directories: Union[Unset, DuckdbParametersSpecDirectories]
+        if isinstance(_directories, Unset):
+            directories = UNSET
+        else:
+            directories = DuckdbParametersSpecDirectories.from_dict(_directories)
+
         duckdb_parameters_spec = cls(
             read_mode=read_mode,
             source_files_type=source_files_type,
             database=database,
             options=options,
             properties=properties,
+            csv=csv,
+            json=json,
+            parquet=parquet,
+            directories=directories,
         )
 
         duckdb_parameters_spec.additional_properties = d
