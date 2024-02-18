@@ -78,14 +78,13 @@ Please read the description of [anomalies supported by DQOps](how-to-detect-anom
 to learn how anomaly detection works in DQOps. 
 The anomaly detection for numeric values and table volume obeys the same rules.
 
-### Daily/weekly/monthly row count change
+### Daily/weekly/monthly relative volume change
 DQOps can monitor row count changes compared to a relative past date. 
 We can avoid the influence of seasonability issues by comparing the current row count to the row count of 7 or 30 days ago. 
 Comparing the row count on Monday to the row count on Sunday may lead to false-positive volume issues,
 especially when no data was loaded during the weekend.
 
 The following table shows how DQOps calculates the row count increase in percent since a reference point seven days ago.
-
 
 | Date           | Row count  | Reference point                  |
 |----------------|------------|----------------------------------|
@@ -98,9 +97,6 @@ The following table shows how DQOps calculates the row count increase in percent
 | 2024-01-07     | 45.750     | &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;│  |
 | **2024-01-08** | **45.780** | ──┘  _(+180 rows or **+0.39%**)_ |
 
-The data quality checks that compare a value (a row count) to a reference value in the past are described in the
-[Compare to a reference point](how-to-detect-anomaly-data-quality-issues.md#compare-to-a-reference-point) section 
-of the [anomaly detection article](how-to-detect-anomaly-data-quality-issues.md).
 
 ### Minimum partition row count
 The [*row_count*](../checks/table/volume/row-count.md) check is also applicable to partition checks in DQOps. 
@@ -222,10 +218,12 @@ Anomaly detection for the data volume uses the same concept as detecting numeric
 ### Row count anomaly checks
 The [*row_count_anomaly*](../checks/table/volume/row-count-anomaly.md) data quality check detects volume anomalies in two modes:
 
-- A *daily monitoring* check [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
+- A [*daily monitoring*](../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md#daily-monitoring-checks)
+  check [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
   calculates the row count difference since the previous day. The anomalous values are abnormal increases or decreases in the data volume.
 
-- A *daily partition* check [*daily_partition_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)
+- A [*daily partition*](../dqo-concepts/definition-of-data-quality-checks/partition-checks.md#daily-partitioning)
+  check [*daily_partition_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)
   check detects volume anomalies by detecting bigger or smaller daily partitions. 
   The difference in row count between the following days is not analyzed.
 
@@ -247,6 +245,77 @@ at various [issue severity levels](../dqo-concepts/definition-of-data-quality-ch
 (*warning*, *error*, *fatal*).
 
 ![Partition row count anomaly at multiple severity levels chart](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/partition-row-count-anomaly-full-screen-min.png){ loading=lazy }
+
+### Configuring anomaly detection in YAML
+The following example of a DQOps YAML file shows the configuration of the [*daily_row_count_anomaly*](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)
+check at multiple severity levels.
+
+``` { .yaml linenums="1" hl_lines="10 12 14" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count_anomaly:
+          warning:
+            anomaly_percent: 1.0
+          error:
+            anomaly_percent: 0.5
+          fatal:
+            anomaly_percent: 0.01
+```
+
+
+## Detecting volume relative change
+DQOps supports detecting significant data volume changes since the last known row count
+or a reference value at a relative point in the past.
+
+- The [*row_count_change*](../checks/table/volume/row-count-change.md) check compares the current row count
+  to the last known row count. The daily monitoring checks will use a value from the previous day or older.
+
+- The [*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md) check compares 
+  the current row count to a value from yesterday. 
+  If DQOps did not measure the row count on the previous day, DQOps skips this check or finds an older result. 
+  The [*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md) and [*row_count_change*](../checks/table/volume/row-count-change.md)
+  checks differ only by one parameter. The [*row_count_change_1_day*](../checks/table/volume/row-count-change-1-day.md) check
+  can be configured to compare the row count to the value from the previous day only when that value was captured.
+
+- The [*row_count_change_7_days*](../checks/table/volume/row-count-change-7-days.md) compares the current row count
+  to a count captured seven days ago. This behavior avoids the influence of weekly seasonability
+  by comparing Mondays to Mondays, Tuesdays to Tuesdays, etc.
+
+- The [*row_count_change_30_days*](../checks/table/volume/row-count-change-30-days.md) compares the current row count
+  to a count captured thirty days ago. This behavior will detect the volume change since the previous month, 
+  avoiding the influence of monthly seasonability.
+
+All these checks take one data quality rule parameter.
+The **max_percent** parameter sets the maximum accepted relative change in percent. 
+A value of 10.0 means that DQOps raises a data quality issue when the row count drops by 10% or increases by 10%.
+
+
+### Configuring volume relative change check in UI
+The [*row_count_change*](../checks/table/volume/row-count-change.md) check takes one parameter **max_percent**. 
+It sets the maximum accepted row count change since the previous known value or a relative value a week or a month ago.
+
+![Row count relative change since the last day data quality check in DQOps](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/row-count-relative-change-data-quality-check-in-dqops-min.png){ loading=lazy }
+
+### Configuring volume relative change check in YAML
+The configuration of the [*row_count_change*](../checks/table/volume/row-count-change.md) check is simple.
+
+``` { .yaml linenums="1" hl_lines="8-10" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  monitoring_checks:
+    daily:
+      volume:
+        daily_row_count_change:
+          warning:
+            max_percent: 10.0
+```
 
 
 ## Use cases
