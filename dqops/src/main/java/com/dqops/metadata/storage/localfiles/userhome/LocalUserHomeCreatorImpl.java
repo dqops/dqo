@@ -316,25 +316,26 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
 
             if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
-                Path defaultGcpCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path credentialsFolderPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS);
+                Path defaultGcpCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
                 if (!Files.exists(defaultGcpCredentialsPath)) {
                     Files.writeString(defaultGcpCredentialsPath, DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAwsCredentialsPath)) {
                     Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsConfigPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsConfigPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
                 if (!Files.exists(defaultAwsConfigPath)) {
                     Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
                 }
 
-                Path defaultAzureCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAzureCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAzureCredentialsPath)) {
                     Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);

@@ -28,7 +28,6 @@ import java.nio.file.Path;
 public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRoot {
     private final Storage storage;
     private final String bucketName;
-    private final DqoRoot rootType;
     private final UserDomainIdentity userIdentity;
 
     /**
@@ -40,10 +39,9 @@ public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRo
      * @param userIdentity User identity of the user initiating synchronization, with the data domain.
      */
     public GSFileSystemSynchronizationRoot(Path rootPath, Storage storage, String bucketName, DqoRoot rootType, UserDomainIdentity userIdentity) {
-        super(rootPath);
+        super(rootPath, rootType);
         this.storage = storage;
         this.bucketName = bucketName;
-        this.rootType = rootType;
         this.userIdentity = userIdentity;
     }
 
@@ -61,14 +59,6 @@ public class GSFileSystemSynchronizationRoot extends FileSystemSynchronizationRo
      */
     public Storage getStorage() {
         return storage;
-    }
-
-    /**
-     * Returns the file system root.
-     * @return File system root.
-     */
-    public DqoRoot getRootType() {
-        return rootType;
     }
 
     /**
