@@ -128,7 +128,15 @@ public class SchemasController {
                         directoryPrefix = duckdbParametersSpec.getDirectories().get(schemaName);
                     }
 
-                    return SchemaModel.fromSchemaNameStrings(connectionName, schemaName, directoryPrefix, isEditor, isOperator);
+                    SchemaModel schemaModel = SchemaModel.fromSchemaNameStrings(connectionName, schemaName, directoryPrefix, isEditor, isOperator);
+
+                    if(connectionSpec.getProviderType() != null
+                            && connectionSpec.getProviderType().equals(ProviderType.duckdb)
+                            && directoryPrefix == null){
+                        schemaModel.setErrorMessage("The schema mapping to the directory with data is missing.");
+                    }
+
+                    return schemaModel;
                 });
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
