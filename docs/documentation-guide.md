@@ -40,7 +40,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     DQOps can be installed locally as a package downloaded from PyPI or as a Docker container. Learn how to install the platform.
 
-    [:octicons-arrow-right-24: Installing DQOps](dqops-installation/index.md)
+    [:octicons-arrow-right-24: Download DQOps from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
 
 -   :material-database:{ .lg .middle } __Data sources__
 
@@ -48,7 +48,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Find out what data sources DQOps supports and how to configure the connection parameters in the user interface or YAML files.
 
-    [:octicons-arrow-right-24: List of data sources](data-sources/index.md)
+    [:octicons-arrow-right-24: List of supported data sources](data-sources/index.md)
 
 -   :material-format-list-checks:{ .lg .middle } __Categories of data quality checks__
 
@@ -65,7 +65,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     DQOps use cases and examples are step-by-step guides to solving the most common data quality issues.
 
-    [:octicons-arrow-right-24: Download from PyPI](dqops-installation/install-dqops-using-pip.md) or [Docker Hub](dqops-installation/run-dqops-as-docker-container.md)
+    [:octicons-arrow-right-24: Review data quality use cases](examples/index.md)
 
 
 -   :material-tooltip-question:{ .lg .middle } __Working with DQOps__
@@ -74,7 +74,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Learn how to work with DQOps, performing regular activities such as reviewing data quality results or managing incidents.
 
-    [:octicons-arrow-right-24: Working with DQOPs](working-with-dqo/index.md)
+    [:octicons-arrow-right-24: Working with DQOps](working-with-dqo/index.md)
 
 
 -   :material-power-plug:{ .lg .middle } __Integrations__
@@ -83,7 +83,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Learn how to integrate DQOps with other data platforms or edit configuration files efficiently in Visual Studio Code.
 
-    [:octicons-arrow-right-24: Integrations](integrations/index.md)
+    [:octicons-arrow-right-24: Integrating DQOps with other tools](integrations/index.md)
 
 </div>
 
@@ -96,7 +96,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     The reference of all commands supported by the DQOps shell or usable from the command prompt.
 
-    [:octicons-arrow-right-24: Command-line interface](command-line-interface/index.md)
+    [:octicons-arrow-right-24: Command-line interface reference](command-line-interface/index.md)
 
 
 -   :material-api:{ .lg .middle } __REST API Python Client__
@@ -105,7 +105,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Learn how to integrate DQOps directly in Python scripts. Run data quality checks from data pipelines or detect fatal issues with source tables.
 
-    [:octicons-arrow-right-24: REST API Python Client](client/index.md)
+    [:octicons-arrow-right-24: REST API Python Client reference](client/index.md)
 
 
 -   :material-book-open-variant:{ .lg .middle } __Data quality checks reference__
@@ -114,7 +114,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     The reference of all data quality checks provided in DQOps shows configuration examples in YAML and SQL queries that DQOps uses for each data source.
 
-    [:octicons-arrow-right-24: Dta quality checks](checks/index.md)
+    [:octicons-arrow-right-24: Data quality checks reference](checks/index.md)
 
 
 -   :material-table-eye:{ .lg .middle } __Data quality sensors reference__
@@ -123,7 +123,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Data quality sensors are templates of SQL queries. Find out what SQL query DQOps uses for each data source.
 
-    [:octicons-arrow-right-24: Data quality sensors](reference/sensors/index.md)
+    [:octicons-arrow-right-24: Data quality sensors reference](reference/sensors/index.md)
 
 -   :material-ruler:{ .lg .middle } __Data quality rules reference__
 
@@ -131,7 +131,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     Data quality rules are Python functions that evaluate data quality measures. Find out what rules are bundled in DQOps.
 
-    [:octicons-arrow-right-24: Data quality rules](reference/rules/index.md)
+    [:octicons-arrow-right-24: Data quality rules reference](reference/rules/index.md)
 
 -   :material-file-code:{ .lg .middle } __YAML file reference__
 
@@ -139,7 +139,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     DQOps stores the configuration of data sources and data quality checks in YAML files. Find the reference of every YAML element used by DQOps.
 
-    [:octicons-arrow-right-24: DQOps YAML file schema](reference/yaml/index.md)
+    [:octicons-arrow-right-24: DQOps YAML file schema reference](reference/yaml/index.md)
 
 -   :material-database:{ .lg .middle } __Parquet tables reference__
 
@@ -147,7 +147,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     DQOps stores the data quality results in a Hive-compliant data lake. Find the schema reference of every Parquet table used by DQOps.
 
-    [:octicons-arrow-right-24: Parquet data tables](reference/parquetfiles/index.md)
+    [:octicons-arrow-right-24: Parquet data tables reference](reference/parquetfiles/index.md)
 
 </div>
 
