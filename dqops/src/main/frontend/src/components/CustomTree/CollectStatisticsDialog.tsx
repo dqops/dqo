@@ -14,7 +14,7 @@ import Input from '../Input';
 import Select from '../Select';
 import Checkbox from '../Checkbox';
 import LabelsView from '../Connection/LabelsView';
-import { CustomTreeNode } from '../../shared/interfaces';
+import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 type TCollectStatisticsDialogProps = {
   onClick: (node: StatisticsCollectorSearchFilters) => void;
   open: boolean;
@@ -116,7 +116,7 @@ export default function CollectStatisticsDialog({
           </div>
           <div>
             Enabled:
-            <Checkbox
+            <CheckboxThreeSteps
               checked={!!filters.enabled}
               onChange={(value) => onChangeFilters({ enabled: value })}
             />
