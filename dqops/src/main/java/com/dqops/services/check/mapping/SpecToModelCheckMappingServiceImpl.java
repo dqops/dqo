@@ -41,6 +41,7 @@ import com.dqops.metadata.fields.ParameterDataType;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.id.HierarchyId;
+import com.dqops.metadata.id.HierarchyNode;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
@@ -153,7 +154,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
             checkContainerModel.setDataCleanJobTemplate(
                     DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                            checkContainerModel.getRunChecksJobTemplate()));
+                            checkContainerModel.getRunChecksJobTemplate(), false));
         }
 
         if (tableSpec != null) {
@@ -178,6 +179,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
 
             if (categoryFieldValue == null) {
                 continue;
+            }
+
+            HierarchyNode categoryHierarchyNode = (HierarchyNode) categoryFieldValue;
+            if (categoryHierarchyNode.getHierarchyId() == null && checkCategoriesSpec != null && checkCategoriesSpec.getHierarchyId() != null) {
+                categoryHierarchyNode.setHierarchyId(new HierarchyId(checkCategoriesSpec.getHierarchyId(), categoryFieldInfo.getYamlFieldName()));
             }
 
             if (categoryFieldValue instanceof AbstractComparisonCheckCategorySpecMap<?>) {
@@ -436,8 +442,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
         categoryModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                        runChecksCategoryTemplate
-                )
+                        runChecksCategoryTemplate, false)
         );
 
         if (checkCategoryParentNode instanceof AbstractCheckCategorySpec) {
@@ -454,6 +459,11 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                 AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                         (AbstractSpec) checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
                 AbstractCheckSpec<?, ?, ?, ?> checkFieldValue = (AbstractCheckSpec<?, ?, ?, ?>) checkSpecObject;
+                HierarchyNode parentHierarchyNode = (HierarchyNode) checkCategoryParentNode;
+                if (checkFieldValue.getHierarchyId() == null && parentHierarchyNode != null && parentHierarchyNode.getHierarchyId() != null) {
+                    checkFieldValue.setHierarchyId(new HierarchyId(parentHierarchyNode.getHierarchyId(), checkFieldInfo.getYamlFieldName()));
+                }
+
                 CheckModel checkModel = createCheckModel(checkFieldInfo,
                         null,
                         checkFieldValue,
@@ -673,7 +683,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             runOneCheckTemplate.setCheckName(checkName);
             checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
 
-            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate);
+            DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate, false);
             dataCleanJobTemplate.setDataGroupTag(checkSpec.getDataGrouping());
             checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
         }

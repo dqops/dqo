@@ -36,12 +36,12 @@ const DeleteOnlyDataDialog = ({
   selectedReference,
   checkTypes
 }: DeleteOnlyDataDialogProps) => {
-  const [startDate, setStartDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date(new Date().getTime() - 1000 * 3600 * 24 * 30));
   const [endDate, setEndDate] = useState(new Date());
-  const [mode, setMode] = useState('all');
+  const [mode, setMode] = useState('part');
   const [params, setParams] = useState({
     deleteErrors: true,
-    deleteStatistics: true,
+    deleteStatistics: false,
     deleteCheckResults: true,
     deleteSensorReadouts: true
   });

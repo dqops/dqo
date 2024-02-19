@@ -109,7 +109,7 @@ spec:
     accuracy:
       profile_total_row_count_match_percent:
         parameters:
-          referenced_table: dim_customer
+          referenced_table: landing_zone.customer_raw
         warning:
           max_diff_percent: 0.0
         error:
@@ -156,7 +156,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -191,10 +191,45 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -226,7 +261,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -261,7 +296,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -296,10 +331,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -331,7 +366,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -366,7 +401,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -401,7 +436,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -423,10 +458,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(*)
+                    COUNT_BIG(*)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -435,10 +470,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                    COUNT_BIG(*)
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -450,7 +485,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -471,10 +506,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -581,7 +616,7 @@ spec:
       accuracy:
         daily_total_row_count_match_percent:
           parameters:
-            referenced_table: dim_customer
+            referenced_table: landing_zone.customer_raw
           warning:
             max_diff_percent: 0.0
           error:
@@ -628,7 +663,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -663,10 +698,45 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -698,7 +768,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -733,7 +803,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -768,10 +838,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -803,7 +873,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -838,7 +908,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -873,7 +943,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -895,10 +965,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(*)
+                    COUNT_BIG(*)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -907,10 +977,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                    COUNT_BIG(*)
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -922,7 +992,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -943,10 +1013,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -1053,7 +1123,7 @@ spec:
       accuracy:
         monthly_total_row_count_match_percent:
           parameters:
-            referenced_table: dim_customer
+            referenced_table: landing_zone.customer_raw
           warning:
             max_diff_percent: 0.0
           error:
@@ -1100,7 +1170,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1135,10 +1205,45 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_referenced_table(referenced_table) -%}
+            {%- if referenced_table.find(".") < 0 -%}
+               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+            {%- else -%}
+               {{ referenced_table }}
+            {%- endif -%}
+            {%- endmacro -%}
+            
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    COUNT(*)
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                COUNT(*) AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1170,7 +1275,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1205,7 +1310,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1240,10 +1345,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -1275,7 +1380,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1310,7 +1415,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1345,7 +1450,7 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ``.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1367,10 +1472,10 @@ spec:
             
             SELECT
                 (SELECT
-                    COUNT(*)
+                    COUNT_BIG(*)
                 FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM {{ lib.render_target_table() }} AS analyzed_table
             {{- lib.render_where_clause() -}}
             ```
@@ -1379,10 +1484,10 @@ spec:
             ```sql
             SELECT
                 (SELECT
-                    COUNT(*)
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                    COUNT_BIG(*)
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
-                COUNT(*) AS actual_value
+                COUNT_BIG(*) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
             ```
     ??? example "Trino"
@@ -1394,7 +1499,7 @@ spec:
             
             {%- macro render_referenced_table(referenced_table) -%}
             {%- if referenced_table.find(".") < 0 -%}
-               {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
+               {{ lib.quote_identifier(lib.macro_catalog_name) }}.{{ lib.quote_identifier(lib.macro_schema_name) }}.{{- lib.quote_identifier(referenced_table) -}}
             {%- else -%}
                {{ referenced_table }}
             {%- endif -%}
@@ -1415,10 +1520,10 @@ spec:
             SELECT
                 (SELECT
                     COUNT(*)
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 COUNT(*) AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___

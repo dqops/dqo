@@ -16,13 +16,12 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
-import com.dqops.metadata.sources.ColumnSpec;
-import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -51,19 +50,19 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
     @JsonPropertyDescription("The default configuration of profiling checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultProfilingTableObservabilityCheckSettingsSpec table = new DefaultProfilingTableObservabilityCheckSettingsSpec();
+    private TableProfilingCheckCategoriesSpec table = new TableProfilingCheckCategoriesSpec();
 
     @JsonPropertyDescription("The default configuration of profiling checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultProfilingColumnObservabilityCheckSettingsSpec column = new DefaultProfilingColumnObservabilityCheckSettingsSpec();
+    private ColumnProfilingCheckCategoriesSpec column = new ColumnProfilingCheckCategoriesSpec();
 
 
     /**
      * Returns the container of default table level checks.
      * @return Table level checks.
      */
-    public DefaultProfilingTableObservabilityCheckSettingsSpec getTable() {
+    public TableProfilingCheckCategoriesSpec getTable() {
         return table;
     }
 
@@ -71,7 +70,7 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
      * Sets the reference to the container of table level default checks.
      * @param table Table level checks container.
      */
-    public void setTable(DefaultProfilingTableObservabilityCheckSettingsSpec table) {
+    public void setTable(TableProfilingCheckCategoriesSpec table) {
         this.setDirtyIf(!Objects.equals(this.table, table));
         this.table = table;
         this.propagateHierarchyIdToField(table, "table");
@@ -81,7 +80,7 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
      * Returns the container of default column level checks.
      * @return Column level checks.
      */
-    public DefaultProfilingColumnObservabilityCheckSettingsSpec getColumn() {
+    public ColumnProfilingCheckCategoriesSpec getColumn() {
         return column;
     }
 
@@ -89,7 +88,7 @@ public class DefaultProfilingObservabilityCheckSettingsSpec extends AbstractSpec
      * Sets the reference to the container of column level default checks.
      * @param column Column level checks container.
      */
-    public void setColumn(DefaultProfilingColumnObservabilityCheckSettingsSpec column) {
+    public void setColumn(ColumnProfilingCheckCategoriesSpec column) {
         this.setDirtyIf(!Objects.equals(this.column, column));
         this.column = column;
         this.propagateHierarchyIdToField(column, "column");

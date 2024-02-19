@@ -64,14 +64,14 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     public abstract HikariConfig createHikariConfig(SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Opens a connection before it can be used for executing any statements.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
@@ -124,15 +124,25 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
     public Table executeQuery(String sqlQueryStatement, JobCancellationToken jobCancellationToken, Integer maxRows, boolean failWhenMaxRowsExceeded) {
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
+                boolean maxRowsSupported = true;
+
                 if (maxRows != null) {
-                    statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    try {
+                        statement.setMaxRows(failWhenMaxRowsExceeded ? maxRows + 1 : maxRows);
+                    }
+                    catch (Exception ex) {
+                        maxRowsSupported = false;
+                    }
                 }
 
                 try (JobCancellationListenerHandle cancellationListenerHandle =
                              jobCancellationToken.registerCancellationListener(
                                      cancellationToken -> RunSilently.run(statement::cancel))) {
                     try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                        Table resultTable = rawTableResultFromResultSet(results, sqlQueryStatement);
+                        ResultSet rowCountLimitedResultSet = maxRows != null ?
+                                new MaxRowsLimitingResultSet(results, maxRows + 1) : results;
+
+                        Table resultTable = rawTableResultFromResultSet(rowCountLimitedResultSet, sqlQueryStatement);
                         if (maxRows != null && resultTable.rowCount() > maxRows) {
                             throw new RowCountLimitExceededException(maxRows);
                         }

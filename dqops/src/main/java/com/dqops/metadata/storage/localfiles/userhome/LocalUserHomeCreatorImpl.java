@@ -62,6 +62,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -70,6 +72,11 @@ import java.util.stream.Stream;
 @Component
 @Slf4j
 public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
+    /**
+     * The file name of a special file that is present in an empty DQOps user home inside a docker container to tell us that the user home was not mounted.
+     */
+    private String DOCKER_USER_HOME_MARKER = ".DQO_USER_HOME_NOT_MOUNTED";
+
     private HomeLocationFindService homeLocationFindService;
     private UserHomeContextFactory userHomeContextFactory;
     private TerminalFactory terminalFactory;
@@ -143,15 +150,39 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
     /**
      * Initializes the DQOps user home at the default location.
+     * @return True when the user home was initialized, false otherwise.
      */
     @Override
-    public void initializeDefaultDqoUserHome() {
+    public boolean initializeDefaultDqoUserHome() {
         String userHomePathString = this.homeLocationFindService.getUserHomePath();
         if (userHomePathString == null) {
-            return;
+            return false;
+        }
+
+        Path userHomePath = Path.of(userHomePathString);
+        if (Files.exists(userHomePath)) {
+            try (Stream<Path> paths = Files.list(userHomePath)) {
+                Optional<Path> firstPath = paths
+                        .filter(p -> !Objects.equals(p.getFileName().toString(), DOCKER_USER_HOME_MARKER))
+                        .findFirst();
+                if (firstPath.isPresent()) {
+                    this.terminalFactory.getWriter().writeLine("Cannot initialize a DQOps user home folder at: " + userHomePathString +
+                                                               " because the folder is not empty.");
+                    Boolean initializeAnyway = this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home folder anyway?", false);
+                    if (initializeAnyway == null || !initializeAnyway) {
+                        return false;
+                    }
+                }
+            }
+            catch (IOException ioe) {
+                this.terminalFactory.getWriter().writeLine("Cannot access the DQOps user home folder at: " + userHomePathString +
+                                                           ", error: " + ioe.getMessage());
+                return false;
+            }
         }
 
         initializeDqoUserHome(userHomePathString);
+        return true;
     }
 
     /**
@@ -285,25 +316,26 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             }
 
             if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
-                Path defaultGcpCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path credentialsFolderPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS);
+                Path defaultGcpCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
                 if (!Files.exists(defaultGcpCredentialsPath)) {
                     Files.writeString(defaultGcpCredentialsPath, DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAwsCredentialsPath)) {
                     Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
                 }
 
-                Path defaultAwsConfigPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAwsConfigPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
                 if (!Files.exists(defaultAwsConfigPath)) {
                     Files.writeString(defaultAwsConfigPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT);
                 }
 
-                Path defaultAzureCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+                Path defaultAzureCredentialsPath = credentialsFolderPath
                         .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
                 if (!Files.exists(defaultAzureCredentialsPath)) {
                     Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
@@ -326,7 +358,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                     .filter(file -> !Files.isDirectory(file))
                     .map(Path::getFileName)
                     .map(Path::toString)
-                    .anyMatch(fileName -> fileName.equals(".DQO_USER_HOME_NOT_MOUNTED"));
+                    .anyMatch(fileName -> fileName.equals(DOCKER_USER_HOME_MARKER));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -369,12 +401,16 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         }
 
         if (isHeadless || this.userConfigurationProperties.isInitializeUserHome()) {
-            this.initializeDefaultDqoUserHome();
+            if (!this.initializeDefaultDqoUserHome()) {
+                System.exit(101);
+            }
             activateFileLoggingInUserHome();
         }
         else {
             if (this.terminalFactory.getReader().promptBoolean("Initialize a DQOps user home at " + userHomePathString, true)) {
-                this.initializeDefaultDqoUserHome();
+                if (!this.initializeDefaultDqoUserHome()) {
+                    System.exit(101);
+                }
                 activateFileLoggingInUserHome();
                 return;
             }

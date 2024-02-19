@@ -1,6 +1,7 @@
 # text not matching regex found data quality checks
 
-A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.
 
 
 ___
@@ -145,7 +146,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -166,7 +167,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -197,7 +198,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -218,7 +219,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -233,6 +234,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -242,7 +296,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -263,7 +317,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -295,7 +349,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -322,7 +376,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -360,14 +414,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -381,14 +435,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -413,14 +467,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -441,14 +495,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -457,7 +511,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -479,14 +533,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -500,14 +554,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -532,7 +586,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -553,7 +607,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -584,7 +638,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -605,7 +659,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -636,7 +690,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -657,7 +711,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -687,7 +741,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -715,7 +769,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -731,7 +785,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -802,7 +856,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -822,7 +876,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -854,7 +908,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -874,7 +928,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -891,6 +945,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -899,7 +1006,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -919,7 +1026,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -952,7 +1059,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -978,7 +1085,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -1022,14 +1129,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1042,14 +1149,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1075,14 +1182,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1102,14 +1209,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -1125,7 +1232,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1146,14 +1253,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1166,14 +1273,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1199,7 +1306,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -1219,7 +1326,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -1251,7 +1358,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -1271,7 +1378,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -1303,7 +1410,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -1323,7 +1430,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -1360,7 +1467,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -1387,7 +1494,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -1410,7 +1517,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1557,7 +1664,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -1578,7 +1685,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -1609,7 +1716,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -1630,7 +1737,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -1645,6 +1752,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1654,7 +1814,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -1675,7 +1835,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -1707,7 +1867,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -1734,7 +1894,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -1772,14 +1932,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1793,14 +1953,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1825,14 +1985,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1853,14 +2013,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -1869,7 +2029,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1891,14 +2051,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1912,14 +2072,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1944,7 +2104,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -1965,7 +2125,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -1996,7 +2156,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2017,7 +2177,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2048,7 +2208,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -2069,7 +2229,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2099,7 +2259,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2127,7 +2287,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -2143,7 +2303,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2215,7 +2375,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2235,7 +2395,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -2267,7 +2427,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2287,7 +2447,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2304,6 +2464,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2312,7 +2525,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -2332,7 +2545,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -2365,7 +2578,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2391,7 +2604,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -2435,14 +2648,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2455,14 +2668,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2488,14 +2701,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2515,14 +2728,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2538,7 +2751,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2559,14 +2772,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2579,14 +2792,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2612,7 +2825,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2632,7 +2845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2664,7 +2877,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -2684,7 +2897,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2716,7 +2929,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -2736,7 +2949,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -2773,7 +2986,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2800,7 +3013,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -2823,7 +3036,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2970,7 +3183,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -2991,7 +3204,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3022,7 +3235,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -3043,7 +3256,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -3058,6 +3271,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3067,7 +3333,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -3088,7 +3354,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3120,7 +3386,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -3147,7 +3413,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3185,14 +3451,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3206,14 +3472,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3238,14 +3504,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3266,14 +3532,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -3282,7 +3548,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3304,14 +3570,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3325,14 +3591,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3357,7 +3623,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -3378,7 +3644,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -3409,7 +3675,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -3430,7 +3696,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -3461,7 +3727,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -3482,7 +3748,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -3512,7 +3778,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -3540,7 +3806,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3556,7 +3822,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3628,7 +3894,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -3648,7 +3914,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3680,7 +3946,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -3700,7 +3966,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -3717,6 +3983,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3725,7 +4044,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -3745,7 +4064,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3778,7 +4097,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -3804,7 +4123,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -3848,14 +4167,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3868,14 +4187,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3901,14 +4220,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3928,14 +4247,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -3951,7 +4270,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3972,14 +4291,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3992,14 +4311,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4025,7 +4344,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -4045,7 +4364,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4077,7 +4396,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -4097,7 +4416,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4129,7 +4448,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -4149,7 +4468,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4186,7 +4505,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -4213,7 +4532,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -4236,7 +4555,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4393,7 +4712,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -4414,7 +4733,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -4445,7 +4764,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -4466,7 +4785,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4481,6 +4800,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4490,7 +4862,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -4511,7 +4883,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -4543,7 +4915,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -4570,7 +4942,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -4608,14 +4980,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4629,14 +5001,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4661,14 +5033,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4689,14 +5061,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -4705,7 +5077,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4727,14 +5099,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4748,14 +5120,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4780,7 +5152,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -4801,7 +5173,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4832,7 +5204,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -4853,7 +5225,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4884,7 +5256,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -4905,7 +5277,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -4939,7 +5311,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -4967,7 +5339,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -4983,7 +5355,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5065,7 +5437,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -5085,7 +5457,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5117,7 +5489,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -5137,7 +5509,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -5154,6 +5526,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -5162,7 +5587,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -5182,7 +5607,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5215,7 +5640,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -5241,7 +5666,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5285,14 +5710,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5305,14 +5730,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5338,14 +5763,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5365,14 +5790,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -5388,7 +5813,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5409,14 +5834,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5429,14 +5854,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5462,7 +5887,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -5482,7 +5907,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -5514,7 +5939,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -5534,7 +5959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -5566,7 +5991,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -5586,7 +6011,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -5621,7 +6046,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -5648,7 +6073,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5671,7 +6096,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5828,7 +6253,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -5849,7 +6274,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5880,7 +6305,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -5901,7 +6326,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -5916,6 +6341,59 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -5925,7 +6403,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -5946,7 +6424,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -5978,7 +6456,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -6005,7 +6483,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -6043,14 +6521,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6064,14 +6542,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6096,14 +6574,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6124,14 +6602,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -6140,7 +6618,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6162,14 +6640,14 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6183,14 +6661,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6215,7 +6693,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -6236,7 +6714,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -6267,7 +6745,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -6288,7 +6766,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -6319,7 +6797,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -6340,7 +6818,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -6374,7 +6852,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -6402,7 +6880,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -6418,7 +6896,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6500,7 +6978,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -6520,7 +6998,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(analyzed_table.`target_column`, r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -6552,7 +7030,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -6572,7 +7050,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -6589,6 +7067,59 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {% macro make_text_constant(string) -%}
+                {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+            {%- endmacro %}
+            
+            {%- macro render_regex(regex) -%}
+                 {{ make_text_constant(regex) }}
+            {%- endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}, ''{{ render_regex(parameters.regex) }}'') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column", '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''') IS TRUE
+                                THEN 0
+                            ELSE 1
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -6597,7 +7128,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_regex(lib.render_target_column('analyzed_table'), parameters.regex) }}
@@ -6617,7 +7148,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table.`target_column`, '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -6650,7 +7181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -6676,7 +7207,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -6720,14 +7251,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ ''{{ render_regex(parameters.regex) }}'' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6740,14 +7271,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '''^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$''' IS TRUE
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6773,14 +7304,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6800,14 +7331,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
                                 THEN 0
                             ELSE 1
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6823,7 +7354,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6844,14 +7375,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6864,14 +7395,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE 100.0 * SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                                 THEN 0
                             ELSE 1
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6897,7 +7428,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -6917,7 +7448,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -6949,7 +7480,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
@@ -6969,7 +7500,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.`target_column` REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -7001,7 +7532,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN {{ lib.render_target_column('analyzed_table') }} LIKE {{ render_regex(parameters.regex) }}
@@ -7021,7 +7552,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN analyzed_table.[target_column] LIKE '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
@@ -7056,7 +7587,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
@@ -7083,7 +7614,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN REGEXP_LIKE(analyzed_table."target_column", '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
@@ -7106,7 +7637,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

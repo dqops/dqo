@@ -74,6 +74,7 @@ import com.dqops.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
 import com.dqops.utils.docs.yaml.YamlDocumentationSchemaNode;
 import com.dqops.utils.python.PythonCallerServiceImpl;
 import com.dqops.utils.python.PythonVirtualEnvServiceImpl;
+import com.dqops.utils.reflection.CompletableFutureThreadPoolShutDown;
 import com.dqops.utils.reflection.ReflectionService;
 import com.dqops.utils.reflection.ReflectionServiceImpl;
 import com.dqops.utils.serialization.JsonSerializerImpl;
@@ -130,6 +131,9 @@ public class GenerateDocumentationPostProcessor {
 
             System.out.println("Documentation was generated");
         }
+
+        CompletableFutureThreadPoolShutDown completableFutureThreadPoolShutDown = new CompletableFutureThreadPoolShutDown();
+        completableFutureThreadPoolShutDown.destroy();
     }
 
     /**
@@ -255,6 +259,7 @@ public class GenerateDocumentationPostProcessor {
                 "########## END INCLUDE CHECK REFERENCE");
 
         DocumentationFolder newTypesOfChecksFolder = renderedDocumentation.getFolderByName("categories-of-data-quality-checks");
+        newTypesOfChecksFolder.sortByLabelRecursive(Comparator.naturalOrder());
         List<String> renderedCheckTypesIndexYaml = newTypesOfChecksFolder.generateMkDocsNavigation(2);
         FileContentIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedCheckTypesIndexYaml,
@@ -273,6 +278,7 @@ public class GenerateDocumentationPostProcessor {
         DqoUserConfigurationProperties dqoUserConfigurationProperties = new DqoUserConfigurationProperties();
         dqoUserConfigurationProperties.setHome(projectRoot.resolve("../userhome").toAbsolutePath().normalize().toString());
         DqoPythonConfigurationProperties pythonConfigurationProperties = createPythonConfiguration();
+        pythonConfigurationProperties.setPythonScriptTimeoutSeconds(5);
 
         PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
                 configurationProperties, createPythonConfiguration(), dqoUserConfigurationProperties);

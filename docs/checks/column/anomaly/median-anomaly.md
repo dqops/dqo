@@ -1,6 +1,8 @@
 # median anomaly data quality checks
 
-A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
+ It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 ___
@@ -274,6 +276,35 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -415,7 +446,7 @@ spec:
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -692,7 +723,7 @@ spec:
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -896,6 +927,35 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -1044,7 +1104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1329,7 +1389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1604,6 +1664,35 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -1745,7 +1834,7 @@ spec:
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2022,7 +2111,7 @@ spec:
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2227,6 +2316,35 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -2375,7 +2493,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2660,7 +2778,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2945,6 +3063,35 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3086,7 +3233,7 @@ spec:
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3363,7 +3510,7 @@ spec:
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3578,6 +3725,35 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                PERCENTILE_CONT({{ parameters.percentile_value }})
+                WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                PERCENTILE_CONT(0.5)
+                WITHIN GROUP (ORDER BY analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "Oracle"
 
         === "Sensor template for Oracle"
@@ -3726,7 +3902,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4011,7 +4187,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                     ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST(CAST(analyzed_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table) AS nested_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

@@ -15,7 +15,6 @@
  */
 package com.dqops.connectors;
 
-import com.dqops.connectors.mysql.MysqlEngineType;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -91,7 +90,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
 
     /**
      * Opens a connection before it can be used for executing any statements.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     @Override
     public abstract void open(SecretValueLookupContext secretValueLookupContext);
@@ -144,10 +143,11 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -186,7 +186,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {

@@ -57,6 +57,7 @@ import com.dqops.execution.sensors.progress.PreparingSensorEvent;
 import com.dqops.execution.sensors.progress.SensorExecutedEvent;
 import com.dqops.execution.sensors.progress.SensorFailedEvent;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
+import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
@@ -340,7 +341,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                 }
                 catch (Throwable ex) {
-                    this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage(), ex);
+                    this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParameters.toString() + " : " + ex.getMessage() +
+                            "The check that failed to run: " +  sensorRunParameters.getCheck().getHierarchyId().toString(), ex);
                     executionStatistics.incrementRuleExecutionErrorsCount(1);
                     ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                             sensorExecutionResult, sensorRunParameters, ex);
@@ -487,7 +489,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                         executionStatistics.addRuleEvaluationResults(ruleEvaluationResult);
                     }
                     catch (Throwable ex) {
-                        this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParametersComparedTable.toString() + ": " + ex.getMessage(), ex);
+                        this.userErrorLogger.logRule("Rule " + ruleDefinitionName + " failed to execute on " + sensorRunParametersComparedTable.toString() + ": " + ex.getMessage() +
+                                "The check that failed to run: " +  sensorRunParametersComparedTable.getCheck().getHierarchyId().toString(), ex);
                         executionStatistics.incrementRuleExecutionErrorsCount(1);
                         ErrorsNormalizedResult normalizedRuleErrorResults = this.errorsNormalizationService.createNormalizedRuleErrorResults(
                                 sensorExecutionResultComparedTable, sensorRunParametersComparedTable, ex);
@@ -737,7 +740,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
     /**
      * Executes prepared sensors.
-     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that could be merged together.
+     * @param groupedSensorsCollection Collection of sensors grouped by executors and similar queries that can be merged together.
      * @param executionContext Execution context - to access sensor definitions.
      * @param progressListener Progress listener - to report progress.
      * @param allErrorsTable Target table where errors are added when parsing fails.
@@ -870,6 +873,14 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
                         rootChecksContainerSpec.getCheckTarget(), checkType,
                         rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
+                if (customCheckDefinitionSpec == null) {
+                    String fullCheckName = CheckDefinitionList.makeCheckName(rootChecksContainerSpec.getCheckTarget(), checkType,
+                            rootChecksContainerSpec.getCheckTimeScale(), checkSpec.getCategoryName(), customCheckSpec.getCheckName());
+                    String errorMessage = "Cannot execute a custom check " + fullCheckName + " on the table " + tableSpec.toString() +
+                            " because the custom check is not defined. The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
+                    this.userErrorLogger.logCheck(errorMessage, null);
+                    throw new DqoRuntimeException(errorMessage);
+                }
             }
 
             Optional<HierarchyNode> comparisonCheckCategory = Lists.reverse(nodesOnPath)
@@ -887,7 +898,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     String errorMessage = "Cannot execute a table comparison check on table " + tableSpec.toString() +
                             " because the reference table configuration " + referenceTableConfigurationName + " is not configured on the table. " +
                             "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
-                            "Please remove table comparison check configuration to fix the problem.";
+                            "Please remove table comparison check configuration to fix the problem. " +
+                            "The configured check that failed to execute is " + checkSpec.getHierarchyId().toString();
                     this.userErrorLogger.logCheck(errorMessage, null);
                     throw new DqoRuntimeException(errorMessage);
                 }
@@ -904,7 +916,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage() +
+                    ", the check that failed to run: " +  checkSpec.getHierarchyId().toString(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }
@@ -940,7 +953,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                 String errorMessage = "Cannot execute a table comparison check on table " + comparedTableSpec.toString() +
                         " because the reference table configuration " + comparisonName + " is not configured on the table. " +
                         "Reason: an old configuration of comparison checks is still configured, despite that the reference table configuration was removed. " +
-                        "Please remove table comparison check configuration to fix the problem.";
+                        "Please remove table comparison check configuration to fix the problem. " +
+                        "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
                 this.userErrorLogger.logCheck(errorMessage, null);
                 throw new DqoRuntimeException(errorMessage);
             }
@@ -956,7 +970,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             TableWrapper referenceTableWrapper = referencedConnectionWrapper.getTables().getByObjectName(referenceTablePhysicalName, true);
             if (referenceTableWrapper == null) {
                 String errorMessage = "Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced table " +
-                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata.";
+                        tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() + " is not defined in the metadata. " +
+                        "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
                 this.userErrorLogger.logCheck(errorMessage, null);
                 throw new DqoRuntimeException(errorMessage);
             }
@@ -975,7 +990,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                     String errorMessage = "Cannot compare table " + comparedTableSpec.toString() + " to a reference table, because the referenced column " +
                             referencedColumnName + " was not found in the referenced table " +
                             tableComparisonConfigurationSpec.getReferenceTableConnectionName() + "." + referenceTablePhysicalName.toString() +
-                            " in the metadata. Please fix the configuration or import the metadata of the missing column.";
+                            " in the metadata. Please fix the configuration or import the metadata of the missing column. " +
+                            "The check that failed to run: " +  checkSpec.getHierarchyId().toString();
                     this.userErrorLogger.logCheck(errorMessage, null);
                     throw new DqoRuntimeException(errorMessage);
                 }
@@ -1021,7 +1037,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
             return sensorRunParameters;
         }
         catch (Throwable ex) {
-            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage(), ex);
+            this.userErrorLogger.logCheck("Sensor execution run parameters preparation failed, message: " + ex.getMessage() +
+                    "The check that failed to run: " +  checkSpec.getHierarchyId().toString(), ex);
             return new SensorExecutionRunParameters(checkSpec, ex);
         }
     }

@@ -4,7 +4,8 @@ kind: check
 spec:
   sensor_name: column/datetime/date_values_in_future_percent
   rule_name: comparison/max_percent
-  help_text: Verifies that the percentage of date values in future in a column does
-    not exceed the maximum accepted percentage. Stores a separate data quality check
-    result for each monthly partition.
+  help_text: "Detects dates in the future in date, datetime and timestamp columns.\
+    \ Measures a percentage of dates in the future. Raises a data quality issue when\
+    \ too many future dates are found. Stores a separate data quality check result\
+    \ for each monthly partition."
   standard: true

@@ -113,7 +113,7 @@ public enum DataTypeCategory {
     public static DataTypeCategory[] ANY = new DataTypeCategory[0];
 
     /**
-     * All data types that could be detected (they are not "other"). Null checks support these data types.
+     * All data types that can be detected (they are not "other"). Null checks support these data types.
      */
     public static DataTypeCategory[] ALL_KNOWN = new DataTypeCategory[] {
             numeric_integer,

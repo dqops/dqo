@@ -14,13 +14,13 @@
                 THEN 1
               ELSE 0
             END
-          )/COUNT(*)
+          ) / COUNT({{ lib.render_target_column('analyzed_table') }})
     {%- endif -%}
 {% endmacro -%}
 
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN NULL
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
         ELSE {{render_else()}}
     END AS actual_value
     {{- lib.render_data_grouping_projections('analyzed_table') }}

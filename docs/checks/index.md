@@ -58,12 +58,13 @@ A table-level check that uses a custom SQL expression on each row to verify (ass
 
 
 ### [sql condition passed percent on table](./table/custom_sql/sql-condition-passed-percent-on-table.md)
-A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 
 ### [sql aggregate expression on table](./table/custom_sql/sql-aggregate-expression-on-table.md)
-A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.
 
 
 
@@ -110,7 +111,7 @@ A table-level check that detects if the list of columns and the order of columns
 ### [column types changed](./table/schema/column-types-changed.md)
 A table-level check that detects if the column names or column types have changed since the last time the check was run.
  This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
- A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns could be reordered as long
+ A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long
  as all columns are still present and the data types match since the last time they were tested.
 
 
@@ -161,33 +162,46 @@ A table-level check that calculates the maximum difference in days between inges
 Evaluates the overall quality of the table by verifying the number of rows.
 
 ### [row count](./table/volume/row-count.md)
-A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
- The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
+This check detects empty or too-small tables. It captures the row count of a tested table.
+ This check raises a data quality issue when the row count is below a minimum accepted value.
+ The default value of the rule parameter **min_count** is 1 (row), which detects empty tables.
+ When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
 
 
 
 ### [row count anomaly](./table/volume/row-count-anomaly.md)
-A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+This check detects anomalies in the day-to-day changes to the table volume (the row count).
+ It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.
+ This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.
 
 
 
 ### [row count change](./table/volume/row-count-change.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout.
+This check compares the current table volume (the row count) to the last known row count.
+ It raises a data quality issue when the change in row count (increase or decrease) exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 1 day](./table/volume/row-count-change-1-day.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
+This check compares the current table volume (the row count) to the row count from the previous day.
+ It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 7 days](./table/volume/row-count-change-7-days.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+This check compares the current table volume (the row count) to the row count seven days ago.
+ This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
+ It raises a data quality issue when the change in row count (increase or decrease) since a week ago exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 30 days](./table/volume/row-count-change-30-days.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
+This check compares the current table volume (the row count) to the row count 30 days ago.
+ This check compares the table volume to a month ago value to overcome monthly seasonability.
+ It raises a data quality issue when the change in row count (increase or decrease) since a value 30 days ago exceeds a maximum accepted percentage of change.
+
+
+
 
 
 
@@ -303,7 +317,7 @@ A column-level check that counts how many expected text values are among the TOP
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
- This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
 
 
 
@@ -311,6 +325,17 @@ A column-level check that counts how many expected text values are among the TOP
 A column-level check that counts unique values in a numeric column and counts how many values out of a list of expected numeric values were found in the column.
  The check raises a data quality issue when the threshold for the maximum number of missing has been exceeded (too many expected values were not found in the column).
  This check is useful for analysing columns with a low number of unique values, such as status codes, to detect whether all status codes are used in any row.
+
+
+
+### [text valid country code percent](./column/accepted_values/text-valid-country-code-percent.md)
+This check measures the percentage of text values that are valid two-letter country codes.
+ It raises a data quality issue when the percentage of valid country codes (excluding null values) falls below a minimum accepted rate.
+
+
+
+### [text valid currency code percent](./column/accepted_values/text-valid-currency-code-percent.md)
+This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.
 
 
 
@@ -357,125 +382,105 @@ A column-level check that ensures that the difference between the count of null 
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
 ### [sum anomaly](./column/anomaly/sum-anomaly.md)
-A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
+ It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [mean anomaly](./column/anomaly/mean-anomaly.md)
-A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.
+ It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [median anomaly](./column/anomaly/median-anomaly.md)
-A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
+ It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [min anomaly](./column/anomaly/min-anomaly.md)
-A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
+ It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new minimum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [max anomaly](./column/anomaly/max-anomaly.md)
-A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
+This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
+ It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new maximum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 
 ### [mean change](./column/anomaly/mean-change.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.
 
 
 
 ### [mean change 1 day](./column/anomaly/mean-change-1-day.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).
 
 
 
 ### [mean change 7 days](./column/anomaly/mean-change-7-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [mean change 30 days](./column/anomaly/mean-change-30-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
 ### [median change](./column/anomaly/median-change.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.
 
 
 
 ### [median change 1 day](./column/anomaly/median-change-1-day.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).
 
 
 
 ### [median change 7 days](./column/anomaly/median-change-7-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [median change 30 days](./column/anomaly/median-change-30-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
 ### [sum change](./column/anomaly/sum-change.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.
 
 
 
 ### [sum change 1 day](./column/anomaly/sum-change-1-day.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).
 
 
 
 ### [sum change 7 days](./column/anomaly/sum-change-7-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 
 ### [sum change 30 days](./column/anomaly/sum-change-30-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.
-
-
-
-
-
-
-## column-level blanks checks
-Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
-
-### [empty text found](./column/blanks/empty-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of empty texts in a monitored column.
-
-
-
-### [whitespace text found](./column/blanks/whitespace-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text found](./column/blanks/null-placeholder-text-found.md)
-A column-level check that ensures that there are no more than a maximum number of rows with a null placeholder text in a monitored column.
-
-
-
-### [empty text percent](./column/blanks/empty-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of empty texts in a monitored column.
-
-
-
-### [whitespace text percent](./column/blanks/whitespace-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of whitespace texts in a monitored column.
-
-
-
-### [null placeholder text percent](./column/blanks/null-placeholder-text-percent.md)
-A column-level check that ensures that there are no more than a maximum percent of rows with a null placeholder text in a monitored column.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 
@@ -486,12 +491,12 @@ A column-level check that ensures that there are no more than a maximum percent 
 Calculates the percentage of data in boolean columns.
 
 ### [true percent](./column/bool/true-percent.md)
-A column-level check that ensures that the proportion of true values in a column is not below the minimum accepted percentage.
+This check measures the percentage of **true** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 
 
 
 ### [false percent](./column/bool/false-percent.md)
-A column-level check that ensures that the proportion of false values in a column is not below the minimum accepted percentage.
+This check measures the percentage of **false** values in a boolean column. It raises a data quality issue when the measured percentage is outside the accepted range.
 
 
 
@@ -540,8 +545,39 @@ A column-level check that ensures that compares the count of null values in the 
 
 
 
+## column-level conversions checks
+Validates that the values in a text column can be parsed and converted to other data types.
+
+### [text parsable to boolean percent](./column/conversions/text-parsable-to-boolean-percent.md)
+Verifies that values in a text column are convertible to a boolean value.
+ Texts are convertible to a boolean value when they are one of the well-known boolean placeholders: &#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
+
+
+
+### [text parsable to integer percent](./column/conversions/text-parsable-to-integer-percent.md)
+Verifies that values in a text column can be parsed and converted to an integer type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
+
+
+
+### [text parsable to float percent](./column/conversions/text-parsable-to-float-percent.md)
+Verifies that values in a text column can be parsed and converted to a float (or numeric) type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
+
+
+
+### [text parsable to date percent](./column/conversions/text-parsable-to-date-percent.md)
+Verifies that values in a text column can be parsed and converted to a date type.
+ This check measures the percentage of valid values and raises a data quality issue when the percentage of valid values is below an accepted rate.
+
+
+
+
+
+
 ## column-level custom_sql checks
-Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
 ### [sql condition failed on column](./column/custom_sql/sql-condition-failed-on-column.md)
 A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
@@ -552,12 +588,13 @@ A column-level check that uses a custom SQL expression on each column to verify 
 
 
 ### [sql condition passed percent on column](./column/custom_sql/sql-condition-passed-percent-on-column.md)
-A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 
 ### [sql aggregate expression on column](./column/custom_sql/sql-aggregate-expression-on-column.md)
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 
@@ -574,18 +611,20 @@ Column level check that uses a custom SQL SELECT statement to retrieve a result 
 
 
 ## column-level datatype checks
-Analyzes all values in a text column to detect if all values could be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
+Analyzes all values in a text column to detect if all values can be safely parsed to numeric, boolean, date or timestamp data types. Used to analyze tables in the landing zone.
 
 ### [detected datatype in text](./column/datatype/detected-datatype-in-text.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..7, which are the codes of detected data types.
+A column-level check that scans all values in a text column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 
 ### [detected datatype in text changed](./column/datatype/detected-datatype-in-text-changed.md)
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- The check compares the data type detected during the current run to the last known data type detected during a previous run. For daily monitoring checks, it will compare the value to yesterday&#x27;s value (or an earlier date).
- For partitioned checks, it will compare the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
+A column-level check that scans all values in a text column, finds the right data type and detects when the desired data type changes.
+ The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected during the current run to the last known data type detected during a previous run.
+ For daily monitoring checks, it compares the value to yesterday&#x27;s value (or an earlier date).
+ For partitioned checks, it compares the current data type to the data type in the previous daily or monthly partition. The last partition with data is used for comparison.
 
 
 
@@ -596,19 +635,20 @@ A table-level check that scans all values in a string column and detects the dat
 Validates that the data in a date or time column is in the expected format and within predefined ranges.
 
 ### [date values in future percent](./column/datetime/date-values-in-future-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in the future in a monitored column.
+Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found.
 
 
 
-### [datetime value in range date percent](./column/datetime/datetime-value-in-range-date-percent.md)
-A column-level check that ensures that there are no more than a set percentage of date values in a given range in a monitored column.
+### [date in range percent](./column/datetime/date-in-range-percent.md)
+Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates.
+ The default configuration detects fake dates such as 1900-01-01 and 2099-12-31.
+ Measures the percentage of valid dates and raises a data quality issue when too many dates are found.
 
 
 
-### [date match format percent](./column/datetime/date-match-format-percent.md)
-A column-level check that validates the values in text columns to ensure that they are valid dates, matching one of predefined date formats.
- It measures the percentage of rows that match the expected date format in a column and raises an issue if not enough rows match the format.
- The default value 100.0 (percent) verifies that all values match a given date format.
+### [text match date format percent](./column/datetime/text-match-date-format-percent.md)
+Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date.
+ Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.
 
 
 
@@ -619,12 +659,15 @@ A column-level check that validates the values in text columns to ensure that th
 Checks the referential integrity of a column against a column in another table.
 
 ### [lookup key not found](./column/integrity/lookup-key-not-found.md)
-A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.
 
 
 
 ### [lookup key found percent](./column/integrity/lookup-key-found-percent.md)
-A column-level check that ensures that there are no more than a minimum percentage of values matching values in another table column.
+This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ This check measures the percentage of valid keys found in the dictionary table.
+ It raises a data quality issue when a percentage of valid keys is below a minimum accepted threshold.
 
 
 
@@ -635,47 +678,64 @@ A column-level check that ensures that there are no more than a minimum percenta
 Checks for the presence of null or missing values in a column.
 
 ### [nulls count](./column/nulls/nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Counts the number of rows having a null value.
+ Raises a data quality issue when the count of null values is above a *max_count* threshold.
 
 
 
 ### [nulls percent](./column/nulls/nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
-
-
-
-### [not nulls count](./column/nulls/not-nulls-count.md)
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
-
-
-
-### [not nulls percent](./column/nulls/not-nulls-percent.md)
-A column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+Detects incomplete columns that contain any *null* values. Measures the percentage of rows having a null value.
+ Raises a data quality issue when the percentage of null values is above a *max_percent* threshold.
+ Configure this check to accept a given percentage of null values by setting the *max_percent* parameter.
 
 
 
 ### [nulls percent anomaly](./column/nulls/nulls-percent-anomaly.md)
-A column-level check that ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days. Use in partitioned checks.
+Detects day-to-day anomalies in the percentage of *null* values. Measures the percentage of rows having a *null* value.
+ Raises a data quality issue when the rate of null values increases or decreases too much.
+
+
+
+### [not nulls count](./column/nulls/not-nulls-count.md)
+Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
+ Raises a data quality issue when the count of non-null values is below *min_count*.
+ The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number
+ to assert that a column has at least that many non-null values.
+
+
+
+### [not nulls percent](./column/nulls/not-nulls-percent.md)
+Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values.
+ Raises a data quality issue when the percentage of non-null values is below *min_percentage*.
+ The default value of the *min_percentage* parameter is 100.0, but DQOps supports setting a lower value to accept some nulls.
 
 
 
 ### [nulls percent change](./column/nulls/nulls-percent-change.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout.
+Detects relative increases or decreases in the percentage of null values since the last measured percentage.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 1 day](./column/nulls/nulls-percent-change-1-day.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+Detects relative increases or decreases in the percentage of null values since the previous day.
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 7 days](./column/nulls/nulls-percent-change-7-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from last week.
+Detects relative increases or decreases in the percentage of null values since the last week (seven days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
 ### [nulls percent change 30 days](./column/nulls/nulls-percent-change-30-days.md)
-A column-level check that ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from the last month.
+Detects relative increases or decreases in the percentage of null values since the last month (30 days ago).
+ Measures the percentage of null values for each day.
+ Raises a data quality issue when the change in the percentage of null values is above *max_percent* of the previous percentage.
 
 
 
@@ -686,142 +746,170 @@ A column-level check that ensures that the null percent in a monitored column ha
 Validates that the data in a numeric column is in the expected format or within predefined ranges.
 
 ### [number below min value](./column/numeric/number-below-min-value.md)
-A column-level check that ensures that the number of values in the monitored column with a value below a user-defined value as a parameter does not exceed set thresholds.
+This check finds numeric values smaller than the minimum accepted value. It counts the values that are too small.
+ This check raises a data quality issue when the count of too small values exceeds the maximum accepted count.
 
 
 
 ### [number above max value](./column/numeric/number-above-max-value.md)
-A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
+This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.
+ This check raises a data quality issue when the count of too big values exceeds the maximum accepted count.
 
 
 
 ### [negative values](./column/numeric/negative-values.md)
-A column-level check that ensures that there are no more than a set number of negative values in a monitored column.
+This check finds and counts negative values in a numeric column. It raises a data quality issue when the count of negative values is above the maximum accepted count.
 
 
 
 ### [negative values percent](./column/numeric/negative-values-percent.md)
-A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+This check finds negative values in a numeric column. It measures the percentage of negative values and raises a data quality issue
+ when the rate of negative values exceeds the maximum accepted percentage.
 
 
 
 ### [number below min value percent](./column/numeric/number-below-min-value-percent.md)
-A column-level check that ensures that the percentage of values in the monitored column with a value below a user-defined value as a parameter does not fall below set thresholds.
+This check finds numeric values smaller than the minimum accepted value. It measures the percentage of values that are too small.
+ This check raises a data quality issue when the percentage of values that are too small exceeds the maximum accepted percentage.
 
 
 
 ### [number above max value percent](./column/numeric/number-above-max-value-percent.md)
-A column-level check that ensures that the percentage of values in the monitored column with a value above a user-defined value as a parameter does not fall below set thresholds.
+This check finds numeric values bigger than the maximum accepted value. It measures the percentage of values that are too big.
+ This check raises a data quality issue when the percentage of values that are too big exceeds the maximum accepted percentage.
 
 
 
 ### [number in range percent](./column/numeric/number-in-range-percent.md)
-A column-level check that ensures that there are no more than a set percentage of values from the range in a monitored column.
+This check verifies that values in a numeric column are within an accepted range.
+ It measures the percentage of values within the valid range and raises a data quality issue when the rate of valid values is below a minimum accepted percentage.
 
 
 
 ### [integer in range percent](./column/numeric/integer-in-range-percent.md)
-A column-level check that ensures that there are no more than a set number of values from range in a monitored column.
+This check verifies that numeric values are within a range of accepted values.
+ It measures the percentage of values in the range and raises a data quality issue when the percentage of valid values is below an accepted rate.
 
 
 
 ### [min in range](./column/numeric/min-in-range.md)
-A column-level check that ensures that the minimum values are within the expected range in the monitored column.
+This check finds a minimum value in a numeric column. It verifies that the minimum value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [max in range](./column/numeric/max-in-range.md)
-A column-level check that ensures that the maximum values are within the expected range in the monitored column.
+This check finds a maximum value in a numeric column. It verifies that the maximum value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sum in range](./column/numeric/sum-in-range.md)
-A column-level check that ensures that the sum value in the monitored column is within the expected range.
+This check calculates a sum of numeric values. It verifies that the sum is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [mean in range](./column/numeric/mean-in-range.md)
-A column-level check that ensures that the average (mean) value in the monitored column is within the expected range.
+This check calculates a mean (average) value in a numeric column. It verifies that the average value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [median in range](./column/numeric/median-in-range.md)
-A column-level check that ensures that the median value in the monitored column is within the expected range.
+This check finds a median value in a numeric column. It verifies that the median value is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile in range](./column/numeric/percentile-in-range.md)
-A column-level check that ensures that the percentile of values in a monitored columnis within the expected range.
+This check finds a requested percentile value of numeric values. The percentile is configured as a value in the range [0, 1]. This check verifies that the given percentile is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 10 in range](./column/numeric/percentile-10-in-range.md)
-A column-level check that ensures that the 10th percentile of values in the monitored column is within the expected range.
+This check finds the 10th percentile value in a numeric column. The 10th percentile is a value greater than 10% of the smallest values and smaller than the remaining 90% of other values.
+ This check verifies that the 10th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 25 in range](./column/numeric/percentile-25-in-range.md)
-A column-level check that ensures that the 25th percentile of values in the monitored column is within the expected range.
+This check finds the 25th percentile value in a numeric column. The 10th percentile is a value greater than 25% of the smallest values and smaller than the remaining 75% of other values.
+ This check verifies that the 25th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 75 in range](./column/numeric/percentile-75-in-range.md)
-A column-level check that ensures that the 75th percentile of values in the monitored column is within the expected range.
+This check finds the 75th percentile value in a numeric column. The 75th percentile is a value greater than 75% of the smallest values and smaller than the remaining 25% of other values.
+ This check verifies that the 75th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [percentile 90 in range](./column/numeric/percentile-90-in-range.md)
-A column-level check that ensures that the 90th percentile of values in the monitored column is within the expected range.
+This check finds the 90th percentile value in a numeric column. The 90th percentile is a value greater than 90% of the smallest values and smaller than the remaining 10% of other values.
+ This check verifies that the 90th percentile is within the range of accepted values and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sample stddev in range](./column/numeric/sample-stddev-in-range.md)
-A column-level check that ensures that the standard deviation of the sample is within the expected range in the monitored column.
+This check calculates the standard deviation of numeric values. It verifies that the standard deviation is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [population stddev in range](./column/numeric/population-stddev-in-range.md)
-A column-level check that ensures that the population standard deviationis within the expected range in a monitored column.
+This check calculates the population standard deviation of numeric values. It verifies that the population standard deviation is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [sample variance in range](./column/numeric/sample-variance-in-range.md)
-A column-level check that ensures the sample varianceis within the expected range in a monitored column.
+This check calculates a sample variance of numeric values. It verifies that the sample variance is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.
 
 
 
 ### [population variance in range](./column/numeric/population-variance-in-range.md)
-A column-level check that ensures that the population varianceis within the expected range in a monitored column.
+This check calculates a population variance of numeric values. It verifies that the population variance is within the range of accepted values
+ and raises a data quality issue when it is not within a valid range.o
 
 
 
 ### [invalid latitude](./column/numeric/invalid-latitude.md)
-A column-level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+This check finds numeric values that are not valid latitude coordinates. A valid latitude coordinate is in the range -90...90. It counts the values outside a valid range for a latitude.
+ This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.
 
 
 
 ### [valid latitude percent](./column/numeric/valid-latitude-percent.md)
-A column-level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
+This check verifies that numeric values are valid latitude coordinates.
+ A valid latitude coordinate is in the range -90...90. It measures the percentage of values within a valid range for a latitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
 
 
 
 ### [invalid longitude](./column/numeric/invalid-longitude.md)
-A column-level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
+This check finds numeric values that are not valid longitude coordinates. A valid longitude coordinate is in the range -180...180. It counts the values outside a valid range for a longitude.
+ This check raises a data quality issue when the count of invalid values exceeds the maximum accepted count.
 
 
 
 ### [valid longitude percent](./column/numeric/valid-longitude-percent.md)
-A column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
+ It measures the percentage of values within a valid range for a longitude.
+ This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
 
 
 
 ### [non negative values](./column/numeric/non-negative-values.md)
-A column-level check that ensures that there are no more than a maximum number of non-negative values in a monitored column.
+This check finds and counts non0negative values in a numeric column. It raises a data quality issue when the count of non-negative values is above the maximum accepted count.
 
 
 
 ### [non negative values percent](./column/numeric/non-negative-values-percent.md)
-A column-level check that ensures that there are no more than a set percentage of negative values in a monitored column.
+This check finds non-negative values in a numeric column.
+ It measures the percentage of non-negative values and raises a data quality issue when the rate of non-negative values exceeds the maximum accepted percentage.
 
 
 
@@ -832,52 +920,62 @@ A column-level check that ensures that there are no more than a set percentage o
 Validates if a text column matches predefined patterns (such as an email address) or a custom regular expression.
 
 ### [text not matching regex found](./column/patterns/text-not-matching-regex-found.md)
-A column-level that calculates the quantity of values that do not match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It counts the number of invalid values and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [texts matching regex percent](./column/patterns/texts-matching-regex-percent.md)
-A column-level that calculates the percentage of values that match the custom regex in a monitored column.
+This check validates text values using a pattern defined as a regular expression.
+ It measures the percentage of valid values and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid email format found](./column/patterns/invalid-email-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid emails in a monitored column.
+This check detects invalid email addresses in text columns using a regular expression.
+ It counts the number of invalid emails and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [text not matching date pattern found](./column/patterns/text-not-matching-date-pattern-found.md)
-A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
+This check detects dates in the wrong format inside text columns using a regular expression.
+ It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.
 
 
 
 ### [text matching date pattern percent](./column/patterns/text-matching-date-pattern-percent.md)
-A column-level check that calculates the percentage of values that match the date regex in a monitored column.
+This check validates the date format of dates stored in text columns.
+ It measures the percentage of correctly formatted dates and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [text matching name pattern percent](./column/patterns/text-matching-name-pattern-percent.md)
-A column-level that calculates the percentage of values that match the name regex in a monitored column.
+This check verifies if values stored in a text column contain only letters and are usable as literal identifiers.
+ It measures the percentage of valid literal identifiers and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid uuid format found](./column/patterns/invalid-uuid-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid UUID in a monitored column.
+This check detects invalid UUID identifiers in text columns using a regular expression.
+ It counts the number of invalid UUIDs and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [valid uuid format percent](./column/patterns/valid-uuid-format-percent.md)
-A column-level check that ensures that the percentage of valid UUID strings in the monitored column does not fall below set thresholds.
+This check validates the format of UUID values in text columns.
+ It measures the percentage of valid UUIDs and raises a data quality issue when the rate is below a threshold.
 
 
 
 ### [invalid ip4 address format found](./column/patterns/invalid-ip4-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP4 address in a monitored column.
+This check detects invalid IP4 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 
 ### [invalid ip6 address format found](./column/patterns/invalid-ip6-address-format-found.md)
-A column-level check that ensures that there are no more than a maximum number of invalid IP6 address in a monitored column.
+This check detects invalid IP6 internet addresses in text columns using a regular expression.
+ It counts the number of invalid addresses and raises a data quality issue when the number is above a threshold.
 
 
 
@@ -885,30 +983,30 @@ A column-level check that ensures that there are no more than a maximum number o
 
 
 ## column-level pii checks
-Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
+Checks for the presence of sensitive or personally identifiable information (PII) in a column such as an email, phone, zip code, IP4, and IP6 addresses.
 
 ### [contains usa phone percent](./column/pii/contains-usa-phone-percent.md)
-Column check that calculates the percentage of rows that contains USA phone number values in a monitored column.
+This check detects USA phone numbers inside text columns. It measures the percentage of columns containing a phone number and raises a data quality issue when too many rows contain phone numbers.
 
 
 
 ### [contains email percent](./column/pii/contains-email-percent.md)
-Column check that calculates the percentage of rows that contains valid email values in a monitored column.
+This check detects emails inside text columns. It measures the percentage of columns containing an email and raises a data quality issue when too many rows contain emails.
 
 
 
 ### [contains usa zipcode percent](./column/pii/contains-usa-zipcode-percent.md)
-Column check that calculates the percentage of rows that contains USA zip code values in a monitored column.
+This check detects USA zip code inside text columns. It measures the percentage of columns containing a zip code and raises a data quality issue when too many rows contain zip codes.
 
 
 
 ### [contains ip4 percent](./column/pii/contains-ip4-percent.md)
-Column check that calculates the percentage of rows that contains valid IP4 address values in a monitored column.
+This check detects IP4 addresses inside text columns. It measures the percentage of columns containing an IP4 address and raises a data quality issue when too many rows contain IP4 addresses.
 
 
 
 ### [contains ip6 percent](./column/pii/contains-ip6-percent.md)
-Column check that calculates the percentage of rows that contains valid IP6 address values in a monitored column.
+This check detects IP6 addresses inside text columns. It measures the percentage of columns containing an IP6 address and raises a data quality issue when too many rows contain IP6 addresses.
 
 
 
@@ -935,85 +1033,52 @@ A column-level check that detects if the data type of the column has changed sin
 
 
 ## column-level text checks
-Validates that the data in a text column has a valid range, or can be parsed to other data types.
-
-### [text max length](./column/text/text-max-length.md)
-A column-level check that ensures that the length of text values in a column does not exceed the maximum accepted length.
-
-
+Validates that the data in a text column has a valid range.
 
 ### [text min length](./column/text/text-min-length.md)
-A column-level check that ensures that the length of text in a column does not fall below the minimum accepted length.
+This check finds the length of the shortest text in a column. DQOps validates the shortest length using a range rule.
+ DQOps raises an issue when the minimum text length is outside a range of accepted values.
+
+
+
+### [text max length](./column/text/text-max-length.md)
+This check finds the length of the longest text in a column. DQOps validates the maximum length using a range rule.
+ DQOps raises an issue when the maximum text length is outside a range of accepted values.
 
 
 
 ### [text mean length](./column/text/text-mean-length.md)
-A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
+This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
+ DQOps raises an issue when the mean text length is outside a range of accepted values.
 
 
 
 ### [text length below min length](./column/text/text-length-below-min-length.md)
-A column-level check that ensures that the number of text values in the monitored column with a length below the length defined by the user as a parameter does not exceed set thresholds.
+This check finds texts that are shorter than the minimum accepted text length. It counts the number of texts that are too short and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length below min length percent](./column/text/text-length-below-min-length-percent.md)
-A column-level check that ensures that the percentage of text values in the monitored column with a length below the length defined by the user as a parameter does not fall below set thresholds.
+This check finds texts that are shorter than the minimum accepted text length.
+ It measures the percentage of too short texts and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length above max length](./column/text/text-length-above-max-length.md)
-A column-level check that ensures that the number of text values in the monitored column with a length above the length defined by the user as a parameter does not exceed set thresholds.
+This check finds texts that are longer than the maximum accepted text length.
+ It counts the number of texts that are too long and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length above max length percent](./column/text/text-length-above-max-length-percent.md)
-A column-level check that ensures that the percentage of text values in the monitored column with a length above the length defined by the user as a parameter does not fall below set thresholds.
+This check finds texts that are longer than the maximum accepted text length.
+ It measures the percentage of texts that are too long and raises a data quality issue when too many invalid texts are found.
 
 
 
 ### [text length in range percent](./column/text/text-length-in-range-percent.md)
-Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
-
-
-
-### [text parsable to boolean percent](./column/text/text-parsable-to-boolean-percent.md)
-A column-level check that ensures that the percentage of boolean placeholder texts (&#x27;0&#x27;, &#x27;1&#x27;, &#x27;true&#x27;, &#x27;false&#x27;, &#x27;yes&#x27;, &#x27;no&#x27;, &#x27;y&#x27;, &#x27;n&#x27;) in the monitored column does not fall below the minimum percentage.
-
-
-
-### [text parsable to integer percent](./column/text/text-parsable-to-integer-percent.md)
-A column-level check that ensures that the percentage of text values that are parsable to integer in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to float percent](./column/text/text-parsable-to-float-percent.md)
-A column-level check that ensures that the percentage of strings that are parsable to float in the monitored column does not fall below set thresholds.
-
-
-
-### [text parsable to date percent](./column/text/text-parsable-to-date-percent.md)
-A column-level check that ensures that there is at least a minimum percentage of valid text values that are valid date strings (are parsable to a DATE type) in a monitored column.
-
-
-
-### [text surrounded by whitespace](./column/text/text-surrounded-by-whitespace.md)
-A column-level check that ensures that there are no more than a maximum number of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text surrounded by whitespace percent](./column/text/text-surrounded-by-whitespace-percent.md)
-A column-level check that ensures that there are no more than a maximum percentage of text values that are surrounded by whitespace in a monitored column.
-
-
-
-### [text valid country code percent](./column/text/text-valid-country-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid country codes in the monitored column does not fall below set thresholds.
-
-
-
-### [text valid currency code percent](./column/text/text-valid-currency-code-percent.md)
-A column-level check that ensures that the percentage of text values that are valid currency codes in the monitored column does not fall below set thresholds.
+This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
+ It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.
 
 
 
@@ -1024,72 +1089,139 @@ A column-level check that ensures that the percentage of text values that are va
 Counts the number or percent of duplicate or unique values in a column.
 
 ### [distinct count](./column/uniqueness/distinct-count.md)
-A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.
 
 
 
 ### [distinct percent](./column/uniqueness/distinct-percent.md)
-A column-level check that ensures that the percentage of unique values in a column does not fall below the minimum accepted percentage.
+This check measures the percentage of distinct values in all non-null values. It verifies that the percentage of distinct values meets a minimum value.
+ The default value of 100% distinct values ensures the column has no duplicate values.
 
 
 
 ### [duplicate count](./column/uniqueness/duplicate-count.md)
-A column-level check that ensures that the number of duplicate values in a column does not exceed the maximum accepted count.
+This check counts duplicate values. It raises a data quality issue when the number of duplicates is above a minimum accepted value.
+ The default configuration detects duplicate values by enforcing that the *min_count* of duplicates is zero.
 
 
 
 ### [duplicate percent](./column/uniqueness/duplicate-percent.md)
-A column-level check that ensures that the percentage of duplicate values in a column does not exceed the maximum accepted percentage.
+This check measures the percentage of duplicate values in all non-null values. It raises a data quality issue when the percentage of duplicates is above an accepted threshold.
+ The default threshold is 0% duplicate values.
 
 
 
 ### [distinct count anomaly](./column/uniqueness/distinct-count-anomaly.md)
-A column-level check that ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check monitors the count of distinct values and detects anomalies in the changes of the distinct count. It monitors a 90-day time window.
+ The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
 
 
 
 ### [distinct percent anomaly](./column/uniqueness/distinct-percent-anomaly.md)
-A column-level check that ensures that the distinct percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check monitors the percentage of distinct values and detects anomalies in the changes in this percentage. It monitors a 90-day time window.
+ The check is configured by setting a desired percentage of anomalies to identify as data quality issues.
 
 
 
 ### [distinct count change](./column/uniqueness/distinct-count-change.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout.
+This check monitors the count of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 1 day](./column/uniqueness/distinct-count-change-1-day.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check monitors the count of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 7 days](./column/uniqueness/distinct-count-change-7-days.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last week.
+This check monitors the count of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct count change 30 days](./column/uniqueness/distinct-count-change-30-days.md)
-A column-level check that ensures that the distinct count in a monitored column has changed by a fixed rate since the last readout from last month.
+This check monitors the count of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change](./column/uniqueness/distinct-percent-change.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout.
+This check monitors the percentage of distinct values and compares it to the last known value. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 1 day](./column/uniqueness/distinct-percent-change-1-day.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check monitors the percentage of distinct values and compares it to the measure from the previous day. It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 7 days](./column/uniqueness/distinct-percent-change-7-days.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last week.
+This check monitors the percentage of distinct values and compares it to the measure seven days ago to overcome the weekly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
 
 
 
 ### [distinct percent change 30 days](./column/uniqueness/distinct-percent-change-30-days.md)
-A column-level check that ensures that the distinct percent in a monitored column has changed by a fixed rate since the last readout from last month.
+This check monitors the percentage of distinct values and compares it to the measure thirty days ago to overcome the monthly seasonability impact.
+ It raises a data quality issue when the change exceeds an accepted threshold.
+
+
+
+
+
+
+## column-level whitespace checks
+Detects text columns that contain blank values, or values that are used as placeholders for missing values: &#x27;n/a&#x27;, &#x27;None&#x27;, etc.
+
+### [empty text found](./column/whitespace/empty-text-found.md)
+This check detects empty texts that are not null. Empty texts have a length of zero.
+ The database treats them as values different than nulls, and some databases allow the storage of both null and empty values.
+ This check counts empty texts and raises a data quality issue when the number of empty values exceeds a *max_count* parameter value.
+
+
+
+### [whitespace text found](./column/whitespace/whitespace-text-found.md)
+This check detects empty texts containing only spaces and other whitespace characters.
+ This check counts whitespace-only texts and raises a data quality issue when their count exceeds a *max_count* parameter value.
+
+
+
+### [null placeholder text found](./column/whitespace/null-placeholder-text-found.md)
+This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
+ This check counts null placeholder values and raises a data quality issue when their count exceeds a *max_count* parameter value.
+
+
+
+### [empty text percent](./column/whitespace/empty-text-percent.md)
+This check detects empty texts that are not null. Empty texts have a length of zero.
+ This check measures the percentage of empty texts and raises a data quality issue when the rate of empty values exceeds a *max_percent* parameter value.
+
+
+
+### [whitespace text percent](./column/whitespace/whitespace-text-percent.md)
+This check detects empty texts containing only spaces and other whitespace characters.
+ This check measures the percentage of whitespace-only texts and raises a data quality issue when their rate exceeds a *max_percent* parameter value.
+
+
+
+### [null placeholder text percent](./column/whitespace/null-placeholder-text-percent.md)
+This check detects text values that are well-known equivalents (placeholders) of a null value, such as *null*, *None*, *n/a*.
+ This check measures the percentage of null placeholder values and raises a data quality issue when their rate exceeds a *max_percent* parameter value.
+
+
+
+### [text surrounded by whitespace found](./column/whitespace/text-surrounded-by-whitespace-found.md)
+This check detects text values that contain additional whitespace characters before or after the text.
+ This check counts text values surrounded by whitespace characters (on any side) and
+ raises a data quality issue when their count exceeds a *max_count* parameter value.
+ Whitespace-surrounded texts should be trimmed before loading to another table.
+
+
+
+### [text surrounded by whitespace percent](./column/whitespace/text-surrounded-by-whitespace-percent.md)
+This check detects text values that contain additional whitespace characters before or after the text.
+ This check measures the percentage of text value surrounded by whitespace characters (on any side) and
+ raises a data quality issue when their rate exceeds a *max_percent* parameter value.
 
 
 

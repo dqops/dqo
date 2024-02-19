@@ -23,7 +23,8 @@ import TableStatisticsView from '../../../pages/TableStatisticsView';
 import {
   DataGroupingConfigurationSpec,
   DqoJobHistoryEntryModelStatusEnum,
-  TableColumnsStatisticsModel
+  TableColumnsStatisticsModel,
+  TableStatisticsModel
 } from '../../../api';
 
 import { setCreatedDataStream } from '../../../redux/actions/definition.actions';
@@ -31,13 +32,15 @@ import { addFirstLevelTab, setActiveFirstLevelUrl } from '../../../redux/actions
 import {
   ColumnApiClient,
   DataGroupingConfigurationsApi,
-  JobApiClient
+  JobApiClient,
+  TableApiClient
 } from '../../../services/apiClient';
 import { TableReferenceComparisons } from './TableComparison/TableReferenceComparisons';
 import { IRootState } from '../../../redux/reducers';
 import TablePreview from './TablePreview';
 import TableQualityStatus from './TableQualityStatus/TableQualityStatus';
 import { TABLE_LEVEL_TABS } from '../../../shared/constants';
+import { AxiosResponse } from 'axios';
 interface LocationState {
   bool: boolean;
   data_stream_name: string;
@@ -75,6 +78,7 @@ const ProfilingView = () => {
   const [statistics, setStatistics] = useState<TableColumnsStatisticsModel>();
   const [selectedColumns, setSelectedColumns] = useState<Array<string>>();
   const [jobId, setJobId] = useState<number>();
+  const [rowCount, setRowCount] = useState<TableStatisticsModel>();
 
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
@@ -94,9 +98,24 @@ const ProfilingView = () => {
     setSelectedColumns(columns);
   };
 
+  const fetchRows = async () => {
+    try {
+      const res: AxiosResponse<TableStatisticsModel> =
+        await TableApiClient.getTableStatistics(
+          connectionName,
+          schemaName,
+          tableName
+        );
+      setRowCount(res.data);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
   useEffect(() => {
     if (activeTab === 'statistics' || activeTab === 'preview') {
       fetchColumns();
+      fetchRows();
     }
   }, [connectionName, schemaName, tableName, activeTab]);
 
@@ -242,7 +261,8 @@ const ProfilingView = () => {
 
     
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
+      fetchRows();
       fetchColumns();
     }
   }, [job]);
@@ -286,6 +306,7 @@ const ProfilingView = () => {
           statistics={statistics}
           onChangeSelectedColumns={onChangeSelectedColumns}
           refreshListFunc={fetchColumns}
+          rowCount={rowCount ?? {}}
         />
       )}
       {activeTab === 'preview' && (

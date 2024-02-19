@@ -106,10 +106,11 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -142,7 +143,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {
@@ -349,7 +350,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override

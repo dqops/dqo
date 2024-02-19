@@ -6,7 +6,7 @@ This is a list of custom_sql column data quality checks supported by DQOps and a
 
 
 ## column-level custom_sql checks
-Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
+Validate data against user-defined SQL queries at the column level. Checks in this group allow to validate whether a set percentage of rows has passed a custom SQL expression or whether the custom SQL expression is not outside the set range.
 
 ### [sql condition failed on column](./sql-condition-failed-on-column.md)
 A column-level check that uses a custom SQL expression on each column to verify (assert) that all rows pass a custom condition defined as an SQL expression.
@@ -26,7 +26,8 @@ A column-level check that uses a custom SQL expression on each column to verify 
 
 
 ### [sql condition passed percent on column](./sql-condition-passed-percent-on-column.md)
-A column-level check that ensures that a set percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -40,7 +41,7 @@ A column-level check that ensures that a set percentage of rows passed a custom 
 
 
 ### [sql aggregate expression on column](./sql-aggregate-expression-on-column.md)
-A column-level check that calculates a given SQL aggregate expression on a column and compares it with a maximum accepted value.
+A column-level check that calculates a given SQL aggregate expression on a column and verifies if the value is within a range of accepted values.
 
 
 | Data quality check name | Check type | Description | Standard |

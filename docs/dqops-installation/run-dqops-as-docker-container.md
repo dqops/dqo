@@ -1,5 +1,5 @@
 # Run DQOps in Docker
-This guide shows how to pull DQOps docker image from Docker Hub, and how to pass the right parameters to the container to start it in a production mode.
+This guide shows how to pull [DQOps docker image from Docker Hub](https://hub.docker.com/r/dqops/dqo), and how to pass the right parameters to the container to start it in a production mode.
 
 ## Overview
 
@@ -29,7 +29,7 @@ To run DQOps as a Docker container you need
 
 To start DQOps in a [Shell mode](../dqo-concepts/command-line-interface.md) follow the steps below.
 
-1.  Download the DQOps image from DockerHub by running the following command in a terminal:
+1.  Download the [DQOps image from Docker Hub](https://hub.docker.com/r/dqops/dqo) by running the following command in a terminal:
 
     ```
     docker pull dqops/dqo
@@ -92,7 +92,7 @@ To start DQOps in a server mode follow the steps below.
    - The `-m` parameter configures the memory size for the container. We are advising to allocate at least 2 GB of memory for the DQOps
      container, which is configured by `-m=2g`. DQOps container runs one Java JVM process and several small Python processes (two per core)
      that are running the rules. DQOps runtime allocates 80% of the container memory for the JVM heap. The memory is used for caching
-     YAML and parquet files in memory. The memory size could be changed by passing the `DQO_JAVA_OPTS`
+     YAML and parquet files in memory. The memory size can be changed by passing the `DQO_JAVA_OPTS`
      environment variable to the container using the following docker run parameter: `-e DQO_JAVA_OPTS=-XX:MaxRAMPercentage=60.0`
    - The `--dqo.cloud.api-key` argument specifies the API Key of your [DQOps Cloud account](https://cloud.dqops.com/registration).
    - The `run` command at the end will run the [run CLI command](../command-line-interface/run.md) command and activate a server mode

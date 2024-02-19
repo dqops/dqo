@@ -48,7 +48,7 @@ public class SnowflakeColumnAccuracyTotalSumMatchPercentSensorParametersSpecInte
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.snowflake);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

@@ -240,14 +240,14 @@ RunChecksQueueJobResult(
 		fatals=0,
 		execution_errors=0
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
 
 ### **Collect statistics on tables**
 
-Starts a new background job that will run selected data statistics collectors on a whole table
+Starts a new background job that will run selected data statistics collectors for the entire table
 
 ```python
 from dqops import client
@@ -294,7 +294,7 @@ CollectStatisticsQueueJobResult(
 		total_collectors_failed=1,
 		total_collected_results=2
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -348,7 +348,7 @@ CollectStatisticsQueueJobResult(
 		total_collectors_failed=1,
 		total_collected_results=2
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -425,7 +425,7 @@ ImportTablesQueueJobResult(
 			)
 		]
 	),
-	status=DqoJobStatus.SUCCEEDED
+	status=DqoJobStatus.FINISHED
 )
 ```
 
@@ -597,7 +597,7 @@ By running this operation you should get a response that resembles the one below
 
 ```python
 DqoJobHistoryEntryModel(
-	status=DqoJobStatus.SUCCEEDED,
+	status=DqoJobStatus.FINISHED,
 	status_changed_at='2007-10-11T13:42:00Z'
 )
 ```

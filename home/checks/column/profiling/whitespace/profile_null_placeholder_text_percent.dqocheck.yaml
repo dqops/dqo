@@ -1,0 +1,9 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/whitespace/null_placeholder_text_percent
+  rule_name: comparison/max_percent
+  help_text: "Detects texts that are well-known placeholders of null values, such\
+    \ as *None*, *null*, *n/a*, and measures their percentage in the column. It raises\
+    \ a data quality issue when their rate exceeds a *max_percent* parameter value."

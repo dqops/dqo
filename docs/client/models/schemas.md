@@ -26,6 +26,7 @@ Schema model that is returned by the REST API. Describes a single unique schema 
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection_name`</span>|Connection name.|*string*|
 |<span class="no-wrap-code">`schema_name`</span>|Schema name.|*string*|
+|<span class="no-wrap-code">`directory_prefix`</span>|Directory prefix.|*string*|
 |<span class="no-wrap-code">[`run_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run all checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_profiling_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run profiling checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`run_monitoring_checks_job_template`](./common.md#checksearchfilters)</span>|Configured parameters for the "check run" job that should be pushed to the job queue in order to run monitoring checks within this schema.|*[CheckSearchFilters](./common.md#checksearchfilters)*|

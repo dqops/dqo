@@ -73,7 +73,7 @@ class TrinoColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -104,7 +104,7 @@ class TrinoColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -136,7 +136,7 @@ class TrinoColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -168,7 +168,7 @@ class TrinoColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(2, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(87.5, resultTable.column(0).get(0));
         Assertions.assertEquals(100.0, resultTable.column(0).get(1));
     }
 
@@ -203,7 +203,7 @@ class TrinoColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extend
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(88.0, resultTable.column(0).get(0));
     }
 
     @Test

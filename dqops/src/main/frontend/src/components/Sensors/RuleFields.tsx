@@ -28,7 +28,7 @@ const RuleFields = ({ fields, onChange, onAdd, isReadOnly }: RuleFieldsProps) =>
         <thead>
         <tr>
           <th className="pr-4 py-2 text-left">
-            Field Name
+            Field name
           </th>
           <th className="px-4 py-2 text-left">
             Display name
@@ -46,7 +46,7 @@ const RuleFields = ({ fields, onChange, onAdd, isReadOnly }: RuleFieldsProps) =>
             Required
           </th>
           <th className="px-4 py-2 text-left">
-            Allowed Values
+            Allowed values
           </th>
           {!isReadOnly && (
             <th className="px-4 py-2 text-left">

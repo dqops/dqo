@@ -32,7 +32,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the length of text values in a column does not exceed the mean accepted length.
+ * This check calculates the average text length in a column. DQOps validates the mean length using a range rule.
+ * DQOps raises an issue when the mean text length is outside a range of accepted values.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

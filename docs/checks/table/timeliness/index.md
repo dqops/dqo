@@ -65,8 +65,8 @@ A table-level check that calculates the maximum difference in days between inges
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
-|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./reload-lag.md#daily-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition| |
-|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./reload-lag.md#monthly-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition| |
+|[<span class="no-wrap-code">`daily_partition_reload_lag`</span>](./reload-lag.md#daily-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Daily partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
+|[<span class="no-wrap-code">`monthly_partition_reload_lag`</span>](./reload-lag.md#monthly-partition-reload-lag)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Monthly partitioned check calculating the longest time a row waited to be loaded, it is the maximum difference in days between the ingestion timestamp and the event timestamp column on any row in the monitored partition|:material-check-bold:|
 
 
 

@@ -42,8 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsIp6PercentSensorParametersSpec sut;
-    private final String sensorRegexCompleteIPv6 = "r\"([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}\"";
-    private final String sensorRegexShortenedIPv6 = "r\"[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}\"";
+    private final String sensorRegexCompleteIPv6 = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
+    private final String sensorRegexShortenedIPv6 = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])[a-f0-9A-F]{1,4}:([a-f0-9A-F]{1,4}:|:[a-f0-9A-F]{1,4}):([a-f0-9A-F]{1,4}:){0,5}([a-f0-9A-F]{1,4}){0,1}([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -72,7 +72,7 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -102,21 +102,21 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -144,23 +144,23 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -184,23 +184,23 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -224,23 +224,23 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -271,22 +271,22 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
@@ -313,24 +313,24 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
@@ -357,24 +357,24 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -411,26 +411,26 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -459,26 +459,26 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
@@ -507,26 +507,26 @@ public class ColumnPiiContainsIp6PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN 
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s) OR
-                                REGEXP_CONTAINS(CAST(%s AS STRING), 
-                                    %s)
+                                REGEXP_CONTAINS(CAST(%1$s AS STRING), 
+                                    %2$s) OR
+                                REGEXP_CONTAINS(CAST(%3$s AS STRING), 
+                                    %4$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%5$s`.`%6$s`.`%7$s` AS analyzed_table
+            WHERE %8$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc

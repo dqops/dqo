@@ -31,6 +31,7 @@ import com.dqops.sampledata.SampleTableMetadataObjectMother;
 import com.dqops.sensors.column.patterns.ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec;
 import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.sqlserver.BaseSqlServerIntegrationTest;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,7 +58,7 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date", this.checkSpec);
 
@@ -66,12 +67,12 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
 
@@ -80,12 +81,12 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
 
@@ -94,12 +95,12 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -108,12 +109,12 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -122,6 +123,6 @@ public class SqlServerColumnPatternsTextNotMatchingDatePatternCountSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(2, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, ValueConverter.toDouble(resultTable.column(0).get(0)));
     }
 }

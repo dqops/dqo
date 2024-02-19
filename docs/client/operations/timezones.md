@@ -29,7 +29,9 @@ http://localhost:8888/api/timezones
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/timezones^
@@ -37,7 +39,19 @@ http://localhost:8888/api/timezones
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -53,8 +67,24 @@ http://localhost:8888/api/timezones
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +101,23 @@ http://localhost:8888/api/timezones
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -91,7 +137,23 @@ http://localhost:8888/api/timezones
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +173,19 @@ http://localhost:8888/api/timezones
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
 
 
 

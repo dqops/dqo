@@ -1,6 +1,6 @@
 # distinct count data quality checks
 
-A column-level check that ensures that the number of unique values in a column does not fall below the minimum accepted count.
+This check counts distinct values and verifies if the distinct count is within an accepted range. It raises a data quality issue when the distinct count is below or above the accepted range.
 
 
 ___
@@ -13,7 +13,7 @@ The **distinct count** data quality check has the following variants for each
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count.
+Verifies that the number of distinct values stays within an accepted range.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -183,6 +183,36 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -323,7 +353,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -484,7 +514,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -591,6 +621,36 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -744,7 +804,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -916,7 +976,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -930,7 +990,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+Verifies that the number of distinct values stays within an accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -1101,6 +1161,36 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1241,7 +1331,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1402,7 +1492,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1510,6 +1600,36 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1663,7 +1783,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1835,7 +1955,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1849,7 +1969,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
+Verifies  that the number of distinct values stays within an accepted range. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -2020,6 +2140,36 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2160,7 +2310,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2321,7 +2471,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2429,6 +2579,36 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2582,7 +2762,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2754,7 +2934,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2768,7 +2948,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each daily partition.
+Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -2949,6 +3129,36 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3089,7 +3299,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3254,7 +3464,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3372,6 +3582,36 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3525,7 +3765,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3695,7 +3935,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3709,7 +3949,7 @@ ___
 
 **Check description**
 
-Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.
+Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -3890,6 +4130,36 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4030,7 +4300,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4195,7 +4465,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4313,6 +4583,36 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT(
+                    DISTINCT({{ lib.render_target_column('analyzed_table')}})
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(
+                    DISTINCT(analyzed_table."target_column")
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4466,7 +4766,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4636,7 +4936,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

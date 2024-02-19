@@ -1,0 +1,34 @@
+{% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'DD/MM/YYYY'-%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\\d{4})$"
+    {%- elif date_format == 'DD-MM-YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\\d{4})$"
+    {%- elif date_format == 'DD.MM.YYYY' -%}
+        "^(0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\\d{4})$"
+    {%- elif date_format == 'YYYY-MM-DD' -%}
+        "^(\\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])$"
+    {%- elif date_format == 'MM/DD/YYYY'-%}
+            "^(0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](\\d{4})$"
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    CASE
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL AND
+                     REGEXP(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), {{render_date_format(parameters.date_format)}}) IS NOT FALSE
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+    END AS actual_value
+    {{- lib.render_data_grouping_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

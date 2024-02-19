@@ -26,6 +26,7 @@ import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -63,10 +64,11 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
+     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();
@@ -117,7 +119,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     @Override
@@ -136,7 +138,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Creates a hikari connection pool config for the connection specification for mysql.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      * @return Hikari config.
      */
     private HikariConfig createHikariConfigForMysql(SecretValueLookupContext secretValueLookupContext) {

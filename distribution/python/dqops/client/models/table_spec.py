@@ -8,6 +8,7 @@ from ..types import UNSET, Unset
 if TYPE_CHECKING:
     from ..models.comment_spec import CommentSpec
     from ..models.default_schedules_spec import DefaultSchedulesSpec
+    from ..models.file_format_spec import FileFormatSpec
     from ..models.partition_incremental_time_window_spec import (
         PartitionIncrementalTimeWindowSpec,
     )
@@ -39,10 +40,10 @@ class TableSpec:
         disabled (Union[Unset, bool]): Disables all data quality checks on the table. Data quality checks will not be
             executed.
         stage (Union[Unset, str]): Stage name.
-        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
-            The table priority is copied into each data quality check result and a sensor result, enabling efficient
-            grouping of more and less important tables during a data quality improvement project, when the data quality
-            issues on higher priority tables are fixed before data quality issues on less important tables.
+        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The
+            table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of
+            more and less important tables during a data quality improvement project, when the data quality issues on higher
+            priority tables are fixed before data quality issues on less important tables.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to
             replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed
             table or {column} to replace the content with the analyzed column name.
@@ -59,14 +60,14 @@ class TableSpec:
             level hierarchy), when the data is segmented at a table level (similar tables store the same information, but
             for different countries, etc.).
         table_comparisons (Union[Unset, TableSpecTableComparisons]): Dictionary of data comparison configurations. Data
-            comparison configurations are used for cross data-source comparisons to compare this table (called the compared
-            table) with other reference tables (the source of truth). The reference table's metadata must be imported into
-            DQOps, but the reference table could be located on a different data source. DQOps will compare metrics
-            calculated for groups of rows (using a GROUP BY clause). For each comparison, the user must specify a name of a
-            data grouping. The number of data grouping dimensions on the parent table and the reference table defined in
-            selected data grouping configurations must match. DQOps will run the same data quality sensors on both the
-            parent table (tested table) and the reference table (the source of truth), comparing the measures (sensor
-            readouts) captured from both the tables.
+            comparison configurations are used for comparisons between data sources to compare this table (called the
+            compared table) with other reference tables (the source of truth). The reference table's metadata must be
+            imported into DQOps, but the reference table may be located in another data source. DQOps will compare metrics
+            calculated for groups of rows (using the GROUP BY clause). For each comparison, the user must specify a name of
+            a data grouping. The number of data grouping dimensions in the parent table and the reference table defined in
+            the selected data grouping configurations must match. DQOps will run the same data quality sensors on both the
+            parent table (table under test) and the reference table (the source of truth), comparing the measures (sensor
+            readouts) captured from both tables.
         incident_grouping (Union[Unset, TableIncidentGroupingSpec]):
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks (Union[Unset, TableProfilingCheckCategoriesSpec]):
@@ -81,6 +82,7 @@ class TableSpec:
             for tables when filtered data quality checks are executed.
         comments (Union[Unset, List['CommentSpec']]): Comments used for change tracking and documenting changes directly
             in the table data quality specification file.
+        file_format (Union[Unset, FileFormatSpec]):
     """
 
     disabled: Union[Unset, bool] = UNSET
@@ -102,6 +104,7 @@ class TableSpec:
     columns: Union[Unset, "TableSpecColumns"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
+    file_format: Union[Unset, "FileFormatSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -170,6 +173,10 @@ class TableSpec:
 
                 comments.append(comments_item)
 
+        file_format: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.file_format, Unset):
+            file_format = self.file_format.to_dict()
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -211,6 +218,8 @@ class TableSpec:
             field_dict["labels"] = labels
         if comments is not UNSET:
             field_dict["comments"] = comments
+        if file_format is not UNSET:
+            field_dict["file_format"] = file_format
 
         return field_dict
 
@@ -218,6 +227,7 @@ class TableSpec:
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
         from ..models.comment_spec import CommentSpec
         from ..models.default_schedules_spec import DefaultSchedulesSpec
+        from ..models.file_format_spec import FileFormatSpec
         from ..models.partition_incremental_time_window_spec import (
             PartitionIncrementalTimeWindowSpec,
         )
@@ -350,6 +360,13 @@ class TableSpec:
 
             comments.append(comments_item)
 
+        _file_format = d.pop("file_format", UNSET)
+        file_format: Union[Unset, FileFormatSpec]
+        if isinstance(_file_format, Unset):
+            file_format = UNSET
+        else:
+            file_format = FileFormatSpec.from_dict(_file_format)
+
         table_spec = cls(
             disabled=disabled,
             stage=stage,
@@ -370,6 +387,7 @@ class TableSpec:
             columns=columns,
             labels=labels,
             comments=comments,
+            file_format=file_format,
         )
 
         table_spec.additional_properties = d

@@ -8,6 +8,7 @@ import { useTree } from '../../contexts/treeContext';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import TextArea from '../TextArea';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -27,6 +28,12 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
   }: { connection: string; schema: string; table: string } = useParams();
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
+  const onCloseCleanPrevState = () => {
+    onClose();
+    setName('');
+    setSqlExpression('');
+  };
+
   const handleSubmit = async () => {
     try {
       setLoading(true);
@@ -41,14 +48,14 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           sql_expression: sqlExpression
         });
       }
-      onClose();
+      onCloseCleanPrevState();
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog open={open} handler={onClose} size="xs">
+    <Dialog open={open} handler={onCloseCleanPrevState} size="xs">
       <DialogBody className="pt-6 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">
@@ -62,10 +69,11 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
             />
           </div>
           <div>
-            <Input
+            <TextArea
               label="SQL expression for a calculated column"
               value={sqlExpression}
               onChange={(e) => setSqlExpression(e.target.value)}
+              className='min-h-25'
             />
           </div>
         </div>
@@ -75,7 +83,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={onCloseCleanPrevState}
           label="Cancel"
         />
         <Button

@@ -112,9 +112,9 @@ spec:
         warning:
           max_failures: 0
         error:
-          max_failures: 5
+          max_failures: 1
         fatal:
-          max_failures: 10
+          max_failures: 5
   columns: {}
 
 ```
@@ -201,6 +201,47 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -323,7 +364,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -516,7 +557,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -630,9 +671,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -719,6 +760,47 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -841,7 +923,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1034,7 +1116,7 @@ spec:
                         *,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1148,9 +1230,9 @@ spec:
           warning:
             max_failures: 0
           error:
-            max_failures: 5
+            max_failures: 1
           fatal:
-            max_failures: 10
+            max_failures: 5
   columns: {}
 
 ```
@@ -1237,6 +1319,47 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
                     FROM `<target_schema>`.`<target_table>` AS analyzed_table
+                    
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                0.0 AS actual_value
+                {{- lib.render_time_dimension_projection('tab_scan') }}
+            FROM
+                (
+                    SELECT
+                        *
+                        {{- lib.render_time_dimension_projection('analyzed_table') }}
+                    FROM {{ lib.render_target_table() }} AS analyzed_table
+                    {{ lib.render_where_clause() }}
+                    LIMIT 1
+                ) AS tab_scan
+            GROUP BY time_period
+            ORDER BY time_period
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                0.0 AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM
+                (
+                    SELECT
+                        *,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+                    FROM "<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1359,7 +1482,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan
@@ -1552,7 +1675,7 @@ spec:
                         *,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
                     
                     LIMIT 1
                 ) AS tab_scan

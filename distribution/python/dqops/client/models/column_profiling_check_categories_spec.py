@@ -15,10 +15,10 @@ if TYPE_CHECKING:
     from ..models.column_anomaly_profiling_checks_spec import (
         ColumnAnomalyProfilingChecksSpec,
     )
-    from ..models.column_blanks_profiling_checks_spec import (
-        ColumnBlanksProfilingChecksSpec,
-    )
     from ..models.column_bool_profiling_checks_spec import ColumnBoolProfilingChecksSpec
+    from ..models.column_conversions_profiling_checks_spec import (
+        ColumnConversionsProfilingChecksSpec,
+    )
     from ..models.column_custom_sql_profiling_checks_spec import (
         ColumnCustomSqlProfilingChecksSpec,
     )
@@ -54,6 +54,9 @@ if TYPE_CHECKING:
     from ..models.column_uniqueness_profiling_checks_spec import (
         ColumnUniquenessProfilingChecksSpec,
     )
+    from ..models.column_whitespace_profiling_checks_spec import (
+        ColumnWhitespaceProfilingChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnProfilingCheckCategoriesSpec")
@@ -69,7 +72,8 @@ class ColumnProfilingCheckCategoriesSpec:
         uniqueness (Union[Unset, ColumnUniquenessProfilingChecksSpec]):
         accepted_values (Union[Unset, ColumnAcceptedValuesProfilingChecksSpec]):
         text (Union[Unset, ColumnTextProfilingChecksSpec]):
-        blanks (Union[Unset, ColumnBlanksProfilingChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceProfilingChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsProfilingChecksSpec]):
         patterns (Union[Unset, ColumnPatternsProfilingChecksSpec]):
         pii (Union[Unset, ColumnPiiProfilingChecksSpec]):
         numeric (Union[Unset, ColumnNumericProfilingChecksSpec]):
@@ -91,7 +95,8 @@ class ColumnProfilingCheckCategoriesSpec:
     uniqueness: Union[Unset, "ColumnUniquenessProfilingChecksSpec"] = UNSET
     accepted_values: Union[Unset, "ColumnAcceptedValuesProfilingChecksSpec"] = UNSET
     text: Union[Unset, "ColumnTextProfilingChecksSpec"] = UNSET
-    blanks: Union[Unset, "ColumnBlanksProfilingChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceProfilingChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsProfilingChecksSpec"] = UNSET
     patterns: Union[Unset, "ColumnPatternsProfilingChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiProfilingChecksSpec"] = UNSET
     numeric: Union[Unset, "ColumnNumericProfilingChecksSpec"] = UNSET
@@ -127,9 +132,13 @@ class ColumnProfilingCheckCategoriesSpec:
         if not isinstance(self.text, Unset):
             text = self.text.to_dict()
 
-        blanks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.blanks, Unset):
-            blanks = self.blanks.to_dict()
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
 
         patterns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.patterns, Unset):
@@ -192,8 +201,10 @@ class ColumnProfilingCheckCategoriesSpec:
             field_dict["accepted_values"] = accepted_values
         if text is not UNSET:
             field_dict["text"] = text
-        if blanks is not UNSET:
-            field_dict["blanks"] = blanks
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
         if patterns is not UNSET:
             field_dict["patterns"] = patterns
         if pii is not UNSET:
@@ -232,11 +243,11 @@ class ColumnProfilingCheckCategoriesSpec:
         from ..models.column_anomaly_profiling_checks_spec import (
             ColumnAnomalyProfilingChecksSpec,
         )
-        from ..models.column_blanks_profiling_checks_spec import (
-            ColumnBlanksProfilingChecksSpec,
-        )
         from ..models.column_bool_profiling_checks_spec import (
             ColumnBoolProfilingChecksSpec,
+        )
+        from ..models.column_conversions_profiling_checks_spec import (
+            ColumnConversionsProfilingChecksSpec,
         )
         from ..models.column_custom_sql_profiling_checks_spec import (
             ColumnCustomSqlProfilingChecksSpec,
@@ -277,6 +288,9 @@ class ColumnProfilingCheckCategoriesSpec:
         from ..models.column_uniqueness_profiling_checks_spec import (
             ColumnUniquenessProfilingChecksSpec,
         )
+        from ..models.column_whitespace_profiling_checks_spec import (
+            ColumnWhitespaceProfilingChecksSpec,
+        )
 
         d = src_dict.copy()
         _custom = d.pop("custom", UNSET)
@@ -316,12 +330,19 @@ class ColumnProfilingCheckCategoriesSpec:
         else:
             text = ColumnTextProfilingChecksSpec.from_dict(_text)
 
-        _blanks = d.pop("blanks", UNSET)
-        blanks: Union[Unset, ColumnBlanksProfilingChecksSpec]
-        if isinstance(_blanks, Unset):
-            blanks = UNSET
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceProfilingChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
         else:
-            blanks = ColumnBlanksProfilingChecksSpec.from_dict(_blanks)
+            whitespace = ColumnWhitespaceProfilingChecksSpec.from_dict(_whitespace)
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsProfilingChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsProfilingChecksSpec.from_dict(_conversions)
 
         _patterns = d.pop("patterns", UNSET)
         patterns: Union[Unset, ColumnPatternsProfilingChecksSpec]
@@ -415,7 +436,8 @@ class ColumnProfilingCheckCategoriesSpec:
             uniqueness=uniqueness,
             accepted_values=accepted_values,
             text=text,
-            blanks=blanks,
+            whitespace=whitespace,
+            conversions=conversions,
             patterns=patterns,
             pii=pii,
             numeric=numeric,

@@ -29,7 +29,7 @@ interface ITableColumnsBodyProps {
   rewriteData: any;
   handleButtonClick: any;
   showDataStreamButtonFunc: any;
-  refreshListFunc: ()  => void;
+  refreshListFunc: () => void;
 }
 
 export default function TableColumnsBody({
@@ -42,11 +42,11 @@ export default function TableColumnsBody({
   refreshListFunc
 }: ITableColumnsBodyProps) {
   const history = useHistory();
-    const {
-      connection,
-      schema,
-      table,
-  checkTypes
+  const {
+    connection,
+    schema,
+    table,
+    checkTypes
   }: {
     connection: string;
     schema: string;
@@ -63,7 +63,11 @@ export default function TableColumnsBody({
   const job = jobId ? job_dictionary_state[jobId] : undefined;
 
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded && jobId != lastRefreshedJobId) {
+    if (
+      job &&
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished &&
+      jobId != lastRefreshedJobId
+    ) {
       setLastRefreshedJobId(jobId);
       refreshListFunc();
     }
@@ -114,17 +118,18 @@ export default function TableColumnsBody({
     history.push(url);
   };
 
-  const filteredColumns  = useMemo(() => {
-    return (job && (
-      job.status === DqoJobHistoryEntryModelStatusEnum.running ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
-      job.status === DqoJobHistoryEntryModelStatusEnum.waiting )) ? 
-      job.parameters?.collectStatisticsParameters
-      ?.statistics_collector_search_filters?.columnNames : [] as string[]
-    }, [job])
+  const filteredColumns = useMemo(() => {
+    return job &&
+      (job.status === DqoJobHistoryEntryModelStatusEnum.running ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.queued ||
+        job.status === DqoJobHistoryEntryModelStatusEnum.waiting)
+      ? job.parameters?.collectStatisticsParameters
+          ?.statistics_collector_search_filters?.columnNames
+      : ([] as string[]);
+  }, [job]);
 
   return (
-    <tbody>
+    <tbody className="text-sm">
       {columns.map((column, index) => (
         <tr key={index}>
           <td className="border-b border-gray-100 text-right px-4 py-2">

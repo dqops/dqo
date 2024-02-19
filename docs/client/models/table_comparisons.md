@@ -31,7 +31,7 @@ Model that identifies a pair of column names used for grouping the data on both 
 ___
 
 ## TableComparisonConfigurationModel
-Model that contains the basic information about a table comparison configuration that specifies how the current table could be compared to another table that is a source of truth for comparison.
+Model that contains the basic information about a table comparison configuration that specifies how the current table can be compared with another table that is a source of truth for comparison.
 
 
 **The structure of this object is described below**

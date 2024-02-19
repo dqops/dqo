@@ -42,6 +42,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extends BaseTest {
     private ColumnPiiContainsIp4PercentSensorParametersSpec sut;
+
+    private final String sensorRegex = "r\"(^|[ \\t.,:;\\\"'`|\\n\\r])((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])([ \\t.,:;\\\"'`|\\n\\r]|$)\"";
     private UserHomeContext userHomeContext;
     private ColumnPiiContainsIp4PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -70,7 +72,7 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
-        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+        return String.format("analyzed_table.`%1$s`", runParameters.getColumn().getColumnName());
     }
 
     private String getSubstitutedFilter(String tableName) {
@@ -100,20 +102,22 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -135,24 +139,26 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -168,24 +174,26 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -201,19 +209,20 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
@@ -221,6 +230,7 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -241,23 +251,25 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1
             ORDER BY grouping_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -276,25 +288,27 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, time_period, time_period_utc
             ORDER BY grouping_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -313,20 +327,21 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, time_period, time_period_utc
@@ -334,6 +349,7 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -360,27 +376,29 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -401,27 +419,29 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),
@@ -442,22 +462,23 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN 0.0
+                    WHEN COUNT(%1$s) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])")
+                            WHEN REGEXP_CONTAINS(CAST(%1$s AS STRING),
+                                %2$s)
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    ) / COUNT(%1$s)
                 END AS actual_value,
                 analyzed_table.`result` AS grouping_level_1,
                 analyzed_table.`result` AS grouping_level_2,
                 analyzed_table.`result` AS grouping_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
+            WHERE %6$s
                   AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
                   AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY grouping_level_1, grouping_level_2, grouping_level_3, time_period, time_period_utc
@@ -465,6 +486,7 @@ public class ColumnPiiContainsIp4PercentSensorParametersSpecBigQueryTests extend
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
+                this.sensorRegex,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
                 runParameters.getTable().getPhysicalTableName().getSchemaName(),
                 runParameters.getTable().getPhysicalTableName().getTableName(),

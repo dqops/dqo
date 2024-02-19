@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/datetime/date_in_range_percent
+  rule_name: comparison/min_percent
+  help_text: "Verifies that the dates in date, datetime, or timestamp columns are\
+    \ within a reasonable range of dates. The default configuration detects fake dates\
+    \ such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and\
+    \ raises a data quality issue when too many dates are found."
+  standard: true

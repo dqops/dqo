@@ -1,5 +1,5 @@
 ///
-/// Copyright © 2021 DQOps (support@dqops.com)
+/// Copyright © 2024 DQOps (support@dqops.com)
 ///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL: (defaultCheck: string) => `/definitions/default_checks/${urlencodeDecoder(defaultCheck)}`,
   INCIDENT_CONNECTION: (name: string) => `/incidents/${urlencodeDecoder(name)}`,
   INCIDENT_DETAIL: (name: string, year: number, month: number, id: string) => `/incidents/${urlencodeDecoder(name)}/${year}/${month}/${urlencodeDecoder(id)}`,
-  USERS_LIST_DETAIL: () => '/definitions/users/all',
+  USERS_LIST_DETAIL: () => '/definitions/manage-users',
   USER_DETAIL: (email: string) => `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL: () => '/definitions/default-webhooks',
@@ -74,7 +74,7 @@ export const ROUTES = {
   CHECK_DEFAULT_DETAIL_VALUE: (defaultCheck: string) => `/definitions/default_checks/${urlencodeDecoder(defaultCheck)}`,
   INCIDENT_CONNECTION_VALUE: (name: string) => `/incidents/${urlencodeDecoder(name)}`,
   INCIDENT_DETAIL_VALUE: (name: string, year: number, month: number, id: string) => `/incidents/${urlencodeDecoder(name)}/${year}/${month}/${urlencodeDecoder(id)}`,
-  USERS_LIST_DETAIL_VALUE: () => '/definitions/users/all',
+  USERS_LIST_DETAIL_VALUE: () => '/definitions/manage-users',
   USER_DETAIL_VALUE: (email: string) => `/definitions/user/${urlencodeDecoder(email)}`,
   SCHEDULES_DEFAULT_DETAIL_VALUE: () => '/definitions/default-schedules',
   WEBHOOKS_DEFAULT_DETAIL_VALUE: () => '/definitions/default-webhooks',
@@ -119,7 +119,7 @@ export const ROUTES = {
     CHECK_DEFAULT_DETAIL: '/definitions/default_checks/:defaultCheck',
     INCIDENT_CONNECTION: '/incidents/:connection',
     INCIDENT_DETAIL: '/incidents/:connection/:year/:month/:id',
-    USERS_LIST_DETAIL: '/definitions/users/all',
+    USERS_LIST_DETAIL: '/definitions/manage-users',
     USER_DETAIL: '/definitions/user/:email',
     SCHEDULES_DEFAULT_DETAIL: '/definitions/default-schedules',
     WEBHOOKS_DEFAULT_DETAIL: '/definitions/default-webhooks',

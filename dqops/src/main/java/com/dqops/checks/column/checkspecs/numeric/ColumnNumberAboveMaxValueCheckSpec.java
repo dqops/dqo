@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the number of values in the monitored column with a value above a user-defined value as a parameter does not exceed set thresholds.
+ * This check finds numeric values bigger than the maximum accepted value. It counts the values that are too big.
+ * This check raises a data quality issue when the count of too big values exceeds the maximum accepted count.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

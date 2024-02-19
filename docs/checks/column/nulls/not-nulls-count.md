@@ -1,6 +1,9 @@
 # not nulls count data quality checks
 
-A column-level check that ensures that there are no more than a set number of null values in the monitored column.
+Detects empty columns that contain only *null* values. Counts the number of rows that have non-null values.
+ Raises a data quality issue when the count of non-null values is below *min_count*.
+ The default value of the *min_count* parameter is 1, but DQOps supports setting a higher number
+ to assert that a column has at least that many non-null values.
 
 
 ___
@@ -13,11 +16,11 @@ The **not nulls count** data quality check has the following variants for each
 
 **Check description**
 
-Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.
+Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -178,6 +181,32 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -308,7 +337,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -453,7 +482,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -555,6 +584,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -698,7 +753,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -854,7 +909,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -868,11 +923,11 @@ ___
 
 **Check description**
 
-Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.
+Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1034,6 +1089,32 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1164,7 +1245,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1309,7 +1390,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1412,6 +1493,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1555,7 +1662,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1711,7 +1818,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1725,11 +1832,11 @@ ___
 
 **Check description**
 
-Detects columns that are empty and have no values (with the rule threshold min_count&#x3D;1). Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores the most recent check result for each month when the data quality check was evaluated.
+Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1891,6 +1998,32 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2021,7 +2154,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2166,7 +2299,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2269,6 +2402,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2412,7 +2571,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2568,7 +2727,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2582,11 +2741,11 @@ ___
 
 **Check description**
 
-Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each daily partition.
+Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2758,6 +2917,32 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2888,7 +3073,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3037,7 +3222,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3150,6 +3335,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3293,7 +3504,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3447,7 +3658,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3461,11 +3672,11 @@ ___
 
 **Check description**
 
-Detects empty columns. The default rule min_count&#x3D;1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count. Stores a separate data quality check result for each monthly partition.
+Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_not_nulls_count`</span>|[nulls](../../../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Completeness|[*not_null_count*](../../../reference/sensors/column/nulls-column-sensors.md#not-null-count)|[*min_count*](../../../reference/rules/Comparison.md#min-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3637,6 +3848,32 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3767,7 +4004,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3916,7 +4153,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4029,6 +4266,32 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                COUNT(analyzed_table."target_column") AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4172,7 +4435,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4326,7 +4589,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

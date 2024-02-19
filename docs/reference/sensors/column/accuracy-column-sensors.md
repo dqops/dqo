@@ -20,8 +20,8 @@ The total average match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -71,6 +71,20 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            AVG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -300,8 +314,8 @@ The total max match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -351,6 +365,20 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -576,8 +604,8 @@ The total min match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -627,6 +655,20 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -853,8 +895,8 @@ The total not null count match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -904,6 +946,20 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1081,10 +1137,10 @@ The templates used to generate the SQL query for each data source supported by D
     
     SELECT
         (SELECT
-            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT_BIG(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT_BIG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -1130,8 +1186,8 @@ The total sum match percent sensor is documented below.
 
 | Field name | Description | Allowed data type | Required | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|<span class="no-wrap-code">`referenced_table`</span>|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|*string*|:material-check-bold:||
-|<span class="no-wrap-code">`referenced_column`</span>|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_table`</span>|The name of the reference table. DQOps accepts the name in two forms: a fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name. When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and prefixes the name with the schema and optionally database name.|*string*|:material-check-bold:||
+|<span class="no-wrap-code">`referenced_column`</span>|The name of a column in the reference table. DQOps calculates an aggregate value on that column and compares it with the value in the analyzed table.|*string*|:material-check-bold:||
 
 
 
@@ -1181,6 +1237,20 @@ The templates used to generate the SQL query for each data source supported by D
         (SELECT
             SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+        ) AS expected_value,
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        (SELECT
+            SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+        FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table

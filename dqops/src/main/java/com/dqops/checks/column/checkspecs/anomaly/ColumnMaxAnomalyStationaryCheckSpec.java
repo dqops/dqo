@@ -35,9 +35,10 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
- * If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
- * This variant of the check is used only for partitioned data in partitioned data quality checks, detecting that the maximum value in a daily partition is different from maximum values of other partitions.
+ * This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
+ * It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
+ * values in the time series (it is a new maximum value, far from the previous one).
+ * This data quality check uses a 90-day time window and requires a history of at least 30 days.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

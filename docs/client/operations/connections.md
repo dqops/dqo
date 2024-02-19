@@ -37,7 +37,9 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkactivate^
@@ -48,7 +50,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -99,8 +105,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -152,7 +162,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -207,7 +221,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -262,7 +280,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkac
 	
     ```
 
-
+    
 
 
 
@@ -301,7 +319,9 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/checks/sample_check/bulkdeactivate^
@@ -312,7 +332,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -342,8 +366,12 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -374,7 +402,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -408,7 +440,11 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -442,7 +478,7 @@ http://localhost:8888/api/connections/{connectionName}/checks/{checkName}/bulkde
 	
     ```
 
-
+    
 
 
 
@@ -480,7 +516,9 @@ http://localhost:8888/api/connections/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection^
@@ -491,7 +529,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -536,8 +578,12 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -583,7 +629,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -632,7 +682,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -681,7 +735,7 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
-
+    
 
 
 
@@ -719,7 +773,9 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/basic^
@@ -730,7 +786,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -804,8 +864,12 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -880,7 +944,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -958,7 +1026,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1036,7 +1108,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
-
+    
 
 
 
@@ -1074,7 +1146,9 @@ http://localhost:8888/api/connections/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection^
@@ -1082,7 +1156,22 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "jobId" : 123456789,
+	  "createdAt" : "2007-10-11T13:42:00Z"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1098,8 +1187,23 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1116,7 +1220,22 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1136,7 +1255,22 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1156,7 +1290,18 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    DqoQueueJobId(
+		job_id=123456789,
+		created_at='2007-10-11T13:42:00Z'
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1187,7 +1332,9 @@ http://localhost:8888/api/connections
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections^
@@ -1195,7 +1342,157 @@ http://localhost:8888/api/connections
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}, {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1211,8 +1508,168 @@ http://localhost:8888/api/connections
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1229,7 +1686,167 @@ http://localhost:8888/api/connections
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1249,7 +1866,167 @@ http://localhost:8888/api/connections
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1269,7 +2046,163 @@ http://localhost:8888/api/connections
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		),
+		ConnectionModel(
+			connection_name='sample_connection',
+			parallel_jobs_limit=4,
+			provider_type=ProviderType.POSTGRESQL,
+			postgresql=PostgresqlParametersSpec(
+				host='localhost',
+				port='5432',
+				database='db',
+				user='PASSWD',
+				sslmode=PostgresqlSslMode.DISABLE
+			),
+			run_checks_job_template=CheckSearchFilters(
+				connection='sample_connection',
+				enabled=True
+			),
+			run_profiling_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PROFILING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_monitoring_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.MONITORING,
+				connection='sample_connection',
+				enabled=True
+			),
+			run_partition_checks_job_template=CheckSearchFilters(
+				check_type=CheckType.PARTITIONED,
+				connection='sample_connection',
+				enabled=True
+			),
+			collect_statistics_job_template=StatisticsCollectorSearchFilters(
+				column_names=[
+				
+				],
+				connection='sample_connection',
+				enabled=True
+			),
+			data_clean_job_template=DeleteStoredDataQueueJobParameters(
+				connection='sample_connection',
+				delete_errors=True,
+				delete_statistics=True,
+				delete_check_results=True,
+				delete_sensor_readouts=True
+			),
+			can_edit=False,
+			can_collect_statistics=True,
+			can_run_checks=True,
+			can_delete_data=True
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -1307,7 +2240,9 @@ http://localhost:8888/api/connections/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection^
@@ -1315,7 +2250,21 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "can_edit" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1332,8 +2281,20 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionSpecificationModel(can_edit=False)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1351,7 +2312,19 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionSpecificationModel(can_edit=False)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1372,7 +2345,19 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionSpecificationModel(can_edit=False)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1393,7 +2378,15 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionSpecificationModel(can_edit=False)
+    ```
+    
+    
+    
 
 
 
@@ -1431,7 +2424,9 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/basic^
@@ -1439,7 +2434,65 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "connection_name" : "sample_connection",
+	  "parallel_jobs_limit" : 4,
+	  "provider_type" : "postgresql",
+	  "postgresql" : {
+	    "host" : "localhost",
+	    "port" : "5432",
+	    "database" : "db",
+	    "user" : "PASSWD",
+	    "sslmode" : "disable"
+	  },
+	  "run_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true
+	  },
+	  "run_profiling_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "profiling"
+	  },
+	  "run_monitoring_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "monitoring"
+	  },
+	  "run_partition_checks_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "checkType" : "partitioned"
+	  },
+	  "collect_statistics_job_template" : {
+	    "connection" : "sample_connection",
+	    "enabled" : true,
+	    "columnNames" : [ ]
+	  },
+	  "data_clean_job_template" : {
+	    "connection" : "sample_connection",
+	    "deleteErrors" : true,
+	    "deleteStatistics" : true,
+	    "deleteCheckResults" : true,
+	    "deleteSensorReadouts" : true
+	  },
+	  "can_edit" : false,
+	  "can_collect_statistics" : true,
+	  "can_run_checks" : true,
+	  "can_delete_data" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1456,8 +2509,68 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.POSTGRESQL,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.DISABLE
+		),
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1475,7 +2588,67 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.POSTGRESQL,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.DISABLE
+		),
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1496,7 +2669,67 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.POSTGRESQL,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.DISABLE
+		),
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1517,7 +2750,63 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionModel(
+		connection_name='sample_connection',
+		parallel_jobs_limit=4,
+		provider_type=ProviderType.POSTGRESQL,
+		postgresql=PostgresqlParametersSpec(
+			host='localhost',
+			port='5432',
+			database='db',
+			user='PASSWD',
+			sslmode=PostgresqlSslMode.DISABLE
+		),
+		run_checks_job_template=CheckSearchFilters(
+			connection='sample_connection',
+			enabled=True
+		),
+		run_profiling_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PROFILING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_monitoring_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.MONITORING,
+			connection='sample_connection',
+			enabled=True
+		),
+		run_partition_checks_job_template=CheckSearchFilters(
+			check_type=CheckType.PARTITIONED,
+			connection='sample_connection',
+			enabled=True
+		),
+		collect_statistics_job_template=StatisticsCollectorSearchFilters(
+			column_names=[
+			
+			],
+			connection='sample_connection',
+			enabled=True
+		),
+		data_clean_job_template=DeleteStoredDataQueueJobParameters(
+			connection='sample_connection',
+			delete_errors=True,
+			delete_statistics=True,
+			delete_check_results=True,
+			delete_sensor_readouts=True
+		),
+		can_edit=False,
+		can_collect_statistics=True,
+		can_run_checks=True,
+		can_delete_data=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1555,7 +2844,9 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/comments^
@@ -1563,7 +2854,31 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	}, {
+	  "date" : "2007-12-03T10:15:30",
+	  "comment_by" : "sample_user",
+	  "comment" : "Sample comment"
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1580,8 +2895,36 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1599,7 +2942,35 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1620,7 +2991,35 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1641,7 +3040,31 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		),
+		CommentSpec(
+			date=Some date/time value: [2007-12-03T10:15:30],
+			comment_by='sample_user',
+			comment='Sample comment'
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -1679,7 +3102,9 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/commoncolumns^
@@ -1687,7 +3112,25 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "tables_count" : 0
+	}, {
+	  "tables_count" : 0
+	}, {
+	  "tables_count" : 0
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1704,8 +3147,24 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1723,7 +3182,23 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1744,7 +3219,23 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1765,7 +3256,19 @@ http://localhost:8888/api/connections/{connectionName}/commoncolumns
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0),
+		CommonColumnModel(tables_count=0)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -1803,7 +3306,9 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
@@ -1811,7 +3316,24 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "level_3" : {
+	    "source" : "column_value",
+	    "column" : "sample_column"
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1828,8 +3350,25 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1847,7 +3386,24 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1868,7 +3424,24 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1889,7 +3462,20 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationSpec(
+		level_3=DataGroupingDimensionSpec(
+			source=DataGroupingDimensionSource.COLUMN_VALUE,
+			column='sample_column'
+		)
+	)
+    ```
+    
+    
+    
 
 
 
@@ -1927,7 +3513,9 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/incidentgrouping^
@@ -1935,7 +3523,31 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "grouping_level" : "table_dimension",
+	  "minimum_severity" : "warning",
+	  "divide_by_data_groups" : true,
+	  "max_incident_length_days" : 60,
+	  "mute_for_days" : 60,
+	  "webhooks" : {
+	    "incident_opened_webhook_url" : "https://sample_url.com/opened",
+	    "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
+	    "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
+	    "incident_muted_webhook_url" : "https://sample_url.com/muted"
+	  }
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1952,8 +3564,33 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_groups=True,
+		max_incident_length_days=60,
+		mute_for_days=60,
+		disabled=False,
+		webhooks=IncidentWebhookNotificationsSpec(
+			incident_opened_webhook_url='https://sample_url.com/opened',
+			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+			incident_resolved_webhook_url='https://sample_url.com/resolved',
+			incident_muted_webhook_url='https://sample_url.com/muted'
+		)
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1971,7 +3608,32 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_groups=True,
+		max_incident_length_days=60,
+		mute_for_days=60,
+		disabled=False,
+		webhooks=IncidentWebhookNotificationsSpec(
+			incident_opened_webhook_url='https://sample_url.com/opened',
+			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+			incident_resolved_webhook_url='https://sample_url.com/resolved',
+			incident_muted_webhook_url='https://sample_url.com/muted'
+		)
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1992,7 +3654,32 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_groups=True,
+		max_incident_length_days=60,
+		mute_for_days=60,
+		disabled=False,
+		webhooks=IncidentWebhookNotificationsSpec(
+			incident_opened_webhook_url='https://sample_url.com/opened',
+			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+			incident_resolved_webhook_url='https://sample_url.com/resolved',
+			incident_muted_webhook_url='https://sample_url.com/muted'
+		)
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2013,7 +3700,28 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    ConnectionIncidentGroupingSpec(
+		grouping_level=IncidentGroupingLevel.TABLE_DIMENSION,
+		minimum_severity=MinimumGroupingSeverityLevel.WARNING,
+		divide_by_data_groups=True,
+		max_incident_length_days=60,
+		mute_for_days=60,
+		disabled=False,
+		webhooks=IncidentWebhookNotificationsSpec(
+			incident_opened_webhook_url='https://sample_url.com/opened',
+			incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+			incident_resolved_webhook_url='https://sample_url.com/resolved',
+			incident_muted_webhook_url='https://sample_url.com/muted'
+		)
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2051,7 +3759,9 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/labels^
@@ -2059,7 +3769,19 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ "sampleString_1", "sampleString_2", "sampleString_3" ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2076,8 +3798,24 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2095,7 +3833,23 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2116,7 +3870,23 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2137,7 +3907,19 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		'sampleString_1',
+		'sampleString_2',
+		'sampleString_3'
+	]
+    ```
+    
+    
+    
 
 
 
@@ -2176,7 +3958,9 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schedules/partitioned_daily^
@@ -2184,7 +3968,21 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "cron_expression" : "0 12 1 * *"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2203,8 +4001,23 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2224,7 +4037,22 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2247,7 +4075,22 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2270,7 +4113,18 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -2308,7 +4162,9 @@ http://localhost:8888/api/connections/{connectionName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection^
@@ -2319,7 +4175,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2364,8 +4224,12 @@ http://localhost:8888/api/connections/{connectionName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2411,7 +4275,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2460,7 +4328,11 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2509,7 +4381,7 @@ http://localhost:8888/api/connections/{connectionName}
 	
     ```
 
-
+    
 
 
 
@@ -2547,7 +4419,9 @@ http://localhost:8888/api/connections/{connectionName}/basic
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/basic^
@@ -2558,7 +4432,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2632,8 +4510,12 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2708,7 +4590,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2786,7 +4672,11 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2864,7 +4754,7 @@ http://localhost:8888/api/connections/{connectionName}/basic
 	
     ```
 
-
+    
 
 
 
@@ -2902,7 +4792,9 @@ http://localhost:8888/api/connections/{connectionName}/comments
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/comments^
@@ -2913,7 +4805,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2949,8 +4845,12 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2987,7 +4887,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3027,7 +4931,11 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3067,7 +4975,7 @@ http://localhost:8888/api/connections/{connectionName}/comments
 	
     ```
 
-
+    
 
 
 
@@ -3105,7 +5013,9 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/defaultgroupingconfiguration^
@@ -3116,7 +5026,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3143,8 +5057,12 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3172,7 +5090,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3203,7 +5125,11 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3234,7 +5160,7 @@ http://localhost:8888/api/connections/{connectionName}/defaultgroupingconfigurat
 	
     ```
 
-
+    
 
 
 
@@ -3272,7 +5198,9 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/incidentgrouping^
@@ -3283,7 +5211,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3319,8 +5251,12 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3357,7 +5293,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3397,7 +5337,11 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3437,7 +5381,7 @@ http://localhost:8888/api/connections/{connectionName}/incidentgrouping
 	
     ```
 
-
+    
 
 
 
@@ -3475,7 +5419,9 @@ http://localhost:8888/api/connections/{connectionName}/labels
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/labels^
@@ -3486,7 +5432,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3509,8 +5459,12 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3534,7 +5488,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3561,7 +5519,11 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3588,7 +5550,7 @@ http://localhost:8888/api/connections/{connectionName}/labels
 	
     ```
 
-
+    
 
 
 
@@ -3627,7 +5589,9 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schedules/partitioned_daily^
@@ -3638,7 +5602,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3663,8 +5631,12 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3690,7 +5662,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3719,7 +5695,11 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -3748,7 +5728,7 @@ http://localhost:8888/api/connections/{connectionName}/schedules/{schedulingGrou
 	
     ```
 
-
+    
 
 
 

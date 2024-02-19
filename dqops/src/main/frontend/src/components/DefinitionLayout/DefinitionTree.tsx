@@ -2,36 +2,29 @@ import React from 'react';
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import {
-  addFirstLevelTab,
   getSensorFolderTree,
-  toggleSensorFolderTree,
-  openRuleFolderTree,
   getRuleFolderTree,
-  toggleRuleFolderTree,
   toggleFirstLevelFolder,
-  openSensorFolderTree,
-  getdataQualityChecksFolderTree,
-  toggledataQualityChecksFolderTree,
-  opendataQualityChecksFolderTree
+  getdataQualityChecksFolderTree
 } from '../../redux/actions/definition.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { IRootState } from '../../redux/reducers';
 import {
   CheckDefinitionFolderModel,
+  CheckDefinitionListModel,
   RuleFolderModel,
   RuleListModel,
   SensorFolderModel,
-  SensorListModel,
-  CheckDefinitionListModel
+  SensorListModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import clsx from 'clsx';
-import { ROUTES } from '../../shared/routes';
 import SensorContextMenu from './SensorContextMenu';
 import RuleContextMenu from './RuleContextMenu';
 import DataQualityContextMenu from './DataQualityContextMenu';
 import { urlencodeEncoder } from '../../utils';
 import { Tooltip } from '@material-tailwind/react';
+import { useDefinition } from '../../contexts/definitionContext';
 
 const defaultChecks = [
   'Profiling checks',
@@ -56,6 +49,19 @@ export const DefinitionTree = () => {
     refreshSensorsTreeIndicator
   } = useSelector((state: IRootState) => state.definition);
 
+  const {
+    openCheckDefaultFirstLevelTab,
+    openCheckFirstLevelTab,
+    openRuleFirstLevelTab,
+    openSensorFirstLevelTab,
+    toggleTree,
+    nodes,
+    toggleSensorFolder,
+    toggleRuleFolder,
+    toggleDataQualityChecksFolder,
+    sortItemsTreeAlphabetically
+  } = useDefinition();
+
   useEffect(() => {
     dispatch(getSensorFolderTree());
   }, [refreshSensorsTreeIndicator]);
@@ -68,209 +74,13 @@ export const DefinitionTree = () => {
     dispatch(getdataQualityChecksFolderTree());
   }, [refreshChecksTreeIndicator]);
 
-  const toggleSensorFolder = (key: string) => {
-    dispatch(toggleSensorFolderTree(key));
-  };
-
-  const openSensorFolder = (key: string) => {
-    dispatch(openSensorFolderTree(key));
-  };
-
-  const toggleRuleFolder = (key: string) => {
-    dispatch(toggleRuleFolderTree(key));
-  };
-
-  const openRuleFolder = (key: string) => {
-    dispatch(openRuleFolderTree(key));
-  };
-
-  const toggleDataQualityChecksFolder = (fullPath: string) => {
-    dispatch(toggledataQualityChecksFolderTree(fullPath));
-  };
-  const openDataQualityChecksFolder = (fullPath: string) => {
-    dispatch(opendataQualityChecksFolderTree(fullPath));
-  };
-
-  const openSensorFirstLevelTab = (sensor: SensorListModel) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.SENSOR_DETAIL(urlencodeEncoder(sensor.sensor_name) ?? ''),
-        value: ROUTES.SENSOR_DETAIL_VALUE(
-          urlencodeEncoder(sensor.sensor_name) ?? ''
-        ),
-        state: {
-          full_sensor_name: urlencodeEncoder(sensor.full_sensor_name)
-        },
-        label: urlencodeEncoder(sensor.sensor_name)
-      })
-    );
-  };
-
-  const openRuleFirstLevelTab = (rule: RuleListModel) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.RULE_DETAIL(urlencodeEncoder(rule.rule_name) ?? ''),
-        value: ROUTES.RULE_DETAIL_VALUE(urlencodeEncoder(rule.rule_name) ?? ''),
-        state: {
-          full_rule_name: urlencodeEncoder(rule.full_rule_name)
-        },
-        label: urlencodeEncoder(rule.rule_name)
-      })
-    );
-  };
-
-  const openCheckFirstLevelTab = (check: CheckDefinitionListModel) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.CHECK_DETAIL(urlencodeEncoder(check.check_name) ?? ''),
-        value: ROUTES.CHECK_DETAIL_VALUE(
-          urlencodeEncoder(check.check_name) ?? ''
-        ),
-        state: {
-          full_check_name: urlencodeEncoder(check.full_check_name),
-          custom: check.custom
-        },
-        label: urlencodeEncoder(check.check_name)
-      })
-    );
-  };
-
-  const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, '_')),
-        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(
-          defaultCheck.replace(/\s/g, '_')
-        ),
-        state: {
-          type: defaultCheck
-        },
-        label: defaultCheck
-      })
-    );
-  };
-
-  const openAllUsersFirstLevelTab = () => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.USERS_LIST_DETAIL(),
-        value: ROUTES.USERS_LIST_DETAIL_VALUE(),
-        label: 'All users'
-      })
-    );
-  };
-
-  const openDefaultSchedulesFirstLevelTab = () => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.SCHEDULES_DEFAULT_DETAIL(),
-        value: ROUTES.SCHEDULES_DEFAULT_DETAIL_VALUE(),
-        label: 'Default schedules'
-      })
-    );
-  };
-
-  const openDefaultWebhooksFirstLevelTab = () => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.WEBHOOKS_DEFAULT_DETAIL(),
-        value: ROUTES.WEBHOOKS_DEFAULT_DETAIL_VALUE(),
-        label: 'Default webhooks'
-      })
-    );
-  };
-
-  const openSharedCredentialsFirstLevelTab = () => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.SHARED_CREDENTIALS_LIST_DETAIL(),
-        value: ROUTES.SHARED_CREDENTIALS_LIST_DETAIL_VALUE(),
-        label: 'Shared credentials'
-      })
-    );
-  };
-
-  const openDataDictionaryFirstLevelTab = () => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.DATA_DICTIONARY_LIST_DETAIL(),
-        value: ROUTES.DATA_DICTIONARY_LIST_VALUE(),
-        label: 'Data dictionaries'
-      })
-    );
-  };
-
-  const toggleFolderRecursively = (
-    elements: string[],
-    index = 0,
-    type: string
-  ) => {
-    if (index >= elements.length - 1) {
-      return;
-    }
-    const path = elements.slice(0, index + 1).join('/');
-    if (index === 0) {
-      if (type === 'checks') {
-        openDataQualityChecksFolder('undefined/' + path);
-      } else if (type === 'rules') {
-        openRuleFolder('undefined/' + path);
-      } else {
-        openSensorFolder('undefined/' + path);
-      }
-    } else {
-      if (type === 'checks') {
-        openDataQualityChecksFolder(path);
-      } else if (type === 'rules') {
-        openRuleFolder(path);
-      } else {
-        openSensorFolder(path);
-      }
-    }
-    toggleFolderRecursively(elements, index + 1, type);
-  };
-
   useEffect(() => {
-    const configuration = [
-      { category: 'Sensors', isOpen: false },
-      { category: 'Rules', isOpen: false },
-      { category: 'Data quality checks', isOpen: false },
-      { category: 'Default checks configuration', isOpen: false }
-    ];
-    if (tabs && tabs.length !== 0) {
-      for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('default_checks')) {
-          configuration[3].isOpen = true;
-        } else if (tabs[i]?.url?.includes('sensors')) {
-          configuration[0].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_sensor_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
-          }
-        } else if (tabs[i]?.url?.includes('checks')) {
-          configuration[2].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.fullCheckName as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          }
-        } else if (tabs[i]?.url?.includes('rules')) {
-          configuration[1].isOpen = true;
-          const arrayOfElemsToToggle = (
-            tabs[i].state.full_rule_name as string
-          )?.split('/');
-          if (arrayOfElemsToToggle) {
-            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'rules');
-          }
-        }
-        dispatch(toggleFirstLevelFolder(configuration));
-      }
-    } else {
-      dispatch(toggleFirstLevelFolder(configuration));
-    }
-  }, []);
+    toggleTree(tabs);
+  }, [activeTab]);
+
+  const highlightedNode = activeTab
+    ?.split('/')
+    .at(activeTab?.split('/').length - 1);
 
   const renderSensorFolderTree = (
     folder?: SensorFolderModel,
@@ -323,58 +133,60 @@ export const DefinitionTree = () => {
             );
           })}
         <div className="ml-2">
-          {folder.sensors?.map((sensor) => (
-            <div
-              key={sensor.full_sensor_name}
-              className={clsx(
-                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
-                sensor.custom ? 'font-bold' : '',
-                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                  sensor.sensor_name
-                  ? 'bg-gray-300'
-                  : ''
-              )}
-              onClick={() => {
-                !(
-                  sensor.yaml_parsing_error &&
-                  sensor.yaml_parsing_error.length > 0
-                )
-                  ? openSensorFirstLevelTab(sensor)
-                  : undefined;
-              }}
-            >
-              <SvgIcon
-                name="definitionssensors"
-                className="w-4 h-4 min-w-4 shrink-0"
-              />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {urlencodeEncoder(sensor.sensor_name ?? '')}
-              </div>
-              {sensor.yaml_parsing_error &&
-              sensor.yaml_parsing_error.length > 0 ? (
-                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                  <Tooltip
-                    content={sensor.yaml_parsing_error}
-                    className="max-w-120 z-50"
-                    placement="right-start"
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        right: '30px',
-                        top: '4px',
-                        borderRadius: '3px'
-                      }}
-                      className="bg-white"
-                    >
-                      <SvgIcon name="warning" className="w-5 h-5" />
-                    </div>
-                  </Tooltip>
+          {sortItemsTreeAlphabetically(folder.sensors)?.map(
+            (sensor: SensorListModel) => (
+              <div
+                key={sensor.full_sensor_name}
+                className={clsx(
+                  'cursor-pointer flex space-x-1.5 items-center mb-1 h-5  hover:bg-gray-300',
+                  sensor.custom ? 'font-bold' : '',
+                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                    sensor.sensor_name
+                    ? 'bg-gray-300'
+                    : ''
+                )}
+                onClick={() => {
+                  !(
+                    sensor.yaml_parsing_error &&
+                    sensor.yaml_parsing_error.length > 0
+                  )
+                    ? openSensorFirstLevelTab(sensor)
+                    : undefined;
+                }}
+              >
+                <SvgIcon
+                  name="definitionssensors"
+                  className="w-4 h-4 min-w-4 shrink-0"
+                />
+                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                  {urlencodeEncoder(sensor.sensor_name ?? '')}
                 </div>
-              ) : null}
-              <SensorContextMenu singleSensor={true} sensor={sensor} />
-            </div>
-          ))}
+                {sensor.yaml_parsing_error &&
+                sensor.yaml_parsing_error.length > 0 ? (
+                  <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                    <Tooltip
+                      content={sensor.yaml_parsing_error}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '4px',
+                          borderRadius: '3px'
+                        }}
+                        className="bg-white"
+                      >
+                        <SvgIcon name="warning" className="w-5 h-5" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                ) : null}
+                <SensorContextMenu singleSensor={true} sensor={sensor} />
+              </div>
+            )
+          )}
         </div>
       </div>
     );
@@ -431,54 +243,60 @@ export const DefinitionTree = () => {
             );
           })}
         <div className="ml-2 ">
-          {folder.rules?.map((rule) => (
-            <div
-              key={rule.full_rule_name}
-              className={clsx(
-                'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
-                rule.custom ? 'font-bold ' : '',
-                activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
-                  rule.rule_name
-                  ? 'bg-gray-300'
-                  : ''
-              )}
-              onClick={() => {
-                !(rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0)
-                  ? openRuleFirstLevelTab(rule)
-                  : undefined;
-              }}
-            >
-              <SvgIcon
-                name="definitionsrules"
-                className="w-4 h-4 min-w-4 shrink-0"
-              />
-              <div className="text-[13px] leading-1.5 whitespace-nowrap">
-                {urlencodeEncoder(rule.rule_name ?? '')}
-              </div>
-              {rule.yaml_parsing_error && rule.yaml_parsing_error.length > 0 ? (
-                <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                  <Tooltip
-                    content={rule.yaml_parsing_error}
-                    className="max-w-120 z-50"
-                    placement="right-start"
-                  >
-                    <div
-                      style={{
-                        position: 'absolute',
-                        right: '30px',
-                        top: '4px',
-                        borderRadius: '3px'
-                      }}
-                      className="bg-white"
-                    >
-                      <SvgIcon name="warning" className="w-5 h-5" />
-                    </div>
-                  </Tooltip>
+          {sortItemsTreeAlphabetically(folder.rules)?.map(
+            (rule: RuleListModel) => (
+              <div
+                key={rule.full_rule_name}
+                className={clsx(
+                  'cursor-pointer flex space-x-1.5 items-center mb-1 h-5 hover:bg-gray-300',
+                  rule.custom ? 'font-bold ' : '',
+                  activeTab?.split('/').at(activeTab?.split('/').length - 1) ===
+                    rule.rule_name
+                    ? 'bg-gray-300'
+                    : ''
+                )}
+                onClick={() => {
+                  !(
+                    rule.yaml_parsing_error &&
+                    rule.yaml_parsing_error.length > 0
+                  )
+                    ? openRuleFirstLevelTab(rule)
+                    : undefined;
+                }}
+              >
+                <SvgIcon
+                  name="definitionsrules"
+                  className="w-4 h-4 min-w-4 shrink-0"
+                />
+                <div className="text-[13px] leading-1.5 whitespace-nowrap">
+                  {urlencodeEncoder(rule.rule_name ?? '')}
                 </div>
-              ) : null}
-              <RuleContextMenu singleRule={true} rule={rule} />
-            </div>
-          ))}
+                {rule.yaml_parsing_error &&
+                rule.yaml_parsing_error.length > 0 ? (
+                  <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                    <Tooltip
+                      content={rule.yaml_parsing_error}
+                      className="max-w-120 z-50"
+                      placement="right-start"
+                    >
+                      <div
+                        style={{
+                          position: 'absolute',
+                          right: '30px',
+                          top: '4px',
+                          borderRadius: '3px'
+                        }}
+                        className="bg-white"
+                      >
+                        <SvgIcon name="warning" className="w-5 h-5" />
+                      </div>
+                    </Tooltip>
+                  </div>
+                ) : null}
+                <RuleContextMenu singleRule={true} rule={rule} />
+              </div>
+            )
+          )}
         </div>
       </div>
     );
@@ -540,74 +358,98 @@ export const DefinitionTree = () => {
           })}
         <div className="ml-2">
           {folder.checks &&
-            folder?.checks.map((check) => (
-              <div key={check.check_name}>
-                <div
-                  className={clsx(
-                    'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
-                    check.custom ? 'font-bold' : '',
-                    activeTab
-                      ?.split('/')
-                      .at(activeTab?.split('/').length - 1) === check.check_name
-                      ? 'bg-gray-300'
-                      : ''
-                  )}
-                  onClick={() => {
-                    !(
-                      check.yaml_parsing_error &&
-                      check.yaml_parsing_error.length > 0
-                    )
-                      ? openCheckFirstLevelTab(check)
-                      : undefined;
-                  }}
-                >
-                  <SvgIcon
-                    name="definitionssensors"
-                    className="w-4 h-4 min-w-4 shrink-0"
-                  />
-                  <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-                    {urlencodeEncoder(check.check_name ?? '')}
-                  </div>
-                  {check.yaml_parsing_error &&
-                  check.yaml_parsing_error.length > 0 ? (
-                    <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
-                      <Tooltip
-                        content={check.yaml_parsing_error}
-                        className="max-w-120 z-50"
-                        placement="right-start"
-                      >
-                        <div
-                          style={{
-                            position: 'absolute',
-                            right: '30px',
-                            top: '4px',
-                            borderRadius: '3px'
-                          }}
-                          className="bg-white"
-                        >
-                          <SvgIcon name="warning" className="w-5 h-5" />
-                        </div>
-                      </Tooltip>
+            sortItemsTreeAlphabetically(folder?.checks).map(
+              (check: CheckDefinitionListModel) => (
+                <div key={check.check_name}>
+                  <div
+                    className={clsx(
+                      'cursor-pointer flex w-full space-between items-center mb-1 h-5  hover:bg-gray-300',
+                      check.custom ? 'font-bold' : '',
+                      activeTab
+                        ?.split('/')
+                        .at(activeTab?.split('/').length - 1) ===
+                        check.check_name
+                        ? 'bg-gray-300'
+                        : ''
+                    )}
+                    onClick={() => {
+                      !(
+                        check.yaml_parsing_error &&
+                        check.yaml_parsing_error.length > 0
+                      )
+                        ? openCheckFirstLevelTab(check)
+                        : undefined;
+                    }}
+                  >
+                    <SvgIcon
+                      name="definitionssensors"
+                      className="w-4 h-4 min-w-4 shrink-0"
+                    />
+                    <div className="text-[13px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+                      {urlencodeEncoder(check.check_name ?? '')}
                     </div>
-                  ) : null}
-                  <DataQualityContextMenu singleCheck={true} check={check} />
+                    {check.yaml_parsing_error &&
+                    check.yaml_parsing_error.length > 0 ? (
+                      <div className="text-gray-700 !absolute right-0 w-7 h-7 rounded-full flex items-center justify-center bg-white ">
+                        <Tooltip
+                          content={check.yaml_parsing_error}
+                          className="max-w-120 z-50"
+                          placement="right-start"
+                        >
+                          <div
+                            style={{
+                              position: 'absolute',
+                              right: '30px',
+                              top: '4px',
+                              borderRadius: '3px'
+                            }}
+                            className="bg-white"
+                          >
+                            <SvgIcon name="warning" className="w-5 h-5" />
+                          </div>
+                        </Tooltip>
+                      </div>
+                    ) : null}
+                    <DataQualityContextMenu singleCheck={true} check={check} />
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
         </div>
       </div>
     );
   };
 
+  const NodeComponent = ({
+    onClick,
+    icon,
+    text
+  }: {
+    onClick: () => void;
+    icon: string;
+    text: string;
+  }) => (
+    <div
+      onClick={onClick}
+      className={clsx(
+        'cursor-pointer flex space-x-1 items-center mb-1 h-5 hover:bg-gray-300',
+        highlightedNode === text.toLowerCase().replace(' ', '-') &&
+          'bg-gray-300'
+      )}
+    >
+      <SvgIcon name={icon} className="w-4 h-4 min-w-4 " />
+      <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
+        {text}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="fixed left-0 top-16 bottom-0 overflow-y-auto w-80 shadow border-r border-gray-300 p-4 pt-4 bg-white">
+    <div className="overflow-hidden p-4 pt-4 bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
-        <div
-          key={index}
-          className="mt-2 mb-2 text-sm font-regular cursor-pointer"
-        >
+        <div key={index} className="text-[13px] cursor-pointer">
           <div
-            className="flex items-center mb-2"
+            className="flex items-center mb-1 gap-x-1"
             onClick={() => {
               const updatedRootTree = [...definitionFirstLevelFolder];
               updatedRootTree[index].isOpen = !updatedRootTree[index].isOpen;
@@ -670,51 +512,9 @@ export const DefinitionTree = () => {
             )}
         </div>
       ))}
-      <div
-        onClick={openAllUsersFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="userprofile" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Manage users
-        </div>
-      </div>
-      <div
-        onClick={openDefaultSchedulesFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="clock" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Default schedules
-        </div>
-      </div>
-      <div
-        onClick={openDefaultWebhooksFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="webhooks" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Default webhooks
-        </div>
-      </div>
-      <div
-        onClick={openSharedCredentialsFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="definitionsrules" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Shared credentials
-        </div>
-      </div>
-      <div
-        onClick={openDataDictionaryFirstLevelTab}
-        className="cursor-pointer flex space-x-1 items-center mb-1 h-5  hover:bg-gray-300"
-      >
-        <SvgIcon name="datadictionary" className="w-4 h-4 min-w-4 " />
-        <div className="text-[14.5px] leading-1.5 whitespace-nowrap flex items-center justify-between">
-          Data dictionaries
-        </div>
-      </div>
+      {(nodes as any[]).map((tab, index) => (
+        <NodeComponent key={index} {...tab} />
+      ))}
     </div>
   );
 };

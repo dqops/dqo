@@ -36,7 +36,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -47,7 +49,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -76,8 +82,12 @@ http://localhost:8888/api/checks/{fullCheckName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -107,7 +117,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -140,7 +154,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -173,7 +191,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
-
+    
 
 
 
@@ -204,7 +222,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -212,7 +232,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -228,8 +252,12 @@ http://localhost:8888/api/checks/{fullCheckName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -246,7 +274,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -266,7 +298,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -286,7 +322,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
-
+    
 
 
 
@@ -317,7 +353,9 @@ http://localhost:8888/api/checks
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/checks^
@@ -325,7 +363,37 @@ http://localhost:8888/api/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}, {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}, {
+	  "check_name" : "sample_check",
+	  "full_check_name" : "sample_target/sample_category/sample_check",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -341,8 +409,42 @@ http://localhost:8888/api/checks
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -359,7 +461,41 @@ http://localhost:8888/api/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -379,7 +515,41 @@ http://localhost:8888/api/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -399,7 +569,37 @@ http://localhost:8888/api/checks
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		),
+		CheckDefinitionListModel(
+			check_name='sample_check',
+			full_check_name='sample_target/sample_category/sample_check',
+			custom=False,
+			built_in=False,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -437,7 +637,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -445,7 +647,28 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "check_name" : "sample_check",
+	  "sensor_name" : "sample_target/sample_category/sample_sensor",
+	  "rule_name" : "sample_target/sample_category/sample_rule",
+	  "help_text" : "Sample help text",
+	  "standard" : false,
+	  "custom" : true,
+	  "built_in" : false,
+	  "can_edit" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -462,8 +685,29 @@ http://localhost:8888/api/checks/{fullCheckName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		standard=False,
+		custom=True,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -481,7 +725,28 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		standard=False,
+		custom=True,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -502,7 +767,28 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		standard=False,
+		custom=True,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -523,7 +809,24 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionModel(
+		check_name='sample_check',
+		sensor_name='sample_target/sample_category/sample_sensor',
+		rule_name='sample_target/sample_category/sample_rule',
+		help_text='Sample help text',
+		standard=False,
+		custom=True,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -554,7 +857,9 @@ http://localhost:8888/api/definitions/checks
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/checks^
@@ -562,7 +867,19 @@ http://localhost:8888/api/definitions/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -578,8 +895,24 @@ http://localhost:8888/api/definitions/checks
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionFolderModel(
+		folders={
+		
+		}
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -596,7 +929,23 @@ http://localhost:8888/api/definitions/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionFolderModel(
+		folders={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -616,7 +965,23 @@ http://localhost:8888/api/definitions/checks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionFolderModel(
+		folders={
+		
+		}
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -636,7 +1001,19 @@ http://localhost:8888/api/definitions/checks
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckDefinitionFolderModel(
+		folders={
+		
+		}
+	)
+    ```
+    
+    
+    
 
 
 
@@ -674,7 +1051,9 @@ http://localhost:8888/api/checks/{fullCheckName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/checks/sample_target/sample_category/sample_check^
@@ -685,7 +1064,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -714,8 +1097,12 @@ http://localhost:8888/api/checks/{fullCheckName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -745,7 +1132,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -778,7 +1169,11 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -811,7 +1206,7 @@ http://localhost:8888/api/checks/{fullCheckName}
 	
     ```
 
-
+    
 
 
 

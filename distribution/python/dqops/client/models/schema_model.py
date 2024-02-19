@@ -28,6 +28,7 @@ class SchemaModel:
     Attributes:
         connection_name (Union[Unset, str]): Connection name.
         schema_name (Union[Unset, str]): Schema name.
+        directory_prefix (Union[Unset, str]): Directory prefix.
         run_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter, identifies which
             checks on which tables and columns should be executed.
         run_profiling_checks_job_template (Union[Unset, CheckSearchFilters]): Target data quality checks filter,
@@ -48,6 +49,7 @@ class SchemaModel:
 
     connection_name: Union[Unset, str] = UNSET
     schema_name: Union[Unset, str] = UNSET
+    directory_prefix: Union[Unset, str] = UNSET
     run_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_profiling_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
     run_monitoring_checks_job_template: Union[Unset, "CheckSearchFilters"] = UNSET
@@ -66,6 +68,7 @@ class SchemaModel:
     def to_dict(self) -> Dict[str, Any]:
         connection_name = self.connection_name
         schema_name = self.schema_name
+        directory_prefix = self.directory_prefix
         run_checks_job_template: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.run_checks_job_template, Unset):
             run_checks_job_template = self.run_checks_job_template.to_dict()
@@ -114,6 +117,8 @@ class SchemaModel:
             field_dict["connection_name"] = connection_name
         if schema_name is not UNSET:
             field_dict["schema_name"] = schema_name
+        if directory_prefix is not UNSET:
+            field_dict["directory_prefix"] = directory_prefix
         if run_checks_job_template is not UNSET:
             field_dict["run_checks_job_template"] = run_checks_job_template
         if run_profiling_checks_job_template is not UNSET:
@@ -164,6 +169,8 @@ class SchemaModel:
         connection_name = d.pop("connection_name", UNSET)
 
         schema_name = d.pop("schema_name", UNSET)
+
+        directory_prefix = d.pop("directory_prefix", UNSET)
 
         _run_checks_job_template = d.pop("run_checks_job_template", UNSET)
         run_checks_job_template: Union[Unset, CheckSearchFilters]
@@ -249,6 +256,7 @@ class SchemaModel:
         schema_model = cls(
             connection_name=connection_name,
             schema_name=schema_name,
+            directory_prefix=directory_prefix,
             run_checks_job_template=run_checks_job_template,
             run_profiling_checks_job_template=run_profiling_checks_job_template,
             run_monitoring_checks_job_template=run_monitoring_checks_job_template,

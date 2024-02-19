@@ -65,10 +65,10 @@ const Tree = () => {
       const key = (job?.jobId?.jobId || 0).toString();
       const str = localStorage.getItem(key);
       if (
-        str !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
-        job.status == DqoJobHistoryEntryModelStatusEnum.succeeded
+        str !== DqoJobHistoryEntryModelStatusEnum.finished &&
+        job.status == DqoJobHistoryEntryModelStatusEnum.finished
       ) {
-        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.succeeded);
+        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.finished);
 
         const id = [
           job.parameters?.importTableParameters?.connectionName,
@@ -402,7 +402,7 @@ const Tree = () => {
               className={clsx('w-4 shrink-0 min-w-4')}
             />
             <Tooltip
-              content={node.id}
+              content={node.tooltip ?? node.id}
               className="max-w-120 py-4 px-4  delay-300 "
               placement="top-start"
             >

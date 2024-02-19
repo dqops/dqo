@@ -1,6 +1,7 @@
 # lookup key not found data quality checks
 
-A column-level check that ensures that there are no more than a maximum number of values not matching values in another table column.
+This check detects invalid values that are not present in a dictionary table. The lookup uses an outer join query within the same database.
+ This check counts the number of values not found in the dictionary table. It raises a data quality issue when too many missing keys are discovered.
 
 
 ___
@@ -13,11 +14,11 @@ The **lookup key not found** data quality check has the following variants for e
 
 **Check description**
 
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.
+Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -110,7 +111,7 @@ spec:
         integrity:
           profile_lookup_key_not_found:
             parameters:
-              foreign_table: dim_customer
+              foreign_table: public.dim_customer
               foreign_column: customer_id
             error:
               max_count: 0
@@ -173,7 +174,7 @@ spec:
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -224,8 +225,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -275,7 +325,7 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -342,7 +392,7 @@ spec:
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -397,7 +447,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -459,9 +509,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -516,7 +566,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -567,7 +617,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -618,7 +668,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -669,7 +719,7 @@ spec:
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             ```
     ??? example "Trino"
@@ -729,9 +779,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -765,7 +815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             integrity:
               profile_lookup_key_not_found:
                 parameters:
-                  foreign_table: dim_customer
+                  foreign_table: public.dim_customer
                   foreign_column: customer_id
                 error:
                   max_count: 0
@@ -831,7 +881,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -882,8 +932,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -933,7 +1032,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1005,7 +1104,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1060,7 +1159,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1127,9 +1226,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1184,7 +1283,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1235,7 +1334,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1286,7 +1385,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1337,7 +1436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -1408,9 +1507,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1424,11 +1523,11 @@ ___
 
 **Check description**
 
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent captured value for each day when the data quality check was evaluated.
+Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -1522,7 +1621,7 @@ spec:
           integrity:
             daily_lookup_key_not_found:
               parameters:
-                foreign_table: dim_customer
+                foreign_table: public.dim_customer
                 foreign_column: customer_id
               error:
                 max_count: 0
@@ -1585,7 +1684,7 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1636,8 +1735,57 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1687,7 +1835,7 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1754,7 +1902,7 @@ spec:
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1809,7 +1957,7 @@ spec:
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1871,9 +2019,9 @@ spec:
                         original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1928,7 +2076,7 @@ spec:
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1979,7 +2127,7 @@ spec:
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2030,7 +2178,7 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2081,7 +2229,7 @@ spec:
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             ```
     ??? example "Trino"
@@ -2141,9 +2289,9 @@ spec:
                         original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2178,7 +2326,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               integrity:
                 daily_lookup_key_not_found:
                   parameters:
-                    foreign_table: dim_customer
+                    foreign_table: public.dim_customer
                     foreign_column: customer_id
                   error:
                     max_count: 0
@@ -2244,7 +2392,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2295,8 +2443,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2346,7 +2543,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2418,7 +2615,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2473,7 +2670,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2540,9 +2737,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2597,7 +2794,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2648,7 +2845,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2699,7 +2896,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2750,7 +2947,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
                 CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -2821,9 +3018,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2837,11 +3034,11 @@ ___
 
 **Check description**
 
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent check result for each month when the data quality check was evaluated.
+Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -2935,7 +3132,7 @@ spec:
           integrity:
             monthly_lookup_key_not_found:
               parameters:
-                foreign_table: dim_customer
+                foreign_table: public.dim_customer
                 foreign_column: customer_id
               error:
                 max_count: 0
@@ -2998,7 +3195,7 @@ spec:
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3049,8 +3246,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3100,7 +3346,7 @@ spec:
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3167,7 +3413,7 @@ spec:
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3222,7 +3468,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3284,9 +3530,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3341,7 +3587,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3392,7 +3638,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3443,7 +3689,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3494,7 +3740,7 @@ spec:
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             ```
     ??? example "Trino"
@@ -3554,9 +3800,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3591,7 +3837,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               integrity:
                 monthly_lookup_key_not_found:
                   parameters:
-                    foreign_table: dim_customer
+                    foreign_table: public.dim_customer
                     foreign_column: customer_id
                   error:
                     max_count: 0
@@ -3657,7 +3903,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3708,8 +3954,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3759,7 +4054,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3831,7 +4126,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TRUNC(CAST(CURRENT_TIMESTAMP AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3886,7 +4181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3953,9 +4248,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4010,7 +4305,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4061,7 +4356,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4112,7 +4407,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4163,7 +4458,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
                 CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY analyzed_table.[country], analyzed_table.[state]
             ORDER BY level_1, level_2
@@ -4234,9 +4529,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4250,11 +4545,11 @@ ___
 
 **Check description**
 
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each daily partition.
+Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -4353,7 +4648,7 @@ spec:
           integrity:
             daily_partition_lookup_key_not_found:
               parameters:
-                foreign_table: dim_customer
+                foreign_table: public.dim_customer
                 foreign_column: customer_id
               error:
                 max_count: 0
@@ -4421,7 +4716,7 @@ spec:
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4472,8 +4767,57 @@ spec:
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4523,7 +4867,7 @@ spec:
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4590,7 +4934,7 @@ spec:
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4645,7 +4989,7 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4707,9 +5051,9 @@ spec:
                         original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4764,7 +5108,7 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4815,7 +5159,7 @@ spec:
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4866,7 +5210,7 @@ spec:
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4917,7 +5261,7 @@ spec:
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ORDER BY CAST(analyzed_table.[date_column] AS date)
@@ -4981,9 +5325,9 @@ spec:
                         original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5023,7 +5367,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               integrity:
                 daily_partition_lookup_key_not_found:
                   parameters:
-                    foreign_table: dim_customer
+                    foreign_table: public.dim_customer
                     foreign_column: customer_id
                   error:
                     max_count: 0
@@ -5094,7 +5438,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5145,8 +5489,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -5196,7 +5589,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5268,7 +5661,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5323,7 +5716,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5390,9 +5783,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5447,7 +5840,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5498,7 +5891,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5549,7 +5942,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5600,7 +5993,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY analyzed_table.[country], analyzed_table.[state], CAST(analyzed_table.[date_column] AS date), CAST(analyzed_table.[date_column] AS date)
             ORDER BY level_1, level_2CAST(analyzed_table.[date_column] AS date)
@@ -5669,9 +6062,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5685,11 +6078,11 @@ ___
 
 **Check description**
 
-Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores a separate data quality check result for each monthly partition.
+Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_lookup_key_not_found`</span>|[integrity](../../../categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Integrity|[*foreign_key_not_match_count*](../../../reference/sensors/column/integrity-column-sensors.md#foreign-key-not-match-count)|[*max_count*](../../../reference/rules/Comparison.md#max-count)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -5788,7 +6181,7 @@ spec:
           integrity:
             monthly_partition_lookup_key_not_found:
               parameters:
-                foreign_table: dim_customer
+                foreign_table: public.dim_customer
                 foreign_column: customer_id
               error:
                 max_count: 0
@@ -5856,7 +6249,7 @@ spec:
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5907,8 +6300,57 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -5958,7 +6400,7 @@ spec:
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6025,7 +6467,7 @@ spec:
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6080,7 +6522,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6142,9 +6584,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6199,7 +6641,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6250,7 +6692,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6301,7 +6743,7 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6352,7 +6794,7 @@ spec:
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ORDER BY DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
@@ -6416,9 +6858,9 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6458,7 +6900,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               integrity:
                 monthly_partition_lookup_key_not_found:
                   parameters:
-                    foreign_table: dim_customer
+                    foreign_table: public.dim_customer
                     foreign_column: customer_id
                   error:
                     max_count: 0
@@ -6529,7 +6971,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `your-google-project-id`.`<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6580,8 +7022,57 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro render_target_column(table_alias_prefix = '') -%}
+                {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+            {%- endmacro %}
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            LEFT OUTER JOIN {{ lib.render_referenced_table(parameters.foreign_table) }} AS foreign_table
+            ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            
+            
+            SELECT
+                SUM(
+                    CASE
+                        WHEN foreign_table."customer_id" IS NULL AND analyzed_table."target_column" IS NOT NULL
+                            THEN 1
+                        ELSE 0
+                    END
+                ) AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
+            ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6631,7 +7122,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
             FROM `<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6703,7 +7194,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(TRUNC(CAST(original_table."date_column" AS DATE), 'MONTH') AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
                 FROM "<target_schema>"."<target_table>" original_table
             ) analyzed_table
-            LEFT OUTER JOIN "dim_customer" foreign_table
+            LEFT OUTER JOIN public.dim_customer foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6758,7 +7249,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_postgresql_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6825,9 +7316,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6882,7 +7373,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_redshift_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6933,7 +7424,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
-            LEFT OUTER JOIN "your_snowflake_database"."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6984,7 +7475,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
-            LEFT OUTER JOIN `<target_schema>`.`dim_customer` AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.`target_column` = foreign_table.`customer_id`
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7035,7 +7526,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1) AS time_period,
                 CAST((DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)) AS DATETIME) AS time_period_utc
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
-            LEFT OUTER JOIN [your_sql_server_database].[<target_schema>].[dim_customer] AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table.[target_column] = foreign_table.[customer_id]
             GROUP BY analyzed_table.[country], analyzed_table.[state], DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, analyzed_table.[date_column]), 0)
             ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST(analyzed_table.[date_column] AS date)), MONTH(CAST(analyzed_table.[date_column] AS date)), 1)
@@ -7104,9 +7595,9 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
-            LEFT OUTER JOIN ""."<target_schema>"."dim_customer" AS foreign_table
+            LEFT OUTER JOIN public.dim_customer AS foreign_table
             ON analyzed_table."target_column" = foreign_table."customer_id"
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

@@ -110,6 +110,16 @@ jobs:
           headers: |-
             content-type: application/zip
 
+
+      - id: 'upload-release-africa-south1'
+        uses: 'google-github-actions/upload-cloud-storage@v2'
+        with:
+          path: './distribution/target/dqo-distribution-${{steps.read_version.outputs.content}}-bin.zip'
+          destination: '${{ secrets.DQOPS_COM_WWW_BUCKET_PREFIX }}-africa-south1/releases'
+          gzip: false
+          headers: |-
+            content-type: application/zip
+
       - id: 'upload-release-us'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:

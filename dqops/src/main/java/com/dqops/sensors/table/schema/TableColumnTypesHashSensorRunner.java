@@ -31,9 +31,7 @@ import com.dqops.execution.sensors.progress.ExecutingSqlOnConnectionEvent;
 import com.dqops.execution.sensors.progress.SensorExecutionProgressListener;
 import com.dqops.execution.sensors.runners.AbstractSensorRunner;
 import com.dqops.execution.sensors.runners.GenericSensorResultsFactory;
-import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.metadata.sources.PhysicalTableName;
-import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.*;
 import com.dqops.services.timezone.DefaultTimeZoneProvider;
 import com.dqops.utils.logging.UserErrorLogger;
 import com.google.common.hash.HashCode;
@@ -180,9 +178,17 @@ public class TableColumnTypesHashSensorRunner extends AbstractSensorRunner {
                     jobCancellationToken.throwIfCancelled();
                     String schemaName = sensorRunParameters.getTable().getPhysicalTableName().getSchemaName();
                     String tableName = sensorRunParameters.getTable().getPhysicalTableName().getTableName();
-                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(schemaName, new ArrayList<>() {{
-                        add(tableName);
-                    }});
+
+                    ConnectionList connections = executionContext.getUserHomeContext().getUserHome().getConnections();
+                    ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionSpec.getConnectionName(), true);
+
+                    List<TableSpec> retrievedTableSpecList = sourceConnection.retrieveTableMetadata(
+                            schemaName,
+                            new ArrayList<>() {{
+                                add(tableName);
+                            }},
+                            connectionWrapper
+                    );
 
                     if (retrievedTableSpecList.size() == 0) {
                         // table not found

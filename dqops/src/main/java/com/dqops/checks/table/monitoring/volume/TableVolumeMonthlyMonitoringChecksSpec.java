@@ -51,14 +51,13 @@ public class TableVolumeMonthlyMonitoringChecksSpec extends AbstractCheckCategor
     };
 
     @JsonPropertyDescription("Verifies that the tested table has at least a minimum accepted number of rows. " +
-            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty. " +
-            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows." +
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the table is not empty. " +
             "Stores the most recent captured row count value for each month when the row count was evaluated.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec monthlyRowCount;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last month.")
+    @JsonPropertyDescription("Detects when the volume (row count) changes since the last known row count from a previous month exceeds the maximum accepted change percentage.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountChangeCheckSpec monthlyRowCountChange;

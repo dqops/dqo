@@ -39,7 +39,9 @@ public class SingleStoreDbSourceConnection {
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
         jdbcConnectionBuilder.append("jdbc:singlestore:");
 
-        switch (singleStoreDbParametersSpec.getLoadBalancingMode()){
+        SingleStoreDbLoadBalancingMode loadBalancingMode = singleStoreDbParametersSpec.getLoadBalancingMode() == null
+                ? SingleStoreDbLoadBalancingMode.none : singleStoreDbParametersSpec.getLoadBalancingMode();
+        switch (loadBalancingMode){
             case loadbalance:
                 jdbcConnectionBuilder.append("loadbalance:");
                 break;
@@ -48,7 +50,7 @@ public class SingleStoreDbSourceConnection {
                 break;
             case none: break;
             default:
-                throw new RuntimeException("Given enum is not supported : " + singleStoreDbParametersSpec.getLoadBalancingMode());
+                throw new RuntimeException("Given enum is not supported : " + loadBalancingMode);
         }
         jdbcConnectionBuilder.append("//");
 
@@ -124,7 +126,6 @@ public class SingleStoreDbSourceConnection {
 
         sqlBuilder.append("SELECT ");
         sqlBuilder.append("TABLE_CATALOG,TABLE_SCHEMA,TABLE_NAME,COLUMN_NAME,ORDINAL_POSITION,COLUMN_DEFAULT,IS_NULLABLE,IS_SPARSE,DATA_TYPE,CHARACTER_MAXIMUM_LENGTH,CHARACTER_OCTET_LENGTH,NUMERIC_PRECISION,NUMERIC_SCALE,CHARACTER_SET_NAME,COLLATION_NAME,CAST(COLUMN_TYPE as CHAR(8192)),COLUMN_KEY,EXTRA,PRIVILEGES,COLUMN_COMMENT,DATETIME_PRECISION");
-//        sqlBuilder.append("*");
         sqlBuilder.append(" FROM ");
 
         String databaseName = providerSpecificConfiguration.getDatabase();

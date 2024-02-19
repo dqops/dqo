@@ -72,10 +72,10 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberBelowMinValueCheckSpec monthlyNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberAboveMaxValueCheckSpec monthlyNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count. Stores the most recent value for each month when the data quality check was evaluated.")
@@ -84,10 +84,10 @@ public class ColumnNumericMonthlyMonitoringChecksSpec extends AbstractCheckCateg
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNegativePercentCheckSpec monthlyNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are below the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberBelowMinValuePercentCheckSpec monthlyNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are above the value defined by the user as a parameter. Stores the most recent value for each month when the data quality check was evaluated.")
     private ColumnNumberAboveMaxValuePercentCheckSpec monthlyNumberAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage. Stores the most recent value for each month when the data quality check was evaluated.")

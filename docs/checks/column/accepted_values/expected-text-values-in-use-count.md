@@ -101,7 +101,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-18"
+```yaml hl_lines="7-20"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -116,8 +116,10 @@ spec:
               - USD
               - GBP
               - EUR
-            error:
+            warning:
               max_missing: 0
+            error:
+              max_missing: 1
             fatal:
               max_missing: 2
       labels:
@@ -252,6 +254,71 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -527,7 +594,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -856,7 +923,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -870,7 +937,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 30-35"
+    ```yaml hl_lines="5-15 32-37"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -894,8 +961,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                   - USD
                   - GBP
                   - EUR
-                error:
+                warning:
                   max_missing: 0
+                error:
+                  max_missing: 1
                 fatal:
                   max_missing: 2
           labels:
@@ -1036,6 +1105,71 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1318,7 +1452,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1658,7 +1792,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1758,7 +1892,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1774,8 +1908,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -1910,6 +2046,71 @@ spec:
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2185,7 +2386,7 @@ spec:
                         original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2514,7 +2715,7 @@ spec:
                         original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2528,7 +2729,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2553,8 +2754,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -2692,6 +2895,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2977,7 +3245,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3317,7 +3585,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3417,7 +3685,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="7-19"
+```yaml hl_lines="7-21"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3433,8 +3701,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -3569,6 +3839,71 @@ spec:
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3844,7 +4179,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4173,7 +4508,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4187,7 +4522,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="5-15 31-36"
+    ```yaml hl_lines="5-15 33-38"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -4212,8 +4547,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -4351,6 +4688,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4636,7 +5038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4976,7 +5378,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5076,7 +5478,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5097,8 +5499,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -5238,6 +5642,71 @@ spec:
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -5513,7 +5982,7 @@ spec:
                         original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5846,7 +6315,7 @@ spec:
                         original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5860,7 +6329,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -5890,8 +6359,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -6034,6 +6505,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6319,7 +6855,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6657,7 +7193,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6757,7 +7293,7 @@ Please expand the section below to see the [DQOps command-line](../../../dqo-con
 The sample *schema_name.table_name.dqotable.yaml* file with the check configured is shown below.
 
 
-```yaml hl_lines="12-24"
+```yaml hl_lines="12-26"
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6778,8 +7314,10 @@ spec:
                 - USD
                 - GBP
                 - EUR
-              error:
+              warning:
                 max_missing: 0
+              error:
+                max_missing: 1
               fatal:
                 max_missing: 2
       labels:
@@ -6919,6 +7457,71 @@ spec:
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -7194,7 +7797,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -7527,7 +8130,7 @@ spec:
                         original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -7541,7 +8144,7 @@ Expand the *Configure with data grouping* section to see additional examples for
     **Sample configuration with data grouping enabled (YAML)**
     The sample below shows how to configure the data grouping and how it affects the generated SQL query.
 
-    ```yaml hl_lines="10-20 41-46"
+    ```yaml hl_lines="10-20 43-48"
     # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -7571,8 +8174,10 @@ Expand the *Configure with data grouping* section to see additional examples for
                     - USD
                     - GBP
                     - EUR
-                  error:
+                  warning:
                     max_missing: 0
+                  error:
+                    max_missing: 1
                   fatal:
                     max_missing: 2
           labels:
@@ -7715,6 +8320,71 @@ Expand the *Configure with data grouping* section to see additional examples for
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            {%- macro extract_in_list(values_list) -%}
+                {%- for i in values_list -%}
+                    {%- if not loop.last -%}
+                        {{lib.make_text_constant(i)}}{{", "}}
+                    {%- else -%}
+                        {{lib.make_text_constant(i)}}
+                    {%- endif -%}
+                {%- endfor -%}
+            {% endmacro -%}
+            
+            {%- macro render_else() -%}
+                {%- if parameters.expected_values|length == 0 -%}
+                    NULL
+                {%- else -%}
+                COUNT(DISTINCT
+                    CASE
+                        WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters.expected_values) }})
+                            THEN {{ lib.render_target_column('analyzed_table') }}
+                        ELSE NULL
+                    END
+                )
+                {%- endif -%}
+            {% endmacro -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE {{render_else()}}
+                END AS actual_value,
+                MAX({{ parameters.expected_values | length }}) AS expected_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE COUNT(DISTINCT
+                    CASE
+                        WHEN analyzed_table."target_column" IN ('USD', 'GBP', 'EUR')
+                            THEN analyzed_table."target_column"
+                        ELSE NULL
+                    END
+                )
+                END AS actual_value,
+                MAX(3) AS expected_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -8000,7 +8670,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -8338,7 +9008,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                    FROM ""."<target_schema>"."<target_table>" original_table
+                    FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
                 ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

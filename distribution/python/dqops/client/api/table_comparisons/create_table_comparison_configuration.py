@@ -72,8 +72,8 @@ def sync_detailed(
         schema_name (str):
         table_name (str):
         json_body (TableComparisonConfigurationModel): Model that contains the basic information
-            about a table comparison configuration that specifies how the current table could be
-            compared to another table that is a source of truth for comparison.
+            about a table comparison configuration that specifies how the current table can be
+            compared with another table that is a source of truth for comparison.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.
@@ -114,8 +114,8 @@ async def asyncio_detailed(
         schema_name (str):
         table_name (str):
         json_body (TableComparisonConfigurationModel): Model that contains the basic information
-            about a table comparison configuration that specifies how the current table could be
-            compared to another table that is a source of truth for comparison.
+            about a table comparison configuration that specifies how the current table can be
+            compared with another table that is a source of truth for comparison.
 
     Raises:
         errors.UnexpectedStatus: If the server returns an undocumented status code and Client.raise_on_unexpected_status is True.

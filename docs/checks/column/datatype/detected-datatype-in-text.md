@@ -1,7 +1,7 @@
 # detected datatype in text data quality checks
 
-A table-level check that scans all values in a string column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types.
- The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..7, which are the codes of detected data types.
+A column-level check that scans all values in a text column and detects the data type of all values in a monitored column. The actual_value returned from the sensor can be one of seven codes: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types.
+ The check compares the data type detected in all non-null columns to an expected data type. The rule compares the value using equals and requires values in the range 1..8, which are the codes of detected data types.
 
 
 ___
@@ -14,11 +14,11 @@ The **detected datatype in text** data quality check has the following variants 
 
 **Check description**
 
-Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.
+Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`profile_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)| |Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -176,7 +176,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -192,8 +192,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -252,7 +252,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -268,8 +268,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -331,7 +331,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -347,8 +347,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -407,7 +407,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -423,12 +423,167 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -485,7 +640,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -501,8 +656,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -584,7 +739,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -624,8 +779,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -687,7 +842,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -703,8 +858,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -768,7 +923,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -784,8 +939,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -852,7 +1007,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -868,8 +1023,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -928,7 +1083,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -944,8 +1099,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1007,7 +1162,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1023,8 +1178,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1090,7 +1245,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -1106,8 +1261,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -1116,7 +1271,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1175,7 +1330,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1191,8 +1346,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1251,7 +1406,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -1267,8 +1422,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1330,7 +1485,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1346,8 +1501,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1406,7 +1561,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -1422,8 +1577,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
@@ -1485,7 +1640,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1501,8 +1656,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1561,7 +1716,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -1577,8 +1732,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -1647,7 +1802,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1663,8 +1818,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1723,7 +1878,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -1739,8 +1894,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1803,7 +1958,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -1819,8 +1974,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1887,7 +2042,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -1903,8 +2058,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -1913,7 +2068,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2014,7 +2169,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2030,8 +2185,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2089,7 +2244,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -2105,8 +2260,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2169,7 +2324,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2185,8 +2340,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2244,7 +2399,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -2260,14 +2415,169 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2323,7 +2633,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2339,8 +2649,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2421,7 +2731,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -2461,8 +2771,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -2525,7 +2835,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2541,8 +2851,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2605,7 +2915,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -2621,8 +2931,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2695,7 +3005,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2711,8 +3021,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2770,7 +3080,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -2786,8 +3096,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2850,7 +3160,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -2866,8 +3176,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2932,7 +3242,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -2948,8 +3258,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2965,7 +3275,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3023,7 +3333,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3039,8 +3349,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3098,7 +3408,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -3114,8 +3424,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3178,7 +3488,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3194,8 +3504,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3253,7 +3563,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -3269,8 +3579,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -3333,7 +3643,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3349,8 +3659,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3408,7 +3718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -3424,8 +3734,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -3495,7 +3805,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3511,8 +3821,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3570,7 +3880,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -3586,8 +3896,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -3651,7 +3961,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3667,8 +3977,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3734,7 +4044,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -3750,8 +4060,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -3767,7 +4077,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3781,11 +4091,11 @@ ___
 
 **Check description**
 
-Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.
+Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent captured value for each day when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -3944,7 +4254,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -3960,8 +4270,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4020,7 +4330,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -4036,8 +4346,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -4099,7 +4409,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4115,8 +4425,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4175,7 +4485,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -4191,12 +4501,167 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4253,7 +4718,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4269,8 +4734,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4352,7 +4817,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -4392,8 +4857,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -4455,7 +4920,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4471,8 +4936,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4536,7 +5001,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -4552,8 +5017,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -4620,7 +5085,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4636,8 +5101,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4696,7 +5161,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -4712,8 +5177,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -4775,7 +5240,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4791,8 +5256,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4858,7 +5323,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -4874,8 +5339,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -4884,7 +5349,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4943,7 +5408,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -4959,8 +5424,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5019,7 +5484,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -5035,8 +5500,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5098,7 +5563,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5114,8 +5579,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5174,7 +5639,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -5190,8 +5655,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
                 TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
@@ -5253,7 +5718,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5269,8 +5734,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5329,7 +5794,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -5345,8 +5810,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
@@ -5415,7 +5880,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5431,8 +5896,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5491,7 +5956,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -5507,8 +5972,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5571,7 +6036,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5587,8 +6052,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5655,7 +6120,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -5671,8 +6136,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -5681,7 +6146,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5783,7 +6248,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5799,8 +6264,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5858,7 +6323,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -5874,8 +6339,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -5938,7 +6403,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -5954,8 +6419,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6013,7 +6478,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -6029,14 +6494,169 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
                 TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -6092,7 +6712,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6108,8 +6728,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6190,7 +6810,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -6230,8 +6850,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -6294,7 +6914,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6310,8 +6930,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6374,7 +6994,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -6390,8 +7010,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6464,7 +7084,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6480,8 +7100,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6539,7 +7159,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -6555,8 +7175,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6619,7 +7239,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6635,8 +7255,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6701,7 +7321,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -6717,8 +7337,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -6734,7 +7354,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6792,7 +7412,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6808,8 +7428,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6867,7 +7487,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -6883,8 +7503,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -6947,7 +7567,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -6963,8 +7583,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7022,7 +7642,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -7038,8 +7658,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -7102,7 +7722,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -7118,8 +7738,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7177,7 +7797,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -7193,8 +7813,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -7264,7 +7884,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -7280,8 +7900,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7339,7 +7959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -7355,8 +7975,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -7420,7 +8040,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -7436,8 +8056,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -7503,7 +8123,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -7519,8 +8139,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -7536,7 +8156,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7550,11 +8170,11 @@ ___
 
 **Check description**
 
-Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.
+Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores the most recent check result for each month when the data quality check was evaluated.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -7713,7 +8333,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -7729,8 +8349,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7789,7 +8409,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -7805,8 +8425,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -7868,7 +8488,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -7884,8 +8504,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7944,7 +8564,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -7960,12 +8580,167 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -8022,7 +8797,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8038,8 +8813,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8121,7 +8896,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -8161,8 +8936,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(LOCALTIMESTAMP, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -8224,7 +8999,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8240,8 +9015,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -8305,7 +9080,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -8321,8 +9096,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -8389,7 +9164,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8405,8 +9180,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8465,7 +9240,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -8481,8 +9256,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -8544,7 +9319,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8560,8 +9335,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -8627,7 +9402,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -8643,8 +9418,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -8653,7 +9428,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -8712,7 +9487,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8728,8 +9503,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8788,7 +9563,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -8804,8 +9579,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -8867,7 +9642,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -8883,8 +9658,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -8943,7 +9718,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -8959,8 +9734,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
@@ -9022,7 +9797,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9038,8 +9813,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9098,7 +9873,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -9114,8 +9889,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
@@ -9184,7 +9959,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9200,8 +9975,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9260,7 +10035,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -9276,8 +10051,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -9340,7 +10115,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9356,8 +10131,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -9424,7 +10199,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -9440,8 +10215,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -9450,7 +10225,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -9552,7 +10327,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9568,8 +10343,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9627,7 +10402,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -9643,8 +10418,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -9707,7 +10482,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9723,8 +10498,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9782,7 +10557,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -9798,14 +10573,169 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -9861,7 +10791,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -9877,8 +10807,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -9959,7 +10889,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -9999,8 +10929,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -10063,7 +10993,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10079,8 +11009,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -10143,7 +11073,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -10159,8 +11089,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -10233,7 +11163,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10249,8 +11179,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10308,7 +11238,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -10324,8 +11254,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -10388,7 +11318,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10404,8 +11334,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -10470,7 +11400,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -10486,8 +11416,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -10503,7 +11433,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -10561,7 +11491,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10577,8 +11507,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10636,7 +11566,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -10652,8 +11582,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -10716,7 +11646,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10732,8 +11662,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10791,7 +11721,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -10807,8 +11737,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -10871,7 +11801,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -10887,8 +11817,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -10946,7 +11876,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -10962,8 +11892,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -11033,7 +11963,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -11049,8 +11979,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11108,7 +12038,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -11124,8 +12054,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -11189,7 +12119,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -11205,8 +12135,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -11272,7 +12202,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -11288,8 +12218,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -11305,7 +12235,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -11319,11 +12249,11 @@ ___
 
 **Check description**
 
-Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.
+Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each daily partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`daily_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|daily|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -11492,7 +12422,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -11508,8 +12438,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11568,7 +12498,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -11584,8 +12514,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
@@ -11647,7 +12577,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -11663,8 +12593,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11723,7 +12653,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -11739,12 +12669,167 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -11801,7 +12886,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -11817,8 +12902,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -11900,7 +12985,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -11940,8 +13025,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-%d 00:00:00'))) AS time_period_utc
@@ -12003,7 +13088,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12019,8 +13104,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -12084,7 +13169,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -12100,8 +13185,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -12168,7 +13253,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12184,8 +13269,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12244,7 +13329,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -12260,8 +13345,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -12323,7 +13408,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12339,8 +13424,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -12406,7 +13491,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -12422,8 +13507,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -12432,7 +13517,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -12491,7 +13576,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12507,8 +13592,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12567,7 +13652,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -12583,8 +13668,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -12646,7 +13731,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12662,8 +13747,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12722,7 +13807,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -12738,8 +13823,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 TO_TIMESTAMP(CAST(analyzed_table."date_column" AS date)) AS time_period_utc
@@ -12801,7 +13886,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12817,8 +13902,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -12877,7 +13962,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -12893,8 +13978,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
@@ -12963,7 +14048,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -12979,8 +14064,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13039,7 +14124,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -13055,8 +14140,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 CAST(analyzed_table.[date_column] AS date) AS time_period,
                 CAST((CAST(analyzed_table.[date_column] AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -13119,7 +14204,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -13135,8 +14220,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -13203,7 +14288,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -13219,8 +14304,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -13229,7 +14314,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -13341,7 +14426,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -13357,8 +14442,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13416,7 +14501,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -13432,8 +14517,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -13496,7 +14581,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -13512,8 +14597,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13571,7 +14656,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -13587,14 +14672,169 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 CAST(analyzed_table.`date_column` AS DATE) AS time_period,
                 TIMESTAMP(CAST(analyzed_table.`date_column` AS DATE)) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -13650,7 +14890,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -13666,8 +14906,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -13748,7 +14988,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -13788,8 +15028,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -13852,7 +15092,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -13868,8 +15108,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -13932,7 +15172,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -13948,8 +15188,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -14022,7 +15262,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14038,8 +15278,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14097,7 +15337,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -14113,8 +15353,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -14177,7 +15417,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14193,8 +15433,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -14259,7 +15499,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -14275,8 +15515,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -14292,7 +15532,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -14350,7 +15590,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14366,8 +15606,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14425,7 +15665,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -14441,8 +15681,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -14505,7 +15745,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14521,8 +15761,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14580,7 +15820,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -14596,8 +15836,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -14660,7 +15900,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14676,8 +15916,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14735,7 +15975,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -14751,8 +15991,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -14822,7 +16062,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14838,8 +16078,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -14897,7 +16137,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -14913,8 +16153,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -14978,7 +16218,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -14994,8 +16234,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -15061,7 +16301,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -15077,8 +16317,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -15094,7 +16334,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -15108,11 +16348,11 @@ ___
 
 **Check description**
 
-Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.
+Detects the data type of text values stored in the column. The sensor returns the code of the detected type of column data: 1 - integers, 2 - floats, 3 - dates, 4 - datetimes, 6 - booleans, 7 - strings, 8 - mixed data types. Raises a data quality issue when the detected data type does not match the expected data type. Stores a separate data quality check result for each monthly partition.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
-|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
+|<span class="no-wrap-code">`monthly_partition_detected_datatype_in_text`</span>|[datatype](../../../categories-of-data-quality-checks/how-to-detect-data-type-changes.md)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|monthly|Consistency|[*string_datatype_detect*](../../../reference/sensors/column/datatype-column-sensors.md#string-datatype-detect)|[*detected_datatype_equals*](../../../reference/rules/Comparison.md#detected-datatype-equals)|:material-check-bold:|
 
 **Command-line examples**
 
@@ -15281,7 +16521,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -15297,8 +16537,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15357,7 +16597,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -15373,8 +16613,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date_column` AS DATE), MONTH)) AS time_period_utc
@@ -15436,7 +16676,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -15452,8 +16692,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15512,7 +16752,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -15528,12 +16768,167 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -15590,7 +16985,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -15606,8 +17001,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -15689,7 +17084,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -15729,8 +17124,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00') AS time_period,
                 FROM_UNIXTIME(UNIX_TIMESTAMP(DATE_FORMAT(analyzed_table.`date_column`, '%Y-%m-01 00:00:00'))) AS time_period_utc
@@ -15792,7 +17187,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -15808,8 +17203,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -15873,7 +17268,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -15889,8 +17284,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -15957,7 +17352,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -15973,8 +17368,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16033,7 +17428,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -16049,8 +17444,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -16112,7 +17507,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16128,8 +17523,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -16195,7 +17590,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -16211,8 +17606,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -16221,7 +17616,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -16280,7 +17675,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16296,8 +17691,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16356,7 +17751,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -16372,8 +17767,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -16435,7 +17830,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16451,8 +17846,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16511,7 +17906,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -16527,8 +17922,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS time_period_utc
@@ -16590,7 +17985,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16606,8 +18001,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16666,7 +18061,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -16682,8 +18077,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
@@ -16752,7 +18147,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16768,8 +18163,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -16828,7 +18223,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -16844,8 +18239,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.[date_column] AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table.[date_column] AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -16908,7 +18303,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -16924,8 +18319,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -16992,7 +18387,7 @@ spec:
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -17008,8 +18403,8 @@ spec:
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -17018,7 +18413,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -17130,7 +18525,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17146,8 +18541,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17205,7 +18600,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -17221,8 +18616,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -17285,7 +18680,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17301,8 +18696,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17360,7 +18755,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -17376,14 +18771,169 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE)) AS time_period,
                 TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table.`date_column` AS DATE))) AS time_period_utc
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
+                        SUM(
+                            CASE
+                                WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST({{ lib.render_target_column('analyzed_table') }} AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 1
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 2
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 3
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 4
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 1
+                                ELSE 0
+                                END
+                        )
+                        THEN 6
+                    WHEN COUNT(analyzed_table."target_column") =
+                        SUM(
+                            CASE
+                                WHEN analyzed_table."target_column" IS NULL OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[-+]?\d+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^[+-]?([0-9]*[.])[0-9]+$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4}))$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4}))$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01]))$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[/](0[1-9]|1[0-2])[/](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[-](0[1-9]|1[0-2])[-](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((0[1-9]|[1][0-9]|[2][0-9]|3[01])[.](0[1-9]|1[0-2])[.](\d{4})[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[/](0[1-9]|1[0-2])[/](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[-](0[1-9]|1[0-2])[-](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$|^((\d{4})[.](0[1-9]|1[0-2])[.](0[1-9]|[1][0-9]|[2][0-9]|3[01])[\s]([0]|[00]|2[0-3]|[01][0-9])[:]([0-5][0-9])[:]([0-5][0-9])[\s]?(am|pm|AM|PM)?)$' IS TRUE OR
+                                     CAST(analyzed_table."target_column" AS TEXT) ~ '^(true|false|TRUE|FALSE|yes|no|YES|NO|y|n|Y|N|t|f|T|F)$' IS TRUE
+                                    THEN 0
+                                WHEN TRIM(CAST(analyzed_table."target_column" AS TEXT)) <> ''
+                                    THEN 1
+                                ELSE 0
+                            END
+                        )
+                        THEN 7
+                    ELSE 8
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -17439,7 +18989,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17455,8 +19005,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17537,7 +19087,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -17577,8 +19127,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -17641,7 +19191,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17657,8 +19207,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -17721,7 +19271,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -17737,8 +19287,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -17811,7 +19361,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17827,8 +19377,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -17886,7 +19436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -17902,8 +19452,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -17966,7 +19516,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -17982,8 +19532,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -18048,7 +19598,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -18064,8 +19614,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -18081,7 +19631,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -18139,7 +19689,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -18155,8 +19705,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -18214,7 +19764,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -18230,8 +19780,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -18294,7 +19844,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -18310,8 +19860,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -18369,7 +19919,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -18385,8 +19935,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -18449,7 +19999,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -18465,8 +20015,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -18524,7 +20074,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table.`target_column`) =
                         SUM(
                             CASE
@@ -18540,8 +20090,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.`country` AS grouping_level_1,
                 analyzed_table.`state` AS grouping_level_2,
@@ -18611,7 +20161,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -18627,8 +20177,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -18686,7 +20236,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT_BIG(analyzed_table.[target_column]) =
                         SUM(
                             CASE
@@ -18702,8 +20252,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
                 analyzed_table.[country] AS grouping_level_1,
                 analyzed_table.[state] AS grouping_level_2,
@@ -18767,7 +20317,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) =
                         SUM(
                             CASE
@@ -18783,8 +20333,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -18850,7 +20400,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                                 END
                         )
-                        THEN 5
+                        THEN 6
                     WHEN COUNT(analyzed_table."target_column") =
                         SUM(
                             CASE
@@ -18866,8 +20416,8 @@ Expand the *Configure with data grouping* section to see additional examples for
                                 ELSE 0
                             END
                         )
-                        THEN 6
-                    ELSE 7
+                        THEN 7
+                    ELSE 8
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -18883,7 +20433,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

@@ -36,7 +36,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -47,7 +49,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -77,8 +83,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -109,7 +119,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -143,7 +157,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -177,7 +195,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 
@@ -208,7 +226,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -216,7 +236,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -232,8 +256,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -250,7 +278,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -270,7 +302,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -290,7 +326,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 
@@ -321,7 +357,9 @@ http://localhost:8888/api/rules
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules^
@@ -329,7 +367,37 @@ http://localhost:8888/api/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	}, {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	}, {
+	  "rule_name" : "sample_rule",
+	  "full_rule_name" : "sample_target/sample_category/sample_rule",
+	  "custom" : false,
+	  "built_in" : true,
+	  "can_edit" : true
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -345,8 +413,42 @@ http://localhost:8888/api/rules
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -363,7 +465,41 @@ http://localhost:8888/api/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -383,7 +519,41 @@ http://localhost:8888/api/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -403,7 +573,37 @@ http://localhost:8888/api/rules
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		),
+		RuleListModel(
+			rule_name='sample_rule',
+			full_rule_name='sample_target/sample_category/sample_rule',
+			custom=False,
+			built_in=True,
+			can_edit=True
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -441,7 +641,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -449,7 +651,27 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "rule_name" : "sample_rule",
+	  "type" : "python",
+	  "java_class_name" : "com.dqops.execution.rules.runners.python.PythonRuleRunner",
+	  "mode" : "current_value",
+	  "custom" : false,
+	  "built_in" : false,
+	  "can_edit" : true
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -466,8 +688,28 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -485,7 +727,27 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -506,7 +768,27 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -527,7 +809,23 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    RuleModel(
+		rule_name='sample_rule',
+		type=RuleRunnerType.PYTHON,
+		java_class_name='com.dqops.execution.rules.runners.python.PythonRuleRunner',
+		mode=RuleTimeWindowMode.CURRENT_VALUE,
+		custom=False,
+		built_in=False,
+		can_edit=True
+	)
+    ```
+    
+    
+    
 
 
 
@@ -558,7 +856,9 @@ http://localhost:8888/api/definitions/rules
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/definitions/rules^
@@ -566,7 +866,70 @@ http://localhost:8888/api/definitions/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "rules" : [ {
+	    "rule_name" : "sample_rule",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_1",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_2",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_3",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  } ],
+	  "all_rules" : [ {
+	    "rule_name" : "sample_rule",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_1",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_1",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_2",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_2",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  }, {
+	    "rule_name" : "sample_rule_3",
+	    "full_rule_name" : "sample_target/sample_category/sample_rule_3",
+	    "custom" : false,
+	    "built_in" : true,
+	    "can_edit" : true
+	  } ]
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -582,8 +945,54 @@ http://localhost:8888/api/definitions/rules
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -600,7 +1009,53 @@ http://localhost:8888/api/definitions/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -620,7 +1075,53 @@ http://localhost:8888/api/definitions/rules
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -640,7 +1141,49 @@ http://localhost:8888/api/definitions/rules
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    RuleFolderModel(
+		folders={
+		
+		},
+		rules=[
+			RuleListModel(
+				rule_name='sample_rule',
+				full_rule_name='sample_target/sample_category/sample_rule',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_1',
+				full_rule_name='sample_target/sample_category/sample_rule_1',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_2',
+				full_rule_name='sample_target/sample_category/sample_rule_2',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			),
+			RuleListModel(
+				rule_name='sample_rule_3',
+				full_rule_name='sample_target/sample_category/sample_rule_3',
+				custom=False,
+				built_in=True,
+				can_edit=True
+			)
+		]
+	)
+    ```
+    
+    
+    
 
 
 
@@ -678,7 +1221,9 @@ http://localhost:8888/api/rules/{fullRuleName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/rules/sample_target/sample_category/sample_rule^
@@ -689,7 +1234,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -719,8 +1268,12 @@ http://localhost:8888/api/rules/{fullRuleName}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -751,7 +1304,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -785,7 +1342,11 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -819,7 +1380,7 @@ http://localhost:8888/api/rules/{fullRuleName}
 	
     ```
 
-
+    
 
 
 

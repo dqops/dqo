@@ -10,9 +10,13 @@ import {
 } from '../../redux/actions/column.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
-import { CheckTypes } from "../../shared/routes";
-import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from '../../shared/routes';
+import { useParams } from 'react-router-dom';
+import {
+  getFirstLevelActiveTab,
+  getFirstLevelState
+} from '../../redux/selectors';
+import TextArea from '../../components/TextArea';
 
 interface IColumnDetailsProps {
   connectionName: string;
@@ -31,7 +35,9 @@ const TableDetails = ({
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(getFirstLevelState(checkTypes));
+  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
+    getFirstLevelState(checkTypes)
+  );
 
   const handleChange = (obj: any) => {
     dispatch(
@@ -56,9 +62,23 @@ const TableDetails = ({
 
   useEffect(() => {
     dispatch(
-      getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
+      getColumnBasic(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      )
     );
-  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName]);
+  }, [
+    checkTypes,
+    firstLevelActiveTab,
+    connectionName,
+    schemaName,
+    columnName,
+    tableName
+  ]);
 
   const onUpdate = async () => {
     if (!columnBasic) {
@@ -75,7 +95,16 @@ const TableDetails = ({
         columnBasic
       )
     );
-    dispatch(getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName));
+    dispatch(
+      getColumnBasic(
+        checkTypes,
+        firstLevelActiveTab,
+        connectionName,
+        schemaName,
+        tableName,
+        columnName
+      )
+    );
   };
 
   return (
@@ -115,13 +144,17 @@ const TableDetails = ({
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">SQL expression for a calculated column (use an {'{'}alias{'}.'} token to reference the table)</td>
             <td className="px-4 py-2">
-              <Input
-                value={columnBasic?.sql_expression}
+              SQL expression for a calculated column (use an {'{'}alias{'}.'}{' '}
+              token to reference the table)
+            </td>
+            <td className="px-4 py-2">
+              <TextArea
+                value={columnBasic?.sql_expression ?? ''}
                 onChange={(e) =>
-                  handleSnapTypeChange({ sql_expression: e.target.value })
+                  handleChange({ sql_expression: e.target.value })
                 }
+                className="min-h-25"
               />
             </td>
           </tr>

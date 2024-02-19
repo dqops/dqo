@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Snowflake from the UI, command-
 
 ## Overview
 
-[Snowflake](https://docs.snowflake.com/) is a cloud-based data warehouse that separates storage from compute resources and requires little maintenance.
+Snowflake is a cloud-based data warehouse that separates storage from compute resources and requires little maintenance.
 
 ## Prerequisite credentials
 

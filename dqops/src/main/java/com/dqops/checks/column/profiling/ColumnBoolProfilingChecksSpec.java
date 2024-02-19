@@ -47,10 +47,10 @@ public class ColumnBoolProfilingChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Measures the percentage of **true** values in a boolean column and verifies that it is within the accepted range.")
     private ColumnTruePercentCheckSpec profileTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage.")
+    @JsonPropertyDescription("Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range.")
     private ColumnFalsePercentCheckSpec profileFalsePercent;
 
     /**

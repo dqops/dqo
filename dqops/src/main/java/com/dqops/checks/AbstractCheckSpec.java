@@ -85,7 +85,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String qualityDimension;
 
-    @JsonPropertyDescription("Data quality check display name that could be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
+    @JsonPropertyDescription("Data quality check display name that can be assigned to the check, otherwise the check_display_name stored in the parquet result files is the check_name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String displayName;
 

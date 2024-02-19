@@ -16,6 +16,9 @@
 package com.dqops.execution.sqltemplates.rendering;
 
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbReadMode;
+import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.data.readouts.factory.SensorReadoutsColumnNames;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
 import com.dqops.execution.sensors.TimeWindowFilterParameters;
@@ -23,11 +26,13 @@ import com.dqops.execution.sensors.finder.SensorDefinitionFindResult;
 import com.dqops.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.PhysicalTableName;
 import com.dqops.metadata.sources.TableSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpec;
+import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -58,6 +63,7 @@ public class JinjaTemplateRenderParameters {
     private String actualValueAlias = SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME;
     private String expectedValueAlias = SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME;
     private List<String> additionalFilters;
+    private String tableFromFiles;
 
     /**
      * Creates a default, empty jinja template render parameters object.
@@ -95,7 +101,8 @@ public class JinjaTemplateRenderParameters {
 										 ProviderDialectSettings dialectSettings,
                                          String actualValueAlias,
                                          String expectedValueAlias,
-                                         List<String> additionalFilters) {
+                                         List<String> additionalFilters,
+                                         String tableFromFiles) {
         this.connection = connection;
         this.table = table;
         this.targetTable = table.getPhysicalTableName();
@@ -111,6 +118,7 @@ public class JinjaTemplateRenderParameters {
         this.actualValueAlias = actualValueAlias;
         this.expectedValueAlias = expectedValueAlias;
         this.additionalFilters = additionalFilters;
+        this.tableFromFiles = tableFromFiles;
     }
 
     /**
@@ -122,11 +130,13 @@ public class JinjaTemplateRenderParameters {
      */
     public static JinjaTemplateRenderParameters createFromTrimmedObjects(SensorExecutionRunParameters sensorRunParameters,
 																		 SensorDefinitionFindResult sensorDefinitions) {
+        TableSpec tableSpec = sensorRunParameters.getTable();
+
         JinjaTemplateRenderParameters result = new JinjaTemplateRenderParameters()
         {{
 			setConnection(sensorRunParameters.getConnection().trim());
-			setTable(sensorRunParameters.getTable().trim());
-            setTargetTable(sensorRunParameters.getTable().getPhysicalTableName());
+			setTable(tableSpec.trim());
+            setTargetTable(tableSpec.getPhysicalTableName());
 			setColumn(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().trim() : null);
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
@@ -140,6 +150,17 @@ public class JinjaTemplateRenderParameters {
             setExpectedValueAlias(sensorRunParameters.getExpectedValueAlias());
             setAdditionalFilters(sensorRunParameters.getAdditionalFilters());
         }};
+
+        DuckdbParametersSpec duckdbParametersSpec = sensorRunParameters.getConnection().getDuckdb();
+        if(duckdbParametersSpec != null && duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.files)
+            && duckdbParametersSpec.getSourceFilesType() != null
+        ){
+            DuckdbSourceFilesType duckdbSourceFilesType = duckdbParametersSpec.getSourceFilesType();
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+            if(!fileFormatSpec.getFilePaths().isEmpty()){
+                result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType));
+            }
+        }
 
         return result;
     }
@@ -383,4 +404,21 @@ public class JinjaTemplateRenderParameters {
     public void setAdditionalFilters(List<String> additionalFilters) {
         this.additionalFilters = additionalFilters;
     }
+
+    /**
+     * Returns the table from files with properties string.
+     * @return The table properties string.
+     */
+    public String getTableFromFiles() {
+        return tableFromFiles;
+    }
+
+    /**
+     * Sets the table from files with properties string.
+     * @param tableFromFiles The table properties string.
+     */
+    public void setTableFromFiles(String tableFromFiles) {
+        this.tableFromFiles = tableFromFiles;
+    }
+
 }

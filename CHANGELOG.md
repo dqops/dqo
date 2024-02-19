@@ -1,9 +1,7 @@
-# 1.0.1
-* Data dictionaries
-* More efficient watching for running jobs in the notification panel
-* SingleStoreDB connector based on MySQL with integration tests
-* Custom SQL check for importing data quality results from third-party data quality libraries
-* Small corrections in the documentation
-* Pip startup script supports mirrors and retries when downloading the release package
-* MIN and MAX anomalies checks
-* Improvement in the performance of the notification panel
+# 1.0.2
+* Changes to the default configuration of the table availability check
+* Use configurable connection pooling when connecting to DQOps Cloud
+* Documentation updates - categories of checks documented.
+* Handling null values in accepted_values checks. 
+* Boolean percentage checks support both the minimum and maximum percentage.
+* Incident details shows the histogram correctly in all cases, also avoiding extra calls to the backend. 

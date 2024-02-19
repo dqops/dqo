@@ -237,7 +237,7 @@ const CheckListItem = ({
 
   useEffect(() => {
     if (
-      job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+      job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
       job?.status === DqoJobHistoryEntryModelStatusEnum.failed
     ) {
       getCheckOverview();
@@ -397,7 +397,7 @@ const CheckListItem = ({
                     check?.schedule_override?.disabled ? 'clock-off' : 'clock'
                   }
                   className={clsx(
-                    'w-5 h-5 cursor-pointer',
+                    'w-[18px] h-[18px] cursor-pointer',
                     check?.schedule_override ? 'text-gray-700' : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
@@ -407,17 +407,17 @@ const CheckListItem = ({
             </Tooltip>
             }
             {(!job ||
-              job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
+              job?.status === DqoJobHistoryEntryModelStatusEnum.finished ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) &&
               isDefaultEditing !== true && isAlreadyDeleted !== true && (
                 <Tooltip
-                  content="Run Check"
+                  content="Run check"
                   className="max-w-80 py-4 px-4 bg-gray-800"
                 >
                   <div>
                     <SvgIcon
                       name="play"
-                      className={clsx("h-5 ", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
+                      className={clsx("h-[18px]", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
                       onClick={canUserRunChecks!==false ? onRunCheck : undefined}
                     />
                   </div>
@@ -431,7 +431,7 @@ const CheckListItem = ({
                 <div>
                   <SvgIcon
                     name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    className="text-gray-700 h-4 w-[18px] cursor-pointer"
                   />
                 </div>
               </Tooltip>
@@ -445,7 +445,7 @@ const CheckListItem = ({
                 <div>
                   <SvgIcon
                     name="hourglass"
-                    className="text-gray-700 h-5 cursor-pointer"
+                    className="text-gray-700 h-4 w-[18px] cursor-pointer"
                   />
                 </div>
               </Tooltip>

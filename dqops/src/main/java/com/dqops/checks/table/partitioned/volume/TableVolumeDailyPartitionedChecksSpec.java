@@ -56,28 +56,27 @@ public class TableVolumeDailyPartitionedChecksSpec extends AbstractCheckCategory
     };
 
     @JsonPropertyDescription("Verifies that each daily partition in the tested table has at least a minimum accepted number of rows. " +
-            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the partition is not empty. " +
-            "When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.")
+            "The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which ensures that the partition is not empty.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableRowCountCheckSpec dailyPartitionRowCount;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table is within a percentile from measurements made during the last 90 days.")
+    @JsonPropertyDescription("Detects outstanding partitions whose volume (the row count) differs too much from the average daily partition size. It uses time series anomaly detection to find the outliers in the partition volume during the last 90 days.")
     private TableRowCountAnomalyStationaryPartitionCheckSpec dailyPartitionRowCountAnomaly;
 
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout.")
+    @JsonPropertyDescription("Detects when the partition's volume (row count) change between the current daily partition and the previous partition exceeds the maximum accepted change percentage.")
     private TableRowCountChangeCheckSpec dailyPartitionRowCountChange;
 
     @JsonProperty("daily_partition_row_count_change_1_day")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from yesterday. Allows for exact match to readouts from yesterday or past readouts lookup.")
+    @JsonPropertyDescription("Detects when the partition volume change (increase or decrease of the row count) since yesterday's daily partition exceeds the maximum accepted change percentage. ")
     private TableRowCountChange1DayCheckSpec dailyPartitionRowCountChange1Day;
 
     @JsonProperty("daily_partition_row_count_change_7_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last week. Allows for exact match to readouts from 7 days ago or past readouts lookup.")
+    @JsonPropertyDescription("This check verifies that the percentage of change in the partition's volume (row count) since seven days ago is below the maximum accepted percentage. Verifying a volume change since a value a week ago overcomes the effect of weekly seasonability.")
     private TableRowCountChange7DaysCheckSpec dailyPartitionRowCountChange7Days;
 
     @JsonProperty("daily_partition_row_count_change_30_days")
-    @JsonPropertyDescription("Verifies that the total row count of the tested table has changed by a fixed rate since the last readout from last month. Allows for exact match to readouts from 30 days ago or past readouts lookup.")
+    @JsonPropertyDescription("This check verifies that the percentage of change in the partition's volume (row count) since thirty days ago is below the maximum accepted percentage. Comparing the current row count to a value 30 days ago overcomes the effect of monthly seasonability.")
     private TableRowCountChange30DaysCheckSpec dailyPartitionRowCountChange30Days;
 
 

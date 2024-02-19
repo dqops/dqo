@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/uniqueness/distinct_count
   rule_name: comparison/count_between
-  help_text: Verifies that the number of distinct values in a column does not fall
-    below the minimum accepted count.
+  help_text: Verifies that the number of distinct values stays within an accepted
+    range.
   standard: true

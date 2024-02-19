@@ -85,7 +85,7 @@ public class RunChecksQueueJobResult {
         public RunChecksQueueJobResult createSample() {
             return new RunChecksQueueJobResult() {{
                 setJobId(new DqoQueueJobId.DqoQueueJobIdSampleFactory().createSample());
-                setStatus(DqoJobStatus.succeeded);
+                setStatus(DqoJobStatus.finished);
                 setResult(new RunChecksResult.RunChecksResultSampleFactory().createSample());
             }};
         }

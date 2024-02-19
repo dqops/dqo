@@ -78,7 +78,7 @@ public class DataSourcesController {
      * @return Enum value of connection status and error message.
      */
     @PostMapping(value = "/datasource/testconnection", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "testConnection", notes = "Checks if the given remote connection could be opened and the credentials are valid",
+    @ApiOperation(value = "testConnection", notes = "Checks if the given remote connection can be opened and if the credentials are valid",
             response = ConnectionTestModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")

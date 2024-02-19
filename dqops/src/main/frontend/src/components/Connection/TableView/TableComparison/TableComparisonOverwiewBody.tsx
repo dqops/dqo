@@ -58,7 +58,7 @@ export default function TableComparisonOverwiewBody({
     <tbody key={index}>
       <tr key={index}>
         <td
-          className="text-left pr-4 py-1.5 flex items-center gap-x-2 cursor-pointer"
+          className="text-left py-1.5 flex items-center gap-x-2 cursor-pointer"
           onClick={() => {
             handleExtend(index);
           }}
@@ -70,7 +70,7 @@ export default function TableComparisonOverwiewBody({
           )}
           {item.compared_column_name}
         </td>
-        <td className="text-left px-4 py-1.5">
+        <td>
           <Select
             value={
               item.reference_column_name !== undefined
@@ -89,7 +89,7 @@ export default function TableComparisonOverwiewBody({
           <td
             key={jIndex}
             className={clsx(
-              'text-center px-4 py-1.5 relative',
+              'text-center py-1.5 relative !max-w-30 !w-30',
               calculateColor(
                 item.compared_column_name ?? '',
                 itemData.key,
@@ -127,6 +127,11 @@ export default function TableComparisonOverwiewBody({
                   (x) => x.label === item.reference_column_name
                 )
               }
+              disabled={item.reference_column_name === undefined ||
+                item.reference_column_name.length === 0 ||
+                !columnOptions.find(
+                  (x) => x.label === item.reference_column_name
+                )}
             />
             {calculateColor(
               item.compared_column_name ?? '',

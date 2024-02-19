@@ -152,7 +152,7 @@ const TableColumnsView = () => {
 
       
   useEffect(() => {
-    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job && job?.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       fetchColumns();
     }
   }, [job]);

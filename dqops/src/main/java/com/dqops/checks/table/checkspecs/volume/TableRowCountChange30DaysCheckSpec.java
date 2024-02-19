@@ -34,7 +34,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
+ * This check compares the current table volume (the row count) to the row count 30 days ago.
+ * This check compares the table volume to a month ago value to overcome monthly seasonability.
+ * It raises a data quality issue when the change in row count (increase or decrease) since a value 30 days ago exceeds a maximum accepted percentage of change.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

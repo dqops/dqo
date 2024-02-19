@@ -37,7 +37,7 @@ Rule severity levels. Matches the severity level name (warning - 1, alert - 2, f
 ___
 
 ## CheckResultStatus
-Enumeration of check execution statuses. It is the highest severity or an error if the sensor could not be executed due to a configuration issue.
+Enumeration of check execution statuses. It is the highest severity or an error if the sensor cannot be executed due to a configuration issue.
 
 
 **The structure of this object is described below**

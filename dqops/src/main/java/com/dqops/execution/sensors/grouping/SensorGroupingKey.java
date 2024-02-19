@@ -29,7 +29,7 @@ public class SensorGroupingKey {
 
     /**
      * Creates a sensor grouping key.
-     * @param fragmentedSqlQuery Parsed sql query that is divided into SQL fragments, static fragments could be compared as a part of this key.
+     * @param fragmentedSqlQuery Parsed sql query that is divided into SQL fragments, static fragments can be compared as a part of this key.
      * @param sensorExecutor Sensor executor instance that will be used to execute this sensor.
      */
     public SensorGroupingKey(FragmentedSqlQuery fragmentedSqlQuery,

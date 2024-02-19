@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/integrity/foreign_key_match_percent
   rule_name: comparison/min_percent
-  help_text: Verifies that the percentage of values in a column that matches values
-    in another table column does not exceed the set count. Stores a separate data
-    quality check result for each monthly partition.
+  help_text: Measures the percentage of valid values that are present in a dictionary
+    table. Joins this table to a dictionary table using an outer join. Stores a separate
+    data quality check result for each monthly partition.

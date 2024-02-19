@@ -19,6 +19,7 @@ import com.dqops.connectors.ConnectionProviderSpecificParameters;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryParametersSpec;
 import com.dqops.connectors.databricks.DatabricksParametersSpec;
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.mysql.MysqlParametersSpec;
 import com.dqops.connectors.oracle.OracleParametersSpec;
 import com.dqops.connectors.postgresql.PostgresqlParametersSpec;
@@ -67,6 +68,7 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
+            put("duckdb", o -> o.duckdb);
             put("redshift", o -> o.redshift);
             put("sqlserver", o -> o.sqlserver);
             put("presto", o -> o.presto);
@@ -101,6 +103,12 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private PostgresqlParametersSpec postgresql;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("DuckDB connection parameters. Specify parameters in the duckdb section or set the url (which is the DuckDB JDBC url).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private DuckdbParametersSpec duckdb;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
@@ -292,6 +300,25 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
         this.postgresql = postgresql;
         propagateHierarchyIdToField(postgresql, "postgresql");
     }
+
+    /**
+     * Returns the connection parameters for DuckDB.
+     * @return DuckDB connection parameters.
+     */
+    public DuckdbParametersSpec getDuckdb() {
+        return duckdb;
+    }
+
+    /**
+     * Sets the DuckDB connection parameters.
+     * @param duckdb New DuckDB connection parameters.
+     */
+    public void setDuckdb(DuckdbParametersSpec duckdb) {
+        setDirtyIf(!Objects.equals(this.duckdb, duckdb));
+        this.duckdb = duckdb;
+        propagateHierarchyIdToField(duckdb, "duckdb");
+    }
+
     /**
      * Returns the connection parameters for Redshift.
      * @return Redshift connection parameters.
@@ -592,6 +619,9 @@ public class ConnectionSpec extends AbstractSpec implements InvalidYamlStatusHol
             }
             if (cloned.postgresql != null) {
                 cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider, secretValueLookupContext);
+            }
+            if (cloned.duckdb != null) {
+                cloned.duckdb = cloned.duckdb.expandAndTrim(secretValueProvider, secretValueLookupContext);
             }
             if (cloned.redshift != null) {
                 cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider, secretValueLookupContext);

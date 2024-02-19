@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to AWS Redshift from the UI, comma
 
 ## Overview
 
-[Amazon Redshift](https://docs.aws.amazon.com/redshift/) is a fully managed, petabyte-scale data warehouse service in the cloud from Amazon Web Services.  
+Amazon Redshift is a fully managed, petabyte-scale data warehouse service in the cloud from Amazon Web Services.  
 Redshift can handle analytic workloads on big data sets stored by a column-oriented DBMS principle
 
 ## Prerequisite credentials

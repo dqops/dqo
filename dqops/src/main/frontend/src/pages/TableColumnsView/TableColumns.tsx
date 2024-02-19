@@ -87,7 +87,7 @@ const TableColumns = ({
   );
   const detectedDatatypeVar = statistics?.column_statistics?.map((x) =>
     x.statistics
-      ?.filter((item) => item.collector === 'string_datatype_detect')
+      ?.filter((item) => item.collector === 'text_datatype_detect')
       .map((item) => item.result)
   );
 
@@ -134,7 +134,7 @@ const TableColumns = ({
         maximumValue: renderValue(maximumValueData?.[i]),
         length: renderValue(lengthData?.[i]),
         scale: renderValue(scaleData?.[i]),
-        importedDatatype: String(renderValue(typeData?.[i])),
+        importedDatatype: typeData?.[i],
         columnHash: Number(hashData?.[i]),
         isColumnSelected: false
       };

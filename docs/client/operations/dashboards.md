@@ -29,7 +29,9 @@ http://localhost:8888/api/dashboards
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards^
@@ -37,7 +39,19 @@ http://localhost:8888/api/dashboards
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ { }, { }, { } ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -53,8 +67,36 @@ http://localhost:8888/api/dashboards
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +113,35 @@ http://localhost:8888/api/dashboards
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -91,7 +161,35 @@ http://localhost:8888/api/dashboards
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +209,31 @@ http://localhost:8888/api/dashboards
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		),
+		DashboardsFolderSpec(
+			standard=False,
+			dashboards=DashboardListSpec(),
+			folders=DashboardsFolderListSpec()
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -151,7 +273,9 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_0/sample_dashboard^
@@ -159,7 +283,19 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -177,8 +313,20 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -197,7 +345,19 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -219,7 +379,19 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -241,7 +413,15 @@ http://localhost:8888/api/dashboards/{folder}/{dashboardName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
 
 
 
@@ -282,7 +462,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_dashboard^
@@ -290,7 +472,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -309,8 +503,20 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -330,7 +536,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -353,7 +571,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -376,7 +606,15 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{dashboardName}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
 
 
 
@@ -418,7 +656,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_dashboard^
@@ -426,7 +666,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -446,8 +698,20 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -468,7 +732,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -492,7 +768,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -516,7 +804,15 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{dashboardNam
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
 
 
 
@@ -559,7 +855,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_dashboard^
@@ -567,7 +865,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -588,8 +898,20 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -611,7 +933,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -636,7 +970,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -661,7 +1007,15 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{da
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
 
 
 
@@ -705,7 +1059,9 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/dashboards/sample_folder_1/sample_folder_2/sample_folder_3/sample_folder_4/sample_folder_5/sample_dashboard^
@@ -713,7 +1069,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    { }
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -735,8 +1103,20 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -759,7 +1139,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -785,7 +1177,19 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -811,7 +1215,15 @@ http://localhost:8888/api/dashboards/{folder1}/{folder2}/{folder3}/{folder4}/{fo
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    AuthenticatedDashboardModel()
+    ```
+    
+    
+    
 
 
 

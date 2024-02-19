@@ -374,11 +374,6 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
             return true; // this is not a column level profiler, should work
         }
 
-        ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
-        if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
-            return false; // the data type not known, we cannot risk failing the profiler, skipping
-        }
-
         DataTypeCategory[] supportedDataTypes = statisticsCollectorSpec.getSupportedDataTypes();
         if (supportedDataTypes == null) {
             return true; // all data types supported
@@ -387,7 +382,14 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         ProviderDialectSettings dialectSettings = connectionProvider.getDialectSettings(sensorRunParameters.getConnection());
-        DataTypeCategory targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
+        DataTypeCategory targetColumnTypeCategory;
+
+        ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
+        if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
+            targetColumnTypeCategory = DataTypeCategory.string; // we are assuming that all unknown types are text types, just to allow analyzing calculated columns
+        } else {
+            targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
+        }
 
         for (DataTypeCategory supportedDataType : supportedDataTypes) {
             if (targetColumnTypeCategory == supportedDataType) {

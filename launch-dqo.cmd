@@ -1,6 +1,6 @@
 @echo off
 @REM
-@REM Copyright © 2021 DQOps (support@dqops.com)
+@REM Copyright © 2021-2024 DQOps (support@dqops.com)
 @REM
 @REM Licensed under the Apache License, Version 2.0 (the "License");
 @REM you may not use this file except in compliance with the License.
@@ -15,4 +15,4 @@
 @REM limitations under the License.
 @REM
 
-"%DQO_RUNNER%" %DQO_JAVA_OPTS% --add-opens java.base/java.nio=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*
+"%DQO_RUNNER%" %DQO_JAVA_OPTS% --add-opens java.base/java.nio=ALL-UNNAMED --add-opens java.base/java.util.concurrent=ALL-UNNAMED -Djava.library.path="%DQO_HOME%\bin" -cp "%DQO_LAUNCH_CLASSPATH%" org.springframework.boot.loader.JarLauncher %*

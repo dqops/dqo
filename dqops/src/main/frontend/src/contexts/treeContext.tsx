@@ -238,7 +238,7 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
       items: [],
-      tooltip: `${node?.label}.${schema.schema_name}`,
+      tooltip: schema.directory_prefix ?? `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
@@ -1792,6 +1792,15 @@ function TreeProvider(props: any) {
     setTabMaps(newTabMaps);
   };
 
+  const reimportTableMetadata = async (node: CustomTreeNode) => {
+    const [connection, schema, table] = node.id.toString().split('.');
+    await JobApiClient.importTables(undefined, false, undefined, {
+      connectionName: connection,
+      schemaName: schema,
+      tableNames: [table]
+    });
+  };
+
   axios.interceptors.response.use(undefined, function (error) {
     const statusCode = error.response ? error.response.status : null;
     if (statusCode === 401 || statusCode === 403) {
@@ -1843,7 +1852,8 @@ function TreeProvider(props: any) {
         refreshDatabaseNode,
         runPartitionedChecks,
         objectNotFound,
-        setObjectNotFound
+        setObjectNotFound,
+        reimportTableMetadata
       }}
       {...props}
     />

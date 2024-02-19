@@ -72,10 +72,10 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
         }
     };
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is below the value defined by the user as a parameter.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are below the value defined by the user as a parameter.")
     private ColumnNumberBelowMinValueCheckSpec profileNumberBelowMinValue;
 
-    @JsonPropertyDescription("The check counts the number of values in the column that is above the value defined by the user as a parameter.")
+    @JsonPropertyDescription("The check counts the number of values in the column that are above the value defined by the user as a parameter.")
     private ColumnNumberAboveMaxValueCheckSpec profileNumberAboveMaxValue;
 
     @JsonPropertyDescription("Verifies that the number of negative values in a column does not exceed the maximum accepted count.")
@@ -84,10 +84,10 @@ public class ColumnNumericProfilingChecksSpec extends AbstractCheckCategorySpec 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage.")
     private ColumnNegativePercentCheckSpec profileNegativeValuesPercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is below the value defined by the user as a parameter.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are below the value defined by the user as a parameter.")
     private ColumnNumberBelowMinValuePercentCheckSpec profileNumberBelowMinValuePercent;
 
-    @JsonPropertyDescription("The check counts the percentage of values in the column that is above the value defined by the user as a parameter.")
+    @JsonPropertyDescription("The check counts the percentage of values in the column that are above the value defined by the user as a parameter.")
     private ColumnNumberAboveMaxValuePercentCheckSpec profileNumberAboveMaxValuePercent;
 
     @JsonPropertyDescription("Verifies that the percentage of values from range in a column does not exceed the minimum accepted percentage.")

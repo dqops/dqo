@@ -41,23 +41,23 @@ public class ColumnPatternsTextNotMatchingDatePatternCountSensorParametersSpec e
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
     @RequiredField
-    private TextBuiltInDateFormats dateFormats = TextBuiltInDateFormats.ISO8601;
+    private TextBuiltInDateFormats dateFormat = TextBuiltInDateFormats.ISO8601;
 
     /**
      * Returns a desired format to parse the date.
      * @return Date format.
      */
-    public TextBuiltInDateFormats getDateFormats() {
-        return dateFormats;
+    public TextBuiltInDateFormats getDateFormat() {
+        return dateFormat;
     }
 
     /**
      * Sets a desired format to parse the date.
-     * @param dateFormats Date format.
+     * @param dateFormat Date format.
      */
-    public void setDateFormats(TextBuiltInDateFormats dateFormats) {
-        this.setDirtyIf(this.dateFormats != dateFormats);
-        this.dateFormats = dateFormats;
+    public void setDateFormat(TextBuiltInDateFormats dateFormat) {
+        this.setDirtyIf(this.dateFormat != dateFormat);
+        this.dateFormat = dateFormat;
     }
 
     /**

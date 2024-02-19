@@ -46,6 +46,9 @@ public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractChec
             put("daily_partition_expected_text_values_in_use_count", o -> o.dailyPartitionExpectedTextValuesInUseCount);
             put("daily_partition_expected_texts_in_top_values_count", o -> o.dailyPartitionExpectedTextsInTopValuesCount);
             put("daily_partition_number_found_in_set_percent", o -> o.dailyPartitionNumberFoundInSetPercent);
+
+            put("daily_partition_text_valid_country_code_percent", o -> o.dailyPartitionTextValidCountryCodePercent);
+            put("daily_partition_text_valid_currency_code_percent", o -> o.dailyPartitionTextValidCurrencyCodePercent);
         }
     };
 
@@ -63,6 +66,12 @@ public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractChec
 
     @JsonPropertyDescription("Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.")
     private ColumnExpectedNumbersInUseCountCheckSpec dailyPartitionExpectedNumbersInUseCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    private ColumnTextValidCountryCodePercentCheckSpec dailyPartitionTextValidCountryCodePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.")
+    private ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionTextValidCurrencyCodePercent;
 
 
     /**
@@ -153,6 +162,42 @@ public class ColumnAcceptedValuesDailyPartitionedChecksSpec extends AbstractChec
         this.setDirtyIf(!Objects.equals(this.dailyPartitionExpectedNumbersInUseCount, dailyPartitionExpectedNumbersInUseCount));
         this.dailyPartitionExpectedNumbersInUseCount = dailyPartitionExpectedNumbersInUseCount;
         propagateHierarchyIdToField(dailyPartitionExpectedNumbersInUseCount, "daily_partition_expected_numbers_in_use_count");
+    }
+
+    /**
+     * Returns a minimum strings in set count check.
+     * @return Minimum strings in set count check.
+     */
+    public ColumnTextValidCountryCodePercentCheckSpec getDailyPartitionTextValidCountryCodePercent() {
+        return dailyPartitionTextValidCountryCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid country code percent check.
+     * @param dailyPartitionTextValidCountryCodePercent String valid country code percent check.
+     */
+    public void setDailyPartitionTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec dailyPartitionTextValidCountryCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextValidCountryCodePercent, dailyPartitionTextValidCountryCodePercent));
+        this.dailyPartitionTextValidCountryCodePercent = dailyPartitionTextValidCountryCodePercent;
+        propagateHierarchyIdToField(dailyPartitionTextValidCountryCodePercent, "daily_partition_text_valid_country_code_percent");
+    }
+
+    /**
+     * Returns a minimum strings in set percent check.
+     * @return Minimum strings in set percent check.
+     */
+    public ColumnTextValidCurrencyCodePercentCheckSpec getDailyPartitionTextValidCurrencyCodePercent() {
+        return dailyPartitionTextValidCurrencyCodePercent;
+    }
+
+    /**
+     * Sets a new definition of a string valid currency code percent check.
+     * @param dailyPartitionTextValidCurrencyCodePercent String valid currency code percent check.
+     */
+    public void setDailyPartitionTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec dailyPartitionTextValidCurrencyCodePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextValidCurrencyCodePercent, dailyPartitionTextValidCurrencyCodePercent));
+        this.dailyPartitionTextValidCurrencyCodePercent = dailyPartitionTextValidCurrencyCodePercent;
+        propagateHierarchyIdToField(dailyPartitionTextValidCurrencyCodePercent, "daily_partition_text_valid_currency_code_percent");
     }
 
 

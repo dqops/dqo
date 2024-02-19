@@ -70,7 +70,7 @@ public class SqlServerSourceConnectionIntegrationTests extends BaseSqlServerInte
     @Test
     void listTables_whenPUBLICSchemaListed_thenReturnsTables() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("dbo");
+        List<SourceTableModel> tables = this.sut.listTables("dbo", null);
 
         Assertions.assertTrue(tables.size() > 0);
     }
@@ -78,11 +78,11 @@ public class SqlServerSourceConnectionIntegrationTests extends BaseSqlServerInte
     @Test
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("dbo");
+        List<SourceTableModel> tables = this.sut.listTables("dbo", null);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -92,11 +92,11 @@ public class SqlServerSourceConnectionIntegrationTests extends BaseSqlServerInte
     @Test
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
         this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("dbo");
+        List<SourceTableModel> tables = this.sut.listTables("dbo", null);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }

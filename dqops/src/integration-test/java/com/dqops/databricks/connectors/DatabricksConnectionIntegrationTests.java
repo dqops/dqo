@@ -68,7 +68,7 @@ public class DatabricksConnectionIntegrationTests extends BaseDatabricksIntegrat
     @Test
     void listTables_whenDefaultSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default");
+        List<SourceTableModel> tables = this.sut.listTables("default", null);
 
         Assertions.assertTrue(tables.size() == 0);
     }

@@ -29,7 +29,9 @@ http://localhost:8888/api/mypassword
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/mypassword^
@@ -40,7 +42,11 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -58,8 +64,12 @@ http://localhost:8888/api/mypassword
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -78,7 +88,11 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -100,7 +114,11 @@ http://localhost:8888/api/mypassword
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -122,7 +140,7 @@ http://localhost:8888/api/mypassword
 	
     ```
 
-
+    
 
 
 
@@ -160,7 +178,9 @@ http://localhost:8888/api/users/{email}/password
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com/password^
@@ -171,7 +191,11 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -190,8 +214,12 @@ http://localhost:8888/api/users/{email}/password
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -211,7 +239,11 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -234,7 +266,11 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -257,7 +293,7 @@ http://localhost:8888/api/users/{email}/password
 	
     ```
 
-
+    
 
 
 
@@ -288,7 +324,9 @@ http://localhost:8888/api/users
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/users^
@@ -299,7 +337,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -322,8 +364,12 @@ http://localhost:8888/api/users
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -347,7 +393,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -374,7 +424,11 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -401,7 +455,7 @@ http://localhost:8888/api/users
 	
     ```
 
-
+    
 
 
 
@@ -432,7 +486,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/users/sample_user@mail.com^
@@ -440,7 +496,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -456,8 +516,12 @@ http://localhost:8888/api/users/{email}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -474,7 +538,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -494,7 +562,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -514,7 +586,7 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-
+    
 
 
 
@@ -545,7 +617,9 @@ http://localhost:8888/api/users
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/users^
@@ -553,7 +627,28 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}, {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}, {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -569,8 +664,33 @@ http://localhost:8888/api/users
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -587,7 +707,32 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -607,7 +752,32 @@ http://localhost:8888/api/users
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -627,7 +797,28 @@ http://localhost:8888/api/users
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		),
+		DqoCloudUserModel(
+			email='sample_user@mail.com',
+			account_role=DqoUserRole.OPERATOR
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -665,7 +856,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/users/sample_user@mail.com^
@@ -673,7 +866,22 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "email" : "sample_user@mail.com",
+	  "accountRole" : "operator"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -690,8 +898,23 @@ http://localhost:8888/api/users/{email}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -709,7 +932,22 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -730,7 +968,22 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -751,7 +1004,18 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    DqoCloudUserModel(
+		email='sample_user@mail.com',
+		account_role=DqoUserRole.OPERATOR
+	)
+    ```
+    
+    
+    
 
 
 
@@ -789,7 +1053,9 @@ http://localhost:8888/api/users/{email}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/users/sample_user@mail.com^
@@ -800,7 +1066,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -824,8 +1094,12 @@ http://localhost:8888/api/users/{email}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -850,7 +1124,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -878,7 +1156,11 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -906,7 +1188,7 @@ http://localhost:8888/api/users/{email}
 	
     ```
 
-
+    
 
 
 

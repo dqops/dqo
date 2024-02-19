@@ -15,11 +15,11 @@ if TYPE_CHECKING:
     from ..models.column_anomaly_daily_monitoring_checks_spec import (
         ColumnAnomalyDailyMonitoringChecksSpec,
     )
-    from ..models.column_blanks_daily_monitoring_checks_spec import (
-        ColumnBlanksDailyMonitoringChecksSpec,
-    )
     from ..models.column_bool_daily_monitoring_checks_spec import (
         ColumnBoolDailyMonitoringChecksSpec,
+    )
+    from ..models.column_conversions_daily_monitoring_checks_spec import (
+        ColumnConversionsDailyMonitoringChecksSpec,
     )
     from ..models.column_custom_sql_daily_monitoring_checks_spec import (
         ColumnCustomSqlDailyMonitoringChecksSpec,
@@ -60,6 +60,9 @@ if TYPE_CHECKING:
     from ..models.column_uniqueness_daily_monitoring_checks_spec import (
         ColumnUniquenessDailyMonitoringChecksSpec,
     )
+    from ..models.column_whitespace_daily_monitoring_checks_spec import (
+        ColumnWhitespaceDailyMonitoringChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnDailyMonitoringCheckCategoriesSpec")
@@ -75,7 +78,8 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         uniqueness (Union[Unset, ColumnUniquenessDailyMonitoringChecksSpec]):
         accepted_values (Union[Unset, ColumnAcceptedValuesDailyMonitoringChecksSpec]):
         text (Union[Unset, ColumnTextDailyMonitoringChecksSpec]):
-        blanks (Union[Unset, ColumnBlanksDailyMonitoringChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceDailyMonitoringChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsDailyMonitoringChecksSpec]):
         patterns (Union[Unset, ColumnPatternsDailyMonitoringChecksSpec]):
         pii (Union[Unset, ColumnPiiDailyMonitoringChecksSpec]):
         numeric (Union[Unset, ColumnNumericDailyMonitoringChecksSpec]):
@@ -99,7 +103,8 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         Unset, "ColumnAcceptedValuesDailyMonitoringChecksSpec"
     ] = UNSET
     text: Union[Unset, "ColumnTextDailyMonitoringChecksSpec"] = UNSET
-    blanks: Union[Unset, "ColumnBlanksDailyMonitoringChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceDailyMonitoringChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsDailyMonitoringChecksSpec"] = UNSET
     patterns: Union[Unset, "ColumnPatternsDailyMonitoringChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiDailyMonitoringChecksSpec"] = UNSET
     numeric: Union[Unset, "ColumnNumericDailyMonitoringChecksSpec"] = UNSET
@@ -137,9 +142,13 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         if not isinstance(self.text, Unset):
             text = self.text.to_dict()
 
-        blanks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.blanks, Unset):
-            blanks = self.blanks.to_dict()
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
 
         patterns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.patterns, Unset):
@@ -202,8 +211,10 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
             field_dict["accepted_values"] = accepted_values
         if text is not UNSET:
             field_dict["text"] = text
-        if blanks is not UNSET:
-            field_dict["blanks"] = blanks
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
         if patterns is not UNSET:
             field_dict["patterns"] = patterns
         if pii is not UNSET:
@@ -242,11 +253,11 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         from ..models.column_anomaly_daily_monitoring_checks_spec import (
             ColumnAnomalyDailyMonitoringChecksSpec,
         )
-        from ..models.column_blanks_daily_monitoring_checks_spec import (
-            ColumnBlanksDailyMonitoringChecksSpec,
-        )
         from ..models.column_bool_daily_monitoring_checks_spec import (
             ColumnBoolDailyMonitoringChecksSpec,
+        )
+        from ..models.column_conversions_daily_monitoring_checks_spec import (
+            ColumnConversionsDailyMonitoringChecksSpec,
         )
         from ..models.column_custom_sql_daily_monitoring_checks_spec import (
             ColumnCustomSqlDailyMonitoringChecksSpec,
@@ -286,6 +297,9 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         )
         from ..models.column_uniqueness_daily_monitoring_checks_spec import (
             ColumnUniquenessDailyMonitoringChecksSpec,
+        )
+        from ..models.column_whitespace_daily_monitoring_checks_spec import (
+            ColumnWhitespaceDailyMonitoringChecksSpec,
         )
 
         d = src_dict.copy()
@@ -328,12 +342,23 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
         else:
             text = ColumnTextDailyMonitoringChecksSpec.from_dict(_text)
 
-        _blanks = d.pop("blanks", UNSET)
-        blanks: Union[Unset, ColumnBlanksDailyMonitoringChecksSpec]
-        if isinstance(_blanks, Unset):
-            blanks = UNSET
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceDailyMonitoringChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
         else:
-            blanks = ColumnBlanksDailyMonitoringChecksSpec.from_dict(_blanks)
+            whitespace = ColumnWhitespaceDailyMonitoringChecksSpec.from_dict(
+                _whitespace
+            )
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsDailyMonitoringChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsDailyMonitoringChecksSpec.from_dict(
+                _conversions
+            )
 
         _patterns = d.pop("patterns", UNSET)
         patterns: Union[Unset, ColumnPatternsDailyMonitoringChecksSpec]
@@ -427,7 +452,8 @@ class ColumnDailyMonitoringCheckCategoriesSpec:
             uniqueness=uniqueness,
             accepted_values=accepted_values,
             text=text,
-            blanks=blanks,
+            whitespace=whitespace,
+            conversions=conversions,
             patterns=patterns,
             pii=pii,
             numeric=numeric,

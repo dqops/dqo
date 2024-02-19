@@ -6,7 +6,7 @@ All [data quality sensors](../../../dqo-concepts/definition-of-data-quality-sens
 
 ## integer in range percent
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
- The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
+ The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
 
 **Sensor summary**
 
@@ -38,12 +38,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -56,12 +59,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -74,12 +101,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -92,12 +122,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -116,13 +149,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -135,12 +170,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) AS DOUBLE) / COUNT(*)  AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -160,13 +198,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -179,13 +219,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -198,12 +240,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -217,13 +262,15 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT_BIG(*) AS actual_value
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -236,12 +283,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) AS DOUBLE) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -303,6 +353,24 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -560,6 +628,24 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -793,6 +879,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -977,6 +1076,24 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -1205,13 +1322,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1226,13 +1343,34 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1247,13 +1385,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1268,16 +1406,16 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-      {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM(
         SELECT
                    original_table.*
@@ -1295,13 +1433,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1316,16 +1454,16 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
         SELECT
             original_table.*
@@ -1344,13 +1482,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1365,13 +1503,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1386,13 +1524,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT(*)
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1407,13 +1545,13 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT_BIG(*) = 0 THEN 100.0
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) / COUNT_BIG(*)
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1428,16 +1566,16 @@ The templates used to generate the SQL query for each data source supported by D
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
         CASE
-            WHEN COUNT(*) = 0 THEN 100.0
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
             ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
         END AS actual_value
-    {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-    {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
         SELECT
             original_table.*
@@ -1497,6 +1635,24 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -1724,12 +1880,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1742,12 +1901,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1760,12 +1943,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1778,14 +1964,17 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-                {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
                        original_table.*
@@ -1802,12 +1991,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1820,13 +2012,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                        WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
                     ELSE 1
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -1846,12 +2040,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1864,12 +2061,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1882,12 +2082,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1900,12 +2103,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                ELSE 1
-            END
-        ) / COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                    ELSE 1
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1922,7 +2128,7 @@ The templates used to generate the SQL query for each data source supported by D
             100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
-                    ELSE 1
+                        ELSE 1
                 END
             ) AS DOUBLE) / COUNT(*) AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
@@ -1996,6 +2202,25 @@ The templates used to generate the SQL query for each data source supported by D
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
                 ELSE 0
             END
         ) AS actual_value
@@ -2226,13 +2451,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2245,13 +2472,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2264,13 +2514,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2283,15 +2535,17 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-              {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+      {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
       FROM(
           SELECT
                      original_table.*
@@ -2308,13 +2562,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2327,14 +2583,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                        THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)  AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2354,13 +2611,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2373,13 +2632,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2392,13 +2653,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2411,13 +2674,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2430,14 +2695,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
-                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
-                        THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*)  AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2509,6 +2775,25 @@ The templates used to generate the SQL query for each data source supported by D
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
                 ELSE 0
             END
         ) AS actual_value
@@ -2739,12 +3024,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2757,12 +3045,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2775,12 +3087,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2793,14 +3108,17 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
-           {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
-            {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
+        {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
         FROM(
             SELECT
                 original_table.*
@@ -2817,13 +3135,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2836,13 +3156,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2862,13 +3184,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
-                    THEN 1
-                ELSE 0
-            END
-        )/ COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2881,12 +3205,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2899,12 +3226,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2917,12 +3247,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                ELSE 0
-            END
-        ) / COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2935,13 +3268,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
-                    ELSE 0
+                        ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -2962,7 +3297,7 @@ ___
 
 ## number in range percent
 Column level sensor that finds the maximum value. It works on any data type that supports the MAX functions.
- The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
+ The returned data type matches the data type of the column (can return date, integer, string, datetime, etc.).
 
 **Sensor summary**
 
@@ -2994,12 +3329,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3012,12 +3350,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3030,12 +3392,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3048,12 +3413,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -3072,13 +3440,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3091,12 +3461,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) AS DOUBLE) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -3116,13 +3489,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-      100.0 * SUM(
         CASE
-          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-        ELSE
-        0
-      END
-        ) / COUNT(*) AS actual_value
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3135,12 +3510,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3153,12 +3531,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3171,12 +3552,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) / COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3189,12 +3573,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
-                ELSE 0
-            END
-        ) AS DOUBLE) / COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+                    ELSE 0
+                END
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -3331,6 +3718,21 @@ The templates used to generate the SQL query for each data source supported by D
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }})
+        WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -3640,6 +4042,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -3819,6 +4234,19 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4016,6 +4444,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -4195,6 +4636,19 @@ The templates used to generate the SQL query for each data source supported by D
 
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
@@ -4392,6 +4846,19 @@ The templates used to generate the SQL query for each data source supported by D
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "MySQL"
 
     ```sql+jinja
@@ -4559,12 +5026,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4577,12 +5047,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4595,12 +5089,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4613,12 +5110,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
       FROM(
@@ -4637,12 +5137,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4655,13 +5158,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4681,12 +5186,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_valuee
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4699,12 +5207,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4717,12 +5228,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4735,12 +5249,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4753,13 +5270,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4804,12 +5323,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4822,12 +5344,36 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_grouping_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "DuckDB"
+
+    ```sql+jinja
+    {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4840,12 +5386,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4858,12 +5407,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
       {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
               {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
       FROM(
@@ -4882,12 +5434,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4900,13 +5455,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/presto.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (
@@ -4926,12 +5483,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4944,12 +5504,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4962,12 +5525,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/spark.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT(*) AS actual_value
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4980,12 +5546,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
-        100.0 * SUM(
-            CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
-                ELSE 0
-            END
-        )/COUNT_BIG(*) AS actual_value
+        CASE
+            WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT_BIG({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
         {{- lib.render_data_grouping_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4998,13 +5567,15 @@ The templates used to generate the SQL query for each data source supported by D
     ```sql+jinja
     {% import '/dialects/trino.sql.jinja2' as lib with context -%}
     SELECT
-        CAST(
-            100.0 * SUM(
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE CAST(100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
                     ELSE 0
                 END
-            ) AS DOUBLE) / COUNT(*) AS actual_value
+            ) AS DOUBLE) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END as actual_value
         {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
         {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
     FROM (

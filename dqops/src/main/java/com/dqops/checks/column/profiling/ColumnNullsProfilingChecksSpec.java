@@ -45,12 +45,11 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         {
             put("profile_nulls_count", o -> o.profileNullsCount);
             put("profile_nulls_percent", o -> o.profileNullsPercent);
+            put("profile_nulls_percent_anomaly", o ->o.profileNullsPercentAnomaly);
 
             put("profile_not_nulls_count", o -> o.profileNotNullsCount);
             put("profile_not_nulls_percent", o -> o.profileNotNullsPercent);
 
-            put("profile_nulls_percent_anomaly", o ->o.profileNullsPercentAnomaly);
-            
             put("profile_nulls_percent_change", o ->o.profileNullsPercentChange);
             put("profile_nulls_percent_change_1_day", o ->o.profileNullsPercentChange1Day);
             put("profile_nulls_percent_change_7_days", o ->o.profileNullsPercentChange7Days);
@@ -58,20 +57,20 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         }
     };
 
-    @JsonPropertyDescription("Detects null values in a column. Verifies that the number of null values in a column does not exceed the maximum accepted count.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Counts the number of rows having a null value. Raises a data quality issue when the count of null values is above a max_count threshold.")
     private ColumnNullsCountCheckSpec profileNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of null values in a column. Raises a data quality exception when the percentage of null values is above the minimum accepted percentage.")
+    @JsonPropertyDescription("Detects incomplete columns that contain any null values. Measures the percentage of rows having a null value. Raises a data quality issue when the percentage of null values is above a max_percent threshold.")
     private ColumnNullsPercentCheckSpec profileNullsPercent;
 
-    @JsonPropertyDescription("Detects empty columns. The default rule min_count=1 verifies that the column has any values. Verifies that the number of not null values in a column does not exceed the minimum accepted count.")
+    @JsonPropertyDescription("Detects day-to-day anomalies in the percentage of null values. Raises a data quality issue when the rate of null values increases or decreases too much during the last 90 days.")
+    private ColumnNullPercentAnomalyStationaryCheckSpec profileNullsPercentAnomaly;
+
+    @JsonPropertyDescription("Detects empty columns that contain only null values. Counts the number of rows that have non-null values. Raises a data quality issue when the count of non-null values is below min_count.")
     private ColumnNotNullsCountCheckSpec profileNotNullsCount;
 
-    @JsonPropertyDescription("Measures the percent of not null values in a column. Raises a data quality exception when the percentage of not null values is below a minimum accepted percentage.")
+    @JsonPropertyDescription("Detects incomplete columns that contain too few non-null values. Measures the percentage of rows that have non-null values. Raises a data quality issue when the percentage of non-null values is below min_percentage.")
     private ColumnNotNullsPercentCheckSpec profileNotNullsPercent;
-
-    @JsonPropertyDescription("Verifies that the null percent value in a column changes in a rate within a percentile boundary during last 90 days.")
-    private ColumnNullPercentAnomalyStationaryCheckSpec profileNullsPercentAnomaly;
 
     @JsonPropertyDescription("Verifies that the null percent value in a column changed in a fixed rate since last readout.")
     private ColumnNullPercentChangeCheckSpec profileNullsPercentChange;
@@ -126,6 +125,24 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a null percent value anomaly 90 days check specification.
+     * @return Null percent value anomaly 90 days check specification.
+     */
+    public ColumnNullPercentAnomalyStationaryCheckSpec getProfileNullsPercentAnomaly() {
+        return profileNullsPercentAnomaly;
+    }
+
+    /**
+     * Sets a new specification of a null percent value anomaly 90 days check.
+     * @param profileNullsPercentAnomaly Null percent value anomaly 90 days check specification.
+     */
+    public void setProfileNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec profileNullsPercentAnomaly) {
+        this.setDirtyIf(!Objects.equals(this.profileNullsPercentAnomaly, profileNullsPercentAnomaly));
+        this.profileNullsPercentAnomaly = profileNullsPercentAnomaly;
+        propagateHierarchyIdToField(profileNullsPercentAnomaly, "profile_nulls_percent_anomaly");
+    }
+
+    /**
      * Returns a not nulls count check specification.
      * @return Not nulls count check specification.
      */
@@ -159,24 +176,6 @@ public class ColumnNullsProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileNotNullsPercent, profileNotNullsPercent));
         this.profileNotNullsPercent = profileNotNullsPercent;
         propagateHierarchyIdToField(profileNotNullsPercent, "profile_not_nulls_percent");
-    }
-
-    /**
-     * Returns a null percent value anomaly 90 days check specification.
-     * @return Null percent value anomaly 90 days check specification.
-     */
-    public ColumnNullPercentAnomalyStationaryCheckSpec getProfileNullsPercentAnomaly() {
-        return profileNullsPercentAnomaly;
-    }
-
-    /**
-     * Sets a new specification of a null percent value anomaly 90 days check.
-     * @param profileNullsPercentAnomaly Null percent value anomaly 90 days check specification.
-     */
-    public void setProfileNullsPercentAnomaly(ColumnNullPercentAnomalyStationaryCheckSpec profileNullsPercentAnomaly) {
-        this.setDirtyIf(!Objects.equals(this.profileNullsPercentAnomaly, profileNullsPercentAnomaly));
-        this.profileNullsPercentAnomaly = profileNullsPercentAnomaly;
-        propagateHierarchyIdToField(profileNullsPercentAnomaly, "profile_nulls_percent_anomaly");
     }
 
     /**

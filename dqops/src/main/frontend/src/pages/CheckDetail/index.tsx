@@ -52,7 +52,9 @@ export const SensorDetail = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [helpText, setHelpText] = useState(activeCheckDetail?.help_text ?? '');
-  const [standard, setStandard] = useState(activeCheckDetail?.standard ?? false);
+  const [standard, setStandard] = useState(
+    activeCheckDetail?.standard ?? false
+  );
 
   const onChangeSensor = (value: string) => {
     setSelectedSensor(value);
@@ -68,7 +70,7 @@ export const SensorDetail = () => {
 
   const onChangeStandard = (value: boolean) => {
     setStandard(value);
-  }
+  };
 
   useEffect(() => {
     if (type === 'create') {
@@ -84,6 +86,7 @@ export const SensorDetail = () => {
     if (activeCheckDetail === undefined) {
       dispatch(getCheck(full_check_name));
     }
+    setIsUpdated(false);
   }, [full_check_name, path, type, custom, activeCheckDetail]);
 
   useEffect(() => {
@@ -113,7 +116,9 @@ export const SensorDetail = () => {
       if (copied === true) {
         await dispatch(
           createCheck(
-            urlencodeDecoder(String(full_check_name).replace(/\/[^/]*$/, '/') + checkName),
+            urlencodeDecoder(
+              String(full_check_name).replace(/\/[^/]*$/, '/') + checkName
+            ),
             {
               sensor_name: urlencodeDecoder(selectedSensor),
               rule_name: urlencodeDecoder(selectedRule),
@@ -151,7 +156,7 @@ export const SensorDetail = () => {
             sensor_name: selectedSensor,
             rule_name: selectedRule,
             help_text: helpText,
-            standard: standard,
+            standard: standard
           }
         )
       );
@@ -166,13 +171,15 @@ export const SensorDetail = () => {
         full_check_name
           ? urlencodeDecoder(full_check_name)
           : urlencodeDecoder(Array.from(path).join('/') + '/' + checkName)
-          )
-          );
-    dispatch(refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true))
+      )
+    );
+    dispatch(
+      refreshChecksFolderTree(refreshChecksTreeIndicator ? false : true)
+    );
     dispatch(
       closeFirstLevelTab(
         '/definitions/checks/' +
-        String(full_check_name).split('/')[
+          String(full_check_name).split('/')[
             String(full_check_name).split('/').length - 1
           ]
       )
@@ -307,8 +314,10 @@ export const SensorDetail = () => {
                 Check:{' '}
                 {full_check_name ||
                   (path !== undefined &&
-                    urlencodeEncoder(Array.from(path).join('/') + '/' + checkName)) ||
-                    urlencodeEncoder(checkName)}
+                    urlencodeEncoder(
+                      Array.from(path).join('/') + '/' + checkName
+                    )) ||
+                  urlencodeEncoder(checkName)}
               </div>
             </div>
           </div>
@@ -320,12 +329,15 @@ export const SensorDetail = () => {
                 Check:{' '}
                 {path
                   ? urlencodeEncoder([...(path || []), ''].join('/'))
-                  : urlencodeEncoder(String(full_check_name).replace(/\/[^/]*$/, '/'))}
+                  : urlencodeEncoder(
+                      String(full_check_name).replace(/\/[^/]*$/, '/')
+                    )}
               </div>
               <Input
                 value={checkName}
                 onChange={onChangecheckName}
                 error={!checkName}
+                className="min-w-64"
               />
             </div>
           </div>

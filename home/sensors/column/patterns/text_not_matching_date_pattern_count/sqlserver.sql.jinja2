@@ -1,24 +1,24 @@
 {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-{% macro render_date_formats(date_formats) %}
-    {%- if date_formats == 'YYYY-MM-DD'-%}
+{% macro render_date_format(date_format) %}
+    {%- if date_format == 'YYYY-MM-DD'-%}
         120
-    {%- elif date_formats == 'MM/DD/YYYY' -%}
+    {%- elif date_format == 'MM/DD/YYYY' -%}
         101
-    {%- elif date_formats == 'DD/MM/YYYY' -%}
+    {%- elif date_format == 'DD/MM/YYYY' -%}
         103
-    {%- elif date_formats == 'YYYY/MM/DD'-%}
+    {%- elif date_format == 'YYYY/MM/DD'-%}
         111
-    {%- elif date_formats == 'Month D, YYYY'-%}
+    {%- elif date_format == 'Month D, YYYY'-%}
         107
     {%- endif -%}
 {% endmacro -%}
 
 SELECT
     CASE
-        WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+        WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
         ELSE SUM(
             CASE
-                WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                     THEN 1
                 ELSE 0
             END

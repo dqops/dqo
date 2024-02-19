@@ -100,7 +100,7 @@ public class FolderTreeNode implements Cloneable {
      * List all folders and deeply nested subfolders (at any depth) that contain any file with a given file extension.
      * Every folder (also deeply nested) that has at least one file whose name ends with the fileNameExtension is returned.
      * @param fileNameExtension File extension pattern, should be like ".dqoconn.yaml".
-     * @param includeCurrentFolder True when the current folder should be also added to the results if it has files with a matching pattern.
+     * @param includeCurrentFolder True when the current folder should also be added to the results if it has files with a matching pattern.
      * @return List of subfolders with a file that match the file name extension.
      */
     public List<FolderTreeNode> findNestedSubFoldersWithFiles(String fileNameExtension, boolean includeCurrentFolder) {

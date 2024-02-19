@@ -24,6 +24,7 @@ import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRule
 import com.dqops.rules.percentile.AnomalyDifferencingPercentileMovingAverageRuleWarning1PctParametersSpec;
 import com.dqops.sensors.table.volume.TableVolumeRowCountSensorParametersSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,7 +35,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+ * This check detects anomalies in the day-to-day changes to the table volume (the row count).
+ * It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.
+ * This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -158,6 +161,18 @@ public class TableRowCountAnomalyDifferencingCheckSpec
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
+    }
+
+    /**
+     * Returns true if this is a standard data quality check that is always shown on the data quality checks editor screen.
+     * Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks.
+     *
+     * @return True when it is a standard check, false when it is an advanced check. The default value is 'false' (all checks are non-standard, advanced checks).
+     */
+    @Override
+    @JsonIgnore
+    public boolean isStandard() {
+        return true;
     }
 
     /**

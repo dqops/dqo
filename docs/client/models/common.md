@@ -50,7 +50,7 @@ Model that returns the form definition and the form data to edit parameters (thr
 
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
-|<span class="no-wrap-code">`rule_name`</span>|Full rule name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality rule.|*string*|
+|<span class="no-wrap-code">`rule_name`</span>|Full rule name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality rule.|*string*|
 |<span class="no-wrap-code">`rule_parameters`</span>|List of fields for editing the rule parameters like thresholds.|*List[[FieldModel](./common.md#fieldmodel)]*|
 |<span class="no-wrap-code">`disabled`</span>|Disable the rule. The rule will not be evaluated. The sensor will also not be executed if it has no enabled rules.|*boolean*|
 |<span class="no-wrap-code">`configured`</span>|Returns true when the rule is configured (is not null), so it should be shown in the UI as configured (having values).|*boolean*|
@@ -167,7 +167,7 @@ The run check scheduling group (profiling, daily checks, monthly checks, etc), w
 ___
 
 ## EffectiveScheduleLevelModel
-Enumeration of possible levels at which a schedule could be configured.
+Enumeration of possible levels at which a schedule can be configured.
 
 
 **The structure of this object is described below**
@@ -289,9 +289,9 @@ Describes a single check that is similar to other checks in other check types.
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`check_target`](./schemas.md#checktarget)</span>|The check target (table or column).|*[CheckTarget](./schemas.md#checktarget)*|
 |<span class="no-wrap-code">[`check_type`](./table_comparisons.md#checktype)</span>|The check type.|*[CheckType](./table_comparisons.md#checktype)*|
-|<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The time scale (daily, monthly). The time scale is optional and could be null (for profiling checks).|*[CheckTimeScale](./common.md#checktimescale)*|
+|<span class="no-wrap-code">[`time_scale`](./common.md#checktimescale)</span>|The time scale (daily, monthly). The time scale is optional and can be null (for profiling checks).|*[CheckTimeScale](./common.md#checktimescale)*|
 |<span class="no-wrap-code">`category`</span>|The check's category.|*string*|
-|<span class="no-wrap-code">`check_name`</span>|The similar check name in another category.|*string*|
+|<span class="no-wrap-code">`check_name`</span>|Similar check name in another category.|*string*|
 
 
 ___
@@ -308,7 +308,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">`check_name`</span>|Data quality check name that is used in YAML.|*string*|
 |<span class="no-wrap-code">`help_text`</span>|Help text that describes the data quality check.|*string*|
 |<span class="no-wrap-code">`sensor_parameters`</span>|List of fields for editing the sensor parameters.|*List[[FieldModel](./common.md#fieldmodel)]*|
-|<span class="no-wrap-code">`sensor_name`</span>|Full sensor name. This field is for information purposes and could be used to create additional custom checks that are reusing the same data quality sensor.|*string*|
+|<span class="no-wrap-code">`sensor_name`</span>|Full sensor name. This field is for information purposes and can be used to create additional custom checks that reuse the same data quality sensor.|*string*|
 |<span class="no-wrap-code">`quality_dimension`</span>|Data quality dimension used for tagging the results of this data quality checks.|*string*|
 |<span class="no-wrap-code">[`rule`](#rulethresholdsmodel)</span>|Threshold (alerting) rules defined for a check.|*[RuleThresholdsModel](#rulethresholdsmodel)*|
 |<span class="no-wrap-code">`supports_grouping`</span>|The data quality check supports a custom data grouping configuration.|*boolean*|
@@ -327,7 +327,7 @@ Model that returns the form definition and the form data to edit a single data q
 |<span class="no-wrap-code">[`data_clean_job_template`](./jobs.md#deletestoreddataqueuejobparameters)</span>|Configured parameters for the "data clean" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.|*[DeleteStoredDataQueueJobParameters](./jobs.md#deletestoreddataqueuejobparameters)*|
 |<span class="no-wrap-code">`data_grouping_configuration`</span>|The name of a data grouping configuration defined at a table that should be used for this check.|*string*|
 |<span class="no-wrap-code">[`check_target`](#checktargetmodel)</span>|Type of the check's target (column, table).|*[CheckTargetModel](#checktargetmodel)*|
-|<span class="no-wrap-code">`configuration_requirements_errors`</span>|List of configuration errors that must be fixed before the data quality check could be executed.|*List[string]*|
+|<span class="no-wrap-code">`configuration_requirements_errors`</span>|List of configuration errors that must be fixed before the data quality check can be executed.|*List[string]*|
 |<span class="no-wrap-code">`similar_checks`</span>|List of similar checks in other check types or in other time scales.|*List[[SimilarCheckModel](#similarcheckmodel)]*|
 |<span class="no-wrap-code">`can_edit`</span>|Boolean flag that decides if the current user can edit the check.|*boolean*|
 |<span class="no-wrap-code">`can_run_checks`</span>|Boolean flag that decides if the current user can run checks.|*boolean*|
@@ -425,7 +425,7 @@ Data source provider type (dialect type).
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
+|string|bigquery<br/>databricks<br/>mysql<br/>oracle<br/>postgresql<br/>duckdb<br/>presto<br/>redshift<br/>snowflake<br/>spark<br/>sqlserver<br/>trino<br/>|
 
 ___
 
@@ -445,6 +445,7 @@ Connection model returned by the rest api that is limited only to the basic fiel
 |<span class="no-wrap-code">[`bigquery`](../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)</span>|BigQuery connection parameters. Specify parameters in the bigquery section.|*[BigQueryParametersSpec](../../reference/yaml/ConnectionYaml.md#bigqueryparametersspec)*|
 |<span class="no-wrap-code">[`snowflake`](../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)</span>|Snowflake connection parameters.|*[SnowflakeParametersSpec](../../reference/yaml/ConnectionYaml.md#snowflakeparametersspec)*|
 |<span class="no-wrap-code">[`postgresql`](../../reference/yaml/ConnectionYaml.md#postgresqlparametersspec)</span>|PostgreSQL connection parameters.|*[PostgresqlParametersSpec](../../reference/yaml/ConnectionYaml.md#postgresqlparametersspec)*|
+|<span class="no-wrap-code">[`duckdb`](../../reference/yaml/ConnectionYaml.md#duckdbparametersspec)</span>|DuckDB connection parameters.|*[DuckdbParametersSpec](../../reference/yaml/ConnectionYaml.md#duckdbparametersspec)*|
 |<span class="no-wrap-code">[`redshift`](../../reference/yaml/ConnectionYaml.md#redshiftparametersspec)</span>|Redshift connection parameters.|*[RedshiftParametersSpec](../../reference/yaml/ConnectionYaml.md#redshiftparametersspec)*|
 |<span class="no-wrap-code">[`sqlserver`](../../reference/yaml/ConnectionYaml.md#sqlserverparametersspec)</span>|SqlServer connection parameters.|*[SqlServerParametersSpec](../../reference/yaml/ConnectionYaml.md#sqlserverparametersspec)*|
 |<span class="no-wrap-code">[`presto`](../../reference/yaml/ConnectionYaml.md#prestoparametersspec)</span>|Presto connection parameters.|*[PrestoParametersSpec](../../reference/yaml/ConnectionYaml.md#prestoparametersspec)*|

@@ -34,7 +34,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+ * This check compares the current table volume (the row count) to the row count seven days ago.
+ * This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
+ * It raises a data quality issue when the change in row count (increase or decrease) since a week ago exceeds a maximum accepted percentage of change.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

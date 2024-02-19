@@ -47,7 +47,7 @@ All parameters supported by the command are listed below.
 |<div id="sensor edit--headless" class="no-wrap-code">`--headless`</div><div id="sensor edit-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="sensor edit-h" class="no-wrap-code">`-h`</div><div id="sensor edit--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
 |<div id="sensor edit-of" class="no-wrap-code">`-of`</div><div id="sensor edit--output-format" class="no-wrap-code">`--output-format`</div>|Output format for tabular responses| |*TABLE*<br/>*CSV*<br/>*JSON*<br/>|
-|<div id="sensor edit-p" class="no-wrap-code">`-p`</div><div id="sensor edit--provider" class="no-wrap-code">`--provider`</div>|Provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
+|<div id="sensor edit-p" class="no-wrap-code">`-p`</div><div id="sensor edit--provider" class="no-wrap-code">`--provider`</div>|Provider type| |*bigquery*<br/>*databricks*<br/>*mysql*<br/>*oracle*<br/>*postgresql*<br/>*duckdb*<br/>*presto*<br/>*redshift*<br/>*snowflake*<br/>*spark*<br/>*sqlserver*<br/>*trino*<br/>|
 |<div id="sensor edit-s" class="no-wrap-code">`-s`</div><div id="sensor edit--sensor" class="no-wrap-code">`--sensor`</div>|Sensor name| ||
 
 

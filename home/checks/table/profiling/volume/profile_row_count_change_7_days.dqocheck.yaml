@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: table/volume/row_count
   rule_name: change/change_percent_7_days
-  help_text: Verifies that the total row count of the tested table has changed by
-    a fixed rate since the last readout from last week. Allows for exact match to
-    readouts from 7 days ago or past readouts lookup.
+  help_text: 'This check verifies that the percentage of change in the table''s volume
+    (row count) since seven days ago is below the maximum accepted percentage. Verifying
+    a volume change since a value a week ago overcomes the effect of weekly seasonability. '

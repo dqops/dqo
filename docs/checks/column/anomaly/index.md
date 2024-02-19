@@ -9,7 +9,9 @@ This is a list of anomaly column data quality checks supported by DQOps and a br
 Detects anomalous (unexpected) changes and outliers in the time series of data quality results collected over a period of time.
 
 ### [sum anomaly](./sum-anomaly.md)
-A column-level check that ensures that the sum in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a sum of values in a numeric column and detects anomalies in a time series of previous sums.
+ It raises a data quality issue when the sum is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -21,7 +23,9 @@ A column-level check that ensures that the sum in a monitored column is within a
 
 
 ### [mean anomaly](./mean-anomaly.md)
-A column-level check that ensures that the mean value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a mean (average) of values in a numeric column and detects anomalies in a time series of previous averages.
+ It raises a data quality issue when the mean is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -33,7 +37,9 @@ A column-level check that ensures that the mean value in a monitored column is w
 
 
 ### [median anomaly](./median-anomaly.md)
-A column-level check that ensures that the median in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.
+This check calculates a median of values in a numeric column and detects anomalies in a time series of previous medians.
+ It raises a data quality issue when the median is in the top *anomaly_percent* percentage of the most outstanding values in the time series.
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -45,8 +51,10 @@ A column-level check that ensures that the median in a monitored column is withi
 
 
 ### [min anomaly](./min-anomaly.md)
-A column-level check that detects big changes of the minimum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new minimum values that changed much more than the typical change for the last 90 days.
+This check finds a minimum value in a numeric column and detects anomalies in a time series of previous minimum values.
+ It raises a data quality issue when the current minimum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new minimum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -58,8 +66,10 @@ A column-level check that detects big changes of the minimum value in a numeric 
 
 
 ### [max anomaly](./max-anomaly.md)
-A column-level check that detects big changes of the maximum value in a numeric column, detecting new data outliers.
- If the values in the column are slightly changing day-to-day, DQOps detects new maximum values that changed much more than the typical change for the last 90 days.
+This check finds a maximum value in a numeric column and detects anomalies in a time series of previous maximum values.
+ It raises a data quality issue when the current maximum value is in the top *anomaly_percent* percentage of the most outstanding
+ values in the time series (it is a new maximum value, far from the previous one).
+ This data quality check uses a 90-day time window and requires a history of at least 30 days.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -71,21 +81,19 @@ A column-level check that detects big changes of the maximum value in a numeric 
 
 
 ### [mean change](./mean-change.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the last measured mean.
 
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_mean_change`</span>](./mean-change.md#profile-mean-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_mean_change`</span>](./mean-change.md#daily-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_mean_change`</span>](./mean-change.md#monthly-mean-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_mean_change`</span>](./mean-change.md#daily-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_mean_change`</span>](./mean-change.md#monthly-partition-mean-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the mean value in a column changed in a fixed rate since the last readout.| |
 
 
 
 ### [mean change 1 day](./mean-change-1-day.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured one day ago (yesterday).
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -97,7 +105,8 @@ A column-level check that ensures that the mean value in a monitored column has 
 
 
 ### [mean change 7 days](./mean-change-7-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the mean (average) value of numeric values has changed more than *max_percent* from the mean value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -109,7 +118,8 @@ A column-level check that ensures that the mean value in a monitored column has 
 
 
 ### [mean change 30 days](./mean-change-30-days.md)
-A column-level check that ensures that the mean value in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the mean (average) of numeric values has changed more than *max_percent* from the mean value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -121,21 +131,19 @@ A column-level check that ensures that the mean value in a monitored column has 
 
 
 ### [median change](./median-change.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the median of numeric values has changed more than *max_percent* from the last measured median.
 
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_median_change`</span>](./median-change.md#profile-median-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_median_change`</span>](./median-change.md#daily-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_median_change`</span>](./median-change.md#monthly-median-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_median_change`</span>](./median-change.md#daily-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_median_change`</span>](./median-change.md#monthly-partition-median-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the median in a column changed in a fixed rate since the last readout.| |
 
 
 
 ### [median change 1 day](./median-change-1-day.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured one day ago (yesterday).
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -147,7 +155,8 @@ A column-level check that ensures that the median in a monitored column has chan
 
 
 ### [median change 7 days](./median-change-7-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -159,7 +168,8 @@ A column-level check that ensures that the median in a monitored column has chan
 
 
 ### [median change 30 days](./median-change-30-days.md)
-A column-level check that ensures that the median in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the median of numeric values has changed more than *max_percent* from the median value measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -171,21 +181,19 @@ A column-level check that ensures that the median in a monitored column has chan
 
 
 ### [sum change](./sum-change.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout.
+This check detects that the sum of numeric values has changed more than *max_percent* from the last measured sum.
 
 
 | Data quality check name | Check type | Description | Standard |
 |-------------------------|------------|-------------|----------|
 |[<span class="no-wrap-code">`profile_sum_change`</span>](./sum-change.md#profile-sum-change)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_sum_change`</span>](./sum-change.md#daily-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_sum_change`</span>](./sum-change.md#monthly-sum-change)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 |[<span class="no-wrap-code">`daily_partition_sum_change`</span>](./sum-change.md#daily-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
-|[<span class="no-wrap-code">`monthly_partition_sum_change`</span>](./sum-change.md#monthly-partition-sum-change)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the sum in a column changed in a fixed rate since the last readout.| |
 
 
 
 ### [sum change 1 day](./sum-change-1-day.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from yesterday.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured one day ago (yesterday).
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -197,7 +205,8 @@ A column-level check that ensures that the sum in a monitored column has changed
 
 
 ### [sum change 7 days](./sum-change-7-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last week.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured seven days ago.
+ This check aims to overcome a weekly seasonability and compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -209,7 +218,8 @@ A column-level check that ensures that the sum in a monitored column has changed
 
 
 ### [sum change 30 days](./sum-change-30-days.md)
-A column-level check that ensures that the sum in a monitored column has changed by a fixed rate since the last readout from last month.
+This check detects that the sum of numeric values has changed more than *max_percent* from the sum measured thirty days ago.
+ This check aims to overcome a monthly seasonability and compare a value to a similar value a month ago.
 
 
 | Data quality check name | Check type | Description | Standard |

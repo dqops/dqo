@@ -47,10 +47,10 @@ public class ColumnIntegrityProfilingChecksSpec extends AbstractCheckCategorySpe
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.")
+    @JsonPropertyDescription("Detects invalid values that are not present in a dictionary table using an outer join query. Counts the number of invalid keys.")
     private ColumnIntegrityLookupKeyNotFoundCountCheckSpec profileLookupKeyNotFound;
 
-    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count.")
+    @JsonPropertyDescription("Measures the percentage of valid values that are present in a dictionary table. Joins this table to a dictionary table using an outer join.")
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec profileLookupKeyFoundPercent;
 
     /**

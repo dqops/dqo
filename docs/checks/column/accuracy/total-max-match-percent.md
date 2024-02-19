@@ -111,7 +111,7 @@ spec:
         accuracy:
           profile_total_max_match_percent:
             parameters:
-              referenced_table: dim_customer
+              referenced_table: landing_zone.customer_raw
               referenced_column: customer_id
             warning:
               max_diff_percent: 0.0
@@ -160,7 +160,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -195,10 +195,37 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -230,7 +257,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -267,7 +294,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,analyzed_table.actual_value
             FROM (SELECT
                     MAX(original_table."target_column") AS actual_value
@@ -304,7 +331,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -339,10 +366,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -374,7 +401,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -409,7 +436,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -444,7 +471,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -479,7 +506,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -514,10 +541,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -626,7 +653,7 @@ spec:
           accuracy:
             daily_total_max_match_percent:
               parameters:
-                referenced_table: dim_customer
+                referenced_table: landing_zone.customer_raw
                 referenced_column: customer_id
               warning:
                 max_diff_percent: 0.0
@@ -675,7 +702,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -710,10 +737,37 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -745,7 +799,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -782,7 +836,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,analyzed_table.actual_value
             FROM (SELECT
                     MAX(original_table."target_column") AS actual_value
@@ -819,7 +873,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -854,10 +908,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -889,7 +943,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -924,7 +978,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -959,7 +1013,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -994,7 +1048,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1029,10 +1083,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___
@@ -1141,7 +1195,7 @@ spec:
           accuracy:
             monthly_total_max_match_percent:
               parameters:
-                referenced_table: dim_customer
+                referenced_table: landing_zone.customer_raw
                 referenced_column: customer_id
               warning:
                 max_diff_percent: 0.0
@@ -1190,7 +1244,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
@@ -1225,10 +1279,37 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
+            ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                (SELECT
+                    MAX(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                FROM {{ lib.render_referenced_table(parameters.referenced_table) }} AS referenced_table
+                ) AS expected_value,
+                MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                (SELECT
+                    MAX(referenced_table."customer_id")
+                FROM landing_zone.customer_raw AS referenced_table
+                ) AS expected_value,
+                MAX(analyzed_table."target_column") AS actual_value
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1260,7 +1341,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_table>` AS analyzed_table
@@ -1297,7 +1378,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "dim_customer" referenced_table
+                FROM landing_zone.customer_raw referenced_table
                 ) AS expected_value,analyzed_table.actual_value
             FROM (SELECT
                     MAX(original_table."target_column") AS actual_value
@@ -1334,7 +1415,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1369,10 +1450,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_database"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     ??? example "Redshift"
 
@@ -1404,7 +1485,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1439,7 +1520,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
             FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
@@ -1474,7 +1555,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.`customer_id`)
-                FROM `<target_schema>`.`dim_customer` AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.`target_column`) AS actual_value
             FROM `<target_schema>`.`<target_table>` AS analyzed_table
@@ -1509,7 +1590,7 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table.[customer_id])
-                FROM [your_sql_server_database].[<target_schema>].[dim_customer] AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table.[target_column]) AS actual_value
             FROM [your_sql_server_database].[<target_schema>].[<target_table>] AS analyzed_table
@@ -1544,10 +1625,10 @@ spec:
             SELECT
                 (SELECT
                     MAX(referenced_table."customer_id")
-                FROM ""."<target_schema>"."dim_customer" AS referenced_table
+                FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 MAX(analyzed_table."target_column") AS actual_value
-            FROM ""."<target_schema>"."<target_table>" AS analyzed_table
+            FROM "your_trino_catalog"."<target_schema>"."<target_table>" AS analyzed_table
             ```
     
 ___

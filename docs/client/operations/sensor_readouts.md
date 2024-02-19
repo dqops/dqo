@@ -47,7 +47,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/monitoring/daily/readouts^
@@ -55,7 +57,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -77,8 +97,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -101,7 +149,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -127,7 +203,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -153,7 +257,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -202,7 +330,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/partitioned/daily/readouts^
@@ -210,7 +340,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -232,8 +380,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -256,7 +432,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -282,7 +486,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -308,7 +540,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -356,7 +612,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/columns/sample_column/profiling/readouts^
@@ -364,7 +622,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -384,8 +660,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -406,7 +710,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -430,7 +762,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -454,7 +814,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -502,7 +886,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/monitoring/daily/readouts^
@@ -510,7 +896,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -531,8 +935,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -554,7 +986,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -579,7 +1039,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -604,7 +1092,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -652,7 +1164,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/partitioned/daily/readouts^
@@ -660,7 +1174,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -681,8 +1213,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -704,7 +1264,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -729,7 +1317,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -754,7 +1370,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -801,7 +1441,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/profiling/readouts^
@@ -809,7 +1451,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	}, {
+	  "sensorReadoutEntries" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -828,8 +1488,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -849,7 +1537,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -872,7 +1588,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -895,7 +1639,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		),
+		SensorReadoutsListModel(
+			sensor_readout_entries=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 

@@ -19,9 +19,9 @@ import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeDateMatchFormatPercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnTextMatchDateFormatPercentCheckSpec;
 import com.dqops.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
-import com.dqops.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
+import com.dqops.checks.column.checkspecs.datetime.ColumnDateInRangePercentCheckSpec;
 import com.dqops.connectors.DataTypeCategory;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -44,19 +44,19 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_date_values_in_future_percent", o -> o.dailyPartitionDateValuesInFuturePercent);
-            put("daily_partition_datetime_value_in_range_date_percent", o -> o.dailyPartitionDatetimeValueInRangeDatePercent);
-            put("daily_partition_date_match_format_percent", o -> o.dailyPartitionDateMatchFormatPercent);
+            put("daily_partition_date_in_range_percent", o -> o.dailyPartitionDateInRangePercent);
+            put("daily_partition_text_match_date_format_percent", o -> o.dailyPartitionTextMatchDateFormatPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
+    @JsonPropertyDescription("Detects dates in the future in date, datetime and timestamp columns. Measures a percentage of dates in the future. Raises a data quality issue when too many future dates are found. Stores a separate data quality check result for each daily partition.")
     private ColumnDateValuesInFuturePercentCheckSpec dailyPartitionDateValuesInFuturePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
-    private ColumnDatetimeValueInRangeDatePercentCheckSpec dailyPartitionDatetimeValueInRangeDatePercent;
+    @JsonPropertyDescription("Verifies that the dates in date, datetime, or timestamp columns are within a reasonable range of dates. The default configuration detects fake dates such as 1900-01-01 and 2099-12-31. Measures the percentage of valid dates and raises a data quality issue when too many dates are found. Stores a separate data quality check result for each daily partition.")
+    private ColumnDateInRangePercentCheckSpec dailyPartitionDateInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of date values matching the given format in a text column does not exceed the maximum accepted percentage. Stores a separate data quality check result for each daily partition.")
-    private ColumnDatetimeDateMatchFormatPercentCheckSpec dailyPartitionDateMatchFormatPercent;
+    @JsonPropertyDescription("Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found. Stores a separate data quality check result for each daily partition.")
+    private ColumnTextMatchDateFormatPercentCheckSpec dailyPartitionTextMatchDateFormatPercent;
 
     /**
      * Returns a date values in future percentage check.
@@ -80,36 +80,36 @@ public class ColumnDatetimeDailyPartitionedChecksSpec extends AbstractCheckCateg
      * Returns a datetime value in range date percentage check.
      * @return Maximum datetime value in range date percentage check.
      */
-    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDailyPartitionDatetimeValueInRangeDatePercent() {
-        return dailyPartitionDatetimeValueInRangeDatePercent;
+    public ColumnDateInRangePercentCheckSpec getDailyPartitionDateInRangePercent() {
+        return dailyPartitionDateInRangePercent;
     }
 
     /**
      * Sets a new definition of a datetime value in range date percentage check.
-     * @param dailyPartitionDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     * @param dailyPartitionDateInRangePercent Datetime value in range date percentage check.
      */
-    public void setDailyPartitionDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec dailyPartitionDatetimeValueInRangeDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDatetimeValueInRangeDatePercent, dailyPartitionDatetimeValueInRangeDatePercent));
-        this.dailyPartitionDatetimeValueInRangeDatePercent = dailyPartitionDatetimeValueInRangeDatePercent;
-        propagateHierarchyIdToField(dailyPartitionDatetimeValueInRangeDatePercent, "daily_partition_datetime_value_in_range_date_percent");
+    public void setDailyPartitionDateInRangePercent(ColumnDateInRangePercentCheckSpec dailyPartitionDateInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionDateInRangePercent, dailyPartitionDateInRangePercent));
+        this.dailyPartitionDateInRangePercent = dailyPartitionDateInRangePercent;
+        propagateHierarchyIdToField(dailyPartitionDateInRangePercent, "daily_partition_date_in_range_percent");
     }
 
     /**
      * Returns a date match format percentage check.
      * @return Maximum date match format percentage check.
      */
-    public ColumnDatetimeDateMatchFormatPercentCheckSpec getDailyPartitionDateMatchFormatPercent() {
-        return dailyPartitionDateMatchFormatPercent;
+    public ColumnTextMatchDateFormatPercentCheckSpec getDailyPartitionTextMatchDateFormatPercent() {
+        return dailyPartitionTextMatchDateFormatPercent;
     }
 
     /**
      * Sets a new definition of a date match format percentage check.
-     * @param dailyPartitionDateMatchFormatPercent Date match format percentage check.
+     * @param dailyPartitionTextMatchDateFormatPercent Date match format percentage check.
      */
-    public void setDailyPartitionDateMatchFormatPercent(ColumnDatetimeDateMatchFormatPercentCheckSpec dailyPartitionDateMatchFormatPercent) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionDateMatchFormatPercent, dailyPartitionDateMatchFormatPercent));
-        this.dailyPartitionDateMatchFormatPercent = dailyPartitionDateMatchFormatPercent;
-        propagateHierarchyIdToField(dailyPartitionDateMatchFormatPercent, "daily_partition_date_match_format_percent");
+    public void setDailyPartitionTextMatchDateFormatPercent(ColumnTextMatchDateFormatPercentCheckSpec dailyPartitionTextMatchDateFormatPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionTextMatchDateFormatPercent, dailyPartitionTextMatchDateFormatPercent));
+        this.dailyPartitionTextMatchDateFormatPercent = dailyPartitionTextMatchDateFormatPercent;
+        propagateHierarchyIdToField(dailyPartitionTextMatchDateFormatPercent, "daily_partition_text_match_date_format_percent");
     }
 
     /**

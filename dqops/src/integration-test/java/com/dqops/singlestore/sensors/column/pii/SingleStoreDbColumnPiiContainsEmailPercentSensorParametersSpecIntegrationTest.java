@@ -66,7 +66,7 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(40.0, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -79,7 +79,7 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(40.0, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -92,7 +92,7 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(40.0, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -105,7 +105,7 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, (float) resultTable.column(0).get(0));
+        Assertions.assertEquals(83.33333333333333, (float) resultTable.column(0).get(0));
     }
 
     @Test
@@ -118,6 +118,6 @@ public class SingleStoreDbColumnPiiContainsEmailPercentSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(40.0, (float) resultTable.column(0).get(0), 3);
     }
 }

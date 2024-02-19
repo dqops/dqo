@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import ActionGroup from './TableActionGroup';
@@ -16,10 +16,23 @@ import {
 } from '../../../redux/selectors';
 import { CheckTypes } from '../../../shared/routes';
 import Select from '../../Select';
-import { TableListModelProfilingChecksResultTruncationEnum } from '../../../api';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  CsvFileFormatSpec,
+  JsonFileFormatSpec,
+  ParquetFileFormatSpec,
+  FileFormatSpec,
+  TableListModelProfilingChecksResultTruncationEnum,
+  DuckdbParametersSpecSourceFilesTypeEnum
+} from '../../../api';
 import NumberInput from '../../NumberInput';
 import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
+import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
+import { ConnectionApiClient } from '../../../services/apiClient';
+
+type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
 const TableDetails = () => {
   const {
@@ -36,15 +49,41 @@ const TableDetails = () => {
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
+  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
+  const [paths, setPaths] = useState<Array<string>>(['']);
+  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+    (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
+      x.includes('format')
+    ) as DuckdbParametersSpecSourceFilesTypeEnum) ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
+  );
+  const [configuration, setConfiguration] = useState<TConfiguration>(
+    tableBasic?.file_format ?? {}
+  );
+
+  const onChangeConfiguration = (params: Partial<TConfiguration>) => {
+    setConfiguration((prev) => ({
+      ...prev,
+      ...params
+    }));
+  };
+
+  const cleanConfiguration = () => {
+    setConfiguration({});
+  };
+
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
-  const { userProfile } = useSelector(
-    (state: IRootState) => state.job || {}
-  );
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   useEffect(() => {
     dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
+    const getConnectionBasic = async () => {
+      await ConnectionApiClient.getConnectionBasic(connection).then((res) =>
+        setConnectionModel(res.data)
+      );
+    };
+    getConnectionBasic();
   }, [checkTypes, firstLevelActiveTab, connection, schema, table]);
 
   const handleChange = (obj: any) => {
@@ -67,13 +106,33 @@ const TableDetails = () => {
         connection,
         schema,
         table,
-        tableBasic
+        {
+          ...tableBasic,
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }
       )
     );
     await dispatch(
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
   };
+
+  const onChangePath = (value: string) => {
+    const copiedPaths = [...paths];
+    copiedPaths[paths.length - 1] = value;
+    setPaths(copiedPaths);
+  };
+
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
+
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
+
+  const onDeletePath = (index: number) =>
+    setPaths((prev) => prev.filter((x, i) => i !== index));
 
   return (
     <div className="p-4">
@@ -83,7 +142,14 @@ const TableDetails = () => {
         isUpdating={isUpdating}
       />
 
-      <table  className={clsx("mb-6 w-160 text-sm", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
+      <table
+        className={clsx(
+          'mb-6 w-160 text-sm',
+          userProfile.can_manage_data_sources
+            ? ''
+            : 'cursor-not-allowed pointer-events-none'
+        )}
+      >
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>
@@ -148,10 +214,17 @@ const TableDetails = () => {
                   { label: '', value: undefined },
                   ...Object.values(
                     TableListModelProfilingChecksResultTruncationEnum
-                  ).map((x) => ({ label: x?.replaceAll("_", " ")
-                  .replace(/./, c => c.toUpperCase()) , value: x }))
+                  ).map((x) => ({
+                    label: x
+                      ?.replaceAll('_', ' ')
+                      .replace(/./, (c) => c.toUpperCase()),
+                    value: x
+                  }))
                 ]}
-                value={tableBasic?.advanced_profiling_result_truncation ?? TableListModelProfilingChecksResultTruncationEnum.one_per_month}
+                value={
+                  tableBasic?.advanced_profiling_result_truncation ??
+                  TableListModelProfilingChecksResultTruncationEnum.one_per_month
+                }
                 onChange={(selected) =>
                   handleChange({
                     advanced_profiling_result_truncation: selected
@@ -168,6 +241,22 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
+      {connectionModel.provider_type ===
+      ConnectionSpecProviderTypeEnum.duckdb ? (
+        <FileFormatConfiguration
+          paths={paths}
+          onAddPath={onAddPath}
+          onChangePath={onChangePath}
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
+          configuration={configuration}
+          onChangeConfiguration={onChangeConfiguration}
+          cleanConfiguration={cleanConfiguration}
+          onDeletePath={onDeletePath}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

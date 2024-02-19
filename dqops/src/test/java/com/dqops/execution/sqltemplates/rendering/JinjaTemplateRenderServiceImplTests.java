@@ -74,7 +74,8 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery),
                 SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME,
                 SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME,
-                new ArrayList<>()
+                new ArrayList<>(),
+                null
         );
     }
 

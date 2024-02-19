@@ -100,7 +100,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -129,7 +129,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -156,7 +156,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -183,7 +183,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 CAST(analyzed_table.`date1` AS DATE) AS time_period,
@@ -217,7 +217,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1
@@ -246,7 +246,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -277,7 +277,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -317,7 +317,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -350,7 +350,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,
@@ -383,7 +383,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         String target_query = """
             SELECT
                 CASE
-                    WHEN COUNT(*) = 0 THEN NULL
+                    WHEN COUNT(*) = 0 THEN 0.0
                     ELSE 100.0 * COUNT(%s) / COUNT(*)
                 END AS actual_value,
                 analyzed_table.`date2` AS grouping_level_1,

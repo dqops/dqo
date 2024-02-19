@@ -137,6 +137,16 @@ description: DQOps is an open-source data quality platform for data quality and 
 
         [:octicons-arrow-right-24: Getting started guide](getting-started/index.md)
 
+
+    -   :material-image-broken-variant:{ .lg .middle } __Categories of data quality checks__
+    
+        ---
+    
+        Find out what types of most common data quality issues DQOps can detect. The manual for each category shows how to activate the check.
+    
+        [:octicons-arrow-right-24: Review the categories of data quality issues](categories-of-data-quality-checks/index.md)
+
+
     -   :material-download:{ .lg .middle } __Download from PyPI or Docker Hub__
     
         ---

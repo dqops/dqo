@@ -47,7 +47,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/monitoring/daily/model^
@@ -55,7 +57,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -76,8 +102,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -99,7 +159,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -124,7 +218,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -149,7 +277,37 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/moni
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -192,7 +350,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/monitoring/daily^
@@ -200,7 +360,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -221,8 +399,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -244,7 +450,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -269,7 +503,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -294,7 +556,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -343,7 +629,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/partitioned/daily/model^
@@ -351,7 +639,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -372,8 +684,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -395,7 +741,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -420,7 +800,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -445,7 +859,37 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/part
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -488,7 +932,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/partitioned/daily^
@@ -496,7 +942,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -517,8 +981,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -540,7 +1032,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -565,7 +1085,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -590,7 +1138,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -638,7 +1210,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/profiling/model^
@@ -646,7 +1220,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	}, {
+	  "sensor_parameters" : [ ],
+	  "disabled" : false,
+	  "configured" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -665,8 +1263,42 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -686,7 +1318,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -709,7 +1375,41 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -732,7 +1432,37 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/prof
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		),
+		CheckConfigurationModel(
+			sensor_parameters=[
+			
+			],
+			disabled=False,
+			configured=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -774,7 +1504,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/bulkenable/profiling^
@@ -782,7 +1514,25 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	}, {
+	  "sensor_parameters_definitions" : [ ]
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -801,8 +1551,36 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -822,7 +1600,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -845,7 +1651,35 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -868,7 +1702,31 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/bulk
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		),
+		CheckTemplate(
+			sensor_parameters_definitions=[
+			
+			]
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -906,7 +1764,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas^
@@ -914,7 +1774,34 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}, {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}, {
+	  "can_edit" : false,
+	  "can_collect_statistics" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -931,8 +1818,39 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -950,7 +1868,38 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -971,7 +1920,38 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -992,7 +1972,34 @@ http://localhost:8888/api/connections/{connectionName}/schemas
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		),
+		SchemaModel(
+			can_edit=False,
+			can_collect_statistics=False,
+			can_run_checks=False,
+			can_delete_data=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 

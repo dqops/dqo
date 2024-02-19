@@ -34,7 +34,9 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that there are no more than a set percentage of valid longitude values in a monitored column.
+ * This check verifies that numeric values are valid longitude coordinates. A valid longitude coordinate is in the range --180...180.
+ * It measures the percentage of values within a valid range for a longitude.
+ * This check raises a data quality issue when the rate of valid values is below the minimum accepted percentage.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

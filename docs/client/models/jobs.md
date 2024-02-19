@@ -30,7 +30,7 @@ Job status of a job on the queue.
 
 |&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|
 |-----------|-------------|
-|string|queued<br/>running<br/>waiting<br/>succeeded<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
+|string|queued<br/>running<br/>waiting<br/>finished<br/>failed<br/>cancel_requested<br/>cancelled<br/>|
 
 ___
 
@@ -314,7 +314,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
-|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
 |<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
 |<span class="no-wrap-code">[`check_search_filters`](./common.md#checksearchfilters)</span>|Target data quality checks filter.|*[CheckSearchFilters](./common.md#checksearchfilters)*|
 |<span class="no-wrap-code">[`time_window_filter`](./jobs.md#timewindowfilterparameters)</span>|Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.|*[TimeWindowFilterParameters](./jobs.md#timewindowfilterparameters)*|
@@ -381,7 +381,7 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
+|<span class="no-wrap-code">[`data_scope`](#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](#statisticsdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -398,10 +398,10 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|
 |---------------|---------------------------------|-----------|
 |<span class="no-wrap-code">`connection`</span>|The name of the target connection.|*string*|
-|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that could be run on this connection. Limits the number of concurrent jobs.|*integer*|
+|<span class="no-wrap-code">`max_jobs_per_connection`</span>|The maximum number of concurrent 'run checks on table' jobs that can be run on this connection. Limits the number of concurrent jobs.|*integer*|
 |<span class="no-wrap-code">[`table`](./columns.md#physicaltablename)</span>|The full physical name (schema.table) of the target table.|*[PhysicalTableName](./columns.md#physicaltablename)*|
 |<span class="no-wrap-code">[`statistics_collector_search_filters`](./jobs.md#statisticscollectorsearchfilters)</span>|Statistics collectors search filters that identify the type of statistics collector to run.|*[StatisticsCollectorSearchFilters](./jobs.md#statisticscollectorsearchfilters)*|
-|<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
+|<span class="no-wrap-code">[`data_scope`](./jobs.md#statisticsdatascope)</span>|The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.|*[StatisticsDataScope](./jobs.md#statisticsdatascope)*|
 |<span class="no-wrap-code">`dummy_sensor_execution`</span>|Boolean flag that enables a dummy statistics collection (sensors are executed, but the statistics results are not written to the parquet files).|*boolean*|
 |<span class="no-wrap-code">[`collect_statistics_result`](./jobs.md#collectstatisticsresult)</span>|The summary of the statistics collection job after if finished. Returns the number of collectors analyzed, columns analyzed, statistics results captured.|*[CollectStatisticsResult](./jobs.md#collectstatisticsresult)*|
 
@@ -519,7 +519,7 @@ Describes a change to the job status or the job queue (such as a new job was add
 ___
 
 ## FolderSynchronizationStatus
-Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQOps Cloud.
+Enumeration of statuses identifying the synchronization status for each folder that can be synchronized with the DQOps cloud.
 
 
 **The structure of this object is described below**

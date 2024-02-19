@@ -18,6 +18,8 @@ package com.dqops.sampledata;
 import com.dqops.connectors.*;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.PhysicalTableName;
+import com.dqops.metadata.sources.TableSpec;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -90,15 +92,25 @@ public class ProviderTestDataProxy {
 
     private List<SourceTableModel> prepareTablesInSchema(SampleTableMetadata sampleTableMetadata,
                                                          ConnectionProvider connectionProvider){
-        String schemaName = sampleTableMetadata.getTableSpec().getPhysicalTableName().getSchemaName();
+        TableSpec tableSpec = sampleTableMetadata.getTableSpec();
+        PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
+        String schemaName = physicalTableName.getSchemaName();
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ConnectionSchemaPair schemaListKey
                 = new ConnectionSchemaPair(connectionSpec, schemaName);
         List<SourceTableModel> tablesInSchema = tablesInSchemas.get(schemaListKey);
+        // the connectionWrapper with a tableSpec made that duckdb tries to use without creating it in the memory
+        // the table name appears in the "existingSourceTable", avoiding creation the table in the memory which result tests throw table missing error messages
+//        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl();
+//        connectionWrapper.setHierarchyId(new HierarchyId("connections", "test"));
+//        connectionWrapper.setSpec(connectionSpec);
+//        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(physicalTableName);
+//        tableWrapper.setSpec(tableSpec);
+
         if (tablesInSchema == null) {
             SecretValueLookupContext secretValueLookupContext = new SecretValueLookupContext(null);
             try (SourceConnection sourceConnection = connectionProvider.createConnection(connectionSpec, true, secretValueLookupContext)) {
-                tablesInSchema = sourceConnection.listTables(schemaName);
+                tablesInSchema = sourceConnection.listTables(schemaName, null);
                 tablesInSchemas.put(schemaListKey, tablesInSchema);
             }
         }

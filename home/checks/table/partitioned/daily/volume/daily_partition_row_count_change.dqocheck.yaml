@@ -4,5 +4,7 @@ kind: check
 spec:
   sensor_name: table/volume/row_count
   rule_name: change/change_percent
-  help_text: Verifies that the total row count of the tested table has changed by
-    a fixed rate since the last readout.
+  help_text: Detects when the partition's volume (row count) change between the current
+    daily partition and the previous partition exceeds the maximum accepted change
+    percentage.
+  standard: true

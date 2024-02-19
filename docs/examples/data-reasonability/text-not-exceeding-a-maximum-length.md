@@ -19,17 +19,17 @@ The `measure_name` contains measure name data. We want to verify that the length
 
 We will verify the data of `bigquery-public-data.america_health_rankings.ahr` using monitoring
 [text_max_length](../../checks/column/text/text-max-length.md) column check.
-Our goal is to verify if the length of the strings in `measure_name` column does not exceed the set threshold.
+Our goal is to verify if the length of the strings in `measure_name` column does not exceed the set range.
 
-In this example, we will set one maximum thresholds level for the check:
+In this example, we will set one threshold level for the check:
 
-- error: 30.0
+- error: range from 0 to 30
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
 **VALUE**
 
-If the string length exceed 30.0, en error alert will be triggered.
+If the string length exceed the range 0.0 - 30.0, en error alert will be triggered.
 
 ## Data structure
 
@@ -56,7 +56,7 @@ A detailed explanation of [how to start DQOps platform and run the example is de
 
 To navigate to a list of checks prepared in the example using the [user interface](../../dqo-concepts/dqops-user-interface-overview.md):
 
-![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-string-max-length-checks1.png)
+![Navigating to a list of checks](https://dqops.com/docs/images/examples/navigating-to-the-list-of-daily-text-max-length-checks2.png)
 
 1. Go to the **Monitoring** section.
 
@@ -79,21 +79,21 @@ Run the activated check using the **Run check** button.
 
 You can also run all the checks for an entire subcategory of checks using the **Run check** button at the end of the line with the check subgroup name.
 
-![Run check](https://dqops.com/docs/images/examples/daily-string-max-length-run-checks1.png)
+![Run check](https://dqops.com/docs/images/examples/daily-text-max-length-run-checks2.png)
 
 
 ### **View detailed check results**
 
 Access the detailed results by clicking the **Results** button. The results should be similar to the one below.
 
-![String-max-length check results](https://dqops.com/docs/images/examples/daily-string-max-length-checks-results1.png)
+![Text max length check results](https://dqops.com/docs/images/examples/daily-text-max-length-checks-results3.png)
 
 Within the Results window, you will see three categories: **Check results**, **Sensor readouts**, and **Execution errors**.
 The Check results category shows the severity level that result from the verification of sensor readouts by set rule thresholds.
 The Sensor readouts category displays the values obtained by the sensors from the data source.
 The Execution errors category displays any error that occurred during the check's execution.
 
-The actual value in this example is 31, which is above the maximum threshold level set in the error field (30).
+The actual value in this example is 31, which is above the range threshold level set in the error field (0 - 30).
 The check result in an error issue (notice the orange square to the left of the check name).
 
 
@@ -172,7 +172,7 @@ The highlighted fragments in the YAML file below represent the segment where the
 
 If you want to learn more about checks and threshold levels, please refer to the [DQOps concept section](../../dqo-concepts/definition-of-data-quality-checks/index.md).
 
-```yaml hl_lines="16-25"
+```yaml hl_lines="16-26"
 apiVersion: dqo/v1
 kind: table
 spec:
@@ -197,7 +197,8 @@ spec:
           text:
             daily_text_max_length:
               error:
-                max_value: 30.0
+                from: 0
+                to: 30
     state_name:
       type_snapshot:
         column_type: STRING
@@ -247,8 +248,8 @@ SELECT
     MAX(
         LENGTH(analyzed_table.`measure_name`)
     ) AS actual_value,
-    CURRENT_TIMESTAMP() AS time_period,
-    TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+    TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
 FROM `bigquery-public-data`.`america_health_rankings`.`ahr` AS analyzed_table
 GROUP BY time_period, time_period_utc
 ORDER BY time_period, time_period_utc
@@ -260,20 +261,20 @@ threshold level set in the error (30.0).
 
 ```
 **************************************************
-Finished executing a sensor for a check text_max_length on the table america_health_rankings.ahr
-using a sensor definition column/text/text_max_length, sensor result count: 1
+Finished executing a sensor for a check daily_text_max_length on the table america_health_rankings.ahr using a sensor
+ definition column/text/text_max_length, sensor result count: 1
 
 Results returned by the sensor:
-+------------+------------------------+------------------------+
-|actual_value|time_period             |time_period_utc         |
-+------------+------------------------+------------------------+
-|31          |2023-05-09T09:19:39.470Z|2023-05-09T09:19:39.470Z|
-+------------+------------------------+---------------
++------------+-----------+--------------------+
+|actual_value|time_period|time_period_utc     |
++------------+-----------+--------------------+
+|31          |2024-02-14 |2024-02-14T00:00:00Z|
++------------+-----------+--------------------+
 ```
 
 In this example, we have demonstrated how to use DQOps to verify the reasonability of data in a column.
 By using the [text_max_length](../../checks/column/text/text-max-length.md) column check, we can monitor that 
-the length of the text in a column does not exceed the maximum length. If it does, you will get a warning, error or fatal result.
+the length of the text in a column does not exceed the length in a set range. If it does, you will get a warning, error or fatal result.
 
 ## Next steps
 

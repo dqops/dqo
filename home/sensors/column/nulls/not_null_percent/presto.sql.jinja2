@@ -1,7 +1,7 @@
 {% import '/dialects/presto.sql.jinja2' as lib with context -%}
 SELECT
     CASE
-        WHEN COUNT(*) = 0 THEN NULL
+        WHEN COUNT(*) = 0 THEN 0.0
         ELSE CAST(100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) AS DOUBLE) / COUNT(*)
     END AS actual_value
     {{- lib.render_data_grouping_projections_reference('analyzed_table') }}

@@ -18,6 +18,7 @@ package com.dqops.core.principal;
 
 import com.dqops.core.dqocloud.login.DqoUserRole;
 import org.apache.parquet.Strings;
+import software.amazon.awssdk.services.s3.endpoints.internal.Value;
 
 import java.util.Objects;
 
@@ -43,12 +44,14 @@ public class UserDomainIdentity {
     /**
      * The default identity of the local instance, a user who manages the root data domain on this DQOps instance.
      */
-    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN, DEFAULT_DATA_DOMAIN);
+    public static final UserDomainIdentity LOCAL_INSTANCE_ADMIN_IDENTITY = new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, DEFAULT_DATA_DOMAIN, DEFAULT_DATA_DOMAIN, null, null);
 
     private final String userName;
     private final DqoUserRole domainRole;
     private final String dataDomainFolder;
     private final String dataDomainCloud;
+    private final String tenantOwner;
+    private final String tenantId;
 
     /**
      * Creates a user identity object.
@@ -56,12 +59,21 @@ public class UserDomainIdentity {
      * @param domainRole Domain role.
      * @param dataDomainFolder The data domain folder name.
      * @param dataDomainCloud The real data domain on DQOps cloud that is mounted.
+     * @param tenantOwner The email of the tenant owner.
+     * @param tenantId The tenant id.
      */
-    public UserDomainIdentity(String userName, DqoUserRole domainRole, String dataDomainFolder, String dataDomainCloud) {
+    public UserDomainIdentity(String userName,
+                              DqoUserRole domainRole,
+                              String dataDomainFolder,
+                              String dataDomainCloud,
+                              String tenantOwner,
+                              String tenantId) {
         this.userName = userName;
         this.domainRole = domainRole;
         this.dataDomainFolder = !Strings.isNullOrEmpty(dataDomainFolder) ? dataDomainFolder : DEFAULT_DATA_DOMAIN;
         this.dataDomainCloud = dataDomainCloud;
+        this.tenantOwner = tenantOwner;
+        this.tenantId = tenantId;
     }
 
     /**
@@ -71,7 +83,7 @@ public class UserDomainIdentity {
      * @return System user identity for the given data domain.
      */
     public static UserDomainIdentity createDataDomainAdminIdentity(String dataDomainFolder, String dataDomainCloud) {
-        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud);
+        return  new UserDomainIdentity(SYSTEM_USER, DqoUserRole.ADMIN, dataDomainFolder, dataDomainCloud, null, null);
     }
 
     /**
@@ -105,6 +117,22 @@ public class UserDomainIdentity {
      */
     public String getDataDomainCloud() {
         return dataDomainCloud;
+    }
+
+    /**
+     * The email of the tenant (account) owner.
+     * @return Tenant owner email.
+     */
+    public String getTenantOwner() {
+        return tenantOwner;
+    }
+
+    /**
+     * The tenant ID (account id).
+     * @return The tenant id.
+     */
+    public String getTenantId() {
+        return tenantId;
     }
 
     @Override

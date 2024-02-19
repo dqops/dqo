@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Dialog, DialogBody, DialogFooter } from '@material-tailwind/react';
 import Button from '../Button';
 import Input from '../Input';
-import { TableApiClient } from "../../services/apiClient";
-import { CustomTreeNode } from "../../shared/interfaces";
-import { useTree } from "../../contexts/treeContext";
-import { useParams } from "react-router-dom";
+import {
+  ConnectionApiClient,
+  JobApiClient,
+  TableApiClient
+} from '../../services/apiClient';
+import { CustomTreeNode } from '../../shared/interfaces';
+import { useTree } from '../../contexts/treeContext';
+import { useHistory, useParams } from 'react-router-dom';
+import { useActionDispatch } from '../../hooks/useActionDispatch';
+import { addFirstLevelTab } from '../../redux/actions/source.actions';
+import { CheckTypes, ROUTES } from '../../shared/routes';
+import {
+  ConnectionModel,
+  ConnectionSpecProviderTypeEnum,
+  CsvFileFormatSpec,
+  JsonFileFormatSpec,
+  ParquetFileFormatSpec,
+  FileFormatSpec,
+  DuckdbParametersSpecSourceFilesTypeEnum
+} from '../../api';
+import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -13,35 +30,132 @@ interface AddTableDialogProps {
   node?: CustomTreeNode;
 }
 
-const AddTableDialog = ({
-  open,
-  onClose,
-  node
-}: AddTableDialogProps) => {
-  const [name, setName] = useState("");
-  const [loading, setLoading] = useState(false);
-  const { refreshNode } = useTree();
-  const { connection, schema }: { connection: string, schema: string } = useParams()
+type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
 
+const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
+  const [name, setName] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
+  const { refreshNode } = useTree();
+  const [paths, setPaths] = useState<Array<string>>(['']);
+  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+    DuckdbParametersSpecSourceFilesTypeEnum.csv
+  );
+  const [configuration, setConfiguration] = useState<TConfiguration>({});
+
+  const onChangeConfiguration = (params: Partial<TConfiguration>) => {
+    setConfiguration((prev) => ({
+      ...prev,
+      ...params
+    }));
+  };
+
+  const cleanConfiguration = () => {
+    setConfiguration({});
+  };
+
+  const { connection, schema }: { connection: string; schema: string } =
+    useParams();
+  const dispatch = useActionDispatch();
+  const history = useHistory();
+
+  const args = node ? node.id.toString().split('.') : [];
+
+  //todo: pass file_paths to createTable method, based on provider type
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
-        const args = node.id.toString().split('.');
-        await TableApiClient.createTable(args[0], args[1], name);
+        await TableApiClient.createTable(args[0], args[1], name, {
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }).then(() =>
+          JobApiClient.importTables(undefined, false, undefined, {
+            connectionName: args[0],
+            schemaName: args[1],
+            tableNames: [name]
+          })
+        );
         refreshNode(node);
       } else {
-        await TableApiClient.createTable(connection, schema, name);
+        await TableApiClient.createTable(connection, schema, name, {
+          file_format:
+            {
+              [fileFormatType as keyof FileFormatSpec]: configuration,
+              file_paths: paths.filter((x) => x.length !== 0)
+            } ?? undefined
+        }).then(() =>
+          JobApiClient.importTables(undefined, false, undefined, {
+            connectionName: connection,
+            schemaName: schema,
+            tableNames: [name]
+          })
+        );
       }
+      dispatch(
+        addFirstLevelTab(CheckTypes.SOURCES, {
+          url: ROUTES.TABLE_LEVEL_PAGE(
+            CheckTypes.SOURCES,
+            connection,
+            schema,
+            name,
+            'detail'
+          ),
+          value: ROUTES.TABLE_LEVEL_VALUE(
+            CheckTypes.SOURCES,
+            connection,
+            schema,
+            name
+          ),
+          state: {},
+          label: name
+        })
+      );
+      history.push(
+        ROUTES.TABLE_LEVEL_PAGE(
+          CheckTypes.SOURCES,
+          connection,
+          schema,
+          name,
+          'detail'
+        )
+      );
       onClose();
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    const getConnectionBasic = async () => {
+      await ConnectionApiClient.getConnectionBasic(args[0]).then((res) =>
+        setConnectionModel(res.data)
+      );
+    };
+    if (node) {
+      getConnectionBasic();
+    }
+  }, [open]);
+
+  const onChangePath = (value: string) => {
+    const copiedPaths = [...paths];
+    copiedPaths[paths.length - 1] = value;
+    setPaths(copiedPaths);
+  };
+
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
+
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
+
+  const onDeletePath = (index: number) =>
+    setPaths((prev) => prev.filter((x, i) => i !== index));
+
   return (
     <Dialog open={open} handler={onClose}>
-      <DialogBody className="pt-6 pb-2 px-8">
+      <DialogBody className="pt-4 pb-2 px-8">
         <div className="flex flex-col">
           <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Table</h1>
           <div>
@@ -52,6 +166,22 @@ const AddTableDialog = ({
             />
           </div>
         </div>
+        {connectionModel.provider_type ===
+        ConnectionSpecProviderTypeEnum.duckdb ? (
+          <FileFormatConfiguration
+            paths={paths}
+            onAddPath={onAddPath}
+            onChangePath={onChangePath}
+            fileFormatType={fileFormatType}
+            onChangeFile={onChangeFile}
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+            cleanConfiguration={cleanConfiguration}
+            onDeletePath={onDeletePath}
+          />
+        ) : (
+          <></>
+        )}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
         <Button

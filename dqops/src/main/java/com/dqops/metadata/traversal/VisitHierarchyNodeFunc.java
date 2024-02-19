@@ -21,7 +21,7 @@ import java.util.function.Function;
 
 /**
  * Lambda function that is called on every visited (traversed) hierarchy tree node.
- * The function returns true if child nodes should be also traversed, false if the traversal should not go deeper and should be stopped at the current hierarchy node.
+ * The function returns true if child nodes should also be traversed, false if the traversal should not go deeper and should be stopped at the current hierarchy node.
  */
 public interface VisitHierarchyNodeFunc extends Function<HierarchyNode, TreeNodeTraversalResult> {
 }

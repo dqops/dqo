@@ -1,6 +1,7 @@
 # text length in range percent data quality checks
 
-Column check that calculates the percentage of text values with a length below the indicated by the user length in a monitored column.
+This check verifies that the minimum and maximum lengths of text values are in the range of accepted values.
+ It measures the percentage of texts with a valid length and raises a data quality issue when an insufficient number of texts have a valid length.
 
 
 ___
@@ -13,7 +14,7 @@ The **text length in range percent** data quality check has the following varian
 
 **Check description**
 
-The check measures the percentage of those text values with length in the range provided by the user in the column
+The check measures the percentage of those text values with length in the range provided by the user in the column.
 
 |Data quality check name|Category|Check type|Time scale|Quality dimension|Sensor definition|Quality rule|Standard|
 |-----------------------|--------|----------|----------|-----------------|-----------------|------------|--------|
@@ -170,7 +171,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -191,7 +192,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -214,7 +215,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -235,7 +236,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -250,6 +251,50 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -259,7 +304,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -280,7 +325,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -304,7 +349,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -330,7 +375,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -358,7 +403,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -379,7 +424,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -403,7 +448,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -430,7 +475,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -445,7 +490,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -459,7 +504,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -480,7 +525,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -504,7 +549,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -525,7 +570,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -548,7 +593,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -569,7 +614,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -592,7 +637,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -613,7 +658,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -635,7 +680,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -662,7 +707,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -677,7 +722,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -773,7 +818,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -793,7 +838,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -817,7 +862,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -837,7 +882,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -854,6 +899,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -862,7 +951,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -882,7 +971,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -907,7 +996,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -932,7 +1021,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -966,7 +1055,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -986,7 +1075,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1011,7 +1100,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -1037,7 +1126,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -1059,7 +1148,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1072,7 +1161,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1092,7 +1181,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1117,7 +1206,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1137,7 +1226,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1161,7 +1250,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1181,7 +1270,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1205,7 +1294,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1225,7 +1314,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1254,7 +1343,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -1280,7 +1369,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -1302,7 +1391,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1474,7 +1563,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1495,7 +1584,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1518,7 +1607,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1539,7 +1628,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1554,6 +1643,50 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1563,7 +1696,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1584,7 +1717,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1608,7 +1741,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1634,7 +1767,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1662,7 +1795,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1683,7 +1816,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1707,7 +1840,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -1734,7 +1867,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -1749,7 +1882,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -1763,7 +1896,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1784,7 +1917,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1808,7 +1941,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1829,7 +1962,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1852,7 +1985,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1873,7 +2006,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1896,7 +2029,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1917,7 +2050,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -1939,7 +2072,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -1966,7 +2099,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -1981,7 +2114,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2078,7 +2211,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2098,7 +2231,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2122,7 +2255,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2142,7 +2275,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2159,6 +2292,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2167,7 +2344,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2187,7 +2364,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2212,7 +2389,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2237,7 +2414,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2271,7 +2448,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2291,7 +2468,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2316,7 +2493,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -2342,7 +2519,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -2364,7 +2541,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2377,7 +2554,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2397,7 +2574,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2422,7 +2599,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2442,7 +2619,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2466,7 +2643,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2486,7 +2663,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2510,7 +2687,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2530,7 +2707,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2559,7 +2736,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -2585,7 +2762,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -2607,7 +2784,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2779,7 +2956,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2800,7 +2977,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2823,7 +3000,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2844,7 +3021,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2859,6 +3036,50 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -2868,7 +3089,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2889,7 +3110,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2913,7 +3134,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2939,7 +3160,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2967,7 +3188,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -2988,7 +3209,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3012,7 +3233,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -3039,7 +3260,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -3054,7 +3275,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3068,7 +3289,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3089,7 +3310,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3113,7 +3334,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3134,7 +3355,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3157,7 +3378,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3178,7 +3399,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3201,7 +3422,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3222,7 +3443,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3244,7 +3465,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -3271,7 +3492,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -3286,7 +3507,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3383,7 +3604,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3403,7 +3624,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3427,7 +3648,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3447,7 +3668,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3464,6 +3685,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3472,7 +3737,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3492,7 +3757,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3517,7 +3782,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3542,7 +3807,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3576,7 +3841,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3596,7 +3861,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3621,7 +3886,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -3647,7 +3912,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -3669,7 +3934,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3682,7 +3947,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3702,7 +3967,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3727,7 +3992,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3747,7 +4012,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3771,7 +4036,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3791,7 +4056,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3815,7 +4080,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3835,7 +4100,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -3864,7 +4129,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -3890,7 +4155,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -3912,7 +4177,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4094,7 +4359,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4115,7 +4380,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4138,7 +4403,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4159,7 +4424,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4174,6 +4439,50 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4183,7 +4492,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4204,7 +4513,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4228,7 +4537,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4254,7 +4563,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4282,7 +4591,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4303,7 +4612,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4327,7 +4636,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -4354,7 +4663,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -4369,7 +4678,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4383,7 +4692,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4404,7 +4713,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4428,7 +4737,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4449,7 +4758,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4472,7 +4781,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4493,7 +4802,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4516,7 +4825,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4537,7 +4846,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4563,7 +4872,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -4590,7 +4899,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -4605,7 +4914,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -4712,7 +5021,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4732,7 +5041,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4756,7 +5065,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4776,7 +5085,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4793,6 +5102,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4801,7 +5154,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4821,7 +5174,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4846,7 +5199,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4871,7 +5224,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4905,7 +5258,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4925,7 +5278,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -4950,7 +5303,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -4976,7 +5329,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -4998,7 +5351,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5011,7 +5364,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5031,7 +5384,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5056,7 +5409,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5076,7 +5429,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5100,7 +5453,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5120,7 +5473,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5144,7 +5497,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5164,7 +5517,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5191,7 +5544,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -5217,7 +5570,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -5239,7 +5592,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5421,7 +5774,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5442,7 +5795,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5465,7 +5818,7 @@ spec:
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5486,7 +5839,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5501,6 +5854,50 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -5510,7 +5907,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5531,7 +5928,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5555,7 +5952,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5581,7 +5978,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5609,7 +6006,7 @@ spec:
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5630,7 +6027,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5654,7 +6051,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -5681,7 +6078,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -5696,7 +6093,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5710,7 +6107,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5731,7 +6128,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5755,7 +6152,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5776,7 +6173,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5799,7 +6196,7 @@ spec:
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5820,7 +6217,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5843,7 +6240,7 @@ spec:
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5864,7 +6261,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -5890,7 +6287,7 @@ spec:
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -5917,7 +6314,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -5932,7 +6329,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6039,7 +6436,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6059,7 +6456,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6083,7 +6480,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6103,7 +6500,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6120,6 +6517,50 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(analyzed_table."target_column")
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -6128,7 +6569,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6148,7 +6589,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6173,7 +6614,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6198,7 +6639,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6232,7 +6673,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6252,7 +6693,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6277,7 +6718,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -6303,7 +6744,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -6325,7 +6766,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6338,7 +6779,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6358,7 +6799,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6383,7 +6824,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6403,7 +6844,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6427,7 +6868,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6447,7 +6888,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6471,7 +6912,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6491,7 +6932,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 100.0
                     ELSE
                         100.0 * SUM(
                             CASE
@@ -6518,7 +6959,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
@@ -6544,7 +6985,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 100.0
                     ELSE CAST(100.0 * SUM(
                             CASE
                                 WHEN LENGTH( analyzed_table."target_column" ) BETWEEN 5 AND 100 THEN 1
@@ -6566,7 +7007,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

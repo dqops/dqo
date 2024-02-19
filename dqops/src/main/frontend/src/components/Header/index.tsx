@@ -173,7 +173,7 @@ const Header = () => {
   useEffect(() => {
     if (
       advisorJobId !== 0 &&
-      job_dictionary_state[advisorJobId].status === DqoJobChangeModelStatusEnum.succeeded
+      job_dictionary_state[advisorJobId].status === DqoJobChangeModelStatusEnum.finished
     ) {
       dispatch(setAdvisorObject(job_dictionary_state[advisorJobId]?.parameters?.importTableParameters ?? {}));
       dispatch(toggleAdvisor(true));
@@ -279,7 +279,7 @@ const Header = () => {
               'px-4 cursor-pointer',
               location.pathname.startsWith('/definitions') ? 'font-bold' : ''
               )}
-              onClick={() => history.push('/definitions')}
+              onClick={() => location.pathname.startsWith('/definitions') ? undefined : history.push('/definitions')}
               >
             Configuration
             </div>

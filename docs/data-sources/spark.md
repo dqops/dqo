@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Apache Spark from the UI, comma
 
 ## Overview
 
-[Apache Spark](https://spark.apache.org/documentation.html) is an open-source unified analytics engine for large-scale data processing.
+Apache Spark is an open-source unified analytics engine for large-scale data processing.
 
 ## Prerequisite credentials
 

@@ -33,7 +33,7 @@ This guide lists all options of installing DQOps Data Quality Operations Center,
 
     ---
 
-    You can also start DQOps as a Docker container that is published on Docker Hub.
+    You can also start DQOps as a Docker container that is published on [Docker Hub](https://hub.docker.com/r/dqops/dqo).
 
     ```
     docker pull dqops/dqo

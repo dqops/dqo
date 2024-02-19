@@ -47,10 +47,10 @@ public class ColumnBoolDailyMonitoringChecksSpec extends AbstractCheckCategorySp
         }
     };
 
-    @JsonPropertyDescription("Verifies that the percentage of true values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percentage of **true** values in a boolean column and verifies that it is within the accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnTruePercentCheckSpec dailyTruePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of false values in a column does not exceed the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Measures the percentage of **false** values in a boolean column and verifies that it is within the accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnFalsePercentCheckSpec dailyFalsePercent;
 
     /**

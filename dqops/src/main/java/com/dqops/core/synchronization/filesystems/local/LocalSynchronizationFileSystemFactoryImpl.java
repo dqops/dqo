@@ -54,7 +54,7 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
     @Override
     public SynchronizationRoot createUserHomeFolderFileSystem(DqoRoot rootType, UserDomainIdentity userIdentity) {
         Path absoluteLocalPathToFolder = getAbsoluteLocalPathToFolder(rootType, userIdentity);
-        UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder);
+        UserHomeFileSystemSynchronizationRoot userHomeFileSystemRoot = new UserHomeFileSystemSynchronizationRoot(absoluteLocalPathToFolder, rootType);
         return new SynchronizationRoot(userHomeFileSystemRoot, this.localFileSystemService);
     }
 

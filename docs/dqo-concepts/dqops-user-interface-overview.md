@@ -213,7 +213,7 @@ synchronizing folders, etc.
 ![DQOps Notifications](https://dqops.com/docs/images/working-with-dqo/navigating-the-graphical-interface/notification-panel.png)
 
 You can use the notifications to access a complete log of all jobs that have been executed. This log allows you to check
-the status of each action, which can be "succeeded," "failed," "running," "waiting," "queued," or "canceled."
+the status of each action, which can be "finished," "failed," "running," "waiting," "queued," or "canceled."
 Additionally, you can expand each job entry to view sub-jobs and access more detailed information about specific tasks.
 
 ### **Enable and disable scheduler**

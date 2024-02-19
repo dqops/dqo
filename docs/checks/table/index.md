@@ -58,12 +58,13 @@ A table-level check that uses a custom SQL expression on each row to verify (ass
 
 
 ### [sql condition passed percent on table](./custom_sql/sql-condition-passed-percent-on-table.md)
-A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression).
+A table-level check that ensures that a minimum percentage of rows passed a custom SQL condition (expression). Measures the percentage of rows passing the condition.
+ Raises a data quality issue when the percent of valid rows is below the *min_percent* parameter.
 
 
 
 ### [sql aggregate expression on table](./custom_sql/sql-aggregate-expression-on-table.md)
-A table-level check that calculates a given SQL aggregate expression and compares it with a maximum accepted value.
+A table-level check that calculates a given SQL aggregate expression on a table and verifies if the value is within a range of accepted values.
 
 
 
@@ -110,7 +111,7 @@ A table-level check that detects if the list of columns and the order of columns
 ### [column types changed](./schema/column-types-changed.md)
 A table-level check that detects if the column names or column types have changed since the last time the check was run.
  This check calculates a hash of the column names and all the components of the column&#x27;s data type: the data type name, length, scale, precision and nullability.
- A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns could be reordered as long
+ A data quality issue will be detected if the hash of the column data types has changed. This check does not depend on the order of columns, the columns can be reordered as long
  as all columns are still present and the data types match since the last time they were tested.
 
 
@@ -161,33 +162,43 @@ A table-level check that calculates the maximum difference in days between inges
 Evaluates the overall quality of the table by verifying the number of rows.
 
 ### [row count](./volume/row-count.md)
-A table-level check that ensures that the tested table has at least a minimum accepted number of rows.
- The default configuration of the warning, error and fatal severity rules verifies a minimum row count of one row, which checks if the table is not empty.
+This check detects empty or too-small tables. It captures the row count of a tested table.
+ This check raises a data quality issue when the row count is below a minimum accepted value.
+ The default value of the rule parameter **min_count** is 1 (row), which detects empty tables.
+ When the data grouping is configured, this check will count rows using a GROUP BY clause and verify that each data grouping has an expected minimum number of rows.
 
 
 
 ### [row count anomaly](./volume/row-count-anomaly.md)
-A table-level check that ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.
+This check detects anomalies in the day-to-day changes to the table volume (the row count).
+ It captures the row count for each day and compares the row count change (increase or decrease) since the previous day.
+ This check raises a data quality issue when the change is in the top **anomaly_percent** percentage of the biggest day-to-day changes.
 
 
 
 ### [row count change](./volume/row-count-change.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout.
+This check compares the current table volume (the row count) to the last known row count.
+ It raises a data quality issue when the change in row count (increase or decrease) exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 1 day](./volume/row-count-change-1-day.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from yesterday.
+This check compares the current table volume (the row count) to the row count from the previous day.
+ It raises a data quality issue when the change in row count (increase or decrease) since yesterday exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 7 days](./volume/row-count-change-7-days.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from last week.
+This check compares the current table volume (the row count) to the row count seven days ago.
+ This check compares the table volume to a value a week ago to overcome weekly seasonability and to compare Mondays to Mondays, Tuesdays to Tuesdays, etc.
+ It raises a data quality issue when the change in row count (increase or decrease) since a week ago exceeds a maximum accepted percentage of change.
 
 
 
 ### [row count change 30 days](./volume/row-count-change-30-days.md)
-A table-level check that ensures that the row count changed by a fixed rate since the last readout from last month.
+This check compares the current table volume (the row count) to the row count 30 days ago.
+ This check compares the table volume to a month ago value to overcome monthly seasonability.
+ It raises a data quality issue when the change in row count (increase or decrease) since a value 30 days ago exceeds a maximum accepted percentage of change.
 
 
 

@@ -43,17 +43,17 @@ public class PartitionIncrementalTimeWindowSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Number of recent days that are analyzed by daily partitioned checks in incremental mode. The default value is 7 days back.")
+    @JsonPropertyDescription("The number of recent days analyzed by daily partition checks in incremental mode. The default value is 7 last days.")
     private Integer dailyPartitioningRecentDays = 7;
 
-    @JsonPropertyDescription("Analyze also today's data by daily partitioned checks in incremental mode. The default value is false, which means that the today's and the future partitions are not analyzed, only yesterday's partition and earlier daily partitions are analyzed because today's data could be still incomplete. Change the value to 'true' if the current day should be also analyzed. The change may require configuring the schedule for daily checks correctly, to run after the data load.")
+    @JsonPropertyDescription("Analyze also today's data by daily partition checks in incremental mode. The default value is false, which means that the today's and the future partitions are not analyzed. Only yesterday's partition and previous daily partitions are analyzed because today's data may still be incomplete. Change the value to 'true' if the current day should also be analyzed. This change may require you to configure the schedule for daily checks correctly. The checks must run after the data load.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean dailyPartitioningIncludeToday;
 
-    @JsonPropertyDescription("Number of recent months that are analyzed by monthly partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar month.")
+    @JsonPropertyDescription("The number of recent days analyzed by monthly partition checks in incremental mode. The default value is the previous calendar month.")
     private Integer monthlyPartitioningRecentMonths = 1;
 
-    @JsonPropertyDescription("Analyze also this month's data by monthly partitioned checks in incremental mode. The default value is false, which means that the current month is not analyzed and future data is also filtered out because the current month could be incomplete. Set the value to 'true' if the current month should be analyzed before the end of the month. The schedule for running monthly checks should be also configured to run more frequently (daily, hourly, etc.).")
+    @JsonPropertyDescription("Analyze also this month's data by monthly partition checks in incremental mode. The default value is false, which means that the current month is not analyzed. Future data is also filtered out because the current month may be incomplete. Change the value to 'true' if the current month should also be analyzed before the end of the month. This change may require you to configure the schedule to run monthly checks more frequently (daily, hourly, etc.).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean monthlyPartitioningIncludeCurrentMonth;
 

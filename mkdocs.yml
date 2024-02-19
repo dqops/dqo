@@ -64,25 +64,26 @@ nav:
 ########## INCLUDE TYPES OF CHECKS REFERENCE - DO NOT MODIFY MANUALLY
   - Categories of checks:
     - 'categories-of-data-quality-checks/index.md'
-    - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
-    - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
-    - Compare tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
-    - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
-    - Table schema changes: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
-    - Timeliness and freshness: 'categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
-    - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
     - Accepted values: 'categories-of-data-quality-checks/how-to-validate-accepted-values-in-columns.md'
-    - Numeric anomalies: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
+    - Anomaly detection: 'categories-of-data-quality-checks/how-to-detect-anomaly-data-quality-issues.md'
     - Blanks and whitespaces: 'categories-of-data-quality-checks/how-to-detect-blank-and-whitespace-values.md'
-    - Bool values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
-    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-datatype-data-quality-issues.md'
-    - Date and time values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-dates.md'
-    - Data integrity: 'categories-of-data-quality-checks/how-to-detect-data-integrity-issues.md'
-    - Null values: 'categories-of-data-quality-checks/how-to-detect-nulls-data-quality-issues.md'
-    - Numeric values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
-    - Text patterns: 'categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
+    - Boolean values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-bool-fields.md'
+    - Comparing tables: 'categories-of-data-quality-checks/how-to-reconcile-data-and-detect-differences.md'
+    - Custom SQL and multi column checks: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-with-custom-sql.md'
+    - Data accuracy: 'categories-of-data-quality-checks/how-to-detect-accuracy-data-quality-issues.md'
+    - Data type conversions: 'categories-of-data-quality-checks/how-to-verify-text-values-are-parsable.md'
+    - Data type detection: 'categories-of-data-quality-checks/how-to-detect-data-type-changes.md'
+    - Data volume: 'categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md'
+    - Empty and incomplete columns: 'categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md'
+    - Invalid dates: 'categories-of-data-quality-checks/how-to-detect-invalid-dates.md'
+    - Numeric statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-numeric-fields.md'
     - PII values: 'categories-of-data-quality-checks/how-to-detect-pii-values-and-sensitive-data.md'
-    - Text values: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
+    - Referential integrity: 'categories-of-data-quality-checks/how-to-detect-data-referential-integrity-issues.md'
+    - Table availability: 'categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md'
+    - Table schema changes: 'categories-of-data-quality-checks/how-to-detect-table-schema-changes.md'
+    - Text patterns: 'categories-of-data-quality-checks/how-to-detect-bad-values-not-matching-patterns.md'
+    - Text statistics: 'categories-of-data-quality-checks/how-to-detect-data-quality-issues-in-text-fields.md'
+    - Timeliness and freshness: 'categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md'
     - Uniqueness and duplicates: 'categories-of-data-quality-checks/how-to-detect-data-uniqueness-issues-and-duplicates.md'
 ########## END INCLUDE TYPES OF CHECKS REFERENCE
   - Use cases and examples:
@@ -92,10 +93,10 @@ nav:
       - Data availability:
           - Detect table availability issues: "examples/data-availability/detect-table-availability-issues.md"
       - Data completeness:
-          - Detect null values: "examples/data-completeness/detect-null-values.md"
+          - Detect incomplete columns: "examples/data-completeness/detect-null-values.md"
           - Detect empty or incomplete tables: "examples/data-completeness/detect-empty-or-incomplete-tables.md"
       - Data consistency:
-          - Percentage of rows having a text in from a set: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
+          - Percentage of rows having only accepted values: "examples/data-consistency/percentage-of-rows-with-a-text-found-in-set.md"
       - Data reasonability:
           - Percentage of false boolean values: "examples/data-reasonability/percentage-of-false-values.md"
           - Percentage of values in range: "examples/data-reasonability/percentage-of-integer-values-in-range.md"
@@ -134,6 +135,8 @@ nav:
       - Set up data grouping: "working-with-dqo/set-up-data-grouping-for-data-quality-checks.md"
       - Compare tables: "working-with-dqo/compare-tables-between-data-sources.md"
       - User and access management: "working-with-dqo/access-management.md"
+      - Managing errors: "working-with-dqo/managing-errors.md"
+      - Creating custom data quality checks: "working-with-dqo/creating-custom-data-quality-checks.md"
       - Working with DQOps Shell: "working-with-dqo/working-with-dqo-shell.md"
   - Integrations:
       - "integrations/index.md"
@@ -280,6 +283,8 @@ nav:
         - expected text values in use count: 'checks/column/accepted_values/expected-text-values-in-use-count.md'
         - expected texts in top values count: 'checks/column/accepted_values/expected-texts-in-top-values-count.md'
         - expected numbers in use count: 'checks/column/accepted_values/expected-numbers-in-use-count.md'
+        - text valid country code percent: 'checks/column/accepted_values/text-valid-country-code-percent.md'
+        - text valid currency code percent: 'checks/column/accepted_values/text-valid-currency-code-percent.md'
       - accuracy:
         - 'checks/column/accuracy/index.md'
         - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
@@ -306,14 +311,6 @@ nav:
         - sum change 1 day: 'checks/column/anomaly/sum-change-1-day.md'
         - sum change 7 days: 'checks/column/anomaly/sum-change-7-days.md'
         - sum change 30 days: 'checks/column/anomaly/sum-change-30-days.md'
-      - blanks:
-        - 'checks/column/blanks/index.md'
-        - empty text found: 'checks/column/blanks/empty-text-found.md'
-        - whitespace text found: 'checks/column/blanks/whitespace-text-found.md'
-        - null placeholder text found: 'checks/column/blanks/null-placeholder-text-found.md'
-        - empty text percent: 'checks/column/blanks/empty-text-percent.md'
-        - whitespace text percent: 'checks/column/blanks/whitespace-text-percent.md'
-        - null placeholder text percent: 'checks/column/blanks/null-placeholder-text-percent.md'
       - bool:
         - 'checks/column/bool/index.md'
         - true percent: 'checks/column/bool/true-percent.md'
@@ -326,6 +323,12 @@ nav:
         - mean match: 'checks/column/comparisons/mean-match.md'
         - not null count match: 'checks/column/comparisons/not-null-count-match.md'
         - null count match: 'checks/column/comparisons/null-count-match.md'
+      - conversions:
+        - 'checks/column/conversions/index.md'
+        - text parsable to boolean percent: 'checks/column/conversions/text-parsable-to-boolean-percent.md'
+        - text parsable to integer percent: 'checks/column/conversions/text-parsable-to-integer-percent.md'
+        - text parsable to float percent: 'checks/column/conversions/text-parsable-to-float-percent.md'
+        - text parsable to date percent: 'checks/column/conversions/text-parsable-to-date-percent.md'
       - custom_sql:
         - 'checks/column/custom_sql/index.md'
         - sql condition failed on column: 'checks/column/custom_sql/sql-condition-failed-on-column.md'
@@ -339,8 +342,8 @@ nav:
       - datetime:
         - 'checks/column/datetime/index.md'
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
-        - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
-        - date match format percent: 'checks/column/datetime/date-match-format-percent.md'
+        - date in range percent: 'checks/column/datetime/date-in-range-percent.md'
+        - text match date format percent: 'checks/column/datetime/text-match-date-format-percent.md'
       - integrity:
         - 'checks/column/integrity/index.md'
         - lookup key not found: 'checks/column/integrity/lookup-key-not-found.md'
@@ -349,9 +352,9 @@ nav:
         - 'checks/column/nulls/index.md'
         - nulls count: 'checks/column/nulls/nulls-count.md'
         - nulls percent: 'checks/column/nulls/nulls-percent.md'
+        - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - not nulls count: 'checks/column/nulls/not-nulls-count.md'
         - not nulls percent: 'checks/column/nulls/not-nulls-percent.md'
-        - nulls percent anomaly: 'checks/column/nulls/nulls-percent-anomaly.md'
         - nulls percent change: 'checks/column/nulls/nulls-percent-change.md'
         - nulls percent change 1 day: 'checks/column/nulls/nulls-percent-change-1-day.md'
         - nulls percent change 7 days: 'checks/column/nulls/nulls-percent-change-7-days.md'
@@ -411,22 +414,14 @@ nav:
         - column type changed: 'checks/column/schema/column-type-changed.md'
       - text:
         - 'checks/column/text/index.md'
-        - text max length: 'checks/column/text/text-max-length.md'
         - text min length: 'checks/column/text/text-min-length.md'
+        - text max length: 'checks/column/text/text-max-length.md'
         - text mean length: 'checks/column/text/text-mean-length.md'
         - text length below min length: 'checks/column/text/text-length-below-min-length.md'
         - text length below min length percent: 'checks/column/text/text-length-below-min-length-percent.md'
         - text length above max length: 'checks/column/text/text-length-above-max-length.md'
         - text length above max length percent: 'checks/column/text/text-length-above-max-length-percent.md'
         - text length in range percent: 'checks/column/text/text-length-in-range-percent.md'
-        - text parsable to boolean percent: 'checks/column/text/text-parsable-to-boolean-percent.md'
-        - text parsable to integer percent: 'checks/column/text/text-parsable-to-integer-percent.md'
-        - text parsable to float percent: 'checks/column/text/text-parsable-to-float-percent.md'
-        - text parsable to date percent: 'checks/column/text/text-parsable-to-date-percent.md'
-        - text surrounded by whitespace: 'checks/column/text/text-surrounded-by-whitespace.md'
-        - text surrounded by whitespace percent: 'checks/column/text/text-surrounded-by-whitespace-percent.md'
-        - text valid country code percent: 'checks/column/text/text-valid-country-code-percent.md'
-        - text valid currency code percent: 'checks/column/text/text-valid-currency-code-percent.md'
       - uniqueness:
         - 'checks/column/uniqueness/index.md'
         - distinct count: 'checks/column/uniqueness/distinct-count.md'
@@ -443,6 +438,16 @@ nav:
         - distinct percent change 1 day: 'checks/column/uniqueness/distinct-percent-change-1-day.md'
         - distinct percent change 7 days: 'checks/column/uniqueness/distinct-percent-change-7-days.md'
         - distinct percent change 30 days: 'checks/column/uniqueness/distinct-percent-change-30-days.md'
+      - whitespace:
+        - 'checks/column/whitespace/index.md'
+        - empty text found: 'checks/column/whitespace/empty-text-found.md'
+        - whitespace text found: 'checks/column/whitespace/whitespace-text-found.md'
+        - null placeholder text found: 'checks/column/whitespace/null-placeholder-text-found.md'
+        - empty text percent: 'checks/column/whitespace/empty-text-percent.md'
+        - whitespace text percent: 'checks/column/whitespace/whitespace-text-percent.md'
+        - null placeholder text percent: 'checks/column/whitespace/null-placeholder-text-percent.md'
+        - text surrounded by whitespace found: 'checks/column/whitespace/text-surrounded-by-whitespace-found.md'
+        - text surrounded by whitespace percent: 'checks/column/whitespace/text-surrounded-by-whitespace-percent.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
     - 'reference/index.md'
@@ -461,8 +466,8 @@ nav:
         - 'reference/sensors/column/index.md'
         - accepted_values column sensors: 'reference/sensors/column/accepted_values-column-sensors.md'
         - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
-        - blanks column sensors: 'reference/sensors/column/blanks-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
+        - conversions column sensors: 'reference/sensors/column/conversions-column-sensors.md'
         - custom_sql column sensors: 'reference/sensors/column/custom_sql-column-sensors.md'
         - datatype column sensors: 'reference/sensors/column/datatype-column-sensors.md'
         - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
@@ -476,6 +481,7 @@ nav:
         - schema column sensors: 'reference/sensors/column/schema-column-sensors.md'
         - text column sensors: 'reference/sensors/column/text-column-sensors.md'
         - uniqueness column sensors: 'reference/sensors/column/uniqueness-column-sensors.md'
+        - whitespace column sensors: 'reference/sensors/column/whitespace-column-sensors.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
     - Data quality rules:

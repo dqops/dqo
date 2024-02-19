@@ -41,94 +41,41 @@ import java.util.Objects;
 public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnTextProfilingChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("profile_text_max_length", o -> o.profileTextMaxLength);
             put("profile_text_min_length", o -> o.profileTextMinLength);
+            put("profile_text_max_length", o -> o.profileTextMaxLength);
             put("profile_text_mean_length", o -> o.profileTextMeanLength);
             put("profile_text_length_below_min_length", o -> o.profileTextLengthBelowMinLength);
             put("profile_text_length_below_min_length_percent", o -> o.profileTextLengthBelowMinLengthPercent);
             put("profile_text_length_above_max_length", o -> o.profileTextLengthAboveMaxLength);
             put("profile_text_length_above_max_length_percent", o -> o.profileTextLengthAboveMaxLengthPercent);
             put("profile_text_length_in_range_percent", o -> o.profileTextLengthInRangePercent);
-
-            put("profile_text_parsable_to_boolean_percent", o -> o.profileTextParsableToBooleanPercent);
-            put("profile_text_parsable_to_integer_percent", o -> o.profileTextParsableToIntegerPercent);
-            put("profile_text_parsable_to_float_percent", o -> o.profileTextParsableToFloatPercent);
-            put("profile_text_parsable_to_date_percent", o -> o.profileTextParsableToDatePercent);
-
-            put("profile_text_surrounded_by_whitespace", o -> o.profileTextSurroundedByWhitespace);
-            put("profile_text_surrounded_by_whitespace_percent", o -> o.profileTextSurroundedByWhitespacePercent);
-            put("profile_text_valid_country_code_percent", o -> o.profileTextValidCountryCodePercent);
-            put("profile_text_valid_currency_code_percent", o -> o.profileTextValidCurrencyCodePercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the maximum accepted length")
-    private ColumnTextMaxLengthCheckSpec profileTextMaxLength;
-
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not fall below the minimum accepted length")
+    @JsonPropertyDescription("This check finds the length of the shortest text in a column. Then, it verifies that the minimum length is within an accepted range. It detects that the shortest text is too short.")
     private ColumnTextMinLengthCheckSpec profileTextMinLength;
 
-    @JsonPropertyDescription("Verifies that the length of a text in a column does not exceed the mean accepted length")
+    @JsonPropertyDescription("This check finds the length of the longest text in a column. Then, it verifies that the maximum length is within an accepted range. It detects that the texts are too long or not long enough.")
+    private ColumnTextMaxLengthCheckSpec profileTextMaxLength;
+
+    @JsonPropertyDescription("Verifies that the mean (average) length of texts in a column is within an accepted range.")
     private ColumnTextMeanLengthCheckSpec profileTextMeanLength;
 
-    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check counts the number of text values in the column that is below the length defined by the user as a parameter.")
     private ColumnTextLengthBelowMinLengthCheckSpec profileTextLengthBelowMinLength;
 
-    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is below the length defined by the user as a parameter.")
     private ColumnTextLengthBelowMinLengthPercentCheckSpec profileTextLengthBelowMinLengthPercent;
 
-    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check counts the number of text values in the column that is above the length defined by the user as a parameter.")
     private ColumnTextLengthAboveMaxLengthCheckSpec profileTextLengthAboveMaxLength;
 
-    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter")
+    @JsonPropertyDescription("The check measures the percentage of text values in the column that is above the length defined by the user as a parameter.")
     private ColumnTextLengthAboveMaxLengthPercentCheckSpec profileTextLengthAboveMaxLengthPercent;
 
-    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column")
+    @JsonPropertyDescription("The check measures the percentage of those text values with length in the range provided by the user in the column.")
     private ColumnTextLengthInRangePercentCheckSpec profileTextLengthInRangePercent;
 
-    @JsonPropertyDescription("Verifies that the percentage of text values that are parsable to a boolean value does not fall below the minimum accepted percentage, " +
-            "text values identified as boolean placeholders are: 0, 1, true, false, t, f, yes, no, y, n.")
-    private ColumnTextParsableToBooleanPercentCheckSpec profileTextParsableToBooleanPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to an integer value in a column does not fall below the minimum accepted percentage")
-    private ColumnTextParsableToIntegerPercentCheckSpec profileTextParsableToIntegerPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a float value in a column does not fall below the minimum accepted percentage")
-    private ColumnTextParsableToFloatPercentCheckSpec profileTextParsableToFloatPercent;
-
-    @JsonPropertyDescription("Verifies that the percentage text values that are parsable to a date value in a column does not fall below the minimum accepted percentage. DQOps uses a safe_cast when possible, otherwise the text is verified using a regular expression")
-    private ColumnTextParsableToDatePercentCheckSpec profileTextParsableToDatePercent;
-
-    @JsonPropertyDescription("The check counts the number of text values in the column that are surrounded by whitespace characters and should be trimmed before loading to another table")
-    private ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace;
-
-    @JsonPropertyDescription("Verifies that the percentage of text values that are surrounded by whitespace characters in a column does not exceed the maximum accepted percentage")
-    private ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent;
-
-    @JsonPropertyDescription("Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage")
-    private ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent;
-
-
-    /**
-     * Returns a maximum string length below check.
-     * @return Maximum string length below check.
-     */
-    public ColumnTextMaxLengthCheckSpec getProfileTextMaxLength() {
-        return profileTextMaxLength;
-    }
-
-    /**
-     * Sets a new definition of a maximum string length check.
-     * @param profileTextMaxLength Maximum string length check.
-     */
-    public void setProfileTextMaxLength(ColumnTextMaxLengthCheckSpec profileTextMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.profileTextMaxLength, profileTextMaxLength));
-        this.profileTextMaxLength = profileTextMaxLength;
-        propagateHierarchyIdToField(profileTextMaxLength, "profile_text_max_length");
-    }
 
     /**
      * Returns a minimum string length above check.
@@ -146,6 +93,24 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextMinLength, profileTextMinLength));
         this.profileTextMinLength = profileTextMinLength;
         propagateHierarchyIdToField(profileTextMinLength, "profile_text_min_length");
+    }
+
+    /**
+     * Returns a maximum string length below check.
+     * @return Maximum string length below check.
+     */
+    public ColumnTextMaxLengthCheckSpec getProfileTextMaxLength() {
+        return profileTextMaxLength;
+    }
+
+    /**
+     * Sets a new definition of a maximum string length check.
+     * @param profileTextMaxLength Maximum string length check.
+     */
+    public void setProfileTextMaxLength(ColumnTextMaxLengthCheckSpec profileTextMaxLength) {
+        this.setDirtyIf(!Objects.equals(this.profileTextMaxLength, profileTextMaxLength));
+        this.profileTextMaxLength = profileTextMaxLength;
+        propagateHierarchyIdToField(profileTextMaxLength, "profile_text_max_length");
     }
 
     /**
@@ -254,150 +219,6 @@ public class ColumnTextProfilingChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.profileTextLengthInRangePercent, profileTextLengthInRangePercent));
         this.profileTextLengthInRangePercent = profileTextLengthInRangePercent;
         propagateHierarchyIdToField(profileTextLengthInRangePercent, "profile_text_length_in_range_percent");
-    }
-
-    /**
-     * Returns a minimum string parsable to integer percent check.
-     * @return Minimum string parsable to integer percent check.
-     */
-    public ColumnTextParsableToBooleanPercentCheckSpec getProfileTextParsableToBooleanPercent() {
-        return profileTextParsableToBooleanPercent;
-    }
-
-    /**
-     * Sets a new definition of a string boolean placeholder percent check.
-     * @param profileTextParsableToBooleanPercent String boolean placeholder percent check.
-     */
-    public void setProfileTextParsableToBooleanPercent(ColumnTextParsableToBooleanPercentCheckSpec profileTextParsableToBooleanPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextParsableToBooleanPercent, profileTextParsableToBooleanPercent));
-        this.profileTextParsableToBooleanPercent = profileTextParsableToBooleanPercent;
-        propagateHierarchyIdToField(profileTextParsableToBooleanPercent, "profile_text_parsable_to_boolean_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace count check.
-     * @return Maximum string surrounded by whitespace count check.
-     */
-    public ColumnTextParsableToIntegerPercentCheckSpec getProfileTextParsableToIntegerPercent() {
-        return profileTextParsableToIntegerPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to integer percent check.
-     * @param profileTextParsableToIntegerPercent String parsable to integer percent check.
-     */
-    public void setProfileTextParsableToIntegerPercent(ColumnTextParsableToIntegerPercentCheckSpec profileTextParsableToIntegerPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextParsableToIntegerPercent, profileTextParsableToIntegerPercent));
-        this.profileTextParsableToIntegerPercent = profileTextParsableToIntegerPercent;
-        propagateHierarchyIdToField(profileTextParsableToIntegerPercent, "profile_text_parsable_to_integer_percent");
-    }
-
-    /**
-     * Returns a maximum string surrounded by whitespace percent check.
-     * @return Maximum string surrounded by whitespace percent check.
-     */
-    public ColumnTextParsableToFloatPercentCheckSpec getProfileTextParsableToFloatPercent() {
-        return profileTextParsableToFloatPercent;
-    }
-
-    /**
-     * Sets a new definition of a string parsable to float percent check.
-     * @param profileTextParsableToFloatPercent String parsable to float percent check.
-     */
-    public void setProfileTextParsableToFloatPercent(ColumnTextParsableToFloatPercentCheckSpec profileTextParsableToFloatPercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextParsableToFloatPercent, profileTextParsableToFloatPercent));
-        this.profileTextParsableToFloatPercent = profileTextParsableToFloatPercent;
-        propagateHierarchyIdToField(profileTextParsableToFloatPercent, "profile_text_parsable_to_float_percent");
-    }
-
-    /**
-     * Returns a minimum string valid USA phone percent check.
-     * @return Minimum string valid USA phone percent check.
-     */
-    public ColumnTextParsableToDatePercentCheckSpec getProfileTextParsableToDatePercent() {
-        return profileTextParsableToDatePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid dates percent check.
-     * @param profileTextParsableToDatePercent String valid dates percent check.
-     */
-    public void setProfileTextParsableToDatePercent(ColumnTextParsableToDatePercentCheckSpec profileTextParsableToDatePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextParsableToDatePercent, profileTextParsableToDatePercent));
-        this.profileTextParsableToDatePercent = profileTextParsableToDatePercent;
-        propagateHierarchyIdToField(profileTextParsableToDatePercent, "profile_text_parsable_to_date_percent");
-    }
-
-    /**
-     * Returns a minimum string valid dates percent check.
-     * @return Minimum string valid dates percent check.
-     */
-    public ColumnTextSurroundedByWhitespaceCheckSpec getProfileTextSurroundedByWhitespace() {
-        return profileTextSurroundedByWhitespace;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace count check.
-     * @param profileTextSurroundedByWhitespace String surrounded by whitespace count check.
-     */
-    public void setProfileTextSurroundedByWhitespace(ColumnTextSurroundedByWhitespaceCheckSpec profileTextSurroundedByWhitespace) {
-        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespace, profileTextSurroundedByWhitespace));
-        this.profileTextSurroundedByWhitespace = profileTextSurroundedByWhitespace;
-        propagateHierarchyIdToField(profileTextSurroundedByWhitespace, "profile_text_surrounded_by_whitespace");
-    }
-
-    /**
-     * Returns a maximum string null placeholder count check.
-     * @return Maximum string null placeholder count check.
-     */
-    public ColumnTextSurroundedByWhitespacePercentCheckSpec getProfileTextSurroundedByWhitespacePercent() {
-        return profileTextSurroundedByWhitespacePercent;
-    }
-
-    /**
-     * Sets a new definition of a string surrounded by whitespace percent check.
-     * @param profileTextSurroundedByWhitespacePercent String surrounded by whitespace percent check.
-     */
-    public void setProfileTextSurroundedByWhitespacePercent(ColumnTextSurroundedByWhitespacePercentCheckSpec profileTextSurroundedByWhitespacePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextSurroundedByWhitespacePercent, profileTextSurroundedByWhitespacePercent));
-        this.profileTextSurroundedByWhitespacePercent = profileTextSurroundedByWhitespacePercent;
-        propagateHierarchyIdToField(profileTextSurroundedByWhitespacePercent, "profile_text_surrounded_by_whitespace_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set count check.
-     * @return Minimum strings in set count check.
-     */
-    public ColumnTextValidCountryCodePercentCheckSpec getProfileTextValidCountryCodePercent() {
-        return profileTextValidCountryCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid country code percent check.
-     * @param profileTextValidCountryCodePercent String valid country code percent check.
-     */
-    public void setProfileTextValidCountryCodePercent(ColumnTextValidCountryCodePercentCheckSpec profileTextValidCountryCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextValidCountryCodePercent, profileTextValidCountryCodePercent));
-        this.profileTextValidCountryCodePercent = profileTextValidCountryCodePercent;
-        propagateHierarchyIdToField(profileTextValidCountryCodePercent, "profile_text_valid_country_code_percent");
-    }
-
-    /**
-     * Returns a minimum strings in set percent check.
-     * @return Minimum strings in set percent check.
-     */
-    public ColumnTextValidCurrencyCodePercentCheckSpec getProfileTextValidCurrencyCodePercent() {
-        return profileTextValidCurrencyCodePercent;
-    }
-
-    /**
-     * Sets a new definition of a string valid currency code percent check.
-     * @param profileTextValidCurrencyCodePercent String valid currency code percent check.
-     */
-    public void setProfileTextValidCurrencyCodePercent(ColumnTextValidCurrencyCodePercentCheckSpec profileTextValidCurrencyCodePercent) {
-        this.setDirtyIf(!Objects.equals(this.profileTextValidCurrencyCodePercent, profileTextValidCurrencyCodePercent));
-        this.profileTextValidCurrencyCodePercent = profileTextValidCurrencyCodePercent;
-        propagateHierarchyIdToField(profileTextValidCurrencyCodePercent, "profile_text_valid_currency_code_percent");
     }
 
 

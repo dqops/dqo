@@ -110,7 +110,7 @@ const SourceTablesView = () => {
   };
 
   useEffect(() => {
-    if (jobId !== 0 && jobId !== undefined && job?.status === 'succeeded') {
+    if (jobId !== 0 && jobId !== undefined && job?.status === 'finished') {
       fetchSourceTables();
     }
   }, [job?.status]);
@@ -148,7 +148,7 @@ const SourceTablesView = () => {
           <Loader isFull={false} className="w-8 h-8 fill-green-700" />
         </div>
       ) : (
-        <table className="w-full">
+        <table className="max-w-300">
           <thead>
             <tr className="border-b border-gray-300">
               <th />
@@ -162,7 +162,7 @@ const SourceTablesView = () => {
                 key={item.tableName}
                 className="border-b border-gray-300 last:border-b-0"
               >
-                <td className="py-2 px-4 text-left">
+                <td className="py-2 px-2 text-left">
                   <div className="flex">
                     <Checkbox
                       onChange={() => onSelectChange(item.tableName ?? '')}
@@ -173,13 +173,13 @@ const SourceTablesView = () => {
                   </div>
                 </td>
                 <td className="py-2 px-4 text-left">{item.tableName}</td>
-                <td className="py-2 px-4 text-left">
+                <td className="py-2 pl-14">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
                     className={
                       item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
-                    width={30}
+                    width={22}
                     height={22}
                   />
                 </td>

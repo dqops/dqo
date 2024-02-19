@@ -6,17 +6,17 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.column_date_in_range_percent_check_spec import (
+        ColumnDateInRangePercentCheckSpec,
+    )
     from ..models.column_date_values_in_future_percent_check_spec import (
         ColumnDateValuesInFuturePercentCheckSpec,
     )
     from ..models.column_datetime_daily_monitoring_checks_spec_custom_checks import (
         ColumnDatetimeDailyMonitoringChecksSpecCustomChecks,
     )
-    from ..models.column_datetime_date_match_format_percent_check_spec import (
-        ColumnDatetimeDateMatchFormatPercentCheckSpec,
-    )
-    from ..models.column_datetime_value_in_range_date_percent_check_spec import (
-        ColumnDatetimeValueInRangeDatePercentCheckSpec,
+    from ..models.column_text_match_date_format_percent_check_spec import (
+        ColumnTextMatchDateFormatPercentCheckSpec,
     )
 
 
@@ -31,8 +31,8 @@ class ColumnDatetimeDailyMonitoringChecksSpec:
             custom checks within this category. The keys are check names defined in the definition section. The sensor
             parameters and rules should match the type of the configured sensor and rule for the custom check.
         daily_date_values_in_future_percent (Union[Unset, ColumnDateValuesInFuturePercentCheckSpec]):
-        daily_datetime_value_in_range_date_percent (Union[Unset, ColumnDatetimeValueInRangeDatePercentCheckSpec]):
-        daily_date_match_format_percent (Union[Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec]):
+        daily_date_in_range_percent (Union[Unset, ColumnDateInRangePercentCheckSpec]):
+        daily_text_match_date_format_percent (Union[Unset, ColumnTextMatchDateFormatPercentCheckSpec]):
     """
 
     custom_checks: Union[
@@ -41,11 +41,11 @@ class ColumnDatetimeDailyMonitoringChecksSpec:
     daily_date_values_in_future_percent: Union[
         Unset, "ColumnDateValuesInFuturePercentCheckSpec"
     ] = UNSET
-    daily_datetime_value_in_range_date_percent: Union[
-        Unset, "ColumnDatetimeValueInRangeDatePercentCheckSpec"
+    daily_date_in_range_percent: Union[
+        Unset, "ColumnDateInRangePercentCheckSpec"
     ] = UNSET
-    daily_date_match_format_percent: Union[
-        Unset, "ColumnDatetimeDateMatchFormatPercentCheckSpec"
+    daily_text_match_date_format_percent: Union[
+        Unset, "ColumnTextMatchDateFormatPercentCheckSpec"
     ] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
@@ -60,16 +60,14 @@ class ColumnDatetimeDailyMonitoringChecksSpec:
                 self.daily_date_values_in_future_percent.to_dict()
             )
 
-        daily_datetime_value_in_range_date_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_datetime_value_in_range_date_percent, Unset):
-            daily_datetime_value_in_range_date_percent = (
-                self.daily_datetime_value_in_range_date_percent.to_dict()
-            )
+        daily_date_in_range_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_date_in_range_percent, Unset):
+            daily_date_in_range_percent = self.daily_date_in_range_percent.to_dict()
 
-        daily_date_match_format_percent: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.daily_date_match_format_percent, Unset):
-            daily_date_match_format_percent = (
-                self.daily_date_match_format_percent.to_dict()
+        daily_text_match_date_format_percent: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.daily_text_match_date_format_percent, Unset):
+            daily_text_match_date_format_percent = (
+                self.daily_text_match_date_format_percent.to_dict()
             )
 
         field_dict: Dict[str, Any] = {}
@@ -81,30 +79,28 @@ class ColumnDatetimeDailyMonitoringChecksSpec:
             field_dict[
                 "daily_date_values_in_future_percent"
             ] = daily_date_values_in_future_percent
-        if daily_datetime_value_in_range_date_percent is not UNSET:
+        if daily_date_in_range_percent is not UNSET:
+            field_dict["daily_date_in_range_percent"] = daily_date_in_range_percent
+        if daily_text_match_date_format_percent is not UNSET:
             field_dict[
-                "daily_datetime_value_in_range_date_percent"
-            ] = daily_datetime_value_in_range_date_percent
-        if daily_date_match_format_percent is not UNSET:
-            field_dict[
-                "daily_date_match_format_percent"
-            ] = daily_date_match_format_percent
+                "daily_text_match_date_format_percent"
+            ] = daily_text_match_date_format_percent
 
         return field_dict
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.column_date_in_range_percent_check_spec import (
+            ColumnDateInRangePercentCheckSpec,
+        )
         from ..models.column_date_values_in_future_percent_check_spec import (
             ColumnDateValuesInFuturePercentCheckSpec,
         )
         from ..models.column_datetime_daily_monitoring_checks_spec_custom_checks import (
             ColumnDatetimeDailyMonitoringChecksSpecCustomChecks,
         )
-        from ..models.column_datetime_date_match_format_percent_check_spec import (
-            ColumnDatetimeDateMatchFormatPercentCheckSpec,
-        )
-        from ..models.column_datetime_value_in_range_date_percent_check_spec import (
-            ColumnDatetimeValueInRangeDatePercentCheckSpec,
+        from ..models.column_text_match_date_format_percent_check_spec import (
+            ColumnTextMatchDateFormatPercentCheckSpec,
         )
 
         d = src_dict.copy()
@@ -134,41 +130,35 @@ class ColumnDatetimeDailyMonitoringChecksSpec:
                 )
             )
 
-        _daily_datetime_value_in_range_date_percent = d.pop(
-            "daily_datetime_value_in_range_date_percent", UNSET
-        )
-        daily_datetime_value_in_range_date_percent: Union[
-            Unset, ColumnDatetimeValueInRangeDatePercentCheckSpec
-        ]
-        if isinstance(_daily_datetime_value_in_range_date_percent, Unset):
-            daily_datetime_value_in_range_date_percent = UNSET
+        _daily_date_in_range_percent = d.pop("daily_date_in_range_percent", UNSET)
+        daily_date_in_range_percent: Union[Unset, ColumnDateInRangePercentCheckSpec]
+        if isinstance(_daily_date_in_range_percent, Unset):
+            daily_date_in_range_percent = UNSET
         else:
-            daily_datetime_value_in_range_date_percent = (
-                ColumnDatetimeValueInRangeDatePercentCheckSpec.from_dict(
-                    _daily_datetime_value_in_range_date_percent
-                )
+            daily_date_in_range_percent = ColumnDateInRangePercentCheckSpec.from_dict(
+                _daily_date_in_range_percent
             )
 
-        _daily_date_match_format_percent = d.pop(
-            "daily_date_match_format_percent", UNSET
+        _daily_text_match_date_format_percent = d.pop(
+            "daily_text_match_date_format_percent", UNSET
         )
-        daily_date_match_format_percent: Union[
-            Unset, ColumnDatetimeDateMatchFormatPercentCheckSpec
+        daily_text_match_date_format_percent: Union[
+            Unset, ColumnTextMatchDateFormatPercentCheckSpec
         ]
-        if isinstance(_daily_date_match_format_percent, Unset):
-            daily_date_match_format_percent = UNSET
+        if isinstance(_daily_text_match_date_format_percent, Unset):
+            daily_text_match_date_format_percent = UNSET
         else:
-            daily_date_match_format_percent = (
-                ColumnDatetimeDateMatchFormatPercentCheckSpec.from_dict(
-                    _daily_date_match_format_percent
+            daily_text_match_date_format_percent = (
+                ColumnTextMatchDateFormatPercentCheckSpec.from_dict(
+                    _daily_text_match_date_format_percent
                 )
             )
 
         column_datetime_daily_monitoring_checks_spec = cls(
             custom_checks=custom_checks,
             daily_date_values_in_future_percent=daily_date_values_in_future_percent,
-            daily_datetime_value_in_range_date_percent=daily_datetime_value_in_range_date_percent,
-            daily_date_match_format_percent=daily_date_match_format_percent,
+            daily_date_in_range_percent=daily_date_in_range_percent,
+            daily_text_match_date_format_percent=daily_text_match_date_format_percent,
         )
 
         column_datetime_daily_monitoring_checks_spec.additional_properties = d

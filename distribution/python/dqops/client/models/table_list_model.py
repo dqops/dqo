@@ -11,6 +11,7 @@ if TYPE_CHECKING:
     from ..models.delete_stored_data_queue_job_parameters import (
         DeleteStoredDataQueueJobParameters,
     )
+    from ..models.file_format_spec import FileFormatSpec
     from ..models.physical_table_name import PhysicalTableName
     from ..models.statistics_collector_search_filters import (
         StatisticsCollectorSearchFilters,
@@ -33,12 +34,13 @@ class TableListModel:
             executed.
         stage (Union[Unset, str]): Stage name.
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor queries.
-        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables could be assigned a priority level.
-            The table priority is copied into each data quality check result and a sensor result, enabling efficient
-            grouping of more and less important tables during a data quality improvement project, when the data quality
-            issues on higher priority tables are fixed before data quality issues on less important tables.
+        priority (Union[Unset, int]): Table priority (1, 2, 3, 4, ...). The tables can be assigned a priority level. The
+            table priority is copied into each data quality check result and a sensor result, enabling efficient grouping of
+            more and less important tables during a data quality improvement project, when the data quality issues on higher
+            priority tables are fixed before data quality issues on less important tables.
         owner (Union[Unset, TableOwnerSpec]):
         profiling_checks_result_truncation (Union[Unset, ProfilingTimePeriod]):
+        file_format (Union[Unset, FileFormatSpec]):
         has_any_configured_checks (Union[Unset, bool]): True when the table has any checks configured.
         has_any_configured_profiling_checks (Union[Unset, bool]): True when the table has any profiling checks
             configured.
@@ -77,6 +79,7 @@ class TableListModel:
     priority: Union[Unset, int] = UNSET
     owner: Union[Unset, "TableOwnerSpec"] = UNSET
     profiling_checks_result_truncation: Union[Unset, ProfilingTimePeriod] = UNSET
+    file_format: Union[Unset, "FileFormatSpec"] = UNSET
     has_any_configured_checks: Union[Unset, bool] = UNSET
     has_any_configured_profiling_checks: Union[Unset, bool] = UNSET
     has_any_configured_monitoring_checks: Union[Unset, bool] = UNSET
@@ -117,6 +120,10 @@ class TableListModel:
             profiling_checks_result_truncation = (
                 self.profiling_checks_result_truncation.value
             )
+
+        file_format: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.file_format, Unset):
+            file_format = self.file_format.to_dict()
 
         has_any_configured_checks = self.has_any_configured_checks
         has_any_configured_profiling_checks = self.has_any_configured_profiling_checks
@@ -184,6 +191,8 @@ class TableListModel:
             field_dict[
                 "profiling_checks_result_truncation"
             ] = profiling_checks_result_truncation
+        if file_format is not UNSET:
+            field_dict["file_format"] = file_format
         if has_any_configured_checks is not UNSET:
             field_dict["has_any_configured_checks"] = has_any_configured_checks
         if has_any_configured_profiling_checks is not UNSET:
@@ -241,6 +250,7 @@ class TableListModel:
         from ..models.delete_stored_data_queue_job_parameters import (
             DeleteStoredDataQueueJobParameters,
         )
+        from ..models.file_format_spec import FileFormatSpec
         from ..models.physical_table_name import PhysicalTableName
         from ..models.statistics_collector_search_filters import (
             StatisticsCollectorSearchFilters,
@@ -284,6 +294,13 @@ class TableListModel:
             profiling_checks_result_truncation = ProfilingTimePeriod(
                 _profiling_checks_result_truncation
             )
+
+        _file_format = d.pop("file_format", UNSET)
+        file_format: Union[Unset, FileFormatSpec]
+        if isinstance(_file_format, Unset):
+            file_format = UNSET
+        else:
+            file_format = FileFormatSpec.from_dict(_file_format)
 
         has_any_configured_checks = d.pop("has_any_configured_checks", UNSET)
 
@@ -387,6 +404,7 @@ class TableListModel:
             priority=priority,
             owner=owner,
             profiling_checks_result_truncation=profiling_checks_result_truncation,
+            file_format=file_format,
             has_any_configured_checks=has_any_configured_checks,
             has_any_configured_profiling_checks=has_any_configured_profiling_checks,
             has_any_configured_monitoring_checks=has_any_configured_monitoring_checks,

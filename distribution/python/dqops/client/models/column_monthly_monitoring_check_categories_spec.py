@@ -12,14 +12,11 @@ if TYPE_CHECKING:
     from ..models.column_accuracy_monthly_monitoring_checks_spec import (
         ColumnAccuracyMonthlyMonitoringChecksSpec,
     )
-    from ..models.column_anomaly_monthly_monitoring_checks_spec import (
-        ColumnAnomalyMonthlyMonitoringChecksSpec,
-    )
-    from ..models.column_blanks_monthly_monitoring_checks_spec import (
-        ColumnBlanksMonthlyMonitoringChecksSpec,
-    )
     from ..models.column_bool_monthly_monitoring_checks_spec import (
         ColumnBoolMonthlyMonitoringChecksSpec,
+    )
+    from ..models.column_conversions_monthly_monitoring_checks_spec import (
+        ColumnConversionsMonthlyMonitoringChecksSpec,
     )
     from ..models.column_custom_sql_monthly_monitoring_checks_spec import (
         ColumnCustomSqlMonthlyMonitoringChecksSpec,
@@ -60,6 +57,9 @@ if TYPE_CHECKING:
     from ..models.column_uniqueness_monthly_monitoring_checks_spec import (
         ColumnUniquenessMonthlyMonitoringChecksSpec,
     )
+    from ..models.column_whitespace_monthly_monitoring_checks_spec import (
+        ColumnWhitespaceMonthlyMonitoringChecksSpec,
+    )
 
 
 T = TypeVar("T", bound="ColumnMonthlyMonitoringCheckCategoriesSpec")
@@ -75,11 +75,11 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         uniqueness (Union[Unset, ColumnUniquenessMonthlyMonitoringChecksSpec]):
         accepted_values (Union[Unset, ColumnAcceptedValuesMonthlyMonitoringChecksSpec]):
         text (Union[Unset, ColumnTextMonthlyMonitoringChecksSpec]):
-        blanks (Union[Unset, ColumnBlanksMonthlyMonitoringChecksSpec]):
+        whitespace (Union[Unset, ColumnWhitespaceMonthlyMonitoringChecksSpec]):
+        conversions (Union[Unset, ColumnConversionsMonthlyMonitoringChecksSpec]):
         patterns (Union[Unset, ColumnPatternsMonthlyMonitoringChecksSpec]):
         pii (Union[Unset, ColumnPiiMonthlyMonitoringChecksSpec]):
         numeric (Union[Unset, ColumnNumericMonthlyMonitoringChecksSpec]):
-        anomaly (Union[Unset, ColumnAnomalyMonthlyMonitoringChecksSpec]):
         datetime_ (Union[Unset, ColumnDatetimeMonthlyMonitoringChecksSpec]):
         bool_ (Union[Unset, ColumnBoolMonthlyMonitoringChecksSpec]):
         integrity (Union[Unset, ColumnIntegrityMonthlyMonitoringChecksSpec]):
@@ -99,11 +99,11 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         Unset, "ColumnAcceptedValuesMonthlyMonitoringChecksSpec"
     ] = UNSET
     text: Union[Unset, "ColumnTextMonthlyMonitoringChecksSpec"] = UNSET
-    blanks: Union[Unset, "ColumnBlanksMonthlyMonitoringChecksSpec"] = UNSET
+    whitespace: Union[Unset, "ColumnWhitespaceMonthlyMonitoringChecksSpec"] = UNSET
+    conversions: Union[Unset, "ColumnConversionsMonthlyMonitoringChecksSpec"] = UNSET
     patterns: Union[Unset, "ColumnPatternsMonthlyMonitoringChecksSpec"] = UNSET
     pii: Union[Unset, "ColumnPiiMonthlyMonitoringChecksSpec"] = UNSET
     numeric: Union[Unset, "ColumnNumericMonthlyMonitoringChecksSpec"] = UNSET
-    anomaly: Union[Unset, "ColumnAnomalyMonthlyMonitoringChecksSpec"] = UNSET
     datetime_: Union[Unset, "ColumnDatetimeMonthlyMonitoringChecksSpec"] = UNSET
     bool_: Union[Unset, "ColumnBoolMonthlyMonitoringChecksSpec"] = UNSET
     integrity: Union[Unset, "ColumnIntegrityMonthlyMonitoringChecksSpec"] = UNSET
@@ -137,9 +137,13 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         if not isinstance(self.text, Unset):
             text = self.text.to_dict()
 
-        blanks: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.blanks, Unset):
-            blanks = self.blanks.to_dict()
+        whitespace: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.whitespace, Unset):
+            whitespace = self.whitespace.to_dict()
+
+        conversions: Union[Unset, Dict[str, Any]] = UNSET
+        if not isinstance(self.conversions, Unset):
+            conversions = self.conversions.to_dict()
 
         patterns: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.patterns, Unset):
@@ -152,10 +156,6 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         numeric: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.numeric, Unset):
             numeric = self.numeric.to_dict()
-
-        anomaly: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.anomaly, Unset):
-            anomaly = self.anomaly.to_dict()
 
         datetime_: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.datetime_, Unset):
@@ -202,16 +202,16 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
             field_dict["accepted_values"] = accepted_values
         if text is not UNSET:
             field_dict["text"] = text
-        if blanks is not UNSET:
-            field_dict["blanks"] = blanks
+        if whitespace is not UNSET:
+            field_dict["whitespace"] = whitespace
+        if conversions is not UNSET:
+            field_dict["conversions"] = conversions
         if patterns is not UNSET:
             field_dict["patterns"] = patterns
         if pii is not UNSET:
             field_dict["pii"] = pii
         if numeric is not UNSET:
             field_dict["numeric"] = numeric
-        if anomaly is not UNSET:
-            field_dict["anomaly"] = anomaly
         if datetime_ is not UNSET:
             field_dict["datetime"] = datetime_
         if bool_ is not UNSET:
@@ -239,14 +239,11 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         from ..models.column_accuracy_monthly_monitoring_checks_spec import (
             ColumnAccuracyMonthlyMonitoringChecksSpec,
         )
-        from ..models.column_anomaly_monthly_monitoring_checks_spec import (
-            ColumnAnomalyMonthlyMonitoringChecksSpec,
-        )
-        from ..models.column_blanks_monthly_monitoring_checks_spec import (
-            ColumnBlanksMonthlyMonitoringChecksSpec,
-        )
         from ..models.column_bool_monthly_monitoring_checks_spec import (
             ColumnBoolMonthlyMonitoringChecksSpec,
+        )
+        from ..models.column_conversions_monthly_monitoring_checks_spec import (
+            ColumnConversionsMonthlyMonitoringChecksSpec,
         )
         from ..models.column_custom_sql_monthly_monitoring_checks_spec import (
             ColumnCustomSqlMonthlyMonitoringChecksSpec,
@@ -286,6 +283,9 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         )
         from ..models.column_uniqueness_monthly_monitoring_checks_spec import (
             ColumnUniquenessMonthlyMonitoringChecksSpec,
+        )
+        from ..models.column_whitespace_monthly_monitoring_checks_spec import (
+            ColumnWhitespaceMonthlyMonitoringChecksSpec,
         )
 
         d = src_dict.copy()
@@ -328,12 +328,23 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
         else:
             text = ColumnTextMonthlyMonitoringChecksSpec.from_dict(_text)
 
-        _blanks = d.pop("blanks", UNSET)
-        blanks: Union[Unset, ColumnBlanksMonthlyMonitoringChecksSpec]
-        if isinstance(_blanks, Unset):
-            blanks = UNSET
+        _whitespace = d.pop("whitespace", UNSET)
+        whitespace: Union[Unset, ColumnWhitespaceMonthlyMonitoringChecksSpec]
+        if isinstance(_whitespace, Unset):
+            whitespace = UNSET
         else:
-            blanks = ColumnBlanksMonthlyMonitoringChecksSpec.from_dict(_blanks)
+            whitespace = ColumnWhitespaceMonthlyMonitoringChecksSpec.from_dict(
+                _whitespace
+            )
+
+        _conversions = d.pop("conversions", UNSET)
+        conversions: Union[Unset, ColumnConversionsMonthlyMonitoringChecksSpec]
+        if isinstance(_conversions, Unset):
+            conversions = UNSET
+        else:
+            conversions = ColumnConversionsMonthlyMonitoringChecksSpec.from_dict(
+                _conversions
+            )
 
         _patterns = d.pop("patterns", UNSET)
         patterns: Union[Unset, ColumnPatternsMonthlyMonitoringChecksSpec]
@@ -355,13 +366,6 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
             numeric = UNSET
         else:
             numeric = ColumnNumericMonthlyMonitoringChecksSpec.from_dict(_numeric)
-
-        _anomaly = d.pop("anomaly", UNSET)
-        anomaly: Union[Unset, ColumnAnomalyMonthlyMonitoringChecksSpec]
-        if isinstance(_anomaly, Unset):
-            anomaly = UNSET
-        else:
-            anomaly = ColumnAnomalyMonthlyMonitoringChecksSpec.from_dict(_anomaly)
 
         _datetime_ = d.pop("datetime", UNSET)
         datetime_: Union[Unset, ColumnDatetimeMonthlyMonitoringChecksSpec]
@@ -431,11 +435,11 @@ class ColumnMonthlyMonitoringCheckCategoriesSpec:
             uniqueness=uniqueness,
             accepted_values=accepted_values,
             text=text,
-            blanks=blanks,
+            whitespace=whitespace,
+            conversions=conversions,
             patterns=patterns,
             pii=pii,
             numeric=numeric,
-            anomaly=anomaly,
             datetime_=datetime_,
             bool_=bool_,
             integrity=integrity,

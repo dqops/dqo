@@ -4,5 +4,7 @@ kind: check
 spec:
   sensor_name: table/volume/row_count
   rule_name: percentile/anomaly_differencing_percentile_moving_average
-  help_text: Verifies that the total row count of the tested table changes in a rate
-    within a percentile boundary during last 90 days.
+  help_text: Detects when the row count has changed too much since the previous day.
+    It uses time series anomaly detection to find the biggest volume changes during
+    the last 90 days.
+  standard: true

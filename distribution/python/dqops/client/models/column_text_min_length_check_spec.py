@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
+    from ..models.between_ints_rule_parameters_spec import BetweenIntsRuleParametersSpec
     from ..models.column_text_text_min_length_sensor_parameters_spec import (
         ColumnTextTextMinLengthSensorParametersSpec,
     )
     from ..models.comment_spec import CommentSpec
-    from ..models.min_value_rule_parameters_spec import MinValueRuleParametersSpec
     from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
 
@@ -36,16 +36,16 @@ class ColumnTextMinLengthCheckSpec:
             Contract for the dataset.
         quality_dimension (Union[Unset, str]): Configures a custom data quality dimension name that is different than
             the built-in dimensions (Timeliness, Validity, etc.).
-        display_name (Union[Unset, str]): Data quality check display name that could be assigned to the check, otherwise
+        display_name (Union[Unset, str]): Data quality check display name that can be assigned to the check, otherwise
             the check_display_name stored in the parquet result files is the check_name.
         data_grouping (Union[Unset, str]): Data grouping configuration name that should be applied to this data quality
             check. The data grouping is used to group the check's result by a GROUP BY clause in SQL, evaluating the data
             quality check for each group of rows. Use the name of one of data grouping configurations defined on the parent
             table.
         parameters (Union[Unset, ColumnTextTextMinLengthSensorParametersSpec]):
-        warning (Union[Unset, MinValueRuleParametersSpec]):
-        error (Union[Unset, MinValueRuleParametersSpec]):
-        fatal (Union[Unset, MinValueRuleParametersSpec]):
+        warning (Union[Unset, BetweenIntsRuleParametersSpec]):
+        error (Union[Unset, BetweenIntsRuleParametersSpec]):
+        fatal (Union[Unset, BetweenIntsRuleParametersSpec]):
     """
 
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
@@ -57,9 +57,9 @@ class ColumnTextMinLengthCheckSpec:
     display_name: Union[Unset, str] = UNSET
     data_grouping: Union[Unset, str] = UNSET
     parameters: Union[Unset, "ColumnTextTextMinLengthSensorParametersSpec"] = UNSET
-    warning: Union[Unset, "MinValueRuleParametersSpec"] = UNSET
-    error: Union[Unset, "MinValueRuleParametersSpec"] = UNSET
-    fatal: Union[Unset, "MinValueRuleParametersSpec"] = UNSET
+    warning: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
+    error: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
+    fatal: Union[Unset, "BetweenIntsRuleParametersSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -129,11 +129,13 @@ class ColumnTextMinLengthCheckSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
+        from ..models.between_ints_rule_parameters_spec import (
+            BetweenIntsRuleParametersSpec,
+        )
         from ..models.column_text_text_min_length_sensor_parameters_spec import (
             ColumnTextTextMinLengthSensorParametersSpec,
         )
         from ..models.comment_spec import CommentSpec
-        from ..models.min_value_rule_parameters_spec import MinValueRuleParametersSpec
         from ..models.monitoring_schedule_spec import MonitoringScheduleSpec
 
         d = src_dict.copy()
@@ -173,25 +175,25 @@ class ColumnTextMinLengthCheckSpec:
             )
 
         _warning = d.pop("warning", UNSET)
-        warning: Union[Unset, MinValueRuleParametersSpec]
+        warning: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_warning, Unset):
             warning = UNSET
         else:
-            warning = MinValueRuleParametersSpec.from_dict(_warning)
+            warning = BetweenIntsRuleParametersSpec.from_dict(_warning)
 
         _error = d.pop("error", UNSET)
-        error: Union[Unset, MinValueRuleParametersSpec]
+        error: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_error, Unset):
             error = UNSET
         else:
-            error = MinValueRuleParametersSpec.from_dict(_error)
+            error = BetweenIntsRuleParametersSpec.from_dict(_error)
 
         _fatal = d.pop("fatal", UNSET)
-        fatal: Union[Unset, MinValueRuleParametersSpec]
+        fatal: Union[Unset, BetweenIntsRuleParametersSpec]
         if isinstance(_fatal, Unset):
             fatal = UNSET
         else:
-            fatal = MinValueRuleParametersSpec.from_dict(_fatal)
+            fatal = BetweenIntsRuleParametersSpec.from_dict(_fatal)
 
         column_text_min_length_check_spec = cls(
             schedule_override=schedule_override,

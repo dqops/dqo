@@ -119,16 +119,13 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             return;
         }
 
-        try {
-            Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
-            this.jobUpdateSink = null;
-            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
-                    this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
-            currentSink.emitComplete(emitFailureHandler);
-        }
-        finally {
-            this.started = false;
-        }
+        this.started = false;
+
+        Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
+        this.jobUpdateSink = null;
+        Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
+               this.queueConfigurationProperties.getPublishBusyLoopingDurationSeconds()));
+        currentSink.emitComplete(emitFailureHandler);
     }
 
     /**
@@ -202,13 +199,13 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             DqoJobChange dqoJobChange;
             if (previousJobHistoryModel != null && !Objects.equals(previousJobHistoryModel.getParameters(), mostRecentJobParameters)) {
                 DqoJobHistoryEntryModel newJobHistoryModel = previousJobHistoryModel.clone();
-                newJobHistoryModel.setStatus(DqoJobStatus.succeeded);
+                newJobHistoryModel.setStatus(DqoJobStatus.finished);
                 newJobHistoryModel.setStatusChangedAt(Instant.now());
                 newJobHistoryModel.setParameters(mostRecentJobParameters);
-                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, newJobHistoryModel);
+                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, newJobHistoryModel);
             }
             else {
-                dqoJobChange = new DqoJobChange(DqoJobStatus.succeeded, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
+                dqoJobChange = new DqoJobChange(DqoJobStatus.finished, jobQueueEntry.getJobId(), jobQueueEntry.getJob().getJobType());
             }
 
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.busyLooping(Duration.ofSeconds(
@@ -339,7 +336,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
                     .values());
-            if (changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
+
+            if (this.started && changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
                 this.waitingClients.put(changeSequence, completableFuture);
@@ -422,7 +420,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                             }
                         }
 
-                        if (jobChange.getStatus() == DqoJobStatus.succeeded && jobChange.getJobType() == DqoJobType.synchronize_multiple_folders) {
+                        if (jobChange.getStatus() == DqoJobStatus.finished && jobChange.getJobType() == DqoJobType.synchronize_multiple_folders) {
                             // we will keep only the last most recent successful synchronization job
                             removeOlderSynchronizeMultipleFoldersJobs(jobChange.getJobId());
                         }
@@ -451,7 +449,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     }
 
     /**
-     * Remove all information of succeeded synchronize multiple folders and their child synchronize folder jobs, except
+     * Remove all information of finished synchronize multiple folders and their child synchronize folder jobs, except
      * for the synchronize multiple folders job identified by <code>jobIdToKeep</code> that is the most recent and should be preserved.
      * @param jobIdToKeep Job id to keep. It's child jobs (when it is a parent job) are also preserved.
      */
@@ -499,7 +497,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         List<DqoQueueJobId> oldJobIdsToDelete = this.allJobs.entrySet()
                 .stream()
                 .takeWhile(e -> e.getValue().getStatusChangedAt().compareTo(oldJobsHistoryThresholdTimestamp) < 1)
-                .filter(e -> e.getValue().getStatus() == DqoJobStatus.succeeded ||
+                .filter(e -> e.getValue().getStatus() == DqoJobStatus.finished ||
                         e.getValue().getStatus() == DqoJobStatus.failed ||
                         e.getValue().getStatus() == DqoJobStatus.cancelled)
                 .map(e -> e.getKey())

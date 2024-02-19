@@ -1,0 +1,11 @@
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/CheckDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: check
+spec:
+  sensor_name: column/datetime/text_match_date_format_percent
+  rule_name: comparison/min_percent
+  help_text: "Verifies that the values in text columns match one of the predefined\
+    \ date formats, such as an ISO 8601 date. Measures the percentage of valid date\
+    \ strings and raises a data quality issue when too many invalid date strings are\
+    \ found. Creates a separate data quality check (and an alert) for each daily monitoring."
+  standard: true

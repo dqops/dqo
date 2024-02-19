@@ -16,6 +16,8 @@
 
 package com.dqops.checks.defaults;
 
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
@@ -51,18 +53,18 @@ public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends Abst
     @JsonPropertyDescription("The default configuration of monthly monitoring checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec table = new DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec();
+    private TableMonthlyMonitoringCheckCategoriesSpec table = new TableMonthlyMonitoringCheckCategoriesSpec();
 
     @JsonPropertyDescription("The default configuration of monthly monitoring checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec column = new DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec();
+    private ColumnMonthlyMonitoringCheckCategoriesSpec column = new ColumnMonthlyMonitoringCheckCategoriesSpec();
 
     /**
      * Returns the container of default table level checks.
      * @return Table level checks.
      */
-    public DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec getTable() {
+    public TableMonthlyMonitoringCheckCategoriesSpec getTable() {
         return table;
     }
 
@@ -70,7 +72,7 @@ public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends Abst
      * Sets the reference to the container of table level default checks.
      * @param table Table level checks container.
      */
-    public void setTable(DefaultMonthlyMonitoringTableObservabilityCheckSettingsSpec table) {
+    public void setTable(TableMonthlyMonitoringCheckCategoriesSpec table) {
         this.setDirtyIf(!Objects.equals(this.table, table));
         this.table = table;
         this.propagateHierarchyIdToField(table, "table");
@@ -80,7 +82,7 @@ public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends Abst
      * Returns the container of default column level checks.
      * @return Column level checks.
      */
-    public DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec getColumn() {
+    public ColumnMonthlyMonitoringCheckCategoriesSpec getColumn() {
         return column;
     }
 
@@ -88,7 +90,7 @@ public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends Abst
      * Sets the reference to the container of column level default checks.
      * @param column Column level checks container.
      */
-    public void setColumn(DefaultMonthlyMonitoringColumnObservabilityCheckSettingsSpec column) {
+    public void setColumn(ColumnMonthlyMonitoringCheckCategoriesSpec column) {
         this.setDirtyIf(!Objects.equals(this.column, column));
         this.column = column;
         this.propagateHierarchyIdToField(column, "column");

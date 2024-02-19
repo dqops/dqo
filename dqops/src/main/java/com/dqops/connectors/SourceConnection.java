@@ -18,6 +18,7 @@ package com.dqops.connectors;
 import com.dqops.core.jobqueue.JobCancellationToken;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
 import tech.tablesaw.api.Table;
 
@@ -36,7 +37,7 @@ public interface SourceConnection extends Closeable {
 
     /**
      * Opens a connection before it can be used for executing any statements.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
      */
     void open(SecretValueLookupContext secretValueLookupContext);
 
@@ -54,9 +55,10 @@ public interface SourceConnection extends Closeable {
     /**
      * Lists tables inside a schema. Views are also returned.
      * @param schemaName Schema name.
+     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
-    List<SourceTableModel> listTables(String schemaName);
+    List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper);
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
@@ -64,7 +66,7 @@ public interface SourceConnection extends Closeable {
      * @param tableNames Table names.
      * @return List of table specifications with the column list which pass the filters.
      */
-    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames);
+    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper);
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.

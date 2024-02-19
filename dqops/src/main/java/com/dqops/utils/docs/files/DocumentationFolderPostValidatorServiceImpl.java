@@ -64,6 +64,7 @@ public class DocumentationFolderPostValidatorServiceImpl implements Documentatio
         List<String> incorrectLinks = generalInternalLink.matcher(content).results()
                 .map(MatchResult::group)
                 .filter(Predicate.not(correctLinkFormat.asMatchPredicate()))
+                .filter(line -> !line.contains("(+1)")) // some PII checks
                 .collect(Collectors.toList());
 
         if (!incorrectLinks.isEmpty()) {

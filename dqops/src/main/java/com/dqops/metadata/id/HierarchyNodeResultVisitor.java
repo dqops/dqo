@@ -18,28 +18,25 @@ package com.dqops.metadata.id;
 import com.dqops.checks.AbstractCheckCategorySpec;
 import com.dqops.checks.AbstractCheckSpec;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
+import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
+import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import com.dqops.metadata.comments.CommentSpec;
+import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairSpec;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.credentials.SharedCredentialWrapper;
-import com.dqops.metadata.dictionaries.DictionaryListImpl;
-import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
-import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
-import com.dqops.metadata.comments.CommentSpec;
-import com.dqops.metadata.comments.CommentsListSpec;
 import com.dqops.metadata.dashboards.*;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
@@ -48,25 +45,29 @@ import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionSpec;
 import com.dqops.metadata.definitions.rules.RuleDefinitionWrapper;
 import com.dqops.metadata.definitions.sensors.*;
+import com.dqops.metadata.dictionaries.DictionaryListImpl;
+import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.dqohome.DqoHomeImpl;
 import com.dqops.metadata.fields.ParameterDefinitionSpec;
 import com.dqops.metadata.fields.ParameterDefinitionsListSpec;
 import com.dqops.metadata.fileindices.FileIndexListImpl;
 import com.dqops.metadata.fileindices.FileIndexSpec;
 import com.dqops.metadata.fileindices.FileIndexWrapperImpl;
-import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
-import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
-import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
-import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
+import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
 import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.incidents.TableIncidentGroupingSpec;
-import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
+import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
+import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
+import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.fileformat.*;
+import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.rules.AbstractRuleParametersSpec;
 import com.dqops.rules.RuleTimeWindowSettingsSpec;
@@ -797,4 +798,50 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(DictionaryWrapperImpl dictionaryWrapper, P parameter);
+
+    /**
+     * Accepts a file format specification.
+     *
+     * @param fileFormatSpec File format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(FileFormatSpec fileFormatSpec, P parameter);
+
+    /**
+     * Accepts a csv file format specification.
+     *
+     * @param csvFileFormatSpec Csv file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(CsvFileFormatSpec csvFileFormatSpec, P parameter);
+
+    /**
+     * Accepts a json file format specification.
+     *
+     * @param jsonFileFormatSpec Json file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(JsonFileFormatSpec jsonFileFormatSpec, P parameter);
+
+    /**
+     * Accepts a parquet file format specification.
+     *
+     * @param parquetFileFormatSpec Parquet file format specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(ParquetFileFormatSpec parquetFileFormatSpec, P parameter);
+
+    /**
+     * Accepts a file path list specification.
+     *
+     * @param filePathListSpec File path list specification.
+     * @param parameter Additional parameter.
+     * @return Accept's result.
+     */
+    R accept(FilePathListSpec filePathListSpec, P parameter);
+
 }

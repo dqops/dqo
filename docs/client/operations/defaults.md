@@ -29,7 +29,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
@@ -37,7 +39,42 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -53,8 +90,50 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -71,7 +150,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -91,7 +212,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -111,7 +274,45 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -142,7 +343,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
@@ -150,7 +353,42 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -166,8 +404,50 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -184,7 +464,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -204,7 +526,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -224,7 +588,45 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -255,7 +657,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
@@ -263,7 +667,42 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -279,8 +718,50 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -297,7 +778,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -317,7 +840,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -337,7 +902,45 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -368,7 +971,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
@@ -376,7 +981,42 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -392,8 +1032,50 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -410,7 +1092,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -430,7 +1154,49 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -450,7 +1216,45 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -481,7 +1285,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/column^
@@ -489,7 +1295,42 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -505,8 +1346,50 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -523,7 +1406,49 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -543,7 +1468,49 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -563,7 +1530,45 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -594,7 +1599,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultchecks/profiling/table^
@@ -602,7 +1609,42 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "categories" : [ {
+	    "category" : "sample_category",
+	    "help_text" : "Sample help text",
+	    "checks" : [ {
+	      "check_name" : "sample_check",
+	      "help_text" : "Sample help text",
+	      "sensor_parameters" : [ ],
+	      "sensor_name" : "sample_target/sample_category/sample_sensor",
+	      "quality_dimension" : "sample_quality_dimension",
+	      "supports_grouping" : false,
+	      "disabled" : false,
+	      "exclude_from_kpi" : false,
+	      "include_in_sla" : false,
+	      "configured" : false,
+	      "can_edit" : false,
+	      "can_run_checks" : false,
+	      "can_delete_data" : false
+	    } ]
+	  } ],
+	  "can_edit" : false,
+	  "can_run_checks" : false,
+	  "can_delete_data" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -618,8 +1660,50 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -636,7 +1720,49 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -656,7 +1782,49 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -676,7 +1844,45 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    CheckContainerModel(
+		categories=[
+			QualityCategoryModel(
+				category='sample_category',
+				help_text='Sample help text',
+				checks=[
+					CheckModel(
+						check_name='sample_check',
+						help_text='Sample help text',
+						sensor_parameters=[
+						
+						],
+						sensor_name='sample_target/sample_category/sample_sensor',
+						quality_dimension='sample_quality_dimension',
+						supports_grouping=False,
+						standard=False,
+						disabled=False,
+						exclude_from_kpi=False,
+						include_in_sla=False,
+						configured=False,
+						can_edit=False,
+						can_run_checks=False,
+						can_delete_data=False
+					)
+				]
+			)
+		],
+		can_edit=False,
+		can_run_checks=False,
+		can_delete_data=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -714,7 +1920,9 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
@@ -722,7 +1930,21 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "cron_expression" : "0 12 1 * *"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -740,8 +1962,23 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -760,7 +1997,22 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -782,7 +2034,22 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -804,7 +2071,18 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    MonitoringScheduleSpec(
+		cron_expression='0 12 1 * *',
+		disabled=False
+	)
+    ```
+    
+    
+    
 
 
 
@@ -835,7 +2113,9 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/defaults/defaultwebhooks^
@@ -843,7 +2123,24 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "incident_opened_webhook_url" : "https://sample_url.com/opened",
+	  "incident_acknowledged_webhook_url" : "https://sample_url.com/acknowledged",
+	  "incident_resolved_webhook_url" : "https://sample_url.com/resolved",
+	  "incident_muted_webhook_url" : "https://sample_url.com/muted"
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -859,8 +2156,25 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -877,7 +2191,24 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -897,7 +2228,24 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -917,7 +2265,20 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    IncidentWebhookNotificationsSpec(
+		incident_opened_webhook_url='https://sample_url.com/opened',
+		incident_acknowledged_webhook_url='https://sample_url.com/acknowledged',
+		incident_resolved_webhook_url='https://sample_url.com/resolved',
+		incident_muted_webhook_url='https://sample_url.com/muted'
+	)
+    ```
+    
+    
+    
 
 
 
@@ -948,7 +2309,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/column^
@@ -959,7 +2322,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1011,8 +2378,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1065,7 +2436,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1121,7 +2496,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1177,7 +2556,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
-
+    
 
 
 
@@ -1208,7 +2587,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/daily/table^
@@ -1219,7 +2600,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1271,8 +2656,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1325,7 +2714,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1381,7 +2774,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1437,7 +2834,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/da
 	
     ```
 
-
+    
 
 
 
@@ -1468,7 +2865,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/column^
@@ -1479,7 +2878,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1531,8 +2934,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1585,7 +2992,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1641,7 +3052,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1697,7 +3112,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
-
+    
 
 
 
@@ -1728,7 +3143,9 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/monthly/table^
@@ -1739,7 +3156,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1791,8 +3212,12 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1845,7 +3270,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1901,7 +3330,11 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -1957,7 +3390,7 @@ http://localhost:8888/api/defaults/defaultchecks/dataobservability/monitoring/mo
 	
     ```
 
-
+    
 
 
 
@@ -1988,7 +3421,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/column^
@@ -1999,7 +3434,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2051,8 +3490,12 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2105,7 +3548,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2161,7 +3608,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2217,7 +3668,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/column
 	
     ```
 
-
+    
 
 
 
@@ -2248,7 +3699,9 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultchecks/profiling/table^
@@ -2259,7 +3712,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2311,8 +3768,12 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2365,7 +3826,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2421,7 +3886,11 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2477,7 +3946,7 @@ http://localhost:8888/api/defaults/defaultchecks/profiling/table
 	
     ```
 
-
+    
 
 
 
@@ -2515,7 +3984,9 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultschedule/partitioned_daily^
@@ -2526,7 +3997,11 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2550,8 +4025,12 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2576,7 +4055,11 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2604,7 +4087,11 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2632,7 +4119,7 @@ http://localhost:8888/api/defaults/defaultschedule/{schedulingGroup}
 	
     ```
 
-
+    
 
 
 
@@ -2663,7 +4150,9 @@ http://localhost:8888/api/defaults/defaultwebhooks
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/defaults/defaultwebhooks^
@@ -2674,7 +4163,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2698,8 +4191,12 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2724,7 +4221,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2752,7 +4253,11 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -2780,7 +4285,7 @@ http://localhost:8888/api/defaults/defaultwebhooks
 	
     ```
 
-
+    
 
 
 

@@ -158,7 +158,7 @@ The following elements are supported, not including the data quality issue thres
   checks have parameters and the node does not need to be configured.
 - `quality_dimension` is a text field used to override the default value of the [data quality dimension](../../dqo-concepts/data-quality-dimensions.md)
   stored in the parquet tables. Changing the default data quality dimension name allows to report some issues under a different dimension.
-- `schedule_override` is a configuration of the CRON schedule for a single data quality check. The check could be configured
+- `schedule_override` is a configuration of the CRON schedule for a single data quality check. The check can be configured
   to run using its own schedule, more or less frequently than the default scheduling configuration at the table or connection levels. 
 
 

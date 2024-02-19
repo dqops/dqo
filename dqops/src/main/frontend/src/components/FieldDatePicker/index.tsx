@@ -3,10 +3,10 @@ import React, { FocusEvent, useRef } from 'react';
 import clsx from 'clsx';
 import SvgIcon from '../SvgIcon';
 import { Tooltip } from '@material-tailwind/react';
-import moment from "moment";
-import usePopup from "../../hooks/usePopup";
+import moment from 'moment';
+import usePopup from '../../hooks/usePopup';
 import BaseDatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
+import 'react-datepicker/dist/react-datepicker.css';
 
 interface IFieldDatePickerProps {
   type?: string;
@@ -17,7 +17,7 @@ interface IFieldDatePickerProps {
   helperText?: string;
   name?: string;
   value?: string | number;
-  onChange?: (e: Date) => void;
+  onChange?: (e: string) => void;
   onBlur?: (e: FocusEvent) => void;
   onClear?: () => void;
   info?: boolean;
@@ -36,7 +36,7 @@ const FieldDatePicker = ({
   onChange,
   onClear,
   tooltipText,
-  disabled,
+  disabled
 }: IFieldDatePickerProps) => {
   const ref = useRef(null);
   const { isOpen, toggleMenu } = usePopup(ref);
@@ -77,19 +77,28 @@ const FieldDatePicker = ({
       </div>
       <div className="relative ">
         <div ref={ref} className="relative">
-          <div
+          <input
+            type="text"
+            value={value}
+            onChange={(e) => onChange && onChange(e.target.value)}
+            placeholder="YYYY-MM-DD"
             className={clsx(
-              "h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none text-sm rounded flex items-center w-30",
+              'h-9 placeholder-gray-500 py-0.5 px-3 border text-gray-900 focus:text-gray-900 focus:outline-none text-sm rounded flex items-center w-30',
               disabled ? 'bg-gray-300 bg-opacity-20 cursor-not-allowed' : '',
+              !value
+                ?.toString()
+                .match(
+                  /^(?:\d{4})-(?:0[1-9]|1[0-2])-(?:0[1-9]|[1-2][0-9]|3[0-1])$/
+                )
+                ? 'border-red-500'
+                : ''
             )}
-            onClick={onClick}
-          >
-            {value ? moment(value).format("YYYY-MM-DD") : ''}
-          </div>
+            disabled={disabled}
+          />
           {isOpen && (
             <div className="absolute z-10 bg-white">
               <BaseDatePicker
-                placeholderText='YYYY-MM-DD'
+                placeholderText="YYYY-MM-DD"
                 onChange={onChange}
                 selected={value}
                 disabled={disabled}
@@ -111,6 +120,6 @@ const FieldDatePicker = ({
       {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
     </div>
   );
-}
+};
 
 export default FieldDatePicker;

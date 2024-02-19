@@ -3,7 +3,7 @@ Read this guide to learn how to connect DQOps to Microsoft SQL Server from the U
 
 ## Overview
 
-[Microsoft SQL Server](https://learn.microsoft.com/en-us/sql/sql-server/) is a relational database management system developed by Microsoft that supports a wide variety of 
+Microsoft SQL Server is a relational database management system developed by Microsoft that supports a wide variety of 
 transaction processing, business intelligence and analytics applications in corporate IT environments.
 
 ## Prerequisite credentials

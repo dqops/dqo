@@ -48,7 +48,7 @@ public class ServerConfigurationProperties implements Cloneable {
     }
 
     /**
-     * Returns the port number. It could be "-1" or "0".
+     * Returns the port number. It can be "-1" or "0".
      * @return Port number.
      */
     public String getPort() {

@@ -36,24 +36,26 @@ public enum DetectedDatatypeCategory {
     dates(3),
 
     /**
-     * Timestamps types (date with time)
+     * Datetime (date with time)
      */
-    timestamps(4),
+    datetimes(4),
+
+    // TODO: add a timestamps(5) type for timestamps containing a time zone component
 
     /**
      * Booleans
      */
-    booleans(5),
+    booleans(6),
 
     /**
      * Text values
      */
-    texts(6),
+    texts(7),
 
     /**
      * Mixed data types
      */
-    mixed(7);
+    mixed(8);
 
     private int code;
 

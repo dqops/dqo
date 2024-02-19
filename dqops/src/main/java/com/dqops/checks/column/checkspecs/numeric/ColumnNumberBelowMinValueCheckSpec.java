@@ -35,7 +35,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * A column-level check that ensures that the number of values in the monitored column with a value below a user-defined value as a parameter does not exceed set thresholds.
+ * This check finds numeric values smaller than the minimum accepted value. It counts the values that are too small.
+ * This check raises a data quality issue when the count of too small values exceeds the maximum accepted count.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

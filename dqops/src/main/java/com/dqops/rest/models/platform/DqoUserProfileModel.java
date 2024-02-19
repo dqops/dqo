@@ -61,33 +61,33 @@ public class DqoUserProfileModel {
     private String trialPeriodExpiresAt;
 
     /**
-     * Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of connections that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of connections that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionsLimit;
 
     /**
-     * Limit of the number of users that could be added to a DQOps environment.
+     * Limit of the number of users that can be added to a DQOps environment.
      */
-    @JsonPropertyDescription("Limit of the number of users that could be added to a DQOps environment.")
+    @JsonPropertyDescription("Limit of the number of users that can be added to a DQOps environment.")
     private Integer usersLimit;
 
     /**
-     * Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of recent months (excluding the current month) that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer monthsLimit;
 
     /**
-     * Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the number of tables inside each connection that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the number of tables inside each connection that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer connectionTablesLimit;
 
     /**
-     * Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.
+     * Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.
      */
-    @JsonPropertyDescription("Limit of the total number of tables that could be synchronized to the DQOps Cloud data quality warehouse.")
+    @JsonPropertyDescription("Limit of the total number of tables that can be synchronized to the DQOps Cloud data quality warehouse.")
     private Integer tablesLimit;
 
     /**

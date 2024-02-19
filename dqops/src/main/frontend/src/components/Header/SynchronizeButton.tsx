@@ -42,7 +42,7 @@ export const SynchronizeButton = () => {
 
   const isGreenBorder = !folderSynchronizationStatus || Object.values(folderSynchronizationStatus).every((status) => status === "unchanged");
   const disabled = job && (
-    job?.status !== DqoJobHistoryEntryModelStatusEnum.succeeded &&
+    job?.status !== DqoJobHistoryEntryModelStatusEnum.finished &&
     job?.status !== DqoJobHistoryEntryModelStatusEnum.failed
   );
 

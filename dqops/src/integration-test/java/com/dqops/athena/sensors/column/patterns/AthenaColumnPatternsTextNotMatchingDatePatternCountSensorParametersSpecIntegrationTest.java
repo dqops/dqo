@@ -17,7 +17,6 @@ package com.dqops.athena.sensors.column.patterns;
 
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.checkspecs.patterns.ColumnTextNotMatchingDatePatternFoundCheckSpec;
-import com.dqops.connectors.ProviderType;
 import com.dqops.execution.sensors.DataQualitySensorRunnerObjectMother;
 import com.dqops.execution.sensors.SensorExecutionResult;
 import com.dqops.execution.sensors.SensorExecutionRunParameters;
@@ -33,6 +32,7 @@ import com.dqops.sensors.column.text.TextBuiltInDateFormats;
 import com.dqops.athena.BaseAthenaIntegrationTest;
 import com.dqops.connectors.trino.AthenaConnectionSpecObjectMother;
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.testutils.ValueConverter;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +60,7 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec);
 
@@ -69,12 +69,12 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
@@ -83,12 +83,12 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedMonitoringMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForMonitoringCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
@@ -97,12 +97,12 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -111,12 +111,12 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setDateFormats(TextBuiltInDateFormats.ISO8601);
+        this.sut.setDateFormat(TextBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -125,6 +125,6 @@ public class AthenaColumnPatternsTextNotMatchingDatePatternCountSensorParameters
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, ValueConverter.toLong(resultTable.column(0).get(0)));
     }
 }

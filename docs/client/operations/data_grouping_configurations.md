@@ -38,7 +38,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X POST http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings^
@@ -49,7 +51,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -83,8 +89,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -119,7 +129,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -157,7 +171,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -195,7 +213,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -229,7 +247,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X DELETE http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
@@ -237,7 +257,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -256,8 +280,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -277,7 +305,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -300,7 +332,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -323,7 +359,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -364,7 +400,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
@@ -372,7 +410,21 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    {
+	  "can_edit" : false
+	}
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -392,8 +444,20 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationModel(can_edit=False)
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -414,7 +478,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationModel(can_edit=False)
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -438,7 +514,19 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationModel(can_edit=False)
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -462,7 +550,15 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    DataGroupingConfigurationModel(can_edit=False)
+    ```
+    
+    
+    
 
 
 
@@ -502,7 +598,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings^
@@ -510,7 +608,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    
+    ```js
+    [ {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	}, {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	}, {
+	  "default_data_grouping_configuration" : false,
+	  "can_edit" : false
+	} ]
+    ```
+    
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -529,8 +648,33 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		)
+	]
+    ```
+    
+    
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -550,7 +694,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -573,7 +742,32 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		)
+	]
+    ```
+    
+    
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -596,7 +790,28 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
+    **Return value sample**
+    
+    ```python
+    [
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		),
+		DataGroupingConfigurationListModel(
+			default_data_grouping_configuration=False,
+			can_edit=False
+		)
+	]
+    ```
+    
+    
+    
 
 
 
@@ -630,7 +845,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PATCH http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/setdefault^
@@ -638,7 +855,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -656,8 +877,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -676,7 +901,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -698,7 +927,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -720,7 +953,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 
@@ -761,7 +994,9 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 
 **Usage examples**
 
+
 === "curl"
+    **Execution**
 
     ```bash
     curl -X PUT http://localhost:8888/api/connections/sample_connection/schemas/sample_schema/tables/sample_table/groupings/sample_data_grouping^
@@ -772,7 +1007,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -807,8 +1046,12 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	)
 	
     ```
+
+    
+
 
 === "Python async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -844,7 +1087,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth sync client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -883,7 +1130,11 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
+    
+
+
 === "Python auth async client"
+    **Execution**
 
     ```python
     from dqops import client
@@ -922,7 +1173,7 @@ http://localhost:8888/api/connections/{connectionName}/schemas/{schemaName}/tabl
 	
     ```
 
-
+    
 
 
 

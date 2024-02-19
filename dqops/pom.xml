@@ -27,7 +27,7 @@
 	</parent>
 	<groupId>com.dqops</groupId>
 	<artifactId>dqo-dqops</artifactId>
-    <version>1.0.1</version>  <!-- DQOps Version, do not touch (changed automatically) -->
+    <version>1.0.2</version>  <!-- DQOps Version, do not touch (changed automatically) -->
 	<packaging>jar</packaging>
 	<name>dqo-dqops</name>
 	<description>DQOps Data Quality Operations Center</description>
@@ -36,6 +36,7 @@
 		<tablesaw.version>0.43.1</tablesaw.version>
 		<license.licenseName>apache_v2</license.licenseName>
 		<npm.build.script>build</npm.build.script>
+		<duckdb.version>0.10.0</duckdb.version>
 	</properties>
 
 	<licenses>
@@ -314,6 +315,11 @@
 			<artifactId>lombok</artifactId>
 			<version>1.18.26</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents.client5</groupId>
+			<artifactId>httpclient5</artifactId>
+			<version>5.3.1</version>
 		</dependency>
 		<dependency>
 			<groupId>com.zaxxer</groupId>
@@ -644,6 +650,12 @@
 			<groupId>com.singlestore</groupId>
 			<artifactId>singlestore-jdbc-client</artifactId>
 			<version>1.2.1</version>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.duckdb</groupId>
+			<artifactId>duckdb_jdbc</artifactId>
+			<version>0.9.2</version>
 			<scope>runtime</scope>
 		</dependency>
 
@@ -997,6 +1009,42 @@
 						</licenseSet>
 					</licenseSets>
 				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<configuration>
+							<target>
+								<!-- set the plugin property to use the variable -->
+								<property name="duckdb.version" value="${duckdb.version}"/>
+								<property name="project.basedir" value="${project.basedir}"/>
+
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="linux_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_amd64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="osx_arm64"/>
+								</ant>
+								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
+									<property name="duckdb.platform_name" value="windows_amd64"/>
+								</ant>
+
+							</target>
+						</configuration>
+						<goals>
+							<goal>run</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>

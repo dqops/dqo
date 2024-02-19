@@ -61,7 +61,7 @@ public class ColumnUniquenessDailyMonitoringChecksSpec extends AbstractCheckCate
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores the most recent captured value for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the number of distinct values stays within an accepted range. Stores the most recent captured value for each day when the data quality check was evaluated.")
     private ColumnDistinctCountCheckSpec dailyDistinctCount;
 
     @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores the most recent captured value for each day when the data quality check was evaluated.")

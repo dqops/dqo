@@ -51,7 +51,7 @@ public class ColumnUniquenessMonthlyPartitionedChecksSpec extends AbstractCheckC
         }
     };
 
-    @JsonPropertyDescription("Verifies that the number of distinct values in a column does not fall below the minimum accepted count. Stores a separate data quality check result for each monthly partition.")
+    @JsonPropertyDescription("Verifies  that the number of distinct values stays within an accepted range. Stores a separate data quality check result for each monthly partition.")
     private ColumnDistinctCountCheckSpec monthlyPartitionDistinctCount;
 
     @JsonPropertyDescription("Verifies that the percentage of distinct values in a column does not fall below the minimum accepted percent. Stores a separate data quality check result for each monthly partition.")

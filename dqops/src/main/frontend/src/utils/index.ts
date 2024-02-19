@@ -1,4 +1,4 @@
-import moment from "moment/moment";
+import moment from 'moment/moment';
 
 export const getDaysString = (value: string | number) => {
   const daysDiff = moment().diff(moment(value), 'day');
@@ -6,9 +6,10 @@ export const getDaysString = (value: string | number) => {
   if (daysDiff === 1) return '1 day ago';
 
   return `${daysDiff} days ago`;
-}
+};
 
-export const wait = (time: number) => new Promise((resolve) => setTimeout(resolve,  time));
+export const wait = (time: number) =>
+  new Promise((resolve) => setTimeout(resolve, time));
 
 export const getLocalDateInUserTimeZone = (date: Date): string => {
   const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -23,16 +24,22 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
     timeZone: userTimeZone
   };
 
-  return date.toLocaleString('en-US', options);
+  let strDate = String(date);
+
+  if (strDate.includes(' 24:')) {
+    strDate = strDate.replace(' 24:', ' 00:');
+  }
+
+  return new Date(strDate).toLocaleString('en-US', options);
 };
 
-export const urlencodeDecoder = (url: string) =>{
-  return url.replace(/\s/g, '%20') ?? url
-}
+export const urlencodeDecoder = (url: string) => {
+  return url.replace(/\s/g, '%20') ?? url;
+};
 
-export const urlencodeEncoder = (url: string | undefined) =>{
-  return url && url.replace(/%20/g, ' ')
-}
+export const urlencodeEncoder = (url: string | undefined) => {
+  return url && url.replace(/%20/g, ' ');
+};
 
 export const getDetectedDatatype = (numberForFile: any) => {
   if (Number(numberForFile) === 1) {
@@ -45,15 +52,15 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'DATETIME';
   }
   if (Number(numberForFile) === 4) {
-    return 'TIMESTAMP';
-  }
-  if (Number(numberForFile) === 5) {
-    return 'BOOLEAN';
+    return 'DATETIME';
   }
   if (Number(numberForFile) === 6) {
-    return 'STRING';
+    return 'BOOLEAN';
   }
   if (Number(numberForFile) === 7) {
+    return 'STRING';
+  }
+  if (Number(numberForFile) === 8) {
     return 'Mixed data type';
   }
 };

@@ -4,6 +4,6 @@ kind: check
 spec:
   sensor_name: column/text/text_mean_length
   rule_name: comparison/between_floats
-  help_text: Verifies that the length of a text in a column does not exceed the mean
-    accepted length. Analyzes every daily partition and creates a separate data quality
-    check result with the time period value that identifies the daily partition.
+  help_text: Verifies that the mean (average) length of texts in a column is within
+    an accepted range. Analyzes every daily partition and creates a separate data
+    quality check result with the time period value that identifies the daily partition.

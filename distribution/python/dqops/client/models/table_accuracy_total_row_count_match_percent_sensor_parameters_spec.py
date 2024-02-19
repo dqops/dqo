@@ -14,8 +14,10 @@ class TableAccuracyTotalRowCountMatchPercentSensorParametersSpec:
     Attributes:
         filter_ (Union[Unset, str]): SQL WHERE clause added to the sensor query. Both the table level filter and a
             sensor query filter are added, separated by an AND operator.
-        referenced_table (Union[Unset, str]): This field can be used to define the name of the table to be compared to.
-            In order to define the name of the table, user should write correct name as a String.
+        referenced_table (Union[Unset, str]): The name of the reference table. DQOps accepts the name in two forms: a
+            fully qualified name including the schema name, for example landing_zone.customer_raw, or only a table name.
+            When only a table name is used, DQOps assumes that the table is in the same schema as the analyzed table, and
+            prefixes the name with the schema and optionally database name.
     """
 
     filter_: Union[Unset, str] = UNSET

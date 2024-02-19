@@ -23,7 +23,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public enum DqoUserAuthenticationTokenDisposition {
     /**
-     * This token is a refresh token and could be used only to issue an authentication token.
+     * This token is a refresh token and can only be used to issue an authentication token.
      */
     @JsonProperty("rt")
     REFRESH_TOKEN,

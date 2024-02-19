@@ -48,7 +48,7 @@ public class PostgresqlColumnAccuracyTotalSumMatchPercentSensorParametersSpecInt
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.postgresql);
-        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
+        this.sampleTableMetadataReferenced = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);

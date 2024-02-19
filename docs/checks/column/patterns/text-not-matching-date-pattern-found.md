@@ -1,6 +1,7 @@
 # text not matching date pattern found data quality checks
 
-A column-level that calculates the quantity of values that do not match the date regex in a monitored column.
+This check detects dates in the wrong format inside text columns using a regular expression.
+ It counts the number of incorrectly formatted dates and raises a data quality issue when the number exceeds a threshold.
 
 
 ___
@@ -110,7 +111,7 @@ spec:
         patterns:
           profile_text_not_matching_date_pattern_found:
             parameters:
-              date_formats: YYYY-MM-DD
+              date_format: YYYY-MM-DD
             warning:
               max_count: 0
             error:
@@ -135,26 +136,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -172,7 +173,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -193,24 +194,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -228,7 +229,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -243,6 +244,51 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -250,26 +296,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -287,7 +333,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -309,26 +355,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -352,7 +398,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -379,30 +425,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -416,14 +462,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -438,30 +484,30 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -482,14 +528,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -498,7 +544,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -509,30 +555,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -546,14 +592,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -568,26 +614,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -605,7 +651,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -626,24 +672,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -661,7 +707,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -682,26 +728,26 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -719,7 +765,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -739,26 +785,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -783,7 +829,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -799,7 +845,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -833,7 +879,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             patterns:
               profile_text_not_matching_date_pattern_found:
                 parameters:
-                  date_formats: YYYY-MM-DD
+                  date_format: YYYY-MM-DD
                 warning:
                   max_count: 0
                 error:
@@ -860,26 +906,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -896,7 +942,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -918,24 +964,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Databricks"
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -952,7 +998,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -969,32 +1015,77 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1011,7 +1102,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -1034,26 +1125,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1076,7 +1167,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -1109,30 +1200,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for PostgreSQL"
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1145,14 +1236,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1168,30 +1259,30 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -1211,14 +1302,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -1234,7 +1325,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1244,30 +1335,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Redshift"
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1280,14 +1371,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -1303,26 +1394,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1339,7 +1430,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -1361,24 +1452,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Spark"
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1395,7 +1486,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -1417,26 +1508,26 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for SQL Server"
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1453,7 +1544,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -1480,26 +1571,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1523,7 +1614,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -1546,7 +1637,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -1658,7 +1749,7 @@ spec:
           patterns:
             daily_text_not_matching_date_pattern_found:
               parameters:
-                date_formats: YYYY-MM-DD
+                date_format: YYYY-MM-DD
               warning:
                 max_count: 0
               error:
@@ -1683,26 +1774,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1720,7 +1811,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -1741,24 +1832,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1776,7 +1867,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -1791,6 +1882,51 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -1798,26 +1934,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1835,7 +1971,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -1857,26 +1993,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -1900,7 +2036,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -1927,30 +2063,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1964,14 +2100,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -1986,30 +2122,30 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2030,14 +2166,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -2046,7 +2182,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2057,30 +2193,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2094,14 +2230,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -2116,26 +2252,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2153,7 +2289,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -2174,24 +2310,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2209,7 +2345,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -2230,26 +2366,26 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2267,7 +2403,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -2287,26 +2423,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2331,7 +2467,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -2347,7 +2483,7 @@ spec:
                     original_table.*,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -2382,7 +2518,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               patterns:
                 daily_text_not_matching_date_pattern_found:
                   parameters:
-                    date_formats: YYYY-MM-DD
+                    date_format: YYYY-MM-DD
                   warning:
                     max_count: 0
                   error:
@@ -2409,26 +2545,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2445,7 +2581,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -2467,24 +2603,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Databricks"
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2501,7 +2637,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -2518,32 +2654,77 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(LOCALTIMESTAMP AS date) AS time_period,
+                CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2560,7 +2741,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -2583,26 +2764,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2625,7 +2806,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -2658,30 +2839,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for PostgreSQL"
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2694,14 +2875,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2717,30 +2898,30 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -2760,14 +2941,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -2783,7 +2964,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -2793,30 +2974,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Redshift"
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2829,14 +3010,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -2852,26 +3033,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2888,7 +3069,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -2910,24 +3091,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Spark"
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -2944,7 +3125,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -2966,26 +3147,26 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for SQL Server"
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3002,7 +3183,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -3029,26 +3210,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3072,7 +3253,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -3095,7 +3276,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(CURRENT_TIMESTAMP AS date) AS time_period,
                 CAST(CAST(CURRENT_TIMESTAMP AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -3207,7 +3388,7 @@ spec:
           patterns:
             monthly_text_not_matching_date_pattern_found:
               parameters:
-                date_formats: YYYY-MM-DD
+                date_format: YYYY-MM-DD
               warning:
                 max_count: 0
               error:
@@ -3232,26 +3413,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3269,7 +3450,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -3290,24 +3471,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3325,7 +3506,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -3340,6 +3521,51 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -3347,26 +3573,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3384,7 +3610,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -3406,26 +3632,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3449,7 +3675,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -3476,30 +3702,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3513,14 +3739,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3535,30 +3761,30 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -3579,14 +3805,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -3595,7 +3821,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3606,30 +3832,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -3643,14 +3869,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -3665,26 +3891,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3702,7 +3928,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -3723,24 +3949,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3758,7 +3984,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -3779,26 +4005,26 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3816,7 +4042,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -3836,26 +4062,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3880,7 +4106,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -3896,7 +4122,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -3931,7 +4157,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               patterns:
                 monthly_text_not_matching_date_pattern_found:
                   parameters:
-                    date_formats: YYYY-MM-DD
+                    date_format: YYYY-MM-DD
                   warning:
                     max_count: 0
                   error:
@@ -3958,26 +4184,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -3994,7 +4220,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -4016,24 +4242,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Databricks"
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4050,7 +4276,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4067,32 +4293,77 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4109,7 +4380,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -4132,26 +4403,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4174,7 +4445,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -4207,30 +4478,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for PostgreSQL"
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4243,14 +4514,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4266,30 +4537,30 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -4309,14 +4580,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -4332,7 +4603,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4342,30 +4613,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Redshift"
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4378,14 +4649,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -4401,26 +4672,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4437,7 +4708,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -4459,24 +4730,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Spark"
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4493,7 +4764,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4515,26 +4786,26 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for SQL Server"
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4551,7 +4822,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -4578,26 +4849,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4621,7 +4892,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -4644,7 +4915,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -4761,7 +5032,7 @@ spec:
           patterns:
             daily_partition_text_not_matching_date_pattern_found:
               parameters:
-                date_formats: YYYY-MM-DD
+                date_format: YYYY-MM-DD
               warning:
                 max_count: 0
               error:
@@ -4791,26 +5062,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4828,7 +5099,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -4849,24 +5120,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4884,7 +5155,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -4899,6 +5170,51 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -4906,26 +5222,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -4943,7 +5259,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -4965,26 +5281,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5008,7 +5324,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -5035,30 +5351,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5072,14 +5388,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5094,30 +5410,30 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5138,14 +5454,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -5154,7 +5470,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5165,30 +5481,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5202,14 +5518,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -5224,26 +5540,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5261,7 +5577,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -5282,24 +5598,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5317,7 +5633,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -5338,26 +5654,26 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5375,7 +5691,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -5399,26 +5715,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5443,7 +5759,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -5459,7 +5775,7 @@ spec:
                     original_table.*,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -5499,7 +5815,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               patterns:
                 daily_partition_text_not_matching_date_pattern_found:
                   parameters:
-                    date_formats: YYYY-MM-DD
+                    date_format: YYYY-MM-DD
                   warning:
                     max_count: 0
                   error:
@@ -5531,26 +5847,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5567,7 +5883,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -5589,24 +5905,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Databricks"
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5623,7 +5939,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -5640,32 +5956,77 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                CAST(analyzed_table."date_column" AS date) AS time_period,
+                CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5682,7 +6043,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -5705,26 +6066,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -5747,7 +6108,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -5780,30 +6141,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for PostgreSQL"
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5816,14 +6177,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5839,30 +6200,30 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -5882,14 +6243,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -5905,7 +6266,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -5915,30 +6276,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Redshift"
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5951,14 +6312,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -5974,26 +6335,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6010,7 +6371,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -6032,24 +6393,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Spark"
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6066,7 +6427,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -6088,26 +6449,26 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for SQL Server"
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6124,7 +6485,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -6149,26 +6510,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6192,7 +6553,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -6215,7 +6576,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 CAST(original_table."date_column" AS date) AS time_period,
                 CAST(CAST(original_table."date_column" AS date) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -6332,7 +6693,7 @@ spec:
           patterns:
             monthly_partition_text_not_matching_date_pattern_found:
               parameters:
-                date_formats: YYYY-MM-DD
+                date_format: YYYY-MM-DD
               warning:
                 max_count: 0
               error:
@@ -6362,26 +6723,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6399,7 +6760,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -6420,24 +6781,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6455,7 +6816,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -6470,6 +6831,51 @@ spec:
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
@@ -6477,26 +6883,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6514,7 +6920,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -6536,26 +6942,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6579,7 +6985,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -6606,30 +7012,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6643,14 +7049,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6665,30 +7071,30 @@ spec:
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -6709,14 +7115,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
                 time_period,
                 time_period_utc
@@ -6725,7 +7131,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -6736,30 +7142,30 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -6773,14 +7179,14 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
@@ -6795,26 +7201,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6832,7 +7238,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -6853,24 +7259,24 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6888,7 +7294,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -6909,26 +7315,26 @@ spec:
 
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -6946,7 +7352,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -6970,26 +7376,26 @@ spec:
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7014,7 +7420,7 @@ spec:
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -7030,7 +7436,7 @@ spec:
                     original_table.*,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
@@ -7070,7 +7476,7 @@ Expand the *Configure with data grouping* section to see additional examples for
               patterns:
                 monthly_partition_text_not_matching_date_pattern_found:
                   parameters:
-                    date_formats: YYYY-MM-DD
+                    date_format: YYYY-MM-DD
                   warning:
                     max_count: 0
                   error:
@@ -7102,26 +7508,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                            WHEN SAFE.PARSE_DATE({{render_date_format(parameters.date_format)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7138,7 +7544,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
@@ -7160,24 +7566,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Databricks"
             ```sql+jinja
             {% import '/dialects/databricks.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7194,7 +7600,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -7211,32 +7617,77 @@ Expand the *Configure with data grouping* section to see additional examples for
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
+    ??? example "DuckDB"
+
+        === "Sensor template for DuckDB"
+            ```sql+jinja
+            {% import '/dialects/duckdb.sql.jinja2' as lib with context -%}
+            
+            SELECT
+                CASE
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{lib.render_date_format(parameters.date_format)}}) IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value
+                {{- lib.render_data_grouping_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() -}}
+            {{- lib.render_group_by() -}}
+            {{- lib.render_order_by() -}}
+            ```
+        === "Rendered SQL for DuckDB"
+            ```sql
+            SELECT
+                CASE
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE 100.0 * SUM(
+                        CASE
+                            WHEN REGEXP_MATCHES(analyzed_table."target_column"::VARCHAR, '^(\d{4})-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$') IS FALSE
+                                THEN 1
+                            ELSE 0
+                        END
+                    )
+                END AS actual_value,
+                analyzed_table."country" AS grouping_level_1,
+                analyzed_table."state" AS grouping_level_2,
+                DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
+                CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
+            ```
     ??? example "MySQL"
 
         === "Sensor template for MySQL"
             ```sql+jinja
             {% import '/dialects/mysql.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN STR_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7253,7 +7704,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN STR_TO_DATE(analyzed_table.`target_column`, '%Y-%m-%d') IS NULL
@@ -7276,26 +7727,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/oracle.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     'YYYY-MM-DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/DD/YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'DD/MM/YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     'YYYY/MM/DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     'MON DD, YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7318,7 +7769,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column", 'YYYY-MM-DD') IS NULL
@@ -7351,30 +7802,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for PostgreSQL"
             ```sql+jinja
             {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7387,14 +7838,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -7410,30 +7861,30 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/presto.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value
                 {{- lib.render_data_grouping_projections_reference('analyzed_table') }}
                 {{- lib.render_time_dimension_projection_reference('analyzed_table') }}
@@ -7453,14 +7904,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
-                    ELSE SUM(
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
+                    ELSE CAST(SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    )
+                    ) AS DOUBLE)
                 END AS actual_value,
             
                             analyzed_table.grouping_level_1,
@@ -7476,7 +7927,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_database"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
@@ -7486,30 +7937,30 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Redshift"
             ```sql+jinja
             {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%YYYY-%MM-%DD'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%MM/%DD/%YYYY'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%DD/%MM/%YYYY'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%YYYY/%MM/%DD'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%MM %DD,%YYYY'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value
                 {{- lib.render_data_grouping_projections('analyzed_table') }}
                 {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -7522,14 +7973,14 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table."target_column"::VARCHAR, '%YYYY-%MM-%DD') IS NULL
                                 THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
+                    )
                 END AS actual_value,
                 analyzed_table."country" AS grouping_level_1,
                 analyzed_table."state" AS grouping_level_2,
@@ -7545,26 +7996,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7581,7 +8032,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
@@ -7603,24 +8054,24 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for Spark"
             ```sql+jinja
             {% import '/dialects/spark.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD' -%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD' -%}
                     'yyyy-MM-dd'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     'MM/dd/yyyy'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     'dd/MM/yyyy'
-                {%- elif date_formats == 'YYYY/MM/DD' -%}
+                {%- elif date_format == 'YYYY/MM/DD' -%}
                     'yyyy/MM/dd'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7637,7 +8088,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
+                    WHEN COUNT(analyzed_table.`target_column`) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TO_DATE(analyzed_table.`target_column`, 'yyyy-MM-dd') IS NULL
@@ -7659,26 +8110,26 @@ Expand the *Configure with data grouping* section to see additional examples for
         === "Sensor template for SQL Server"
             ```sql+jinja
             {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     120
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     101
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     103
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     111
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     107
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT_BIG({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                            WHEN TRY_CONVERT(DATETIME, {{ lib.quote_identifier(column_name) }}, {{render_date_format(parameters.date_format)}}) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7695,7 +8146,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN NULL
+                    WHEN COUNT_BIG(analyzed_table.[target_column]) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY_CONVERT(DATETIME, [target_column], 120) IS NULL
@@ -7720,26 +8171,26 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql+jinja
             {% import '/dialects/trino.sql.jinja2' as lib with context -%}
             
-            {% macro render_date_formats(date_formats) %}
-                {%- if date_formats == 'YYYY-MM-DD'-%}
+            {% macro render_date_format(date_format) %}
+                {%- if date_format == 'YYYY-MM-DD'-%}
                     '%Y-%m-%d'
-                {%- elif date_formats == 'MM/DD/YYYY' -%}
+                {%- elif date_format == 'MM/DD/YYYY' -%}
                     '%m/%d/%Y'
-                {%- elif date_formats == 'DD/MM/YYYY' -%}
+                {%- elif date_format == 'DD/MM/YYYY' -%}
                     '%d/%m/%Y'
-                {%- elif date_formats == 'YYYY/MM/DD'-%}
+                {%- elif date_format == 'YYYY/MM/DD'-%}
                     '%Y/%m/%d'
-                {%- elif date_formats == 'Month D, YYYY'-%}
+                {%- elif date_format == 'Month D, YYYY'-%}
                     '%b %d, %Y'
                 {%- endif -%}
             {% endmacro -%}
             
             SELECT
                 CASE
-                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+                    WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 0.0
                     ELSE SUM(
                         CASE
-                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})) IS NULL
+                            WHEN TRY(DATE_PARSE({{ lib.render_target_column('analyzed_table') }}, {{render_date_format(parameters.date_format)}})) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -7763,7 +8214,7 @@ Expand the *Configure with data grouping* section to see additional examples for
             ```sql
             SELECT
                 CASE
-                    WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
+                    WHEN COUNT(analyzed_table."target_column") = 0 THEN 0.0
                     ELSE SUM(
                         CASE
                             WHEN TRY(DATE_PARSE(analyzed_table."target_column", '%Y-%m-%d')) IS NULL
@@ -7786,7 +8237,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 original_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS time_period,
                 CAST(DATE_TRUNC('MONTH', CAST(original_table."date_column" AS date)) AS TIMESTAMP) AS time_period_utc
-                FROM ""."<target_schema>"."<target_table>" original_table
+                FROM "your_trino_catalog"."<target_schema>"."<target_table>" original_table
             ) analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc

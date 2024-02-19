@@ -65,7 +65,7 @@ public class OracleColumnPiiContainsEmailPercentSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666f, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(86.666664f, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class OracleColumnPiiContainsEmailPercentSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666f, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(86.666664f, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class OracleColumnPiiContainsEmailPercentSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666f, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(86.666664f, (float) resultTable.column(0).get(0), 3);
     }
 
     @Test
@@ -117,6 +117,6 @@ public class OracleColumnPiiContainsEmailPercentSensorParametersSpecIntegrationT
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666f, (float) resultTable.column(0).get(0), 3);
+        Assertions.assertEquals(86.666664f, (float) resultTable.column(0).get(0), 3);
     }
 }

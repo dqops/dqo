@@ -65,7 +65,7 @@ const JobItem = ({
   );
 
   const renderStatus = () => {
-    if (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded) {
+    if (job.status === DqoJobHistoryEntryModelStatusEnum.finished) {
       return <SvgIcon name="success" className="w-4 h-4 text-primary" />;
     }
     if (job.status === DqoJobHistoryEntryModelStatusEnum.waiting) {
@@ -103,7 +103,9 @@ const JobItem = ({
           <div className="flex space-x-1 items-center">
             <div>
               {job.jobType !== undefined && String(job.jobType).length !== 0
-                ? job.jobType.replace(/_/g, ' ')
+                ? job.jobType
+                    .replace(/_/g, ' ')
+                    .replace(/./, (c) => c.toUpperCase())
                 : 'Error'}
             </div>
           </div>
@@ -128,7 +130,7 @@ const JobItem = ({
               <div className="flex items-center gap-x-3">
                 {job.jobType ===
                   DqoJobHistoryEntryModelJobTypeEnum.run_checks &&
-                  job.status == DqoJobHistoryEntryModelStatusEnum.succeeded && (
+                  job.status == DqoJobHistoryEntryModelStatusEnum.finished && (
                     <TooltipRunChecks job={job} open={tooltipOpen} />
                   )}
                 <div className="flex gap-x-2 items-center">

@@ -66,7 +66,7 @@ A column-level check that counts how many expected text values are among the TOP
  The check will first count the number of occurrences of each column&#x27;s value and will pick the TOP X most popular values (configurable by the &#x27;top&#x27; parameter).
  Then, it will compare the list of most popular values to the given list of expected values that should be most popular.
  This check will verify how many supposed most popular values (provided in the &#x27;expected_values&#x27; list) were not found in the top X most popular values in the column.
- This check is useful for analyzing string columns that have several very popular values, these could be the country codes of the countries with the most number of customers.
+ This check is helpful in analyzing string columns with frequently occurring values, such as country codes for countries with the most customers.
 
 
 | Data quality check name | Check type | Description | Standard |
@@ -92,6 +92,35 @@ A column-level check that counts unique values in a numeric column and counts ho
 |[<span class="no-wrap-code">`monthly_expected_numbers_in_use_count`</span>](./expected-numbers-in-use-count.md#monthly-expected-numbers-in-use-count)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores the most recent captured value for each month when the data quality check was evaluated.| |
 |[<span class="no-wrap-code">`daily_partition_expected_numbers_in_use_count`</span>](./expected-numbers-in-use-count.md#daily-partition-expected-numbers-in-use-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each daily partition.| |
 |[<span class="no-wrap-code">`monthly_partition_expected_numbers_in_use_count`</span>](./expected-numbers-in-use-count.md#monthly-partition-expected-numbers-in-use-count)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the expected numeric values were found in the column. Raises a data quality issue when too many expected values were not found (were missing). Stores a separate data quality check result for each monthly partition.| |
+
+
+
+### [text valid country code percent](./text-valid-country-code-percent.md)
+This check measures the percentage of text values that are valid two-letter country codes.
+ It raises a data quality issue when the percentage of valid country codes (excluding null values) falls below a minimum accepted rate.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#profile-text-valid-country-code-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage| |
+|[<span class="no-wrap-code">`daily_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#daily-text-valid-country-code-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`monthly_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#monthly-text-valid-country-code-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`daily_partition_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#daily-partition-text-valid-country-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
+|[<span class="no-wrap-code">`monthly_partition_text_valid_country_code_percent`</span>](./text-valid-country-code-percent.md#monthly-partition-text-valid-country-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid country codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
+
+
+
+### [text valid currency code percent](./text-valid-currency-code-percent.md)
+This check measures the percentage of text values that are valid currency names. It raises a data quality issue when the percentage of valid currency names (excluding null values) falls below a minimum accepted rate.
+
+
+| Data quality check name | Check type | Description | Standard |
+|-------------------------|------------|-------------|----------|
+|[<span class="no-wrap-code">`profile_text_valid_currency_code_percent`</span>](./text-valid-currency-code-percent.md#profile-text-valid-currency-code-percent)|[profiling](../../../dqo-concepts/definition-of-data-quality-checks/data-profiling-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage| |
+|[<span class="no-wrap-code">`daily_text_valid_currency_code_percent`</span>](./text-valid-currency-code-percent.md#daily-text-valid-currency-code-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each day when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`monthly_text_valid_currency_code_percent`</span>](./text-valid-currency-code-percent.md#monthly-text-valid-currency-code-percent)|[monitoring](../../../dqo-concepts/definition-of-data-quality-checks/data-observability-monitoring-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Stores the most recent captured value for each month when the data quality check was evaluated.| |
+|[<span class="no-wrap-code">`daily_partition_text_valid_currency_code_percent`</span>](./text-valid-currency-code-percent.md#daily-partition-text-valid-currency-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every daily partition and creates a separate data quality check result with the time period value that identifies the daily partition.| |
+|[<span class="no-wrap-code">`monthly_partition_text_valid_currency_code_percent`</span>](./text-valid-currency-code-percent.md#monthly-partition-text-valid-currency-code-percent)|[partitioned](../../../dqo-concepts/definition-of-data-quality-checks/partition-checks.md)|Verifies that the percentage of valid currency codes in a text column does not fall below the minimum accepted percentage. Analyzes every monthly partition and creates a separate data quality check result with the time period value that identifies the monthly partition.| |
 
 
 

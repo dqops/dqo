@@ -41,9 +41,9 @@ public class CollectStatisticsQueueJobParameters implements Cloneable {
     private StatisticsCollectorSearchFilters statisticsCollectorSearchFilters;
 
     /**
-     * The target scope of collecting statistics. Statistics could be collected on a whole table or for each data stream separately.
+     * The target scope of collecting statistics. Statistics can be collected for the entire table or for each data stream separately.
      */
-    @JsonPropertyDescription("The target scope of collecting statistics. Statistics could be collected on a whole table or for each data grouping separately.")
+    @JsonPropertyDescription("The target scope of collecting statistics. Statistics can be collected for the entire table or for each data grouping separately.")
     private StatisticsDataScope dataScope = StatisticsDataScope.table;
 
     /**
