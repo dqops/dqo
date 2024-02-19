@@ -11,10 +11,9 @@ import {
   StatisticsCollectorSearchFiltersTargetEnum
 } from '../../api';
 import Input from '../Input';
-import Select from '../Select';
-import Checkbox from '../Checkbox';
 import LabelsView from '../Connection/LabelsView';
 import CheckboxThreeSteps from '../CheckBoxThreeSteps';
+import SelectInput from '../SelectInput';
 type TCollectStatisticsDialogProps = {
   onClick: (node: StatisticsCollectorSearchFilters) => void;
   open: boolean;
@@ -31,8 +30,11 @@ export default function CollectStatisticsDialog({
   const hierarchiArray = nodeId?.split('.');
   const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>({
     connection: hierarchiArray?.[0],
-    fullTableName: hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
-    columnNames: [hierarchiArray?.[4]]
+    fullTableName:
+      hierarchiArray?.[1] &&
+      hierarchiArray?.[2] &&
+      hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
+    columnNames: hierarchiArray?.[4] ? [hierarchiArray?.[4], ''] : ['']
   });
 
   const onChangeFilters = (obj: Partial<StatisticsCollectorSearchFilters>) => {
@@ -48,21 +50,23 @@ export default function CollectStatisticsDialog({
         Collect statistics
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
-        <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
-          <div>
+        <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold px-4">
+          <div className="w-1/4">
             Connection:
             <Input
               value={filters.connection}
               onChange={(e) => onChangeFilters({ connection: e.target.value })}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             fullTableName:
             <Input
               value={filters.fullTableName}
               onChange={(e) =>
                 onChangeFilters({ fullTableName: e.target.value })
               }
+              className="mt-2"
             />
           </div>
           <div></div>
@@ -76,45 +80,52 @@ export default function CollectStatisticsDialog({
             title="Columns"
           />
         </div>
-        <div className="flex justify-between pt-4 text-black font-semibold">
-          <div>
+        <div className="flex justify-between pt-4 text-black font-semibold px-4">
+          <div className="w-1/4">
             Collector category:
             <Input
               value={filters.collectorCategory}
               onChange={(e) =>
                 onChangeFilters({ collectorCategory: e.target.value })
               }
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Collector name:
             <Input
               value={filters.collectorName}
               onChange={(e) =>
                 onChangeFilters({ collectorName: e.target.value })
               }
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Sensor name:
             <Input
               value={filters.sensorName}
               onChange={(e) => onChangeFilters({ sensorName: e.target.value })}
+              className="mt-2"
             />
           </div>
         </div>
-        <div className="flex justify-between pt-4 text-black font-semibold">
-          <div>
+        <div className="flex justify-between pt-4 text-black font-semibold px-4">
+          <div className="w-1/4">
             Target:
-            <Select
+            <SelectInput
               value={filters.target}
               onChange={(value) => onChangeFilters({ target: value })}
-              options={Object.keys(
-                StatisticsCollectorSearchFiltersTargetEnum
-              ).map((x) => ({ label: x, value: x }))}
+              options={[
+                { label: '', value: '' },
+                ...Object.keys(StatisticsCollectorSearchFiltersTargetEnum).map(
+                  (x) => ({ label: x, value: x })
+                )
+              ]}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="flex items-center gap-x-2">
             Enabled:
             <CheckboxThreeSteps
               checked={!!filters.enabled}

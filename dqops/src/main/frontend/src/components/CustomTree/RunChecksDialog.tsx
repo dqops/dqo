@@ -1,14 +1,10 @@
 import {
-  Popover,
-  PopoverHandler,
-  PopoverContent,
   Dialog,
   DialogBody,
   DialogFooter,
   DialogHeader
 } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import SvgIcon from '../SvgIcon';
 import Button from '../Button';
 import {
   CheckSearchFilters,
@@ -18,12 +14,10 @@ import {
 } from '../../api';
 import LabelsView from '../Connection/LabelsView';
 import Input from '../Input';
-import Select from '../Select';
-import Checkbox from '../Checkbox';
 import SelectInput from '../SelectInput';
 import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 type TRunChecksDialogProps = {
-  onClick: () => void;
+  onClick: (filter: CheckSearchFilters) => void;
   open: boolean;
   onClose: VoidFunction;
   nodeId: string;
@@ -35,7 +29,17 @@ export default function RunChecksDialog({
   open,
   nodeId
 }: TRunChecksDialogProps) {
-  const [filters, setFilters] = useState<CheckSearchFilters>({});
+  const hierarchiArray = nodeId?.split('.');
+
+  const [filters, setFilters] = useState<CheckSearchFilters>({
+    connection: hierarchiArray?.[0],
+    fullTableName:
+      hierarchiArray?.[1] &&
+      hierarchiArray?.[2] &&
+      hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
+    column: hierarchiArray?.[4],
+    enabled: true
+  });
 
   const onChangeFilters = (obj: Partial<CheckSearchFilters>) => {
     setFilters((prev) => ({
@@ -51,39 +55,43 @@ export default function RunChecksDialog({
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
         <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
-          <div>
+          <div className="w-1/4">
             Connection:
             <Input
               value={filters.connection}
               onChange={(e) => onChangeFilters({ connection: e.target.value })}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             fullTableName:
             <Input
               value={filters.fullTableName}
               onChange={(e) =>
                 onChangeFilters({ fullTableName: e.target.value })
               }
+              className="mt-2"
             />
           </div>
           <div></div>
         </div>
         <div className="flex justify-between py-4 text-black font-semibold">
-          <div>
+          <div className="w-1/4">
             Column name:
             <Input
               value={filters.column}
               onChange={(e) => onChangeFilters({ column: e.target.value })}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Column datatype:
             <Input
               value={filters.columnDataType}
               onChange={(e) =>
                 onChangeFilters({ columnDataType: e.target.value })
               }
+              className="mt-2"
             />
           </div>
           <div></div>
@@ -106,59 +114,76 @@ export default function RunChecksDialog({
           <div></div>
         </div>
         <div className="flex justify-between py-4 text-black font-semibold">
-          <div>
+          <div className="w-1/4">
             Check target:
             <SelectInput
               value={filters.checkTarget}
               onChange={(value) => onChangeFilters({ checkTarget: value })}
-              options={Object.keys(
-                StatisticsCollectorSearchFiltersTargetEnum
-              ).map((x) => ({ label: x, value: x }))}
+              options={[
+                { label: '', value: '' },
+                ...Object.keys(StatisticsCollectorSearchFiltersTargetEnum).map(
+                  (x) => ({ label: x, value: x })
+                )
+              ]}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Check type:
             <SelectInput
               value={filters.checkType}
               onChange={(value) => onChangeFilters({ checkType: value })}
-              options={Object.keys(CheckSearchFiltersCheckTypeEnum).map(
-                (x) => ({ label: x, value: x })
-              )}
+              options={[
+                { label: '', value: '' },
+                ...Object.keys(CheckSearchFiltersCheckTypeEnum).map((x) => ({
+                  label: x,
+                  value: x
+                }))
+              ]}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Time scale:
             <SelectInput
               value={filters.timeScale}
               onChange={(value) => onChangeFilters({ timeScale: value })}
-              options={Object.keys(CheckSearchFiltersTimeScaleEnum).map(
-                (x) => ({ label: x, value: x })
-              )}
+              options={[
+                { label: '', value: '' },
+                ...Object.keys(CheckSearchFiltersTimeScaleEnum).map((x) => ({
+                  label: x,
+                  value: x
+                }))
+              ]}
+              className="mt-2"
             />
           </div>
         </div>
         <div className="flex justify-between pt-4 text-black font-semibold">
-          <div>
+          <div className="w-1/4">
             Check name:
             <Input
               value={filters.checkName}
               onChange={(e) => onChangeFilters({ checkName: e.target.value })}
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Table comparison name:
             <Input
               value={filters.tableComparisonName}
               onChange={(e) =>
                 onChangeFilters({ tableComparisonName: e.target.value })
               }
+              className="mt-2"
             />
           </div>
-          <div>
+          <div className="w-1/4">
             Sensor name:
             <Input
               value={filters.sensorName}
               onChange={(e) => onChangeFilters({ sensorName: e.target.value })}
+              className="mt-2"
             />
           </div>
         </div>
@@ -185,7 +210,7 @@ export default function RunChecksDialog({
         <Button
           color="primary"
           className="px-8"
-          onClick={onClick}
+          onClick={() => onClick(filters)}
           label="Run checks"
           //   disabled={userProfile.can_delete_data !== true}
         />

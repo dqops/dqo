@@ -16,7 +16,8 @@ import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import {
   TimeWindowFilterParameters,
   RunChecksParameters,
-  StatisticsCollectorSearchFilters
+  StatisticsCollectorSearchFilters,
+  CheckSearchFilters
 } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
@@ -65,8 +66,12 @@ const ContextMenu = ({
     setOpen(false);
   };
 
-  const handleRunChecks = () => {
-    runChecks(node);
+  const handleRunChecks = (filter?: CheckSearchFilters) => {
+    if (filter) {
+      runChecks({ ...node, run_checks_job_template: filter });
+    } else {
+      runChecks(node);
+    }
     setOpen(false);
   };
 
@@ -173,7 +178,7 @@ const ContextMenu = ({
                 <RunChecksDialog
                   open={runChecksDialogOpened}
                   onClose={() => setRunChecksDialogOpened(false)}
-                  onClick={runChecks}
+                  onClick={handleRunChecks}
                   nodeId={String(node.id)}
                 />
               </>
