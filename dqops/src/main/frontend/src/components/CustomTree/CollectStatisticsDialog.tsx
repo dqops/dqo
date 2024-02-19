@@ -14,6 +14,8 @@ import Input from '../Input';
 import LabelsView from '../Connection/LabelsView';
 import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 import SelectInput from '../SelectInput';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 type TCollectStatisticsDialogProps = {
   onClick: (node: StatisticsCollectorSearchFilters) => void;
   open: boolean;
@@ -27,7 +29,9 @@ export default function CollectStatisticsDialog({
   open,
   nodeId
 }: TCollectStatisticsDialogProps) {
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const hierarchiArray = nodeId?.split('.');
+
   const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>({
     connection: hierarchiArray?.[0],
     fullTableName:
@@ -171,7 +175,7 @@ export default function CollectStatisticsDialog({
           className="px-8"
           onClick={() => onClick(prepareFilters(filters))}
           label="Collect statistics"
-          //   disabled={userProfile.can_delete_data !== true}
+          disabled={userProfile.can_delete_data !== true}
         />
       </DialogFooter>
     </Dialog>

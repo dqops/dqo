@@ -16,6 +16,8 @@ import LabelsView from '../Connection/LabelsView';
 import Input from '../Input';
 import SelectInput from '../SelectInput';
 import CheckboxThreeSteps from '../CheckBoxThreeSteps';
+import { useSelector } from 'react-redux';
+import { IRootState } from '../../redux/reducers';
 type TRunChecksDialogProps = {
   onClick: (filter: CheckSearchFilters) => void;
   open: boolean;
@@ -30,6 +32,7 @@ export default function RunChecksDialog({
   nodeId
 }: TRunChecksDialogProps) {
   const hierarchiArray = nodeId?.split('.');
+  const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const [filters, setFilters] = useState<CheckSearchFilters>({
     connection: hierarchiArray?.[0],
@@ -221,7 +224,7 @@ export default function RunChecksDialog({
           className="px-8"
           onClick={() => onClick(prepareFilters(filters))}
           label="Run checks"
-          //   disabled={userProfile.can_delete_data !== true}
+          disabled={userProfile.can_delete_data !== true}
         />
       </DialogFooter>
     </Dialog>
