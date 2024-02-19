@@ -164,10 +164,8 @@ const ContextMenu = ({
               </div>
             )}
           {checkTypes === 'partitioned' &&
-            (node.level === TREE_LEVEL.COLUMN ||
-              node.level === TREE_LEVEL.TABLE) && (
               <RunChecksPartitionedMenu onClick={onRunPartitionedChecks} />
-            )}
+            }
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,

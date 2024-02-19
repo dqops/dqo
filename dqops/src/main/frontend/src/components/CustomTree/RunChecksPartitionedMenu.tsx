@@ -17,19 +17,20 @@ export default function RunChecksPartitionedMenu({
 }: TRunChecksPartitionedMenuProps) {
   const [open, setOpen] = useState(false);
 
-  const openPopover = (e: MouseEvent) => {
-    setOpen(!open);
-    e.stopPropagation();
+  const openPopover = () => {
+    setOpen(open => !open);
   };
 
   return (
-    <Popover placement="bottom-start" open={open} handler={setOpen}>
-      <PopoverHandler onClick={openPopover}>
+    <Popover placement="bottom-start" open={open}>
+      <PopoverHandler >
         <div className="text-gray-900 cursor-pointer hover:bg-gray-100 pl-4 py-2 rounded flex items-center justify-between">
           <div onClick={() => onClick(null)}>
-          Run checks
+            Run checks
           </div>
-          <SvgIcon name="options" className="w-5 h-5" />
+          <div onClick={openPopover}>
+            <SvgIcon name="options" className="w-5 h-5" />
+          </div>
         </div>
       </PopoverHandler>
       <PopoverContent
