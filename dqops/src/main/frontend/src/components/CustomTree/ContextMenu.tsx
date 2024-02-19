@@ -12,7 +12,6 @@ import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
-import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
 import {
   TimeWindowFilterParameters,
   RunChecksParameters,
@@ -25,6 +24,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
 import RunChecksDialog from './RunChecksDialog';
+import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -58,7 +58,6 @@ const ContextMenu = ({
   const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
   const [collectStatisticsDialogOpened, setCollectStatisticsDialogOpened] =
     useState(false);
-  const [isClicked, setIsClicked] = useState<boolean>(false);
   const dispatch = useActionDispatch();
 
   const handleRefresh = () => {
@@ -150,6 +149,14 @@ const ContextMenu = ({
     return obj;
   };
 
+  const onRunPartitionedChecks = (value: TimeWindowFilterParameters | null) => {
+    if (value) {
+      handleRunPartitionedChecks(value);
+    } else {
+      handleRunChecks();
+    }
+  };
+
   return (
     <Popover placement="bottom-end" open={open} handler={setOpen}>
       <PopoverHandler onClick={openPopover}>
@@ -184,36 +191,14 @@ const ContextMenu = ({
               </>
             )}
           {checkTypes === 'partitioned' &&
-            (node.level === TREE_LEVEL.COLUMN ||
-              node.level === TREE_LEVEL.TABLE) && (
-              <div className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded flex items-center gap-x-14">
-                Run checks
-                <SvgIcon
-                  name="options"
-                  className="w-5 h-5"
-                  onClick={() => setIsClicked(!isClicked)}
-                />
-              </div>
+            [
+              TREE_LEVEL.DATABASE,
+              TREE_LEVEL.SCHEMA,
+              TREE_LEVEL.TABLE,
+              TREE_LEVEL.COLUMN
+            ].includes(node.level) && (
+              <RunChecksPartitionedMenu onClick={onRunPartitionedChecks} />
             )}
-          {isClicked && (
-            <div className="w-80 h-121 bg-white absolute left-50 top-0 rounded border">
-              {Object.entries(RUN_CHECK_TIME_WINDOW_FILTERS).map(
-                ([key, value]) => (
-                  <div
-                    className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                    key={key}
-                    onClick={() =>
-                      value
-                        ? handleRunPartitionedChecks(value)
-                        : handleRunChecks()
-                    }
-                  >
-                    {key}
-                  </div>
-                )
-              )}
-            </div>
-          )}
           {[
             TREE_LEVEL.DATABASE,
             TREE_LEVEL.SCHEMA,
