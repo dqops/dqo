@@ -48,6 +48,15 @@ export default function RunChecksDialog({
     }));
   };
 
+  const prepareFilters = (filters: CheckSearchFilters) => {
+    const copiedFilters = { ...filters };
+
+    copiedFilters.labels = copiedFilters.labels?.filter((x) => x.length > 0);
+    copiedFilters.tags = copiedFilters.tags?.filter((x) => x.length > 0);
+
+    return copiedFilters;
+  };
+
   return (
     <Dialog open={open} handler={onClose} className="min-w-300 p-4">
       <DialogHeader className="font-bold text-center justify-center">
@@ -210,7 +219,7 @@ export default function RunChecksDialog({
         <Button
           color="primary"
           className="px-8"
-          onClick={() => onClick(filters)}
+          onClick={() => onClick(prepareFilters(filters))}
           label="Run checks"
           //   disabled={userProfile.can_delete_data !== true}
         />

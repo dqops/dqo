@@ -34,7 +34,8 @@ export default function CollectStatisticsDialog({
       hierarchiArray?.[1] &&
       hierarchiArray?.[2] &&
       hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
-    columnNames: hierarchiArray?.[4] ? [hierarchiArray?.[4], ''] : ['']
+    columnNames: hierarchiArray?.[4] ? [hierarchiArray?.[4], ''] : [''],
+    enabled: true
   });
 
   const onChangeFilters = (obj: Partial<StatisticsCollectorSearchFilters>) => {
@@ -42,6 +43,17 @@ export default function CollectStatisticsDialog({
       ...prev,
       ...obj
     }));
+  };
+
+  const prepareFilters = (filters: StatisticsCollectorSearchFilters) => {
+    const copiedFilters = { ...filters };
+    copiedFilters.columnNames = copiedFilters.columnNames?.filter(
+      (x) => x.length > 0
+    );
+    copiedFilters.labels = copiedFilters.labels?.filter((x) => x.length > 0);
+    copiedFilters.tags = copiedFilters.tags?.filter((x) => x.length > 0);
+
+    return copiedFilters;
   };
 
   return (
@@ -157,7 +169,7 @@ export default function CollectStatisticsDialog({
         <Button
           color="primary"
           className="px-8"
-          onClick={() => onClick(filters)}
+          onClick={() => onClick(prepareFilters(filters))}
           label="Collect statistics"
           //   disabled={userProfile.can_delete_data !== true}
         />
