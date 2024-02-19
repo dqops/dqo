@@ -163,7 +163,13 @@ const ContextMenu = ({
                 Run checks
               </div>
             )}
-          {checkTypes === 'partitioned' &&
+          {checkTypes === 'partitioned' && 
+          [
+            TREE_LEVEL.DATABASE,
+            TREE_LEVEL.SCHEMA,
+            TREE_LEVEL.TABLE,
+            TREE_LEVEL.COLUMN
+          ].includes(node.level) &&
               <RunChecksPartitionedMenu onClick={onRunPartitionedChecks} />
             }
           {[
