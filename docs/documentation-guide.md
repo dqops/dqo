@@ -141,7 +141,7 @@ This page is the starting point to explore DQOps documentation. It lists all the
 
     [:octicons-arrow-right-24: DQOps YAML file schema reference](reference/yaml/index.md)
 
--   :material-database:{ .lg .middle } __Parquet tables reference__
+-   :material-table-large:{ .lg .middle } __Parquet tables reference__
 
     ---
 
