@@ -34,7 +34,7 @@ export default function RunChecksDialog({
   const hierarchiArray = nodeId?.split('.');
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
-  const [filters, setFilters] = useState<CheckSearchFilters>({
+  const defaultFilters = {
     connection: hierarchiArray?.[0],
     fullTableName:
       hierarchiArray?.[1] &&
@@ -42,7 +42,8 @@ export default function RunChecksDialog({
       hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
     column: hierarchiArray?.[4],
     enabled: true
-  });
+  };
+  const [filters, setFilters] = useState<CheckSearchFilters>(defaultFilters);
 
   const onChangeFilters = (obj: Partial<CheckSearchFilters>) => {
     setFilters((prev) => ({
@@ -216,13 +217,17 @@ export default function RunChecksDialog({
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={() => {
+            onClose(), setFilters(defaultFilters);
+          }}
           label="Cancel"
         />
         <Button
           color="primary"
           className="px-8"
-          onClick={() => onClick(prepareFilters(filters))}
+          onClick={() => {
+            onClick(prepareFilters(filters)), setFilters(defaultFilters);
+          }}
           label="Run checks"
           disabled={userProfile.can_delete_data !== true}
         />

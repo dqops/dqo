@@ -31,8 +31,7 @@ export default function CollectStatisticsDialog({
 }: TCollectStatisticsDialogProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
   const hierarchiArray = nodeId?.split('.');
-
-  const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>({
+  const defaultFilters = {
     connection: hierarchiArray?.[0],
     fullTableName:
       hierarchiArray?.[1] &&
@@ -40,7 +39,10 @@ export default function CollectStatisticsDialog({
       hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
     columnNames: hierarchiArray?.[4] ? [hierarchiArray?.[4], ''] : [''],
     enabled: true
-  });
+  };
+
+  const [filters, setFilters] =
+    useState<StatisticsCollectorSearchFilters>(defaultFilters);
 
   const onChangeFilters = (obj: Partial<StatisticsCollectorSearchFilters>) => {
     setFilters((prev) => ({
@@ -167,13 +169,17 @@ export default function CollectStatisticsDialog({
           color="primary"
           variant="outlined"
           className="px-8"
-          onClick={onClose}
+          onClick={() => {
+            onClose(), setFilters(defaultFilters);
+          }}
           label="Cancel"
         />
         <Button
           color="primary"
           className="px-8"
-          onClick={() => onClick(prepareFilters(filters))}
+          onClick={() => {
+            onClick(prepareFilters(filters)), setFilters(defaultFilters);
+          }}
           label="Collect statistics"
           disabled={userProfile.can_delete_data !== true}
         />
