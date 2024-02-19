@@ -10,9 +10,15 @@ interface ILabelsViewProps {
   labels: string[];
   onChange: (labels: string[]) => void;
   hasAdd?: boolean;
+  title?: string;
 }
 
-const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
+const LabelsView = ({
+  labels = [],
+  onChange,
+  hasAdd,
+  title
+}: ILabelsViewProps) => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
   const onChangeLabel = (key: number, value: string) => {
@@ -48,7 +54,9 @@ const LabelsView = ({ labels = [], onChange, hasAdd }: ILabelsViewProps) => {
   return (
     <div className="p-4 text-sm w-full">
       <div className="flex items-center font-bold">
-        <div className="text-left min-w-40 w-11/12 pr-4 py-2">Label</div>
+        <div className="text-left min-w-40 w-11/12 pr-4 py-2">
+          {title ?? 'Label'}
+        </div>
         <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
           Action
         </div>
