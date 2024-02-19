@@ -13,11 +13,17 @@ import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from '../../shared/routes';
 import DeleteStoredDataExtendedPopUp from './DeleteStoredDataExtendedPopUp';
 import { RUN_CHECK_TIME_WINDOW_FILTERS } from '../../shared/constants';
-import { TimeWindowFilterParameters, RunChecksParameters } from '../../api';
+import {
+  TimeWindowFilterParameters,
+  RunChecksParameters,
+  StatisticsCollectorSearchFilters
+} from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { addFirstLevelTab } from '../../redux/actions/source.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import CollectStatisticsDialog from './CollectStatisticsDialog';
+import RunChecksDialog from './RunChecksDialog';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -48,6 +54,9 @@ const ContextMenu = ({
   const [open, setOpen] = useState(false);
   const history = useHistory();
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [runChecksDialogOpened, setRunChecksDialogOpened] = useState(false);
+  const [collectStatisticsDialogOpened, setCollectStatisticsDialogOpened] =
+    useState(false);
   const [isClicked, setIsClicked] = useState<boolean>(false);
   const dispatch = useActionDispatch();
 
@@ -66,8 +75,13 @@ const ContextMenu = ({
     setOpen(false);
   };
 
-  const handleCollectStatisticsOnTable = () => {
-    collectStatisticsOnTable(node);
+  const handleCollectStatisticsOnTable = (
+    filter: StatisticsCollectorSearchFilters
+  ) => {
+    collectStatisticsOnTable({
+      ...node,
+      collect_statistics_job_template: filter
+    });
     setOpen(false);
   };
 
@@ -145,16 +159,24 @@ const ContextMenu = ({
         <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS &&
             checkTypes !== 'partitioned' && (
-              <div
-                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-                onClick={
-                  userProfile.can_run_checks === true
-                    ? handleRunChecks
-                    : undefined
-                }
-              >
-                Run checks
-              </div>
+              <>
+                <div
+                  className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                  onClick={() => {
+                    userProfile.can_delete_data
+                      ? setRunChecksDialogOpened(true)
+                      : undefined;
+                  }}
+                >
+                  Run Checks
+                </div>
+                <RunChecksDialog
+                  open={runChecksDialogOpened}
+                  onClose={() => setRunChecksDialogOpened(false)}
+                  onClick={runChecks}
+                  nodeId={String(node.id)}
+                />
+              </>
             )}
           {checkTypes === 'partitioned' &&
             (node.level === TREE_LEVEL.COLUMN ||
@@ -193,16 +215,24 @@ const ContextMenu = ({
             TREE_LEVEL.TABLE,
             TREE_LEVEL.COLUMN
           ].includes(node.level) && (
-            <div
-              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
-              onClick={
-                userProfile.can_collect_statistics === true
-                  ? handleCollectStatisticsOnTable
-                  : undefined
-              }
-            >
-              Collect statistics
-            </div>
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => {
+                  userProfile.can_delete_data
+                    ? setCollectStatisticsDialogOpened(true)
+                    : undefined;
+                }}
+              >
+                Collect statistics
+              </div>
+              <CollectStatisticsDialog
+                open={collectStatisticsDialogOpened}
+                onClose={() => setCollectStatisticsDialogOpened(false)}
+                onClick={handleCollectStatisticsOnTable}
+                nodeId={String(node.id)}
+              />
+            </>
           )}
           {node.level === TREE_LEVEL.DATABASE && (
             <div

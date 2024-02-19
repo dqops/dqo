@@ -238,7 +238,8 @@ function TreeProvider(props: any) {
       level: TREE_LEVEL.SCHEMA,
       parentId: node.id,
       items: [],
-      tooltip: schema.directory_prefix ?? `${node?.label}.${schema.schema_name}`,
+      tooltip:
+        schema.directory_prefix ?? `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema[
         checkTypesToJobTemplateKey[
           checkTypes as keyof typeof checkTypesToJobTemplateKey
