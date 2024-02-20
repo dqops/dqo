@@ -16,6 +16,7 @@ type TFileFormatConfigurationProps = {
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
   freezeFileType: boolean;
+  children: any;
 };
 
 export default function FileFormatConfiguration({
@@ -24,9 +25,9 @@ export default function FileFormatConfiguration({
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  freezeFileType
+  freezeFileType,
+  children
 }: TFileFormatConfigurationProps) {
-
   const renderConfiguration = () => {
     switch (fileFormatType) {
       case DuckdbParametersSpecSourceFilesTypeEnum.csv: {
@@ -75,8 +76,8 @@ export default function FileFormatConfiguration({
     <>
       <div className="flex items-center gap-x-5">
         <div>File format</div>
-        {!freezeFileType && 
-          <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
+        {!freezeFileType && (
+          <SelectInput // todo: bug on names, you see "csv" instead of "CSV"
             options={sourceFilesTypeOptions}
             onChange={(value) => {
               onChangeFile(value);
@@ -84,10 +85,9 @@ export default function FileFormatConfiguration({
             }}
             value={fileFormatType}
           />
-        }
-        {freezeFileType && 
-          <div>{fileFormatType}</div>
-        }
+        )}
+        {freezeFileType && <div>{fileFormatType}</div>}
+        {children}
       </div>
       {renderConfiguration()}
     </>

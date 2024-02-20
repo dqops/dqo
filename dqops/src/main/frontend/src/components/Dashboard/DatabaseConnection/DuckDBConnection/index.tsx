@@ -6,8 +6,9 @@ import {
   SharedCredentialListModel,
   DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../../../api';
-import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration'
+import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
+import FilePath from '../../../FileFormatConfiguration/FilePath';
 
 interface IDuckdbConnectionProps {
   duckdb?: DuckdbParametersSpec;
@@ -31,9 +32,10 @@ const DuckdbConnection = ({
   };
 
   const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-    DuckdbParametersSpecSourceFilesTypeEnum.csv
-  );
+  const [fileFormatType, setFileFormatType] =
+    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+      DuckdbParametersSpecSourceFilesTypeEnum.csv
+    );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
@@ -41,8 +43,13 @@ const DuckdbConnection = ({
       ...prev,
       ...params
     }));
+    handleChange({
+      [fileFormatType as keyof DuckdbParametersSpec]: configuration
+    });
   };
-  const cleanConfiguration = () => { setConfiguration({}); };
+  const cleanConfiguration = () => {
+    setConfiguration({});
+  };
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
   const onChangePath = (value: string) => {
@@ -50,29 +57,34 @@ const DuckdbConnection = ({
     copiedPaths[paths.length - 1] = value;
     setPaths(copiedPaths);
   };
-  const onDeletePath = (index: number) => setPaths((prev) => prev.filter((x, i) => i !== index));
-  
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
+  const onDeletePath = (index: number) =>
+    setPaths((prev) => prev.filter((x, i) => i !== index));
+
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+    setFileFormatType(val);
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
       {/* // todo: paths */}
       <SectionWrapper
-            title="File format configuration"
-            className="text-sm my-4 text-black"
-          >
-        <FileFormatConfiguration 
-          // paths={paths}
-          // onAddPath={onAddPath}
-          // onChangePath={onChangePath}
+        title="File format configuration"
+        className="text-sm my-4 text-black"
+      >
+        <FileFormatConfiguration
           fileFormatType={fileFormatType}
           onChangeFile={onChangeFile}
           configuration={configuration}
           onChangeConfiguration={onChangeConfiguration}
           cleanConfiguration={cleanConfiguration}
-          // onDeletePath={onDeletePath}
           freezeFileType={freezeFileType}
-        />
+        >
+          <FilePath
+            paths={paths}
+            onAddPath={onAddPath}
+            onChangePath={onChangePath}
+            onDeletePath={onDeletePath}
+          />
+        </FileFormatConfiguration>
       </SectionWrapper>
     </SectionWrapper>
   );

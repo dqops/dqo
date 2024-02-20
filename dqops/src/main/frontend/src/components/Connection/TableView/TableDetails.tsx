@@ -33,6 +33,7 @@ import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatCon
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
 import SectionWrapper from '../../Dashboard/SectionWrapper';
+import FilePath from '../../FileFormatConfiguration/FilePath';
 
 const TableDetails = () => {
   const {
@@ -50,12 +51,18 @@ const TableDetails = () => {
     getFirstLevelState(checkTypes)
   );
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
-  const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-    (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
-      x.includes('format')
-    ) as DuckdbParametersSpecSourceFilesTypeEnum) ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
+  const [paths, setPaths] = useState<Array<string>>(
+    tableBasic?.file_format?.file_paths
+      ? [...tableBasic.file_format.file_paths, '']
+      : ['']
   );
+  const [fileFormatType, setFileFormatType] =
+    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+      (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
+        x.includes('format')
+      ) as DuckdbParametersSpecSourceFilesTypeEnum) ??
+        DuckdbParametersSpecSourceFilesTypeEnum.csv
+    );
   const [configuration, setConfiguration] = useState<TConfiguration>(
     tableBasic?.file_format ?? {}
   );
@@ -123,14 +130,15 @@ const TableDetails = () => {
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
   const onChangePath = (value: string) => {
-      const copiedPaths = [...paths];
-      copiedPaths[paths.length - 1] = value;
-      setPaths(copiedPaths);
-    };
+    const copiedPaths = [...paths];
+    copiedPaths[paths.length - 1] = value;
+    setPaths(copiedPaths);
+  };
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+    setFileFormatType(val);
 
   return (
     <div className="p-4">
@@ -239,26 +247,29 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
-      {connectionModel.provider_type === ConnectionSpecProviderTypeEnum.duckdb &&
+      {connectionModel.provider_type ===
+        ConnectionSpecProviderTypeEnum.duckdb && (
         <SectionWrapper
-            title="File format configuration"
-            className="text-sm my-4 text-black"
-          >
-        {/* // todo: filepaths */}
+          title="File format configuration"
+          className="text-sm my-4 text-black"
+        >
           <FileFormatConfiguration
-            // paths={paths}
-            // onAddPath={onAddPath}
-            // onChangePath={onChangePath}
             fileFormatType={fileFormatType}
             onChangeFile={onChangeFile}
             configuration={configuration}
             onChangeConfiguration={onChangeConfiguration}
             cleanConfiguration={cleanConfiguration}
-            // onDeletePath={onDeletePath}
-            freezeFileType={true}
-          />
+            freezeFileType={false}
+          >
+            <FilePath
+              paths={paths}
+              onAddPath={onAddPath}
+              onChangePath={onChangePath}
+              onDeletePath={onDeletePath}
+            />
+          </FileFormatConfiguration>
         </SectionWrapper>
-      }
+      )}
     </div>
   );
 };
