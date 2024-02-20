@@ -198,6 +198,23 @@ public class FileFormatSpecProviderTest extends BaseTest {
         Assertions.assertEquals(tableName, fileFormatSpec.get(0));
     }
 
+    @Test
+    void guessFilePaths_whenPathDictionaryDoesNotHavePathPrefix_useJustSchemaName() {
+        String schemaName = "/schema_name_example";
+        String tableName = "table_name_example";
+
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
+
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
+        duckdbParametersSpec.setSourceFilesType(DuckdbSourceFilesType.csv);
+
+        FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
+
+        String expectedTablePath = Path.of(schemaName, tableName) + File.separator + "**.csv";
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
+    }
+
     @EnabledOnOs(OS.WINDOWS)
     @Test
     void isPathAbsoluteSystemsWide_forWindowsWithFlippedSlash_returnsTrue() {

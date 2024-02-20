@@ -64,6 +64,9 @@ public class FileFormatSpecProvider {
         String tableName = tableSpec.getPhysicalTableName().getTableName();
         String schemaName = tableSpec.getPhysicalTableName().getSchemaName();
         String pathPrefix = directories.get(schemaName);
+        if(pathPrefix == null){
+            pathPrefix = schemaName;
+        }
         String filePath = isPathAbsoluteSystemsWide(tableName) ? tableName : Path.of(pathPrefix, tableName).toString();
 
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
