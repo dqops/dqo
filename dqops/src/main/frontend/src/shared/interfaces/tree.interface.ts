@@ -29,6 +29,7 @@ export interface CustomTreeNode extends TreeNode {
   data_clean_job_template?: DeleteStoredDataQueueJobParameters;
   open?: boolean;
   category?: string;
+  error_message?: string;
 
   configured?: boolean;
   parsingYamlError?: string; 

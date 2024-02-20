@@ -92,6 +92,7 @@ import { ReactComponent as DefinitionsSensorsSvg } from './svg/definitions-senso
 import { ReactComponent as CopyTextSvg } from './svg/copy-text.svg';
 import { ReactComponent as DoneSvg } from './svg/done.svg';
 import { ReactComponent as WarningSvg } from './svg/warning.svg';
+import { ReactComponent as WarningGenericSvg } from './svg/warning-generic.svg';
 import { ReactComponent as WebhooksSvg } from './svg/webhooks.svg';
 import { ReactComponent as SparkSvg } from './svg/spark.svg';
 import { ReactComponent as DatabricksSvg } from './svg/databricks.svg';
@@ -200,6 +201,7 @@ const iconsMap: any = {
   copytext: CopyTextSvg,
   done: DoneSvg,
   warning: WarningSvg,
+  'warning-generic': WarningGenericSvg,
   webhooks: WebhooksSvg,
   spark: SparkSvg,
   databricks: DatabricksSvg,
@@ -207,7 +209,7 @@ const iconsMap: any = {
   trino: TrinoSvg,
   athena: AmazonAthenaSvg,
   singlestoredb: SingleStoreDbSvg,
-  datadictionary: DataDictionarySvg
+  datadictionary: DataDictionarySvg,
 };
 
 interface SvgIconProps {
