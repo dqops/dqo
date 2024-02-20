@@ -31,8 +31,8 @@ import clsx from 'clsx';
 import { IRootState } from '../../../redux/reducers';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
+import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
+import SectionWrapper from '../../Dashboard/SectionWrapper';
 
 const TableDetails = () => {
   const {
@@ -121,18 +121,16 @@ const TableDetails = () => {
     );
   };
 
-  const onChangePath = (value: string) => {
-    const copiedPaths = [...paths];
-    copiedPaths[paths.length - 1] = value;
-    setPaths(copiedPaths);
-  };
-
   const onAddPath = () => setPaths((prev) => [...prev, '']);
-
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
-
+  const onChangePath = (value: string) => {
+      const copiedPaths = [...paths];
+      copiedPaths[paths.length - 1] = value;
+      setPaths(copiedPaths);
+    };
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));
+
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
 
   return (
     <div className="p-4">
@@ -241,22 +239,26 @@ const TableDetails = () => {
           </tr>
         </tbody>
       </table>
-      {connectionModel.provider_type ===
-      ConnectionSpecProviderTypeEnum.duckdb ? (
-        <FileFormatConfiguration
-          paths={paths}
-          onAddPath={onAddPath}
-          onChangePath={onChangePath}
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-          configuration={configuration}
-          onChangeConfiguration={onChangeConfiguration}
-          cleanConfiguration={cleanConfiguration}
-          onDeletePath={onDeletePath}
-        />
-      ) : (
-        <></>
-      )}
+      {connectionModel.provider_type === ConnectionSpecProviderTypeEnum.duckdb &&
+        <SectionWrapper
+            title="File format configuration"
+            className="text-sm my-4 text-black"
+          >
+        {/* // todo: filepaths */}
+          <FileFormatConfiguration
+            // paths={paths}
+            // onAddPath={onAddPath}
+            // onChangePath={onChangePath}
+            fileFormatType={fileFormatType}
+            onChangeFile={onChangeFile}
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+            cleanConfiguration={cleanConfiguration}
+            // onDeletePath={onDeletePath}
+            freezeFileType={true}
+          />
+        </SectionWrapper>
+      }
     </div>
   );
 };

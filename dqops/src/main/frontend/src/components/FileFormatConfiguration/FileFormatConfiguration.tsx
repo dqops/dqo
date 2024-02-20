@@ -1,48 +1,30 @@
 import React from 'react';
 import SectionWrapper from '../Dashboard/SectionWrapper';
 import SelectInput from '../SelectInput';
-import { 
-  CsvFileFormatSpec, 
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
-  DuckdbParametersSpecSourceFilesTypeEnum
-} from '../../api';
-import CsvFormatConfiguration from './CsvFormatConfiguration';
-import JsonFormatConfiguration from './JsonFormatConfiguration';
-import ParquetFormatConfiguration from './ParquetFormatConfiguration';
+import { DuckdbParametersSpecSourceFilesTypeEnum } from '../../api';
+import CsvFormatConfiguration from './FormatsConfiguration/CsvFormatConfiguration';
+import JsonFormatConfiguration from './FormatsConfiguration/JsonFormatConfiguration';
+import ParquetFormatConfiguration from './FormatsConfiguration/ParquetFormatConfiguration';
 import FilePath from './FilePath';
+import { TConfiguration } from './TConfiguration';
+import KeyValueProperties from './KeyValueProperties';
 
 type TFileFormatConfigurationProps = {
-  paths: string[];
-  onChangePath: (val: string) => void;
-  onAddPath: () => void;
   fileFormatType: DuckdbParametersSpecSourceFilesTypeEnum;
-  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
   configuration: TConfiguration;
+  onChangeFile: (val: DuckdbParametersSpecSourceFilesTypeEnum) => void;
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
-  onDeletePath: (index: number) => void;
+  freezeFileType: boolean;
 };
 
-// enum fileFormat {
-//   csv = 'csv_file_format',
-//   json = 'json_file_format',
-//   parquet = 'parquet_file_format',
-//   file_path = 'file_path'
-// }
-
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
-
 export default function FileFormatConfiguration({
-  paths,
-  onAddPath,
-  onChangePath,
   fileFormatType,
   onChangeFile,
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  onDeletePath
+  freezeFileType
 }: TFileFormatConfigurationProps) {
 
   const renderConfiguration = () => {
@@ -74,32 +56,40 @@ export default function FileFormatConfiguration({
     }
   };
 
+  const sourceFilesTypeOptions = [
+    {
+      label: 'CSV',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.csv
+    },
+    {
+      label: 'JSON',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.json
+    },
+    {
+      label: 'Parquet',
+      value: DuckdbParametersSpecSourceFilesTypeEnum.parquet
+    }
+  ];
+
   return (
-    <SectionWrapper
-      title="File format configuration"
-      className="text-sm my-4 text-black"
-    >
-      <FilePath
-        paths={paths}
-        onAddPath={onAddPath}
-        onChangePath={onChangePath}
-        onDeletePath={onDeletePath}
-      />
+    <>
       <div className="flex items-center gap-x-5">
-        <div>File format</div>{' '}
-        <SelectInput
-          options={Object.values(DuckdbParametersSpecSourceFilesTypeEnum).map((x) => ({
-            label: x,
-            value: x
-          }))}
-          onChange={(value) => {
-            onChangeFile(value);
-            cleanConfiguration();
-          }}
-          value={fileFormatType}
-        />{' '}
+        <div>File format</div>
+        {!freezeFileType && 
+          <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
+            options={sourceFilesTypeOptions}
+            onChange={(value) => {
+              onChangeFile(value);
+              cleanConfiguration();
+            }}
+            value={fileFormatType}
+          />
+        }
+        {freezeFileType && 
+          <div>{fileFormatType}</div>
+        }
       </div>
       {renderConfiguration()}
-    </SectionWrapper>
+    </>
   );
 }
