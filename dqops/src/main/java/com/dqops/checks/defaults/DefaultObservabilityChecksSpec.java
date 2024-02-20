@@ -263,9 +263,13 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
                 }
 
                 FieldInfo targetContainerCategoryFieldInfo = targetContainerChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksCategoryEntry.getChildName());
-                AbstractCheckCategorySpec targetCategoryContainer = (AbstractCheckCategorySpec)targetContainerCategoryFieldInfo.getFieldValueOrNewObject(targetChecksContainer);
-                targetContainerCategoryFieldInfo.setFieldValue(targetCategoryContainer, targetChecksContainer);
-                ChildHierarchyNodeFieldMap targetCategoryChildMap = targetCategoryContainer.childMap();
+                AbstractCheckCategorySpec targetCategoryContainerNullable = (AbstractCheckCategorySpec)targetContainerCategoryFieldInfo.getFieldValue(targetChecksContainer);
+                AbstractCheckCategorySpec targetCategoryContainerNotNull = targetCategoryContainerNullable != null ? targetCategoryContainerNullable :
+                        (AbstractCheckCategorySpec)targetContainerCategoryFieldInfo.getFieldValueOrNewObject(targetChecksContainer);
+                if (targetCategoryContainerNullable == null) {
+                    targetContainerCategoryFieldInfo.setFieldValue(targetCategoryContainerNotNull, targetChecksContainer);
+                }
+                ChildHierarchyNodeFieldMap targetCategoryChildMap = targetCategoryContainerNotNull.childMap();
 
                 for (ChildFieldEntry defaultChecksEntry : defaultCheckCategory.childMap().getChildEntries()) {
                     HierarchyNode defaultCheckNode = defaultChecksEntry.getGetChildFunc().apply(defaultCheckCategory);
@@ -277,22 +281,34 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
                         }
 
                         FieldInfo targetCategoryCheckFieldInfo = targetCategoryChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksEntry.getChildName());
+                        Object alreadyConfiguredCheckSpec = targetCategoryCheckFieldInfo.getFieldValue(targetCategoryContainerNotNull);
+                        if (alreadyConfiguredCheckSpec != null) {
+                            continue;
+                        }
+
                         AbstractCheckSpec<?,?,?,?> targetCheckCloned = defaultCheck.deepClone();
-                        targetCategoryCheckFieldInfo.setFieldValue(targetCheckCloned, targetCategoryContainer);
+                        targetCheckCloned.setDefaultCheck(true);
+                        targetCategoryCheckFieldInfo.setFieldValue(targetCheckCloned, targetCategoryContainerNotNull);
                     }
                 }
 
                 CustomCheckSpecMap defaultCategoryCustomChecks = defaultCheckCategory.getCustomChecks();
                 if (defaultCategoryCustomChecks != null && !defaultCategoryCustomChecks.isEmpty()) {
-                    CustomCategoryCheckSpecMap targetCategoryCustomChecks = targetCategoryContainer.getCustomChecks();
+                    CustomCategoryCheckSpecMap targetCategoryCustomChecks = targetCategoryContainerNotNull.getCustomChecks();
                     if (targetCategoryCustomChecks == null) {
                         targetCategoryCustomChecks = new CustomCategoryCheckSpecMap();
-                        targetCategoryContainer.setCustomChecks(targetCategoryCustomChecks);
+                        targetCategoryContainerNotNull.setCustomChecks(targetCategoryCustomChecks);
                     }
 
                     for (Map.Entry<String, CustomCheckSpec> defaultCategoryCustomCheckKeyValue : defaultCategoryCustomChecks.entrySet()) {
+                        String customCheckName = defaultCategoryCustomCheckKeyValue.getKey();
+                        if (targetCategoryCustomChecks.containsKey(customCheckName)) {
+                            continue;
+                        }
+
                         CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCategoryCustomCheckKeyValue.getValue().deepClone();
-                        targetCategoryCustomChecks.put(defaultCategoryCustomCheckKeyValue.getKey(), clonedTargetCustomCheck);
+                        clonedTargetCustomCheck.setDefaultCheck(true);
+                        targetCategoryCustomChecks.put(customCheckName, clonedTargetCustomCheck);
                     }
                 }
             }
@@ -307,8 +323,14 @@ public class DefaultObservabilityChecksSpec extends AbstractSpec implements Inva
             }
 
             for (Map.Entry<String, CustomCheckSpec> defaultCustomCheckKeyValue : defaultCustomChecks.entrySet()) {
+                String customCheckName = defaultCustomCheckKeyValue.getKey();
+                if (targetCustomChecks.containsKey(customCheckName)) {
+                    continue;
+                }
+
                 CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCustomCheckKeyValue.getValue().deepClone();
-                targetCustomChecks.put(defaultCustomCheckKeyValue.getKey(), clonedTargetCustomCheck);
+                clonedTargetCustomCheck.setDefaultCheck(true);
+                targetCustomChecks.put(customCheckName, clonedTargetCustomCheck);
             }
         }
     }

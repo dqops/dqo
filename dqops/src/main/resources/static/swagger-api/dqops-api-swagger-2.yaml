@@ -13210,6 +13210,11 @@ definitions:
           \ the data quality checks editor screen. Non-standard data quality checks\
           \ (when the value is false) are advanced checks that are shown when the\
           \ user decides to expand the list of checks."
+      default_check:
+        type: "boolean"
+        description: "This is a check that was applied on-the-fly, because it is configured\
+          \ as a default data observability check and can be run, but it is not configured\
+          \ in the table YAML."
       data_grouping_override:
         description: "Data grouping configuration for this check. When a data grouping\
           \ configuration is assigned at a check level, it overrides the data grouping\

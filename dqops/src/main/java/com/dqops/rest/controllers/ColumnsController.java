@@ -25,6 +25,7 @@ import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategories
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
@@ -85,6 +86,7 @@ public class ColumnsController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates a columns rest controller.
@@ -94,6 +96,7 @@ public class ColumnsController {
      * @param specToModelCheckMappingService Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService Check mapper to convert the check model to a check specification.
      * @param statisticsDataService       Statistics data service.
+     * @param defaultObservabilityConfigurationService The service that applies default observability checks.
      */
     @Autowired
     public ColumnsController(ColumnService columnService,
@@ -101,13 +104,15 @@ public class ColumnsController {
                              DqoHomeContextFactory dqoHomeContextFactory,
                              SpecToModelCheckMappingService specToModelCheckMappingService,
                              ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                             StatisticsDataService statisticsDataService) {
+                             StatisticsDataService statisticsDataService,
+                             DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -712,7 +717,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -785,7 +792,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -857,7 +867,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1111,7 +1123,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1190,7 +1204,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1268,7 +1285,10 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+        ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());

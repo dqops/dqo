@@ -344,6 +344,7 @@ const CheckListItem = ({
               <div>
                 <Switch
                   checked={!!check?.configured}
+                  checkedByDefault={!!check?.default_check}
                   onChange={onChangeConfigured}
                 />
               </div>

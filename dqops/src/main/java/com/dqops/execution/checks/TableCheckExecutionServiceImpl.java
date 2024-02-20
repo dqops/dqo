@@ -21,6 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.custom.CustomCheckSpec;
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -108,6 +109,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
     private final IncidentImportQueueService incidentImportQueueService;
     private final DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties;
     private final UserErrorLogger userErrorLogger;
+    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates a data quality check execution service.
@@ -125,6 +127,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
      * @param incidentImportQueueService New incident import queue service. Identifies new incidents and sends notifications.
      * @param dqoSensorLimitsConfigurationProperties DQOps sensor limit configuration parameters.
      * @param userErrorLogger Check execution logger.
+     * @param defaultObservabilityConfigurationService Default observability configuration service.
      */
     @Autowired
     public TableCheckExecutionServiceImpl(HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher,
@@ -140,7 +143,8 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
                                           RuleDefinitionFindService ruleDefinitionFindService,
                                           IncidentImportQueueService incidentImportQueueService,
                                           DqoSensorLimitsConfigurationProperties dqoSensorLimitsConfigurationProperties,
-                                          UserErrorLogger userErrorLogger) {
+                                          UserErrorLogger userErrorLogger,
+                                          DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
         this.sensorExecutionRunParametersFactory = sensorExecutionRunParametersFactory;
         this.dataQualitySensorRunner = dataQualitySensorRunner;
@@ -155,6 +159,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         this.incidentImportQueueService = incidentImportQueueService;
         this.dqoSensorLimitsConfigurationProperties = dqoSensorLimitsConfigurationProperties;
         this.userErrorLogger = userErrorLogger;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -189,7 +194,10 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
         }
         jobCancellationToken.throwIfCancelled();
 
-        TableSpec tableSpec = targetTable.getSpec();
+        TableSpec originalTableSpec = targetTable.getSpec();
+        TableSpec tableSpec = originalTableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(tableSpec, connectionWrapper.getSpec(), userHome);
+
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
         PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
