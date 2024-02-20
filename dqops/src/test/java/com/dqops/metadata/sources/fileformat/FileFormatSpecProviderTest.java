@@ -91,4 +91,25 @@ public class FileFormatSpecProviderTest extends BaseTest {
         Assertions.assertEquals(1, fileFormatSpec.getFilePaths().size());
         Assertions.assertTrue(fileFormatSpec.getCsv().getAutoDetect());
     }
+
+    @Test
+    void resolveFileFormat_whenDuckdbSourceFilesTypeIsNotSet_returnsNull() {
+        String sampleFileName = SampleCsvFileNames.continuous_days_one_row_per_day;
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setFileFormat(
+                new FileFormatSpec() {{
+                    setFilePaths(new FilePathListSpec(){{
+                        add(SampleDataFilesProvider.getFile(sampleFileName).toString());
+                    }});
+                }});
+
+        DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
+
+        FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
+
+        Assertions.assertNull(fileFormatSpec);
+    }
+
+
+
 }
