@@ -186,7 +186,7 @@ const ContextMenu = ({
                   open={runChecksDialogOpened}
                   onClose={() => setRunChecksDialogOpened(false)}
                   onClick={handleRunChecks}
-                  nodeId={String(node.id)}
+                  runChecksJobTemplate={node.run_checks_job_template ?? {}}
                 />
               </>
             )}
@@ -220,7 +220,9 @@ const ContextMenu = ({
                 open={collectStatisticsDialogOpened}
                 onClose={() => setCollectStatisticsDialogOpened(false)}
                 onClick={handleCollectStatisticsOnTable}
-                nodeId={String(node.id)}
+                collectStatisticsJobTemplate={
+                  node.collect_statistics_job_template ?? {}
+                }
               />
             </>
           )}

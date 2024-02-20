@@ -12,7 +12,6 @@ import {
 } from '../../api';
 import Input from '../Input';
 import LabelsView from '../Connection/LabelsView';
-import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 import SelectInput from '../SelectInput';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -20,29 +19,20 @@ type TCollectStatisticsDialogProps = {
   onClick: (node: StatisticsCollectorSearchFilters) => void;
   open: boolean;
   onClose: VoidFunction;
-  nodeId: string;
+  collectStatisticsJobTemplate: StatisticsCollectorSearchFilters;
 };
 
 export default function CollectStatisticsDialog({
   onClick,
   onClose,
   open,
-  nodeId
+  collectStatisticsJobTemplate
 }: TCollectStatisticsDialogProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
-  const hierarchiArray = nodeId?.split('.');
-  const defaultFilters = {
-    connection: hierarchiArray?.[0],
-    fullTableName:
-      hierarchiArray?.[1] &&
-      hierarchiArray?.[2] &&
-      hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
-    columnNames: hierarchiArray?.[4] ? [hierarchiArray?.[4], ''] : [''],
-    enabled: true
-  };
 
-  const [filters, setFilters] =
-    useState<StatisticsCollectorSearchFilters>(defaultFilters);
+  const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>(
+    collectStatisticsJobTemplate
+  );
 
   const onChangeFilters = (obj: Partial<StatisticsCollectorSearchFilters>) => {
     setFilters((prev) => ({
@@ -69,7 +59,7 @@ export default function CollectStatisticsDialog({
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
         <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold px-4">
-          <div className="w-1/4">
+          <div className="w-[45%]">
             Connection:
             <Input
               value={filters.connection}
@@ -77,8 +67,8 @@ export default function CollectStatisticsDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
-            fullTableName:
+          <div className="w-[45%]">
+            Schema and table name:
             <Input
               value={filters.fullTableName}
               onChange={(e) =>
@@ -99,7 +89,7 @@ export default function CollectStatisticsDialog({
           />
         </div>
         <div className="flex justify-between pt-4 text-black font-semibold px-4">
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Collector category:
             <Input
               value={filters.collectorCategory}
@@ -109,7 +99,7 @@ export default function CollectStatisticsDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Collector name:
             <Input
               value={filters.collectorName}
@@ -119,7 +109,7 @@ export default function CollectStatisticsDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Sensor name:
             <Input
               value={filters.sensorName}
@@ -129,7 +119,7 @@ export default function CollectStatisticsDialog({
           </div>
         </div>
         <div className="flex justify-between pt-4 text-black font-semibold px-4">
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Target:
             <SelectInput
               value={filters.target}
@@ -143,14 +133,6 @@ export default function CollectStatisticsDialog({
               className="mt-2"
             />
           </div>
-          <div className="flex items-center gap-x-2">
-            Enabled:
-            <CheckboxThreeSteps
-              checked={!!filters.enabled}
-              onChange={(value) => onChangeFilters({ enabled: value })}
-            />
-          </div>
-          <div></div>
         </div>
         <div className="flex justify-between pt-4 text-black font-semibold">
           <LabelsView
@@ -170,7 +152,7 @@ export default function CollectStatisticsDialog({
           variant="outlined"
           className="px-8"
           onClick={() => {
-            onClose(), setFilters(defaultFilters);
+            onClose(), setFilters(collectStatisticsJobTemplate);
           }}
           label="Cancel"
         />
@@ -178,7 +160,8 @@ export default function CollectStatisticsDialog({
           color="primary"
           className="px-8"
           onClick={() => {
-            onClick(prepareFilters(filters)), setFilters(defaultFilters);
+            onClick(prepareFilters(filters)),
+              setFilters(collectStatisticsJobTemplate);
           }}
           label="Collect statistics"
           disabled={userProfile.can_delete_data !== true}

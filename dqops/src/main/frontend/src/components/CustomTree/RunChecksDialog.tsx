@@ -22,28 +22,19 @@ type TRunChecksDialogProps = {
   onClick: (filter: CheckSearchFilters) => void;
   open: boolean;
   onClose: VoidFunction;
-  nodeId: string;
+  runChecksJobTemplate: CheckSearchFilters;
 };
 
 export default function RunChecksDialog({
   onClick,
   onClose,
   open,
-  nodeId
+  runChecksJobTemplate
 }: TRunChecksDialogProps) {
-  const hierarchiArray = nodeId?.split('.');
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
-  const defaultFilters = {
-    connection: hierarchiArray?.[0],
-    fullTableName:
-      hierarchiArray?.[1] &&
-      hierarchiArray?.[2] &&
-      hierarchiArray?.[1] + '.' + hierarchiArray?.[2],
-    column: hierarchiArray?.[4],
-    enabled: true
-  };
-  const [filters, setFilters] = useState<CheckSearchFilters>(defaultFilters);
+  const [filters, setFilters] =
+    useState<CheckSearchFilters>(runChecksJobTemplate);
 
   const onChangeFilters = (obj: Partial<CheckSearchFilters>) => {
     setFilters((prev) => ({
@@ -68,7 +59,7 @@ export default function RunChecksDialog({
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
         <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
-          <div className="w-1/4">
+          <div className="w-[45%] ml-2">
             Connection:
             <Input
               value={filters.connection}
@@ -76,8 +67,8 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
-            fullTableName:
+          <div className="w-[45%] ml-2">
+            Schema and table name:
             <Input
               value={filters.fullTableName}
               onChange={(e) =>
@@ -88,8 +79,8 @@ export default function RunChecksDialog({
           </div>
           <div></div>
         </div>
-        <div className="flex justify-between py-4 text-black font-semibold">
-          <div className="w-1/4">
+        <div className="flex justify-between py-4 text-black font-semibold items-center">
+          <div className="w-1/3 ml-2">
             Column name:
             <Input
               value={filters.column}
@@ -97,7 +88,7 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Column datatype:
             <Input
               value={filters.columnDataType}
@@ -107,27 +98,16 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div></div>
-        </div>
-        <div className="flex justify-between py-4 text-black font-semibold">
-          <div className="flex items-center gap-x-2">
-            Enabled:
-            <CheckboxThreeSteps
-              checked={!!filters.enabled}
-              onChange={(value) => onChangeFilters({ enabled: value })}
-            />
-          </div>
-          <div className="flex items-center gap-x-2">
+          <div className="flex items-center gap-x-2 w-1/3 ml-4">
             Column nullable:
             <CheckboxThreeSteps
               checked={!!filters.columnNullable}
               onChange={(value) => onChangeFilters({ columnNullable: value })}
             />
           </div>
-          <div></div>
         </div>
         <div className="flex justify-between py-4 text-black font-semibold">
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Check target:
             <SelectInput
               value={filters.checkTarget}
@@ -141,7 +121,7 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Check type:
             <SelectInput
               value={filters.checkType}
@@ -156,7 +136,7 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Time scale:
             <SelectInput
               value={filters.timeScale}
@@ -173,7 +153,7 @@ export default function RunChecksDialog({
           </div>
         </div>
         <div className="flex justify-between pt-4 text-black font-semibold">
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Check name:
             <Input
               value={filters.checkName}
@@ -181,7 +161,7 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Table comparison name:
             <Input
               value={filters.tableComparisonName}
@@ -191,7 +171,7 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/4">
+          <div className="w-1/3 ml-2">
             Sensor name:
             <Input
               value={filters.sensorName}
@@ -218,7 +198,7 @@ export default function RunChecksDialog({
           variant="outlined"
           className="px-8"
           onClick={() => {
-            onClose(), setFilters(defaultFilters);
+            onClose(), setFilters(runChecksJobTemplate);
           }}
           label="Cancel"
         />
@@ -226,7 +206,7 @@ export default function RunChecksDialog({
           color="primary"
           className="px-8"
           onClick={() => {
-            onClick(prepareFilters(filters)), setFilters(defaultFilters);
+            onClick(prepareFilters(filters)), setFilters(runChecksJobTemplate);
           }}
           label="Run checks"
           disabled={userProfile.can_delete_data !== true}

@@ -28,7 +28,7 @@ const LabelItem = ({
           : ''
       )}
     >
-      <div className="pr-4 min-w-40 w-11/12 py-2">
+      <div className="min-w-40 w-11/12 py-2">
         <div>
           <Input
             className="focus:!ring-0 focus:!border"
@@ -38,7 +38,7 @@ const LabelItem = ({
           />
         </div>
       </div>
-      <div className="px-8 max-w-34 min-w-34 py-2">
+      <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
         <div className="flex justify-center">
           <IconButton
             color="teal"
