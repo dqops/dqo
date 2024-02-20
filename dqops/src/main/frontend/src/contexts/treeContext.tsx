@@ -246,7 +246,8 @@ function TreeProvider(props: any) {
       ] as CheckSearchFilters,
       collect_statistics_job_template: schema.collect_statistics_job_template,
       data_clean_job_template: schema.data_clean_job_template,
-      open: false
+      open: false,
+      error_message: schema.error_message
     }));
 
     if (reset) {

@@ -373,6 +373,49 @@ const Tree = () => {
     );
   };
 
+  const renderParsingYamlErrorToolTip = (node: CustomTreeNode) => {
+    return (
+      <Tooltip
+        content={node.parsingYamlError}
+        className="max-w-120 z-50"
+        placement="right-start"
+      >
+        <div
+          style={{
+            position: 'absolute',
+            right: '30px',
+            top: '-9px',
+            borderRadius: '3px'
+          }}
+          className="bg-white"
+        >
+          <SvgIcon name="warning" className="w-5 h-5" />
+        </div>
+      </Tooltip>
+    )
+  }
+
+  const renderErrorMessageToolTip = (node: CustomTreeNode) => {
+    return (
+      <Tooltip
+        content={node.error_message}
+        className="max-w-120 z-50"
+        placement="right-start"
+      >
+        <div
+          style={{
+            position: 'absolute',
+            right: '30px',
+            top: '-9px',
+            borderRadius: '3px'
+          }}
+        >
+          <SvgIcon name="warning-generic" className="w-5 h-5 text-yellow-600" /> {/* text-[#e0ca00] */}
+        </div>
+      </Tooltip>
+    )
+  }
+
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
       <div style={{ paddingLeft: deep ? 16 : 0 }}>
@@ -380,6 +423,7 @@ const Tree = () => {
           className={clsx(
             'px-2 cursor-pointer flex space-x-1 hover:bg-gray-100  mb-0.5',
             activeTab === node.id ? 'bg-gray-100' : '',
+            node.error_message !== undefined ? 'text-[#797500]' : '',
             node.level === TREE_LEVEL.TABLE &&
               checkTypes === CheckTypes.PARTITIONED &&
               node.configured
@@ -417,23 +461,11 @@ const Tree = () => {
                 </div>
                 <div className="relative ">
                   {node.parsingYamlError && node.parsingYamlError.length > 0 ? (
-                    <Tooltip
-                      content={node.parsingYamlError}
-                      className="max-w-120 z-50"
-                      placement="right-start"
-                    >
-                      <div
-                        style={{
-                          position: 'absolute',
-                          right: '30px',
-                          top: '-9px',
-                          borderRadius: '3px'
-                        }}
-                        className="bg-white"
-                      >
-                        <SvgIcon name="warning" className="w-5 h-5" />
-                      </div>
-                    </Tooltip>
+                    renderParsingYamlErrorToolTip(node)
+                  ) : null}
+
+                  {node.error_message && node.error_message.length > 0 ? (
+                    renderErrorMessageToolTip(node)
                   ) : null}
                 </div>
                 <ContextMenu
