@@ -1,6 +1,7 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.BaseTest;
+import com.dqops.metadata.sources.TableSpec;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,7 +22,7 @@ public class ParquetFileFormatSpecTest extends BaseTest {
             setUnionByName(true);
         }};
 
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.csv"));
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.csv"), null);
 
         assertTrue(output.contains("binary_as_string = true"));
         assertTrue(output.contains("filename = true"));
@@ -33,7 +34,7 @@ public class ParquetFileFormatSpecTest extends BaseTest {
     @Test
     void buildSourceTableOptionsString_onParquetFile_useSuitableFunctionToReadParquet() {
         ParquetFileFormatSpec sut = new ParquetFileFormatSpec();
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"));
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"), new TableSpec());
         assertTrue(output.contains("read_parquet"));
     }
 }

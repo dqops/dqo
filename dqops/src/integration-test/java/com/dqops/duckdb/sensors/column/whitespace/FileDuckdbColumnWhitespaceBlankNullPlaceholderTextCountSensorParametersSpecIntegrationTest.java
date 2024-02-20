@@ -57,7 +57,7 @@ public class FileDuckdbColumnWhitespaceBlankNullPlaceholderTextCountSensorParame
     @Test
     void runSensor_withUseOfLocalCsvFile_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "null_placeholder:STRING", this.checkSpec);
+                sampleTableMetadata, "null_placeholder", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

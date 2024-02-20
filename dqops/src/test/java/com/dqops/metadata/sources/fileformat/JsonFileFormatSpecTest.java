@@ -1,15 +1,18 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.BaseTest;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnSpecMap;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 public class JsonFileFormatSpecTest extends BaseTest {
@@ -18,7 +21,6 @@ public class JsonFileFormatSpecTest extends BaseTest {
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
-            setColumns(Map.of("col1", "type1", "col2", "type2"));
             setCompression("gzip");
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
@@ -32,7 +34,20 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
         }};
 
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.json"));
+        ColumnSpec columnSpec = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("INT"));
+        }};
+        ColumnSpec columnSpec2 = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("STRING"));
+        }};
+        ColumnSpecMap columnSpecMap = new ColumnSpecMap(){{
+            put("col1", columnSpec);
+            put("col2", columnSpec2);
+        }};
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setColumns(columnSpecMap);
+
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.json"), tableSpec);
 
         assertTrue(output.contains("auto_detect = true"));
         assertTrue(output.contains("columns"));
@@ -52,7 +67,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
     @Test
     void buildSourceTableOptionsString_onJsonFile_useSuitableFunctionToReadJson() {
         JsonFileFormatSpec sut = new JsonFileFormatSpec();
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.json"));
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.json"), null);
         assertTrue(output.contains("read_json"));
     }
 
