@@ -107,10 +107,6 @@ export default function RunChecksDialog({
           </div>
         </div>
         <div className="flex justify-between py-4 text-black font-semibold">
-          <div></div>
-          <div></div>
-        </div>
-        <div className="flex justify-between py-4 text-black font-semibold">
           <div className="w-1/3 ml-2">
             Check target:
             <SelectInput
@@ -194,17 +190,6 @@ export default function RunChecksDialog({
             onChange={(tags: string[]) => onChangeFilters({ tags: tags })}
             title="Tags"
           />
-        </div>
-        <div className="flex justify-between py-4 text-black font-semibold">
-          <div className="flex items-center gap-x-2 px-4">
-            Enabled:
-            <CheckboxThreeSteps
-              checked={!!filters.enabled}
-              onChange={(value) => onChangeFilters({ enabled: value })}
-            />
-          </div>
-          <div></div>
-          <div></div>
         </div>
       </DialogBody>
       <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
