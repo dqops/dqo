@@ -29,6 +29,12 @@
     }
 }
 
+@media screen and (max-width: 76.234375em) {
+  [dir=ltr] .md-sidebar--primary {
+      left: -13.1rem;
+  }
+}
+
 .md-sidebar__scrollwrap{
   white-space: normal; 
 }
