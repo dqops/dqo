@@ -29125,13 +29125,6 @@ definitions:
       auto_detect:
         type: "boolean"
         description: "Enables auto detection of CSV parameters."
-      columns:
-        type: "object"
-        description: "A struct that specifies the column names and column types contained\
-          \ within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using\
-          \ this option implies that auto detection is not used."
-        additionalProperties:
-          type: "string"
       compression:
         type: "string"
         description: "The compression type for the file. By default this will be detected\
@@ -30557,13 +30550,6 @@ definitions:
         type: "boolean"
         description: "Whether to auto-detect detect the names of the keys and data\
           \ types of the values automatically"
-      columns:
-        type: "object"
-        description: "A struct that specifies the key names and value types contained\
-          \ within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect\
-          \ is enabled these will be inferred"
-        additionalProperties:
-          type: "string"
       compression:
         type: "string"
         description: "The compression type for the file. By default this will be detected\
