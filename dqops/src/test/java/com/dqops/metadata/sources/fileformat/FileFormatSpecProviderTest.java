@@ -42,20 +42,22 @@ public class FileFormatSpecProviderTest extends BaseTest {
     @Test
     void resolveFileFormat_whenNotSetOnTable_guessesFormConnectionParameters() {
         String schemaName = "schema_name_example";
-        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, "table_name_example"));
+        String tableName = "a/file/path.csv";
+        String pathPrefix = "prefix_example";
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
 
         DuckdbParametersSpec duckdbParametersSpec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv).getDuckdb();
         duckdbParametersSpec.setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(false);
         }});
-        duckdbParametersSpec.getDirectories().put(schemaName, "a/file/path.csv");
+        duckdbParametersSpec.getDirectories().put(schemaName, pathPrefix);
 
         FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
 
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(1, fileFormatSpec.getFilePaths().size());
         Assertions.assertEquals(fileFormatSpec.getFilePaths().get(0),
-                Path.of(schemaName,"a/file/path.csv").toString());
+                Path.of(pathPrefix,tableName).toString());
         Assertions.assertFalse(fileFormatSpec.getCsv().getAutoDetect());
     }
 
@@ -123,9 +125,10 @@ public class FileFormatSpecProviderTest extends BaseTest {
     @Test
     void guessFilePaths_whenTableNameEndsWithExtension_returnsIt() {
         String schemaName = "schema_name_example";
-        String filePath = "clients.csv";
+        String filePath = "prefix_example";
+        String tableName = "table_name_example.csv";
 
-        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, "table_name_example"));
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filePath));
@@ -133,7 +136,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = Path.of(schemaName, filePath).toString();
+        String expectedTablePath = Path.of(filePath, tableName).toString();
 
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
@@ -143,8 +146,9 @@ public class FileFormatSpecProviderTest extends BaseTest {
     void guessFilePaths_whenTableNameDoesNotEndsWithExtension_returnsIt() {
         String schemaName = "schema_name_example";
         String filesFolder = "clients";
+        String tableName = "table_name_example";
 
-        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, "table_name_example"));
+        TableSpec tableSpec = new TableSpec(new PhysicalTableName(schemaName, tableName));
 
         DuckdbParametersSpec duckdbParametersSpec = new DuckdbParametersSpec();
         duckdbParametersSpec.setDirectories(Map.of(schemaName, filesFolder));
@@ -152,7 +156,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        String expectedTablePath = schemaName + File.separator + filesFolder + File.separator + "**.csv";
+        String expectedTablePath = filesFolder + File.separator + tableName + File.separator + "**.csv";
         Assertions.assertNotNull(fileFormatSpec);
         Assertions.assertEquals(expectedTablePath, fileFormatSpec.get(0));
     }
