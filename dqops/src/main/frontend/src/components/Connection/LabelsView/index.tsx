@@ -57,7 +57,7 @@ const LabelsView = ({
         <div className="text-left min-w-40 w-11/12 pr-4 py-2">
           {title ?? 'Label'}
         </div>
-        <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+        <div className="px-0 pr-8 py-2 text-center max-w-34 min-w-34 w-34">
           Action
         </div>
       </div>
@@ -72,7 +72,7 @@ const LabelsView = ({
         />
       ))}
       <div className="flex items-center w-full">
-        <div className="pr-4 min-w-40 py-2 w-11/12">
+        <div className="min-w-40 py-2 w-11/12">
           <Input
             className="focus:!ring-0 focus:!border"
             value={labels.length ? labels[labels.length - 1] : ''}
@@ -80,7 +80,7 @@ const LabelsView = ({
             onKeyDown={onKeyDown}
           />
         </div>
-        <div className="px-8 max-w-34 min-w-34 py-2">
+        <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
           <div className="flex justify-center">
             <IconButton
               size="sm"
