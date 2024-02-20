@@ -65,10 +65,13 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       if (node) {
         await TableApiClient.createTable(args[0], args[1], name, {
           file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
-            } ?? undefined
+            connectionModel.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb
+              ? {
+                  [fileFormatType as keyof FileFormatSpec]: configuration,
+                  file_paths: paths.slice(0, -1)
+                }
+              : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: args[0],
@@ -80,10 +83,13 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       } else {
         await TableApiClient.createTable(connection, schema, name, {
           file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
-            } ?? undefined
+            connectionModel.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb
+              ? {
+                  [fileFormatType as keyof FileFormatSpec]: configuration,
+                  file_paths: paths.slice(0, -1)
+                }
+              : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: connection,

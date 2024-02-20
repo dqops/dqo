@@ -73,6 +73,7 @@ const TableDetails = () => {
       ...prev,
       ...params
     }));
+    handleChange({});
   };
 
   const cleanConfiguration = () => {
@@ -140,17 +141,24 @@ const TableDetails = () => {
     }
   }, [tableBasic?.file_format]);
 
-  const onAddPath = () => setPaths((prev) => [...prev, '']);
+  const onAddPath = () => {
+    setPaths((prev) => [...prev, '']);
+    handleChange({});
+  };
   const onChangePath = (value: string) => {
     const copiedPaths = [...paths];
     copiedPaths[paths.length - 1] = value;
     setPaths(copiedPaths);
   };
-  const onDeletePath = (index: number) =>
+  const onDeletePath = (index: number) => {
     setPaths((prev) => prev.filter((_, i) => i !== index));
+    handleChange({});
+  };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
     setFileFormatType(val);
+    setConfiguration({});
+  };
 
   return (
     <div className="p-4">
