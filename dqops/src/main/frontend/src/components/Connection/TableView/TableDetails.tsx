@@ -50,6 +50,12 @@ const TableDetails = () => {
   const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
     getFirstLevelState(checkTypes)
   );
+  const format =
+    (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
+      x.includes('format')
+    ) as DuckdbParametersSpecSourceFilesTypeEnum) ??
+    DuckdbParametersSpecSourceFilesTypeEnum.csv;
+
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const [paths, setPaths] = useState<Array<string>>(
     tableBasic?.file_format?.file_paths
@@ -57,14 +63,9 @@ const TableDetails = () => {
       : ['']
   );
   const [fileFormatType, setFileFormatType] =
-    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      (Object.keys(tableBasic?.file_format ?? {}).find((x) =>
-        x.includes('format')
-      ) as DuckdbParametersSpecSourceFilesTypeEnum) ??
-        DuckdbParametersSpecSourceFilesTypeEnum.csv
-    );
+    useState<DuckdbParametersSpecSourceFilesTypeEnum>(format);
   const [configuration, setConfiguration] = useState<TConfiguration>(
-    tableBasic?.file_format ?? {}
+    tableBasic?.file_format[format] ?? {}
   );
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
@@ -118,7 +119,7 @@ const TableDetails = () => {
           file_format:
             {
               [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
+              file_paths: paths.slice(0, -1)
             } ?? undefined
         }
       )
@@ -127,6 +128,17 @@ const TableDetails = () => {
       getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table)
     );
   };
+  useEffect(() => {
+    if (
+      Object.keys(configuration ?? {}).length === 0 &&
+      tableBasic?.file_format[format]
+    ) {
+      setConfiguration(tableBasic?.file_format[format]);
+    }
+    if (paths?.length === 1 && tableBasic?.file_format?.file_paths) {
+      setPaths([...tableBasic.file_format.file_paths, '']);
+    }
+  }, [tableBasic?.file_format]);
 
   const onAddPath = () => setPaths((prev) => [...prev, '']);
   const onChangePath = (value: string) => {
@@ -135,7 +147,7 @@ const TableDetails = () => {
     setPaths(copiedPaths);
   };
   const onDeletePath = (index: number) =>
-    setPaths((prev) => prev.filter((x, i) => i !== index));
+    setPaths((prev) => prev.filter((_, i) => i !== index));
 
   const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
     setFileFormatType(val);

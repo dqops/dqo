@@ -1,8 +1,8 @@
 import React from 'react';
 import Input from '../../Input';
-import FieldTypeInput from "../../Connection/ConnectionView/FieldTypeInput";
-import { IconButton } from "@material-tailwind/react";
-import SvgIcon from "../../SvgIcon";
+import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
+import { IconButton } from '@material-tailwind/react';
+import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
 
 interface IKeyValuePropertyItemProps {
@@ -12,7 +12,8 @@ interface IKeyValuePropertyItemProps {
   onRemove: (key: number) => void;
   isLast?: boolean;
   onChange: (key: number, value: [string, string]) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  onAdd: () => void;
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
 const KeyValuePropertyItem = ({
@@ -22,9 +23,9 @@ const KeyValuePropertyItem = ({
   idx,
   onRemove,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  onAdd
 }: IKeyValuePropertyItemProps) => {
-
   return (
     <tr>
       <td className="pr-4 min-w-40 py-2 w-1/2">
@@ -43,7 +44,7 @@ const KeyValuePropertyItem = ({
       </td>
       <td className="px-8 min-w-20 py-2 text-center">
         {isLast ? (
-          <IconButton className="bg-teal-500" size="sm">
+          <IconButton className="bg-teal-500" size="sm" onClick={onAdd}>
             <SvgIcon name="add" className="w-4" />
           </IconButton>
         ) : (
