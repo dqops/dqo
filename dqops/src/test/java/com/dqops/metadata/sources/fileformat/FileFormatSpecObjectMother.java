@@ -4,7 +4,6 @@ import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.dqops.sampledata.files.SampleDataFilesProvider;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Object mother for FileFormatSpec.
@@ -29,10 +28,9 @@ public class FileFormatSpecObjectMother {
     /**
      * Creates a FileFormatSpec for a folder with multiple csv files.
      * @param csvFileNames List with names of csv files.
-     * @param headerNameTypeMap A header of the data.
      * @return FileFormatSpec
      */
-    public static FileFormatSpec createForMultipleCsvFiles(List<String> csvFileNames, Map<String, String> headerNameTypeMap) {
+    public static FileFormatSpec createForMultipleCsvFiles(List<String> csvFileNames) {
 
         FilePathListSpec filePathListSpec = new FilePathListSpec();
         csvFileNames.stream()
@@ -43,7 +41,6 @@ public class FileFormatSpecObjectMother {
             setCsv(new CsvFileFormatSpec(){{
                 setAutoDetect(true);
                 setHeader(false);
-                setColumns(headerNameTypeMap);
             }} );
             setFilePaths(filePathListSpec);
         }};
