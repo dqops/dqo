@@ -6,6 +6,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -14,7 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -42,10 +42,6 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("Enables auto detection of CSV parameters.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean autoDetect = true;
-
-    @JsonPropertyDescription("A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> columns;
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -105,12 +101,12 @@ public class CsvFileFormatSpec extends AbstractSpec {
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList) {
+    public String buildSourceTableOptionsString(List<String> filePathList, TableSpec tableSpec) {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_csv", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.allVarchar, allVarchar);
         tableOptionsFormatter.formatValueWhenSet(Fields.allowQuotedNulls, allowQuotedNulls);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
-        tableOptionsFormatter.formatMapWhenSet(Fields.columns, columns);
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
         tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
         tableOptionsFormatter.formatStringWhenSet(Fields.decimalSeparator, decimalSeparator);
@@ -182,25 +178,6 @@ public class CsvFileFormatSpec extends AbstractSpec {
     public void setAutoDetect(Boolean autoDetect) {
         setDirtyIf(!Objects.equals(this.autoDetect, autoDetect));
         this.autoDetect = autoDetect;
-    }
-
-    /**
-     * Returns the columns map.
-     *
-     * @return Columns map.
-     */
-    public Map<String, String> getColumns() {
-        return columns;
-    }
-
-    /**
-     * Sets the columns map.
-     *
-     * @param columns Columns map.
-     */
-    public void setColumns(Map<String, String> columns) {
-        setDirtyIf(!Objects.equals(this.columns, columns));
-        this.columns = columns;
     }
 
     /**

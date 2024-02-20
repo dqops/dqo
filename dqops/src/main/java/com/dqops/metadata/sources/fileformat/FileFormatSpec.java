@@ -7,6 +7,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -130,11 +131,11 @@ public class FileFormatSpec extends AbstractSpec {
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
      * @return Table options string.
      */
-    public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType){
+    public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType, TableSpec tableSpec){
         switch(duckdbSourceFilesType){
-            case csv: return csv.buildSourceTableOptionsString(filePaths);
-            case json: return json.buildSourceTableOptionsString(filePaths);
-            case parquet: return parquet.buildSourceTableOptionsString(filePaths);
+            case csv: return csv.buildSourceTableOptionsString(filePaths, tableSpec);
+            case json: return json.buildSourceTableOptionsString(filePaths, tableSpec);
+            case parquet: return parquet.buildSourceTableOptionsString(filePaths, tableSpec);
             default: throw new RuntimeException("Cant create table options string for the given files: " + duckdbSourceFilesType);
         }
     }

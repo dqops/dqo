@@ -1,5 +1,8 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnSpecMap;
+import com.dqops.metadata.sources.TableSpec;
 import com.google.common.base.CaseFormat;
 
 import java.util.List;
@@ -46,15 +49,21 @@ public class TableOptionsFormatter {
         }
     }
 
-    public void formatMapWhenSet(String fieldName, Map<String, String> value){
-        if(value != null && !value.isEmpty()){
+    public void formatColumns(String fieldName, TableSpec tableSpec){
+
+        if(tableSpec != null && tableSpec.getColumns() != null && !tableSpec.getColumns().isEmpty()){
+            ColumnSpecMap columnSpecMap = tableSpec.getColumns();
+
             sourceTable.append(commaNewLineIdentTwo);
             sourceTable.append(makeSnakeCase(fieldName)).append(" = {");
 
-            Map.Entry<String, String> firstEntry = value.entrySet().stream().findFirst().get();
-            sourceTable.append("\n    '").append(firstEntry.getKey()).append("': '").append(firstEntry.getValue()).append("'");
-            value.entrySet().stream().skip(1).forEach(stringStringEntry -> {
-                sourceTable.append(",\n    '").append(stringStringEntry.getKey()).append("': '").append(stringStringEntry.getValue()).append("'");
+            Map.Entry<String, ColumnSpec> firstEntry = columnSpecMap.entrySet().stream().findFirst().get();
+            String firstColumnType = firstEntry.getValue().getTypeSnapshot().getColumnType();
+            sourceTable.append("\n    '").append(firstEntry.getKey()).append("': '").append(firstColumnType).append("'");
+
+            columnSpecMap.entrySet().stream().skip(1).forEachOrdered(columnSpecEntry -> {
+                String columnType = columnSpecEntry.getValue().getTypeSnapshot().getColumnType();
+                sourceTable.append(",\n    '").append(columnSpecEntry.getKey()).append("': '").append(columnType).append("'");
             });
             sourceTable.append("\n  }");
         }
