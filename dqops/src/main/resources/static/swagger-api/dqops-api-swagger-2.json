@@ -32937,6 +32937,10 @@
         "can_delete_data" : {
           "type" : "boolean",
           "description" : "Boolean flag that decides if the current user can delete data (results)."
+        },
+        "error_message" : {
+          "type" : "string",
+          "description" : "Field for error message."
         }
       },
       "description" : "Schema model"

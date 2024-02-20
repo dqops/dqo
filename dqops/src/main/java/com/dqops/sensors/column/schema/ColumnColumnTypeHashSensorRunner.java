@@ -114,6 +114,10 @@ public class ColumnColumnTypeHashSensorRunner extends AbstractSensorRunner {
         SensorExecutionRunParameters sensorRunParameters = sensorPrepareResult.getSensorRunParameters();
         PhysicalTableName physicalTableName = sensorRunParameters.getTable().getPhysicalTableName();
 
+        if (!groupedSensorExecutionResult.isSuccess()) {
+            return new SensorExecutionResult(sensorRunParameters, groupedSensorExecutionResult.getException());
+        }
+
         try {
             TableSpec introspectedTableSpec = groupedSensorExecutionResult.getCapturedMetadataResult();
 

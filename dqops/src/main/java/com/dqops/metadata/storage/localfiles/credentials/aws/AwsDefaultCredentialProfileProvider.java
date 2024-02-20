@@ -4,6 +4,7 @@ import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.credentials.FileSharedCredentialWrapperImpl;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.profiles.ProfileFile;
@@ -37,10 +38,13 @@ public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
                 (FileSharedCredentialWrapperImpl) secretValueLookupContext.getUserHome().getCredentials().getByObjectName(
                     DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true) : null;
 
-        if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
-                !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
-
+        if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null) {
             String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();
+
+            if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
+                throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME +
+                        " file contains default (fake) credentials. Please update the file by setting valid AWS default credentials.");
+            }
 
             ProfileFile profileFile;
             try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {

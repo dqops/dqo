@@ -23,6 +23,7 @@ import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.auth.oauth2.ServiceAccountCredentials;
 import com.google.auth.oauth2.UserCredentials;
@@ -99,9 +100,14 @@ public class BigQueryConnectionPoolImpl implements BigQueryConnectionPool {
                             secretValueLookupContext.getUserHome().getCredentials() != null ?
                             secretValueLookupContext.getUserHome().getCredentials()
                             .getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) : null;
-                    if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null &&
-                            !Objects.equals(defaultCredentialsSharedSecret.getObject().getTextContent(), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
+                    if (defaultCredentialsSharedSecret != null && defaultCredentialsSharedSecret.getObject() != null) {
                         String keyContent = defaultCredentialsSharedSecret.getObject().getTextContent();
+
+                        if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT)) {
+                            throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME +
+                                    " file contains default (fake) credentials. Please replace the content of the file with a valid GCP Service Account JSON key.");
+                        }
+
                         try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
                             googleCredentials = GoogleCredentials.fromStream(keyReaderStream);
                         }
