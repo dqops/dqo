@@ -53,8 +53,10 @@ import java.util.*;
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
-    private final static Object registerLock = new Object();
+    private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
+    private final static Object loadSecretsLock = new Object();
+    private static boolean secretsLoaded = false;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -161,14 +163,18 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
         registerExtensions();
+        loadSecrets();
     }
 
+    /**
+     * Registers extensions for duckdb from the local extension repository.
+     */
     private void registerExtensions(){
         if(extensionsRegistered){
             return;
         }
         try {
-            synchronized (registerLock) {
+            synchronized (registerExtensionsLock) {
                 StringBuilder setCustomRepository = new StringBuilder();
                 setCustomRepository.append("SET extension_directory = ");
                 setCustomRepository.append("'");
@@ -197,6 +203,45 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Loads secrets that are used during the connection to a cloud storage service.
+     */
+    private void loadSecrets(){
+        if(secretsLoaded){
+            return;
+        }
+        try {
+            synchronized (loadSecretsLock) {
+                DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
+                DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
+
+                StringBuilder loadSecretsString = new StringBuilder();
+                loadSecretsString.append("CREATE SECRET (");
+                switch (secretsType){
+                    case s3:
+                        loadSecretsString.append("TYPE ").append(secretsType.toString().toUpperCase());
+                        // todo: use the default credentials when below are not set
+                        // todo: use secretValueProvider for the below
+                        loadSecretsString.append("KEY_ID ").append(duckdbParametersSpec.getUser());
+                        loadSecretsString.append("SECRET ").append(duckdbParametersSpec.getPassword());
+                        loadSecretsString.append("REGION ").append(duckdbParametersSpec.getRegion());
+                        break;
+                    default:
+                        throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+                }
+                loadSecretsString.append(");");
+
+                this.executeCommand(loadSecretsString.toString(), JobCancellationToken.createDummyJobCancellationToken());
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
+     * @return The list of extension names for DuckDB.
+     */
     private List<String> getAvailableExtensions(){
         return Arrays.asList(
                 "httpfs",
