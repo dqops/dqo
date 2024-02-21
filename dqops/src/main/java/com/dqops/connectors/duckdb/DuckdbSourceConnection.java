@@ -175,17 +175,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (registerExtensionsLock) {
-                StringBuilder setCustomRepository = new StringBuilder();
-                setCustomRepository.append("SET extension_directory = ");
-                setCustomRepository.append("'");
-                setCustomRepository.append(homeLocationFindService.getDqoHomePath());
-                setCustomRepository.append("/bin/duckdb");
-                setCustomRepository.append("'");
-
-                this.executeCommand(setCustomRepository.toString(), JobCancellationToken.createDummyJobCancellationToken());
+                String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
+                this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 
                 List<String> availableExtensionList = getAvailableExtensions();
-
                 availableExtensionList.stream().forEach(extensionName -> {
                     try {
                         String installExtensionQuery = "INSTALL " + extensionName;
@@ -213,25 +206,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         try {
             synchronized (loadSecretsLock) {
                 DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
-                DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
-
-                StringBuilder loadSecretsString = new StringBuilder();
-                loadSecretsString.append("CREATE SECRET (");
-                switch (secretsType){
-                    case s3:
-                        loadSecretsString.append("TYPE ").append(secretsType.toString().toUpperCase());
-                        // todo: use the default credentials when below are not set
-                        // todo: use secretValueProvider for the below
-                        loadSecretsString.append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("'");
-                        loadSecretsString.append("SECRET '").append(duckdbParametersSpec.getPassword()).append("'");
-                        loadSecretsString.append("REGION '").append(duckdbParametersSpec.getRegion()).append("'");
-                        break;
-                    default:
-                        throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
-                }
-                loadSecretsString.append(");");
-
-                this.executeCommand(loadSecretsString.toString(), JobCancellationToken.createDummyJobCancellationToken());
+                String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(duckdbParametersSpec);
+                this.executeCommand(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {
             throw new RuntimeException(e);

@@ -59,6 +59,28 @@ public class DuckdbConnectionSpecObjectMother {
     }
 
     /**
+     * Creates a default connection spec to DuckDB with s3 setup.
+     * @return Connection spec to a DuckDB.
+     */
+    public static ConnectionSpec createForFilesOnS3(DuckdbSourceFilesType duckdbSourceFilesType) {
+        ConnectionSpec connectionSpec = new ConnectionSpec()
+        {{
+            setProviderType(ProviderType.duckdb);
+            setDuckdb(new DuckdbParametersSpec()
+            {{
+                setReadMode(DuckdbReadMode.files);
+                setSourceFilesType(duckdbSourceFilesType);
+                setSecretsType(DuckdbSecretsType.s3);
+                setUser("aws_example_key_id");
+                setPassword("aws_example_secret");
+                setRegion("eu-central-1");
+            }});
+        }};
+
+        return connectionSpec;
+    }
+
+    /**
      * Returns the default schema used for a testable DuckDB database. Tables are created in this schema.
      * @return Schema name.
      */
