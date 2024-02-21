@@ -18,10 +18,23 @@ export interface CheckboxProps {
   isDisabled?: boolean;
 }
 
+const getStep = (checked: boolean | undefined) => {
+  if (typeof checked === 'undefined') {
+    return 3;
+  }
+  if (checked === true) {
+    return 1;
+  }
+  if (checked === false) {
+    return 2;
+  }
+  return 3;
+};
+
 const CheckboxThreeSteps = ({
   label,
   className,
-  checked = false,
+  checked,
   onChange,
   tooltipText,
   disabled,
@@ -30,7 +43,7 @@ const CheckboxThreeSteps = ({
   checkClassName,
   isDisabled
 }: CheckboxProps) => {
-  const ref = useRef(1);
+  const ref = useRef(getStep(checked));
   const handleOnChange = () => {
     if (ref.current < 3) {
       ref.current = ref.current + 1;
@@ -66,7 +79,7 @@ const CheckboxThreeSteps = ({
             'absolute top-1/2 rounded-sm -translate-y-1/2 left-0 h-4 w-4 flex items-center justify-center text-sm',
             checked ? checkClassName + ' bg-teal-500 border-0' : 'border',
             error ? 'border-red-500' : 'border-gray-150',
-            isDisabled || ref.current === 3 ? 'bg-gray-200' : ''
+            isDisabled || checked === undefined ? 'bg-gray-200' : ''
           )}
         >
           {checked && (

@@ -16,12 +16,14 @@ export default function ConfigurationItemRow({
   };
   //debug why is not gray
   return (
-    <CheckboxThreeSteps
-      label={label}
-      checked={value ?? defaultValue}
-      onChange={handleChange}
-      labelPosition="right"
-      className={className}
-    />
+    <>
+      <CheckboxThreeSteps
+        label={label}
+        checked={value ?? defaultValue}
+        onChange={handleChange}
+        labelPosition="right"
+        className={className}
+      />
+    </>
   );
 }
