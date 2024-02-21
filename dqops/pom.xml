@@ -1022,6 +1022,7 @@
 								<property name="duckdb.version" value="${duckdb.version}"/>
 								<property name="project.basedir" value="${project.basedir}"/>
 
+								<!-- the definitions of platforms only - open duckdb-extensions-ant-build.xml to edit extensions -->
 								<ant antfile="${project.basedir}/duckdb-extensions-ant-build.xml">
 									<property name="duckdb.platform_name" value="linux_amd64"/>
 								</ant>
