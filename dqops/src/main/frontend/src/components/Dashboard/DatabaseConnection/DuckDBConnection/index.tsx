@@ -69,8 +69,8 @@ const DuckdbConnection = ({
           freezeFileType={freezeFileType}
         >
           <KeyValueProperties
-            properties={duckdb?.properties}
-            onChange={(properties) => onChange({ properties: properties })}
+            properties={duckdb?.directories}
+            onChange={(properties) => onChange({ directories: properties })}
           />
         </FileFormatConfiguration>
       </SectionWrapper>
