@@ -222,9 +222,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         loadSecretsString.append("TYPE ").append(secretsType.toString().toUpperCase());
                         // todo: use the default credentials when below are not set
                         // todo: use secretValueProvider for the below
-                        loadSecretsString.append("KEY_ID ").append(duckdbParametersSpec.getUser());
-                        loadSecretsString.append("SECRET ").append(duckdbParametersSpec.getPassword());
-                        loadSecretsString.append("REGION ").append(duckdbParametersSpec.getRegion());
+                        loadSecretsString.append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("'");
+                        loadSecretsString.append("SECRET '").append(duckdbParametersSpec.getPassword()).append("'");
+                        loadSecretsString.append("REGION '").append(duckdbParametersSpec.getRegion()).append("'");
                         break;
                     default:
                         throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
