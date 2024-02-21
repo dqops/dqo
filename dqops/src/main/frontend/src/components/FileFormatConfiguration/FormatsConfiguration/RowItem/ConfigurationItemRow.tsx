@@ -33,7 +33,7 @@ export default function ConfigurationItemRow({
         <div className={className}>
           <div>{label}</div>
           <SelectInput
-            options={[{ label: '', values: '' }, ...options]}
+            options={options}
             value={String(value ?? defaultValue)}
             onChange={handleChange}
           />

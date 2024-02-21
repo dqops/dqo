@@ -86,7 +86,11 @@ export default function FileFormatConfiguration({
               onChangeFile(value);
               cleanConfiguration();
             }}
-            value={fileFormatType.toUpperCase()}
+            value={
+              fileFormatType === DuckdbParametersSpecSourceFilesTypeEnum.parquet
+                ? fileFormatType.replace(/./, (c) => c.toUpperCase())
+                : fileFormatType.toUpperCase()
+            }
           />
         )}
         {freezeFileType && <div>{fileFormatType}</div>}

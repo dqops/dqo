@@ -42,12 +42,15 @@ export default function CsvFormatConfiguration({
         value: configuration?.compression,
         onChange: (str) => {
           onChangeConfiguration({
-            compression: str as CsvFileFormatSpecCompressionEnum
+            compression:
+              String(str).length > 0
+                ? (str as CsvFileFormatSpecCompressionEnum)
+                : undefined
           });
         },
         isEnum: true,
-        options: compressionEnumOptions,
-        defaultValue: CsvFileFormatSpecCompressionEnum.auto
+        options: [{ label: '', value: '' }, ...compressionEnumOptions],
+        defaultValue: ''
       },
       {
         label: 'Date format',

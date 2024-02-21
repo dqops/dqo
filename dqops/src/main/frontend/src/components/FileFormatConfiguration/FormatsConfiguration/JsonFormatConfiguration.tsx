@@ -76,12 +76,17 @@ export default function JsonFormatConfiguration({
       {
         label: 'Compression',
         value: configuration?.compression,
-        onChange: (str) =>
+        onChange: (str) => {
           onChangeConfiguration({
-            compression: str as JsonFileFormatSpecCompressionEnum
-          }),
+            compression:
+              String(str).length > 0
+                ? (str as JsonFileFormatSpecCompressionEnum)
+                : undefined
+          });
+        },
         isEnum: true,
-        options: compressionEnumOptions
+        options: [{ label: '', value: '' }, ...compressionEnumOptions],
+        defaultValue: ''
       },
       {
         label: 'Date format',
@@ -93,10 +98,14 @@ export default function JsonFormatConfiguration({
         value: configuration?.format,
         onChange: (str) =>
           onChangeConfiguration({
-            format: str as JsonFileFormatSpecFormatEnum
+            format:
+              String(str).length > 0
+                ? (str as JsonFileFormatSpecFormatEnum)
+                : undefined
           }),
         isEnum: true,
-        options: jsonFormatOptions
+        options: [{ label: '', value: '' }, ...jsonFormatOptions],
+        defaultValue: ''
       },
       {
         label: 'Maximum depth',
@@ -121,10 +130,14 @@ export default function JsonFormatConfiguration({
         value: configuration?.records,
         onChange: (str) =>
           onChangeConfiguration({
-            records: str as JsonFileFormatSpecRecordsEnum
+            records:
+              String(str).length > 0
+                ? (str as JsonFileFormatSpecRecordsEnum)
+                : undefined
           }),
         isEnum: true,
-        options: jsonRecordsOptions
+        options: [{ label: '', value: '' }, ...jsonRecordsOptions],
+        defaultValue: ''
       },
       {
         label: 'Sample size',
