@@ -6,7 +6,8 @@ import {
   TimeWindowFilterParameters,
   CheckModel,
   FieldModel,
-  RuleParametersModel
+  RuleParametersModel,
+  RuleThresholdsModel
 } from '../../api';
 import SvgIcon from '../SvgIcon';
 import CheckSettings from './CheckSettings';
@@ -178,25 +179,36 @@ const CheckListItem = ({
     if (!configured) {
       closeExpand();
     }
+
+    let newRuleConfiguration : RuleThresholdsModel | undefined = configured ? {
+        ...check.rule
+    } : {};
+    
+    if (!check?.rule?.warning?.configured &&
+        !check?.rule?.error?.configured && 
+        !check?.rule?.fatal?.configured) {
+      newRuleConfiguration = {
+        ...newRuleConfiguration,
+        error: {
+          ...check.rule?.error,
+          configured: true
+        }
+      };
+    }
+
     handleChange({
       configured,
       disabled: configured ? check?.disabled : null,
       ...(configured
         ? {
-            rule: {
-              ...check.rule,
-              error: {
-                ...check.rule?.error,
-                configured: true
-              }
-            }
+            rule: newRuleConfiguration
           }
         : {})
     });
   };
 
   const onRunCheck = async () => {
-    if (!check.configured || check?.disabled) {
+    if (!(check?.default_check || check.configured) || check?.disabled) {
       return;
     }
     await onUpdate();
@@ -419,7 +431,7 @@ const CheckListItem = ({
                     <SvgIcon
                       name="play"
                       className={clsx("h-[18px]", canUserRunChecks === false ? "text-gray-500 cursor-not-allowed" :  "text-primary cursor-pointer")}
-                      onClick={canUserRunChecks!==false ? onRunCheck : undefined}
+                      onClick={canUserRunChecks!==false && (check?.configured || check?.default_check) ? onRunCheck : undefined}
                     />
                   </div>
                 </Tooltip>
