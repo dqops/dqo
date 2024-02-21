@@ -198,7 +198,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     private List<String> getAvailableExtensions(){
-        return Arrays.asList("httpfs");
+        return Arrays.asList(
+                "httpfs",
+                "aws"
+        );
     }
 
     /**

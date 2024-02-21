@@ -23,5 +23,7 @@
              verbose="true"
              usetimestamp="true"/>
 
+        <!-- IMPORTANT! Remember to add the extension in DuckdbSourceConnection -->
+
     </target>
 </project>
