@@ -9,9 +9,9 @@ import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigInteger;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
@@ -28,7 +28,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setFormat(JsonFormatType.array);
             setHivePartitioning(true);
             setIgnoreErrors(true);
-            setMaximumDepth(BigInteger.TEN);
+            setMaximumDepth(10L);
             setMaximumObjectSize(200L);
             setRecords("auto");
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
@@ -69,6 +69,38 @@ public class JsonFileFormatSpecTest extends BaseTest {
         JsonFileFormatSpec sut = new JsonFileFormatSpec();
         String output = sut.buildSourceTableOptionsString(List.of("/dev/table.json"), null);
         assertTrue(output.contains("read_json"));
+    }
+
+    @Test
+    void deepClone_onInstanceWithAllFieldsSet_clones(){
+        JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
+            setAutoDetect(true);
+            setCompression("gzip");
+            setConvertStringsToIntegers(true);
+            setDateformat("%m/%d/%Y");
+            setFilename(true);
+            setFormat(JsonFormatType.array);
+            setHivePartitioning(true);
+            setIgnoreErrors(true);
+            setMaximumDepth(10L);
+            setMaximumObjectSize(200L);
+            setRecords("auto");
+            setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
+        }};
+
+        JsonFileFormatSpec sutCloned = sut.deepClone();
+        assertNotNull(sutCloned.getAutoDetect());
+        assertNotNull(sutCloned.getCompression());
+        assertNotNull(sutCloned.getConvertStringsToIntegers());
+        assertNotNull(sutCloned.getDateformat());
+        assertNotNull(sutCloned.getFilename());
+        assertNotNull(sutCloned.getFormat());
+        assertNotNull(sutCloned.getHivePartitioning());
+        assertNotNull(sutCloned.getIgnoreErrors());
+        assertNotNull(sutCloned.getMaximumDepth());
+        assertNotNull(sutCloned.getMaximumObjectSize());
+        assertNotNull(sutCloned.getRecords());
+        assertNotNull(sutCloned.getTimestampformat());
     }
 
 }
