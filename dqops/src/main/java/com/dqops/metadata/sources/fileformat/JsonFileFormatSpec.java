@@ -16,7 +16,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
-import java.math.BigInteger;
 import java.util.List;
 import java.util.Objects;
 
@@ -68,7 +67,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private BigInteger maximumDepth;
+    private Long maximumDepth;
 
     @JsonPropertyDescription("\tThe maximum size of a JSON object (in bytes)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -251,7 +250,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Returns a maximum nesting depth to which the automatic schema detection detects types.
      * @return The maximum depth of json to be read.
      */
-    public BigInteger getMaximumDepth() {
+    public Long getMaximumDepth() {
         return maximumDepth;
     }
 
@@ -259,7 +258,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets a maximum nesting depth to which the automatic schema detection detects types.
      * @param maximumDepth The maximum depth of json to be read.
      */
-    public void setMaximumDepth(BigInteger maximumDepth) {
+    public void setMaximumDepth(Long maximumDepth) {
         setDirtyIf(!Objects.equals(this.maximumDepth, maximumDepth));
         this.maximumDepth = maximumDepth;
     }
