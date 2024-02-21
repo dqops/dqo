@@ -4,6 +4,7 @@ import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
+import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
 
 interface IKeyValuePropertyItemProps {
   propertyKey: string;
@@ -57,11 +58,9 @@ const KeyValuePropertyItem = ({
         {/* {propertyKey} */}
       </td>
       <td className="pr-4 min-w-40 py-2 w-1/2">
-        <FieldTypeInput
+        <FieldTypeTextarea
           value={value}
           onChange={(val) => onChangeValue(propertyKey, val)}
-          credential={true}
-          data={sharedCredentials}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">

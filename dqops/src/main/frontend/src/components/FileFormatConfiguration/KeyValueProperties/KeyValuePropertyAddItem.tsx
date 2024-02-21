@@ -4,6 +4,7 @@ import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
 import Input from '../../Input';
+import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
@@ -31,7 +32,7 @@ export default function KeyValuePropertyAddItem({
         <Input value={key} onChange={(e) => setKey(e.target.value)} />
       </td>
       <td className="pr-4 min-w-40 py-2 w-1/2">
-        <FieldTypeInput
+        <FieldTypeTextarea
           value={value}
           onChange={(val) => setValue(val)}
           credential={true}
