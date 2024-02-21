@@ -199,6 +199,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.settings, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.credentials, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.dictionaries, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.patterns, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_check_results, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, userIdentity, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.column.partitioned;
+package com.dqops.checks.table.monitoring;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -29,62 +29,62 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)
+ * Container of table level monitoring, divided by the time window (daily, monthly, etc.)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnPartitionedChecksRootSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnPartitionedChecksRootSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class TableMonitoringCheckCategoriesSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("daily", o -> o.daily);
             put("monthly", o -> o.monthly);
         }
     };
 
-    @JsonPropertyDescription("Configuration of day partitioned data quality checks evaluated at a column level.")
+    @JsonPropertyDescription("Configuration of daily monitoring evaluated at a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnDailyPartitionedCheckCategoriesSpec daily;
+    private TableDailyMonitoringCheckCategoriesSpec daily;
 
-    @JsonPropertyDescription("Configuration of monthly partitioned data quality checks evaluated at a column level.")
+    @JsonPropertyDescription("Configuration of monthly monitoring evaluated at a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMonthlyPartitionedCheckCategoriesSpec monthly;
+    private TableMonthlyMonitoringCheckCategoriesSpec monthly;
 
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
     /**
-     * Returns daily partitioned checks.
-     * @return Daily partitioned checks.
+     * Returns daily monitoring.
+     * @return Daily monitoring.
      */
-    public ColumnDailyPartitionedCheckCategoriesSpec getDaily() {
+    public TableDailyMonitoringCheckCategoriesSpec getDaily() {
         return daily;
     }
 
     /**
-     * Sets the daily partitioned checks container.
-     * @param daily New daily partitioned checks container.
+     * Sets the daily monitoring checks container.
+     * @param daily New daily monitoring checks container.
      */
-    public void setDaily(ColumnDailyPartitionedCheckCategoriesSpec daily) {
+    public void setDaily(TableDailyMonitoringCheckCategoriesSpec daily) {
 		this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
 		this.propagateHierarchyIdToField(daily, "daily");
     }
 
     /**
-     * Returns monthly partitioned checks.
-     * @return Monthly partitioned checks.
+     * Returns monthly monitoring checks.
+     * @return Monthly monitoring checks.
      */
-    public ColumnMonthlyPartitionedCheckCategoriesSpec getMonthly() {
+    public TableMonthlyMonitoringCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
     /**
-     * Sets the monthly partitioned checks container.
-     * @param monthly New monthly partitioned checks container.
+     * Sets the monthly monitoring checks container.
+     * @param monthly New monthly monitoring checks container.
      */
-    public void setMonthly(ColumnMonthlyPartitionedCheckCategoriesSpec monthly) {
+    public void setMonthly(TableMonthlyMonitoringCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));
         this.monthly = monthly;
         this.propagateHierarchyIdToField(monthly, "monthly");

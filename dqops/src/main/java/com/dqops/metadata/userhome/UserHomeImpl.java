@@ -19,6 +19,9 @@ import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.credentials.SharedCredentialListImpl;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternListImpl;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionListImpl;
@@ -51,6 +54,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
             put("file_indices", o -> o.fileIndices);
             put("dashboards", o -> o.dashboards);
             put("default_schedules", o -> o.defaultSchedules);
+            put("table_default_checks_patterns", o -> o.tableDefaultChecksPatterns);
+            put("column_default_checks_patterns", o -> o.columnDefaultChecksPatterns);
             put("default_observability_checks", o -> o.defaultObservabilityChecks);
             put("default_notification_webhooks", o -> o.defaultNotificationWebhooks);
         }
@@ -74,6 +79,16 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * The settings that are configured take precedence over configuration from the DQOps command line parameters and environment variables.
      */
     private MonitoringSchedulesWrapperImpl defaultSchedules;
+
+    /**
+     * The collection of default checks configurations for tables matching a pattern.
+     */
+    private TableDefaultChecksPatternListImpl tableDefaultChecksPatterns;
+
+    /**
+     * The collection of default checks configurations for columns matching a pattern.
+     */
+    private ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns;
 
     /**
      * The default configuration of Data Observability checks that are tracking volume, detecting schema drifts and basic anomalies on data.
@@ -105,6 +120,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDashboards(new DashboardFolderListSpecWrapperImpl());
         this.setDefaultSchedules(new MonitoringSchedulesWrapperImpl());
         this.setDefaultObservabilityChecks(new DefaultObservabilityCheckWrapperImpl());
+        this.setTableDefaultChecksPatterns(new TableDefaultChecksPatternListImpl());
+        this.setColumnDefaultChecksPatterns(new ColumnDefaultChecksPatternListImpl());
         this.setDefaultNotificationWebhooks(new DefaultIncidentWebhookNotificationsWrapperImpl());
     }
 
@@ -123,6 +140,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param dashboards Custom dashboards wrapper.
      * @param schedules Default monitoring schedules wrapper.
      * @param observabilityCheck Default observability checks wrapper.
+     * @param tableDefaultChecksPatterns Default table-level checks.
+     * @param columnDefaultChecksPatterns Default column-level checks.
      */
     public UserHomeImpl(UserDomainIdentity userIdentity,
                         ConnectionListImpl connections,
@@ -136,6 +155,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
                         DashboardFolderListSpecWrapperImpl dashboards,
                         MonitoringSchedulesWrapperImpl schedules,
                         DefaultObservabilityCheckWrapperImpl observabilityCheck,
+                        TableDefaultChecksPatternListImpl tableDefaultChecksPatterns,
+                        ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns,
                         DefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks) {
         this.userIdentity = userIdentity;
 		this.setConnections(connections);
@@ -149,6 +170,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.setDashboards(dashboards);
         this.setDefaultSchedules(schedules);
         this.setDefaultObservabilityChecks(observabilityCheck);
+        this.setTableDefaultChecksPatterns(tableDefaultChecksPatterns);
+        this.setColumnDefaultChecksPatterns(columnDefaultChecksPatterns);
         this.setDefaultNotificationWebhooks(notificationWebhooks);
     }
 
@@ -380,6 +403,50 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns the collection of default table checks.
+     * @return A collection of default table checks.
+     */
+    @Override
+    public TableDefaultChecksPatternListImpl getTableDefaultChecksPatterns() {
+        return tableDefaultChecksPatterns;
+    }
+
+    /**
+     * Sets a container of default table-level checks.
+     * @param tableDefaultChecksPatterns Default table-level checks.
+     */
+    public void setTableDefaultChecksPatterns(TableDefaultChecksPatternListImpl tableDefaultChecksPatterns) {
+        this.tableDefaultChecksPatterns = tableDefaultChecksPatterns;
+        if (tableDefaultChecksPatterns != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "table_default_checks_patterns");
+            tableDefaultChecksPatterns.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("table_default_checks_patterns").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
+     * Returns the collection of default column checks.
+     * @return A collection of default column checks.
+     */
+    @Override
+    public ColumnDefaultChecksPatternListImpl getColumnDefaultChecksPatterns() {
+        return columnDefaultChecksPatterns;
+    }
+
+    /**
+     * Sets a collection of default column checks.
+     * @param columnDefaultChecksPatterns Default column checks.
+     */
+    public void setColumnDefaultChecksPatterns(ColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns) {
+        this.columnDefaultChecksPatterns = columnDefaultChecksPatterns;
+        if (columnDefaultChecksPatterns != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "column_default_checks_patterns");
+            columnDefaultChecksPatterns.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("column_default_checks_patterns").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
      * @return User's default data observability checks configuration.
      */
@@ -454,6 +521,8 @@ public class UserHomeImpl implements UserHome, Cloneable {
         this.getDashboards().flush();
         this.getDefaultSchedules().flush();
         this.getDefaultObservabilityChecks().flush();
+        this.getTableDefaultChecksPatterns().flush();
+        this.getColumnDefaultChecksPatterns().flush();
         this.getDefaultNotificationWebhook().flush();
 
         this.clearDirty(false); // children that were saved should be already not dirty, the next assert will detect forgotten instances
@@ -685,6 +754,12 @@ public class UserHomeImpl implements UserHome, Cloneable {
             if (cloned.defaultObservabilityChecks != null) {
                 cloned.defaultObservabilityChecks = (DefaultObservabilityCheckWrapperImpl) cloned
                         .defaultObservabilityChecks.deepClone();
+            }
+            if (cloned.tableDefaultChecksPatterns != null) {
+                cloned.tableDefaultChecksPatterns = (TableDefaultChecksPatternListImpl) cloned.tableDefaultChecksPatterns.deepClone();
+            }
+            if (cloned.columnDefaultChecksPatterns != null) {
+                cloned.columnDefaultChecksPatterns = (ColumnDefaultChecksPatternListImpl) cloned.columnDefaultChecksPatterns.deepClone();
             }
             if (cloned.defaultNotificationWebhooks != null) {
                 cloned.defaultNotificationWebhooks = (DefaultIncidentWebhookNotificationsWrapperImpl) cloned

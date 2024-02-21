@@ -16,18 +16,19 @@
 
 package com.dqops.checks.defaults.services;
 
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 /**
  * Service that will apply the default configuration of the data observability (the default checks) on new tables and columns that are imported.
@@ -46,24 +47,6 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
     }
 
     /**
-     * Applies the default configuration of default checks on a list of tables that were imported.
-     * @param tableSpecList List of tables.
-     * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
-     * @param userHome User home, to read the configuration.
-     */
-    @Override
-    public void applyDefaultChecksOnTableAndColumns(List<TableSpec> tableSpecList, ProviderDialectSettings providerDialectSettings, UserHome userHome) {
-        if (userHome.getDefaultObservabilityChecks() == null
-                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            return;
-        }
-
-        for (TableSpec targetTableSpec :  tableSpecList) {
-            applyDefaultChecksOnTableAndColumns(targetTableSpec, providerDialectSettings, userHome);
-        }
-    }
-
-    /**
      * Applies the default configuration of default checks on a table.
      *
      * @param targetTableSpec         Target table specification.
@@ -72,17 +55,16 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
      */
     @Override
     public void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ProviderDialectSettings providerDialectSettings, UserHome userHome) {
-        if (userHome.getDefaultObservabilityChecks() == null
-                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            return;
+        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : userHome.getTableDefaultChecksPatterns() ) {
+            TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
+            defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings);
         }
 
-        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
-
-        defaultDataObservabilityChecks.applyOnTable(targetTableSpec, providerDialectSettings);
-
         for (ColumnSpec targetColumnSpec : targetTableSpec.getColumns().values()) {
-            defaultDataObservabilityChecks.applyOnColumn(targetColumnSpec, providerDialectSettings);
+            for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : userHome.getColumnDefaultChecksPatterns() ) {
+                ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
+                defaultChecksPattern.applyOnColumn(targetColumnSpec, providerDialectSettings);
+            }
         }
     }
 
@@ -113,14 +95,10 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        if (userHome.getDefaultObservabilityChecks() == null
-                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            return;
+        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : userHome.getTableDefaultChecksPatterns() ) {
+            TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
+            defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings);
         }
-
-        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
-
-        defaultDataObservabilityChecks.applyOnTable(targetTableSpec, providerDialectSettings);
     }
 
     /**
@@ -135,12 +113,9 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        if (userHome.getDefaultObservabilityChecks() == null
-                || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            return;
+        for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : userHome.getColumnDefaultChecksPatterns() ) {
+            ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
+            defaultChecksPattern.applyOnColumn(targetColumnSpec, providerDialectSettings);
         }
-
-        DefaultObservabilityChecksSpec defaultDataObservabilityChecks = userHome.getDefaultObservabilityChecks().getSpec();
-        defaultDataObservabilityChecks.applyOnColumn(targetColumnSpec, providerDialectSettings);
     }
 }

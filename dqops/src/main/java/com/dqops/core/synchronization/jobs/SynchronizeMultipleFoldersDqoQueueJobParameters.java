@@ -96,6 +96,12 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
     private boolean dictionaries;
 
     /**
+     * Synchronize the "patterns" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"patterns\" folder.")
+    private boolean patterns;
+
+    /**
      * Synchronize the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("Synchronize the \".data/sensor_readouts\" folder.")
@@ -167,6 +173,10 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
             this.dictionaries = true;
         }
 
+        if (localFoldersStatusModel.getPatterns() == FolderSynchronizationStatus.changed) {
+            this.patterns = true;
+        }
+
         if (localFoldersStatusModel.getDataSensorReadouts() == FolderSynchronizationStatus.changed) {
             this.dataSensorReadouts = true;
         }
@@ -199,6 +209,7 @@ public class SynchronizeMultipleFoldersDqoQueueJobParameters implements Cloneabl
         this.settings = true;
         this.credentials = true;
         this.dictionaries = true;
+        this.patterns = true;
         this.dataSensorReadouts = true;
         this.dataCheckResults = true;
         this.dataStatistics = true;

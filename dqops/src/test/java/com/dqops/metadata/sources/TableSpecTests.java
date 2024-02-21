@@ -18,7 +18,7 @@ package com.dqops.metadata.sources;
 import com.dqops.BaseTest;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
@@ -156,7 +156,7 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void hasAnyChecksConfigured_whenOneDailyMonitoringCheckConfigured_thenReturnsTrue() {
-        TableMonitoringChecksSpec monitoring = new TableMonitoringChecksSpec();
+        TableMonitoringCheckCategoriesSpec monitoring = new TableMonitoringCheckCategoriesSpec();
         TableDailyMonitoringCheckCategoriesSpec daily = new TableDailyMonitoringCheckCategoriesSpec();
         TableVolumeDailyMonitoringChecksSpec volume = new TableVolumeDailyMonitoringChecksSpec();
         volume.setDailyRowCount(new TableRowCountCheckSpec());
@@ -168,7 +168,7 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void hasAnyChecksConfigured_whenOneMonthlyMonitoringCheckConfigured_thenReturnsTrue() {
-        TableMonitoringChecksSpec monitoring = new TableMonitoringChecksSpec();
+        TableMonitoringCheckCategoriesSpec monitoring = new TableMonitoringCheckCategoriesSpec();
         TableMonthlyMonitoringCheckCategoriesSpec daily = new TableMonthlyMonitoringCheckCategoriesSpec();
         TableVolumeMonthlyMonitoringChecksSpec volume = new TableVolumeMonthlyMonitoringChecksSpec();
         volume.setMonthlyRowCount(new TableRowCountCheckSpec());

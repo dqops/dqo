@@ -90,6 +90,11 @@ public final class BuiltInFolderNames {
     public static final String DICTIONARIES = "dictionaries";
 
     /**
+     * Folder with the configuration of default check patterns.
+     */
+    public static final String PATTERNS = "patterns";
+
+    /**
      * Local log folder inside the user home that stores logs.
      */
     public static final String LOGS = ".logs";

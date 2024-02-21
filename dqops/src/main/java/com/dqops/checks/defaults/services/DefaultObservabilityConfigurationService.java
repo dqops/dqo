@@ -22,21 +22,10 @@ import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 
-import java.util.List;
-
 /**
  * Service that will apply the default configuration of the data observability (the default checks) on new tables and columns that are imported.
  */
 public interface DefaultObservabilityConfigurationService {
-    /**
-     * Applies the default configuration of default checks on a list of tables that were imported.
-     *
-     * @param tableSpecList           List of tables.
-     * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
-     * @param userHome                User home, to read the configuration.
-     */
-    void applyDefaultChecksOnTableAndColumns(List<TableSpec> tableSpecList, ProviderDialectSettings providerDialectSettings, UserHome userHome);
-
     /**
      * Applies the default configuration of default checks on a table and its columns.
      *

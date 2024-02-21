@@ -81,6 +81,13 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus dictionaries = FolderSynchronizationStatus.unchanged;
 
     /**
+     * The synchronization status of the "patterns" folder.
+     */
+    @JsonPropertyDescription("The synchronization status of the \"patterns\" folder.")
+    @Setter(AccessLevel.NONE)
+    private FolderSynchronizationStatus patterns = FolderSynchronizationStatus.unchanged;
+
+    /**
      * The synchronization status of the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("The synchronization status of the \".data/sensor_readouts\" folder.")
@@ -136,6 +143,8 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return credentials;
             case dictionaries:
                 return dictionaries;
+            case patterns:
+                return patterns;
             case data_sensor_readouts:
                 return dataSensorReadouts;
             case data_check_results:
@@ -181,6 +190,9 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return;
             case dictionaries:
                 this.dictionaries = newStatus;
+                return;
+            case patterns:
+                this.patterns = newStatus;
                 return;
             case data_sensor_readouts:
                 this.dataSensorReadouts = newStatus;

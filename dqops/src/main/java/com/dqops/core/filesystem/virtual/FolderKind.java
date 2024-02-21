@@ -118,9 +118,21 @@ public enum FolderKind {
     DICTIONARIES,
 
     /**
-     * Subfolder in the dictionaies folder.
+     * Subfolder in the dictionaries folder.
     */
     @JsonProperty("dictionaries_subfolder")
-    DICTIONARIES_SUBFOLDER
+    DICTIONARIES_SUBFOLDER,
+
+    /**
+     * Patterns folder.
+     */
+    @JsonProperty("patterns")
+    PATTERNS,
+
+    /**
+     * Subfolder in the patterns folder.
+     */
+    @JsonProperty("patterns_subfolder")
+    PATTERNS_SUBFOLDER
 }
 

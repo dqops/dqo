@@ -16109,6 +16109,11 @@
           "description" : "The synchronization status of the \"dictionaries\" folder.",
           "enum" : [ "unchanged", "changed", "synchronizing" ]
         },
+        "patterns" : {
+          "type" : "string",
+          "description" : "The synchronization status of the \"patterns\" folder.",
+          "enum" : [ "unchanged", "changed", "synchronizing" ]
+        },
         "data_sensor_readouts" : {
           "type" : "string",
           "description" : "The synchronization status of the \".data/sensor_readouts\" folder.",
@@ -21696,7 +21701,7 @@
       },
       "description" : "Full column model"
     },
-    "ColumnMonitoringChecksRootSpec" : {
+    "ColumnMonitoringCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -24216,7 +24221,7 @@
         }
       }
     },
-    "ColumnPartitionedChecksRootSpec" : {
+    "ColumnPartitionedCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -25993,11 +25998,11 @@
         },
         "monitoring_checks" : {
           "description" : "Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.",
-          "$ref" : "#/definitions/ColumnMonitoringChecksRootSpec"
+          "$ref" : "#/definitions/ColumnMonitoringCheckCategoriesSpec"
         },
         "partitioned_checks" : {
           "description" : "Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-          "$ref" : "#/definitions/ColumnPartitionedChecksRootSpec"
+          "$ref" : "#/definitions/ColumnPartitionedCheckCategoriesSpec"
         },
         "statistics" : {
           "description" : "Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.",
@@ -31775,7 +31780,7 @@
         },
         "convert_strings_to_integers" : {
           "type" : "boolean",
-          "description" : "\tWhether strings representing integer values should be converted to a numerical type."
+          "description" : "Whether strings representing integer values should be converted to a numerical type."
         },
         "dateformat" : {
           "type" : "string",
@@ -31787,12 +31792,12 @@
         },
         "format" : {
           "type" : "string",
-          "description" : "\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
+          "description" : "Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
           "enum" : [ "auto", "unstructured", "newline_delimited", "array" ]
         },
         "hive_partitioning" : {
           "type" : "boolean",
-          "description" : "\tWhether or not to interpret the path as a hive partitioned path."
+          "description" : "Whether or not to interpret the path as a hive partitioned path."
         },
         "ignore_errors" : {
           "type" : "boolean",
@@ -31806,7 +31811,7 @@
         "maximum_object_size" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "\tThe maximum size of a JSON object (in bytes)"
+          "description" : "The maximum size of a JSON object (in bytes)"
         },
         "records" : {
           "type" : "string",
@@ -31814,7 +31819,7 @@
         },
         "timestampformat" : {
           "type" : "string",
-          "description" : "\tSpecifies the date format to use when parsing timestamps."
+          "description" : "Specifies the date format to use when parsing timestamps."
         }
       }
     },
@@ -33601,6 +33606,10 @@
           "type" : "boolean",
           "description" : "Synchronize the \"dictionaries\" folder."
         },
+        "patterns" : {
+          "type" : "boolean",
+          "description" : "Synchronize the \"patterns\" folder."
+        },
         "dataSensorReadouts" : {
           "type" : "boolean",
           "description" : "Synchronize the \".data/sensor_readouts\" folder."
@@ -33655,7 +33664,7 @@
       "properties" : {
         "folder" : {
           "type" : "string",
-          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
+          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
         },
         "direction" : {
           "type" : "string",
@@ -35024,7 +35033,7 @@
       },
       "description" : "Full table model, including all nested objects like columns or checks."
     },
-    "TableMonitoringChecksSpec" : {
+    "TableMonitoringCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -35180,7 +35189,7 @@
         }
       }
     },
-    "TablePartitionedChecksRootSpec" : {
+    "TablePartitionedCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -36117,11 +36126,11 @@
         },
         "monitoring_checks" : {
           "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
-          "$ref" : "#/definitions/TableMonitoringChecksSpec"
+          "$ref" : "#/definitions/TableMonitoringCheckCategoriesSpec"
         },
         "partitioned_checks" : {
           "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-          "$ref" : "#/definitions/TablePartitionedChecksRootSpec"
+          "$ref" : "#/definitions/TablePartitionedCheckCategoriesSpec"
         },
         "statistics" : {
           "description" : "Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.",

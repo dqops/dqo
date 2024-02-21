@@ -19,6 +19,8 @@ import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.metadata.basespecs.Flushable;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapper;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionList;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
 import com.dqops.metadata.definitions.sensors.SensorDefinitionList;
@@ -135,6 +137,18 @@ public interface UserHome extends Flushable, HierarchyNode {
      * @return Collection of default schedules definitions.
      */
     MonitoringSchedulesWrapper getDefaultSchedules();
+
+    /**
+     * Returns a collection of named patterns with the default configuration of table-level checks.
+     * @return Collection of table-level default checks patterns.
+     */
+    TableDefaultChecksPatternList getTableDefaultChecksPatterns();
+
+    /**
+     * Returns a collection of named patterns with the default configuration of column-level checks.
+     * @return Collection of column-level default checks patterns.
+     */
+    ColumnDefaultChecksPatternList getColumnDefaultChecksPatterns();
 
     /**
      * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.

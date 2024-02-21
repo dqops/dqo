@@ -13729,6 +13729,13 @@ definitions:
         - "unchanged"
         - "changed"
         - "synchronizing"
+      patterns:
+        type: "string"
+        description: "The synchronization status of the \"patterns\" folder."
+        enum:
+        - "unchanged"
+        - "changed"
+        - "synchronizing"
       data_sensor_readouts:
         type: "string"
         description: "The synchronization status of the \".data/sensor_readouts\"\
@@ -20041,7 +20048,7 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Full column model"
-  ColumnMonitoringChecksRootSpec:
+  ColumnMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -22688,7 +22695,7 @@ definitions:
         type: "string"
         description: "SQL WHERE clause added to the sensor query. Both the table level\
           \ filter and a sensor query filter are added, separated by an AND operator."
-  ColumnPartitionedChecksRootSpec:
+  ColumnPartitionedCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -24544,14 +24551,14 @@ definitions:
           \ are data quality checks that are evaluated for each period of time (daily,\
           \ weekly, monthly, etc.). A monitoring stores only the most recent data\
           \ quality check result for each period of time."
-        $ref: "#/definitions/ColumnMonitoringChecksRootSpec"
+        $ref: "#/definitions/ColumnMonitoringCheckCategoriesSpec"
       partitioned_checks:
         description: "Configuration of column level date/time partitioned checks.\
           \ Partitioned data quality checks are evaluated for each partition separately,\
           \ raising separate alerts at a partition level. The table does not need\
           \ to be physically partitioned by date, it is possible to run data quality\
           \ checks for each day or month of data separately."
-        $ref: "#/definitions/ColumnPartitionedChecksRootSpec"
+        $ref: "#/definitions/ColumnPartitionedCheckCategoriesSpec"
       statistics:
         description: "Custom configuration of a column level statistics collector\
           \ (a basic profiler). Enables customization of the statistics collector\
@@ -30562,7 +30569,7 @@ definitions:
           \ t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
       convert_strings_to_integers:
         type: "boolean"
-        description: "\tWhether strings representing integer values should be converted\
+        description: "Whether strings representing integer values should be converted\
           \ to a numerical type."
       dateformat:
         type: "string"
@@ -30573,7 +30580,7 @@ definitions:
           \ the result."
       format:
         type: "string"
-        description: "\tCan be one of ['auto', 'unstructured', 'newline_delimited',\
+        description: "Can be one of ['auto', 'unstructured', 'newline_delimited',\
           \ 'array']."
         enum:
         - "auto"
@@ -30582,8 +30589,7 @@ definitions:
         - "array"
       hive_partitioning:
         type: "boolean"
-        description: "\tWhether or not to interpret the path as a hive partitioned\
-          \ path."
+        description: "Whether or not to interpret the path as a hive partitioned path."
       ignore_errors:
         type: "boolean"
         description: "Whether to ignore parse errors (only possible when format is\
@@ -30596,13 +30602,13 @@ definitions:
       maximum_object_size:
         type: "integer"
         format: "int64"
-        description: "\tThe maximum size of a JSON object (in bytes)"
+        description: "The maximum size of a JSON object (in bytes)"
       records:
         type: "string"
         description: "Can be one of ['auto', 'true', 'false']"
       timestampformat:
         type: "string"
-        description: "\tSpecifies the date format to use when parsing timestamps."
+        description: "Specifies the date format to use when parsing timestamps."
   MaxCountRule0ErrorParametersSpec:
     type: "object"
     properties:
@@ -32340,6 +32346,9 @@ definitions:
       dictionaries:
         type: "boolean"
         description: "Synchronize the \"dictionaries\" folder."
+      patterns:
+        type: "boolean"
+        description: "Synchronize the \"patterns\" folder."
       dataSensorReadouts:
         type: "boolean"
         description: "Synchronize the \".data/sensor_readouts\" folder."
@@ -32406,6 +32415,7 @@ definitions:
         - "settings"
         - "credentials"
         - "dictionaries"
+        - "patterns"
         - "_indexes"
         - "_local_settings"
       direction:
@@ -33897,7 +33907,7 @@ definitions:
           \ captured, this field returns the file parsing error message and the file\
           \ location."
     description: "Full table model, including all nested objects like columns or checks."
-  TableMonitoringChecksSpec:
+  TableMonitoringCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -34037,7 +34047,7 @@ definitions:
         description: "Alerting threshold that raises a fatal data quality issue which\
           \ indicates a serious data quality problem"
         $ref: "#/definitions/MaxDaysRule7ParametersSpec"
-  TablePartitionedChecksRootSpec:
+  TablePartitionedCheckCategoriesSpec:
     type: "object"
     properties:
       daily:
@@ -35105,14 +35115,14 @@ definitions:
           \ are data quality checks that are evaluated for each period of time (daily,\
           \ weekly, monthly, etc.). A monitoring check stores only the most recent\
           \ data quality check result for each period of time."
-        $ref: "#/definitions/TableMonitoringChecksSpec"
+        $ref: "#/definitions/TableMonitoringCheckCategoriesSpec"
       partitioned_checks:
         description: "Configuration of table level date/time partitioned checks. Partitioned\
           \ data quality checks are evaluated for each partition separately, raising\
           \ separate alerts at a partition level. The table does not need to be physically\
           \ partitioned by date, it is possible to run data quality checks for each\
           \ day or month of data separately."
-        $ref: "#/definitions/TablePartitionedChecksRootSpec"
+        $ref: "#/definitions/TablePartitionedCheckCategoriesSpec"
       statistics:
         description: "Configuration of table level data statistics collector (a basic\
           \ profiler). Configures which statistics collectors are enabled and how\

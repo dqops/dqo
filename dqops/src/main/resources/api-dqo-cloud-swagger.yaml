@@ -268,6 +268,38 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
+  /api/v1/accesstokenissue/rw/patterns:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketPatternsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with the configuration of default checks as check patterns (patterns\
+        \ folder)"
+      operationId: "issueBucketPatternsRWAccessToken"
+      parameters:
+      - name: "dataDomain"
+        in: "query"
+        description: "The name of the data domain"
+        required: false
+        type: "string"
+      - name: "owner"
+        in: "query"
+        description: "The email of account's owner"
+        required: false
+        type: "string"
+      - name: "tenantId"
+        in: "query"
+        description: "The tenant id"
+        required: false
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
   /api/v1/accesstokenissue/rw/rules:
     get:
       tags:
@@ -1006,6 +1038,7 @@ definitions:
         - "settings"
         - "credentials"
         - "dictionaries"
+        - "patterns"
       connections:
         type: "array"
         description: "Optional list of connection names that were modified and the\

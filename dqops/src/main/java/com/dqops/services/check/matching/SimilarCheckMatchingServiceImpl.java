@@ -18,11 +18,11 @@ package com.dqops.services.check.matching;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
@@ -208,7 +208,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 profilingChecks.getCheckTarget(), profilingChecks.getCheckType(), profilingChecks.getCheckTimeScale());
 
-        ColumnMonitoringChecksRootSpec monitoring = Objects.requireNonNullElseGet(columnSpec.getMonitoringChecks(), ColumnMonitoringChecksRootSpec::new);
+        ColumnMonitoringCheckCategoriesSpec monitoring = Objects.requireNonNullElseGet(columnSpec.getMonitoringChecks(), ColumnMonitoringCheckCategoriesSpec::new);
         ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = Objects.requireNonNullElseGet(monitoring.getDaily(), ColumnDailyMonitoringCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
                 this.specToModelCheckMappingService.createModel(dailyMonitoring,
@@ -221,7 +221,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                         checkSearchFilters, null, tableSpec, executionContext, ProviderType.bigquery, true),
                 monthlyMonitoring.getCheckTarget(), monthlyMonitoring.getCheckType(), monthlyMonitoring.getCheckTimeScale());
 
-        ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
+        ColumnPartitionedCheckCategoriesSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedCheckCategoriesSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.similarCheckGroupingKeyFactory,
                 this.specToModelCheckMappingService.createModel(dailyPartitioned,

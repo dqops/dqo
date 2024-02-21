@@ -104,6 +104,9 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case dictionaries:
                 return localUserHomePath.resolve(BuiltInFolderNames.DICTIONARIES);
 
+            case patterns:
+                return localUserHomePath.resolve(BuiltInFolderNames.PATTERNS);
+
             default:
                 throw new IllegalArgumentException("Unsupported root: " +  rootType.toString());
         }

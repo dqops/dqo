@@ -19,13 +19,13 @@ import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.numeric.ColumnNegativeCountCheckSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
@@ -340,7 +340,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullDailyMonitoring.setDailyNullsCount(nullsChecksSpec);
         ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoring = new ColumnDailyMonitoringCheckCategoriesSpec();
         dailyMonitoring.setNulls(nullDailyMonitoring);
-        ColumnMonitoringChecksRootSpec sampleMonitoring = new ColumnMonitoringChecksRootSpec();
+        ColumnMonitoringCheckCategoriesSpec sampleMonitoring = new ColumnMonitoringCheckCategoriesSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
         
         ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnMonitoringChecksDaily(
@@ -378,7 +378,7 @@ public class ColumnsControllerUTTests extends BaseTest {
         negativeMonthlyPartitionedChecks.setMonthlyPartitionNegativeValues(negativeChecksSpec);
         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCheck = new ColumnMonthlyPartitionedCheckCategoriesSpec();
         monthlyPartitionedCheck.setNumeric(negativeMonthlyPartitionedChecks);
-        ColumnPartitionedChecksRootSpec samplePartitionedCheck = new ColumnPartitionedChecksRootSpec();
+        ColumnPartitionedCheckCategoriesSpec samplePartitionedCheck = new ColumnPartitionedCheckCategoriesSpec();
         samplePartitionedCheck.setMonthly(monthlyPartitionedCheck);
         
         ResponseEntity<Mono<Void>> responseEntity = this.sut.updateColumnPartitionedChecksMonthly(

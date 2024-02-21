@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.table.partitioned;
+package com.dqops.checks.column.partitioned;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -29,28 +29,28 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)
+ * Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TablePartitionedChecksRootSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TablePartitionedChecksRootSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ColumnPartitionedCheckCategoriesSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPartitionedCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("daily", o -> o.daily);
             put("monthly", o -> o.monthly);
         }
     };
 
-    @JsonPropertyDescription("Configuration of day partitioned data quality checks evaluated at a table level.")
+    @JsonPropertyDescription("Configuration of day partitioned data quality checks evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDailyPartitionedCheckCategoriesSpec daily;
+    private ColumnDailyPartitionedCheckCategoriesSpec daily;
 
-    @JsonPropertyDescription("Configuration of monthly partitioned data quality checks evaluated at a table level..")
+    @JsonPropertyDescription("Configuration of monthly partitioned data quality checks evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMonthlyPartitionedCheckCategoriesSpec monthly;
+    private ColumnMonthlyPartitionedCheckCategoriesSpec monthly;
 
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
@@ -58,7 +58,7 @@ public class TablePartitionedChecksRootSpec extends AbstractSpec {
      * Returns daily partitioned checks.
      * @return Daily partitioned checks.
      */
-    public TableDailyPartitionedCheckCategoriesSpec getDaily() {
+    public ColumnDailyPartitionedCheckCategoriesSpec getDaily() {
         return daily;
     }
 
@@ -66,7 +66,7 @@ public class TablePartitionedChecksRootSpec extends AbstractSpec {
      * Sets the daily partitioned checks container.
      * @param daily New daily partitioned checks container.
      */
-    public void setDaily(TableDailyPartitionedCheckCategoriesSpec daily) {
+    public void setDaily(ColumnDailyPartitionedCheckCategoriesSpec daily) {
 		this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
 		this.propagateHierarchyIdToField(daily, "daily");
@@ -76,7 +76,7 @@ public class TablePartitionedChecksRootSpec extends AbstractSpec {
      * Returns monthly partitioned checks.
      * @return Monthly partitioned checks.
      */
-    public TableMonthlyPartitionedCheckCategoriesSpec getMonthly() {
+    public ColumnMonthlyPartitionedCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
@@ -84,7 +84,7 @@ public class TablePartitionedChecksRootSpec extends AbstractSpec {
      * Sets the monthly partitioned checks container.
      * @param monthly New monthly partitioned checks container.
      */
-    public void setMonthly(TableMonthlyPartitionedCheckCategoriesSpec monthly) {
+    public void setMonthly(ColumnMonthlyPartitionedCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));
         this.monthly = monthly;
         this.propagateHierarchyIdToField(monthly, "monthly");

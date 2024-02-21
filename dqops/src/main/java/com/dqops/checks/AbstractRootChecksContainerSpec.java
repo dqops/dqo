@@ -17,17 +17,19 @@ package com.dqops.checks;
 
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
+import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
+import com.dqops.checks.custom.CustomCheckSpec;
 import com.dqops.checks.custom.CustomCheckSpecMap;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonColumnCountMatchCheckSpec;
 import com.dqops.checks.table.checkspecs.comparison.TableComparisonRowCountMatchCheckSpec;
+import com.dqops.connectors.DataTypeCategory;
+import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
-import com.dqops.metadata.id.ChildFieldEntry;
-import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import com.dqops.metadata.id.HierarchyNode;
-import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.id.*;
 import com.dqops.metadata.scheduling.CheckRunScheduleGroup;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
+import com.dqops.utils.reflection.FieldInfo;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -160,5 +162,102 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
         }
 
         return false;
+    }
+
+    /**
+     * Copies all configured data quality checks from this root checks container (a container of default checks) to the target container.
+     * @param targetChecksContainer Target root checks container to copy the definitions.
+     * @param columnDataTypeCategory Detected data type of a column, if we are applying it on a column.
+     * @param dialectSettings Dialect settings.
+     */
+    public void copyChecksToContainer(AbstractRootChecksContainerSpec targetChecksContainer,
+                                      DataTypeCategory columnDataTypeCategory,
+                                      ProviderDialectSettings dialectSettings) {
+        if (this.isDefault()) {
+            return;
+        }
+
+        ChildHierarchyNodeFieldMap targetContainerChildMap = targetChecksContainer.childMap();
+
+        for (ChildFieldEntry defaultChecksCategoryEntry : this.childMap().getChildEntries()) {
+            HierarchyNode defaultCategoryNode = defaultChecksCategoryEntry.getGetChildFunc().apply(this);
+            if (defaultCategoryNode instanceof AbstractCheckCategorySpec) {
+                AbstractCheckCategorySpec defaultCheckCategory = (AbstractCheckCategorySpec)defaultCategoryNode;
+
+                if (defaultCheckCategory.isDefault()) {
+                    continue;
+                }
+
+                if (!DataTypeCategory.isDataTypeInList(columnDataTypeCategory, defaultCheckCategory.getSupportedDataTypeCategories())) {
+                    continue;
+                }
+
+                AbstractCheckCategorySpec targetCategoryContainer =(AbstractCheckCategorySpec)defaultChecksCategoryEntry.getGetChildFunc().apply(targetChecksContainer);;
+                if (targetCategoryContainer == null) {
+                    FieldInfo targetContainerCategoryFieldInfo = targetContainerChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksCategoryEntry.getChildName());
+                    targetCategoryContainer = (AbstractCheckCategorySpec)targetContainerCategoryFieldInfo.getFieldValueOrNewObject(targetChecksContainer);
+                    targetContainerCategoryFieldInfo.setFieldValue(targetCategoryContainer, targetChecksContainer);
+                }
+
+                ChildHierarchyNodeFieldMap targetCategoryChildMap = targetCategoryContainer.childMap();
+
+                for (ChildFieldEntry defaultChecksEntry : defaultCheckCategory.childMap().getChildEntries()) {
+                    HierarchyNode defaultCheckNode = defaultChecksEntry.getGetChildFunc().apply(defaultCheckCategory);
+                    if (defaultCheckNode instanceof AbstractCheckSpec<?,?,?,?>) {
+                        AbstractCheckSpec<?,?,?,?> defaultCheck = (AbstractCheckSpec<?,?,?,?>)defaultCheckNode;
+
+                        Object alreadyConfiguredCheckSpec = defaultChecksEntry.getGetChildFunc().apply(defaultCheckCategory);
+                        if (alreadyConfiguredCheckSpec != null) {
+                            continue;
+                        }
+
+                        AbstractCheckSpec<?,?,?,?> targetCheckCloned = defaultCheck.deepClone();
+                        targetCheckCloned.setDefaultCheck(true);
+                        FieldInfo targetCategoryCheckFieldInfo = targetCategoryChildMap.getReflectionClassInfo().getFieldByYamlName(defaultChecksEntry.getChildName());
+                        targetCategoryCheckFieldInfo.setFieldValue(targetCheckCloned, targetCategoryContainer);
+                    }
+                }
+
+                CustomCheckSpecMap defaultCategoryCustomChecks = defaultCheckCategory.getCustomChecks();
+                if (defaultCategoryCustomChecks != null && !defaultCategoryCustomChecks.isEmpty()) {
+                    CustomCategoryCheckSpecMap targetCategoryCustomChecks = targetCategoryContainer.getCustomChecks();
+                    if (targetCategoryCustomChecks == null) {
+                        targetCategoryCustomChecks = new CustomCategoryCheckSpecMap();
+                        targetCategoryContainer.setCustomChecks(targetCategoryCustomChecks);
+                    }
+
+                    for (Map.Entry<String, CustomCheckSpec> defaultCategoryCustomCheckKeyValue : defaultCategoryCustomChecks.entrySet()) {
+                        String customCheckName = defaultCategoryCustomCheckKeyValue.getKey();
+                        if (targetCategoryCustomChecks.containsKey(customCheckName)) {
+                            continue;
+                        }
+
+                        CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCategoryCustomCheckKeyValue.getValue().deepClone();
+                        clonedTargetCustomCheck.setDefaultCheck(true);
+                        targetCategoryCustomChecks.put(customCheckName, clonedTargetCustomCheck);
+                    }
+                }
+            }
+        }
+
+        CustomCheckSpecMap defaultCustomChecks = this.getCustom();
+        if (defaultCustomChecks != null && !defaultCustomChecks.isEmpty()) {
+            CustomCheckSpecMap targetCustomChecks = targetChecksContainer.getCustom();
+            if (targetCustomChecks == null) {
+                targetCustomChecks = new CustomCheckSpecMap();
+                targetChecksContainer.setCustom(targetCustomChecks);
+            }
+
+            for (Map.Entry<String, CustomCheckSpec> defaultCustomCheckKeyValue : defaultCustomChecks.entrySet()) {
+                String customCheckName = defaultCustomCheckKeyValue.getKey();
+                if (targetCustomChecks.containsKey(customCheckName)) {
+                    continue;
+                }
+
+                CustomCheckSpec clonedTargetCustomCheck = (CustomCheckSpec)defaultCustomCheckKeyValue.getValue().deepClone();
+                clonedTargetCustomCheck.setDefaultCheck(true);
+                targetCustomChecks.put(customCheckName, clonedTargetCustomCheck);
+            }
+        }
     }
 }

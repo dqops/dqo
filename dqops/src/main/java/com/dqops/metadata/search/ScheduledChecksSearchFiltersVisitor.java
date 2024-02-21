@@ -16,6 +16,8 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -99,5 +101,29 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<F
         foundNodes.add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
+    }
+
+    /**
+     * Accepts a list of default configuration of table observability checks wrappers.
+     *
+     * @param tableDefaultChecksPatternWrappers Table observability default checks list.
+     * @param parameter                         Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TableDefaultChecksPatternList tableDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
+    }
+
+    /**
+     * Accepts a default configuration of column observability checks wrapper.
+     *
+     * @param columnDefaultChecksPatternWrappers Column observability default checks specification.
+     * @param parameter                          Additional parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> parameter) {
+        return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 }
