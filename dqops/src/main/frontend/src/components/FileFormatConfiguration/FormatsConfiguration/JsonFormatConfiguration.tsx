@@ -164,27 +164,23 @@ export default function JsonFormatConfiguration({
           label: 'Convert strings to integers',
           value: configuration?.convert_strings_to_integers,
           onChange: (value) =>
-            onChangeConfiguration({ convert_strings_to_integers: value }),
-          defaultValue: false
+            onChangeConfiguration({ convert_strings_to_integers: value })
         },
         {
           label: 'Filename',
           value: configuration?.filename,
-          onChange: (value) => onChangeConfiguration({ filename: value }),
-          defaultValue: false
+          onChange: (value) => onChangeConfiguration({ filename: value })
         },
         {
           label: 'Hive partitioning',
           value: configuration?.hive_partitioning,
           onChange: (value) =>
-            onChangeConfiguration({ hive_partitioning: value }),
-          defaultValue: false
+            onChangeConfiguration({ hive_partitioning: value })
         },
         {
           label: 'Ignore errors',
           value: configuration?.ignore_errors,
-          onChange: (value) => onChangeConfiguration({ ignore_errors: value }),
-          defaultValue: false
+          onChange: (value) => onChangeConfiguration({ ignore_errors: value })
         }
       ];
     }, [configuration]);
