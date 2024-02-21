@@ -45,7 +45,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String compression;
+    private CompressionType compression;
 
     @JsonPropertyDescription("Specifies the date format to use when parsing dates.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -87,6 +87,10 @@ public class CsvFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String quote;
 
+    @JsonPropertyDescription("The number of sample rows for auto detection of parameters.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Long sampleSize;
+
     @JsonPropertyDescription("The number of lines at the top of the file to skip.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long skip;
@@ -118,6 +122,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.ignoreErrors, ignoreErrors);
         tableOptionsFormatter.formatStringWhenSet(Fields.newLine, newLine);
         tableOptionsFormatter.formatStringWhenSet(Fields.quote, quote);
+        tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatValueWhenSet(Fields.skip, skip);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
         return tableOptionsFormatter.toString();
@@ -185,7 +190,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @return Compression type.
      */
-    public String getCompression() {
+    public CompressionType getCompression() {
         return compression;
     }
 
@@ -194,7 +199,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      *
      * @param compression Compression type.
      */
-    public void setCompression(String compression) {
+    public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
@@ -391,6 +396,25 @@ public class CsvFileFormatSpec extends AbstractSpec {
     }
 
     /**
+     * Returns the number of sample rows for auto detection of parameters.
+     *
+     * @return Number of rows for sampling.
+     */
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    /**
+     * Sets the number of sample rows for auto detection of parameters.
+     *
+     * @param sampleSize Number of rows for sampling.
+     */
+    public void setSampleSize(Long sampleSize) {
+        setDirtyIf(!Objects.equals(this.sampleSize, sampleSize));
+        this.sampleSize = sampleSize;
+    }
+
+    /**
      * Returns the number of lines at the top of the file to skip.
      *
      * @return Number of lines to skip.
@@ -455,8 +479,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
      * @return Cloned, trimmed and expanded table specification.
      */
     public CsvFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        CsvFileFormatSpec cloned = (CsvFileFormatSpec) this.deepClone();
-        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        CsvFileFormatSpec cloned = this.deepClone();
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
         cloned.decimalSeparator = secretValueProvider.expandValue(cloned.decimalSeparator, lookupContext);
         cloned.delim = secretValueProvider.expandValue(cloned.delim, lookupContext);

@@ -21,7 +21,12 @@ public class CsvFileFormatSpecTest extends BaseTest {
             setAllVarchar(true);
             setAllowQuotedNulls(true);
             setAutoDetect(true);
+<<<<<<< HEAD
             setCompression("gzip");
+=======
+            setColumns(Map.of("col1", "type1", "col2", "type2"));
+            setCompression(CompressionType.gzip);
+>>>>>>> 29788271d33a20e59f4ef7aab9c46c208ed4a01e
             setDateformat("%m/%d/%Y");
             setDecimalSeparator(".");
             setDelim(",");

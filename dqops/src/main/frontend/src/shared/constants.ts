@@ -380,6 +380,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'Databricks'
   },
   {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'DuckDB',
+    iconName: 'duckdb',
+    displayName: 'DuckDB'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.mysql,
     name: 'MariaDB',
     iconName: 'mariadb',
