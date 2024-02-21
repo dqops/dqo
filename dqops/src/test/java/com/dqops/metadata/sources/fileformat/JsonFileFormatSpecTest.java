@@ -22,12 +22,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
-<<<<<<< HEAD
-            setCompression("gzip");
-=======
-            setColumns(Map.of("col1", "type1", "col2", "type2"));
             setCompression(CompressionType.gzip);
->>>>>>> 29788271d33a20e59f4ef7aab9c46c208ed4a01e
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
             setFilename(true);
