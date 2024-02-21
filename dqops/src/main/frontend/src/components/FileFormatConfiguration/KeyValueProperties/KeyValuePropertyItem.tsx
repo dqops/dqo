@@ -6,7 +6,6 @@ import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
 
 interface IKeyValuePropertyItemProps {
-  idx: number;
   propertyKey: string;
   properties: { [key: string]: string };
   onChange: (properties: { [key: string]: string }) => void;
@@ -16,7 +15,6 @@ interface IKeyValuePropertyItemProps {
 const KeyValuePropertyItem = ({
   propertyKey,
   properties,
-  idx,
   onChange,
   sharedCredentials
 }: IKeyValuePropertyItemProps) => {
@@ -35,6 +33,15 @@ const KeyValuePropertyItem = ({
     onChange(copiedProperties);
   };
 
+  const onChangeKey = (newKey: string) => {
+    if (newKey !== propertyKey) {
+      const updatedProperties = { ...properties };
+      updatedProperties[newKey] = value;
+      delete updatedProperties[propertyKey];
+      onChange(updatedProperties);
+    }
+  };
+
   const onChangeValue = (key: string, value: string) => {
     const copiedProperties = { ...properties };
     copiedProperties[key] = value;
@@ -43,11 +50,11 @@ const KeyValuePropertyItem = ({
   return (
     <tr>
       <td className="pr-4 min-w-40 py-2 w-1/2">
-        {/* <Input
+        <Input
           value={propertyKey}
-          // onChange={(e) => onChange(idx, [e.target.value, value])}
-        /> */}
-        {propertyKey}
+          onChange={(e) => onChangeKey(e.target.value)}
+        />
+        {/* {propertyKey} */}
       </td>
       <td className="pr-4 min-w-40 py-2 w-1/2">
         <FieldTypeInput

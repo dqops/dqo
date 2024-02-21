@@ -53,27 +53,24 @@ const DuckdbConnection = ({
 
   const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
     setFileFormatType(val);
-
+  console.log(duckdb?.directories);
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-      <SectionWrapper
-        title="File format configuration"
-        className="text-sm my-4 text-black"
+      <FileFormatConfiguration
+        fileFormatType={fileFormatType}
+        onChangeFile={onChangeFile}
+        configuration={configuration}
+        onChangeConfiguration={onChangeConfiguration}
+        cleanConfiguration={cleanConfiguration}
+        freezeFileType={freezeFileType}
       >
-        <FileFormatConfiguration
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-          configuration={configuration}
-          onChangeConfiguration={onChangeConfiguration}
-          cleanConfiguration={cleanConfiguration}
-          freezeFileType={freezeFileType}
-        >
-          <KeyValueProperties
-            properties={duckdb?.directories}
-            onChange={(properties) => onChange({ directories: properties })}
-          />
-        </FileFormatConfiguration>
-      </SectionWrapper>
+        <KeyValueProperties
+          properties={duckdb?.directories}
+          onChange={(properties) => {
+            onChange({ directories: properties }), console.log(properties);
+          }}
+        />
+      </FileFormatConfiguration>
     </SectionWrapper>
   );
 };

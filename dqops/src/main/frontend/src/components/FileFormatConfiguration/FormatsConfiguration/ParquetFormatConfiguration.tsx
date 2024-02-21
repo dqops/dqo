@@ -48,6 +48,7 @@ export default function ParquetFormatConfiguration({
   return (
     <FormatConfigurationRenderer
       configurationBooleans={parquetConfigurationBooleans}
+      type="Parquet"
     />
   );
 }

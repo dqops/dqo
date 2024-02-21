@@ -150,6 +150,7 @@ export default function CsvFormatConfiguration({
     <FormatConfigurationRenderer
       configuraitonStrings={csvConfiguration}
       configurationBooleans={csvConfigurationBoolean}
+      type="Csv"
     />
   );
 }

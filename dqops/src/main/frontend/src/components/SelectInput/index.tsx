@@ -63,7 +63,7 @@ const SelectInput = ({
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (onChange) {
-      onChange(e.target.value);
+      onChange(e?.target.value);
     }
     setIsChanged(true);
   };

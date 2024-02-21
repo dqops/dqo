@@ -73,8 +73,11 @@ export default function FileFormatConfiguration({
   ];
 
   return (
-    <>
-      <div className="flex items-center gap-x-5">
+    <SectionWrapper
+      title="File format configuration"
+      className="text-sm my-4 text-black"
+    >
+      <div className="flex items-center gap-x-5 py-4">
         <div>File format</div>
         {!freezeFileType && (
           <SelectInput
@@ -87,9 +90,9 @@ export default function FileFormatConfiguration({
           />
         )}
         {freezeFileType && <div>{fileFormatType}</div>}
-        {children}
       </div>
-      {renderConfiguration()}
-    </>
+      {children}
+      <div className="pt-8">{renderConfiguration()}</div>
+    </SectionWrapper>
   );
 }
