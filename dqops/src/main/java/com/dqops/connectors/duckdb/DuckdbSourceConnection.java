@@ -205,8 +205,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
         try {
             synchronized (loadSecretsLock) {
-                DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
-                String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(duckdbParametersSpec);
+                String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(getConnectionSpec());
                 this.executeCommand(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken());
             }
         } catch (Exception e) {

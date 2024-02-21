@@ -1,5 +1,7 @@
 package com.dqops.connectors.duckdb;
 
+import com.dqops.metadata.sources.ConnectionSpec;
+
 /**
  * Provides a queries specific to DuckDB with the human-readable formatting.
  */
@@ -7,15 +9,15 @@ public class DuckdbQueriesProvider {
 
     /**
      * Provides a CREATE SECRET query for especial secret type given in duckdb parameters spec.
-     * @param duckdbParametersSpec DuckDB parameters with credentials and setup.
+     * @param connectionSpec Connection spec with DuckDB parameters with credentials and setup.
      * @return Ready to execute create secrets query string.
      */
-    public static String provideCreateSecretQuery(DuckdbParametersSpec duckdbParametersSpec){
+    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec){
+        DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
         DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
         String indent = "    ";
-
         StringBuilder loadSecretsString = new StringBuilder();
-        loadSecretsString.append("CREATE SECRET (").append("\n");
+        loadSecretsString.append("CREATE SECRET ").append(connectionSpec.getConnectionName()).append(" (\n");
         switch (secretsType){
             case s3:
                 loadSecretsString.append(indent).append("TYPE ").append(secretsType.toString().toUpperCase()).append(",\n");
