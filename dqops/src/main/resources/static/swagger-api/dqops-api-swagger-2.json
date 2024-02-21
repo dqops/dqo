@@ -31800,6 +31800,7 @@
         },
         "maximum_depth" : {
           "type" : "integer",
+          "format" : "int64",
           "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
         },
         "maximum_object_size" : {
