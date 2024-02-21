@@ -58,7 +58,6 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const args = node ? node.id.toString().split('.') : [];
 
-  //todo: pass file_paths to createTable method, based on provider type
   const handleSubmit = async () => {
     try {
       setLoading(true);

@@ -1,20 +1,21 @@
 import React from 'react';
 import Input from '../../../Input';
 import Select from '../../../Select';
-import { TConfigurationItemRow } from './TConfigurationItemRow'
+import { TConfigurationItemRow } from './TConfigurationItemRow';
+import SelectInput from '../../../SelectInput';
 
 export default function ConfigurationItemRow({
   label,
   value,
   onChange,
-  defaultValue, 
+  defaultValue,
   isEnum,
   options,
   className
 }: TConfigurationItemRow) {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement> | string) => {
     if (typeof e === 'string') {
-      onChange(e)
+      onChange(e);
     } else {
       onChange(e.target.value);
     }
@@ -22,25 +23,22 @@ export default function ConfigurationItemRow({
 
   return (
     <div>
-      { !isEnum &&
+      {!isEnum && (
         <div className={className}>
           <div>{label}</div>
-          <Input 
-            value={value ?? defaultValue}
-            onChange={handleChange} 
-          />
+          <Input value={value ?? defaultValue} onChange={handleChange} />
         </div>
-      }
-      { isEnum && options &&
+      )}
+      {isEnum && options && (
         <div className={className}>
           <div>{label}</div>
-          <Select
+          <SelectInput
             options={options}
-            value={value ?? defaultValue}
+            value={String(value ?? defaultValue)}
             onChange={handleChange}
           />
         </div>
-      }
+      )}
     </div>
   );
 }

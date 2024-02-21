@@ -77,13 +77,13 @@ export default function FileFormatConfiguration({
       <div className="flex items-center gap-x-5">
         <div>File format</div>
         {!freezeFileType && (
-          <SelectInput // todo: bug on names, you see "csv" instead of "CSV"
+          <SelectInput
             options={sourceFilesTypeOptions}
             onChange={(value) => {
               onChangeFile(value);
               cleanConfiguration();
             }}
-            value={fileFormatType}
+            value={fileFormatType.toUpperCase()}
           />
         )}
         {freezeFileType && <div>{fileFormatType}</div>}
