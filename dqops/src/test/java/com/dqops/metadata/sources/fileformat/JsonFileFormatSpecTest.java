@@ -9,7 +9,6 @@ import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigInteger;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -28,7 +27,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setFormat(JsonFormatType.array);
             setHivePartitioning(true);
             setIgnoreErrors(true);
-            setMaximumDepth(BigInteger.TEN);
+            setMaximumDepth(10L);
             setMaximumObjectSize(200L);
             setRecords("auto");
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
