@@ -1,7 +1,15 @@
 package com.dqops.connectors.duckdb;
 
+/**
+ * Provides a queries specific to DuckDB with the human-readable formatting.
+ */
 public class DuckdbQueriesProvider {
 
+    /**
+     * Provides a CREATE SECRET query for especial secret type given in duckdb parameters spec.
+     * @param duckdbParametersSpec DuckDB parameters with credentials and setup.
+     * @return Ready to execute create secrets query string.
+     */
     public static String provideCreateSecretQuery(DuckdbParametersSpec duckdbParametersSpec){
         DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
         String indent = "    ";
@@ -24,6 +32,11 @@ public class DuckdbQueriesProvider {
         return loadSecretsString.toString();
     }
 
+    /**
+     * Provides query to set extension directory.
+     * @param dqoHomePath The dqo home path with local extensions for DuckDB
+     * @return Ready to execute query string.
+     */
     public static String provideSetExtensionsQuery(String dqoHomePath){
         StringBuilder setCustomRepository = new StringBuilder();
         setCustomRepository.append("SET extension_directory = ");
