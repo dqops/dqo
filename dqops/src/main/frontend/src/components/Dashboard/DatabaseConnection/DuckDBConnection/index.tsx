@@ -59,7 +59,7 @@ const DuckdbConnection = ({
 
   const secretsTypeOptions = [
     {
-      label: 'None',
+      label: 'Local',
       value: undefined
     },
     {
@@ -84,7 +84,7 @@ const DuckdbConnection = ({
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
       
       <Select
-          label="Cloud storage type"
+          label="Storage type"
           options={secretsTypeOptions}
           className="mb-4"
           value={ duckdb?.secrets_type }
@@ -118,25 +118,20 @@ const DuckdbConnection = ({
           />
         </>
       }
-
-      <SectionWrapper
-        title="File format configuration"
-        className="text-sm my-4 text-black"
+      
+      <FileFormatConfiguration
+        fileFormatType={fileFormatType}
+        onChangeFile={onChangeFile}
+        configuration={configuration}
+        onChangeConfiguration={onChangeConfiguration}
+        cleanConfiguration={cleanConfiguration}
+        freezeFileType={freezeFileType}
       >
-        <FileFormatConfiguration
-          fileFormatType={fileFormatType}
-          onChangeFile={onChangeFile}
-          configuration={configuration}
-          onChangeConfiguration={onChangeConfiguration}
-          cleanConfiguration={cleanConfiguration}
-          freezeFileType={freezeFileType}
-        >
-          <KeyValueProperties
-            properties={duckdb?.properties}
-            onChange={(properties) => onChange({ properties: properties })}
-          />
-        </FileFormatConfiguration>
-      </SectionWrapper>
+        <KeyValueProperties
+          properties={duckdb?.properties}
+          onChange={(properties) => onChange({ properties: properties })}
+        />
+      </FileFormatConfiguration>
     </SectionWrapper>
   );
 };
