@@ -1,6 +1,13 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.metadata.sources.ConnectionSpec;
+import com.dqops.utils.serialization.JsonSerializer;
+import com.dqops.utils.serialization.JsonSerializerImpl;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.HashFunction;
+import com.google.common.hash.Hashing;
+
+import java.nio.charset.StandardCharsets;
 
 /**
  * Provides a queries specific to DuckDB with the human-readable formatting.
@@ -17,7 +24,8 @@ public class DuckdbQueriesProvider {
         DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
         String indent = "    ";
         StringBuilder loadSecretsString = new StringBuilder();
-        loadSecretsString.append("CREATE SECRET ").append(connectionSpec.getConnectionName()).append(" (\n");
+        String secretName = "secret_" + calculateHash64(connectionSpec);
+        loadSecretsString.append("CREATE SECRET ").append(secretName).append(" (\n");
         switch (secretsType){
             case s3:
                 loadSecretsString.append(indent).append("TYPE ").append(secretsType.toString().toUpperCase()).append(",\n");
@@ -32,6 +40,14 @@ public class DuckdbQueriesProvider {
         }
         loadSecretsString.append("\n);");
         return loadSecretsString.toString();
+    }
+
+    private static HashCode calculateHash64(ConnectionSpec connectionSpec) {
+        JsonSerializer jsonSerializer = new JsonSerializerImpl();
+        String serialized = jsonSerializer.serialize(connectionSpec);
+        HashFunction hashFunction = Hashing.farmHashFingerprint64();
+        HashCode hash = hashFunction.hashString(serialized, StandardCharsets.UTF_8);
+        return hash;
     }
 
     /**

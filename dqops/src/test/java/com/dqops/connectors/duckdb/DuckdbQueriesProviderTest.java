@@ -1,23 +1,22 @@
 package com.dqops.connectors.duckdb;
 
-import com.dqops.metadata.id.HierarchyId;
+import com.dqops.BaseTest;
 import com.dqops.metadata.sources.ConnectionSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-class DuckdbQueriesProviderTest {
+@SpringBootTest
+class DuckdbQueriesProviderTest extends BaseTest {
 
     @Test
     void provideCreateSecretQuery_forS3_createsQuery() {
         ConnectionSpec connectionSpec = DuckdbConnectionSpecObjectMother.createForFilesOnS3(DuckdbSourceFilesType.csv);
-        connectionSpec.setHierarchyId(new HierarchyId("connection_name_example", "nothing")); // the last but one name is a connection name
 
         String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec);
 
         Assertions.assertEquals("""
-                        CREATE SECRET connection_name_example (
+                        CREATE SECRET secret_bd95a74421bc7192 (
                             TYPE S3,
                             KEY_ID 'aws_example_key_id',
                             SECRET 'aws_example_secret',
