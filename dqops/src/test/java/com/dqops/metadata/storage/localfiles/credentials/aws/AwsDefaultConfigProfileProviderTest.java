@@ -74,7 +74,7 @@ public class AwsDefaultConfigProfileProviderTest extends BaseTest {
         Assertions.assertTrue(profile.isPresent());
 
         Assertions.assertEquals("overridden-region",
-                profile.get().property(AwsConfigSettingNames.REGION).orElse(null));
+                profile.get().property(AwsConfigProfileSettingNames.REGION).orElse(null));
     }
 
     @Test
