@@ -82,7 +82,7 @@ const DuckdbConnection = ({
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-      
+
       <Select
           label="Storage type"
           options={secretsTypeOptions}
@@ -118,7 +118,7 @@ const DuckdbConnection = ({
           />
         </>
       }
-      
+
       <FileFormatConfiguration
         fileFormatType={fileFormatType}
         onChangeFile={onChangeFile}
@@ -128,8 +128,9 @@ const DuckdbConnection = ({
         freezeFileType={freezeFileType}
       >
         <KeyValueProperties
-          properties={duckdb?.properties}
-          onChange={(properties) => onChange({ properties: properties })}
+          properties={duckdb?.directories}
+          onChange={(directories) => onChange({ directories: directories })}
+          sharedCredentials={sharedCredentials}
         />
       </FileFormatConfiguration>
     </SectionWrapper>

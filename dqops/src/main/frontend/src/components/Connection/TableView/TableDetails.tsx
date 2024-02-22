@@ -269,26 +269,21 @@ const TableDetails = () => {
       </table>
       {connectionModel.provider_type ===
         ConnectionSpecProviderTypeEnum.duckdb && (
-        <SectionWrapper
-          title="File format configuration"
-          className="text-sm my-4 text-black"
+        <FileFormatConfiguration
+          fileFormatType={fileFormatType}
+          onChangeFile={onChangeFile}
+          configuration={configuration}
+          onChangeConfiguration={onChangeConfiguration}
+          cleanConfiguration={cleanConfiguration}
+          freezeFileType={false}
         >
-          <FileFormatConfiguration
-            fileFormatType={fileFormatType}
-            onChangeFile={onChangeFile}
-            configuration={configuration}
-            onChangeConfiguration={onChangeConfiguration}
-            cleanConfiguration={cleanConfiguration}
-            freezeFileType={false}
-          >
-            <FilePath
-              paths={paths}
-              onAddPath={onAddPath}
-              onChangePath={onChangePath}
-              onDeletePath={onDeletePath}
-            />
-          </FileFormatConfiguration>
-        </SectionWrapper>
+          <FilePath
+            paths={paths}
+            onAddPath={onAddPath}
+            onChangePath={onChangePath}
+            onDeletePath={onDeletePath}
+          />
+        </FileFormatConfiguration>
       )}
     </div>
   );

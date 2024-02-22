@@ -4,58 +4,75 @@ import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
+import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
 
 interface IKeyValuePropertyItemProps {
-  idx: number;
-  name: string;
-  value: string;
-  onRemove: (key: number) => void;
-  isLast?: boolean;
-  onChange: (key: number, value: [string, string]) => void;
-  onAdd: () => void;
+  propertyKey: string;
+  properties: { [key: string]: string };
+  onChange: (properties: { [key: string]: string }) => void;
   sharedCredentials?: SharedCredentialListModel[];
 }
 
 const KeyValuePropertyItem = ({
-  name,
-  value,
-  isLast,
-  idx,
-  onRemove,
+  propertyKey,
+  properties,
   onChange,
-  sharedCredentials,
-  onAdd
+  sharedCredentials
 }: IKeyValuePropertyItemProps) => {
+  const value = properties[propertyKey];
+  // const isLast = idx === Object.keys(properties).length - 1;
+
+  // const onAdd = (key: string, value: string) => {
+  //   const elem = { [key]: value };
+  //   onChange({ ...properties, ...elem });
+  // };
+
+  const onRemove = (key: string) => {
+    const copiedProperties = { ...properties };
+    delete copiedProperties[key];
+
+    onChange(copiedProperties);
+  };
+
+  const onChangeKey = (newKey: string) => {
+    if (newKey !== propertyKey) {
+      const updatedProperties = { ...properties };
+      updatedProperties[newKey] = value;
+      delete updatedProperties[propertyKey];
+      onChange(updatedProperties);
+    }
+  };
+
+  const onChangeValue = (key: string, value: string) => {
+    const copiedProperties = { ...properties };
+    copiedProperties[key] = value;
+    onChange(copiedProperties);
+  };
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
+      <td className="pr-4 min-w-40 py-2 w-1/4">
         <Input
-          value={name}
-          onChange={(e) => onChange(idx, [e.target.value, value])}
+          value={propertyKey}
+          onChange={(e) => onChangeKey(e.target.value)}
         />
+        {/* {propertyKey} */}
       </td>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
+      <td className="pr-4 min-w-40 py-2 w-3/4">
         <FieldTypeInput
           value={value}
-          onChange={(val) => onChange(idx, [name, val])}
-          credential={true}
+          onChange={(val) => onChangeValue(propertyKey, val)}
           data={sharedCredentials}
+          credential={true}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">
-        {isLast ? (
-          <IconButton className="bg-teal-500" size="sm" onClick={onAdd}>
-            <SvgIcon name="add" className="w-4" />
-          </IconButton>
-        ) : (
-          <IconButton
-            className="bg-teal-500"
-            size="sm"
-            onClick={() => onRemove(idx)}
-          >
-            <SvgIcon name="delete" className="w-4" />
-          </IconButton>
-        )}
+        <IconButton
+          className="bg-teal-500"
+          size="sm"
+          onClick={() => onRemove(propertyKey)}
+        >
+          <SvgIcon name="delete" className="w-4" />
+        </IconButton>
       </td>
     </tr>
   );

@@ -1,29 +1,31 @@
 import React from 'react';
 import ConfigurationItemRow from './FormatsConfiguration/RowItem/ConfigurationItemRow';
 import ConfigurationItemRowBoolean from './FormatsConfiguration/RowItem/ConfigurationItemRowBoolean';
-import { TConfigurationItemRow } from './FormatsConfiguration/RowItem/TConfigurationItemRow'
-import { TConfigurationItemRowBoolean } from './FormatsConfiguration/RowItem/TConfigurationItemRowBoolean'
+import { TConfigurationItemRow } from './FormatsConfiguration/RowItem/TConfigurationItemRow';
+import { TConfigurationItemRowBoolean } from './FormatsConfiguration/RowItem/TConfigurationItemRowBoolean';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 
 type TConfigurationProps = {
-  configuraitonStrings?: TConfigurationItemRow[],
-  configurationBooleans?: TConfigurationItemRowBoolean[]
+  configuraitonStrings?: TConfigurationItemRow[];
+  configurationBooleans?: TConfigurationItemRowBoolean[];
+  type: string;
 };
 
 const divStyle = {
   display: 'grid',
   gridTemplateColumns: '1fr 1fr 1fr',
   gap: '16px'
-}
+};
 
 export default function FormatConfigurationRenderer({
-   configuraitonStrings,
-   configurationBooleans
+  configuraitonStrings,
+  configurationBooleans,
+  type
 }: TConfigurationProps) {
-
   return (
-    <>
-      <div className="py-2"/>
-      {configuraitonStrings &&
+    <SectionWrapper title={`${type} format options`}>
+      <div className="py-2" />
+      {configuraitonStrings && (
         <div style={divStyle}>
           {configuraitonStrings.map((x, index) => (
             <ConfigurationItemRow
@@ -37,10 +39,10 @@ export default function FormatConfigurationRenderer({
             />
           ))}
         </div>
-      }
+      )}
 
-      {configurationBooleans &&
-        <div style={divStyle} className='py-5'>
+      {configurationBooleans && (
+        <div style={divStyle} className="py-5">
           {configurationBooleans.map((x, index) => (
             <ConfigurationItemRowBoolean
               key={index}
@@ -51,7 +53,7 @@ export default function FormatConfigurationRenderer({
             />
           ))}
         </div>
-      }
-    </>
+      )}
+    </SectionWrapper>
   );
 }

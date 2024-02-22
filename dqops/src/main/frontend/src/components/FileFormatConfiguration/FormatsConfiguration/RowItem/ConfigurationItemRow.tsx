@@ -25,7 +25,7 @@ export default function ConfigurationItemRow({
     <div>
       {!isEnum && (
         <div className={className}>
-          <div>{label}</div>
+          <div className="pb-1">{label}</div>
           <Input value={value ?? defaultValue} onChange={handleChange} />
         </div>
       )}

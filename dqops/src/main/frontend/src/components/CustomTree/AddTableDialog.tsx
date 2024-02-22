@@ -169,26 +169,21 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
         </div>
         {connectionModel.provider_type ===
           ConnectionSpecProviderTypeEnum.duckdb && (
-          <SectionWrapper
-            title="File format configuration"
-            className="text-sm my-4 text-black"
+          <FileFormatConfiguration
+            fileFormatType={fileFormatType}
+            onChangeFile={onChangeFile}
+            configuration={configuration}
+            onChangeConfiguration={onChangeConfiguration}
+            cleanConfiguration={cleanConfiguration}
+            freezeFileType={true}
           >
-            <FileFormatConfiguration
-              fileFormatType={fileFormatType}
-              onChangeFile={onChangeFile}
-              configuration={configuration}
-              onChangeConfiguration={onChangeConfiguration}
-              cleanConfiguration={cleanConfiguration}
-              freezeFileType={true}
-            >
-              <FilePath
-                paths={paths}
-                onAddPath={onAddPath}
-                onChangePath={onChangePath}
-                onDeletePath={onDeletePath}
-              />
-            </FileFormatConfiguration>
-          </SectionWrapper>
+            <FilePath
+              paths={paths}
+              onAddPath={onAddPath}
+              onChangePath={onChangePath}
+              onDeletePath={onDeletePath}
+            />
+          </FileFormatConfiguration>
         )}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
