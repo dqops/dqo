@@ -65,7 +65,7 @@ const TableDetails = () => {
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecSourceFilesTypeEnum>(format);
   const [configuration, setConfiguration] = useState<TConfiguration>(
-    tableBasic?.file_format[format] ?? {}
+    tableBasic?.file_format?.[format] ?? {}
   );
 
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
@@ -132,7 +132,7 @@ const TableDetails = () => {
   useEffect(() => {
     if (
       Object.keys(configuration ?? {}).length === 0 &&
-      tableBasic?.file_format[format]
+      tableBasic?.file_format?.[format]
     ) {
       setConfiguration(tableBasic?.file_format[format]);
     }
