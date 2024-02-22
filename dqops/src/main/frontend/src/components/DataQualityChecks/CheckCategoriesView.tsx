@@ -138,7 +138,7 @@ const CheckCategoriesView = ({
                   onClick={() => setDeleteDataDialogOpened(true)}
                 />
                 <div className="hidden group-hover:block absolute bottom-5 right-0 px-2 py-1 bg-black text-white text-xxs rounded-md mt-1">
-                  Delete data for the category
+                  Delete data quality resutls for the category
                 </div>
               </div>
               <div className="group relative">

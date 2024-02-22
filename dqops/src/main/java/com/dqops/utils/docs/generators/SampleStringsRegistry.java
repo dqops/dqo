@@ -70,6 +70,10 @@ public class SampleStringsRegistry {
         return "sample_rule";
     }
 
+    public static String getPatternName() {
+        return "default";
+    }
+
     public static String getFullCheckName() {
         return String.join("/", getTarget(), getCategoryName(), getCheckName());
     }

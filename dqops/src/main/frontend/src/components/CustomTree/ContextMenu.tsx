@@ -180,7 +180,7 @@ const ContextMenu = ({
                       : undefined;
                   }}
                 >
-                  Run Checks
+                  Run checks
                 </div>
                 <RunChecksDialog
                   open={runChecksDialogOpened}

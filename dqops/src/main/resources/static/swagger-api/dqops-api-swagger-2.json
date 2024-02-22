@@ -44,6 +44,9 @@
     "name" : "Defaults",
     "description" : "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns."
   }, {
+    "name" : "DefaultTableCheckPatterns",
+    "description" : "Operations for managing the configuration of the default table-level checks for tables matching a pattern."
+  }, {
     "name" : "Dictionaries",
     "description" : "Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks."
   }, {
@@ -11791,6 +11794,209 @@
         } ]
       }
     },
+    "/api/default/checks/table" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getAllDefaultTableChecksPatterns",
+        "description" : "Returns a flat list of all table-level default check patterns configured for this instance. Default checks are applied on tables dynamically.",
+        "operationId" : "getAllDefaultTableChecksPatterns",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/DefaultTableChecksPatternListModel"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultTableChecksPattern",
+        "description" : "Returns a default checks pattern definition",
+        "operationId" : "getDefaultTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Table pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+            }
+          },
+          "404" : {
+            "description" : "Pattern name not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "createDefaultTableChecksPattern",
+        "description" : "Creates (adds) a new default table-level checks pattern configuration.",
+        "operationId" : "createDefaultTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "201" : {
+            "description" : "New checks pattern successfully created"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "409" : {
+            "description" : "Check pattern with the same name already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultTableChecksPattern",
+        "description" : "Updates an default table-level checks pattern",
+        "operationId" : "updateDefaultTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+          }
+        }, {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default table-level checks pattern successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "deleteDefaultTableChecksPattern",
+        "description" : "Deletes a default table-level checks pattern",
+        "operationId" : "deleteDefaultTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default table-level checks pattern successfully deleted"
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/defaults/defaultchecks/dataobservability/monitoring/daily/column" : {
       "get" : {
         "tags" : [ "Defaults" ],
@@ -14297,7 +14503,7 @@
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "description" : "List of rule definitions",
+          "description" : "Rule model",
           "required" : false,
           "schema" : {
             "$ref" : "#/definitions/RuleModel"
@@ -30702,6 +30908,46 @@
         }
       }
     },
+    "DefaultTableChecksPatternListModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name."
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default table-level checks pattern list model"
+    },
+    "DefaultTableChecksPatternModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name"
+        },
+        "pattern_spec" : {
+          "description" : "The default checks specification.",
+          "$ref" : "#/definitions/TableDefaultChecksPatternSpec"
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default table-level checks pattern model"
+    },
     "DeleteStoredDataQueueJobParameters" : {
       "type" : "object",
       "properties" : {
@@ -34867,6 +35113,23 @@
         "fatal" : {
           "description" : "Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem",
           "$ref" : "#/definitions/MaxDaysRule7ParametersSpec"
+        }
+      }
+    },
+    "TableDefaultChecksPatternSpec" : {
+      "type" : "object",
+      "properties" : {
+        "profiling_checks" : {
+          "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
+          "$ref" : "#/definitions/TableProfilingCheckCategoriesSpec"
+        },
+        "monitoring_checks" : {
+          "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
+          "$ref" : "#/definitions/TableMonitoringCheckCategoriesSpec"
+        },
+        "partitioned_checks" : {
+          "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
+          "$ref" : "#/definitions/TablePartitionedCheckCategoriesSpec"
         }
       }
     },

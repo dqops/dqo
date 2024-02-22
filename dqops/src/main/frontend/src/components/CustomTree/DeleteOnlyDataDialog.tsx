@@ -79,7 +79,7 @@ const DeleteOnlyDataDialog = ({
   return (
     <Dialog open={open} handler={onClose} className="min-w-200 p-4">
       <DialogHeader className="font-bold text-center justify-center">
-        Delete data
+        Delete data quality results
       </DialogHeader>
       <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
         {hierarchiArray?.[0] && (
