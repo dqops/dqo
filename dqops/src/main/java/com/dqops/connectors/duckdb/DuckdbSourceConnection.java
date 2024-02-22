@@ -55,8 +55,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final HomeLocationFindService homeLocationFindService;
     private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
-    private final static Object loadSecretsLock = new Object();
-    private static boolean secretsLoaded = false;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -163,7 +161,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
         registerExtensions();
-        loadSecrets();
+        ensureSecretsLoaded();
     }
 
     /**
@@ -199,15 +197,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     /**
      * Loads secrets that are used during the connection to a cloud storage service.
      */
-    private void loadSecrets(){
-        if(secretsLoaded){
-            return;
-        }
+    private void ensureSecretsLoaded(){
+        ConnectionSpec connectionSpec = getConnectionSpec();
         try {
-            synchronized (loadSecretsLock) {
-                String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(getConnectionSpec());
-                this.executeCommand(createSecretQuery, JobCancellationToken.createDummyJobCancellationToken());
-            }
+            DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

@@ -1,13 +1,7 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.metadata.sources.ConnectionSpec;
-import com.dqops.utils.serialization.JsonSerializer;
-import com.dqops.utils.serialization.JsonSerializerImpl;
 import com.google.common.hash.HashCode;
-import com.google.common.hash.HashFunction;
-import com.google.common.hash.Hashing;
-
-import java.nio.charset.StandardCharsets;
 
 /**
  * Provides a queries specific to DuckDB with the human-readable formatting.
@@ -19,12 +13,12 @@ public class DuckdbQueriesProvider {
      * @param connectionSpec Connection spec with DuckDB parameters with credentials and setup.
      * @return Ready to execute create secrets query string.
      */
-    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec){
+    public static String provideCreateSecretQuery(ConnectionSpec connectionSpec, HashCode secretHash){
         DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
         DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
         String indent = "    ";
         StringBuilder loadSecretsString = new StringBuilder();
-        String secretName = "secret_" + calculateHash64(connectionSpec);
+        String secretName = "secret_" + secretHash;
         loadSecretsString.append("CREATE SECRET ").append(secretName).append(" (\n");
         switch (secretsType){
             case s3:
@@ -42,13 +36,6 @@ public class DuckdbQueriesProvider {
         return loadSecretsString.toString();
     }
 
-    private static HashCode calculateHash64(ConnectionSpec connectionSpec) {
-        JsonSerializer jsonSerializer = new JsonSerializerImpl();
-        String serialized = jsonSerializer.serialize(connectionSpec);
-        HashFunction hashFunction = Hashing.farmHashFingerprint64();
-        HashCode hash = hashFunction.hashString(serialized, StandardCharsets.UTF_8);
-        return hash;
-    }
 
     /**
      * Provides query to set extension directory.
