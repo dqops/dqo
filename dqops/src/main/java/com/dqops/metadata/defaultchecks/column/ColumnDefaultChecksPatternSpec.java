@@ -19,7 +19,11 @@ package com.dqops.metadata.defaultchecks.column;
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -221,6 +225,211 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
                 defaultChecksMonthly.copyChecksToContainer(targetContainer, null, dialectSettings);
             }
+        }
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column default checks specification.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer) {
+        return getColumnCheckRootContainer(checkType, checkTimeScale, attachCheckContainer, true);
+    }
+
+    /**
+     * Retrieves a non-null root check container for the requested category.  Returns null when the check container is not present.
+     * Creates a new check root container object if there was no such object configured and referenced
+     * from the column default checks specification.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
+     * @param createEmptyContainerWhenNull Creates a new check container instance when it is null.
+     * @return Newly created container root.
+     */
+    public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer,
+                                                                       boolean createEmptyContainerWhenNull) {
+        switch (checkType) {
+            case profiling: {
+                if (this.profilingChecks != null) {
+                    return this.profilingChecks;
+                }
+
+                if (!createEmptyContainerWhenNull) {
+                    return null;
+                }
+
+                ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+                columnProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "profiling_checks"));
+                if (attachCheckContainer) {
+                    this.profilingChecks = columnProfilingCheckCategoriesSpec;
+                }
+                return columnProfilingCheckCategoriesSpec;
+            }
+
+            case monitoring: {
+                ColumnMonitoringCheckCategoriesSpec monitoringSpec = this.monitoringChecks;
+                if (monitoringSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
+                    monitoringSpec = new ColumnMonitoringCheckCategoriesSpec();
+                    monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
+                    if (attachCheckContainer) {
+                        this.monitoringChecks = monitoringSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (monitoringSpec.getDaily() != null) {
+                            return monitoringSpec.getDaily();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
+                        ColumnDailyMonitoringCheckCategoriesSpec dailyMonitoringCategoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
+                        dailyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            monitoringSpec.setDaily(dailyMonitoringCategoriesSpec);
+                        }
+                        return dailyMonitoringCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (monitoringSpec.getMonthly() != null) {
+                            return monitoringSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
+                        ColumnMonthlyMonitoringCheckCategoriesSpec monthlyMonitoringCategoriesSpec = new ColumnMonthlyMonitoringCheckCategoriesSpec();
+                        monthlyMonitoringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(monitoringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            monitoringSpec.setMonthly(monthlyMonitoringCategoriesSpec);
+                        }
+                        return monthlyMonitoringCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            case partitioned: {
+                ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = this.partitionedChecks;
+                if (partitionedChecksSpec == null) {
+                    if (!createEmptyContainerWhenNull) {
+                        return null;
+                    }
+
+                    partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
+                    partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                    if (attachCheckContainer) {
+                        this.partitionedChecks = partitionedChecksSpec;
+                    }
+                }
+
+                switch (checkTimeScale) {
+                    case daily: {
+                        if (partitionedChecksSpec.getDaily() != null) {
+                            return partitionedChecksSpec.getDaily();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
+                        ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
+                        dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setDaily(dailyPartitionedCategoriesSpec);
+                        }
+                        return dailyPartitionedCategoriesSpec;
+                    }
+                    case monthly: {
+                        if (partitionedChecksSpec.getMonthly() != null) {
+                            return partitionedChecksSpec.getMonthly();
+                        }
+
+                        if (!createEmptyContainerWhenNull) {
+                            return null;
+                        }
+
+                        ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();
+                        monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setMonthly(monthlyPartitionedCategoriesSpec);
+                        }
+                        return monthlyPartitionedCategoriesSpec;
+                    }
+                    default:
+                        throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
+                }
+            }
+
+            default: {
+                throw new IllegalArgumentException("Unsupported check type");
+            }
+        }
+    }
+
+    /**
+     * Sets the given container of checks at a proper level of the check hierarchy.
+     * The object could be a profiling check container, one of monitoring containers or one of partitioned checks container.
+     * @param checkRootContainer Root check container to store.
+     */
+    @JsonIgnore
+    public void setColumnCheckRootContainer(AbstractRootChecksContainerSpec checkRootContainer) {
+        if (checkRootContainer == null) {
+            throw new NullPointerException("Root check container cannot be null");
+        }
+
+        if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
+            this.setProfilingChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
+            }
+
+            this.getMonitoringChecks().setDaily((ColumnDailyMonitoringCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyMonitoringCheckCategoriesSpec) {
+            if (this.monitoringChecks == null) {
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
+            }
+
+            this.getMonitoringChecks().setMonthly((ColumnMonthlyMonitoringCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
+            }
+
+            this.getPartitionedChecks().setDaily((ColumnDailyPartitionedCheckCategoriesSpec)checkRootContainer);
+        }
+        else if (checkRootContainer instanceof ColumnMonthlyPartitionedCheckCategoriesSpec) {
+            if (this.partitionedChecks == null) {
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
+            }
+
+            this.getPartitionedChecks().setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);
+        } else {
+            throw new IllegalArgumentException("Unsupported check root container type " + checkRootContainer.getClass().getCanonicalName());
         }
     }
 }
