@@ -17,6 +17,8 @@
 package com.dqops.checks.defaults.services;
 
 import com.dqops.connectors.ProviderDialectSettings;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 
@@ -33,5 +35,41 @@ public interface DefaultObservabilityConfigurationService {
      * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
      * @param userHome                User home, to read the configuration.
      */
-    void applyDefaultChecks(List<TableSpec> tableSpecList, ProviderDialectSettings providerDialectSettings, UserHome userHome);
+    void applyDefaultChecksOnTableAndColumns(List<TableSpec> tableSpecList, ProviderDialectSettings providerDialectSettings, UserHome userHome);
+
+    /**
+     * Applies the default configuration of default checks on a table and its columns.
+     *
+     * @param targetTableSpec         Target table specification.
+     * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
+     * @param userHome                User home, to read the configuration.
+     */
+    void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ProviderDialectSettings providerDialectSettings, UserHome userHome);
+
+    /**
+     * Applies the default configuration of default checks on a table and its columns.
+     *
+     * @param targetTableSpec         Target table specification.
+     * @param connectionSpec          Connection specification.
+     * @param userHome                User home, to read the configuration.
+     */
+    void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome);
+
+    /**
+     * Applies the default configuration of default checks on a table only, not on columns.
+     *
+     * @param targetTableSpec         Target table specification.
+     * @param connectionSpec          Connection specification.
+     * @param userHome                User home, to read the configuration.
+     */
+    void applyDefaultChecksOnTableOnly(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome);
+
+    /**
+     * Applies the default configuration of default checks on a column.
+     *
+     * @param targetColumnSpec        Target column specification.
+     * @param connectionSpec          Connection specification.
+     * @param userHome                User home, to read the configuration.
+     */
+    void applyDefaultChecksOnColumn(ColumnSpec targetColumnSpec, ConnectionSpec connectionSpec, UserHome userHome);
 }

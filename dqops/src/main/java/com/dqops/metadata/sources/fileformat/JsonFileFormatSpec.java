@@ -6,6 +6,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
 import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -15,9 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.FieldNameConstants;
 
-import java.math.BigInteger;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 /**
@@ -37,10 +36,6 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean autoDetect;
-
-    @JsonPropertyDescription("A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<String, String> columns;
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -72,7 +67,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private BigInteger maximumDepth;
+    private Long maximumDepth;
 
     @JsonPropertyDescription("\tThe maximum size of a JSON object (in bytes)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -95,10 +90,10 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList){
+    public String buildSourceTableOptionsString(List<String> filePathList, TableSpec tableSpec){
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_json", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.autoDetect, autoDetect);
-        tableOptionsFormatter.formatMapWhenSet(Fields.columns, columns);
+        tableOptionsFormatter.formatColumns("columns", tableSpec);
         tableOptionsFormatter.formatStringWhenSet(Fields.compression, compression);
         tableOptionsFormatter.formatValueWhenSet(Fields.convertStringsToIntegers, convertStringsToIntegers);
         tableOptionsFormatter.formatStringWhenSet(Fields.dateformat, dateformat);
@@ -129,23 +124,6 @@ public class JsonFileFormatSpec extends AbstractSpec {
     public void setAutoDetect(Boolean autoDetect) {
         setDirtyIf(!Objects.equals(this.autoDetect, autoDetect));
         this.autoDetect = autoDetect;
-    }
-
-    /**
-     * Returns the columns map.
-     * @return Columns map.
-     */
-    public Map<String, String> getColumns() {
-        return columns;
-    }
-
-    /**
-     * Sets the columns map.
-     * @param columns Columns map.
-     */
-    public void setColumns(Map<String, String> columns) {
-        setDirtyIf(!Objects.equals(this.columns, columns));
-        this.columns = columns;
     }
 
     /**
@@ -272,7 +250,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Returns a maximum nesting depth to which the automatic schema detection detects types.
      * @return The maximum depth of json to be read.
      */
-    public BigInteger getMaximumDepth() {
+    public Long getMaximumDepth() {
         return maximumDepth;
     }
 
@@ -280,7 +258,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets a maximum nesting depth to which the automatic schema detection detects types.
      * @param maximumDepth The maximum depth of json to be read.
      */
-    public void setMaximumDepth(BigInteger maximumDepth) {
+    public void setMaximumDepth(Long maximumDepth) {
         setDirtyIf(!Objects.equals(this.maximumDepth, maximumDepth));
         this.maximumDepth = maximumDepth;
     }

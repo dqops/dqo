@@ -68,7 +68,8 @@ public class ScheduleChangeFinderServiceImpl implements ScheduleChangeFinderServ
 
         MonitoringScheduleSearchFilters monitoringScheduleSearchFilters = new MonitoringScheduleSearchFilters();
         monitoringScheduleSearchFilters.setScheduleEnabled(true);
-        // we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
+        // NOTE 1: we can add additional filters if this instance should only process schedules in one connection or matching a connection name pattern
+        // NOTE 2: this code will not detect that a default observability check has a custom schedule, because the default checks are not applied
         Collection<MonitoringScheduleSpec> schedules = this.nodeTreeSearcher.findSchedules(userHome, monitoringScheduleSearchFilters);
 
         UniqueSchedulesCollection uniqueSchedulesCollection = new UniqueSchedulesCollection();

@@ -52,18 +52,15 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ConnectionProviderRegistry connectionProviderRegistry;
     private final SecretValueProvider secretValueProvider;
-    private final DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
     private ImportTablesQueueJobParameters importParameters;
 
     @Autowired
     public ImportTablesQueueJob(UserHomeContextFactory userHomeContextFactory,
                                 ConnectionProviderRegistry connectionProviderRegistry,
-                                SecretValueProvider secretValueProvider,
-                                DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
+                                SecretValueProvider secretValueProvider) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.secretValueProvider = secretValueProvider;
-        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -139,9 +136,6 @@ public class ImportTablesQueueJob extends DqoQueueJob<ImportTablesResult> {
                     .stream()
                     .map(tableSpec -> tableSpec.deepClone())
                     .collect(Collectors.toList());
-
-            this.defaultObservabilityConfigurationService.applyDefaultChecks(importedTablesSpecs,
-                    connectionProvider.getDialectSettings(expandedConnectionSpec), userHome);
 
             TableList currentTablesColl = connectionWrapper.getTables();
             currentTablesColl.importTables(importedTablesSpecs, connectionSpec.getDefaultGroupingConfiguration());

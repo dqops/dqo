@@ -4,6 +4,7 @@ import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
+import com.dqops.metadata.sources.TableSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -52,7 +53,7 @@ public class ParquetFileFormatSpec extends AbstractSpec {
      * @param filePathList The names of files with data.
      * @return The formatted source table with the options.
      */
-    public String buildSourceTableOptionsString(List<String> filePathList){
+    public String buildSourceTableOptionsString(List<String> filePathList, TableSpec tableSpec){
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("read_parquet", filePathList);
         tableOptionsFormatter.formatValueWhenSet(Fields.binaryAsString, binaryAsString);
         tableOptionsFormatter.formatValueWhenSet(Fields.filename, filename);

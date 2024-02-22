@@ -19,6 +19,7 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTarget;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
@@ -99,6 +100,7 @@ public class TablesController {
     private SpecToModelCheckMappingService specToModelCheckMappingService;
     private ModelToSpecCheckMappingService modelToSpecCheckMappingService;
     private StatisticsDataService statisticsDataService;
+    private DefaultObservabilityConfigurationService defaultObservabilityConfigurationService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
@@ -108,6 +110,7 @@ public class TablesController {
      * @param specToModelCheckMappingService   Check mapper to convert the check specification to a model.
      * @param modelToSpecCheckMappingService   Check mapper to convert the check model to a check specification.
      * @param statisticsDataService            Statistics data service, provides access to the statistics (basic profiling).
+     * @param defaultObservabilityConfigurationService The service that applies the configuration of the default checks to a table.
      */
     @Autowired
     public TablesController(TableService tableService,
@@ -115,13 +118,15 @@ public class TablesController {
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToModelCheckMappingService specToModelCheckMappingService,
                             ModelToSpecCheckMappingService modelToSpecCheckMappingService,
-                            StatisticsDataService statisticsDataService) {
+                            StatisticsDataService statisticsDataService,
+                            DefaultObservabilityConfigurationService defaultObservabilityConfigurationService) {
         this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
         this.modelToSpecCheckMappingService = modelToSpecCheckMappingService;
         this.statisticsDataService = statisticsDataService;
+        this.defaultObservabilityConfigurationService = defaultObservabilityConfigurationService;
     }
 
     /**
@@ -851,7 +856,9 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -919,7 +926,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -986,7 +996,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1224,7 +1237,9 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
@@ -1300,7 +1315,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1375,7 +1393,10 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+        TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
+
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnection(connectionWrapper.getName());
             setFullTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());

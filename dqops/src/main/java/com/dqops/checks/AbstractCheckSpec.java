@@ -96,6 +96,12 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     private String dataGrouping;
 
     /**
+     * True when this check was copied from the configuration of the default observability checks and is not stored in the table's YAML file (it is transient).
+     */
+    @JsonIgnore
+    private boolean defaultCheck;
+
+    /**
      * Returns the schedule configuration for running the checks automatically.
      * @return Schedule configuration.
      */
@@ -230,6 +236,23 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      */
     public void setDataGrouping(String dataGrouping) {
         this.dataGrouping = dataGrouping;
+    }
+
+    /**
+     * Returns true if this check is an observability check that was added as a transient check, because it is configured in the default observability checks.
+     * @return True when it is a default check (not persisted in YAML), false when it is a materialized check that is configured in the table.
+     */
+    public boolean isDefaultCheck() {
+        return defaultCheck;
+    }
+
+    /**
+     * Sets a flag that this check is a default observability check.
+     * @param defaultCheck True when it is a default check.
+     */
+    public void setDefaultCheck(boolean defaultCheck) {
+        this.setDirtyIf(this.defaultCheck != defaultCheck);
+        this.defaultCheck = defaultCheck;
     }
 
     /**

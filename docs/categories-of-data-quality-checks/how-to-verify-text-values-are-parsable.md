@@ -77,7 +77,7 @@ It measures the percentage of valid values.
 The data quality check is configured by setting the **min_percent** parameter, 
 which is the minimum percentage of convertible values.
 
-![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs-dqo-ai/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min.png){ loading=lazy }
+![Data conversion data quality check to parse text values as integer values](https://dqops.com/docs/images/concepts/categories-of-data-quality-checks/text-value-convertible-to-integer-data-quality-check-min.png){ loading=lazy }
 
 ### Testing valid integers in YAML
 The [*text_parsable_to_integer_percent*](../checks/column/conversions/text-parsable-to-integer-percent.md) data quality check is easy to configure.
