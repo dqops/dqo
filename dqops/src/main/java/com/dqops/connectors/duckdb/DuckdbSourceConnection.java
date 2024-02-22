@@ -27,6 +27,8 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -35,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
@@ -55,6 +58,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final HomeLocationFindService homeLocationFindService;
     private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
+    private final AwsProfileProvider awsProfileProvider;
 
     /**
      * Injection constructor for the duckdb connection.
@@ -62,14 +66,17 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param jdbcConnectionPool      Jdbc connection pool.
      * @param secretValueProvider     Secret value provider for the environment variable expansion.
      * @param homeLocationFindService
+     * @param awsProfileProvider
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
                                   DuckdbConnectionProvider duckdbConnectionProvider,
-                                  HomeLocationFindService homeLocationFindService) {
+                                  HomeLocationFindService homeLocationFindService,
+                                  AwsProfileProvider awsProfileProvider) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
+        this.awsProfileProvider = awsProfileProvider;
     }
 
     /**
@@ -161,7 +168,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
         registerExtensions();
-        ensureSecretsLoaded();
+        ensureSecretsLoaded(secretValueLookupContext);
     }
 
     /**
@@ -197,12 +204,50 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     /**
      * Loads secrets that are used during the connection to a cloud storage service.
      */
-    private void ensureSecretsLoaded(){
-        ConnectionSpec connectionSpec = getConnectionSpec();
+    private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
+        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        fillSpecWithDefaultCredentials(connectionSpec, secretValueLookupContext);
+
         try {
             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
         } catch (Exception e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private void fillSpecWithDefaultCredentials(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext){
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+        DuckdbSecretsType secretsType = duckdb.getSecretsType();
+
+        switch (secretsType){
+            case s3:
+                Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
+                if(!profile.isPresent()){
+                    return;
+                }
+
+                if(!Strings.isNullOrEmpty(duckdb.getUser()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
+                ){
+                    String awsAccessKeyId = profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get();
+                    duckdb.setUser(awsAccessKeyId);
+                }
+
+                if(!Strings.isNullOrEmpty(duckdb.getPassword()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()
+                ){
+                    String awsSecretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get();
+                    duckdb.setPassword(awsSecretAccessKey);
+                }
+
+                // todo: set the region form defaults
+//                if(!Strings.isNullOrEmpty(duckdb.getRegion()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()
+//                ){
+//                    String awsSecretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get();
+//                    duckdb.setPassword(awsSecretAccessKey);
+//                }
+
+                break;
+            default:
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
         }
     }
 

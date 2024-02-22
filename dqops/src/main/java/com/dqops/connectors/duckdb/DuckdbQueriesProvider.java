@@ -23,8 +23,6 @@ public class DuckdbQueriesProvider {
         switch (secretsType){
             case s3:
                 loadSecretsString.append(indent).append("TYPE ").append(secretsType.toString().toUpperCase()).append(",\n");
-                // todo: use the default credentials when below are not set
-                // todo: use secretValueProvider for the below
                 loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
                 loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
                 loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("'");
