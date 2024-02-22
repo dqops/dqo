@@ -1,48 +1,87 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
-import { convertArrayToObject, convertObjectToArray } from "../../../utils/object";
 import { SharedCredentialListModel } from '../../../api';
+import KeyValuePropertyAddItem from './KeyValuePropertyAddItem';
 
 interface IKeyValueProperties {
-  properties?: { [key: string]: string; };
-  onChange: (properties: { [key: string]: string; }) => void;
-  sharedCredentials ?: SharedCredentialListModel[];
+  properties?: { [key: string]: string };
+  onChange: (properties: { [key: string]: string }) => void;
+  sharedCredentials?: SharedCredentialListModel[];
 }
 
-const KeyValueProperties = ({ properties, onChange, sharedCredentials }: IKeyValueProperties) => {
-  const entries: [string, string][] = convertObjectToArray(properties).concat([['', '']]);
+function convertObjectToArray(obj: {
+  [key: string]: string;
+}): { [key: string]: string }[] {
+  return Object.entries(obj).map(([key, value]) => ({ [key]: value }));
+}
 
-  const onRemove = (key: number) => {
-    onChange(convertArrayToObject(entries.filter((item, index) => index !== key)));
+function convertArrayToObject(array: { [key: string]: string }[]): {
+  [key: string]: string;
+} {
+  return array.reduce((result, currentObject) => {
+    for (const key in currentObject) {
+      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+        result[key] = currentObject[key];
+      }
+    }
+    return result;
+  }, {});
+}
+
+const KeyValueProperties = ({
+  properties,
+  onChange,
+  sharedCredentials
+}: IKeyValueProperties) => {
+  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
+
+  const onChangeArr = (
+    array: {
+      [key: string]: string;
+    }[]
+  ) => {
+    setArr(array);
+    if (
+      Object.values(array[array.length - 1])[0].length !== 0 &&
+      Object.keys(array[array.length - 1])[0].length !== 0
+    ) {
+      onChange(convertArrayToObject(array));
+    }
   };
 
-  const onChangeDict = (key: number, val: [string, string]) => {
-    onChange(convertArrayToObject(entries.map((item, index) => index === key ? val : item)));
-  };
+  useEffect(() => {
+    if (arr.length === 0) {
+      onChangeArr([{ ['']: '' }]);
+    }
+  }, [arr]);
 
   return (
     <div className="py-4">
       <table className="my-3 w-full">
         <thead>
           <tr>
-            <th className="text-left min-w-40 pr-4 py-2">Virtual schema name</th>
+            <th className="text-left min-w-40 pr-4 py-2">
+              Virtual schema name
+            </th>
             <th className="text-left min-w-40 pr-4 py-2">Path</th>
             <th className="px-8 min-w-40 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
-          {entries.map(([key, value], index) => (
+          {arr.map((_, index) => (
             <KeyValuePropertyItem
               key={index}
-              idx={index}
-              name={key}
-              value={value}
-              isLast={index === entries.length - 1}
-              onRemove={onRemove}
-              onChange={onChangeDict}
+              index={index}
+              properties={arr}
+              onChange={onChangeArr}
               sharedCredentials={sharedCredentials}
             />
           ))}
+          {/* <KeyValuePropertyAddItem
+            properties={arr}
+            onChange={onChangeArr}
+            sharedCredentials={sharedCredentials}
+          /> */}
         </tbody>
       </table>
     </div>

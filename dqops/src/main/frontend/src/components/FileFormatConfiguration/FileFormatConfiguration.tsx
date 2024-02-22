@@ -16,6 +16,7 @@ type TFileFormatConfigurationProps = {
   onChangeConfiguration: (params: Partial<TConfiguration>) => void;
   cleanConfiguration: () => void;
   freezeFileType: boolean;
+  children: any;
 };
 
 export default function FileFormatConfiguration({
@@ -24,9 +25,9 @@ export default function FileFormatConfiguration({
   configuration,
   cleanConfiguration,
   onChangeConfiguration,
-  freezeFileType
+  freezeFileType,
+  children
 }: TFileFormatConfigurationProps) {
-
   const renderConfiguration = () => {
     switch (fileFormatType) {
       case DuckdbParametersSpecSourceFilesTypeEnum.csv: {
@@ -72,24 +73,30 @@ export default function FileFormatConfiguration({
   ];
 
   return (
-    <>
-      <div className="flex items-center gap-x-5">
+    <SectionWrapper
+      title="File format configuration"
+      className="text-sm my-4 text-black"
+    >
+      <div className="flex items-center gap-x-5 py-4">
         <div>File format</div>
-        {!freezeFileType && 
-          <SelectInput    // todo: bug on names, you see "csv" instead of "CSV"
+        {!freezeFileType && (
+          <SelectInput
             options={sourceFilesTypeOptions}
             onChange={(value) => {
               onChangeFile(value);
               cleanConfiguration();
             }}
-            value={fileFormatType}
+            value={
+              fileFormatType === DuckdbParametersSpecSourceFilesTypeEnum.parquet
+                ? fileFormatType.replace(/./, (c) => c.toUpperCase())
+                : fileFormatType.toUpperCase()
+            }
           />
-        }
-        {freezeFileType && 
-          <div>{fileFormatType}</div>
-        }
+        )}
+        {freezeFileType && <div>{fileFormatType}</div>}
       </div>
-      {renderConfiguration()}
-    </>
+      {children}
+      <div className="pt-8">{renderConfiguration()}</div>
+    </SectionWrapper>
   );
 }

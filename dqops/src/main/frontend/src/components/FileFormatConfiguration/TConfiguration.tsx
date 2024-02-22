@@ -1,7 +1,10 @@
 import {
-    CsvFileFormatSpec,
-    JsonFileFormatSpec,
-    ParquetFileFormatSpec,
+  CsvFileFormatSpec,
+  JsonFileFormatSpec,
+  ParquetFileFormatSpec
 } from '../../api';
 
-export type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
+export type TConfiguration =
+  | CsvFileFormatSpec
+  | JsonFileFormatSpec
+  | ParquetFileFormatSpec;
