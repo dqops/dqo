@@ -31,7 +31,7 @@ export default function ConfigurationItemRow({
       )}
       {isEnum && options && (
         <div className={className}>
-          <div>{label}</div>
+          <div className="pb-1">{label}</div>
           <SelectInput
             options={options}
             value={String(value ?? defaultValue)}
