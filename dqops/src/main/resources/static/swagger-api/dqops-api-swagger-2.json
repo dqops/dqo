@@ -38559,6 +38559,11 @@
           "type" : "string",
           "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
         },
+        "table_priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
+        },
         "label" : {
           "type" : "string",
           "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table."
@@ -38592,6 +38597,11 @@
         "table" : {
           "type" : "string",
           "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+        },
+        "table_priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
         },
         "label" : {
           "type" : "string",

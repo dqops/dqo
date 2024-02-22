@@ -52,6 +52,9 @@ public class TargetTablePatternSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String table;
 
+    @JsonPropertyDescription("The maximum table priority (inclusive) for tables that are covered by the default checks.")
+    private Integer tablePriority;
+
     @JsonPropertyDescription("The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String label;
@@ -105,6 +108,23 @@ public class TargetTablePatternSpec extends AbstractSpec {
     public void setTable(String table) {
         this.setDirtyIf(!Objects.equals(this.table, table));
         this.table = table;
+    }
+
+    /**
+     * Returns the highest priority (inclusive) of tables that are covered by the checks.
+     * @return Maximum table priority or null.
+     */
+    public Integer getTablePriority() {
+        return tablePriority;
+    }
+
+    /**
+     * Sets the maximum table priority of tables that are covered by the checks.
+     * @param tablePriority Maximum table priority.
+     */
+    public void setTablePriority(Integer tablePriority) {
+        this.setDirtyIf(!Objects.equals(this.tablePriority, tablePriority));
+        this.tablePriority = tablePriority;
     }
 
     /**

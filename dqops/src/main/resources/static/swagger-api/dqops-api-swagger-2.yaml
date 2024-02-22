@@ -37327,6 +37327,11 @@ definitions:
         type: "string"
         description: "The table name filter. Accepts wildcards in the format: *_customers,\
           \ *, fact_*."
+      table_priority:
+        type: "integer"
+        format: "int32"
+        description: "The maximum table priority (inclusive) for tables that are covered\
+          \ by the default checks."
       label:
         type: "string"
         description: "The label filter. Accepts wildcards in the format: *_customers,\
@@ -37373,6 +37378,11 @@ definitions:
         type: "string"
         description: "The table name filter. Accepts wildcards in the format: *_customers,\
           \ *, fact_*."
+      table_priority:
+        type: "integer"
+        format: "int32"
+        description: "The maximum table priority (inclusive) for tables that are covered\
+          \ by the default checks."
       label:
         type: "string"
         description: "The label filter. Accepts wildcards in the format: *_customers,\

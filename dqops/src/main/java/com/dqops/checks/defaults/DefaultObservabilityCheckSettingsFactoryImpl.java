@@ -60,6 +60,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObservabilityCheckSettingsFactory {
     /**
+     * The priority level of the default checks.
+     */
+    public static final Integer DEFAULT_PATTERNS_PRIORITY = 1000;
+
+    /**
      * Creates the default check settings to be stored in the local settings. This is an initial, default configuration.
      * @return Default observability settings.
      */
@@ -78,6 +83,7 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     @Override
     public TableDefaultChecksPatternSpec createDefaultTableChecks() {
         TableDefaultChecksPatternSpec defaultPattern = new TableDefaultChecksPatternSpec();
+        defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
 
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(profilingChecks);
@@ -143,6 +149,8 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     @Override
     public ColumnDefaultChecksPatternSpec createDefaultColumnChecks() {
         ColumnDefaultChecksPatternSpec defaultPattern = new ColumnDefaultChecksPatternSpec();
+        defaultPattern.setPriority(DEFAULT_PATTERNS_PRIORITY);
+
         ColumnProfilingCheckCategoriesSpec defaultProfilingChecks = new ColumnProfilingCheckCategoriesSpec();
         defaultPattern.setProfilingChecks(defaultProfilingChecks);
 
