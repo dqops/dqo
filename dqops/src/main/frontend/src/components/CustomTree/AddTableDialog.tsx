@@ -16,13 +16,13 @@ import { CheckTypes, ROUTES } from '../../shared/routes';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
-  CsvFileFormatSpec,
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
   FileFormatSpec,
   DuckdbParametersSpecSourceFilesTypeEnum
 } from '../../api';
 import FileFormatConfiguration from '../FileFormatConfiguration/FileFormatConfiguration';
+import { TConfiguration } from '../../components/FileFormatConfiguration/TConfiguration';
+import SectionWrapper from '../Dashboard/SectionWrapper';
+import FilePath from '../FileFormatConfiguration/FilePath';
 
 interface AddTableDialogProps {
   open: boolean;
@@ -30,26 +30,23 @@ interface AddTableDialogProps {
   node?: CustomTreeNode;
 }
 
-type TConfiguration = CsvFileFormatSpec | JsonFileFormatSpec | ParquetFileFormatSpec;
-
 const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(false);
   const [connectionModel, setConnectionModel] = useState<ConnectionModel>({});
   const { refreshNode } = useTree();
   const [paths, setPaths] = useState<Array<string>>(['']);
-  const [fileFormatType, setFileFormatType] = useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-    DuckdbParametersSpecSourceFilesTypeEnum.csv
-  );
+  const [fileFormatType, setFileFormatType] =
+    useState<DuckdbParametersSpecSourceFilesTypeEnum>(
+      DuckdbParametersSpecSourceFilesTypeEnum.csv
+    );
   const [configuration, setConfiguration] = useState<TConfiguration>({});
-
   const onChangeConfiguration = (params: Partial<TConfiguration>) => {
     setConfiguration((prev) => ({
       ...prev,
       ...params
     }));
   };
-
   const cleanConfiguration = () => {
     setConfiguration({});
   };
@@ -61,17 +58,19 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
 
   const args = node ? node.id.toString().split('.') : [];
 
-  //todo: pass file_paths to createTable method, based on provider type
   const handleSubmit = async () => {
     try {
       setLoading(true);
       if (node) {
         await TableApiClient.createTable(args[0], args[1], name, {
           file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
-            } ?? undefined
+            connectionModel.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb
+              ? {
+                  [fileFormatType as keyof FileFormatSpec]: configuration,
+                  file_paths: paths.slice(0, -1)
+                }
+              : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: args[0],
@@ -83,10 +82,13 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
       } else {
         await TableApiClient.createTable(connection, schema, name, {
           file_format:
-            {
-              [fileFormatType as keyof FileFormatSpec]: configuration,
-              file_paths: paths.filter((x) => x.length !== 0)
-            } ?? undefined
+            connectionModel.provider_type ===
+            ConnectionSpecProviderTypeEnum.duckdb
+              ? {
+                  [fileFormatType as keyof FileFormatSpec]: configuration,
+                  file_paths: paths.slice(0, -1)
+                }
+              : undefined
         }).then(() =>
           JobApiClient.importTables(undefined, false, undefined, {
             connectionName: connection,
@@ -140,18 +142,17 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     }
   }, [open]);
 
+  const onAddPath = () => setPaths((prev) => [...prev, '']);
   const onChangePath = (value: string) => {
     const copiedPaths = [...paths];
     copiedPaths[paths.length - 1] = value;
     setPaths(copiedPaths);
   };
-
-  const onAddPath = () => setPaths((prev) => [...prev, '']);
-
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => setFileFormatType(val);
-
   const onDeletePath = (index: number) =>
     setPaths((prev) => prev.filter((x, i) => i !== index));
+
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+    setFileFormatType(val);
 
   return (
     <Dialog open={open} handler={onClose}>
@@ -167,20 +168,22 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
           </div>
         </div>
         {connectionModel.provider_type ===
-        ConnectionSpecProviderTypeEnum.duckdb ? (
+          ConnectionSpecProviderTypeEnum.duckdb && (
           <FileFormatConfiguration
-            paths={paths}
-            onAddPath={onAddPath}
-            onChangePath={onChangePath}
             fileFormatType={fileFormatType}
             onChangeFile={onChangeFile}
             configuration={configuration}
             onChangeConfiguration={onChangeConfiguration}
             cleanConfiguration={cleanConfiguration}
-            onDeletePath={onDeletePath}
-          />
-        ) : (
-          <></>
+            freezeFileType={true}
+          >
+            <FilePath
+              paths={paths}
+              onAddPath={onAddPath}
+              onChangePath={onChangePath}
+              onDeletePath={onDeletePath}
+            />
+          </FileFormatConfiguration>
         )}
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">

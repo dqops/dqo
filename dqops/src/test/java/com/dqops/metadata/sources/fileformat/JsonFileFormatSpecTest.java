@@ -6,6 +6,7 @@ import com.dqops.metadata.sources.ColumnSpecMap;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
+import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -21,7 +22,8 @@ public class JsonFileFormatSpecTest extends BaseTest {
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
-            setCompression("gzip");
+            setColumns(Map.of("col1", "type1", "col2", "type2"));
+            setCompression(CompressionType.gzip);
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
             setFilename(true);
@@ -30,7 +32,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setIgnoreErrors(true);
             setMaximumDepth(10L);
             setMaximumObjectSize(200L);
-            setRecords("auto");
+            setRecords(JsonRecordsType.auto);
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
         }};
 

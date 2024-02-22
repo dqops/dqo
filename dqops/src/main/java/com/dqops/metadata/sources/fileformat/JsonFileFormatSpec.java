@@ -8,6 +8,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.sources.fileformat.json.JsonFormatType;
+import com.dqops.metadata.sources.fileformat.json.JsonRecordsType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -38,7 +39,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String compression;
+    private CompressionType compression;
 
     @JsonPropertyDescription("Whether strings representing integer values should be converted to a numerical type.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -74,7 +75,11 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Can be one of ['auto', 'true', 'false']")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private String records;
+    private JsonRecordsType records;
+
+    @JsonPropertyDescription("The number of sample rows for auto detection of parameters.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Long sampleSize;
 
     @JsonPropertyDescription("Specifies the date format to use when parsing timestamps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -99,6 +104,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumDepth, maximumDepth);
         tableOptionsFormatter.formatValueWhenSet(Fields.maximumObjectSize, maximumObjectSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.records, records);
+        tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
         return tableOptionsFormatter.toString();
     }
@@ -124,7 +130,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Returns the compression type for the file. By default this will be detected automatically from the file extension.
      * @return Compression type.
      */
-    public String getCompression() {
+    public CompressionType getCompression() {
         return compression;
     }
 
@@ -132,7 +138,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets the compression type for the file. By default this will be detected automatically from the file extension.
      * @param compression Compression type.
      */
-    public void setCompression(String compression) {
+    public void setCompression(CompressionType compression) {
         setDirtyIf(!Objects.equals(this.compression, compression));
         this.compression = compression;
     }
@@ -274,12 +280,11 @@ public class JsonFileFormatSpec extends AbstractSpec {
         this.maximumObjectSize = maximumObjectSize;
     }
 
-
     /**
      * Returns the records setup. Can be one of ['auto', 'true', 'false']
      * @return Records
      */
-    public String getRecords() {
+    public JsonRecordsType getRecords() {
         return records;
     }
 
@@ -287,11 +292,29 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * Sets the records setup. Can be one of ['auto', 'true', 'false']
      * @param records Records
      */
-    public void setRecords(String records) {
+    public void setRecords(JsonRecordsType records) {
         setDirtyIf(!Objects.equals(this.records, records));
         this.records = records;
     }
 
+    /**
+     * Returns the number of sample rows for auto detection of parameters.
+     *
+     * @return Number of rows for sampling.
+     */
+    public Long getSampleSize() {
+        return sampleSize;
+    }
+
+    /**
+     * Sets the number of sample rows for auto detection of parameters.
+     *
+     * @param sampleSize Number of rows for sampling.
+     */
+    public void setSampleSize(Long sampleSize) {
+        setDirtyIf(!Objects.equals(this.sampleSize, sampleSize));
+        this.sampleSize = sampleSize;
+    }
 
     /**
      * Returns the date format to use when parsing timestamps.
@@ -337,10 +360,8 @@ public class JsonFileFormatSpec extends AbstractSpec {
      * @return Cloned, trimmed and expanded table specification.
      */
     public JsonFileFormatSpec expandAndTrim(SecretValueProvider secretValueProvider, SecretValueLookupContext lookupContext) {
-        JsonFileFormatSpec cloned = (JsonFileFormatSpec) this.deepClone();
-        cloned.compression = secretValueProvider.expandValue(cloned.compression, lookupContext);
+        JsonFileFormatSpec cloned = this.deepClone();
         cloned.dateformat = secretValueProvider.expandValue(cloned.dateformat, lookupContext);
-        cloned.records = secretValueProvider.expandValue(cloned.records, lookupContext);
         cloned.timestampformat = secretValueProvider.expandValue(cloned.timestampformat, lookupContext);
         return cloned;
     }

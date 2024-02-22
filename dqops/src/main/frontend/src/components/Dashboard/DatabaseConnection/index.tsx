@@ -42,6 +42,7 @@ import DatabricksConnection from './DatabricksConnection';
 import DatabricksLogo from '../../SvgIcon/svg/databricks.svg';
 import SingleStoreDbLogo from '../../SvgIcon/svg/single-store.svg';
 import clsx from 'clsx';
+import DuckDBConnection from './DuckDBConnection';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -150,7 +151,7 @@ const DatabaseConnection = ({
   };
 
   const getTitle = (database?: ConnectionModel): string => {
-    if(nameOfDatabase){
+    if (nameOfDatabase) {
       return nameOfDatabase + ' Connection Settings';
     }
 
@@ -183,18 +184,20 @@ const DatabaseConnection = ({
   };
 
   const getIcon = () => {
-    if(nameOfDatabase){
-      return (<SvgIcon
-        name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
-        className={clsx(
-          'mb-3 w-20 text-blue-500',
-          nameOfDatabase === 'Spark' && 'w-35',
-          nameOfDatabase === 'Trino' && 'max-w-11',
-        )}
-      />);
+    if (nameOfDatabase) {
+      return (
+        <SvgIcon
+          name={nameOfDatabase?.toLowerCase().replace(/\s/g, '')}
+          className={clsx(
+            'mb-3 w-20 text-blue-500',
+            nameOfDatabase === 'Spark' && 'w-35',
+            nameOfDatabase === 'Trino' && 'max-w-11'
+          )}
+        />
+      );
     }
-    return (<img src={dbImage} className="h-16" alt="db logo" />);
-  }
+    return <img src={dbImage} className="h-16" alt="db logo" />;
+  };
 
   const getSharedCredentials = async () => {
     await SharedCredentialsApi.getAllSharedCredentials().then((res) =>
@@ -229,13 +232,11 @@ const DatabaseConnection = ({
       />
     ),
     [ConnectionModelProviderTypeEnum.duckdb]: (
-      // todo
-      // <DuckDBConnection
-      // duckdb={database.duckdb}
-      //   onChange={(duckdb) => onChange({ ...database, duckdb })}
-      //   sharedCredentials={sharedCredentials}
-      // />
-      <></>
+      <DuckDBConnection
+        duckdb={database.duckdb}
+        onChange={(duckdb) => onChange({ ...database, duckdb })}
+        sharedCredentials={sharedCredentials}
+      />
     ),
     [ConnectionModelProviderTypeEnum.redshift]: (
       <RedshiftConnection
@@ -327,7 +328,6 @@ const DatabaseConnection = ({
         return '';
     }
   }, [database.provider_type]);
-  console.log(database)
 
   return (
     <div>
@@ -342,9 +342,7 @@ const DatabaseConnection = ({
       <div className="flex justify-between mb-4">
         <div>
           <div className="text-2xl font-semibold mb-3">Connect a database</div>
-          <div>
-            {getTitle(database)}
-          </div>
+          <div>{getTitle(database)}</div>
         </div>
         {getIcon()}
       </div>
