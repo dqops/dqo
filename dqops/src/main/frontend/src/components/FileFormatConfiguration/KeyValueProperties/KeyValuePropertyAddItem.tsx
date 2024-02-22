@@ -7,8 +7,8 @@ import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea
 import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 
 interface IKeyValueProperties {
-  properties?: { [key: string]: string };
-  onChange: (properties: { [key: string]: string }) => void;
+  properties?: { [key: string]: string }[];
+  onChange: (properties: { [key: string]: string }[]) => void;
   sharedCredentials?: SharedCredentialListModel[];
 }
 
@@ -21,19 +21,9 @@ export default function KeyValuePropertyAddItem({
   const [value, setValue] = useState('');
 
   const onAdd = () => {
+    onChange([...(properties ?? []), { [key]: value }]);
     setKey('');
     setValue('');
-    // console.log(convertObjectToArray(properties));
-    // console.log(convertObjectToArray({ [key]: value }));
-    // const arr: [string, string][] = [
-    //   ...convertObjectToArray(properties),
-    //   ...convertObjectToArray({ [key]: value })
-    // ];
-
-    // const obj: { [key: string]: string } = Object.fromEntries(arr);
-    // console.log(obj);
-    // console.log({ ...properties, [key]: value });
-    onChange({ ...properties, [key]: value });
   };
 
   return (

@@ -328,7 +328,6 @@ const DatabaseConnection = ({
         return '';
     }
   }, [database.provider_type]);
-  console.log(database);
 
   return (
     <div>
