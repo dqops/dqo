@@ -28,6 +28,7 @@ import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMap;
 import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
@@ -54,11 +55,17 @@ import java.util.Objects;
 public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDefaultChecksPatternSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("target", o -> o.target);
             put("profiling_checks", o -> o.profilingChecks);
             put("monitoring_checks", o -> o.monitoringChecks);
             put("partitioned_checks", o -> o.partitionedChecks);
         }
     };
+
+    @JsonPropertyDescription("The target column filter that are filtering the column, table and connection on which the default checks are applied.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TargetColumnPatternSpec target = new TargetColumnPatternSpec();
 
     @JsonPropertyDescription("Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -97,6 +104,24 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
     @Override
     public String getYamlParsingError() {
         return this.yamlParsingError;
+    }
+
+    /**
+     * Returns the configuration of the target column using search patterns.
+     * @return The filters for the target columns.
+     */
+    public TargetColumnPatternSpec getTarget() {
+        return target;
+    }
+
+    /**
+     * Returns the filters for the target column.
+     * @param target Target column filter.
+     */
+    public void setTarget(TargetColumnPatternSpec target) {
+        setDirtyIf(!Objects.equals(this.target, target));
+        this.target = target;
+        propagateHierarchyIdToField(target, "target");
     }
 
     /**

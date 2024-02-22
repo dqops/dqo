@@ -190,7 +190,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         TableSpec originalTableSpec = targetTable.getSpec();
         TableSpec tableSpec = originalTableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(tableSpec, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), tableSpec, userHome);
         // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
         // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
 

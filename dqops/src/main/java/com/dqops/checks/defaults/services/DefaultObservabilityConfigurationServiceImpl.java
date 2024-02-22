@@ -18,11 +18,14 @@ package com.dqops.checks.defaults.services;
 
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.column.TargetColumnPatternFilter;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternFilter;
 import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.TableSpec;
@@ -47,56 +50,44 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
     }
 
     /**
-     * Applies the default configuration of default checks on a table.
+     * Applies the default configuration of default checks on a table and its columns.
      *
-     * @param targetTableSpec         Target table specification.
-     * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
-     * @param userHome                User home, to read the configuration.
-     */
-    @Override
-    public void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ProviderDialectSettings providerDialectSettings, UserHome userHome) {
-        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : userHome.getTableDefaultChecksPatterns() ) {
-            TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
-            defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings);
-        }
-
-        for (ColumnSpec targetColumnSpec : targetTableSpec.getColumns().values()) {
-            for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : userHome.getColumnDefaultChecksPatterns() ) {
-                ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
-                defaultChecksPattern.applyOnColumn(targetColumnSpec, providerDialectSettings);
-            }
-        }
-    }
-
-    /**
-     * Applies the default configuration of default checks on a table.
-     *
+     * @param connectionSpec  Target connection specification.
      * @param targetTableSpec Target table specification.
-     * @param connectionSpec  Connection specification.
      * @param userHome        User home, to read the configuration.
      */
     @Override
-    public void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome) {
-        ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
-        ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
+    public void applyDefaultChecksOnTableAndColumns(ConnectionSpec connectionSpec,
+                                                    TableSpec targetTableSpec,
+                                                    UserHome userHome) {
+        applyDefaultChecksOnTableOnly(connectionSpec, targetTableSpec, userHome);
 
-        applyDefaultChecksOnTableAndColumns(targetTableSpec, providerDialectSettings, userHome);
+        for (ColumnSpec targetColumnSpec : targetTableSpec.getColumns().values()) {
+            applyDefaultChecksOnColumn(connectionSpec, targetTableSpec, targetColumnSpec, userHome);
+        }
     }
 
     /**
      * Applies the default configuration of default checks on a table only, not on columns.
      *
-     * @param targetTableSpec Target table specification.
      * @param connectionSpec  Connection specification.
+     * @param targetTableSpec Target table specification.
      * @param userHome        User home, to read the configuration.
      */
     @Override
-    public void applyDefaultChecksOnTableOnly(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome) {
+    public void applyDefaultChecksOnTableOnly(ConnectionSpec connectionSpec,
+                                              TableSpec targetTableSpec,
+                                              UserHome userHome) {
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
         for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : userHome.getTableDefaultChecksPatterns() ) {
             TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
+            TargetTablePatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
+            if (!patternFilter.match(connectionSpec, targetTableSpec, true)) {
+                continue;
+            }
+
             defaultChecksPattern.applyOnTable(targetTableSpec, providerDialectSettings);
         }
     }
@@ -104,17 +95,27 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
     /**
      * Applies the default configuration of default checks on a column.
      *
-     * @param targetColumnSpec Target column specification.
      * @param connectionSpec   Connection specification.
+     * @param targetTableSpec  Target table specification.
+     * @param targetColumnSpec Target column specification.
      * @param userHome         User home, to read the configuration.
      */
     @Override
-    public void applyDefaultChecksOnColumn(ColumnSpec targetColumnSpec, ConnectionSpec connectionSpec, UserHome userHome) {
+    public void applyDefaultChecksOnColumn(ConnectionSpec connectionSpec,
+                                           TableSpec targetTableSpec,
+                                           ColumnSpec targetColumnSpec,
+                                           UserHome userHome) {
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
         for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : userHome.getColumnDefaultChecksPatterns() ) {
             ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
+            TargetColumnPatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
+            DataTypeCategory dataTypeCategory = providerDialectSettings.detectColumnType(targetColumnSpec.getTypeSnapshot());
+            if (!patternFilter.match(connectionSpec, targetTableSpec, targetColumnSpec, dataTypeCategory)) {
+                continue;
+            }
+
             defaultChecksPattern.applyOnColumn(targetColumnSpec, providerDialectSettings);
         }
     }

@@ -42,6 +42,7 @@ import com.dqops.metadata.defaultchecks.column.*;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.checks.CheckDefinitionSpec;
 import com.dqops.metadata.definitions.checks.CheckDefinitionWrapperImpl;
@@ -901,4 +902,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, P parameter);
+
+    /**
+     * Accept a table filter for a default check pattern.
+     * @param targetTablePatternSpec Table pattern specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(TargetTablePatternSpec targetTablePatternSpec, P parameter);
 }

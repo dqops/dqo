@@ -9879,7 +9879,8 @@ paths:
       tags:
       - "DefaultTableCheckPatterns"
       summary: "getDefaultTableChecksPattern"
-      description: "Returns a default checks pattern definition"
+      description: "Returns a default checks pattern definition as a full specification\
+        \ object"
       operationId: "getDefaultTableChecksPattern"
       produces:
       - "application/json"
@@ -9906,7 +9907,8 @@ paths:
       tags:
       - "DefaultTableCheckPatterns"
       summary: "createDefaultTableChecksPattern"
-      description: "Creates (adds) a new default table-level checks pattern configuration."
+      description: "Creates (adds) a new default table-level checks pattern configuration\
+        \ by saving a full specification object."
       operationId: "createDefaultTableChecksPattern"
       consumes:
       - "application/json"
@@ -9947,7 +9949,8 @@ paths:
       tags:
       - "DefaultTableCheckPatterns"
       summary: "updateDefaultTableChecksPattern"
-      description: "Updates an default table-level checks pattern"
+      description: "Updates an default table-level checks pattern by saving a full\
+        \ specification object"
       operationId: "updateDefaultTableChecksPattern"
       consumes:
       - "application/json"
@@ -10375,6 +10378,115 @@ paths:
           description: "Default check pattern configuration not found"
         406:
           description: "Rejected, missing required fields"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+  /api/default/checks/table/{patternName}/target:
+    get:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "getDefaultTableChecksPatternTarget"
+      description: "Returns a default checks pattern definition"
+      operationId: "getDefaultTableChecksPatternTarget"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Table pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/DefaultTableChecksPatternListModel"
+        404:
+          description: "Pattern name not found"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    post:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "createDefaultTableChecksPatternTarget"
+      description: "Creates (adds) a new default table-level checks pattern configuration."
+      operationId: "createDefaultTableChecksPatternTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model with only the target filters"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternListModel"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        201:
+          description: "New checks pattern successfully created"
+        400:
+          description: "Bad request, adjust before retrying"
+        406:
+          description: "Rejected, missing required fields"
+        409:
+          description: "Check pattern with the same name already exists"
+        500:
+          description: "Internal Server Error"
+          schema:
+            $ref: "#/definitions/SpringErrorPayload"
+      security:
+      - authorization_bearer_api_key: []
+    put:
+      tags:
+      - "DefaultTableCheckPatterns"
+      summary: "updateDefaultTableChecksPatternTarget"
+      description: "Updates an default table-level checks pattern, changing only the\
+        \ target object"
+      operationId: "updateDefaultTableChecksPatternTarget"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        description: "Default checks pattern model"
+        required: false
+        schema:
+          $ref: "#/definitions/DefaultTableChecksPatternListModel"
+      - name: "patternName"
+        in: "path"
+        description: "Pattern name"
+        required: true
+        type: "string"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/MonoVoid"
+        204:
+          description: "Default table-level checks pattern successfully updated"
+        400:
+          description: "Bad request, adjust before retrying"
+        404:
+          description: "Pattern not found"
         500:
           description: "Internal Server Error"
           schema:
@@ -30106,6 +30218,9 @@ definitions:
       pattern_name:
         type: "string"
         description: "Pattern name."
+      target_table:
+        description: "The filters for the target table."
+        $ref: "#/definitions/TargetTablePatternSpec"
       can_edit:
         type: "boolean"
         description: "Boolean flag that decides if the current user can update or\
@@ -34301,6 +34416,10 @@ definitions:
   TableDefaultChecksPatternSpec:
     type: "object"
     properties:
+      target:
+        description: "The target table filter that are filtering the table and connection\
+          \ on which the default checks are applied."
+        $ref: "#/definitions/TargetTablePatternSpec"
       profiling_checks:
         description: "Configuration of data quality profiling checks that are enabled.\
           \ Pick a check from a category, apply the parameters and rules to enable\
@@ -36440,6 +36559,25 @@ definitions:
       row_count:
         description: "Configuration of the row count profiler."
         $ref: "#/definitions/TableVolumeRowCountStatisticsCollectorSpec"
+  TargetTablePatternSpec:
+    type: "object"
+    properties:
+      connection:
+        type: "string"
+        description: "The data source connection name filter. Accepts wildcards in\
+          \ the format: *conn, *, conn*."
+      schema:
+        type: "string"
+        description: "The schema name filter. Accepts wildcards in the format: *_prod,\
+          \ *, pub*."
+      table:
+        type: "string"
+        description: "The table name filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*."
+      label:
+        type: "string"
+        description: "The label filter. Accepts wildcards in the format: *_customers,\
+          \ *, fact_*. The label must be present on the connection or table."
   TemporalUnit:
     type: "object"
     properties:

@@ -49,11 +49,17 @@ import java.util.Objects;
 public class TableDefaultChecksPatternSpec extends AbstractSpec implements InvalidYamlStatusHolder {
     public static final ChildHierarchyNodeFieldMapImpl<TableDefaultChecksPatternSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
+            put("target", o -> o.target);
             put("profiling_checks", o -> o.profilingChecks);
             put("monitoring_checks", o -> o.monitoringChecks);
             put("partitioned_checks", o -> o.partitionedChecks);
         }
     };
+
+    @JsonPropertyDescription("The target table filter that are filtering the table and connection on which the default checks are applied.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private TargetTablePatternSpec target = new TargetTablePatternSpec();
 
     @JsonPropertyDescription("Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -92,6 +98,24 @@ public class TableDefaultChecksPatternSpec extends AbstractSpec implements Inval
     @Override
     public String getYamlParsingError() {
         return this.yamlParsingError;
+    }
+
+    /**
+     * Returns the configuration of the target table using search patterns.
+     * @return The filters for the target tables.
+     */
+    public TargetTablePatternSpec getTarget() {
+        return target;
+    }
+
+    /**
+     * Returns the filters for the target table.
+     * @param target Target table filter.
+     */
+    public void setTarget(TargetTablePatternSpec target) {
+        setDirtyIf(!Objects.equals(this.target, target));
+        this.target = target;
+        propagateHierarchyIdToField(target, "target");
     }
 
     /**

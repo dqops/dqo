@@ -16,6 +16,7 @@
 package com.dqops.rest.models.metadata;
 
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,6 +39,12 @@ public class DefaultTableChecksPatternListModel {
      */
     @JsonPropertyDescription("Pattern name.")
     private String patternName;
+
+    /**
+     * Target table filters.
+     */
+    @JsonPropertyDescription("The filters for the target table.")
+    private TargetTablePatternSpec targetTable;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -67,6 +74,7 @@ public class DefaultTableChecksPatternListModel {
             boolean isEditor) {
         return new DefaultTableChecksPatternListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
+            setTargetTable(checksPatternSpec.getTarget());
             setCanEdit(isEditor);
             setYamlParsingError(checksPatternSpec.getYamlParsingError());
         }};

@@ -718,7 +718,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -793,7 +794,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -868,7 +870,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1124,7 +1127,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1205,7 +1209,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1286,7 +1291,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{

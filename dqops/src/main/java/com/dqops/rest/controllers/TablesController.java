@@ -857,7 +857,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -927,7 +928,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -997,7 +999,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1238,7 +1241,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1316,7 +1320,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1394,7 +1399,8 @@ public class TablesController {
         }
 
         TableSpec clonedTableWithDefaultChecks = tableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(clonedTableWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableOnly(
+                connectionWrapper.getSpec(), clonedTableWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedTableWithDefaultChecks.getTableCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{

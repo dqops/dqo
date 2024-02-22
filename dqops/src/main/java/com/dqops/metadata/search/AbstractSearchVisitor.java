@@ -38,6 +38,7 @@ import com.dqops.metadata.defaultchecks.column.*;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
 import com.dqops.metadata.dictionaries.DictionaryListImpl;
 import com.dqops.metadata.dictionaries.DictionaryWrapperImpl;
 import com.dqops.metadata.incidents.ConnectionIncidentGroupingSpec;
@@ -1186,6 +1187,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(ColumnDefaultChecksPatternList columnDefaultChecksPatternWrappers, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accept a table filter for a default check pattern.
+     *
+     * @param targetTablePatternSpec Table pattern specification.
+     * @param parameter        Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(TargetTablePatternSpec targetTablePatternSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

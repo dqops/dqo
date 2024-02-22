@@ -29,36 +29,33 @@ public interface DefaultObservabilityConfigurationService {
     /**
      * Applies the default configuration of default checks on a table and its columns.
      *
+     * @param connectionSpec          Target connection specification.
      * @param targetTableSpec         Target table specification.
-     * @param providerDialectSettings Provider specific dialect settings, to detect the column type and if certain categories of checks could be applied.
      * @param userHome                User home, to read the configuration.
      */
-    void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ProviderDialectSettings providerDialectSettings, UserHome userHome);
-
-    /**
-     * Applies the default configuration of default checks on a table and its columns.
-     *
-     * @param targetTableSpec         Target table specification.
-     * @param connectionSpec          Connection specification.
-     * @param userHome                User home, to read the configuration.
-     */
-    void applyDefaultChecksOnTableAndColumns(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome);
+    void applyDefaultChecksOnTableAndColumns(ConnectionSpec connectionSpec,
+                                             TableSpec targetTableSpec,
+                                             UserHome userHome);
 
     /**
      * Applies the default configuration of default checks on a table only, not on columns.
      *
-     * @param targetTableSpec         Target table specification.
      * @param connectionSpec          Connection specification.
+     * @param targetTableSpec         Target table specification.
      * @param userHome                User home, to read the configuration.
      */
-    void applyDefaultChecksOnTableOnly(TableSpec targetTableSpec, ConnectionSpec connectionSpec, UserHome userHome);
+    void applyDefaultChecksOnTableOnly(ConnectionSpec connectionSpec, TableSpec targetTableSpec, UserHome userHome);
 
     /**
      * Applies the default configuration of default checks on a column.
      *
-     * @param targetColumnSpec        Target column specification.
      * @param connectionSpec          Connection specification.
+     * @param targetTableSpec         Target table specification.
+     * @param targetColumnSpec        Target column specification.
      * @param userHome                User home, to read the configuration.
      */
-    void applyDefaultChecksOnColumn(ColumnSpec targetColumnSpec, ConnectionSpec connectionSpec, UserHome userHome);
+    void applyDefaultChecksOnColumn(ConnectionSpec connectionSpec,
+                                    TableSpec targetTableSpec,
+                                    ColumnSpec targetColumnSpec,
+                                    UserHome userHome);
 }
