@@ -66,18 +66,19 @@ const DuckdbConnection = ({
       label: 'AWS S3',
       value: DuckdbParametersSpecSecretsTypeEnum.s3
     },
-    {
-      label: 'Google Cloud Storage',
-      value: DuckdbParametersSpecSecretsTypeEnum.gcs
-    },
-    {
-      label: 'Azure Blob Storage',
-      value: DuckdbParametersSpecSecretsTypeEnum.azure
-    },
-    {
-      label: 'Cloudflare R2',
-      value: DuckdbParametersSpecSecretsTypeEnum.r2
-    }
+    // todo: uncomment below when implemented
+    // {
+    //   label: 'Google Cloud Storage',
+    //   value: DuckdbParametersSpecSecretsTypeEnum.gcs
+    // },
+    // {
+    //   label: 'Azure Blob Storage',
+    //   value: DuckdbParametersSpecSecretsTypeEnum.azure
+    // },
+    // {
+    //   label: 'Cloudflare R2',
+    //   value: DuckdbParametersSpecSecretsTypeEnum.r2
+    // }
   ];
 
   return (
