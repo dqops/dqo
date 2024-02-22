@@ -105,7 +105,7 @@ description: DQOps is an open-source data quality platform for data quality and 
 
     [:octicons-arrow-right-24: Verify the data quality status of training data sets](client/index.md#get-table-data-quality-status)
 
-    [:octicons-arrow-right-24: Define custom data quality checks and rules](dqo-concepts/definition-of-data-quality-rules.md)
+    [:octicons-arrow-right-24: Design custom data quality checks and rules](working-with-dqo/creating-custom-data-quality-checks.md)
 
 </div>
 
