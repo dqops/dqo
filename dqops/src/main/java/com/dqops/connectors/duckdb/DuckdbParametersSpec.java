@@ -56,7 +56,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbReadMode readMode;
+    private DuckdbReadMode readMode = DuckdbReadMode.files;
 
     @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
