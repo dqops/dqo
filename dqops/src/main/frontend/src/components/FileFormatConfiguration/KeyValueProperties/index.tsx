@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 import { SharedCredentialListModel } from '../../../api';
 import KeyValuePropertyAddItem from './KeyValuePropertyAddItem';
@@ -41,8 +41,19 @@ const KeyValueProperties = ({
     }[]
   ) => {
     setArr(array);
-    onChange(convertArrayToObject(array));
+    if (
+      Object.values(array[array.length - 1])[0].length !== 0 &&
+      Object.keys(array[array.length - 1])[0].length !== 0
+    ) {
+      onChange(convertArrayToObject(array));
+    }
   };
+
+  useEffect(() => {
+    if (arr.length === 0) {
+      onChangeArr([{ ['']: '' }]);
+    }
+  }, [arr]);
 
   return (
     <div className="py-4">
@@ -66,11 +77,11 @@ const KeyValueProperties = ({
               sharedCredentials={sharedCredentials}
             />
           ))}
-          <KeyValuePropertyAddItem
+          {/* <KeyValuePropertyAddItem
             properties={arr}
             onChange={onChangeArr}
             sharedCredentials={sharedCredentials}
-          />
+          /> */}
         </tbody>
       </table>
     </div>
