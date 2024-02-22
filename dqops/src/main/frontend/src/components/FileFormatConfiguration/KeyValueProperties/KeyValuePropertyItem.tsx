@@ -7,70 +7,55 @@ import { SharedCredentialListModel } from '../../../api';
 import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
 
 interface IKeyValuePropertyItemProps {
-  propertyKey: string;
-  properties: { [key: string]: string };
-  onChange: (properties: { [key: string]: string }) => void;
+  properties: { [key: string]: string }[];
+  onChange: (properties: { [key: string]: string }[]) => void;
   sharedCredentials?: SharedCredentialListModel[];
+  index: number;
 }
 
 const KeyValuePropertyItem = ({
-  propertyKey,
   properties,
   onChange,
-  sharedCredentials
+  sharedCredentials,
+  index
 }: IKeyValuePropertyItemProps) => {
-  const value = properties[propertyKey];
-  // const isLast = idx === Object.keys(properties).length - 1;
+  const value = Object.values(properties[index])[0];
+  const key = Object.keys(properties[index])[0];
 
-  // const onAdd = (key: string, value: string) => {
-  //   const elem = { [key]: value };
-  //   onChange({ ...properties, ...elem });
-  // };
-
-  const onRemove = (key: string) => {
-    const copiedProperties = { ...properties };
-    delete copiedProperties[key];
-
+  const onRemove = () => {
+    const copiedProperties = [...properties].filter((_, idx) => idx !== index);
     onChange(copiedProperties);
   };
 
   const onChangeKey = (newKey: string) => {
-    if (newKey !== propertyKey) {
-      const updatedProperties = { ...properties };
-      updatedProperties[newKey] = value;
-      delete updatedProperties[propertyKey];
-      onChange(updatedProperties);
-    }
+    const updatedProperties = [...properties];
+
+    updatedProperties[index] = { [newKey]: value };
+    onChange(updatedProperties);
   };
 
-  const onChangeValue = (key: string, value: string) => {
-    const copiedProperties = { ...properties };
-    copiedProperties[key] = value;
-    onChange(copiedProperties);
+  const onChangeValue = (newValue: string) => {
+    const updatedProperties = [...properties];
+
+    updatedProperties[index] = { key: newValue };
+    onChange(updatedProperties);
   };
   return (
     <tr>
       <td className="pr-4 min-w-40 py-2 w-1/4">
-        <Input
-          value={propertyKey}
-          onChange={(e) => onChangeKey(e.target.value)}
-        />
+        <Input value={key} onChange={(e) => onChangeKey(e.target.value)} />
         {/* {propertyKey} */}
       </td>
       <td className="pr-4 min-w-40 py-2 w-3/4">
         <FieldTypeInput
           value={value}
-          onChange={(val) => onChangeValue(propertyKey, val)}
+          onChange={(val) => onChangeValue(val)}
           data={sharedCredentials}
           credential={true}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">
-        <IconButton
-          className="bg-teal-500"
-          size="sm"
-          onClick={() => onRemove(propertyKey)}
-        >
+        <IconButton className="bg-teal-500" size="sm" onClick={onRemove}>
           <SvgIcon name="delete" className="w-4" />
         </IconButton>
       </td>

@@ -7,8 +7,8 @@ import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea
 import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 
 interface IKeyValueProperties {
-  properties?: { [key: string]: string };
-  onChange: (properties: { [key: string]: string }) => void;
+  properties?: { [key: string]: string }[];
+  onChange: (properties: { [key: string]: string }[]) => void;
   sharedCredentials?: SharedCredentialListModel[];
 }
 
@@ -21,25 +21,22 @@ export default function KeyValuePropertyAddItem({
   const [value, setValue] = useState('');
 
   const onAdd = () => {
+    onChange([...(properties ?? []), { [key]: value }]);
     setKey('');
     setValue('');
-    // console.log(convertObjectToArray(properties));
-    // console.log(convertObjectToArray({ [key]: value }));
-    // const arr: [string, string][] = [
-    //   ...convertObjectToArray(properties),
-    //   ...convertObjectToArray({ [key]: value })
-    // ];
-
-    // const obj: { [key: string]: string } = Object.fromEntries(arr);
-    // console.log(obj);
-    // console.log({ ...properties, [key]: value });
-    onChange({ ...properties, [key]: value });
   };
+
+  const isKeyRed = key.length === 0 && value.length > 0;
+  const isValueRed = key.length > 0 && value.length === 0;
 
   return (
     <tr>
       <td className="pr-4 min-w-40 py-2 w-1/4">
-        <Input value={key} onChange={(e) => setKey(e.target.value)} />
+        <Input
+          value={key}
+          onChange={(e) => setKey(e.target.value)}
+          className={isKeyRed ? 'border border-red-500' : ''}
+        />
       </td>
       <td className="pr-4 min-w-40 py-2 w-3/4">
         <FieldTypeInput
@@ -47,6 +44,7 @@ export default function KeyValuePropertyAddItem({
           onChange={(val) => setValue(val)}
           credential={true}
           data={sharedCredentials}
+          inputClassName={isValueRed ? 'border border-red-500' : ''}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">

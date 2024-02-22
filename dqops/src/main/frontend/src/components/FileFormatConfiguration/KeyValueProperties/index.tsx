@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import KeyValuePropertyItem from './KeyValuePropertyItem';
 import { SharedCredentialListModel } from '../../../api';
 import KeyValuePropertyAddItem from './KeyValuePropertyAddItem';
@@ -9,11 +9,41 @@ interface IKeyValueProperties {
   sharedCredentials?: SharedCredentialListModel[];
 }
 
+function convertObjectToArray(obj: {
+  [key: string]: string;
+}): { [key: string]: string }[] {
+  return Object.entries(obj).map(([key, value]) => ({ [key]: value }));
+}
+
+function convertArrayToObject(array: { [key: string]: string }[]): {
+  [key: string]: string;
+} {
+  return array.reduce((result, currentObject) => {
+    for (const key in currentObject) {
+      if (Object.prototype.hasOwnProperty.call(currentObject, key)) {
+        result[key] = currentObject[key];
+      }
+    }
+    return result;
+  }, {});
+}
+
 const KeyValueProperties = ({
   properties,
   onChange,
   sharedCredentials
 }: IKeyValueProperties) => {
+  const [arr, setArr] = useState(convertObjectToArray(properties ?? {}));
+
+  const onChangeArr = (
+    array: {
+      [key: string]: string;
+    }[]
+  ) => {
+    setArr(array);
+    onChange(convertArrayToObject(array));
+  };
+
   return (
     <div className="py-4">
       <table className="my-3 w-full">
@@ -27,18 +57,18 @@ const KeyValueProperties = ({
           </tr>
         </thead>
         <tbody>
-          {Object.keys(properties ?? {}).map((propertyKey, index) => (
+          {arr.map((_, index) => (
             <KeyValuePropertyItem
               key={index}
-              propertyKey={propertyKey}
-              properties={properties ?? {}}
-              onChange={onChange}
+              index={index}
+              properties={arr}
+              onChange={onChangeArr}
               sharedCredentials={sharedCredentials}
             />
           ))}
           <KeyValuePropertyAddItem
-            properties={properties ?? {}}
-            onChange={onChange}
+            properties={arr}
+            onChange={onChangeArr}
             sharedCredentials={sharedCredentials}
           />
         </tbody>
