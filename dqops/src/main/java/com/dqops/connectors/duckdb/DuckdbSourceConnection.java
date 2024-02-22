@@ -27,6 +27,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
@@ -226,24 +227,23 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     return;
                 }
 
-                if(!Strings.isNullOrEmpty(duckdb.getUser()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
-                ){
-                    String awsAccessKeyId = profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).get();
+                Optional<String> accessKeyId = profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
+                    String awsAccessKeyId = accessKeyId.get();
                     duckdb.setUser(awsAccessKeyId);
                 }
 
-                if(!Strings.isNullOrEmpty(duckdb.getPassword()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()
-                ){
-                    String awsSecretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get();
+                Optional<String> secretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
+                    String awsSecretAccessKey = secretAccessKey.get();
                     duckdb.setPassword(awsSecretAccessKey);
                 }
 
-                // todo: set the region form defaults
-//                if(!Strings.isNullOrEmpty(duckdb.getRegion()) && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()
-//                ){
-//                    String awsSecretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).get();
-//                    duckdb.setPassword(awsSecretAccessKey);
-//                }
+                Optional<String> region = profile.get().property(AwsConfigProfileSettingNames.REGION);
+                if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
+                    String awsRegion = region.get();
+                    duckdb.setRegion(awsRegion);
+                }
 
                 break;
             default:
