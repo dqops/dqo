@@ -50,17 +50,19 @@ const KeyValuePropertyItem = ({
   };
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
+      <td className="pr-4 min-w-40 py-2 w-1/4">
         <Input
           value={propertyKey}
           onChange={(e) => onChangeKey(e.target.value)}
         />
         {/* {propertyKey} */}
       </td>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
-        <FieldTypeTextarea
+      <td className="pr-4 min-w-40 py-2 w-3/4">
+        <FieldTypeInput
           value={value}
           onChange={(val) => onChangeValue(propertyKey, val)}
+          data={sharedCredentials}
+          credential={true}
         />
       </td>
       <td className="px-8 min-w-20 py-2 text-center">

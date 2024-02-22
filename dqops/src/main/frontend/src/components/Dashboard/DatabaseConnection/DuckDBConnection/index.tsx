@@ -53,7 +53,6 @@ const DuckdbConnection = ({
 
   const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
     setFileFormatType(val);
-  console.log(duckdb?.directories);
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
       <FileFormatConfiguration
@@ -67,8 +66,9 @@ const DuckdbConnection = ({
         <KeyValueProperties
           properties={duckdb?.directories}
           onChange={(properties) => {
-            onChange({ directories: properties }), console.log(properties);
+            onChange({ directories: properties });
           }}
+          sharedCredentials={sharedCredentials}
         />
       </FileFormatConfiguration>
     </SectionWrapper>

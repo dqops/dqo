@@ -58,7 +58,7 @@ export default function CsvFormatConfiguration({
         onChange: (str) => onChangeConfiguration({ dateformat: str.toString() })
       },
       {
-        label: 'Decimal Separator',
+        label: 'Decimal separator',
         value: configuration?.decimal_separator,
         onChange: (str) =>
           onChangeConfiguration({ decimal_separator: str.toString() })
@@ -69,7 +69,7 @@ export default function CsvFormatConfiguration({
         onChange: (str) => onChangeConfiguration({ delim: str.toString() })
       },
       {
-        label: 'Escape Character/String',
+        label: 'Escape character/string',
         value: configuration?.escape,
         onChange: (str) => onChangeConfiguration({ escape: str.toString() })
       },
@@ -102,7 +102,7 @@ export default function CsvFormatConfiguration({
         }
       },
       {
-        label: 'Timestamp Format',
+        label: 'Timestamp format',
         value: configuration?.timestampformat,
         onChange: (str) =>
           onChangeConfiguration({ timestampformat: str.toString() })
@@ -122,8 +122,7 @@ export default function CsvFormatConfiguration({
           label: 'Allow quoted nulls',
           value: configuration?.allow_quoted_nulls,
           onChange: (value) =>
-            onChangeConfiguration({ allow_quoted_nulls: value }),
-          defaultValue: true
+            onChangeConfiguration({ allow_quoted_nulls: value })
         },
         {
           label: 'Filename',
@@ -153,7 +152,7 @@ export default function CsvFormatConfiguration({
     <FormatConfigurationRenderer
       configuraitonStrings={csvConfiguration}
       configurationBooleans={csvConfigurationBoolean}
-      type="Csv"
+      type="CSV"
     />
   );
 }

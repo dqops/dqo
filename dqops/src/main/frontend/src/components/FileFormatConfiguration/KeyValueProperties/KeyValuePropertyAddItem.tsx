@@ -1,10 +1,10 @@
 import { IconButton } from '@material-tailwind/react';
 import React, { useState } from 'react';
-import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 import SvgIcon from '../../SvgIcon';
 import { SharedCredentialListModel } from '../../../api';
 import Input from '../../Input';
 import FieldTypeTextarea from '../../Connection/ConnectionView/FieldTypeTextarea';
+import FieldTypeInput from '../../Connection/ConnectionView/FieldTypeInput';
 
 interface IKeyValueProperties {
   properties?: { [key: string]: string };
@@ -23,16 +23,26 @@ export default function KeyValuePropertyAddItem({
   const onAdd = () => {
     setKey('');
     setValue('');
+    // console.log(convertObjectToArray(properties));
+    // console.log(convertObjectToArray({ [key]: value }));
+    // const arr: [string, string][] = [
+    //   ...convertObjectToArray(properties),
+    //   ...convertObjectToArray({ [key]: value })
+    // ];
+
+    // const obj: { [key: string]: string } = Object.fromEntries(arr);
+    // console.log(obj);
+    // console.log({ ...properties, [key]: value });
     onChange({ ...properties, [key]: value });
   };
 
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
+      <td className="pr-4 min-w-40 py-2 w-1/4">
         <Input value={key} onChange={(e) => setKey(e.target.value)} />
       </td>
-      <td className="pr-4 min-w-40 py-2 w-1/2">
-        <FieldTypeTextarea
+      <td className="pr-4 min-w-40 py-2 w-3/4">
+        <FieldTypeInput
           value={value}
           onChange={(val) => setValue(val)}
           credential={true}

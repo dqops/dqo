@@ -149,7 +149,7 @@ export default function JsonFormatConfiguration({
         }
       },
       {
-        label: 'Timestamp Format',
+        label: 'Timestamp format',
         value: configuration?.timestampformat,
         onChange: (str) =>
           onChangeConfiguration({ timestampformat: str.toString() })
@@ -189,7 +189,7 @@ export default function JsonFormatConfiguration({
     <FormatConfigurationRenderer
       configuraitonStrings={jsonConfiguration}
       configurationBooleans={jsonConfigurationBoolean}
-      type="Json"
+      type="JSON"
     />
   );
 }
