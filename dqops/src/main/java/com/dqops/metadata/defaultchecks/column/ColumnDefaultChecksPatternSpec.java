@@ -62,6 +62,9 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
         }
     };
 
+    @JsonPropertyDescription("The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values.")
+    private int priority;
+
     @JsonPropertyDescription("The target column filter that are filtering the column, table and connection on which the default checks are applied.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
@@ -104,6 +107,23 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
     @Override
     public String getYamlParsingError() {
         return this.yamlParsingError;
+    }
+
+    /**
+     * Returns the apply priority.
+     * @return Application priority.
+     */
+    public int getPriority() {
+        return priority;
+    }
+
+    /**
+     * Sets the priority of applying this pattern.
+     * @param priority The priority of applying this pattern.
+     */
+    public void setPriority(int priority) {
+        this.setDirtyIf(this.priority != priority);
+        this.priority = priority;
     }
 
     /**

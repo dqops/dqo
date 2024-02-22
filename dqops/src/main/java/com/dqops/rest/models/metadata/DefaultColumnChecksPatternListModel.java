@@ -15,8 +15,8 @@
  */
 package com.dqops.rest.models.metadata;
 
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.column.TargetColumnPatternSpec;
 import com.dqops.utils.docs.generators.SampleStringsRegistry;
 import com.dqops.utils.docs.generators.SampleValueFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,13 +27,13 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * The listing model of table-level default check patterns that is returned by the REST API.
+ * The listing model of column-level default check patterns that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "DefaultTableChecksPatternListModel", description = "Default table-level checks pattern list model")
-public class DefaultTableChecksPatternListModel {
+@ApiModel(value = "DefaultColumnChecksPatternListModel", description = "Default column-level checks pattern list model")
+public class DefaultColumnChecksPatternListModel {
     /**
      * Pattern name.
      */
@@ -44,10 +44,10 @@ public class DefaultTableChecksPatternListModel {
     private int priority;
 
     /**
-     * Target table filters.
+     * Target column filters.
      */
-    @JsonPropertyDescription("The filters for the target table.")
-    private TargetTablePatternSpec targetTable;
+    @JsonPropertyDescription("The filters for the target column.")
+    private TargetColumnPatternSpec targetColumn;
 
     /**
      * Boolean flag that decides if the current user can update or delete this object.
@@ -63,7 +63,7 @@ public class DefaultTableChecksPatternListModel {
             "This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location.")
     private String yamlParsingError;
 
-    public DefaultTableChecksPatternListModel() {
+    public DefaultColumnChecksPatternListModel() {
     }
 
     /**
@@ -72,28 +72,27 @@ public class DefaultTableChecksPatternListModel {
      * @param isEditor       The current user has the editor permission.
      * @return Default checks pattern list model.
      */
-    public static DefaultTableChecksPatternListModel fromPatternSpecification(
-            TableDefaultChecksPatternSpec checksPatternSpec,
+    public static DefaultColumnChecksPatternListModel fromPatternSpecification(
+            ColumnDefaultChecksPatternSpec checksPatternSpec,
             boolean isEditor) {
-        return new DefaultTableChecksPatternListModel() {{
+        return new DefaultColumnChecksPatternListModel() {{
             setPatternName(checksPatternSpec.getPatternName());
             setPriority(checksPatternSpec.getPriority());
-            setTargetTable(checksPatternSpec.getTarget());
+            setTargetColumn(checksPatternSpec.getTarget());
             setCanEdit(isEditor);
             setYamlParsingError(checksPatternSpec.getYamlParsingError());
         }};
     }
 
-    public static class TableDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<DefaultTableChecksPatternListModel> {
+    public static class ColumnDefaultChecksPatternListModelSampleFactory implements SampleValueFactory<DefaultColumnChecksPatternListModel> {
         @Override
-        public DefaultTableChecksPatternListModel createSample() {
-            return new DefaultTableChecksPatternListModel() {{
+        public DefaultColumnChecksPatternListModel createSample() {
+            return new DefaultColumnChecksPatternListModel() {{
                 setPatternName(SampleStringsRegistry.getPatternName());
                 setPriority(100);
-                setTargetTable(new TargetTablePatternSpec() {{
+                setTargetColumn(new TargetColumnPatternSpec() {{
                     setConnection("dwh");
-                    setSchema("public");
-                    setTable("fact_*");
+                    setColumn("id");
                 }});
                 setCanEdit(true);
             }};

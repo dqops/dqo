@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.defaults.services;
+package com.dqops.checks.defaults;
 
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.sources.ColumnSpec;

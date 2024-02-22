@@ -22,7 +22,6 @@ public class JsonFileFormatSpecTest extends BaseTest {
     void buildSourceTableOptionsString_whenEachFieldsIsSet_fieldsArePresentInValidlyFormattedString() {
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
-            setColumns(Map.of("col1", "type1", "col2", "type2"));
             setCompression(CompressionType.gzip);
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
@@ -77,7 +76,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
     void deepClone_onInstanceWithAllFieldsSet_clones(){
         JsonFileFormatSpec sut = new JsonFileFormatSpec(){{
             setAutoDetect(true);
-            setCompression("gzip");
+            setCompression(CompressionType.gzip);
             setConvertStringsToIntegers(true);
             setDateformat("%m/%d/%Y");
             setFilename(true);
@@ -86,7 +85,7 @@ public class JsonFileFormatSpecTest extends BaseTest {
             setIgnoreErrors(true);
             setMaximumDepth(10L);
             setMaximumObjectSize(200L);
-            setRecords("auto");
+            setRecords(JsonRecordsType.auto);
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
         }};
 

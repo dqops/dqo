@@ -15,7 +15,6 @@
  */
 package com.dqops.core.jobqueue.jobs.schema;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.*;
 import com.dqops.core.jobqueue.*;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;

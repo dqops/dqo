@@ -98,7 +98,7 @@ public class FileColumnDefaultChecksPatternWrapperImpl extends ColumnDefaultChec
                     if (!Objects.equals(deserialized.getApiVersion(), ApiVersion.CURRENT_API_VERSION)) {
                         throw new LocalFileSystemException("apiVersion not supported in file " + fileNode.getFilePath().toString());
                     }
-                    if (deserialized.getKind() != SpecificationKind.default_table_checks) {
+                    if (deserialized.getKind() != SpecificationKind.default_column_checks) {
                         throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
                     }
 

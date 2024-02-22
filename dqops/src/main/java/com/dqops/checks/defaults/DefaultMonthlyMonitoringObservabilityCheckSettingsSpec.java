@@ -42,6 +42,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
+@Deprecated
 public class DefaultMonthlyMonitoringObservabilityCheckSettingsSpec extends AbstractSpec {
     public static final ChildHierarchyNodeFieldMapImpl<DefaultMonthlyMonitoringObservabilityCheckSettingsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {

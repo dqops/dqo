@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.defaults.services;
+package com.dqops.checks.defaults;
 
 import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;

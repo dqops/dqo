@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.dqops.checks.defaults.services;
+package com.dqops.checks.defaults;
 
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
@@ -23,6 +23,7 @@ import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.column.TargetColumnPatternFilter;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TargetTablePatternFilter;
@@ -32,6 +33,10 @@ import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 /**
  * Service that will apply the default configuration of the data observability (the default checks) on new tables and columns that are imported.
@@ -81,7 +86,10 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : userHome.getTableDefaultChecksPatterns() ) {
+        List<TableDefaultChecksPatternWrapper> tableDefaultChecksPatternWrappers = new ArrayList<>(userHome.getTableDefaultChecksPatterns().toList());
+        tableDefaultChecksPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
+        
+        for (TableDefaultChecksPatternWrapper tableDefaultChecksPatternWrapper : tableDefaultChecksPatternWrappers) {
             TableDefaultChecksPatternSpec defaultChecksPattern = tableDefaultChecksPatternWrapper.getSpec();
             TargetTablePatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
             if (!patternFilter.match(connectionSpec, targetTableSpec, true)) {
@@ -108,7 +116,10 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(connectionSpec.getProviderType());
         ProviderDialectSettings providerDialectSettings = connectionProvider.getDialectSettings(connectionSpec);
 
-        for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : userHome.getColumnDefaultChecksPatterns() ) {
+        List<ColumnDefaultChecksPatternWrapper> columnPatternWrappers = new ArrayList<>(userHome.getColumnDefaultChecksPatterns().toList());
+        columnPatternWrappers.sort(Comparator.comparing(wrapper -> wrapper.getSpec().getPriority()));
+
+        for (ColumnDefaultChecksPatternWrapper columnDefaultChecksPatternWrapper : columnPatternWrappers) {
             ColumnDefaultChecksPatternSpec defaultChecksPattern = columnDefaultChecksPatternWrapper.getSpec();
             TargetColumnPatternFilter patternFilter = defaultChecksPattern.getTarget().toPatternFilter();
             DataTypeCategory dataTypeCategory = providerDialectSettings.detectColumnType(targetColumnSpec.getTypeSnapshot());

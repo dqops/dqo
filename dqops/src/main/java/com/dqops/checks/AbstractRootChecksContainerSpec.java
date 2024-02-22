@@ -206,7 +206,7 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
                     if (defaultCheckNode instanceof AbstractCheckSpec<?,?,?,?>) {
                         AbstractCheckSpec<?,?,?,?> defaultCheck = (AbstractCheckSpec<?,?,?,?>)defaultCheckNode;
 
-                        Object alreadyConfiguredCheckSpec = defaultChecksEntry.getGetChildFunc().apply(defaultCheckCategory);
+                        Object alreadyConfiguredCheckSpec = defaultChecksEntry.getGetChildFunc().apply(targetCategoryContainer);
                         if (alreadyConfiguredCheckSpec != null) {
                             continue;
                         }

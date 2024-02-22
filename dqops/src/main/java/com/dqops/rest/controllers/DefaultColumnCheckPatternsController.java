@@ -25,13 +25,14 @@ import com.dqops.core.principal.DqoUserPrincipal;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.execution.ExecutionContext;
 import com.dqops.execution.ExecutionContextFactory;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
-import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.userhome.UserHome;
-import com.dqops.rest.models.metadata.*;
+import com.dqops.rest.models.metadata.DefaultColumnChecksPatternListModel;
+import com.dqops.rest.models.metadata.DefaultColumnChecksPatternModel;
 import com.dqops.rest.models.platform.SpringErrorPayload;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingService;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingService;
@@ -51,13 +52,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * REST api controller to manage the list of default table-level check patterns.
+ * REST api controller to manage the list of default column-level check patterns.
  */
 @RestController
 @RequestMapping("/api")
 @ResponseStatus(HttpStatus.OK)
-@Api(value = "DefaultTableCheckPatterns", description = "Operations for managing the configuration of the default table-level checks for tables matching a pattern.")
-public class DefaultTableCheckPatternsController {
+@Api(value = "DefaultColumnCheckPatterns", description = "Operations for managing the configuration of the default column-level checks for columns matching a pattern.")
+public class DefaultColumnCheckPatternsController {
     private final UserHomeContextFactory userHomeContextFactory;
     private final ExecutionContextFactory executionContextFactory;
     private final SpecToModelCheckMappingService specToModelCheckMappingService;
@@ -71,10 +72,10 @@ public class DefaultTableCheckPatternsController {
      * @param modelToSpecCheckMappingService Check model to UI conversion service.
      */
     @Autowired
-    public DefaultTableCheckPatternsController(UserHomeContextFactory userHomeContextFactory,
-                                               ExecutionContextFactory executionContextFactory,
-                                               SpecToModelCheckMappingService specToModelCheckMappingService,
-                                               ModelToSpecCheckMappingService modelToSpecCheckMappingService) {
+    public DefaultColumnCheckPatternsController(UserHomeContextFactory userHomeContextFactory,
+                                                ExecutionContextFactory executionContextFactory,
+                                                SpecToModelCheckMappingService specToModelCheckMappingService,
+                                                ModelToSpecCheckMappingService modelToSpecCheckMappingService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.executionContextFactory = executionContextFactory;
         this.specToModelCheckMappingService = specToModelCheckMappingService;
@@ -85,29 +86,29 @@ public class DefaultTableCheckPatternsController {
      * Returns a flat list of all default check templates.
      * @return List of all default check templates.
      */
-    @GetMapping(value = "/default/checks/table", produces = "application/json")
-    @ApiOperation(value = "getAllDefaultTableChecksPatterns",
-            notes = "Returns a flat list of all table-level default check patterns configured for this instance. Default checks are applied on tables dynamically.",
-            response = DefaultTableChecksPatternListModel[].class,
+    @GetMapping(value = "/default/checks/column", produces = "application/json")
+    @ApiOperation(value = "getAllDefaultColumnChecksPatterns",
+            notes = "Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.",
+            response = DefaultColumnChecksPatternListModel[].class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultTableChecksPatternListModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternListModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Flux<DefaultTableChecksPatternListModel>> getAllDefaultTableChecksPatterns(
+    public ResponseEntity<Flux<DefaultColumnChecksPatternListModel>> getAllDefaultColumnChecksPatterns(
             @AuthenticationPrincipal DqoUserPrincipal principal) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        List<TableDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        List<ColumnDefaultChecksPatternWrapper> patternWrappersList = defaultChecksPatternsList.toList();
         boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
 
-        List<DefaultTableChecksPatternListModel> models = patternWrappersList.stream()
-                .map(pw -> DefaultTableChecksPatternListModel.fromPatternSpecification(pw.getSpec(), canEdit))
+        List<DefaultColumnChecksPatternListModel> models = patternWrappersList.stream()
+                .map(pw -> DefaultColumnChecksPatternListModel.fromPatternSpecification(pw.getSpec(), canEdit))
                 .collect(Collectors.toList());
         models.sort(Comparator.comparing(model -> model.getPatternName()));
 
@@ -119,21 +120,21 @@ public class DefaultTableCheckPatternsController {
      * @param patternName Pattern name.
      * @return Model of the default checks pattern.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/target", produces = "application/json")
-    @ApiOperation(value = "getDefaultTableChecksPatternTarget", notes = "Returns a default checks pattern definition", response = DefaultTableChecksPatternListModel.class,
+    @GetMapping(value = "/default/checks/column/{patternName}/target", produces = "application/json")
+    @ApiOperation(value = "getDefaultColumnChecksPatternTarget", notes = "Returns a default checks pattern definition", response = DefaultColumnChecksPatternListModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultTableChecksPatternListModel.class),
+            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternListModel.class),
             @ApiResponse(code = 404, message = "Pattern name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DefaultTableChecksPatternListModel>> getDefaultTableChecksPatternTarget(
+    public ResponseEntity<Mono<DefaultColumnChecksPatternListModel>> getDefaultColumnChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Table pattern name") @PathVariable String patternName) {
+            @ApiParam("Column pattern name") @PathVariable String patternName) {
 
         if (Strings.isNullOrEmpty(patternName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -141,16 +142,16 @@ public class DefaultTableCheckPatternsController {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper =
+                userHome.getColumnDefaultChecksPatterns().getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
         boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        DefaultTableChecksPatternListModel patternModel =
-                DefaultTableChecksPatternListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
+        DefaultColumnChecksPatternListModel patternModel =
+                DefaultColumnChecksPatternListModel.fromPatternSpecification(defaultChecksPatternWrapper.getSpec(), canEdit);
 
         return new ResponseEntity<>(Mono.just(patternModel), HttpStatus.OK);
     }
@@ -160,21 +161,21 @@ public class DefaultTableCheckPatternsController {
      * @param patternName Pattern name.
      * @return Model of the default checks pattern.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}", produces = "application/json")
-    @ApiOperation(value = "getDefaultTableChecksPattern", notes = "Returns a default checks pattern definition as a full specification object", response = DefaultTableChecksPatternModel.class,
+    @GetMapping(value = "/default/checks/column/{patternName}", produces = "application/json")
+    @ApiOperation(value = "getDefaultColumnChecksPattern", notes = "Returns a default checks pattern definition as a full specification object", response = DefaultColumnChecksPatternModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = DefaultTableChecksPatternModel.class),
+            @ApiResponse(code = 200, message = "OK", response = DefaultColumnChecksPatternModel.class),
             @ApiResponse(code = 404, message = "Pattern name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<DefaultTableChecksPatternModel>> getDefaultTableChecksPattern(
+    public ResponseEntity<Mono<DefaultColumnChecksPatternModel>> getDefaultColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Table pattern name") @PathVariable String patternName) {
+            @ApiParam("Column pattern name") @PathVariable String patternName) {
 
         if (Strings.isNullOrEmpty(patternName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
@@ -182,15 +183,15 @@ public class DefaultTableCheckPatternsController {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper =
-                userHome.getTableDefaultChecksPatterns().getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper =
+                userHome.getColumnDefaultChecksPatterns().getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
         boolean canEdit = principal.hasPrivilege(DqoPermissionGrantedAuthorities.EDIT);
-        DefaultTableChecksPatternModel patternModel = new DefaultTableChecksPatternModel() {{
+        DefaultColumnChecksPatternModel patternModel = new DefaultColumnChecksPatternModel() {{
             setPatternName(patternName);
             setPatternSpec(defaultChecksPatternWrapper.getSpec());
             setCanEdit(canEdit);
@@ -201,13 +202,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Creates (adds) a new default table-level checks pattern configuration.
+     * Creates (adds) a new default column-level checks pattern configuration.
      * @param patternModel Default checks pattern model.
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/checks/table/{patternName}/target", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createDefaultTableChecksPatternTarget", notes = "Creates (adds) a new default table-level checks pattern configuration.", response = Void.class,
+    @PostMapping(value = "/default/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createDefaultColumnChecksPatternTarget", notes = "Creates (adds) a new default column-level checks pattern configuration.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -220,10 +221,10 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createDefaultTableChecksPatternTarget(
+    public ResponseEntity<Mono<Void>> createDefaultColumnChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
-            @ApiParam("Default checks pattern model with only the target filters") @RequestBody DefaultTableChecksPatternListModel patternModel) {
+            @ApiParam("Default checks pattern model with only the target filters") @RequestBody DefaultColumnChecksPatternListModel patternModel) {
         if (patternModel == null || Strings.isNullOrEmpty(patternName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -231,16 +232,16 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
         if (existingDefaultChecksPatternWrapper != null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-        defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
-            setTarget(patternModel.getTargetTable());
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+        defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec() {{
+            setTarget(patternModel.getTargetColumn());
             setPriority(patternModel.getPriority());
         }});
         userHomeContext.flush();
@@ -249,13 +250,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Creates (adds) a new default table-level checks pattern configuration as a full specification object.
+     * Creates (adds) a new default column-level checks pattern configuration as a full specification object.
      * @param patternModel Default checks pattern model.
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PostMapping(value = "/default/checks/table/{patternName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "createDefaultTableChecksPattern", notes = "Creates (adds) a new default table-level checks pattern configuration by saving a full specification object.", response = Void.class,
+    @PostMapping(value = "/default/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "createDefaultColumnChecksPattern", notes = "Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -268,10 +269,10 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> createDefaultTableChecksPattern(
+    public ResponseEntity<Mono<Void>> createDefaultColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternModel patternModel) {
+            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternModel patternModel) {
         if (patternModel == null || Strings.isNullOrEmpty(patternName) || patternModel.getPatternSpec() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
@@ -279,14 +280,14 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
         if (existingDefaultChecksPatternWrapper != null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
         defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
         userHomeContext.flush();
 
@@ -294,48 +295,48 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates an existing default table-level checks pattern, creating possibly a new checks pattern configuration.
+     * Updates an existing default column-level checks pattern, creating possibly a new checks pattern configuration.
      * @param patternModel Default checks pattern model.
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/target", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultTableChecksPatternTarget", notes = "Updates an default table-level checks pattern, changing only the target object", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/target", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultColumnChecksPatternTarget", notes = "Updates an default column-level checks pattern, changing only the target object", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Default table-level checks pattern successfully updated", response = Void.class),
+            @ApiResponse(code = 204, message = "Default column-level checks pattern successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Pattern not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultTableChecksPatternTarget(
+    public ResponseEntity<Mono<Void>> updateDefaultColumnChecksPatternTarget(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternListModel patternModel,
+            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternListModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
 
-        if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getTargetTable() == null) {
+        if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getTargetColumn() == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
         if (existingDefaultChecksPatternWrapper == null) {
-            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
-            defaultChecksPatternWrapper.setSpec(new TableDefaultChecksPatternSpec() {{
-                setTarget(patternModel.getTargetTable());
+            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+            defaultChecksPatternWrapper.setSpec(new ColumnDefaultChecksPatternSpec() {{
+                setTarget(patternModel.getTargetColumn());
                 setPriority(patternModel.getPriority());
             }});
         } else {
-            TableDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
-            currentPatternSpec.setTarget(patternModel.getTargetTable());
+            ColumnDefaultChecksPatternSpec currentPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+            currentPatternSpec.setTarget(patternModel.getTargetColumn());
             currentPatternSpec.setPriority(patternModel.getPriority());
         }
         userHomeContext.flush();
@@ -344,27 +345,27 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates an existing default table-level checks pattern, creating possibly a new checks pattern configuration, by passing a full specification.
+     * Updates an existing default column-level checks pattern, creating possibly a new checks pattern configuration, by passing a full specification.
      * @param patternModel Default checks pattern model.
      * @param patternName Pattern name.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultTableChecksPattern", notes = "Updates an default table-level checks pattern by saving a full specification object", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultColumnChecksPattern", notes = "Updates an default column-level checks pattern by saving a full specification object", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Default table-level checks pattern successfully updated", response = Void.class),
+            @ApiResponse(code = 204, message = "Default column-level checks pattern successfully updated", response = Void.class),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying"),
             @ApiResponse(code = 404, message = "Pattern not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("Default checks pattern model") @RequestBody DefaultTableChecksPatternModel patternModel,
+            @ApiParam("Default checks pattern model") @RequestBody DefaultColumnChecksPatternModel patternModel,
             @ApiParam("Pattern name") @PathVariable String patternName) {
 
         if (Strings.isNullOrEmpty(patternName) || patternModel == null || patternModel.getPatternSpec() == null) {
@@ -374,14 +375,14 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
         if (existingDefaultChecksPatternWrapper == null) {
-            TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
+            ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = defaultChecksPatternsList.createAndAddNew(patternName);
             defaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
         } else {
-            TableDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
+            ColumnDefaultChecksPatternSpec oldPatternSpec = existingDefaultChecksPatternWrapper.getSpec(); // just to load
             existingDefaultChecksPatternWrapper.setSpec(patternModel.getPatternSpec());
         }
         userHomeContext.flush();
@@ -394,19 +395,19 @@ public class DefaultTableCheckPatternsController {
      * @param patternName  Pattern name.
      * @return Empty response.
      */
-    @DeleteMapping(value = "/default/checks/table/{patternName}", produces = "application/json")
-    @ApiOperation(value = "deleteDefaultTableChecksPattern", notes = "Deletes a default table-level checks pattern", response = Void.class,
+    @DeleteMapping(value = "/default/checks/column/{patternName}", produces = "application/json")
+    @ApiOperation(value = "deleteDefaultColumnChecksPattern", notes = "Deletes a default column-level checks pattern", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Default table-level checks pattern successfully deleted", response = Void.class),
+            @ApiResponse(code = 204, message = "Default column-level checks pattern successfully deleted", response = Void.class),
             @ApiResponse(code = 404, message = "Default checks pattern not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> deleteDefaultTableChecksPattern(
+    public ResponseEntity<Mono<Void>> deleteDefaultColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
 
@@ -417,8 +418,8 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(principal.getDataDomainIdentity());
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternList defaultChecksPatternsList = userHome.getTableDefaultChecksPatterns();
-        TableDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
+        ColumnDefaultChecksPatternList defaultChecksPatternsList = userHome.getColumnDefaultChecksPatterns();
+        ColumnDefaultChecksPatternWrapper existingDefaultChecksPatternWrapper = defaultChecksPatternsList.getByObjectName(patternName, true);
 
         if (existingDefaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -431,12 +432,12 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Returns the UI model for the default configuration of default profiling checks on a table level.
-     * @return Check UI model with the configuration of the profiling checks that are applied to tables.
+     * Returns the UI model for the default configuration of default profiling checks on a column level.
+     * @return Check UI model with the configuration of the profiling checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/profiling", produces = "application/json")
-    @ApiOperation(value = "getDefaultProfilingTableChecksPattern",
-            notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a table level.",
+    @GetMapping(value = "/default/checks/column/{patternName}/profiling", produces = "application/json")
+    @ApiOperation(value = "getDefaultProfilingColumnChecksPattern",
+            notes = "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -448,7 +449,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingTableChecksPattern(
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultProfilingColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -456,15 +457,15 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, false);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                 null, null, null, executionContext, null,
@@ -474,12 +475,12 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Returns the UI model for the default configuration of default daily monitoring checks on a table level.
-     * @return Check UI model with the configuration of the daily monitoring checks that are applied to tables.
+     * Returns the UI model for the default configuration of default daily monitoring checks on a column level.
+     * @return Check UI model with the configuration of the daily monitoring checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/monitoring/daily", produces = "application/json")
-    @ApiOperation(value = "getDefaultMonitoringDailyTableChecksPattern",
-            notes = "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a table level.",
+    @GetMapping(value = "/default/checks/column/{patternName}/monitoring/daily", produces = "application/json")
+    @ApiOperation(value = "getDefaultMonitoringDailyColumnChecksPattern",
+            notes = "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -491,7 +492,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringDailyTableChecksPattern(
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringDailyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -499,15 +500,15 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, false);
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                 null, null, null, executionContext, null,
@@ -517,12 +518,12 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Returns the UI model for the default configuration of default monthly monitoring checks on a table level.
-     * @return Check UI model with the configuration of the monthly monitoring checks that are applied to tables.
+     * Returns the UI model for the default configuration of default monthly monitoring checks on a column level.
+     * @return Check UI model with the configuration of the monthly monitoring checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/monitoring/monthly", produces = "application/json")
-    @ApiOperation(value = "getDefaultMonitoringMonthlyTableChecksPattern",
-            notes = "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a table level.",
+    @GetMapping(value = "/default/checks/column/{patternName}/monitoring/monthly", produces = "application/json")
+    @ApiOperation(value = "getDefaultMonitoringMonthlyColumnChecksPattern",
+            notes = "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -534,7 +535,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringMonthlyTableChecksPattern(
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultMonitoringMonthlyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -542,15 +543,15 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, false);
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                 null, null, null, executionContext, null,
@@ -560,12 +561,12 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Returns the UI model for the default configuration of default daily partitioned checks on a table level.
-     * @return Check UI model with the configuration of the daily partitioned checks that are applied to tables.
+     * Returns the UI model for the default configuration of default daily partitioned checks on a column level.
+     * @return Check UI model with the configuration of the daily partitioned checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/partitioned/daily", produces = "application/json")
-    @ApiOperation(value = "getDefaultPartitionedDailyTableChecksPattern",
-            notes = "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a table level.",
+    @GetMapping(value = "/default/checks/column/{patternName}/partitioned/daily", produces = "application/json")
+    @ApiOperation(value = "getDefaultPartitionedDailyColumnChecksPattern",
+            notes = "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -577,7 +578,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedDailyTableChecksPattern(
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedDailyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -585,15 +586,15 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, false);
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                 null, null, null, executionContext, null,
@@ -603,12 +604,12 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Returns the UI model for the default configuration of default monthly partitioned checks on a table level.
-     * @return Check UI model with the configuration of the monthly partitioned checks that are applied to tables.
+     * Returns the UI model for the default configuration of default monthly partitioned checks on a column level.
+     * @return Check UI model with the configuration of the monthly partitioned checks that are applied to columns.
      */
-    @GetMapping(value = "/default/checks/table/{patternName}/partitioned/monthly", produces = "application/json")
-    @ApiOperation(value = "getDefaultPartitionedMonthlyTableChecksPattern",
-            notes = "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a table level.",
+    @GetMapping(value = "/default/checks/column/{patternName}/partitioned/monthly", produces = "application/json")
+    @ApiOperation(value = "getDefaultPartitionedMonthlyColumnChecksPattern",
+            notes = "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.",
             response = CheckContainerModel.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
@@ -620,7 +621,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.VIEW})
-    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedMonthlyTableChecksPattern(
+    public ResponseEntity<Mono<CheckContainerModel>> getDefaultPartitionedMonthlyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName) {
         UserDomainIdentity userDomainIdentity = principal.getDataDomainIdentity();
@@ -628,15 +629,15 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
 
         UserHome userHome = userHomeContext.getUserHome();
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec checksContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, false);
 
         CheckContainerModel checkContainerModel = this.specToModelCheckMappingService.createModel(checksContainer,
                 null, null, null, executionContext, null,
@@ -646,13 +647,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates the configuration of default profiling checks pattern on a table level.
+     * Updates the configuration of default profiling checks pattern on a column level.
      * @param checkContainerModel New configuration of the default profiling checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/profiling", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultProfilingTableChecksPattern",
-            notes = "New configuration of the default profiling checks on a table level. These checks will be applied to tables.", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/profiling", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultProfilingColumnChecksPattern",
+            notes = "New configuration of the default profiling checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -665,7 +666,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultProfilingTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultProfilingColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality profiling checks configuration")
@@ -679,17 +680,17 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.profiling, null, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.profiling, null, true);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
+        defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
 
         userHomeContext.flush();
 
@@ -697,13 +698,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates the configuration of default daily monitoring checks pattern on a table level.
+     * Updates the configuration of default daily monitoring checks pattern on a column level.
      * @param checkContainerModel New configuration of the default daily monitoring checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/monitoring/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultMonitoringDailyTableChecksPattern",
-            notes = "New configuration of the default daily monitoring checks on a table level. These checks will be applied to tables.", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/monitoring/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultMonitoringDailyColumnChecksPattern",
+            notes = "New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -716,7 +717,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultMonitoringDailyTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultMonitoringDailyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily monitoring checks configuration")
@@ -730,17 +731,17 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
+        defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
 
         userHomeContext.flush();
 
@@ -748,13 +749,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates the configuration of default monthly monitoring checks pattern on a table level.
+     * Updates the configuration of default monthly monitoring checks pattern on a column level.
      * @param checkContainerModel New configuration of the default monthly monitoring checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultMonitoringMonthlyTableChecksPattern",
-            notes = "New configuration of the default monthly monitoring checks on a table level. These checks will be applied to tables.", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/monitoring/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultMonitoringMonthlyColumnChecksPattern",
+            notes = "New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -767,7 +768,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultMonitoringMonthlyTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultMonitoringMonthlyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly monitoring checks configuration")
@@ -781,17 +782,17 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
+        defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
 
         userHomeContext.flush();
 
@@ -799,13 +800,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates the configuration of default daily partitioned checks pattern on a table level.
+     * Updates the configuration of default daily partitioned checks pattern on a column level.
      * @param checkContainerModel New configuration of the default daily partitioned checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/partitioned/daily", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultPartitionedDailyTableChecksPattern",
-            notes = "New configuration of the default daily partitioned checks on a table level. These checks will be applied to tables.", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/partitioned/daily", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultPartitionedDailyColumnChecksPattern",
+            notes = "New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -818,7 +819,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultPartitionedDailyTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultPartitionedDailyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality daily partitioned checks configuration")
@@ -832,17 +833,17 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
+        defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
 
         userHomeContext.flush();
 
@@ -850,13 +851,13 @@ public class DefaultTableCheckPatternsController {
     }
 
     /**
-     * Updates the configuration of default monthly partitioned checks pattern on a table level.
+     * Updates the configuration of default monthly partitioned checks pattern on a column level.
      * @param checkContainerModel New configuration of the default monthly partitioned checks pattern.
      * @return Empty response.
      */
-    @PutMapping(value = "/default/checks/table/{patternName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
-    @ApiOperation(value = "updateDefaultPartitionedMonthlyTableChecksPattern",
-            notes = "New configuration of the default monthly partitioned checks on a table level. These checks will be applied to tables.", response = Void.class,
+    @PutMapping(value = "/default/checks/column/{patternName}/partitioned/monthly", consumes = "application/json", produces = "application/json")
+    @ApiOperation(value = "updateDefaultPartitionedMonthlyColumnChecksPattern",
+            notes = "New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.", response = Void.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -869,7 +870,7 @@ public class DefaultTableCheckPatternsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     @Secured({DqoPermissionNames.EDIT})
-    public ResponseEntity<Mono<Void>> updateDefaultPartitionedMonthlyTableChecksPattern(
+    public ResponseEntity<Mono<Void>> updateDefaultPartitionedMonthlyColumnChecksPattern(
             @AuthenticationPrincipal DqoUserPrincipal principal,
             @ApiParam("Pattern name") @PathVariable String patternName,
             @ApiParam("Model with the changes to be applied to the data quality monthly partitioned checks configuration")
@@ -883,17 +884,17 @@ public class DefaultTableCheckPatternsController {
         UserHomeContext userHomeContext = executionContext.getUserHomeContext();
         UserHome userHome = userHomeContext.getUserHome();
 
-        TableDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+        ColumnDefaultChecksPatternWrapper defaultChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
                 .getByObjectName(patternName, true);
 
         if (defaultChecksPatternWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
-        AbstractRootChecksContainerSpec tableCheckRootContainer = defaultChecksPatternSpec.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, tableCheckRootContainer, null);
-        defaultChecksPatternSpec.setTableCheckRootContainer(tableCheckRootContainer);
+        ColumnDefaultChecksPatternSpec defaultChecksPatternSpec = defaultChecksPatternWrapper.getSpec();
+        AbstractRootChecksContainerSpec columnCheckRootContainer = defaultChecksPatternSpec.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
+        this.modelToSpecCheckMappingService.updateCheckContainerSpec(checkContainerModel, columnCheckRootContainer, null);
+        defaultChecksPatternSpec.setColumnCheckRootContainer(columnCheckRootContainer);
 
         userHomeContext.flush();
 
