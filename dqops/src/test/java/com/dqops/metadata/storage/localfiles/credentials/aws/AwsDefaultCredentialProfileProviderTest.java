@@ -12,6 +12,7 @@ import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObject
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -81,17 +82,14 @@ public class AwsDefaultCredentialProfileProviderTest extends BaseTest {
     }
 
     @Test
-    void provideProfile_defaultInitializationCredentials_ReturnsNull() throws IOException {
+    void provideProfile_defaultInitializationCredentials_thenThrowsException() throws IOException {
 
         Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
+        Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
-        if (!Files.exists(defaultAwsCredentialsPath)) {
-            Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
-        }
-
-        Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
-
-        Assertions.assertTrue(profile.isEmpty());
+        Assertions.assertThrows(DqoRuntimeException.class, () -> {
+                    Optional<Profile> profile = this.sut.provideProfile(secretValueLookupContext);
+        });
     }
 }

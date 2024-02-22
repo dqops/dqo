@@ -12,6 +12,7 @@ import com.dqops.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObject
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
+import com.dqops.utils.exceptions.DqoRuntimeException;
 import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
@@ -76,19 +77,14 @@ class AzureCredentialsProviderTest extends BaseTest {
     }
 
     @Test
-    void provideCredential_defaultInitializationCredentials_ReturnsNull() throws IOException {
-
-        Path defaultAwsCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
+    void provideCredential_defaultInitializationCredentials_thenThrowsException() throws IOException {
+        Path defaultAzureCredentialsPath = userHomePath.resolve(BuiltInFolderNames.CREDENTIALS)
                 .resolve(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
 
-        if (!Files.exists(defaultAwsCredentialsPath)) {
-            Files.writeString(defaultAwsCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
-            String credentialFileContent = DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT;
-            Files.writeString(defaultAwsCredentialsPath, credentialFileContent);
-        }
+        Files.writeString(defaultAzureCredentialsPath, DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT);
 
-        Optional<AzureCredential> azureCredential = this.sut.provideCredentials(secretValueLookupContext);
-
-        Assertions.assertTrue(azureCredential.isEmpty());
+        Assertions.assertThrows(DqoRuntimeException.class, () -> {
+                    Optional<AzureCredential> azureCredential = this.sut.provideCredentials(secretValueLookupContext);
+        });
     }
 }

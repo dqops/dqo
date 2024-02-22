@@ -149,14 +149,14 @@ public class HierarchyId {
      * @return Hierarchy nodes on the path.
      */
     public HierarchyNode[] getNodesOnPath(HierarchyNode rootNode) {
-        HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length];
+        HierarchyNode[] nodesOnPath = new HierarchyNode[this.elements.length - rootNode.getHierarchyId().size()];
         HierarchyNode currentNode = rootNode;
         for (int i = rootNode.getHierarchyId().size(); i < this.elements.length; i++) {
             HierarchyNode childNode = currentNode.getChild(this.elements[i]);
             if (childNode == null) {
                 throw new NoSuchElementException("Cannot find child named " + this.elements[i] + " on object " + currentNode);
             }
-            nodesOnPath[i] = childNode;
+            nodesOnPath[i - rootNode.getHierarchyId().size()] = childNode;
             currentNode = childNode;
         }
 

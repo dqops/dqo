@@ -480,7 +480,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
                     continue;
                 }
 
-                checkModel.setConfigured(checkSpecObjectNullable != null);
+                checkModel.setConfigured(checkSpecObjectNullable != null && !checkFieldValue.isDefaultCheck());
                 categoryModel.getChecks().add(checkModel);
             }
         }
@@ -561,7 +561,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
             if (customCheckSpec == null) {
                 customCheckSpec = new CustomCheckSpec();
             } else {
-                checkIsConfigured = true;
+                checkIsConfigured = !customCheckSpec.isDefaultCheck();
             }
 
             CheckModel customCheckModel = createCheckModel(null,
@@ -677,6 +677,7 @@ public class SpecToModelCheckMappingServiceImpl implements SpecToModelCheckMappi
         checkModel.setCheckName(checkName);
         checkModel.setHelpText(checkFieldInfo != null ? checkFieldInfo.getHelpText() : customCheckDefinitionSpec.getHelpText());
         checkModel.setStandard(customCheckDefinitionSpec != null ? customCheckDefinitionSpec.isStandard() : checkSpec.isStandard());
+        checkModel.setDefaultCheck(checkSpec.isDefaultCheck());
 
         if (runChecksCategoryTemplate != null) {
             CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();

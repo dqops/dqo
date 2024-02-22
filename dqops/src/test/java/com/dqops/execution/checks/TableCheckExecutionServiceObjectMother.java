@@ -16,6 +16,7 @@
 
 package com.dqops.execution.checks;
 
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;
@@ -106,7 +107,8 @@ public class TableCheckExecutionServiceObjectMother {
                 ruleDefinitionFindService,
                 new IncidentImportQueueServiceStub(),
                 sensorLimitsConfigurationProperties,
-                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
+                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()),
+                new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()));
 
         return tableCheckExecutionService;
     }

@@ -15593,6 +15593,10 @@
           "type" : "boolean",
           "description" : "This is a standard data quality check that is always shown on the data quality checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are shown when the user decides to expand the list of checks."
         },
+        "default_check" : {
+          "type" : "boolean",
+          "description" : "This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML."
+        },
         "data_grouping_override" : {
           "description" : "Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level. Data grouping is configured in two cases: (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning. (2) a static data grouping configuration is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). ",
           "$ref" : "#/definitions/DataGroupingConfigurationSpec"
@@ -30230,13 +30234,6 @@
           "type" : "boolean",
           "description" : "Enables auto detection of CSV parameters."
         },
-        "columns" : {
-          "type" : "object",
-          "description" : "A struct that specifies the column names and column types contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that auto detection is not used.",
-          "additionalProperties" : {
-            "type" : "string"
-          }
-        },
         "compression" : {
           "type" : "string",
           "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd."
@@ -31772,13 +31769,6 @@
           "type" : "boolean",
           "description" : "Whether to auto-detect detect the names of the keys and data types of the values automatically"
         },
-        "columns" : {
-          "type" : "object",
-          "description" : "A struct that specifies the key names and value types contained within the JSON file (e.g., {key1: 'INTEGER', key2: 'VARCHAR'}). If auto_detect is enabled these will be inferred",
-          "additionalProperties" : {
-            "type" : "string"
-          }
-        },
         "compression" : {
           "type" : "string",
           "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
@@ -31810,6 +31800,7 @@
         },
         "maximum_depth" : {
           "type" : "integer",
+          "format" : "int64",
           "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
         },
         "maximum_object_size" : {

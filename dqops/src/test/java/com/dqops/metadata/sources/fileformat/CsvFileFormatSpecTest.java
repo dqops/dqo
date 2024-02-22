@@ -1,11 +1,14 @@
 package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.BaseTest;
+import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.ColumnSpecMap;
+import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
+import com.dqops.metadata.sources.TableSpec;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -34,7 +37,20 @@ public class CsvFileFormatSpecTest extends BaseTest {
             setTimestampformat("%A, %-d %B %Y - %I:%M:%S %p");
         }};
 
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"));
+        ColumnSpec columnSpec = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("INT"));
+        }};
+        ColumnSpec columnSpec2 = new ColumnSpec(){{
+            setTypeSnapshot(ColumnTypeSnapshotSpec.fromType("STRING"));
+        }};
+        ColumnSpecMap columnSpecMap = new ColumnSpecMap(){{
+            put("col1", columnSpec);
+            put("col2", columnSpec2);
+        }};
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setColumns(columnSpecMap);
+
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"), tableSpec);
 
         assertTrue(output.contains("all_varchar = true"));
         assertTrue(output.contains("allow_quoted_nulls = true"));
@@ -58,7 +74,7 @@ public class CsvFileFormatSpecTest extends BaseTest {
     @Test
     void buildSourceTableOptionsString_onCsvFile_useSuitableFunctionToReadCsv() {
         CsvFileFormatSpec sut = new CsvFileFormatSpec();
-        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"));
+        String output = sut.buildSourceTableOptionsString(List.of("/dev/table.parquet"), new TableSpec());
         assertTrue(output.contains("read_csv"));
     }
 

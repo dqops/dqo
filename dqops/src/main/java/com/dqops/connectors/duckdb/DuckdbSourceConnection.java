@@ -252,7 +252,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             for (TableWrapper tableWrapper : tableWrappers) {
 
                 FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableWrapper.getSpec());
-                Table tableResult = queryForTableResult(fileFormatSpec);
+                Table tableResult = queryForTableResult(fileFormatSpec, tableWrapper.getSpec());
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -295,9 +295,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param fileFormatSpec A file format specification with paths and format configuration.
      * @return A table result with metadata of the given data file.
      */
-    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec){
+    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec, TableSpec tableSpec){
         DuckdbSourceFilesType duckdbSourceFilesType = super.getConnectionSpec().getDuckdb().getSourceFilesType();
-        String tableString = fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType);
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType, tableSpec);
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }

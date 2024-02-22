@@ -112,6 +112,13 @@ public class CheckModel implements Cloneable {
     private boolean standard;
 
     /**
+     * This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.
+     */
+    @JsonPropertyDescription("This is a check that was applied on-the-fly, because it is configured as a default data observability check and can be run, but it is not configured in the table YAML.")
+    @JsonInclude(JsonInclude.Include.NON_DEFAULT)
+    private boolean defaultCheck;
+
+    /**
      * Data grouping configuration for this check. When a data grouping configuration is assigned at a check level, it overrides the data grouping configuration from the table level.
      * Data grouping is configured in two cases:
      * (1) the data in the table should be analyzed with a GROUP BY condition, to analyze different groups of rows using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.

@@ -20,6 +20,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
@@ -161,7 +162,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 null,
                 DqoSensorLimitsConfigurationPropertiesObjectMother.getDefault(),
-                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()));
+                new UserErrorLoggerImpl(new DqoLoggingUserErrorsConfigurationProperties()),
+                new DefaultObservabilityConfigurationServiceImpl(ConnectionProviderRegistryObjectMother.getInstance()));
 
         this.sut = new CheckExecutionServiceImpl(
                 hierarchyNodeTreeSearcher,
