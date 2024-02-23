@@ -17,15 +17,15 @@ package com.dqops.rest.controllers;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.CheckTimeScale;
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.volume.TableVolumeDailyMonitoringChecksSpec;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.connectors.ProviderType;
@@ -211,7 +211,7 @@ public class TablesControllerUTTests extends BaseTest {
         volumeDailyMonitoringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = new TableDailyMonitoringCheckCategoriesSpec();
         dailyMonitoring.setVolume(volumeDailyMonitoringSpec);
-        TableMonitoringChecksSpec sampleMonitoring = new TableMonitoringChecksSpec();
+        TableMonitoringCheckCategoriesSpec sampleMonitoring = new TableMonitoringCheckCategoriesSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
         
         this.sampleTable.getTableSpec().setMonitoringChecks(sampleMonitoring);
@@ -242,7 +242,7 @@ public class TablesControllerUTTests extends BaseTest {
         volumeDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
         dailyPartitionedCheck.setVolume(volumeDailyPartitionedCheckSpec);
-        TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
+        TablePartitionedCheckCategoriesSpec samplePartitionedCheck = new TablePartitionedCheckCategoriesSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
         this.sampleTable.getTableSpec().setPartitionedChecks(samplePartitionedCheck);
@@ -420,7 +420,7 @@ public class TablesControllerUTTests extends BaseTest {
         volumeDailyMonitoringSpec.setDailyRowCount(minRowCountSpec);
         TableDailyMonitoringCheckCategoriesSpec dailyMonitoring = new TableDailyMonitoringCheckCategoriesSpec();
         dailyMonitoring.setVolume(volumeDailyMonitoringSpec);
-        TableMonitoringChecksSpec sampleMonitoring = new TableMonitoringChecksSpec();
+        TableMonitoringCheckCategoriesSpec sampleMonitoring = new TableMonitoringCheckCategoriesSpec();
         sampleMonitoring.setDaily(dailyMonitoring);
 
         ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTableDailyMonitoringChecks(
@@ -453,7 +453,7 @@ public class TablesControllerUTTests extends BaseTest {
         volumeDailyPartitionedCheckSpec.setDailyPartitionRowCount(minRowCountSpec);
         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCheck = new TableDailyPartitionedCheckCategoriesSpec();
         dailyPartitionedCheck.setVolume(volumeDailyPartitionedCheckSpec);
-        TablePartitionedChecksRootSpec samplePartitionedCheck = new TablePartitionedChecksRootSpec();
+        TablePartitionedCheckCategoriesSpec samplePartitionedCheck = new TablePartitionedCheckCategoriesSpec();
         samplePartitionedCheck.setDaily(dailyPartitionedCheck);
 
         ResponseEntity<Mono<Void>> responseEntity = this.sut.updateTablePartitionedChecksDaily(

@@ -41,8 +41,14 @@
     "name" : "DataSources",
     "description" : "Rest API controller that operates on data sources that are not yet imported, testing connections or retrieving the metadata (schemas and tables)."
   }, {
+    "name" : "DefaultColumnCheckPatterns",
+    "description" : "Operations for managing the configuration of the default column-level checks for columns matching a pattern."
+  }, {
     "name" : "Defaults",
     "description" : "Default settings management for configuring the default data quality checks that are configured for all imported tables and columns."
+  }, {
+    "name" : "DefaultTableCheckPatterns",
+    "description" : "Operations for managing the configuration of the default table-level checks for tables matching a pattern."
   }, {
     "name" : "Dictionaries",
     "description" : "Operations for managing data dictionary CSV files in DQOps. Data dictionaries can be used in *accepted_values* data quality checks."
@@ -11791,6 +11797,1566 @@
         } ]
       }
     },
+    "/api/default/checks/column" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getAllDefaultColumnChecksPatterns",
+        "description" : "Returns a flat list of all column-level default check patterns configured for this instance. Default checks are applied on columns dynamically.",
+        "operationId" : "getAllDefaultColumnChecksPatterns",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/DefaultColumnChecksPatternListModel"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultColumnChecksPattern",
+        "description" : "Returns a default checks pattern definition as a full specification object",
+        "operationId" : "getDefaultColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Column pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DefaultColumnChecksPatternModel"
+            }
+          },
+          "404" : {
+            "description" : "Pattern name not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "createDefaultColumnChecksPattern",
+        "description" : "Creates (adds) a new default column-level checks pattern configuration by saving a full specification object.",
+        "operationId" : "createDefaultColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultColumnChecksPatternModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "201" : {
+            "description" : "New checks pattern successfully created"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "409" : {
+            "description" : "Check pattern with the same name already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultColumnChecksPattern",
+        "description" : "Updates an default column-level checks pattern by saving a full specification object",
+        "operationId" : "updateDefaultColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultColumnChecksPatternModel"
+          }
+        }, {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default column-level checks pattern successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "deleteDefaultColumnChecksPattern",
+        "description" : "Deletes a default column-level checks pattern",
+        "operationId" : "deleteDefaultColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default column-level checks pattern successfully deleted"
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/monitoring/daily" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultMonitoringDailyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultMonitoringDailyColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringDailyColumnChecksPattern",
+        "description" : "New configuration of the default daily monitoring checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultMonitoringDailyColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality daily monitoring checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of daily monitoring checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/monitoring/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultMonitoringMonthlyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultMonitoringMonthlyColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringMonthlyColumnChecksPattern",
+        "description" : "New configuration of the default monthly monitoring checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultMonitoringMonthlyColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality monthly monitoring checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of monthly monitoring checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/partitioned/daily" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultPartitionedDailyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultPartitionedDailyColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedDailyColumnChecksPattern",
+        "description" : "New configuration of the default daily partitioned checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultPartitionedDailyColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality daily partitioned checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of daily partitioned checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/partitioned/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultPartitionedMonthlyColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultPartitionedMonthlyColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedMonthlyColumnChecksPattern",
+        "description" : "New configuration of the default monthly partitioned checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultPartitionedMonthlyColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality monthly partitioned checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of monthly partitioned checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/profiling" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultProfilingColumnChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a column level.",
+        "operationId" : "getDefaultProfilingColumnChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultProfilingColumnChecksPattern",
+        "description" : "New configuration of the default profiling checks on a column level. These checks will be applied to columns.",
+        "operationId" : "updateDefaultProfilingColumnChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of profiling checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/column/{patternName}/target" : {
+      "get" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "getDefaultColumnChecksPatternTarget",
+        "description" : "Returns a default checks pattern definition",
+        "operationId" : "getDefaultColumnChecksPatternTarget",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Column pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DefaultColumnChecksPatternListModel"
+            }
+          },
+          "404" : {
+            "description" : "Pattern name not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "createDefaultColumnChecksPatternTarget",
+        "description" : "Creates (adds) a new default column-level checks pattern configuration.",
+        "operationId" : "createDefaultColumnChecksPatternTarget",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model with only the target filters",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultColumnChecksPatternListModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "201" : {
+            "description" : "New checks pattern successfully created"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "409" : {
+            "description" : "Check pattern with the same name already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultColumnCheckPatterns" ],
+        "summary" : "updateDefaultColumnChecksPatternTarget",
+        "description" : "Updates an default column-level checks pattern, changing only the target object",
+        "operationId" : "updateDefaultColumnChecksPatternTarget",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultColumnChecksPatternListModel"
+          }
+        }, {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default column-level checks pattern successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getAllDefaultTableChecksPatterns",
+        "description" : "Returns a flat list of all table-level default check patterns configured for this instance. Default checks are applied on tables dynamically.",
+        "operationId" : "getAllDefaultTableChecksPatterns",
+        "produces" : [ "application/json" ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/DefaultTableChecksPatternListModel"
+              }
+            }
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultTableChecksPattern",
+        "description" : "Returns a default checks pattern definition as a full specification object",
+        "operationId" : "getDefaultTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Table pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+            }
+          },
+          "404" : {
+            "description" : "Pattern name not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "createDefaultTableChecksPattern",
+        "description" : "Creates (adds) a new default table-level checks pattern configuration by saving a full specification object.",
+        "operationId" : "createDefaultTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "201" : {
+            "description" : "New checks pattern successfully created"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "409" : {
+            "description" : "Check pattern with the same name already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultTableChecksPattern",
+        "description" : "Updates an default table-level checks pattern by saving a full specification object",
+        "operationId" : "updateDefaultTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternModel"
+          }
+        }, {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default table-level checks pattern successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "delete" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "deleteDefaultTableChecksPattern",
+        "description" : "Deletes a default table-level checks pattern",
+        "operationId" : "deleteDefaultTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default table-level checks pattern successfully deleted"
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/monitoring/daily" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultMonitoringDailyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily monitoring checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultMonitoringDailyTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringDailyTableChecksPattern",
+        "description" : "New configuration of the default daily monitoring checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultMonitoringDailyTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality daily monitoring checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of daily monitoring checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/monitoring/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultMonitoringMonthlyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly monitoring checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultMonitoringMonthlyTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultMonitoringMonthlyTableChecksPattern",
+        "description" : "New configuration of the default monthly monitoring checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultMonitoringMonthlyTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality monthly monitoring checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of monthly monitoring checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/partitioned/daily" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultPartitionedDailyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the daily partitioned checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultPartitionedDailyTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedDailyTableChecksPattern",
+        "description" : "New configuration of the default daily partitioned checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultPartitionedDailyTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality daily partitioned checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of daily partitioned checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/partitioned/monthly" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultPartitionedMonthlyTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the monthly partitioned checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultPartitionedMonthlyTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultPartitionedMonthlyTableChecksPattern",
+        "description" : "New configuration of the default monthly partitioned checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultPartitionedMonthlyTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality monthly partitioned checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of monthly partitioned checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/profiling" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultProfilingTableChecksPattern",
+        "description" : "Returns UI model to show and edit the default configuration of the profiling checks that are configured for a check pattern on a table level.",
+        "operationId" : "getDefaultProfilingTableChecksPattern",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/CheckContainerModel"
+            }
+          },
+          "404" : {
+            "description" : "Default checks pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultProfilingTableChecksPattern",
+        "description" : "New configuration of the default profiling checks on a table level. These checks will be applied to tables.",
+        "operationId" : "updateDefaultProfilingTableChecksPattern",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Model with the changes to be applied to the data quality profiling checks configuration",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/CheckContainerModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "The default configuration of profiling checks successfully updated."
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Default check pattern configuration not found"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
+    "/api/default/checks/table/{patternName}/target" : {
+      "get" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "getDefaultTableChecksPatternTarget",
+        "description" : "Returns a default checks pattern definition",
+        "operationId" : "getDefaultTableChecksPatternTarget",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Table pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "OK",
+            "schema" : {
+              "$ref" : "#/definitions/DefaultTableChecksPatternListModel"
+            }
+          },
+          "404" : {
+            "description" : "Pattern name not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "post" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "createDefaultTableChecksPatternTarget",
+        "description" : "Creates (adds) a new default table-level checks pattern configuration.",
+        "operationId" : "createDefaultTableChecksPatternTarget",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model with only the target filters",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternListModel"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "201" : {
+            "description" : "New checks pattern successfully created"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "406" : {
+            "description" : "Rejected, missing required fields"
+          },
+          "409" : {
+            "description" : "Check pattern with the same name already exists"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      },
+      "put" : {
+        "tags" : [ "DefaultTableCheckPatterns" ],
+        "summary" : "updateDefaultTableChecksPatternTarget",
+        "description" : "Updates an default table-level checks pattern, changing only the target object",
+        "operationId" : "updateDefaultTableChecksPatternTarget",
+        "consumes" : [ "application/json" ],
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Default checks pattern model",
+          "required" : false,
+          "schema" : {
+            "$ref" : "#/definitions/DefaultTableChecksPatternListModel"
+          }
+        }, {
+          "name" : "patternName",
+          "in" : "path",
+          "description" : "Pattern name",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "successful operation",
+            "schema" : {
+              "$ref" : "#/definitions/MonoVoid"
+            }
+          },
+          "204" : {
+            "description" : "Default table-level checks pattern successfully updated"
+          },
+          "400" : {
+            "description" : "Bad request, adjust before retrying"
+          },
+          "404" : {
+            "description" : "Pattern not found"
+          },
+          "500" : {
+            "description" : "Internal Server Error",
+            "schema" : {
+              "$ref" : "#/definitions/SpringErrorPayload"
+            }
+          }
+        },
+        "security" : [ {
+          "authorization_bearer_api_key" : [ ]
+        } ]
+      }
+    },
     "/api/defaults/defaultchecks/dataobservability/monitoring/daily/column" : {
       "get" : {
         "tags" : [ "Defaults" ],
@@ -14297,7 +15863,7 @@
         "parameters" : [ {
           "in" : "body",
           "name" : "body",
-          "description" : "List of rule definitions",
+          "description" : "Rule model",
           "required" : false,
           "schema" : {
             "$ref" : "#/definitions/RuleModel"
@@ -16107,6 +17673,11 @@
         "dictionaries" : {
           "type" : "string",
           "description" : "The synchronization status of the \"dictionaries\" folder.",
+          "enum" : [ "unchanged", "changed", "synchronizing" ]
+        },
+        "patterns" : {
+          "type" : "string",
+          "description" : "The synchronization status of the \"patterns\" folder.",
           "enum" : [ "unchanged", "changed", "synchronizing" ]
         },
         "data_sensor_readouts" : {
@@ -18801,6 +20372,32 @@
         "profile_text_match_date_format_percent" : {
           "description" : "Verifies that the values in text columns match one of the predefined date formats, such as an ISO 8601 date. Measures the percentage of valid date strings and raises a data quality issue when too many invalid date strings are found.",
           "$ref" : "#/definitions/ColumnTextMatchDateFormatPercentCheckSpec"
+        }
+      }
+    },
+    "ColumnDefaultChecksPatternSpec" : {
+      "type" : "object",
+      "properties" : {
+        "priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+        },
+        "target" : {
+          "description" : "The target column filter that are filtering the column, table and connection on which the default checks are applied.",
+          "$ref" : "#/definitions/TargetColumnPatternSpec"
+        },
+        "profiling_checks" : {
+          "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
+          "$ref" : "#/definitions/ColumnProfilingCheckCategoriesSpec"
+        },
+        "monitoring_checks" : {
+          "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
+          "$ref" : "#/definitions/ColumnMonitoringCheckCategoriesSpec"
+        },
+        "partitioned_checks" : {
+          "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
+          "$ref" : "#/definitions/ColumnPartitionedCheckCategoriesSpec"
         }
       }
     },
@@ -21696,7 +23293,7 @@
       },
       "description" : "Full column model"
     },
-    "ColumnMonitoringChecksRootSpec" : {
+    "ColumnMonitoringCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -24216,7 +25813,7 @@
         }
       }
     },
-    "ColumnPartitionedChecksRootSpec" : {
+    "ColumnPartitionedCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -25993,11 +27590,11 @@
         },
         "monitoring_checks" : {
           "description" : "Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.",
-          "$ref" : "#/definitions/ColumnMonitoringChecksRootSpec"
+          "$ref" : "#/definitions/ColumnMonitoringCheckCategoriesSpec"
         },
         "partitioned_checks" : {
           "description" : "Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-          "$ref" : "#/definitions/ColumnPartitionedChecksRootSpec"
+          "$ref" : "#/definitions/ColumnPartitionedCheckCategoriesSpec"
         },
         "statistics" : {
           "description" : "Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.",
@@ -30236,7 +31833,8 @@
         },
         "compression" : {
           "type" : "string",
-          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd."
+          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none, gzip, zstd.",
+          "enum" : [ "auto", "none", "gzip", "zstd" ]
         },
         "dateformat" : {
           "type" : "string",
@@ -30277,6 +31875,11 @@
         "quote" : {
           "type" : "string",
           "description" : "Specifies the quoting string to be used when a data value is quoted."
+        },
+        "sample_size" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The number of sample rows for auto detection of parameters."
         },
         "skip" : {
           "type" : "integer",
@@ -30672,6 +32275,55 @@
         }
       }
     },
+    "DefaultColumnChecksPatternListModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name."
+        },
+        "priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+        },
+        "target_column" : {
+          "description" : "The filters for the target column.",
+          "$ref" : "#/definitions/TargetColumnPatternSpec"
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default column-level checks pattern list model"
+    },
+    "DefaultColumnChecksPatternModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name"
+        },
+        "pattern_spec" : {
+          "description" : "The default checks specification.",
+          "$ref" : "#/definitions/ColumnDefaultChecksPatternSpec"
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default column-level checks pattern model"
+    },
     "DefaultSchedulesSpec" : {
       "type" : "object",
       "properties" : {
@@ -30696,6 +32348,55 @@
           "$ref" : "#/definitions/MonitoringScheduleSpec"
         }
       }
+    },
+    "DefaultTableChecksPatternListModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name."
+        },
+        "priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+        },
+        "target_table" : {
+          "description" : "The filters for the target table.",
+          "$ref" : "#/definitions/TargetTablePatternSpec"
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default table-level checks pattern list model"
+    },
+    "DefaultTableChecksPatternModel" : {
+      "type" : "object",
+      "properties" : {
+        "pattern_name" : {
+          "type" : "string",
+          "description" : "Pattern name"
+        },
+        "pattern_spec" : {
+          "description" : "The default checks specification.",
+          "$ref" : "#/definitions/TableDefaultChecksPatternSpec"
+        },
+        "can_edit" : {
+          "type" : "boolean",
+          "description" : "Boolean flag that decides if the current user can update or delete this object."
+        },
+        "yaml_parsing_error" : {
+          "type" : "string",
+          "description" : "Optional parsing error that was captured when parsing the YAML file. This field is null when the YAML file is valid. If an error was captured, this field returns the file parsing error message and the file location."
+        }
+      },
+      "description" : "Default table-level checks pattern model"
     },
     "DeleteStoredDataQueueJobParameters" : {
       "type" : "object",
@@ -31771,11 +33472,12 @@
         },
         "compression" : {
           "type" : "string",
-          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'."
+          "description" : "The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.",
+          "enum" : [ "auto", "none", "gzip", "zstd" ]
         },
         "convert_strings_to_integers" : {
           "type" : "boolean",
-          "description" : "\tWhether strings representing integer values should be converted to a numerical type."
+          "description" : "Whether strings representing integer values should be converted to a numerical type."
         },
         "dateformat" : {
           "type" : "string",
@@ -31787,12 +33489,12 @@
         },
         "format" : {
           "type" : "string",
-          "description" : "\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
+          "description" : "Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].",
           "enum" : [ "auto", "unstructured", "newline_delimited", "array" ]
         },
         "hive_partitioning" : {
           "type" : "boolean",
-          "description" : "\tWhether or not to interpret the path as a hive partitioned path."
+          "description" : "Whether or not to interpret the path as a hive partitioned path."
         },
         "ignore_errors" : {
           "type" : "boolean",
@@ -31800,20 +33502,27 @@
         },
         "maximum_depth" : {
           "type" : "integer",
+          "format" : "int64",
           "description" : "Maximum nesting depth to which the automatic schema detection detects types. Set to -1 to fully detect nested JSON types"
         },
         "maximum_object_size" : {
           "type" : "integer",
           "format" : "int64",
-          "description" : "\tThe maximum size of a JSON object (in bytes)"
+          "description" : "The maximum size of a JSON object (in bytes)"
         },
         "records" : {
           "type" : "string",
-          "description" : "Can be one of ['auto', 'true', 'false']"
+          "description" : "Can be one of ['auto', 'true', 'false']",
+          "enum" : [ "auto", "true", "false" ]
+        },
+        "sample_size" : {
+          "type" : "integer",
+          "format" : "int64",
+          "description" : "The number of sample rows for auto detection of parameters."
         },
         "timestampformat" : {
           "type" : "string",
-          "description" : "\tSpecifies the date format to use when parsing timestamps."
+          "description" : "Specifies the date format to use when parsing timestamps."
         }
       }
     },
@@ -33600,6 +35309,10 @@
           "type" : "boolean",
           "description" : "Synchronize the \"dictionaries\" folder."
         },
+        "patterns" : {
+          "type" : "boolean",
+          "description" : "Synchronize the \"patterns\" folder."
+        },
         "dataSensorReadouts" : {
           "type" : "boolean",
           "description" : "Synchronize the \".data/sensor_readouts\" folder."
@@ -33654,7 +35367,7 @@
       "properties" : {
         "folder" : {
           "type" : "string",
-          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "_indexes", "_local_settings" ]
+          "enum" : [ "data_sensor_readouts", "data_check_results", "data_statistics", "data_errors", "data_incidents", "sources", "sensors", "rules", "checks", "settings", "credentials", "dictionaries", "patterns", "_indexes", "_local_settings" ]
         },
         "direction" : {
           "type" : "string",
@@ -34860,6 +36573,32 @@
         }
       }
     },
+    "TableDefaultChecksPatternSpec" : {
+      "type" : "object",
+      "properties" : {
+        "priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The priority of the pattern. Patterns with lower values are applied before patterns with higher priority values."
+        },
+        "target" : {
+          "description" : "The target table filter that are filtering the table and connection on which the default checks are applied.",
+          "$ref" : "#/definitions/TargetTablePatternSpec"
+        },
+        "profiling_checks" : {
+          "description" : "Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.",
+          "$ref" : "#/definitions/TableProfilingCheckCategoriesSpec"
+        },
+        "monitoring_checks" : {
+          "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
+          "$ref" : "#/definitions/TableMonitoringCheckCategoriesSpec"
+        },
+        "partitioned_checks" : {
+          "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
+          "$ref" : "#/definitions/TablePartitionedCheckCategoriesSpec"
+        }
+      }
+    },
     "TableIncidentGroupingSpec" : {
       "type" : "object",
       "properties" : {
@@ -35023,7 +36762,7 @@
       },
       "description" : "Full table model, including all nested objects like columns or checks."
     },
-    "TableMonitoringChecksSpec" : {
+    "TableMonitoringCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -35179,7 +36918,7 @@
         }
       }
     },
-    "TablePartitionedChecksRootSpec" : {
+    "TablePartitionedCheckCategoriesSpec" : {
       "type" : "object",
       "properties" : {
         "daily" : {
@@ -36116,11 +37855,11 @@
         },
         "monitoring_checks" : {
           "description" : "Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.",
-          "$ref" : "#/definitions/TableMonitoringChecksSpec"
+          "$ref" : "#/definitions/TableMonitoringCheckCategoriesSpec"
         },
         "partitioned_checks" : {
           "description" : "Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.",
-          "$ref" : "#/definitions/TablePartitionedChecksRootSpec"
+          "$ref" : "#/definitions/TablePartitionedCheckCategoriesSpec"
         },
         "statistics" : {
           "description" : "Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.",
@@ -36802,6 +38541,71 @@
         "row_count" : {
           "description" : "Configuration of the row count profiler.",
           "$ref" : "#/definitions/TableVolumeRowCountStatisticsCollectorSpec"
+        }
+      }
+    },
+    "TargetColumnPatternSpec" : {
+      "type" : "object",
+      "properties" : {
+        "connection" : {
+          "type" : "string",
+          "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*."
+        },
+        "schema" : {
+          "type" : "string",
+          "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*."
+        },
+        "table" : {
+          "type" : "string",
+          "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+        },
+        "table_priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table."
+        },
+        "column" : {
+          "type" : "string",
+          "description" : "The target column name filter. Accepts wildcards in the format: *id, *, c_*."
+        },
+        "data_type" : {
+          "type" : "string",
+          "description" : "The target column data type filter. Filters by a physical (database specific) data type name imported from the data source. Accepts wildcards in the format: *int, *, big*."
+        },
+        "data_type_category" : {
+          "type" : "string",
+          "description" : "The filter for a target data type category.",
+          "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_instant", "datetime_datetime", "datetime_date", "datetime_time", "string", "text", "json", "bool", "binary", "array", "other" ]
+        }
+      }
+    },
+    "TargetTablePatternSpec" : {
+      "type" : "object",
+      "properties" : {
+        "connection" : {
+          "type" : "string",
+          "description" : "The data source connection name filter. Accepts wildcards in the format: *conn, *, conn*."
+        },
+        "schema" : {
+          "type" : "string",
+          "description" : "The schema name filter. Accepts wildcards in the format: *_prod, *, pub*."
+        },
+        "table" : {
+          "type" : "string",
+          "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+        },
+        "table_priority" : {
+          "type" : "integer",
+          "format" : "int32",
+          "description" : "The maximum table priority (inclusive) for tables that are covered by the default checks."
+        },
+        "label" : {
+          "type" : "string",
+          "description" : "The label filter. Accepts wildcards in the format: *_customers, *, fact_*. The label must be present on the connection or table."
         }
       }
     },

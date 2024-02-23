@@ -16,7 +16,7 @@
 package com.dqops.metadata.storage.localfiles.userhome;
 
 import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
-import com.dqops.checks.defaults.services.DefaultObservabilityCheckSettingsFactory;
+import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
 import com.dqops.core.configuration.DqoDockerUserhomeConfigurationProperties;
@@ -26,8 +26,6 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
-import com.dqops.core.principal.DqoUserPrincipal;
-import com.dqops.core.principal.DqoUserPrincipalProvider;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
@@ -41,6 +39,7 @@ import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.core.rolling.RollingFileAppender;
 import ch.qos.logback.core.rolling.TimeBasedRollingPolicy;
 import ch.qos.logback.core.util.FileSize;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnDefaultChecksPatternYaml;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileContent;
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
@@ -48,6 +47,7 @@ import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYa
 import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
 import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.utils.serialization.YamlSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -250,6 +250,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DICTIONARIES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.PATTERNS));
 
 
             Path gitIgnorePath = userHomePath.resolve(".gitignore");
@@ -301,6 +302,24 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
                 String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
                 Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
+            }
+
+            Path tableDefaultChecksChecksPath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
+                    .resolve(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML);
+            if (!Files.exists(tableDefaultChecksChecksPath)) {
+                TableDefaultChecksPatternYaml defaultObservabilityChecksYaml = new TableDefaultChecksPatternYaml();
+                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultTableChecks());
+                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
+                Files.writeString(tableDefaultChecksChecksPath, defaultObservabilityChecks);
+            }
+
+            Path columnDefaultChecksChecksPath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
+                    .resolve(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME + SpecFileNames.COLUMN_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML);
+            if (!Files.exists(columnDefaultChecksChecksPath)) {
+                ColumnDefaultChecksPatternYaml defaultObservabilityChecksYaml = new ColumnDefaultChecksPatternYaml();
+                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
+                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
+                Files.writeString(columnDefaultChecksChecksPath, defaultObservabilityChecks);
             }
 
             Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);

@@ -47,7 +47,7 @@ const SchemaPage = () => {
               value: 'multiple_checks'
             }
           ]
-        : [{ label: 'Import Tables', value: 'import-tables' }])
+        : [{ label: 'Import tables', value: 'import-tables' }])
     ],
     [checkTypes]
   );
@@ -101,7 +101,7 @@ const SchemaPage = () => {
                   ? 'outlined'
                   : 'contained'
               }
-              label="Add Table"
+              label="Add table"
               onClick={() => setAddTableDialogOpen(true)}
               disabled={userProfile.can_manage_data_sources !== true}
             />

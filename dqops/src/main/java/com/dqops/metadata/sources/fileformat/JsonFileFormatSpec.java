@@ -41,7 +41,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private CompressionType compression;
 
-    @JsonPropertyDescription("\tWhether strings representing integer values should be converted to a numerical type.")
+    @JsonPropertyDescription("Whether strings representing integer values should be converted to a numerical type.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean convertStringsToIntegers;
 
@@ -53,11 +53,11 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean filename;
 
-    @JsonPropertyDescription("\tCan be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
+    @JsonPropertyDescription("Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private JsonFormatType format;
 
-    @JsonPropertyDescription("\tWhether or not to interpret the path as a hive partitioned path.")
+    @JsonPropertyDescription("Whether or not to interpret the path as a hive partitioned path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Boolean hivePartitioning;
 
@@ -69,7 +69,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long maximumDepth;
 
-    @JsonPropertyDescription("\tThe maximum size of a JSON object (in bytes)")
+    @JsonPropertyDescription("The maximum size of a JSON object (in bytes)")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long maximumObjectSize;
 
@@ -81,7 +81,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Long sampleSize;
 
-    @JsonPropertyDescription("\tSpecifies the date format to use when parsing timestamps.")
+    @JsonPropertyDescription("Specifies the date format to use when parsing timestamps.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String timestampformat;
 

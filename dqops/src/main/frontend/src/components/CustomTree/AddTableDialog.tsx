@@ -158,7 +158,7 @@ const AddTableDialog = ({ open, onClose, node }: AddTableDialogProps) => {
     <Dialog open={open} handler={onClose}>
       <DialogBody className="pt-4 pb-2 px-8">
         <div className="flex flex-col">
-          <h1 className="text-center mb-4 text-gray-700 text-2xl">Add Table</h1>
+          <h1 className="text-center mb-4 text-gray-700 text-2xl">Add table</h1>
           <div>
             <Input
               label="Table Name"

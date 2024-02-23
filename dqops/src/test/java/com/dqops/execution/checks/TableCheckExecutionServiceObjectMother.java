@@ -16,7 +16,7 @@
 
 package com.dqops.execution.checks;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.connectors.ConnectionProviderRegistryObjectMother;
 import com.dqops.core.configuration.DqoLoggingUserErrorsConfigurationProperties;
 import com.dqops.core.configuration.DqoSensorLimitsConfigurationProperties;

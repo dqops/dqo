@@ -20,10 +20,10 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationServiceImpl;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationServiceImpl;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
-import com.dqops.checks.table.monitoring.TableMonitoringChecksSpec;
+import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.customsql.TableCustomSqlDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.customsql.TableSqlConditionPassedPercentCheckSpec;
@@ -103,7 +103,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.getProfilingChecks().getVolume().setProfileRowCount(new TableRowCountCheckSpec());
         tableSpec.getProfilingChecks().getVolume().getProfileRowCount().setError(new MinCountRule1ParametersSpec(5L));
 
-        tableSpec.setMonitoringChecks(new TableMonitoringChecksSpec());
+        tableSpec.setMonitoringChecks(new TableMonitoringCheckCategoriesSpec());
         tableSpec.getMonitoringChecks().setDaily(new TableDailyMonitoringCheckCategoriesSpec());
         tableSpec.getMonitoringChecks().getDaily().setCustomSql(new TableCustomSqlDailyMonitoringChecksSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();

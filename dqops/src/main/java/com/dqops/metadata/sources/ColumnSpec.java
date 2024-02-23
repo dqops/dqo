@@ -19,11 +19,11 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -85,12 +85,12 @@ public class ColumnSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnMonitoringChecksRootSpec monitoringChecks;
+    private ColumnMonitoringCheckCategoriesSpec monitoringChecks;
 
     @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnPartitionedChecksRootSpec partitionedChecks;
+    private ColumnPartitionedCheckCategoriesSpec partitionedChecks;
 
     @JsonPropertyDescription("Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -193,7 +193,7 @@ public class ColumnSpec extends AbstractSpec {
      * Returns configuration of enabled column level monitoring checks.
      * @return Column level monitoring.
      */
-    public ColumnMonitoringChecksRootSpec getMonitoringChecks() {
+    public ColumnMonitoringCheckCategoriesSpec getMonitoringChecks() {
         return monitoringChecks;
     }
 
@@ -201,7 +201,7 @@ public class ColumnSpec extends AbstractSpec {
      * Sets a new configuration of column level data quality monitoring checks.
      * @param monitoringChecks New monitoring checks configuration.
      */
-    public void setMonitoringChecks(ColumnMonitoringChecksRootSpec monitoringChecks) {
+    public void setMonitoringChecks(ColumnMonitoringCheckCategoriesSpec monitoringChecks) {
         setDirtyIf(!Objects.equals(this.monitoringChecks, monitoringChecks));
         this.monitoringChecks = monitoringChecks;
         propagateHierarchyIdToField(monitoringChecks, "monitoring_checks");
@@ -211,7 +211,7 @@ public class ColumnSpec extends AbstractSpec {
      * Returns configuration of enabled column level date/time partitioned checks.
      * @return Column level date/time partitioned checks.
      */
-    public ColumnPartitionedChecksRootSpec getPartitionedChecks() {
+    public ColumnPartitionedCheckCategoriesSpec getPartitionedChecks() {
         return partitionedChecks;
     }
 
@@ -219,7 +219,7 @@ public class ColumnSpec extends AbstractSpec {
      * Sets a new configuration of column level date/time partitioned data quality checks.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
-    public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
+    public void setPartitionedChecks(ColumnPartitionedCheckCategoriesSpec partitionedChecks) {
         setDirtyIf(!Objects.equals(this.partitionedChecks, partitionedChecks));
         this.partitionedChecks = partitionedChecks;
         propagateHierarchyIdToField(partitionedChecks, "partitioned_checks");
@@ -329,13 +329,13 @@ public class ColumnSpec extends AbstractSpec {
             }
 
             case monitoring: {
-                ColumnMonitoringChecksRootSpec monitoringSpec = this.monitoringChecks;
+                ColumnMonitoringCheckCategoriesSpec monitoringSpec = this.monitoringChecks;
                 if (monitoringSpec == null) {
                     if (!createEmptyContainerWhenNull) {
                         return null;
                     }
 
-                    monitoringSpec = new ColumnMonitoringChecksRootSpec();
+                    monitoringSpec = new ColumnMonitoringCheckCategoriesSpec();
                     monitoringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "monitoring_checks"));
                     if (attachCheckContainer) {
                         this.monitoringChecks = monitoringSpec;
@@ -381,13 +381,13 @@ public class ColumnSpec extends AbstractSpec {
             }
 
             case partitioned: {
-                ColumnPartitionedChecksRootSpec partitionedChecksSpec = this.partitionedChecks;
+                ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = this.partitionedChecks;
                 if (partitionedChecksSpec == null) {
                     if (!createEmptyContainerWhenNull) {
                         return null;
                     }
 
-                    partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+                    partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
                     if (attachCheckContainer) {
                         this.partitionedChecks = partitionedChecksSpec;
@@ -454,28 +454,28 @@ public class ColumnSpec extends AbstractSpec {
         }
         else if (checkRootContainer instanceof ColumnDailyMonitoringCheckCategoriesSpec) {
             if (this.monitoringChecks == null) {
-                this.setMonitoringChecks(new ColumnMonitoringChecksRootSpec());
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
             }
 
             this.getMonitoringChecks().setDaily((ColumnDailyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnMonthlyMonitoringCheckCategoriesSpec) {
             if (this.monitoringChecks == null) {
-                this.setMonitoringChecks(new ColumnMonitoringChecksRootSpec());
+                this.setMonitoringChecks(new ColumnMonitoringCheckCategoriesSpec());
             }
 
             this.getMonitoringChecks().setMonthly((ColumnMonthlyMonitoringCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
-                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
             }
 
             this.getPartitionedChecks().setDaily((ColumnDailyPartitionedCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnMonthlyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
-                this.setPartitionedChecks(new ColumnPartitionedChecksRootSpec());
+                this.setPartitionedChecks(new ColumnPartitionedCheckCategoriesSpec());
             }
 
             this.getPartitionedChecks().setMonthly((ColumnMonthlyPartitionedCheckCategoriesSpec)checkRootContainer);

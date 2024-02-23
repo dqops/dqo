@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.checks.table.monitoring;
+package com.dqops.checks.column.monitoring;
 
 import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -29,62 +29,66 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of table level monitoring, divided by the time window (daily, monthly, etc.)
+ * Container of column level monitoring, divided by the time window (daily, monthly, etc.)
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableMonitoringChecksSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableMonitoringChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public class ColumnMonitoringCheckCategoriesSpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnMonitoringCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("daily", o -> o.daily);
             put("monthly", o -> o.monthly);
         }
     };
 
-    @JsonPropertyDescription("Configuration of daily monitoring evaluated at a table level.")
+    @JsonPropertyDescription("Configuration of daily monitoring evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableDailyMonitoringCheckCategoriesSpec daily;
+    private ColumnDailyMonitoringCheckCategoriesSpec daily;
 
-    @JsonPropertyDescription("Configuration of monthly monitoring evaluated at a table level.")
+    @JsonPropertyDescription("Configuration of monthly monitoring evaluated at a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableMonthlyMonitoringCheckCategoriesSpec monthly;
+    private ColumnMonthlyMonitoringCheckCategoriesSpec monthly;
 
     // TODO: add other time periods that make sense (hourly, weekly, etc.)
 
     /**
      * Returns daily monitoring.
+     *
      * @return Daily monitoring.
      */
-    public TableDailyMonitoringCheckCategoriesSpec getDaily() {
+    public ColumnDailyMonitoringCheckCategoriesSpec getDaily() {
         return daily;
     }
 
     /**
      * Sets the daily monitoring checks container.
+     *
      * @param daily New daily monitoring checks container.
      */
-    public void setDaily(TableDailyMonitoringCheckCategoriesSpec daily) {
-		this.setDirtyIf(!Objects.equals(this.daily, daily));
+    public void setDaily(ColumnDailyMonitoringCheckCategoriesSpec daily) {
+        this.setDirtyIf(!Objects.equals(this.daily, daily));
         this.daily = daily;
-		this.propagateHierarchyIdToField(daily, "daily");
+        this.propagateHierarchyIdToField(daily, "daily");
     }
 
     /**
      * Returns monthly monitoring checks.
+     *
      * @return Monthly monitoring checks.
      */
-    public TableMonthlyMonitoringCheckCategoriesSpec getMonthly() {
+    public ColumnMonthlyMonitoringCheckCategoriesSpec getMonthly() {
         return monthly;
     }
 
     /**
      * Sets the monthly monitoring checks container.
+     *
      * @param monthly New monthly monitoring checks container.
      */
-    public void setMonthly(TableMonthlyMonitoringCheckCategoriesSpec monthly) {
+    public void setMonthly(ColumnMonthlyMonitoringCheckCategoriesSpec monthly) {
         this.setDirtyIf(!Objects.equals(this.monthly, monthly));
         this.monthly = monthly;
         this.propagateHierarchyIdToField(monthly, "monthly");

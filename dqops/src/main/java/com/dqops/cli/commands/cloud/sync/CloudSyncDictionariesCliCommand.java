@@ -38,7 +38,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "dictionaries", header = "Synchronize local \"dictionaries\" folder that synchronizes data dictionary CSV files with DQOps Cloud",
+@CommandLine.Command(name = "dictionaries", header = "Synchronize local \"dictionaries\" folder that stores data dictionary CSV files with DQOps Cloud",
         description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"dictionaries\" folder.")
 public class CloudSyncDictionariesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationCliService cloudSynchronizationCliService;

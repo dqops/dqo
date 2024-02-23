@@ -24,7 +24,7 @@ import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthChe
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.numeric.ColumnNumericDailyMonitoringChecksSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
@@ -185,7 +185,7 @@ public class CheckServiceImplTests extends BaseTest {
         col21categoriesSpec.setText(col21stringChecksSpec);
         col21.setProfilingChecks(col21categoriesSpec);
 
-        ColumnMonitoringChecksRootSpec col23monitoringSpec = new ColumnMonitoringChecksRootSpec();
+        ColumnMonitoringCheckCategoriesSpec col23monitoringSpec = new ColumnMonitoringCheckCategoriesSpec();
         col23.setMonitoringChecks(col23monitoringSpec);
         ColumnDailyMonitoringCheckCategoriesSpec col23categoriesSpec = new ColumnDailyMonitoringCheckCategoriesSpec();
         col23monitoringSpec.setDaily(col23categoriesSpec);

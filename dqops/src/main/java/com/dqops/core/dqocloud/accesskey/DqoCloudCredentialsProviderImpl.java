@@ -92,6 +92,9 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
             case dictionaries:
                 return accessTokenIssueApi.issueBucketDictionariesRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
 
+            case patterns:
+                return accessTokenIssueApi.issueBucketPatternsRWAccessToken(userIdentity.getDataDomainCloud(), userIdentity.getTenantOwner(), userIdentity.getTenantId());
+
             default:
                 throw new RuntimeException("Unknown root: " + rootType);
         }

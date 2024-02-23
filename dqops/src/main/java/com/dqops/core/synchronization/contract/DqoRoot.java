@@ -87,6 +87,11 @@ public enum DqoRoot {
     dictionaries,
 
     /**
+     * Default checks configurations for tables or columns matching a pattern.
+     */
+    patterns,
+
+    /**
      * Local file indexes.
      */
     _indexes,
@@ -133,6 +138,10 @@ public enum DqoRoot {
 
         if (Objects.equals(folder1, BuiltInFolderNames.DICTIONARIES)) {
             return dictionaries;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.PATTERNS)) {
+            return patterns;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {

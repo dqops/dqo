@@ -21,7 +21,7 @@ import com.dqops.checks.CheckType;
 import com.dqops.checks.comparison.AbstractColumnComparisonCheckCategorySpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpec;
 import com.dqops.checks.custom.CustomCheckSpec;
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.ConnectionProvider;
 import com.dqops.connectors.ConnectionProviderRegistry;
 import com.dqops.connectors.ProviderDialectSettings;
@@ -190,7 +190,7 @@ public class TableCheckExecutionServiceImpl implements TableCheckExecutionServic
 
         TableSpec originalTableSpec = targetTable.getSpec();
         TableSpec tableSpec = originalTableSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(tableSpec, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnTableAndColumns(connectionWrapper.getSpec(), tableSpec, userHome);
         // TODO: before applying default checks, we could look into the filters, if the run check filters are selective (one column, or one check), we could use
         // a different variant of applying default checks, or pass the CheckSearchFilters object to the defaultObservabilityConfigurationService
 

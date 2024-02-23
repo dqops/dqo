@@ -19,13 +19,13 @@ import com.dqops.checks.AbstractRootChecksContainerSpec;
 import com.dqops.checks.CheckTimeScale;
 import com.dqops.checks.CheckType;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
-import com.dqops.checks.column.monitoring.ColumnMonitoringChecksRootSpec;
+import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
-import com.dqops.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
+import com.dqops.checks.defaults.DefaultObservabilityConfigurationService;
 import com.dqops.core.jobqueue.DqoQueueJobId;
 import com.dqops.core.jobqueue.PushJobResult;
 import com.dqops.core.principal.DqoPermissionGrantedAuthorities;
@@ -509,7 +509,7 @@ public class ColumnsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/daily", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksDaily", notes = "Return the configuration of daily column level data quality monitoring on a column",
-            response = ColumnMonitoringChecksRootSpec.class,
+            response = ColumnMonitoringCheckCategoriesSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -532,7 +532,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnMonitoringChecksRootSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
         if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -551,7 +551,7 @@ public class ColumnsController {
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/monitoring/monthly", produces = "application/json")
     @ApiOperation(value = "getColumnMonitoringChecksMonthly", notes = "Return the configuration of monthly column level data quality monitoring on a column",
-            response = ColumnMonitoringChecksRootSpec.class,
+            response = ColumnMonitoringCheckCategoriesSpec.class,
             authorizations = {
                     @Authorization(value = "authorization_bearer_api_key")
             })
@@ -574,7 +574,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnMonitoringChecksRootSpec monitoringSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringSpec = columnSpec.getMonitoringChecks();
         if (monitoringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -616,7 +616,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -659,7 +659,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -718,7 +718,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -793,7 +794,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -868,7 +870,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1124,7 +1127,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.profiling, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1205,7 +1209,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.monitoring, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1286,7 +1291,8 @@ public class ColumnsController {
         }
 
         ColumnSpec clonedColumnWithDefaultChecks = columnSpec.deepClone();
-        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(clonedColumnWithDefaultChecks, connectionWrapper.getSpec(), userHome);
+        this.defaultObservabilityConfigurationService.applyDefaultChecksOnColumn(
+                connectionWrapper.getSpec(), tableSpec, clonedColumnWithDefaultChecks, userHome);
         AbstractRootChecksContainerSpec checks = clonedColumnWithDefaultChecks.getColumnCheckRootContainer(CheckType.partitioned, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
@@ -1681,9 +1687,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        ColumnMonitoringChecksRootSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
         if (monitoringChecksSpec == null) {
-            monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
+            monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
         }
         
         if (columnDailyMonitoringSpec != null) {
@@ -1744,9 +1750,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnMonitoringChecksRootSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
+        ColumnMonitoringCheckCategoriesSpec monitoringChecksSpec = columnSpec.getMonitoringChecks();
         if (monitoringChecksSpec == null) {
-            monitoringChecksSpec = new ColumnMonitoringChecksRootSpec();
+            monitoringChecksSpec = new ColumnMonitoringCheckCategoriesSpec();
         }
 
         if (columnMonthlyMonitoringSpec != null) {
@@ -1807,9 +1813,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+            partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
         }
 
         if (columnDailyPartitionedSpec != null) {
@@ -1870,9 +1876,9 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnPartitionedChecksRootSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
+        ColumnPartitionedCheckCategoriesSpec partitionedChecksSpec = columnSpec.getPartitionedChecks();
         if (partitionedChecksSpec == null) {
-            partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
+            partitionedChecksSpec = new ColumnPartitionedCheckCategoriesSpec();
         }
 
         if (columnMonthlyPartitionedSpec != null) {

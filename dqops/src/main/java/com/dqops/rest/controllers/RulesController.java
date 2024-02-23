@@ -207,7 +207,7 @@ public class RulesController {
     @Secured({DqoPermissionNames.EDIT})
     public ResponseEntity<Mono<Void>> updateRule(
             @AuthenticationPrincipal DqoUserPrincipal principal,
-            @ApiParam("List of rule definitions") @RequestBody RuleModel ruleModel,
+            @ApiParam("Rule model") @RequestBody RuleModel ruleModel,
             @ApiParam("Full rule name") @PathVariable String fullRuleName) {
 
         if (Strings.isNullOrEmpty(fullRuleName) || ruleModel == null) {
