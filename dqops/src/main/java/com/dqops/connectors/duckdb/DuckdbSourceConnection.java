@@ -45,6 +45,8 @@ import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -301,21 +303,44 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      */
     @Override
     public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
-        List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
-
-        if(connectionWrapper == null){
+        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
+        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
+            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
             return sourceTableModels;
         }
 
-        TableList tableList = connectionWrapper.getTables();
+        List<SourceTableModel> sourceTableModels = new ArrayList<>();
 
-        for (TableWrapper table : tableList) {
-            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
-                PhysicalTableName physicalTableName = table.getPhysicalTableName();
-                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-                sourceTableModels.add(schemaModel);
-            }
+        DuckdbSecretsType secretsType = duckdb.getSecretsType();
+        if(secretsType == null){
+            String pathString = duckdb.getDirectories().get(schemaName);
+            File[] files = Path.of(pathString).toFile().listFiles();
+
+            Arrays.stream(files).forEach(file -> {
+                sourceTableModels.add(
+                        new SourceTableModel(schemaName,
+                                new PhysicalTableName(schemaName, file.toString())));
+            });
+
+            // todo: list from local system -> list all files and catalogs
+        } else {
+//                    switch (secretsType){
+//            case s3:
+//
+//                break;
+//        }
         }
+
+        // todo: to be removed?
+//        TableList tableList = connectionWrapper.getTables();
+//
+//        for (TableWrapper table : tableList) {
+//            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
+//                PhysicalTableName physicalTableName = table.getPhysicalTableName();
+//                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
+//                sourceTableModels.add(schemaModel);
+//            }
+//        }
 
         return sourceTableModels;
     }
@@ -343,11 +368,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         List<TableSpec> tableSpecs = new ArrayList<>();
 
         try {
-            List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
-            for (TableWrapper tableWrapper : tableWrappers) {
+//            List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
+//            for (TableWrapper tableWrapper : tableWrappers) {
+            for (String tableName : tableNames) {
 
-                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableWrapper.getSpec());
-                Table tableResult = queryForTableResult(fileFormatSpec, tableWrapper.getSpec(), secretValueLookupContext);
+                TableSpec tableSpecTemp = new TableSpec();
+                tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+
+                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+                Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -357,7 +386,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
                 for (Row colRow : tableResult) {
-                    String physicalTableName = tableWrapper.getPhysicalTableName().getTableName();
+                    String physicalTableName = tableSpecTemp.getPhysicalTableName().getTableName();
                     String columnName = colRow.getString("column_name");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
