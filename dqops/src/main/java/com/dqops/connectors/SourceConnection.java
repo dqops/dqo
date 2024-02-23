@@ -66,7 +66,7 @@ public interface SourceConnection extends Closeable {
      * @param tableNames Table names.
      * @return List of table specifications with the column list which pass the filters.
      */
-    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper);
+    List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.

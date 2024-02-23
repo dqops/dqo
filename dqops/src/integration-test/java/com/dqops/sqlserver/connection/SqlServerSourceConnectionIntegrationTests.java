@@ -82,7 +82,7 @@ public class SqlServerSourceConnectionIntegrationTests extends BaseSqlServerInte
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null, null);
 
         Assertions.assertEquals(1, tableSpecs.size());
         TableSpec tableSpec = tableSpecs.get(0);
@@ -96,7 +96,7 @@ public class SqlServerSourceConnectionIntegrationTests extends BaseSqlServerInte
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());
-        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null);
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("dbo", tableNames, null, null);
 
         Assertions.assertTrue(tableSpecs.size() > 0);
     }

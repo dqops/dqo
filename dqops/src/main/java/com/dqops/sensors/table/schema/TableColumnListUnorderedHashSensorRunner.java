@@ -187,7 +187,8 @@ public class TableColumnListUnorderedHashSensorRunner extends AbstractSensorRunn
                             new ArrayList<>() {{
                                 add(tableName);
                             }},
-                            connectionWrapper
+                            connectionWrapper,
+                            secretValueLookupContext
                     );
 
                     if (retrievedTableSpecList.size() == 0) {

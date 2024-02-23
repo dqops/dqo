@@ -297,13 +297,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
         if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper);
+            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
         }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
@@ -313,7 +316,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             for (TableWrapper tableWrapper : tableWrappers) {
 
                 FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableWrapper.getSpec());
-                Table tableResult = queryForTableResult(fileFormatSpec, tableWrapper.getSpec());
+                Table tableResult = queryForTableResult(fileFormatSpec, tableWrapper.getSpec(), secretValueLookupContext);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {

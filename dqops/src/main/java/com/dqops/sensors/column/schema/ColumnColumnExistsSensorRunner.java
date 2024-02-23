@@ -179,7 +179,8 @@ public class ColumnColumnExistsSensorRunner extends AbstractSensorRunner {
                             new ArrayList<>() {{
                                 add(tableName);
                             }},
-                            connectionWrapper
+                            connectionWrapper,
+                            secretValueLookupContext
                     );
 
                     if (retrievedTableSpecList.size() == 0) {

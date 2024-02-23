@@ -15,9 +15,10 @@
  */
 package com.dqops.core.jobqueue.jobs.schema;
 
-import com.dqops.checks.defaults.services.DefaultObservabilityConfigurationService;
 import com.dqops.connectors.*;
-import com.dqops.core.jobqueue.*;
+import com.dqops.core.jobqueue.DqoJobExecutionContext;
+import com.dqops.core.jobqueue.DqoJobType;
+import com.dqops.core.jobqueue.DqoQueueJob;
 import com.dqops.core.jobqueue.concurrency.ConcurrentJobType;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyConstraint;
 import com.dqops.core.jobqueue.concurrency.JobConcurrencyTarget;
@@ -178,7 +179,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
                     .map(tm -> tm.getTableName().getTableName())
                     .collect(Collectors.toList());
 
-            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper);
+            List<TableSpec> sourceTableSpecs = sourceConnection.retrieveTableMetadata(this.importParameters.getSchemaName(), tableNames, connectionWrapper, secretValueLookupContext);
             List<TableSpec> filteredSourceTableSpecs = filterTableSpecs(sourceTableSpecs, tableNamePattern);
 //
             TableList currentTablesColl = connectionWrapper.getTables();
