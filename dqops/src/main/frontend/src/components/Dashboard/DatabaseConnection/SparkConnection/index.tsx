@@ -36,6 +36,7 @@ const SparkConnection = ({
         className="mb-4"
         value={spark?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!spark?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}

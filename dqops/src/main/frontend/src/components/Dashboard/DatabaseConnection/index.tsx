@@ -350,7 +350,12 @@ const DatabaseConnection = ({
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
-          className="mb-4"
+          className={clsx(
+            'mb-4',
+            (database.connection_name?.length === 0 ||
+              !database.connection_name) &&
+              'border border-red-500'
+          )}
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })

@@ -59,6 +59,9 @@ const BigqueryConnection: React.FC<IBigqueryConnectionProps> = ({
         onChange={(value) => handleChange({ source_project_id: value })}
         disabled={userProfile.can_manage_data_sources !== true}
         data={sharedCredentials}
+        inputClassName={
+          !bigquery?.source_project_id ? 'border border-red-500' : ''
+        }
       />
       <Select
         label="Authentication mode to the Google Cloud"
