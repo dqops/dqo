@@ -175,7 +175,7 @@ const ContextMenu = ({
                 <div
                   className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                   onClick={() => {
-                    userProfile.can_delete_data
+                    userProfile.can_manage_data_sources
                       ? setRunChecksDialogOpened(true)
                       : undefined;
                   }}
@@ -209,7 +209,7 @@ const ContextMenu = ({
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                 onClick={() => {
-                  userProfile.can_delete_data
+                  userProfile.can_manage_data_sources
                     ? setCollectStatisticsDialogOpened(true)
                     : undefined;
                 }}
