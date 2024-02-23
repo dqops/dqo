@@ -1,5 +1,6 @@
 package com.dqops.metadata.sources.fileformat;
 
+import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
@@ -16,6 +17,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 /**
@@ -131,13 +133,47 @@ public class FileFormatSpec extends AbstractSpec {
      * Builds the table options string for use in SQL query that contains file paths to the source data files and options for the files.
      * @return Table options string.
      */
-    public String buildTableOptionsString(DuckdbSourceFilesType duckdbSourceFilesType, TableSpec tableSpec){
-        switch(duckdbSourceFilesType){
-            case csv: return csv.buildSourceTableOptionsString(filePaths, tableSpec);
-            case json: return json.buildSourceTableOptionsString(filePaths, tableSpec);
-            case parquet: return parquet.buildSourceTableOptionsString(filePaths, tableSpec);
-            default: throw new RuntimeException("Cant create table options string for the given files: " + duckdbSourceFilesType);
+    public String buildTableOptionsString(DuckdbParametersSpec duckdb, TableSpec tableSpec){
+        ArrayList<String> readyFilePaths = makeFilePathsAccessible(duckdb);
+
+        DuckdbSourceFilesType sourceFilesType = duckdb.getSourceFilesType();
+        switch(sourceFilesType){
+            case csv: return csv.buildSourceTableOptionsString(readyFilePaths, tableSpec);
+            case json: return json.buildSourceTableOptionsString(readyFilePaths, tableSpec);
+            case parquet: return parquet.buildSourceTableOptionsString(readyFilePaths, tableSpec);
+            default: throw new RuntimeException("Cant create table options string for the given files: " + readyFilePaths);
         }
+    }
+
+    private ArrayList<String> makeFilePathsAccessible(DuckdbParametersSpec duckdb){
+
+        ArrayList<String> accessibleFilePaths = new ArrayList<>();
+
+        if(duckdb.getSecretsType() == null){
+            filePaths.iterator().forEachRemaining(accessibleFilePaths::add);
+            return accessibleFilePaths;
+        }
+
+        switch(duckdb.getSecretsType()){
+            case s3:
+                filePaths.iterator().forEachRemaining(filePath -> {
+
+                    StringBuilder newPath = new StringBuilder();
+                    newPath.append(filePath);
+                    newPath.append("?");
+                    newPath.append("s3_access_key_id=").append(duckdb.getUser());
+                    newPath.append("&");
+                    newPath.append("s3_secret_access_key=").append(duckdb.getPassword());
+                    newPath.append("&");
+                    newPath.append("s3_region=").append(duckdb.getRegion());
+
+                    accessibleFilePaths.add(newPath.toString());
+                });
+                break;
+            default:
+                throw new RuntimeException("Secrets type is not supported : " + duckdb.getSecretsType());
+        }
+        return accessibleFilePaths;
     }
 
     /**
@@ -209,7 +245,7 @@ public class FileFormatSpec extends AbstractSpec {
             cloned.json = cloned.json.expandAndTrim(secretValueProvider, secretValueLookupContext);
         }
         if (cloned.parquet != null) {
-            cloned.parquet = (ParquetFileFormatSpec) cloned.parquet.deepClone();
+            cloned.parquet = cloned.parquet.deepClone();
         }
         if (cloned.filePaths != null) {
             cloned.filePaths = cloned.filePaths.deepClone();

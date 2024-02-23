@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
@@ -194,6 +195,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         log.error(exception.getMessage());
                     }
                 });
+                extensionsRegistered = true;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -204,11 +206,17 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * Loads secrets that are used during the connection to a cloud storage service.
      */
     private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
+        if(getConnectionSpec().getDuckdb().getSecretsType() == null){
+            return;
+        }
+
         ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         fillSpecWithDefaultCredentials(connectionSpec, secretValueLookupContext);
 
         try {
-            DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
+            // todo: use the below method with duckdb 0.10 when aws extension is fixed
+//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -262,6 +270,27 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 "httpfs",
                 "aws"
         );
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
+        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
+            return super.listSchemas();
+        }
+        Map<String, String> directories = duckdb.getDirectories();
+        List<SourceSchemaModel> results = new ArrayList<>();
+        directories.keySet().forEach(s -> {
+            SourceSchemaModel schemaModel = new SourceSchemaModel(s);
+            results.add(schemaModel);
+        });
+
+        return results;
     }
 
     /**
