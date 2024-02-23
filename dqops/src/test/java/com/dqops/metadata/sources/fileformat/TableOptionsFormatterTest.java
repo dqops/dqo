@@ -19,7 +19,7 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv"));
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -33,7 +33,7 @@ public class TableOptionsFormatterTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv", "file_two.csv"));
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -49,7 +49,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("bool_field", true);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -65,7 +65,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("long_field", 3L);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -81,7 +81,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatValueWhenSet("bool_field", null);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -96,7 +96,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatStringWhenSet("string_field", "text value");
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -127,7 +127,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatColumns("columns", tableSpec);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
@@ -160,7 +160,7 @@ public class TableOptionsFormatterTest extends BaseTest {
 
         tableOptionsFormatter.formatColumns("columns", tableSpec);
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(

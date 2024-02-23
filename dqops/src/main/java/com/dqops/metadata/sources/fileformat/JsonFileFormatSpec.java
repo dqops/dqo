@@ -106,7 +106,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatStringWhenSet(Fields.records, records);
         tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**

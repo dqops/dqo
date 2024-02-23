@@ -60,7 +60,7 @@ public class ParquetFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.fileRowNumber, fileRowNumber);
         tableOptionsFormatter.formatValueWhenSet(Fields.hivePartitioning, hivePartitioning);
         tableOptionsFormatter.formatValueWhenSet(Fields.unionByName, unionByName);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**

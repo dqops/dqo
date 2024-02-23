@@ -112,8 +112,7 @@ public class TableOptionsFormatter {
      * The method stringifies the StringBuilder adding the close bracket to the end of the built string.
      * @return
      */
-    @Override
-    public String toString() {
+    public String build() {
         sourceTable.append("\n)");
         return sourceTable.toString();
     }

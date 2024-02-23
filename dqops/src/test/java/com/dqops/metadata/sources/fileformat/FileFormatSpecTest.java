@@ -15,7 +15,7 @@ public class FileFormatSpecTest extends BaseTest {
         TableOptionsFormatter tableOptionsFormatter = new TableOptionsFormatter("csv_file",
                 List.of("file_one.csv"));
 
-        String output = tableOptionsFormatter.toString();
+        String output = tableOptionsFormatter.build();
 
         Assertions.assertEquals("""
                 csv_file(
