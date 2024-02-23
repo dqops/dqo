@@ -38559,6 +38559,10 @@
           "type" : "string",
           "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
         },
+        "stage" : {
+          "type" : "string",
+          "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*."
+        },
         "table_priority" : {
           "type" : "integer",
           "format" : "int32",
@@ -38597,6 +38601,10 @@
         "table" : {
           "type" : "string",
           "description" : "The table name filter. Accepts wildcards in the format: *_customers, *, fact_*."
+        },
+        "stage" : {
+          "type" : "string",
+          "description" : "The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*."
         },
         "table_priority" : {
           "type" : "integer",

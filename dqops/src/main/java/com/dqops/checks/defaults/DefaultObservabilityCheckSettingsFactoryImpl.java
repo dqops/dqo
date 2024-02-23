@@ -197,9 +197,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
 
         ColumnNullsDailyMonitoringChecksSpec columnNullsDailyMonitoring = new ColumnNullsDailyMonitoringChecksSpec();
         columnNullsDailyMonitoring.setDailyNullsCount(new ColumnNullsCountCheckSpec());
-        columnNullsDailyMonitoring.setDailyNotNullsCount(new ColumnNotNullsCountCheckSpec() {{
-            setWarning(new MinCountRule1ParametersSpec());
-        }});
         columnNullsDailyMonitoring.setDailyNullsPercent(new ColumnNullsPercentCheckSpec());
         columnNullsDailyMonitoring.setDailyNotNullsPercent(new ColumnNotNullsPercentCheckSpec());
         columnNullsDailyMonitoring.setDailyNullsPercentAnomaly(new ColumnNullPercentAnomalyStationaryCheckSpec() {{
