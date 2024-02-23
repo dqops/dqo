@@ -20,14 +20,14 @@ import java.util.Optional;
  * AWS default profile provider that use the keys available in the credential folder of DQO.
  */
 @Component
-public class AwsDefaultCredentialProfileProvider implements AwsProfileProvider {
+public class AwsDefaultCredentialProfileProvider {
 
     /**
      * Provides the AWS profile with credentials.
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return AWS default profile created from the credential files available in DQOps shared credentials.
      */
-    public Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
+    public static Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
 
         String sectionName = "profiles";
         String sectionTitle = "default";

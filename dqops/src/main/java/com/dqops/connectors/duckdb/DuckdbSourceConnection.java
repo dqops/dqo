@@ -29,7 +29,8 @@ import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -59,25 +60,22 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     private final HomeLocationFindService homeLocationFindService;
     private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
-    private final AwsProfileProvider awsProfileProvider;
+
 
     /**
      * Injection constructor for the duckdb connection.
      *
-     * @param jdbcConnectionPool      Jdbc connection pool.
-     * @param secretValueProvider     Secret value provider for the environment variable expansion.
+     * @param jdbcConnectionPool                  Jdbc connection pool.
+     * @param secretValueProvider                 Secret value provider for the environment variable expansion.
      * @param homeLocationFindService
-     * @param awsProfileProvider
      */
     @Autowired
     public DuckdbSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                   SecretValueProvider secretValueProvider,
                                   DuckdbConnectionProvider duckdbConnectionProvider,
-                                  HomeLocationFindService homeLocationFindService,
-                                  AwsProfileProvider awsProfileProvider) {
+                                  HomeLocationFindService homeLocationFindService) {
         super(jdbcConnectionPool, secretValueProvider, duckdbConnectionProvider);
         this.homeLocationFindService = homeLocationFindService;
-        this.awsProfileProvider = awsProfileProvider;
     }
 
     /**
@@ -222,27 +220,31 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         switch (secretsType){
             case s3:
-                Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
-                if(!profile.isPresent()){
-                    return;
+                if(Strings.isNullOrEmpty(duckdb.getUser()) || Strings.isNullOrEmpty(duckdb.getPassword())){
+                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                    if(credentialProfile.isPresent()){
+                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                        if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
+                            String awsAccessKeyId = accessKeyId.get();
+                            duckdb.setUser(awsAccessKeyId);
+                        }
+                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                        if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
+                            String awsSecretAccessKey = secretAccessKey.get();
+                            duckdb.setPassword(awsSecretAccessKey);
+                        }
+                    }
                 }
 
-                Optional<String> accessKeyId = profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
-                    String awsAccessKeyId = accessKeyId.get();
-                    duckdb.setUser(awsAccessKeyId);
-                }
-
-                Optional<String> secretAccessKey = profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
-                    String awsSecretAccessKey = secretAccessKey.get();
-                    duckdb.setPassword(awsSecretAccessKey);
-                }
-
-                Optional<String> region = profile.get().property(AwsConfigProfileSettingNames.REGION);
-                if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
-                    String awsRegion = region.get();
-                    duckdb.setRegion(awsRegion);
+                if(Strings.isNullOrEmpty(duckdb.getUser())){
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent()){
+                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
+                        if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
+                            String awsRegion = region.get();
+                            duckdb.setRegion(awsRegion);
+                        }
+                    }
                 }
 
                 break;
@@ -359,9 +361,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param fileFormatSpec A file format specification with paths and format configuration.
      * @return A table result with metadata of the given data file.
      */
-    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec, TableSpec tableSpec){
-        DuckdbSourceFilesType duckdbSourceFilesType = super.getConnectionSpec().getDuckdb().getSourceFilesType();
-        String tableString = fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType, tableSpec);
+    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec,
+                                                        TableSpec tableSpec,
+                                                        SecretValueLookupContext secretValueLookupContext){
+        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpec);
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }

@@ -20,14 +20,14 @@ import java.util.Optional;
  * Provider for the AWS default config profile file available in the credential folder of DQO.
  */
 @Component
-public class AwsDefaultConfigProfileProvider implements AwsProfileProvider {
+public class AwsDefaultConfigProfileProvider {
 
     /**
      * Provides the AWS config profile file.
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
      * @return AWS default config profile created from the credential files available in DQOps shared credentials.
      */
-    public Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
+    public static Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
 
         String sectionName = "profiles";
         String sectionTitle = "default";
