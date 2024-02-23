@@ -29,6 +29,7 @@ public class TargetTablePatternFilter {
     private SearchPattern connectionPattern;
     private SearchPattern schemaPattern;
     private SearchPattern tablePattern;
+    private SearchPattern stagePattern;
     private Integer tablePriority;
     protected SearchPattern labelPattern;
 
@@ -47,6 +48,10 @@ public class TargetTablePatternFilter {
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getTable())) {
             this.tablePattern = SearchPattern.create(false, tablePatternSpec.getTable());
+        }
+
+        if (!Strings.isNullOrEmpty(tablePatternSpec.getStage())) {
+            this.stagePattern = SearchPattern.create(false, tablePatternSpec.getStage());
         }
 
         if (!Strings.isNullOrEmpty(tablePatternSpec.getLabel())) {
@@ -78,6 +83,12 @@ public class TargetTablePatternFilter {
 
         if (this.tablePattern != null) {
             if (!this.tablePattern.match(tableSpec.getPhysicalTableName().getTableName())) {
+                return false;
+            }
+        }
+
+        if (this.stagePattern != null) {
+            if (!this.stagePattern.match(tableSpec.getStage())) {
                 return false;
             }
         }

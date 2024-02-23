@@ -52,6 +52,10 @@ public class TargetTablePatternSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String table;
 
+    @JsonPropertyDescription("The table stage filter. Accepts wildcards in the format: *_landing, *, staging_*.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private String stage;
+
     @JsonPropertyDescription("The maximum table priority (inclusive) for tables that are covered by the default checks.")
     private Integer tablePriority;
 
@@ -108,6 +112,23 @@ public class TargetTablePatternSpec extends AbstractSpec {
     public void setTable(String table) {
         this.setDirtyIf(!Objects.equals(this.table, table));
         this.table = table;
+    }
+
+    /**
+     * Returns the table stage filter.
+     * @return Table stage filter.
+     */
+    public String getStage() {
+        return stage;
+    }
+
+    /**
+     * Sets the table stage filter.
+     * @param stage Table stage filter.
+     */
+    public void setStage(String stage) {
+        this.setDirtyIf(!Objects.equals(this.stage, stage));
+        this.stage = stage;
     }
 
     /**
