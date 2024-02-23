@@ -58,7 +58,7 @@ export default function RunChecksDialog({
         Run checks
       </DialogHeader>
       <DialogBody className="text-sm flex flex-col mb-20">
-        <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
+        <div className="flex justify-between border-b pb-4 border-gray-300 text-black  ">
           <div className="w-[45%] ml-2">
             Connection:
             <Input
@@ -79,7 +79,7 @@ export default function RunChecksDialog({
           </div>
           <div></div>
         </div>
-        <div className="flex justify-between py-4 text-black font-semibold items-center">
+        <div className="flex justify-between py-4 text-black   items-center">
           <div className="w-1/3 ml-2">
             Column name:
             <Input
@@ -106,7 +106,7 @@ export default function RunChecksDialog({
             />
           </div>
         </div>
-        <div className="flex justify-between py-4 text-black font-semibold">
+        <div className="flex justify-between py-4 text-black  ">
           <div className="w-1/3 ml-2">
             Check target:
             <SelectInput
@@ -152,12 +152,20 @@ export default function RunChecksDialog({
             />
           </div>
         </div>
-        <div className="flex justify-between pt-4 text-black font-semibold">
+        <div className="flex justify-between pt-4 text-black  ">
           <div className="w-1/3 ml-2">
             Check name:
             <Input
               value={filters.checkName}
               onChange={(e) => onChangeFilters({ checkName: e.target.value })}
+              className="mt-2"
+            />
+          </div>
+          <div className="w-1/3 ml-2">
+            Sensor name:
+            <Input
+              value={filters.sensorName}
+              onChange={(e) => onChangeFilters({ sensorName: e.target.value })}
               className="mt-2"
             />
           </div>
@@ -171,16 +179,8 @@ export default function RunChecksDialog({
               className="mt-2"
             />
           </div>
-          <div className="w-1/3 ml-2">
-            Sensor name:
-            <Input
-              value={filters.sensorName}
-              onChange={(e) => onChangeFilters({ sensorName: e.target.value })}
-              className="mt-2"
-            />
-          </div>
         </div>
-        <div className="flex justify-between pt-4 text-black font-semibold">
+        <div className="flex justify-between pt-4 text-black  ">
           <LabelsView
             labels={filters.labels ?? []}
             onChange={(labels: string[]) => onChangeFilters({ labels: labels })}
