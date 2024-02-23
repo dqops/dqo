@@ -35,6 +35,7 @@ const RedshiftConnection = ({
         className="mb-4"
         value={redshift?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!redshift?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}

@@ -36,6 +36,7 @@ const OracleConnection = ({
         className="mb-4"
         value={oracle?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!oracle?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}

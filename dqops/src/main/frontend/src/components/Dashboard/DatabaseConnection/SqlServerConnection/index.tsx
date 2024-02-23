@@ -24,11 +24,13 @@ const authenticationModes = [
   },
   {
     label: 'Active Directory Password',
-    value: SqlServerParametersSpecAuthenticationModeEnum.active_directory_password
+    value:
+      SqlServerParametersSpecAuthenticationModeEnum.active_directory_password
   },
   {
     label: 'Active Directory Service Principal',
-    value: SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
+    value:
+      SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
   },
   {
     label: 'Default Credential',
@@ -61,6 +63,7 @@ const SqlServerConnection = ({
         className="mb-4"
         value={sqlserver?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!sqlserver?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}
@@ -82,30 +85,41 @@ const SqlServerConnection = ({
         options={authenticationModes}
         className="mb-4"
         value={sqlserver?.authentication_mode}
-        onChange={(value) => { 
-          handleChange({ authentication_mode: value })
+        onChange={(value) => {
+          handleChange({ authentication_mode: value });
         }}
       />
 
-      { sqlserver?.authentication_mode !== SqlServerParametersSpecAuthenticationModeEnum.default_credential && 
+      {sqlserver?.authentication_mode !==
+        SqlServerParametersSpecAuthenticationModeEnum.default_credential && (
         <>
           <FieldTypeInput
             data={sharedCredentials}
-            label={sqlserver?.authentication_mode === SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal ? "Application (client) ID" : "User name"}
+            label={
+              sqlserver?.authentication_mode ===
+              SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
+                ? 'Application (client) ID'
+                : 'User name'
+            }
             className="mb-4"
             value={sqlserver?.user}
             onChange={(value) => handleChange({ user: value })}
           />
           <FieldTypeInput
             data={sharedCredentials}
-            label={sqlserver?.authentication_mode === SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal ? "Client Secret" : "Password"}
+            label={
+              sqlserver?.authentication_mode ===
+              SqlServerParametersSpecAuthenticationModeEnum.active_directory_service_principal
+                ? 'Client Secret'
+                : 'Password'
+            }
             className="mb-4"
             maskingType="password"
             value={sqlserver?.password}
             onChange={(value) => handleChange({ password: value })}
           />
         </>
-      }
+      )}
 
       <Checkbox
         checked={sqlserver?.disable_encryption}
