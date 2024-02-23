@@ -175,7 +175,7 @@ const ContextMenu = ({
                 <div
                   className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                   onClick={() => {
-                    userProfile.can_delete_data
+                    userProfile.can_manage_data_sources
                       ? setRunChecksDialogOpened(true)
                       : undefined;
                   }}
@@ -184,8 +184,12 @@ const ContextMenu = ({
                 </div>
                 <RunChecksDialog
                   open={runChecksDialogOpened}
-                  onClose={() => setRunChecksDialogOpened(false)}
-                  onClick={handleRunChecks}
+                  onClose={() => {
+                    setRunChecksDialogOpened(false), setOpen(false);
+                  }}
+                  onClick={() => {
+                    handleRunChecks(), setOpen(false);
+                  }}
                   runChecksJobTemplate={node.run_checks_job_template ?? {}}
                 />
               </>
@@ -209,7 +213,7 @@ const ContextMenu = ({
               <div
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                 onClick={() => {
-                  userProfile.can_delete_data
+                  userProfile.can_manage_data_sources
                     ? setCollectStatisticsDialogOpened(true)
                     : undefined;
                 }}
@@ -218,8 +222,12 @@ const ContextMenu = ({
               </div>
               <CollectStatisticsDialog
                 open={collectStatisticsDialogOpened}
-                onClose={() => setCollectStatisticsDialogOpened(false)}
-                onClick={handleCollectStatisticsOnTable}
+                onClose={() => {
+                  setCollectStatisticsDialogOpened(false), setOpen(false);
+                }}
+                onClick={(filter) => {
+                  handleCollectStatisticsOnTable(filter), setOpen(false);
+                }}
                 collectStatisticsJobTemplate={
                   node.collect_statistics_job_template ?? {}
                 }
@@ -357,7 +365,9 @@ const ContextMenu = ({
               </div>
               <DeleteStoredDataExtendedPopUp
                 open={deleteDataDialogOpened}
-                onClose={() => setDeleteDataDialogOpened(false)}
+                onClose={() => {
+                  setDeleteDataDialogOpened(false), setOpen(false);
+                }}
                 onDelete={(params) => {
                   setDeleteDataDialogOpened(false);
                   deleteStoredData(node, params);
