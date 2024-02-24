@@ -34,7 +34,7 @@ const DuckdbConnection = ({
 
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      DuckdbParametersSpecSourceFilesTypeEnum.csv
+      duckdb?.source_files_type ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
     );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
@@ -51,8 +51,16 @@ const DuckdbConnection = ({
     setConfiguration({});
   };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
+    handleChange({
+      [fileFormatType as keyof DuckdbParametersSpec]: undefined,
+      [val as keyof DuckdbParametersSpec]: {},
+      source_files_type: val
+    });
     setFileFormatType(val);
+    cleanConfiguration();
+  };
+
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
       <FileFormatConfiguration
@@ -66,7 +74,7 @@ const DuckdbConnection = ({
         <KeyValueProperties
           properties={duckdb?.directories}
           onChange={(properties) => {
-            onChange({ directories: properties });
+            handleChange({ directories: properties });
           }}
           sharedCredentials={sharedCredentials}
         />
