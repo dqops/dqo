@@ -8,6 +8,7 @@ import {
   BigQueryParametersSpecJobsCreateProjectEnum,
   ConnectionModel,
   ConnectionModelProviderTypeEnum,
+  DuckdbParametersSpecSourceFilesTypeEnum,
   MysqlParametersSpecMysqlEngineTypeEnum,
   SingleStoreDbParametersSpecLoadBalancingModeEnum,
   TrinoParametersSpecAthenaAuthenticationModeEnum,
@@ -113,7 +114,11 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
-        copiedDatabase.duckdb = { directories: { files: '' } };
+        copiedDatabase.duckdb = {
+          directories: { files: '' },
+          source_files_type: DuckdbParametersSpecSourceFilesTypeEnum.csv
+        };
+        console.log(copiedDatabase);
       }
     }
     setDatabase(copiedDatabase);
