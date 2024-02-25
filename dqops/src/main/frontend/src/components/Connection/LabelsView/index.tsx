@@ -57,10 +57,10 @@ const LabelsView = ({
   return (
     <div className="p-4 text-sm w-full">
       <div className={clsx('flex items-center font-bold', titleClassName)}>
-        <div className="text-left min-w-40 w-11/12 pr-4 py-2">
+        <div className="text-left min-w-40 w-11/12 pr-4">
           {title ?? 'Label'}
         </div>
-        <div className="px-0 pr-8 py-2 text-center max-w-34 min-w-34 w-34">
+        <div className="px-0 pr-8 text-center max-w-34 min-w-34 w-34">
           Action
         </div>
       </div>
