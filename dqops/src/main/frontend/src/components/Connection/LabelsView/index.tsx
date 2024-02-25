@@ -5,19 +5,22 @@ import { IconButton } from '@material-tailwind/react';
 import SvgIcon from '../../SvgIcon';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
+import clsx from 'clsx';
 
 interface ILabelsViewProps {
   labels: string[];
   onChange: (labels: string[]) => void;
   hasAdd?: boolean;
   title?: string;
+  titleClassName?: string;
 }
 
 const LabelsView = ({
   labels = [],
   onChange,
   hasAdd,
-  title
+  title,
+  titleClassName
 }: ILabelsViewProps) => {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
@@ -53,7 +56,7 @@ const LabelsView = ({
 
   return (
     <div className="p-4 text-sm w-full">
-      <div className="flex items-center font-bold">
+      <div className={clsx('flex items-center font-bold', titleClassName)}>
         <div className="text-left min-w-40 w-11/12 pr-4 py-2">
           {title ?? 'Label'}
         </div>

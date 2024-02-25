@@ -18,6 +18,8 @@ import SelectInput from '../SelectInput';
 import CheckboxThreeSteps from '../CheckBoxThreeSteps';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
+import SvgIcon from '../SvgIcon';
+import SectionWrapper from '../Dashboard/SectionWrapper';
 type TRunChecksDialogProps = {
   onClick: (filter: CheckSearchFilters) => void;
   open: boolean;
@@ -33,8 +35,13 @@ export default function RunChecksDialog({
 }: TRunChecksDialogProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
-  const [filters, setFilters] =
-    useState<CheckSearchFilters>(runChecksJobTemplate);
+  const [filters, setFilters] = useState<CheckSearchFilters>({
+    fullTableName: 'schema*.table*',
+    column: 'col*',
+    ...runChecksJobTemplate
+  });
+
+  const [additionalParams, setAdditionalParams] = useState(false);
 
   const onChangeFilters = (obj: Partial<CheckSearchFilters>) => {
     setFilters((prev) => ({
@@ -106,91 +113,120 @@ export default function RunChecksDialog({
             />
           </div>
         </div>
-        <div className="flex justify-between py-4 text-black  ">
-          <div className="w-1/3 ml-2">
-            Check target:
-            <SelectInput
-              value={filters.checkTarget}
-              onChange={(value) => onChangeFilters({ checkTarget: value })}
-              options={[
-                { label: '', value: '' },
-                ...Object.keys(StatisticsCollectorSearchFiltersTargetEnum).map(
-                  (x) => ({ label: x, value: x })
-                )
-              ]}
-              className="mt-2"
-            />
+        {additionalParams === false ? (
+          <div
+            className="flex items-center text-black mb-4 cursor-default"
+            onClick={() => setAdditionalParams(true)}
+          >
+            <SvgIcon name="chevron-right" className="w-5 h-5" />
+            <span className="font-bold">Additional parameters</span>
           </div>
-          <div className="w-1/3 ml-2">
-            Check type:
-            <SelectInput
-              value={filters.checkType}
-              onChange={(value) => onChangeFilters({ checkType: value })}
-              options={[
-                { label: '', value: '' },
-                ...Object.keys(CheckSearchFiltersCheckTypeEnum).map((x) => ({
-                  label: x,
-                  value: x
-                }))
-              ]}
-              className="mt-2"
-            />
-          </div>
-          <div className="w-1/3 ml-2">
-            Time scale:
-            <SelectInput
-              value={filters.timeScale}
-              onChange={(value) => onChangeFilters({ timeScale: value })}
-              options={[
-                { label: '', value: '' },
-                ...Object.keys(CheckSearchFiltersTimeScaleEnum).map((x) => ({
-                  label: x,
-                  value: x
-                }))
-              ]}
-              className="mt-2"
-            />
-          </div>
-        </div>
-        <div className="flex justify-between pt-4 text-black  ">
-          <div className="w-1/3 ml-2">
-            Check name:
-            <Input
-              value={filters.checkName}
-              onChange={(e) => onChangeFilters({ checkName: e.target.value })}
-              className="mt-2"
-            />
-          </div>
-          <div className="w-1/3 ml-2">
-            Sensor name:
-            <Input
-              value={filters.sensorName}
-              onChange={(e) => onChangeFilters({ sensorName: e.target.value })}
-              className="mt-2"
-            />
-          </div>
-          <div className="w-1/3 ml-2">
-            Table comparison name:
-            <Input
-              value={filters.tableComparisonName}
-              onChange={(e) =>
-                onChangeFilters({ tableComparisonName: e.target.value })
-              }
-              className="mt-2"
-            />
-          </div>
-        </div>
-        <div className="flex justify-between pt-4 text-black  ">
-          <LabelsView
-            labels={filters.labels ?? []}
-            onChange={(labels: string[]) => onChangeFilters({ labels: labels })}
-          />
-          <LabelsView
-            labels={filters.tags ?? []}
-            onChange={(tags: string[]) => onChangeFilters({ tags: tags })}
-            title="Tags"
-          />
-        </div>
+        ) : (
+          <SectionWrapper
+            title="Additional parameters"
+            onClick={() => setAdditionalParams(false)}
+            svgIcon={true}
+            className="cursor-default"
+          >
+            <div className="flex justify-between py-4 text-black  ">
+              <div className="w-1/3 ml-2">
+                Check target:
+                <SelectInput
+                  value={filters.checkTarget}
+                  onChange={(value) => onChangeFilters({ checkTarget: value })}
+                  options={[
+                    { label: '', value: '' },
+                    ...Object.keys(
+                      StatisticsCollectorSearchFiltersTargetEnum
+                    ).map((x) => ({ label: x, value: x }))
+                  ]}
+                  className="mt-2"
+                />
+              </div>
+              <div className="w-1/3 ml-2">
+                Check type:
+                <SelectInput
+                  value={filters.checkType}
+                  onChange={(value) => onChangeFilters({ checkType: value })}
+                  options={[
+                    { label: '', value: '' },
+                    ...Object.keys(CheckSearchFiltersCheckTypeEnum).map(
+                      (x) => ({
+                        label: x,
+                        value: x
+                      })
+                    )
+                  ]}
+                  className="mt-2"
+                />
+              </div>
+              <div className="w-1/3 ml-2">
+                Time scale:
+                <SelectInput
+                  value={filters.timeScale}
+                  onChange={(value) => onChangeFilters({ timeScale: value })}
+                  options={[
+                    { label: '', value: '' },
+                    ...Object.keys(CheckSearchFiltersTimeScaleEnum).map(
+                      (x) => ({
+                        label: x,
+                        value: x
+                      })
+                    )
+                  ]}
+                  className="mt-2"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between pt-4 text-black  ">
+              <div className="w-1/3 ml-2">
+                Check name:
+                <Input
+                  value={filters.checkName}
+                  onChange={(e) =>
+                    onChangeFilters({ checkName: e.target.value })
+                  }
+                  className="mt-2"
+                />
+              </div>
+              <div className="w-1/3 ml-2">
+                Sensor name:
+                <Input
+                  value={filters.sensorName}
+                  onChange={(e) =>
+                    onChangeFilters({ sensorName: e.target.value })
+                  }
+                  className="mt-2"
+                />
+              </div>
+              <div className="w-1/3 ml-2">
+                Table comparison name:
+                <Input
+                  value={filters.tableComparisonName}
+                  onChange={(e) =>
+                    onChangeFilters({ tableComparisonName: e.target.value })
+                  }
+                  className="mt-2"
+                />
+              </div>
+            </div>
+            <div className="flex justify-between pt-4 text-black  ">
+              <LabelsView
+                labels={filters.labels ?? []}
+                onChange={(labels: string[]) =>
+                  onChangeFilters({ labels: labels })
+                }
+                titleClassName="font-normal"
+              />
+              <LabelsView
+                labels={filters.tags ?? []}
+                onChange={(tags: string[]) => onChangeFilters({ tags: tags })}
+                title="Tags"
+                titleClassName="font-normal"
+              />
+            </div>
+          </SectionWrapper>
+        )}
       </DialogBody>
       <DialogFooter className="flex gap-6 items-center absolute bottom-5 right-5">
         <Button
