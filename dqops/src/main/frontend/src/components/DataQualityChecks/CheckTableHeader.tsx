@@ -322,14 +322,14 @@ const TableHeader = ({
           </>
         )}
         <td className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400 relative pl-1">
-          Passing rule
+          Passing rule (KPI met)
           <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
         </td>
         <td
           className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           colSpan={2}
         >
-          Failing rule
+          Failing rule (KPI unmet)
         </td>
       </tr>
       <tr>
