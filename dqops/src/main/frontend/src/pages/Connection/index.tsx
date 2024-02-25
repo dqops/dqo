@@ -75,9 +75,13 @@ const ConnectionPage = () => {
   const location = useLocation() as any;
   const { import_schema, create_success } = qs.parse(location.search);
 
-  const { isUpdatedConnectionBasic } = useSelector(
-    getFirstLevelState(checkTypes)
-  );
+  const {
+    isUpdatedConnectionBasic,
+    isUpdatedLabels,
+    isUpdatedSchedule,
+    isUpdatedComments,
+    isUpdatedDataStreamsMapping
+  } = useSelector(getFirstLevelState(checkTypes));
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
   const dispatch = useActionDispatch();
 
@@ -104,43 +108,43 @@ const ConnectionPage = () => {
     }
   }, [isUpdatedConnectionBasic]);
 
-  // useEffect(() => {
-  //   setTabs(
-  //     tabs.map((item) =>
-  //       item.value === 'schedule'
-  //         ? { ...item, isUpdated: isUpdatedSchedule }
-  //         : item
-  //     )
-  //   );
-  // }, [isUpdatedSchedule, tabs]);
-  //
-  // useEffect(() => {
-  //   setTabs(
-  //     tabs.map((item) =>
-  //       item.value === 'comments'
-  //         ? { ...item, isUpdated: isUpdatedComments }
-  //         : item
-  //     )
-  //   );
-  // }, [isUpdatedComments, tabs]);
-  //
-  // useEffect(() => {
-  //   setTabs(
-  //     tabs.map((item) =>
-  //       item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
-  //     )
-  //   );
-  // }, [isUpdatedLabels, tabs]);
-  //
-  // useEffect(() => {
-  //   setTabs(
-  //     tabs.map((item) =>
-  //       item.value === 'data-streams'
-  //         ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
-  //         : item
-  //     )
-  //   );
-  // }, [isUpdatedDataStreamsMapping, tabs]);
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'schedule'
+          ? { ...item, isUpdated: isUpdatedSchedule }
+          : item
+      )
+    );
+  }, [isUpdatedSchedule]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'comments'
+          ? { ...item, isUpdated: isUpdatedComments }
+          : item
+      )
+    );
+  }, [isUpdatedComments]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
+      )
+    );
+  }, [isUpdatedLabels]);
+
+  useEffect(() => {
+    setTabs(
+      tabs.map((item) =>
+        item.value === 'data-streams'
+          ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
+          : item
+      )
+    );
+  }, [isUpdatedDataStreamsMapping]);
 
   useEffect(() => {
     setTabs(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
