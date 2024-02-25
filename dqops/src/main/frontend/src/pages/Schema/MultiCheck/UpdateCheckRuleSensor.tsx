@@ -80,7 +80,7 @@ export default function UpdateCheckRuleSensor({
         <div className="w-5 bg-white absolute h-full right-0 top-0"></div>
       </div>
       <div className="text-center whitespace-nowrap text-gray-700  bg-gray-400 w-140">
-        <div className="py-2 font-semibold">Failing rule (KPI unmet)</div>
+        <div className="py-2 font-semibold">Failing rule (KPI not met)</div>
         <div className="flex">
           <div className="bg-orange-100 w-70 pb-2">
             <div className="text-center whitespace-nowrap border-b border-gray-300 text-gray-700 py-2 font-semibold">

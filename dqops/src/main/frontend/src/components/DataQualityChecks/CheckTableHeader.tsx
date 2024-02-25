@@ -329,7 +329,7 @@ const TableHeader = ({
           className="text-center whitespace-nowrap text-gray-700 py-1.5 px-4 font-semibold bg-gray-400"
           colSpan={2}
         >
-          Failing rule (KPI unmet)
+          Failing rule (KPI not met)
         </td>
       </tr>
       <tr>
