@@ -445,7 +445,7 @@ export const DefinitionTree = () => {
   );
 
   return (
-    <div className="overflow-hidden p-4 pt-4 bg-white">
+    <div className="overflow-hidden bg-white">
       {definitionFirstLevelFolder?.map((x, index) => (
         <div key={index} className="text-[13px] cursor-pointer">
           <div
