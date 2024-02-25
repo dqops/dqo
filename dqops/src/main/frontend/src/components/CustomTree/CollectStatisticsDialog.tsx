@@ -32,9 +32,10 @@ export default function CollectStatisticsDialog({
 }: TCollectStatisticsDialogProps) {
   const { userProfile } = useSelector((state: IRootState) => state.job || {});
 
-  const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>(
-    collectStatisticsJobTemplate
-  );
+  const [filters, setFilters] = useState<StatisticsCollectorSearchFilters>({
+    fullTableName: 'schema*.table*',
+    ...collectStatisticsJobTemplate
+  });
   const [additionalParams, setAdditionalParams] = useState(false);
 
   const onChangeFilters = (obj: Partial<StatisticsCollectorSearchFilters>) => {
