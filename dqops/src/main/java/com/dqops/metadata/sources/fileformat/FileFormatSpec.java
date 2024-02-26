@@ -145,13 +145,17 @@ public class FileFormatSpec extends AbstractSpec {
         }
     }
 
+    /**
+     * Modifies each file path appending secrets to a cloud storage.
+     * Local file paths are not modified.
+     *
+     * @param duckdb DuckdbParametersSpec object with secret type and a bunch of secrets.
+     * @return List of modified filepaths that are accessible for duckdb (with valid credentials).
+     */
     private ArrayList<String> makeFilePathsAccessible(DuckdbParametersSpec duckdb){
-
         ArrayList<String> accessibleFilePaths = new ArrayList<>();
-
         if(duckdb.getSecretsType() == null){
-            filePaths.iterator().forEachRemaining(accessibleFilePaths::add);
-            return accessibleFilePaths;
+            return new ArrayList<>(filePaths);
         }
 
         switch(duckdb.getSecretsType()){

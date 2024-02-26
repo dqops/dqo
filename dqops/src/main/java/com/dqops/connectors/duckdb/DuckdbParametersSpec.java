@@ -270,7 +270,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * Returns the secrets type.
      * @return the secrets type.
      */
-    public DuckdbSecretsType getSecretsType() { // todo: change the Type name so that can be a local storage as well
+    public DuckdbSecretsType getSecretsType() {
         return secretsType;
     }
 

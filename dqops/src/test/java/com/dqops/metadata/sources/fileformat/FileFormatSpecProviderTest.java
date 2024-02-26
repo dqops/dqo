@@ -199,7 +199,7 @@ public class FileFormatSpecProviderTest extends BaseTest {
     }
 
     @Test
-    void guessFilePaths_whenPathDictionaryDoesNotHavePathPrefix_returnNull() {
+    void guessFilePaths_whenPathDictionaryDoesNotHavePathPrefix_returnsEmptyList() {
         String schemaName = "/schema_name_example";
         String tableName = "table_name_example";
 
@@ -210,7 +210,8 @@ public class FileFormatSpecProviderTest extends BaseTest {
 
         FilePathListSpec fileFormatSpec = FileFormatSpecProvider.guessFilePaths(duckdbParametersSpec, tableSpec);
 
-        Assertions.assertNull(fileFormatSpec);
+        Assertions.assertNotNull(fileFormatSpec);
+        Assertions.assertTrue(fileFormatSpec.isEmpty());
     }
 
     @EnabledOnOs(OS.WINDOWS)
