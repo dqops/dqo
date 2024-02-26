@@ -27,9 +27,8 @@ import { Tooltip } from '@material-tailwind/react';
 import { useDefinition } from '../../contexts/definitionContext';
 
 const defaultChecks = [
-  'Profiling checks',
-  'Monitoring daily',
-  'Monitoring monthly'
+  'Table-level checks patterns',
+  'Column-level checks patterns'
 ];
 
 export const DefinitionTree = () => {
@@ -54,6 +53,7 @@ export const DefinitionTree = () => {
     openCheckFirstLevelTab,
     openRuleFirstLevelTab,
     openSensorFirstLevelTab,
+    openDefaultChecksPatternsFirstLevelTab,
     toggleTree,
     nodes,
     toggleSensorFolder,
@@ -495,7 +495,7 @@ export const DefinitionTree = () => {
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
                       onClick={() => {
-                        openCheckDefaultFirstLevelTab(x);
+                        openDefaultChecksPatternsFirstLevelTab(x);
                       }}
                     >
                       <SvgIcon

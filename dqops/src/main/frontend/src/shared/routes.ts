@@ -55,6 +55,7 @@ export const ROUTES = {
   SHARED_CREDENTIALS_DETAIL: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
   DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionary',
   DATA_DICTIONARY_DETAIL: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
+  DEFAULT_CHECKS_PATTERNS: (pattern: string) => `/definitions/default-checks-patterns/${urlencodeDecoder(pattern)}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}/schema/${urlencodeDecoder(schema)}`,
@@ -82,7 +83,8 @@ export const ROUTES = {
   SHARED_CREDENTIALS_DETAIL_VALUE: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
   DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionary',
   DATA_DICTIONARY_VALUE: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
-
+  DEFAULT_CHECKS_PATTERNS_VALUE: (pattern: string) => `/definitions/default-checks-patterns/${urlencodeDecoder(pattern)}`,
+  
   PATTERNS: {
     INDEX: '/',
     CONNECTION: '/:checkTypes/connection/:connection/:tab',
@@ -126,6 +128,7 @@ export const ROUTES = {
     SHARED_CREDENTIALS_LIST_DETAIL: '/definitions/shared-credentials',
     SHARED_CREDENTIALS_DETAIL: '/definitions/shared-credential/:credential',
     DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionary',
-    DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`
+    DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`,
+    DEFAULT_CHECKS_PATTERNS:`/definitions/default-checks-patterns/:pattern`,
   }
 };
