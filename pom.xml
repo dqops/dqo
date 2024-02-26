@@ -38,11 +38,11 @@
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>com.ibm.db2</groupId>
-                <artifactId>jcc</artifactId>
-                <version>11.5.8.0</version>
-            </dependency>
+<!--            <dependency>-->
+<!--                <groupId>com.ibm.db2</groupId>-->
+<!--                <artifactId>jcc</artifactId>-->
+<!--                <version>11.5.8.0</version>-->
+<!--            </dependency>-->
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -56,7 +56,7 @@
             <dependency>
                 <groupId>org.postgresql</groupId>
                 <artifactId>postgresql</artifactId>
-                <version>42.6.0</version>
+                <version>42.7.2</version>
             </dependency>
             <dependency>
                 <groupId>com.amazon.redshift</groupId>

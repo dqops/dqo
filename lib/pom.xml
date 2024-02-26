@@ -58,11 +58,11 @@
 
 	<dependencies>
 		<!-- Add dependencies that should be included in the "lib" folder. Specify a "runtime" scope. JDBC drivers should be specified here  -->
-		<dependency>
-			<groupId>com.ibm.db2</groupId>
-			<artifactId>jcc</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+<!--		<dependency>-->
+<!--			<groupId>com.ibm.db2</groupId>-->
+<!--			<artifactId>jcc</artifactId>-->
+<!--			<scope>runtime</scope>-->
+<!--		</dependency>-->
 		<dependency>
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
