@@ -303,10 +303,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+    public List<SourceTableModel> listTables(String schemaName) {
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
         if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
+            List<SourceTableModel> sourceTableModels = super.listTables(schemaName);
             return sourceTableModels;
         }
 

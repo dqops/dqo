@@ -68,7 +68,7 @@ public class SparkConnectionIntegrationTests extends BaseSparkIntegrationTest {
     @Test
     void listTables_whenDefaultSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
-        List<SourceTableModel> tables = this.sut.listTables("default", null);
+        List<SourceTableModel> tables = this.sut.listTables("default");
 
         Assertions.assertTrue(tables.size() == 0);
     }

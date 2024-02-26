@@ -32,9 +32,9 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     private DuckdbSourceConnection sut;
     private SecretValueLookupContext secretValueLookupContext;
-    private String connectionName = "test-connection";
-    private String schemaName = "example_schema";
-    private String tableName = "example_table";
+    private final String schemaName = "example_schema";
+    private final String connectionName = "test_connection";
+    private final String tableName = "example_table";
 
     @BeforeEach
     void setUp() {
@@ -172,7 +172,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided).toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName);
 
         Assertions.assertEquals(4, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("continuous_days_one_row_per_day_1.csv"));
@@ -188,7 +188,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
         String pathPrefix = SampleDataFilesProvider.getFile("files/").toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName);
 
         Assertions.assertEquals(3, sourceTableModels.size());
         Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("csv"));
