@@ -16,7 +16,6 @@
 
 package com.dqops.checks.defaults;
 
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternSpec;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
 
@@ -24,13 +23,6 @@ import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternSpec;
  * Factory that creates the default configuration of checks, when DQOps is initialized and the initial configuration is loaded into the local settings.
  */
 public interface DefaultObservabilityCheckSettingsFactory {
-    /**
-     * Creates the default check settings to be stored in the local settings. This is an initial, default configuration.
-     *
-     * @return Default observability settings.
-     */
-    DefaultObservabilityChecksSpec createDefaultCheckSettings();
-
     /**
      * Create an initial configuration of table-level checks.
      * @return The configuration of the default table level checks.

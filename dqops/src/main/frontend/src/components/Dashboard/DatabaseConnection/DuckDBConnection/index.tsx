@@ -36,7 +36,7 @@ const DuckdbConnection = ({
 
   const [fileFormatType, setFileFormatType] =
     useState<DuckdbParametersSpecSourceFilesTypeEnum>(
-      DuckdbParametersSpecSourceFilesTypeEnum.csv
+      duckdb?.source_files_type ?? DuckdbParametersSpecSourceFilesTypeEnum.csv
     );
 
   const [configuration, setConfiguration] = useState<TConfiguration>({});
@@ -53,19 +53,26 @@ const DuckdbConnection = ({
     setConfiguration({});
   };
 
-  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) =>
+  const onChangeFile = (val: DuckdbParametersSpecSourceFilesTypeEnum) => {
+    handleChange({
+      [fileFormatType as keyof DuckdbParametersSpec]: undefined,
+      [val as keyof DuckdbParametersSpec]: {},
+      source_files_type: val
+    });
     setFileFormatType(val);
+    cleanConfiguration();
+  };
 
   const secretsTypeOptions = [
     {
       label: 'Local',
       value: undefined
     },
-    {
-      label: 'AWS S3',
-      value: DuckdbParametersSpecSecretsTypeEnum.s3
-    },
     // todo: uncomment below when implemented
+//     {
+//       label: 'AWS S3',
+//       value: DuckdbParametersSpecSecretsTypeEnum.s3
+//     },
     // {
     //   label: 'Google Cloud Storage',
     //   value: DuckdbParametersSpecSecretsTypeEnum.gcs
@@ -129,7 +136,9 @@ const DuckdbConnection = ({
       >
         <KeyValueProperties
           properties={duckdb?.directories}
-          onChange={(directories) => onChange({ directories: directories })}
+          onChange={(directories) => {
+            handleChange({ directories: directories });
+          }}
           sharedCredentials={sharedCredentials}
         />
       </FileFormatConfiguration>

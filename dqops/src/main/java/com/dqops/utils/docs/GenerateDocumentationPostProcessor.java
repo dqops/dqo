@@ -33,9 +33,9 @@ import com.dqops.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import com.dqops.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import com.dqops.execution.sqltemplates.rendering.JinjaTemplateRenderServiceImpl;
 import com.dqops.metadata.storage.localfiles.checkdefinitions.CheckDefinitionYaml;
+import com.dqops.metadata.storage.localfiles.columndefaultpatterns.ColumnDefaultChecksPatternYaml;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
-import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import com.dqops.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -46,6 +46,7 @@ import com.dqops.metadata.storage.localfiles.sensordefinitions.SensorDefinitionY
 import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.sources.ConnectionYaml;
 import com.dqops.metadata.storage.localfiles.sources.TableYaml;
+import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
 import com.dqops.services.check.mapping.SpecToModelCheckMappingServiceImpl;
 import com.dqops.services.check.mapping.ModelToSpecCheckMappingServiceImpl;
 import com.dqops.services.check.matching.*;
@@ -439,7 +440,8 @@ public class GenerateDocumentationPostProcessor {
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(RuleDefinitionYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(CheckDefinitionYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(DefaultNotificationsYaml.class));
-        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(DefaultObservabilityChecksYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(TableDefaultChecksPatternYaml.class));
+        yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(ColumnDefaultChecksPatternYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(DefaultSchedulesYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(LocalSettingsYaml.class));
         yamlDocumentationSchemaNodes.add(YamlDocumentationSchemaNode.fromClass(IncidentNotificationMessage.class)); // the incident notification message format

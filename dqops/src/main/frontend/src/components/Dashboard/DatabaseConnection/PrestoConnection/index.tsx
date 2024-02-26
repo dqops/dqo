@@ -36,6 +36,7 @@ const PrestoConnection = ({
         className="mb-4"
         value={presto?.host}
         onChange={(value) => handleChange({ host: value })}
+        inputClassName={!presto?.host ? 'border border-red-500' : ''}
       />
       <FieldTypeInput
         data={sharedCredentials}

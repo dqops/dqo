@@ -17,7 +17,6 @@ package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
@@ -100,8 +99,8 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void updateAllChecksSpec_whenChangesAppliedToDefaultProfilingObservabilityChecks_thenEnablesCheck() {
-        DefaultProfilingObservabilityCheckSettingsSpec profilingObservabilityChecksSpec = new DefaultProfilingObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec.getTable(), null,
+        TableProfilingCheckCategoriesSpec profilingObservabilityChecksSpec = new TableProfilingCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.specToUiMapper.createModel(profilingObservabilityChecksSpec, null,
                 null, null, null, null, true);
 
         QualityCategoryModel tableVolumeCategoryModel = uiModel.getCategories().stream()
@@ -113,10 +112,10 @@ public class ModelToSpecCheckMappingServiceImplTests extends BaseTest {
         profileRowCountModel.getRule().getWarning().setConfigured(true);
 
 
-        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec.getTable(), this.tableSpec);
+        this.sut.updateCheckContainerSpec(uiModel, profilingObservabilityChecksSpec, this.tableSpec);
 
-        Assertions.assertNotNull(profilingObservabilityChecksSpec.getTable().getVolume());
-        TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getTable().getVolume().getProfileRowCount();
+        Assertions.assertNotNull(profilingObservabilityChecksSpec.getVolume());
+        TableRowCountCheckSpec profileRowCountCheck = profilingObservabilityChecksSpec.getVolume().getProfileRowCount();
         Assertions.assertNotNull(profileRowCountCheck);
         Assertions.assertNotNull(profileRowCountCheck.getWarning());
     }
