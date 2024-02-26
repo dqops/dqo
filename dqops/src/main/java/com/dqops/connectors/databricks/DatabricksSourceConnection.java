@@ -152,11 +152,10 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * Lists tables inside a schema. Views are also returned.
      *
      * @param schemaName Schema name.
-     * @param connectionWrapper Connection wrapper with a list of existing tables.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
+    public List<SourceTableModel> listTables(String schemaName) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");
@@ -213,7 +212,10 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         try {

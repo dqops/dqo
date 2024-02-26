@@ -65,7 +65,7 @@ public class FileFormatSpecProvider {
         String schemaName = tableSpec.getPhysicalTableName().getSchemaName();
         String pathPrefix = directories.get(schemaName);
         if(pathPrefix == null){
-            pathPrefix = schemaName;
+            return filePathListSpec;
         }
         String filePath = isPathAbsoluteSystemsWide(tableName) ? tableName : Path.of(pathPrefix, tableName).toString();
 

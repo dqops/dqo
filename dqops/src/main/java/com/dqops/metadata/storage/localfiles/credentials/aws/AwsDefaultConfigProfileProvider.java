@@ -17,15 +17,15 @@ import java.util.Objects;
 import java.util.Optional;
 
 /**
- * AWS default profile provider that use the keys available in the credential folder of DQO.
+ * Provider for the AWS default config profile file available in the credential folder of DQO.
  */
 @Component
-public class AwsDefaultCredentialProfileProvider {
+public class AwsDefaultConfigProfileProvider {
 
     /**
-     * Provides the AWS profile with credentials.
+     * Provides the AWS config profile file.
      * @param secretValueLookupContext Secret value lookup context used to access shared credentials.
-     * @return AWS default profile created from the credential files available in DQOps shared credentials.
+     * @return AWS default config profile created from the credential files available in DQOps shared credentials.
      */
     public static Optional<Profile> provideProfile(SecretValueLookupContext secretValueLookupContext){
 
@@ -33,21 +33,21 @@ public class AwsDefaultCredentialProfileProvider {
         String sectionTitle = "default";
 
         FileContent fileContent = CredentialsFileProvider.getCredentialFileContent(
-                DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME,
+                DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME,
                 secretValueLookupContext
         );
 
         if (fileContent != null) {
             String keyContent = fileContent.getTextContent();
 
-            if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT)) {
-                throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME +
+            if (Objects.equals(keyContent.replace("\r\n", "\n"), DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT)) {
+                throw new DqoRuntimeException("The .credentials/" + DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME +
                         " file contains default (fake) credentials. Please update the file by setting valid AWS default credentials.");
             }
 
             ProfileFile profileFile;
             try (InputStream keyReaderStream = new ByteArrayInputStream(keyContent.getBytes(StandardCharsets.UTF_8))) {
-                profileFile = ProfileFile.builder().content(keyReaderStream).type(ProfileFile.Type.CREDENTIALS).build();
+                profileFile = ProfileFile.builder().content(keyReaderStream).type(ProfileFile.Type.CONFIGURATION).build();
             } catch (IOException e) {
                 throw new RuntimeException("Failed to read AWS default credentials.");
             }

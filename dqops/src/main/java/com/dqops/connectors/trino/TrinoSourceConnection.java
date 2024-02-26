@@ -27,7 +27,7 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ColumnTypeSnapshotSpec;
 import com.dqops.metadata.sources.TableSpec;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import org.apache.parquet.Strings;
@@ -54,21 +54,17 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
 
     private final static Object initializeLock = new Object();
     private static boolean athenaInitialized = false;
-    private final AwsProfileProvider awsProfileProvider;
 
     /**
      * Injection constructor for the trino connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
-     * @param awsProfileProvider AWS profile provider for the connection establishment.
      */
     @Autowired
     public TrinoSourceConnection(JdbcConnectionPool jdbcConnectionPool,
                                  SecretValueProvider secretValueProvider,
-                                 TrinoConnectionProvider trinoConnectionProvider,
-                                 AwsProfileProvider awsProfileProvider) {
+                                 TrinoConnectionProvider trinoConnectionProvider) {
         super(jdbcConnectionPool, secretValueProvider, trinoConnectionProvider);
-        this.awsProfileProvider = awsProfileProvider;
     }
 
     /**
@@ -154,7 +150,7 @@ public class TrinoSourceConnection extends AbstractJdbcSourceConnection {
                 break;
 
             case default_credentials:
-                Optional<Profile> profile = awsProfileProvider.provideProfile(secretValueLookupContext);
+                Optional<Profile> profile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
                 if(profile.isPresent()
                         && profile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID).isPresent()
                         && profile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY).isPresent()){

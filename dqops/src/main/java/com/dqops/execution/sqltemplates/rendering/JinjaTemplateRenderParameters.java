@@ -157,8 +157,8 @@ public class JinjaTemplateRenderParameters {
         ){
             DuckdbSourceFilesType duckdbSourceFilesType = duckdbParametersSpec.getSourceFilesType();
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpec);
-            if(!fileFormatSpec.getFilePaths().isEmpty()){
-                result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType, tableSpec));
+            if(duckdbSourceFilesType != null && fileFormatSpec != null && !fileFormatSpec.getFilePaths().isEmpty()){
+                result.setTableFromFiles(fileFormatSpec.buildTableOptionsString(duckdbParametersSpec, tableSpec));
             }
         }
 

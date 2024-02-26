@@ -13,13 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.dqops.sampledata;
+package com.dqops.connectors.duckdb;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Constants: names of csv file paths with sample data.
+ * Storage providers' credentials for DuckDB
  */
-public class SampleParquetFileNames {
-    public static final String folder_path = "files/parquet/";
-    public static final String continuous_days_one_row_per_day = "files/parquet/continuous_days_one_row_per_day.parquet";
+public enum DuckdbSecretsType {
+    /**
+     * Uses the AWS S3
+     */
+    @JsonProperty("s3")
+    s3,
+
+    /**
+     * Uses the Google Cloud Storage
+     */
+    @JsonProperty("gcs")
+    gcs,
+
+    /**
+     * Uses the Cloudflare R2
+     */
+    @JsonProperty("r2")
+    r2,
+
+    /**
+     * Uses the Azure Blob Storage
+     */
+    @JsonProperty("azure")
+    azure
 
 }

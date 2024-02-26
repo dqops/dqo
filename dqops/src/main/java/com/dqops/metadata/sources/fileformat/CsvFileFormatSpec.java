@@ -125,7 +125,7 @@ public class CsvFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatValueWhenSet(Fields.skip, skip);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**

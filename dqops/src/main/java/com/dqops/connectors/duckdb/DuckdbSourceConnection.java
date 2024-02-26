@@ -15,6 +15,7 @@
  */
 package com.dqops.connectors.duckdb;
 
+import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
@@ -27,6 +28,10 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +40,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
+import java.io.File;
+import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DuckDB source connection.
@@ -53,14 +62,15 @@ import java.util.*;
 public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     private final HomeLocationFindService homeLocationFindService;
-    private final static Object registerLock = new Object();
+    private final static Object registerExtensionsLock = new Object();
     private static boolean extensionsRegistered = false;
+
 
     /**
      * Injection constructor for the duckdb connection.
      *
-     * @param jdbcConnectionPool      Jdbc connection pool.
-     * @param secretValueProvider     Secret value provider for the environment variable expansion.
+     * @param jdbcConnectionPool                  Jdbc connection pool.
+     * @param secretValueProvider                 Secret value provider for the environment variable expansion.
      * @param homeLocationFindService
      */
     @Autowired
@@ -157,29 +167,30 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
+     */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
         registerExtensions();
+        ensureSecretsLoaded(secretValueLookupContext);
     }
 
+    /**
+     * Registers extensions for duckdb from the local extension repository.
+     */
     private void registerExtensions(){
         if(extensionsRegistered){
             return;
         }
         try {
-            synchronized (registerLock) {
-                StringBuilder setCustomRepository = new StringBuilder();
-                setCustomRepository.append("SET extension_directory = ");
-                setCustomRepository.append("'");
-                setCustomRepository.append(homeLocationFindService.getDqoHomePath());
-                setCustomRepository.append("/bin/duckdb");
-                setCustomRepository.append("'");
-
-                this.executeCommand(setCustomRepository.toString(), JobCancellationToken.createDummyJobCancellationToken());
+            synchronized (registerExtensionsLock) {
+                String setExtensionsQuery = DuckdbQueriesProvider.provideSetExtensionsQuery(homeLocationFindService.getDqoHomePath());
+                this.executeCommand(setExtensionsQuery, JobCancellationToken.createDummyJobCancellationToken());
 
                 List<String> availableExtensionList = getAvailableExtensions();
-
                 availableExtensionList.stream().forEach(extensionName -> {
                     try {
                         String installExtensionQuery = "INSTALL " + extensionName;
@@ -191,14 +202,110 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         log.error(exception.getMessage());
                     }
                 });
+                extensionsRegistered = true;
             }
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
+    /**
+     * Loads secrets that are used during the connection to a cloud storage service.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
+        if(getConnectionSpec().getDuckdb().getSecretsType() == null){
+            return;
+        }
+
+        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        fillSpecWithDefaultCredentials(connectionSpec, secretValueLookupContext);
+
+        try {
+            // todo: use the below method with duckdb 0.10 when aws extension is fixed
+//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
+
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Fills DuckDB parameters spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
+     *
+     * @param connectionSpec ConnectionSpec with filled the object type of DuckdbParametersSpec.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    private void fillSpecWithDefaultCredentials(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext){
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+        DuckdbSecretsType secretsType = duckdb.getSecretsType();
+
+        switch (secretsType){
+            case s3:
+                if(Strings.isNullOrEmpty(duckdb.getUser()) || Strings.isNullOrEmpty(duckdb.getPassword())){
+                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                    if(credentialProfile.isPresent()){
+                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                        if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
+                            String awsAccessKeyId = accessKeyId.get();
+                            duckdb.setUser(awsAccessKeyId);
+                        }
+                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                        if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
+                            String awsSecretAccessKey = secretAccessKey.get();
+                            duckdb.setPassword(awsSecretAccessKey);
+                        }
+                    }
+                }
+
+                if(Strings.isNullOrEmpty(duckdb.getUser())){
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent()){
+                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
+                        if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
+                            String awsRegion = region.get();
+                            duckdb.setRegion(awsRegion);
+                        }
+                    }
+                }
+
+                break;
+            default:
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+        }
+    }
+
+    /**
+     * The list of available extensions for DuckDB. Extensions are gathered locally through the project installation process.
+     * @return The list of extension names for DuckDB.
+     */
     private List<String> getAvailableExtensions(){
-        return Arrays.asList("httpfs");
+        return Arrays.asList(
+                "httpfs",
+                "aws"
+        );
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
+        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
+            return super.listSchemas();
+        }
+        Map<String, String> directories = duckdb.getDirectories();
+        List<SourceSchemaModel> results = new ArrayList<>();
+        directories.keySet().forEach(s -> {
+            SourceSchemaModel schemaModel = new SourceSchemaModel(s);
+            results.add(schemaModel);
+        });
+
+        return results;
     }
 
     /**
@@ -208,21 +315,33 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName, ConnectionWrapper connectionWrapper) {
-        List<SourceTableModel> sourceTableModels = super.listTables(schemaName, connectionWrapper);
-
-        if(connectionWrapper == null){
+    public List<SourceTableModel> listTables(String schemaName) {
+        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
+        if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
+            List<SourceTableModel> sourceTableModels = super.listTables(schemaName);
             return sourceTableModels;
         }
 
-        TableList tableList = connectionWrapper.getTables();
+        List<SourceTableModel> sourceTableModels = new ArrayList<>();
 
-        for (TableWrapper table : tableList) {
-            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
-                PhysicalTableName physicalTableName = table.getPhysicalTableName();
-                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-                sourceTableModels.add(schemaModel);
-            }
+        DuckdbSecretsType secretsType = duckdb.getSecretsType();
+        if(secretsType == null){
+            String pathString = duckdb.getDirectories().get(schemaName);
+            File[] files = Path.of(pathString).toFile().listFiles();
+
+            Arrays.stream(files).forEach(file -> {
+                sourceTableModels.add(
+                        new SourceTableModel(schemaName,
+                                new PhysicalTableName(schemaName, file.toString())));
+            });
+
+            // todo: list from local system -> list all files and catalogs
+        } else {
+//                    switch (secretsType){
+//            case s3:
+//
+//                break;
+//        }
         }
 
         return sourceTableModels;
@@ -233,26 +352,46 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      *
      * @param schemaName Schema name.
      * @param tableNames Table names.
+     * @param connectionWrapper The connection wrapper on table spec which points the file path and the file format.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return List of table specifications with the column list.
      */
     @Override
-    public List<TableSpec> retrieveTableMetadata(String schemaName, List<String> tableNames, ConnectionWrapper connectionWrapper) {
+    public List<TableSpec> retrieveTableMetadata(String schemaName,
+                                                 List<String> tableNames,
+                                                 ConnectionWrapper connectionWrapper,
+                                                 SecretValueLookupContext secretValueLookupContext) {
         assert !Strings.isNullOrEmpty(schemaName);
 
         DuckdbParametersSpec duckdbParametersSpec = getConnectionSpec().getDuckdb();
 
         if(duckdbParametersSpec.getReadMode().equals(DuckdbReadMode.in_memory)){
-            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper);
+            return super.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
         }
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 
-        try {
+        Map<String, TableSpec> physicalTableNameToTableSpec = new HashMap<>();
+        if(connectionWrapper != null){
             List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
-            for (TableWrapper tableWrapper : tableWrappers) {
+            physicalTableNameToTableSpec = tableWrappers.stream()
+                    .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
+                    .collect(Collectors.toMap(
+                            tableWrapper -> tableWrapper.getPhysicalTableName().toString(),
+                            tableWrapper -> tableWrapper.getSpec()
+                    ));
+        }
 
-                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableWrapper.getSpec());
-                Table tableResult = queryForTableResult(fileFormatSpec, tableWrapper.getSpec());
+        try {
+            for (String tableName : tableNames) {
+                TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
+                if (physicalTableNameToTableSpec.get(tableName) == null){
+                    tableSpecTemp = new TableSpec();
+                    tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+                }
+
+                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+                Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -262,7 +401,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
                 for (Row colRow : tableResult) {
-                    String physicalTableName = tableWrapper.getPhysicalTableName().getTableName();
+                    String physicalTableName = tableSpecTemp.getPhysicalTableName().getTableName();
                     String columnName = colRow.getString("column_name");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
@@ -295,9 +434,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param fileFormatSpec A file format specification with paths and format configuration.
      * @return A table result with metadata of the given data file.
      */
-    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec, TableSpec tableSpec){
-        DuckdbSourceFilesType duckdbSourceFilesType = super.getConnectionSpec().getDuckdb().getSourceFilesType();
-        String tableString = fileFormatSpec.buildTableOptionsString(duckdbSourceFilesType, tableSpec);
+    private tech.tablesaw.api.Table queryForTableResult(FileFormatSpec fileFormatSpec,
+                                                        TableSpec tableSpec,
+                                                        SecretValueLookupContext secretValueLookupContext){
+        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+        String tableString = fileFormatSpec.buildTableOptionsString(duckdb, tableSpec);
         String query = String.format("DESCRIBE SELECT * FROM %s", tableString);
         return this.executeQuery(query, JobCancellationToken.createDummyJobCancellationToken(), null, false);
     }

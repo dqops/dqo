@@ -17,5 +17,13 @@
              dest="${local_platform_path}/httpfs.duckdb_extension.gz"
              verbose="true"
              usetimestamp="true"/>
+
+        <get src="${remote_platform_path}/aws.duckdb_extension.gz"
+             dest="${local_platform_path}/aws.duckdb_extension.gz"
+             verbose="true"
+             usetimestamp="true"/>
+
+        <!-- IMPORTANT! Remember to add the extension in DuckdbSourceConnection -->
+
     </target>
 </project>

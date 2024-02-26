@@ -1,16 +1,24 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.BaseTest;
+import com.dqops.connectors.ProviderType;
+import com.dqops.connectors.SourceSchemaModel;
+import com.dqops.connectors.SourceTableModel;
 import com.dqops.core.secrets.SecretValueLookupContext;
+import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.*;
+import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
+import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleCsvFilesFolderNames;
 import com.dqops.sampledata.SampleJsonFileNames;
 import com.dqops.sampledata.SampleParquetFileNames;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,11 +31,10 @@ import java.util.stream.Collectors;
 class DuckdbSourceConnectionTest extends BaseTest {
 
     private DuckdbSourceConnection sut;
-    private ConnectionWrapperImpl connectionWrapper;
     private SecretValueLookupContext secretValueLookupContext;
-    private String connectionName = "test-connection";
-    private String tableSchemaName = "example_schema";
-    private String tableName = "example_table";
+    private final String schemaName = "example_schema";
+    private final String connectionName = "test_connection";
+    private final String tableName = "example_table";
 
     @BeforeEach
     void setUp() {
@@ -36,26 +43,29 @@ class DuckdbSourceConnectionTest extends BaseTest {
         UserHome userHome = userHomeContext.getUserHome();
         userHome.getConnections().createAndAddNew(connectionName);
         secretValueLookupContext = new SecretValueLookupContext(userHome);
-        this.connectionWrapper = new ConnectionWrapperImpl();
     }
 
     @Test
     void retrieveTableMetadata_fromTableSpecWithCsvFilePath_readColumnTypes() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
-        this.connectionWrapper.setSpec(spec);
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(tableSchemaName, tableName));
+
+        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl();
+        connectionWrapper.setSpec(spec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(physicalTableName);
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day);
+
         tableWrapper.getSpec().setFileFormat(fileFormatSpec);
+        tableWrapper.getSpec().setHierarchyId(new HierarchyId("connections", connectionName, "tables", physicalTableName));
+
         List<String> tableNames = connectionWrapper
                 .getTables().toList().stream()
                 .map(tw -> tw.getPhysicalTableName().toString())
                 .collect(Collectors.toList());
 
-
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(tableSchemaName, tableNames, connectionWrapper);
-
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, connectionWrapper, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -70,22 +80,41 @@ class DuckdbSourceConnectionTest extends BaseTest {
     }
 
     @Test
-    void retrieveTableMetadata_fromTableSpecWithJsonFilePath_readColumnTypes() {
+    void retrieveTableMetadata_fromConnectionSpecWithCsvFilePathPrefix_readColumnTypes() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+        this.sut.setConnectionSpec(spec);
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile("");
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
+
+        List<String> tableNames = List.of(SampleCsvFileNames.continuous_days_one_row_per_day);
+
+        this.sut.open(secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+
+        ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
+        ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
+        Assertions.assertEquals("BIGINT", idColumn.getTypeSnapshot().getColumnType());
+        Assertions.assertTrue(idColumn.getTypeSnapshot().getNullable());
+
+        ColumnSpec dateColumn = firstTableColumns.get("date:LOCAL_DATE");
+        Assertions.assertEquals("DATE", dateColumn.getTypeSnapshot().getColumnType());
+
+        ColumnSpec valueColumn = firstTableColumns.get("value:STRING");
+        Assertions.assertEquals("VARCHAR", valueColumn.getTypeSnapshot().getColumnType());
+    }
+
+    @Test
+    void retrieveTableMetadata_fromConnectionSpecWithJsonFilePathPrefix_readColumnTypes() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.json);
         this.sut.setConnectionSpec(spec);
-        this.connectionWrapper.setSpec(spec);
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(tableSchemaName, tableName));
-        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForJsonFile(SampleJsonFileNames.continuous_days_one_row_per_day);
-        tableWrapper.getSpec().setFileFormat(fileFormatSpec);
-        List<String> tableNames = connectionWrapper
-                .getTables().toList().stream()
-                .map(tw -> tw.getPhysicalTableName().toString())
-                .collect(Collectors.toList());
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForJsonFile(SampleJsonFileNames.folder_path);
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
 
+        List<String> tableNames = List.of(
+                SampleJsonFileNames.continuous_days_one_row_per_day.substring(SampleJsonFileNames.folder_path.length()));
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(tableSchemaName, tableNames, connectionWrapper);
-
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -100,22 +129,17 @@ class DuckdbSourceConnectionTest extends BaseTest {
     }
 
     @Test
-    void retrieveTableMetadata_fromTableSpecWithParquetFilePath_readColumnTypes() {
+    void retrieveTableMetadata_fromConnectionSpecWithParquetFilePathPrefix_readColumnTypes() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.parquet);
         this.sut.setConnectionSpec(spec);
-        this.connectionWrapper.setSpec(spec);
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(tableSchemaName, tableName));
-        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForParquetFile(SampleParquetFileNames.continuous_days_one_row_per_day);
-        tableWrapper.getSpec().setFileFormat(fileFormatSpec);
-        List<String> tableNames = connectionWrapper
-                .getTables().toList().stream()
-                .map(tw -> tw.getPhysicalTableName().toString())
-                .collect(Collectors.toList());
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForParquetFile(SampleParquetFileNames.folder_path);
+        spec.getDuckdb().getDirectories().put(schemaName, fileFormatSpec.getFilePaths().get(0));
 
+        List<String> tableNames = List.of(
+                SampleParquetFileNames.continuous_days_one_row_per_day.substring(SampleParquetFileNames.folder_path.length()));
 
         this.sut.open(secretValueLookupContext);
-        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(tableSchemaName, tableNames, connectionWrapper);
-
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
 
         ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
         ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
@@ -128,5 +152,49 @@ class DuckdbSourceConnectionTest extends BaseTest {
         ColumnSpec valueColumn = firstTableColumns.get("value:STRING");
         Assertions.assertEquals("VARCHAR", valueColumn.getTypeSnapshot().getColumnType());
     }
+
+    @Test
+    void listSchemas_whenSchemaIsAvailable_returnsListWithTheSchema() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+        this.sut.setConnectionSpec(spec);
+        spec.getDuckdb().getDirectories().put(schemaName, tableName);
+
+        List<SourceSchemaModel> sourceSchemaModels = sut.listSchemas();
+
+        Assertions.assertEquals(1, sourceSchemaModels.size());
+        Assertions.assertEquals(schemaName, sourceSchemaModels.get(0).getSchemaName());
+    }
+
+    @Test
+    void listTables_schemaPointsToPathWithFourFiles_returnsAllFourFiles() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        this.sut.setConnectionSpec(spec);
+        String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided).toString();
+        spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
+
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName);
+
+        Assertions.assertEquals(4, sourceTableModels.size());
+        Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("continuous_days_one_row_per_day_1.csv"));
+        Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().contains("continuous_days_one_row_per_day_2.csv"));
+        Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().contains("continuous_days_one_row_per_day_3.csv"));
+        Assertions.assertTrue(sourceTableModels.get(3).getTableName().getTableName().contains("header.csv"));
+    }
+
+    @Test
+    void listTables_schemaPointsToPathWithFolders_returnsAllThreeFolders() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        this.sut.setConnectionSpec(spec);
+        String pathPrefix = SampleDataFilesProvider.getFile("files/").toString();
+        spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
+
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName);
+
+        Assertions.assertEquals(3, sourceTableModels.size());
+        Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("csv"));
+        Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().contains("json"));
+        Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().contains("parquet"));
+    }
+
 
 }

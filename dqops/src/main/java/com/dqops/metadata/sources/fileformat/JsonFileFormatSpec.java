@@ -35,7 +35,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Whether to auto-detect detect the names of the keys and data types of the values automatically")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Boolean autoDetect;
+    private Boolean autoDetect = true;
 
     @JsonPropertyDescription("The compression type for the file. By default this will be detected automatically from the file extension (e.g., t.json.gz will use gzip, t.json will use none). Options are 'none', 'gzip', 'zstd', and 'auto'.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -55,7 +55,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private JsonFormatType format;
+    private JsonFormatType format = JsonFormatType.auto;
 
     @JsonPropertyDescription("Whether or not to interpret the path as a hive partitioned path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -106,7 +106,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
         tableOptionsFormatter.formatStringWhenSet(Fields.records, records);
         tableOptionsFormatter.formatValueWhenSet(Fields.sampleSize, sampleSize);
         tableOptionsFormatter.formatStringWhenSet(Fields.timestampformat, timestampformat);
-        return tableOptionsFormatter.toString();
+        return tableOptionsFormatter.build();
     }
 
     /**

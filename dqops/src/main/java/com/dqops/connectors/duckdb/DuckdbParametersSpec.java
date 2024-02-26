@@ -56,7 +56,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
     @CommandLine.Option(names = {"--duckdb-read-mode"}, description = "DuckDB read mode. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbReadMode readMode;
+    private DuckdbReadMode readMode = DuckdbReadMode.files;
 
     @CommandLine.Option(names = {"--duckdb-source-files-type"}, description = "Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("Type of source files for DuckDB. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -93,6 +93,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Schema to directory mappings.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
+
+    @CommandLine.Option(names = {"--duckdb-secrets-type"}, description = "The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbSecretsType secretsType;
+
+    @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String user;
+
+    @CommandLine.Option(names = {"--duckdb-password"}, description = "DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String password;
+
+    @CommandLine.Option(names = {"--duckdb-region"}, description = "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private String region;
 
     /**
      * Returns a readMode value.
@@ -251,6 +267,74 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the secrets type.
+     * @return the secrets type.
+     */
+    public DuckdbSecretsType getSecretsType() {
+        return secretsType;
+    }
+
+    /**
+     * Sets the secrets type.
+     * @param secretsType the secrets type.
+     */
+    public void setSecretsType(DuckdbSecretsType secretsType) {
+        setDirtyIf(!Objects.equals(this.secretsType, secretsType));
+        this.secretsType = secretsType;
+    }
+
+    /**
+     * Returns the user that is used to log in to the data source.
+     * @return User name.
+     */
+    public String getUser() {
+        return user;
+    }
+
+    /**
+     * Sets a user name.
+     * @param user User name.
+     */
+    public void setUser(String user) {
+        setDirtyIf(!Objects.equals(this.user, user));
+        this.user = user;
+    }
+
+    /**
+     * Returns a password.
+     * @return Password.
+     */
+    public String getPassword() {
+        return password;
+    }
+
+    /**
+     * Sets a password.
+     * @param password Password.
+     */
+    public void setPassword(String password) {
+        setDirtyIf(!Objects.equals(this.password, password));
+        this.password = password;
+    }
+
+    /**
+     * Returns the region
+     * @return region.
+     */
+    public String getRegion() {
+        return region;
+    }
+
+    /**
+     * Sets region.
+     * @param region region.
+     */
+    public void setRegion(String region) {
+        setDirtyIf(!Objects.equals(this.region, region));
+        this.region = region;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
      * @param duckdbSourceFilesType Type of files.
      * @return State that whether the file format for the specific file type is set.
@@ -300,6 +384,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         if(cloned.json != null){
             cloned.json = cloned.json.expandAndTrim(secretValueProvider, lookupContext);
         }
+        cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
+        cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
+        cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
 
         return cloned;
     }
