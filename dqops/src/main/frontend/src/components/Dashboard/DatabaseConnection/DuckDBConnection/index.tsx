@@ -9,7 +9,6 @@ import {
 } from '../../../../api';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
-import FilePath from '../../../FileFormatConfiguration/FilePath';
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import Select from '../../../Select';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
