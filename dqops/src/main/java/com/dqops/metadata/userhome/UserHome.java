@@ -34,7 +34,6 @@ import com.dqops.metadata.sources.ColumnSpec;
 import com.dqops.metadata.sources.ConnectionList;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableWrapper;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 
 /**
@@ -151,21 +150,8 @@ public interface UserHome extends Flushable, HierarchyNode {
     ColumnDefaultChecksPatternList getColumnDefaultChecksPatterns();
 
     /**
-     * Returns the default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder.
-     * @return User's default data observability checks configuration.
-     */
-    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks();
-
-    /**
-     * Returns the non-null default configuration of Data Observability checks to be applied on new tables and columns. Configuration is stored in the user home folder. When specification does not exist, a new empty one is created.
-     * @return Collection of default observability checks definitions.
-     */
-    DefaultObservabilityCheckWrapper getDefaultObservabilityChecks(boolean createIfNull);
-
-    /**
      * Returns a default notification webhooks.
      * @return Collection of default observability checks definitions.
      */
     DefaultIncidentWebhookNotificationsWrapper getDefaultNotificationWebhook();
-
 }

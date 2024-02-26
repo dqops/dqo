@@ -26,6 +26,7 @@ import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategories
 import com.dqops.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import com.dqops.connectors.DataTypeCategory;
 import com.dqops.connectors.ProviderDialectSettings;
 import com.dqops.metadata.basespecs.AbstractSpec;
 import com.dqops.metadata.defaultchecks.table.TargetTablePatternSpec;
@@ -239,22 +240,24 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
      */
     public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
+        DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
+
         if (this.profilingChecks != null && !this.profilingChecks.isDefault()) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
-            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, null, dialectSettings);
+            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, dataTypeCategory, dialectSettings);
         }
 
         if (this.monitoringChecks != null) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.monitoringChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.monitoringChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
             }
         }
 
@@ -262,13 +265,13 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
             AbstractRootChecksContainerSpec defaultChecksDaily = this.partitionedChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.partitionedChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
             }
         }
     }

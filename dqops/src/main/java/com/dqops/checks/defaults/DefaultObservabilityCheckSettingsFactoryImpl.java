@@ -65,17 +65,6 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
     public static final Integer DEFAULT_PATTERNS_PRIORITY = 1000;
 
     /**
-     * Creates the default check settings to be stored in the local settings. This is an initial, default configuration.
-     * @return Default observability settings.
-     */
-    @Override
-    public DefaultObservabilityChecksSpec createDefaultCheckSettings() {
-        DefaultObservabilityChecksSpec defaultSettings = new DefaultObservabilityChecksSpec();
-
-        return defaultSettings;
-    }
-
-    /**
      * Create an initial configuration of table-level checks.
      *
      * @return The configuration of the default table level checks.

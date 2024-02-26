@@ -23,10 +23,6 @@ import com.dqops.checks.column.partitioned.ColumnPartitionedCheckCategoriesSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.metadata.comments.CommentSpec;
@@ -69,7 +65,6 @@ import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -696,41 +691,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractComparisonCheckCategorySpecMap<?> abstractComparisonCheckCategorySpecMap, P parameter);
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                      Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     * @param defaultDailyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                           Visitor's parameter.
-     * @return Accept's result.
-     */
-
-    R accept(DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultDailyMonitoringObservabilityCheckSettingsSpec, P parameter);
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     * @param defaultMonthlyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonthlyMonitoringObservabilityCheckSettingsSpec, P parameter);
-
-    /**
      * Accepts a configuration of a pair of column names that are used for joining and grouping.
      *
      * @param tableComparisonGroupingColumnsPairSpec Configuration of a pair of columns used for grouping and joining in table comparison checks.
@@ -771,14 +731,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(MonitoringSchedulesWrapper monitoringSchedulesWrapper, P parameter);
-
-    /**
-     * Accepts a default observability check.
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper.
-     * @param parameter Visitor's parameter.
-     * @return Accept's result.
-     */
-    R accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, P parameter);
 
     /**
      * Accepts a default incident webhook notifications.

@@ -16,13 +16,11 @@
 package com.dqops.metadata.search;
 
 import com.dqops.checks.AbstractCheckSpec;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
 import com.dqops.metadata.comparisons.TableComparisonGroupingColumnsPairsListSpec;
 import com.dqops.metadata.credentials.SharedCredentialList;
 import com.dqops.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternList;
-import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
 import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternList;
 import com.dqops.metadata.definitions.checks.CheckDefinitionListImpl;
 import com.dqops.metadata.definitions.rules.RuleDefinitionList;
@@ -34,7 +32,6 @@ import com.dqops.metadata.scheduling.MonitoringScheduleSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
 import com.dqops.metadata.settings.LocalSettingsSpec;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.sources.ConnectionSpec;
 import com.dqops.metadata.sources.ConnectionWrapper;
 import com.dqops.metadata.sources.TableSpec;
@@ -162,18 +159,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
     }
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, FoundResultsCollector<ScheduleRootResult> parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
      * Accepts a list of sensor definitions for different providers.
      *
      * @param providerSensorDefinitionList List of sensor definitions per provider.
@@ -290,18 +275,6 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
      */
     @Override
     public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
-        return TreeNodeTraversalResult.SKIP_CHILDREN;
-    }
-
-    /**
-     * Accepts a default observability check wrapper instance.
-     *
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper instance.
-     * @param parameter                        Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, FoundResultsCollector<ScheduleRootResult> parameter) {
         return TreeNodeTraversalResult.SKIP_CHILDREN;
     }
 

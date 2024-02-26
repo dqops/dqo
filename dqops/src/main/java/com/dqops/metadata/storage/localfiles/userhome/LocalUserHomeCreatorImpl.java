@@ -15,7 +15,6 @@
  */
 package com.dqops.metadata.storage.localfiles.userhome;
 
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
 import com.dqops.checks.defaults.DefaultObservabilityCheckSettingsFactory;
 import com.dqops.cli.terminal.TerminalFactory;
 import com.dqops.cli.terminal.TerminalWriter;
@@ -26,10 +25,16 @@ import com.dqops.core.configuration.DqoUserConfigurationProperties;
 import com.dqops.core.filesystem.BuiltInFolderNames;
 import com.dqops.core.filesystem.localfiles.HomeLocationFindService;
 import com.dqops.core.filesystem.localfiles.LocalFileSystemException;
+import com.dqops.core.filesystem.virtual.FileContent;
 import com.dqops.core.principal.UserDomainIdentity;
 import com.dqops.core.principal.UserDomainIdentityFactory;
 import com.dqops.core.scheduler.defaults.DefaultSchedulesProvider;
+import com.dqops.metadata.credentials.SharedCredentialList;
+import com.dqops.metadata.credentials.SharedCredentialWrapper;
 import com.dqops.metadata.dashboards.DashboardsFolderListSpec;
+import com.dqops.metadata.defaultchecks.column.ColumnDefaultChecksPatternWrapper;
+import com.dqops.metadata.defaultchecks.table.TableDefaultChecksPatternWrapper;
+import com.dqops.metadata.incidents.IncidentWebhookNotificationsSpec;
 import com.dqops.metadata.scheduling.DefaultSchedulesSpec;
 import com.dqops.metadata.settings.LocalSettingsSpec;
 import com.dqops.metadata.storage.localfiles.SpecFileNames;
@@ -44,7 +49,6 @@ import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialF
 import com.dqops.metadata.storage.localfiles.credentials.DefaultCloudCredentialFileNames;
 import com.dqops.metadata.storage.localfiles.dashboards.DashboardYaml;
 import com.dqops.metadata.storage.localfiles.defaultschedules.DefaultSchedulesYaml;
-import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.DefaultObservabilityChecksYaml;
 import com.dqops.metadata.storage.localfiles.settings.LocalSettingsYaml;
 import com.dqops.metadata.storage.localfiles.defaultnotifications.DefaultNotificationsYaml;
 import com.dqops.metadata.storage.localfiles.tabledefaultpatterns.TableDefaultChecksPatternYaml;
@@ -220,10 +224,6 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             return false;
         }
 
-        // we are not checking the existence of other folders (like rules, sensors, sources) because they
-        // may have been empty when the code was checked into Git and the user just checked the configuration out
-        // those folders will be created on first use anyway, we need to ensure that the "marker" is there
-
         return true;
     }
 
@@ -295,15 +295,6 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(defaultSchedulesPath, defaultSchedules);
             }
 
-            Path defaultDataObservabilityChecksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS)
-                    .resolve(SpecFileNames.DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML);
-            if (!Files.exists(defaultDataObservabilityChecksPath)) {
-                DefaultObservabilityChecksYaml defaultObservabilityChecksYaml = new DefaultObservabilityChecksYaml();
-                defaultObservabilityChecksYaml.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings());
-                String defaultObservabilityChecks = this.yamlSerializer.serialize(defaultObservabilityChecksYaml);
-                Files.writeString(defaultDataObservabilityChecksPath, defaultObservabilityChecks);
-            }
-
             Path tableDefaultChecksChecksPath = userHomePath.resolve(BuiltInFolderNames.PATTERNS)
                     .resolve(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME + SpecFileNames.TABLE_DEFAULT_CHECKS_SPEC_FILE_EXT_YAML);
             if (!Files.exists(tableDefaultChecksChecksPath)) {
@@ -322,11 +313,11 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                 Files.writeString(columnDefaultChecksChecksPath, defaultObservabilityChecks);
             }
 
-            Path defaultNotificaitonWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
-            if (!Files.exists(defaultNotificaitonWebhooksPath)) {
+            Path defaultNotificationWebhooksPath = userHomePath.resolve(BuiltInFolderNames.SETTINGS).resolve(SpecFileNames.DEFAULT_NOTIFICATIONS_FILE_NAME_YAML);
+            if (!Files.exists(defaultNotificationWebhooksPath)) {
                 DefaultNotificationsYaml webhooksYaml = new DefaultNotificationsYaml();
                 String defaultWebhooks = this.yamlSerializer.serialize(webhooksYaml);
-                Files.writeString(defaultNotificaitonWebhooksPath, defaultWebhooks);
+                Files.writeString(defaultNotificationWebhooksPath, defaultWebhooks);
             }
 
             Path rulesRequirementTxtPath = userHomePath.resolve(BuiltInFolderNames.RULES).resolve("requirements.txt");
@@ -449,30 +440,22 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome(rootDataDomainAdminIdentity);
         UserHome userHome = userHomeContext.getUserHome();
         LocalSettingsSpec localSettingsSpec = userHome.getSettings().getSpec();
-        if (localSettingsSpec != null &&
-                userHome.getDefaultObservabilityChecks() != null && userHome.getDefaultObservabilityChecks().getSpec() != null &&
-                userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() != null &&
-                userHome.getDashboards() != null && userHome.getDashboards().getSpec() != null &&
-                (localSettingsSpec.getInstanceSignatureKey() != null || this.dqoInstanceConfigurationProperties.getSignatureKey() != null)) {
-            return;
-        }
 
         if (localSettingsSpec == null) {
             localSettingsSpec = new LocalSettingsSpec();
             userHome.getSettings().setSpec(localSettingsSpec);
         }
 
-        if (userHome.getDefaultObservabilityChecks() == null || userHome.getDefaultObservabilityChecks().getSpec() == null) {
-            DefaultObservabilityChecksSpec defaultObservabilityChecksSpec = this.defaultObservabilityCheckSettingsFactory.createDefaultCheckSettings();
-            userHome.getDefaultObservabilityChecks().setSpec(defaultObservabilityChecksSpec);
-        }
-
-        if (userHome.getDefaultSchedules() == null || userHome.getDefaultSchedules().getSpec() == null) {
+        if (userHome.getDefaultSchedules() != null && userHome.getDefaultSchedules().getSpec() == null) {
             DefaultSchedulesSpec defaultMonitoringSchedules = this.defaultSchedulesProvider.createDefaultSchedules();
             userHome.getDefaultSchedules().setSpec(defaultMonitoringSchedules);
         }
 
-        if (userHome.getDashboards() == null || userHome.getDashboards().getSpec() == null) {
+        if (userHome.getDefaultNotificationWebhook() != null && userHome.getDefaultNotificationWebhook().getSpec() == null) {
+            userHome.getDefaultNotificationWebhook().setSpec(new IncidentWebhookNotificationsSpec());
+        }
+
+        if (userHome.getDashboards() != null && userHome.getDashboards().getSpec() == null) {
             userHome.getDashboards().setSpec(new DashboardsFolderListSpec());
         }
 
@@ -483,6 +466,58 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
             String encodedNewKey = Base64.getEncoder().encodeToString(instanceKeyBytes);
             localSettingsSpec.setInstanceSignatureKey(encodedNewKey);
+        }
+
+        Path userHomePath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
+        if (userHomePath != null) {
+            Path rulesRequirementTxtPath = userHomePath.resolve(BuiltInFolderNames.RULES)
+                    .resolve("requirements.txt");
+            if (!Files.exists(rulesRequirementTxtPath)) {
+                try {
+                    Files.writeString(rulesRequirementTxtPath, "# packages in this file are installed when DQOps starts\n");
+                }
+                catch (IOException ioe) {
+                    log.warn("Cannot write a requirements.txt file, error: " + ioe.getMessage(), ioe);
+                }
+            }
+        }
+
+        TableDefaultChecksPatternWrapper defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns()
+                .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
+        if (defaultTableChecksPatternWrapper == null) {
+            defaultTableChecksPatternWrapper = userHome.getTableDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
+            defaultTableChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultTableChecks());
+        }
+
+        ColumnDefaultChecksPatternWrapper defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns()
+                .getByObjectName(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME, true);
+        if (defaultColumnChecksPatternWrapper == null) {
+            defaultColumnChecksPatternWrapper = userHome.getColumnDefaultChecksPatterns().createAndAddNew(SpecFileNames.DEFAULT_CHECKS_PATTERN_NAME);
+            defaultColumnChecksPatternWrapper.setSpec(this.defaultObservabilityCheckSettingsFactory.createDefaultColumnChecks());
+        }
+
+        if (this.userConfigurationProperties.isInitializeDefaultCloudCredentials()) {
+            SharedCredentialList credentialList = userHome.getCredentials();
+
+            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME, true) == null) {
+                SharedCredentialWrapper gcpCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_NAME);
+                gcpCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.GCP_APPLICATION_DEFAULT_CREDENTIALS_JSON_INITIAL_CONTENT));
+            }
+
+            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME, true) == null) {
+                SharedCredentialWrapper awsCredentialWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CREDENTIALS_NAME);
+                awsCredentialWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
+            }
+
+            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME, true) == null) {
+                SharedCredentialWrapper awsConfigWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AWS_DEFAULT_CONFIG_NAME);
+                awsConfigWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AWS_DEFAULT_CONFIG_INITIAL_CONTENT));
+            }
+
+            if (credentialList.getByObjectName(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME, true) == null) {
+                SharedCredentialWrapper azureCredentialsWrapper = credentialList.createAndAddNew(DefaultCloudCredentialFileNames.AZURE_DEFAULT_CREDENTIALS_NAME);
+                azureCredentialsWrapper.setObject(new FileContent(DefaultCloudCredentialFileContent.AZURE_DEFAULT_CREDENTIALS_INITIAL_CONTENT));
+            }
         }
 
         userHomeContext.flush();

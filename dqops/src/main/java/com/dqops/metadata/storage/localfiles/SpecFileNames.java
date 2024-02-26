@@ -95,12 +95,6 @@ public final class SpecFileNames {
     public static final String DEFAULT_MONITORING_SCHEDULES_SPEC_FILE_NAME_YAML = "defaultschedules.dqoschedules.yaml";
 
     /**
-     * Default checks file name.
-     */
-    @Deprecated
-    public static final String DEFAULT_OBSERVABILITY_CHECKS_SPEC_FILE_NAME_YAML = "default.dqodefaultchecks.yaml";
-
-    /**
      * Default notification configuration file name.
      */
     public static final String DEFAULT_NOTIFICATIONS_FILE_NAME_YAML = "defaultnotifications.dqonotifications.yaml";

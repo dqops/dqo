@@ -25,7 +25,6 @@ import com.dqops.metadata.storage.localfiles.dashboards.FileDashboardFolderListS
 import com.dqops.metadata.storage.localfiles.dictionaries.FileDictionaryListImpl;
 import com.dqops.metadata.storage.localfiles.fileindices.FileFileIndexListImpl;
 import com.dqops.metadata.storage.localfiles.defaultschedules.FileMonitoringSchedulesWrapperImpl;
-import com.dqops.metadata.storage.localfiles.defaultobservabilitychecks.FileObservabilityCheckWrapperImpl;
 import com.dqops.metadata.storage.localfiles.ruledefinitions.FileRuleDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.sensordefinitions.FileSensorDefinitionListImpl;
 import com.dqops.metadata.storage.localfiles.settings.FileSettingsWrapperImpl;
@@ -73,13 +72,12 @@ public class FileUserHomeImpl extends UserHomeImpl {
                             FileFileIndexListImpl fileIndices,
                             FileDashboardFolderListSpecWrapperImpl dashboards,
                             FileMonitoringSchedulesWrapperImpl monitoringSchedules,
-                            FileObservabilityCheckWrapperImpl observabilityCheck,
                             FileTableDefaultChecksPatternListImpl tableDefaultChecksPattern,
                             FileColumnDefaultChecksPatternListImpl columnDefaultChecksPattern,
                             FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks,
                             UserHomeContext userHomeContext) {
         super(userIdentity, sources, sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
-                monitoringSchedules, observabilityCheck, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks);
+                monitoringSchedules, tableDefaultChecksPattern, columnDefaultChecksPattern, notificationWebhooks);
         this.userHomeContext = userHomeContext;
 		this.homeFolder = userHomeContext.getHomeRoot(); // just a convenience
     }
@@ -113,14 +111,13 @@ public class FileUserHomeImpl extends UserHomeImpl {
         FileFileIndexListImpl fileIndices = new FileFileIndexListImpl(indexFolder, jsonSerializer);
         FileDashboardFolderListSpecWrapperImpl dashboards = new FileDashboardFolderListSpecWrapperImpl(settingsFolder, yamlSerializer);
         FileMonitoringSchedulesWrapperImpl monitoringSchedules = new FileMonitoringSchedulesWrapperImpl(settingsFolder, yamlSerializer);
-        FileObservabilityCheckWrapperImpl observabilityCheckSettings = new FileObservabilityCheckWrapperImpl(settingsFolder, yamlSerializer);
         FileTableDefaultChecksPatternListImpl tableDefaultChecksPatterns = new FileTableDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
         FileColumnDefaultChecksPatternListImpl columnDefaultChecksPatterns = new FileColumnDefaultChecksPatternListImpl(patternsFolder, yamlSerializer);
         FileDefaultIncidentWebhookNotificationsWrapperImpl notificationWebhooks = new FileDefaultIncidentWebhookNotificationsWrapperImpl(settingsFolder, yamlSerializer);
 
         return new FileUserHomeImpl(userHomeContext.getUserIdentity(), dataSources,
                 sensors, rules, checks, settings, credentials, dictionaries, fileIndices, dashboards,
-                monitoringSchedules, observabilityCheckSettings, tableDefaultChecksPatterns, columnDefaultChecksPatterns,
+                monitoringSchedules, tableDefaultChecksPatterns, columnDefaultChecksPatterns,
                 notificationWebhooks, userHomeContext);
     }
 

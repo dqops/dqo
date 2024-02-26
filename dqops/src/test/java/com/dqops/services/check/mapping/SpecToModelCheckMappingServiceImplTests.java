@@ -16,10 +16,11 @@
 package com.dqops.services.check.mapping;
 
 import com.dqops.BaseTest;
+import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
+import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.TableMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.bigquery.BigQueryConnectionSpecObjectMother;
@@ -208,8 +209,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityProfilingTableConfigurationGiven_thenCreatesUiModel() {
-        DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getTable(), null,
+        TableProfilingCheckCategoriesSpec defaultProfilingChecks = new TableProfilingCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
@@ -218,8 +219,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityProfilingColumnConfigurationGiven_thenCreatesUiModel() {
-        DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingChecks = new DefaultProfilingObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks.getColumn(), null,
+        ColumnProfilingCheckCategoriesSpec defaultProfilingChecks = new ColumnProfilingCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultProfilingChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
@@ -228,8 +229,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityDailyMonitoringTableConfigurationGiven_thenCreatesUiModel() {
-        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getTable(), null,
+        TableDailyMonitoringCheckCategoriesSpec defaultMonitoringChecks = new TableDailyMonitoringCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
@@ -238,8 +239,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityDailyMonitoringColumnConfigurationGiven_thenCreatesUiModel() {
-        DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultDailyMonitoringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getColumn(), null,
+        ColumnDailyMonitoringCheckCategoriesSpec defaultMonitoringChecks = new ColumnDailyMonitoringCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
@@ -248,8 +249,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityMonthlyMonitoringTableConfigurationGiven_thenCreatesUiModel() {
-        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getTable(), null,
+        TableMonthlyMonitoringCheckCategoriesSpec defaultMonitoringChecks = new TableMonthlyMonitoringCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);
@@ -258,8 +259,8 @@ public class SpecToModelCheckMappingServiceImplTests extends BaseTest {
 
     @Test
     void createUiModel_whenDataObservabilityMonthlyMonitoringColumnConfigurationGiven_thenCreatesUiModel() {
-        DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonitoringChecks = new DefaultMonthlyMonitoringObservabilityCheckSettingsSpec();
-        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks.getColumn(), null,
+        ColumnMonthlyMonitoringCheckCategoriesSpec defaultMonitoringChecks = new ColumnMonthlyMonitoringCheckCategoriesSpec();
+        CheckContainerModel uiModel = this.sut.createModel(defaultMonitoringChecks, null,
                 null, null, this.executionContext, null, true);
 
         Assertions.assertNotNull(uiModel);

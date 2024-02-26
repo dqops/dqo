@@ -23,10 +23,6 @@ import com.dqops.checks.column.monitoring.ColumnMonitoringCheckCategoriesSpec;
 import com.dqops.checks.comparison.AbstractComparisonCheckCategorySpecMap;
 import com.dqops.checks.custom.CustomCategoryCheckSpecMap;
 import com.dqops.checks.custom.CustomCheckSpecMap;
-import com.dqops.checks.defaults.DefaultObservabilityChecksSpec;
-import com.dqops.checks.defaults.DefaultProfilingObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultDailyMonitoringObservabilityCheckSettingsSpec;
-import com.dqops.checks.defaults.DefaultMonthlyMonitoringObservabilityCheckSettingsSpec;
 import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpec;
 import com.dqops.metadata.comparisons.TableComparisonConfigurationSpecMap;
@@ -63,7 +59,6 @@ import com.dqops.metadata.groupings.DataGroupingDimensionSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpec;
 import com.dqops.metadata.groupings.DataGroupingConfigurationSpecMap;
 import com.dqops.metadata.scheduling.MonitoringSchedulesWrapper;
-import com.dqops.metadata.settings.defaultchecks.DefaultObservabilityCheckWrapper;
 import com.dqops.metadata.incidents.defaultnotifications.DefaultIncidentWebhookNotificationsWrapper;
 import com.dqops.metadata.sources.fileformat.*;
 import com.dqops.metadata.timeseries.TimeSeriesConfigurationSpec;
@@ -903,54 +898,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultObservabilityChecksSpec Default configuration of observability checks.
-     * @param parameter                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityChecksSpec defaultObservabilityChecksSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultProfilingObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                      Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultProfilingObservabilityCheckSettingsSpec defaultProfilingObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultDailyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                           Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultDailyMonitoringObservabilityCheckSettingsSpec defaultDailyMonitoringObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of default observability checks to enable on new tables and columns.
-     *
-     * @param defaultMonthlyMonitoringObservabilityCheckSettingsSpec Default configuration of observability checks.
-     * @param parameter                                             Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultMonthlyMonitoringObservabilityCheckSettingsSpec defaultMonthlyMonitoringObservabilityCheckSettingsSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts a configuration of a pair of column names that are used for joining and grouping.
      *
      * @param tableComparisonGroupingColumnsPairSpec Configuration of grouping columns.
@@ -1019,18 +966,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(DefaultIncidentWebhookNotificationsWrapper defaultIncidentWebhookNotificationsWrapper, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a default observability check wrapper instance.
-     *
-     * @param defaultObservabilityCheckWrapper Default observability check wrapper instance.
-     * @param parameter                Visitor's parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(DefaultObservabilityCheckWrapper defaultObservabilityCheckWrapper, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
