@@ -17,12 +17,7 @@ import { getFirstLevelActiveTab } from '../../../redux/selectors';
 import { useParams, useRouteMatch } from 'react-router-dom';
 import { findTreeNode } from '../../../utils/tree';
 import { AxiosResponse } from 'axios';
-import {
-  ConnectionModel,
-  DqoJobHistoryEntryModel,
-  DqoJobHistoryEntryModelJobTypeEnum,
-  DqoJobHistoryEntryModelStatusEnum
-} from '../../../api';
+import { ConnectionModel } from '../../../api';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import AddColumnDialog from '../../CustomTree/AddColumnDialog';
 import AddTableDialog from '../../CustomTree/AddTableDialog';
@@ -51,35 +46,21 @@ const Tree = () => {
   const [addColumnDialogOpen, setAddColumnDialogOpen] = useState(false);
   const [addTableDialogOpen, setAddTableDialogOpen] = useState(false);
   const [addSchemaDialogOpen, setAddSchemaDialogOpen] = useState(false);
-  const { job_dictionary_state } = useSelector(
+  const { job_dictionary_state, advisorJobId } = useSelector(
     (state: IRootState) => state.job || {}
   );
-
   useEffect(() => {
-    const jobs = Object.values(job_dictionary_state).filter(
-      (item) =>
-        item.jobType === DqoJobHistoryEntryModelJobTypeEnum.import_tables
-    );
+    if (advisorJobId && advisorJobId !== 0) {
+      const job = job_dictionary_state[advisorJobId] ?? {};
+      const id = job?.parameters?.importTableParameters?.connectionName ?? '';
 
-    jobs.forEach((job: DqoJobHistoryEntryModel) => {
-      const key = (job?.jobId?.jobId || 0).toString();
-      const str = localStorage.getItem(key);
-      if (
-        str !== DqoJobHistoryEntryModelStatusEnum.finished &&
-        job.status == DqoJobHistoryEntryModelStatusEnum.finished
-      ) {
-        localStorage.setItem(key, DqoJobHistoryEntryModelStatusEnum.finished);
+      const schemaNode = findTreeNode(treeData, id);
 
-        const id = [
-          job.parameters?.importTableParameters?.connectionName,
-          job.parameters?.importTableParameters?.schemaName
-        ].join('.');
-        const schemaNode = findTreeNode(treeData, id);
-
+      if (schemaNode?.open === true) {
         refreshNode(schemaNode, true);
       }
-    });
-  }, [job_dictionary_state]);
+    }
+  }, [advisorJobId, job_dictionary_state[advisorJobId]]);
 
   const handleNodeClick = (node: CustomTreeNode) => {
     switchTab(node, checkTypes);
@@ -392,8 +373,8 @@ const Tree = () => {
           <SvgIcon name="warning" className="w-5 h-5" />
         </div>
       </Tooltip>
-    )
-  }
+    );
+  };
 
   const renderErrorMessageToolTip = (node: CustomTreeNode) => {
     return (
@@ -410,11 +391,12 @@ const Tree = () => {
             borderRadius: '3px'
           }}
         >
-          <SvgIcon name="warning-generic" className="w-5 h-5 text-yellow-600" /> {/* text-[#e0ca00] */}
+          <SvgIcon name="warning-generic" className="w-5 h-5 text-yellow-600" />{' '}
+          {/* text-[#e0ca00] */}
         </div>
       </Tooltip>
-    )
-  }
+    );
+  };
 
   const renderTreeNode = (node: CustomTreeNode, deep: number) => {
     return (
@@ -460,13 +442,13 @@ const Tree = () => {
                   {node.label}
                 </div>
                 <div className="relative ">
-                  {node.parsingYamlError && node.parsingYamlError.length > 0 ? (
-                    renderParsingYamlErrorToolTip(node)
-                  ) : null}
+                  {node.parsingYamlError && node.parsingYamlError.length > 0
+                    ? renderParsingYamlErrorToolTip(node)
+                    : null}
 
-                  {node.error_message && node.error_message.length > 0 ? (
-                    renderErrorMessageToolTip(node)
-                  ) : null}
+                  {node.error_message && node.error_message.length > 0
+                    ? renderErrorMessageToolTip(node)
+                    : null}
                 </div>
                 <ContextMenu
                   node={node}
