@@ -55,7 +55,7 @@ public class JsonFileFormatSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Can be one of ['auto', 'unstructured', 'newline_delimited', 'array'].")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private JsonFormatType format;
+    private JsonFormatType format = JsonFormatType.auto;
 
     @JsonPropertyDescription("Whether or not to interpret the path as a hive partitioned path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
