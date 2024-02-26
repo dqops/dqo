@@ -167,6 +167,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Opens a connection before it can be used for executing any statements.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that can be used in the connection names.
+     */
     @Override
     public void open(SecretValueLookupContext secretValueLookupContext) {
         super.open(secretValueLookupContext);
@@ -207,6 +211,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
     /**
      * Loads secrets that are used during the connection to a cloud storage service.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
         if(getConnectionSpec().getDuckdb().getSecretsType() == null){
@@ -225,6 +231,12 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
     }
 
+    /**
+     * Fills DuckDB parameters spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
+     *
+     * @param connectionSpec ConnectionSpec with filled the object type of DuckdbParametersSpec.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
     private void fillSpecWithDefaultCredentials(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext){
         DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
@@ -331,17 +343,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 //                break;
 //        }
         }
-
-        // todo: to be removed?
-//        TableList tableList = connectionWrapper.getTables();
-//
-//        for (TableWrapper table : tableList) {
-//            if(table.getPhysicalTableName().getSchemaName().equals(schemaName)){
-//                PhysicalTableName physicalTableName = table.getPhysicalTableName();
-//                SourceTableModel schemaModel = new SourceTableModel(schemaName, physicalTableName);
-//                sourceTableModels.add(schemaModel);
-//            }
-//        }
 
         return sourceTableModels;
     }

@@ -13,6 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * DuckDB secret manager that handles of the secrets creation in DuckDB.
+ */
 public class DuckdbSecretManager {
 
     private static DuckdbSecretManager secretsManager;
@@ -22,6 +25,10 @@ public class DuckdbSecretManager {
         secrets = new HashSet<HashCode>();
     }
 
+    /**
+     * Returns a static shared instance of the DuckDB secrets manager.
+     * @return DuckDB secrets manager.
+     */
     public static synchronized DuckdbSecretManager getInstance() {
         if (secretsManager == null) {
             secretsManager = new DuckdbSecretManager();
@@ -29,6 +36,12 @@ public class DuckdbSecretManager {
         return secretsManager;
     }
 
+    /**
+     * Creates a secret for a connection spec which secret has not been created yet or when the conneciton spec has changed.
+     *
+     * @param connectionSpec Connection spec which hash is compared for the creation of a new secret.
+     * @param sourceConnection The source connection that executes a query with that creates a new secret.
+     */
     public synchronized void ensureCreated(ConnectionSpec connectionSpec, AbstractJdbcSourceConnection sourceConnection){
         HashCode secretHash = calculateHash64(connectionSpec);
         if(secrets.contains(secretHash)){
@@ -39,6 +52,10 @@ public class DuckdbSecretManager {
         secrets.add(secretHash);
     }
 
+    /**
+     * Calculates a 64-bit hash of all the files.
+     * @return 64-bit farm hash.
+     */
     public static HashCode calculateHash64(ConnectionSpec connectionSpec) {
         JsonSerializer jsonSerializer = new JsonSerializerImpl();
         String serialized = jsonSerializer.serialize(connectionSpec);
