@@ -15,8 +15,10 @@ import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.userhome.UserHome;
 import com.dqops.sampledata.SampleCsvFileNames;
+import com.dqops.sampledata.SampleCsvFilesFolderNames;
 import com.dqops.sampledata.SampleJsonFileNames;
 import com.dqops.sampledata.SampleParquetFileNames;
+import com.dqops.sampledata.files.SampleDataFilesProvider;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -155,11 +157,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
     void listSchemas_whenSchemaIsAvailable_returnsListWithTheSchema() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
-        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl();
-        connectionWrapper.setSpec(spec);
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(schemaName, tableName));
-        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day);
-        tableWrapper.getSpec().setFileFormat(fileFormatSpec);
+        spec.getDuckdb().getDirectories().put(schemaName, tableName);
 
         List<SourceSchemaModel> sourceSchemaModels = sut.listSchemas();
 
@@ -168,21 +166,35 @@ class DuckdbSourceConnectionTest extends BaseTest {
     }
 
     @Test
-    void listTables_whenOneTableInOneSchemaIsAvailable_returnsListWithTheTable() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+    void listTables_schemaPointsToPathWithFourFiles_returnsAllFourFiles() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
         this.sut.setConnectionSpec(spec);
-        ConnectionWrapperImpl connectionWrapper = new ConnectionWrapperImpl();
-        connectionWrapper.setSpec(spec);
-        TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName(schemaName, tableName));
-        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day);
-        tableWrapper.getSpec().setFileFormat(fileFormatSpec);
+        String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided).toString();
+        spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
 
-        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, connectionWrapper);
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null);
 
-        Assertions.assertEquals(1, sourceTableModels.size());
-        Assertions.assertEquals(tableName, sourceTableModels.get(0).getTableName().getTableName());
+        Assertions.assertEquals(4, sourceTableModels.size());
+        Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("continuous_days_one_row_per_day_1.csv"));
+        Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().contains("continuous_days_one_row_per_day_2.csv"));
+        Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().contains("continuous_days_one_row_per_day_3.csv"));
+        Assertions.assertTrue(sourceTableModels.get(3).getTableName().getTableName().contains("header.csv"));
     }
 
-    
+    @Test
+    void listTables_schemaPointsToPathWithFolders_returnsAllThreeFolders() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        this.sut.setConnectionSpec(spec);
+        String pathPrefix = SampleDataFilesProvider.getFile("files/").toString();
+        spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
+
+        List<SourceTableModel> sourceTableModels = sut.listTables(schemaName, null);
+
+        Assertions.assertEquals(3, sourceTableModels.size());
+        Assertions.assertTrue(sourceTableModels.get(0).getTableName().getTableName().contains("csv"));
+        Assertions.assertTrue(sourceTableModels.get(1).getTableName().getTableName().contains("json"));
+        Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().contains("parquet"));
+    }
+
 
 }
