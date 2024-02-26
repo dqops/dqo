@@ -31456,6 +31456,27 @@ definitions:
         description: "Schema to directory mappings."
         additionalProperties:
           type: "string"
+      secrets_type:
+        type: "string"
+        description: "The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+        enum:
+        - "s3"
+        - "gcs"
+        - "r2"
+        - "azure"
+      user:
+        type: "string"
+        description: "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      password:
+        type: "string"
+        description: "DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}\
+          \ format to use dynamic substitution."
+      region:
+        type: "string"
+        description: "The region for the storage credentials. The value can be in\
+          \ the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
   Duration:
     type: "object"
     properties:

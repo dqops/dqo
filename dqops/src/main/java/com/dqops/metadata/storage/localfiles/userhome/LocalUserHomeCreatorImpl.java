@@ -470,6 +470,18 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
 
         Path userHomePath = userHomeContext.getHomeRoot().getPhysicalAbsolutePath();
         if (userHomePath != null) {
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SENSORS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CHECKS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SETTINGS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CREDENTIALS));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DICTIONARIES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.PATTERNS));
+
             Path rulesRequirementTxtPath = userHomePath.resolve(BuiltInFolderNames.RULES)
                     .resolve("requirements.txt");
             if (!Files.exists(rulesRequirementTxtPath)) {
