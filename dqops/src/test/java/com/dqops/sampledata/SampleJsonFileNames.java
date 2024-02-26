@@ -19,6 +19,7 @@ package com.dqops.sampledata;
  * Constants: names of csv file paths with sample data.
  */
 public class SampleJsonFileNames {
+    public static final String folder_path = "files/json/";
     public static final String continuous_days_one_row_per_day = "files/json/continuous_days_one_row_per_day.json";
 
 }

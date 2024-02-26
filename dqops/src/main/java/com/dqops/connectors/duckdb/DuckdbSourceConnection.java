@@ -51,6 +51,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * DuckDB source connection.
@@ -350,6 +351,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      *
      * @param schemaName Schema name.
      * @param tableNames Table names.
+     * @param connectionWrapper The connection wrapper on table spec which points the file path and the file format.
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      * @return List of table specifications with the column list.
      */
     @Override
@@ -367,13 +370,24 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         List<TableSpec> tableSpecs = new ArrayList<>();
 
-        try {
-//            List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
-//            for (TableWrapper tableWrapper : tableWrappers) {
-            for (String tableName : tableNames) {
+        Map<String, TableSpec> physicalTableNameToTableSpec = new HashMap<>();
+        if(connectionWrapper != null){
+            List<TableWrapper> tableWrappers = connectionWrapper.getTables().toList();
+            physicalTableNameToTableSpec = tableWrappers.stream()
+                    .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
+                    .collect(Collectors.toMap(
+                            tableWrapper -> tableWrapper.getPhysicalTableName().toString(),
+                            tableWrapper -> tableWrapper.getSpec()
+                    ));
+        }
 
-                TableSpec tableSpecTemp = new TableSpec();
-                tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+        try {
+            for (String tableName : tableNames) {
+                TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
+                if (physicalTableNameToTableSpec.get(tableName) == null){
+                    tableSpecTemp = new TableSpec();
+                    tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+                }
 
                 FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
                 Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);

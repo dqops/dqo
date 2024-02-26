@@ -52,7 +52,6 @@ public class DuckdbConnectionSpecObjectMother {
             {{
                 setReadMode(DuckdbReadMode.files);
                 setSourceFilesType(duckdbSourceFilesType);
-                getDirectories().put("example_schema", "example_table");
             }});
         }};
 
