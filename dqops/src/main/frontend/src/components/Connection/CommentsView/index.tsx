@@ -72,7 +72,7 @@ const CommentsView = ({
           <div className="w-9/12">Comment</div>
           <div className="w-1/12">Author</div>
           <div className="w-1/12">Date</div>
-          <div className="px-8 py-2 text-center max-w-34 min-w-34 w-34">
+          <div className="px-0 pr-8 py-2 text-center max-w-34 min-w-34 w-34">
             Action
           </div>
         </div>
@@ -89,14 +89,14 @@ const CommentsView = ({
           : ''}
       </div>
       <div className="flex items-center w-full">
-        <div className="pr-4 min-w-40 py-2 w-11/12">
+        <div className="min-w-40 py-2 w-11/12">
           <Input
             className="h-10 focus:!ring-0 focus:!border"
             value={text}
             onChange={onChangeText}
           />
         </div>
-        <div className="px-8 max-w-34 min-w-34 py-2">
+        <div className="px-0 pr-8 max-w-34 min-w-34 py-2">
           <div className="flex justify-center">
             <IconButton
               size="sm"

@@ -85,7 +85,7 @@ const setActiveTabState = (
 ) => {
   const newState = state ? structuredClone(state) : state;
   const activeTab = action?.activeTab || newState[action.checkType]?.activeTab;
-  
+
   return {
     ...newState,
     [action.checkType]: {
@@ -105,8 +105,8 @@ const setActiveTabState = (
     }
   };
 };
-
 const connectionReducer = (state = initialState, action: Action) => {
+  console.log(state, action);
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
       const existing = state[action.checkType]?.tabs.find(
@@ -1167,15 +1167,22 @@ const connectionReducer = (state = initialState, action: Action) => {
       });
     case SOURCE_ACTION.SET_CHECK_RESULTS: {
       const firstState =
-      state[action.checkType]?.tabs.find(
+        state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-            let key = action.data.checkName;
-            if (String(action?.data?.comparisonName).length > 0) {
-              key = action.data.checkName + "/" + action.data.comparisonName;
-            } else if (Object.keys(action.data.checkResults).length > 0 &&  action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison) {
-              key = action.data.checkName + "/" + action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison;
-            } 
+      let key = action.data.checkName;
+      if (String(action?.data?.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.checkResults).length > 0 &&
+        action.data.checkResults?.[0].checkResultEntries?.[0]?.tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data.checkResults?.[0].checkResultEntries?.[0]
+            ?.tableComparison;
+      }
 
       return setActiveTabState(state, action, {
         checkResults: {
@@ -1189,12 +1196,20 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-        let key = action.data.checkName;
-        if (String(action.data.comparisonName).length > 0) {
-          key = action.data.checkName + "/" + action.data.comparisonName;
-        } else if (Object.keys(action.data.sensorReadouts).length > 0 && action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison) {
-          key = action.data.checkName + "/" + action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0].tableComparison;
-        } 
+      let key = action.data.checkName;
+      if (String(action.data.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.sensorReadouts).length > 0 &&
+        action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0]
+          .tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data.sensorReadouts?.[0].sensorReadoutEntries?.[0]
+            .tableComparison;
+      }
       return setActiveTabState(state, action, {
         sensorReadouts: {
           ...(firstState.sensorReadouts || {}),
@@ -1207,12 +1222,18 @@ const connectionReducer = (state = initialState, action: Action) => {
         state[action.checkType]?.tabs.find(
           (item) => item.value === action.activeTab
         )?.state || {};
-        let key = action.data.checkName;
-        if (String(action.data.comparisonName).length > 0) {
-          key = action.data.checkName + "/" + action.data.comparisonName;
-        } else if (Object.keys(action.data.sensorErrors).length > 0 && action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison) {
-          key = action.data.checkName + "/" + action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison;
-        } 
+      let key = action.data.checkName;
+      if (String(action.data.comparisonName).length > 0) {
+        key = action.data.checkName + '/' + action.data.comparisonName;
+      } else if (
+        Object.keys(action.data.sensorErrors).length > 0 &&
+        action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison
+      ) {
+        key =
+          action.data.checkName +
+          '/' +
+          action.data?.sensorErrors?.[0]?.errorEntries?.[0]?.tableComparison;
+      }
       const newSensors = {
         ...(firstState.sensorErrors || {}),
         [key]: action.data.sensorErrors
@@ -1345,29 +1366,29 @@ const connectionReducer = (state = initialState, action: Action) => {
     }
     case SOURCE_ACTION.SET_MULTICHECK_FILTERS: {
       const firstState =
-      state[action.checkType]?.tabs.find(
-        (item) => item.value === action.activeTab
-      )?.state || {};
+        state[action.checkType]?.tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
 
       const checksState: Record<string, any> =
-      firstState.multiCheckFilters || ({} as any);
+        firstState.multiCheckFilters || ({} as any);
 
       return setActiveTabState(state, action, {
-        multiCheckFilters: {...checksState, ...action.data}
-      })
+        multiCheckFilters: { ...checksState, ...action.data }
+      });
     }
-    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {      
+    case SOURCE_ACTION.SET_MULTICHECK_SEARCHED_CHECKS: {
       const firstState =
-      state[action.checkType]?.tabs.find(
-        (item) => item.value === action.activeTab
-      )?.state || {};
+        state[action.checkType]?.tabs.find(
+          (item) => item.value === action.activeTab
+        )?.state || {};
 
       const checksState: Record<string, any> =
-      firstState.multiCheckSearchedChecks || ({} as any);
+        firstState.multiCheckSearchedChecks || ({} as any);
 
       return setActiveTabState(state, action, {
-        multiCheckSearchedChecks: {...checksState, ...action.data}
-      })
+        multiCheckSearchedChecks: { ...checksState, ...action.data }
+      });
     }
     default:
       return state;
