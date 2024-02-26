@@ -631,6 +631,13 @@ public class TableDataSnapshot {
 
             ParquetPartitionId partitionId = new ParquetPartitionId(this.userIdentity.getDataDomainFolder(), storageSettings.getTableType(), connectionName, tableName, currentMonth);
             LoadedMonthlyPartition loadedMonthlyPartition = this.loadedMonthlyPartitions.get(partitionId);
+            if (loadedMonthlyPartition == null) {
+                if (this.tableDataChanges.hasChanges()) {
+                    loadedMonthlyPartition = new LoadedMonthlyPartition(partitionId);
+                } else {
+                    continue;
+                }
+            }
             this.storageService.savePartition(loadedMonthlyPartition, this.tableDataChanges, this.storageSettings, this.userIdentity);
         }
     }

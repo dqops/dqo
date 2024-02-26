@@ -112,6 +112,7 @@ public class PostgresqlTableComparisonIntegrationTests extends BasePostgresqlInt
         this.tableCheckExecutionService = TableCheckExecutionServiceObjectMother.createCheckExecutionServiceOnUserHomeContext(userHomeContext);
 
         checkSearchFilters = new CheckSearchFilters();
+        checkSearchFilters.setCheckCategory("comparisons");
 
         ParquetPartitionStorageServiceImpl parquetPartitionStorageService = ParquetPartitionStorageServiceObjectMother.create(userHomeContext);
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
