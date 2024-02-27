@@ -1,16 +1,13 @@
 package com.dqops.connectors.duckdb;
 
 import com.dqops.BaseTest;
-import com.dqops.connectors.ProviderType;
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.sources.*;
-import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecObjectMother;
-import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContext;
 import com.dqops.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import com.dqops.metadata.userhome.UserHome;

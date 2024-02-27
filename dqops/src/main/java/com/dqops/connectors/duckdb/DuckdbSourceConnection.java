@@ -330,14 +330,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             File[] files = Path.of(pathString).toFile().listFiles();
 
             Arrays.stream(files).forEach(file -> {
+                String fileName = file.toString().substring(pathString.length() + 1);
                 sourceTableModels.add(
                         new SourceTableModel(schemaName,
-                                new PhysicalTableName(schemaName, file.toString())));
+                                new PhysicalTableName(schemaName, fileName)));
             });
-
-            // todo: list from local system -> list all files and catalogs
         } else {
-//                    switch (secretsType){
+            // todo: list from s3
+//            switch (secretsType){
 //            case s3:
 //
 //                break;
