@@ -86,22 +86,22 @@ export default function DefaultCheckPatternsTable({
                 onClick={() => deletePattern(pattern.pattern_name ?? '')}
               />
             </td>
-            {/* <td className="px-4">
+            <td className="px-4">
               <Button
                 variant="text"
                 label="download"
                 color="primary"
-                onClick={downloadPattern}
+                // onClick={downloadPattern}
               />
-              <a
+              {/* <a
                 href={`/api/dictionaries/${pattern.pattern_name}/download`}
                 rel="noreferrer"
                 target="_blank"
                 className="text-teal-500"
               >
                 download
-              </a>
-            </td> */}
+              </a> */}
+            </td>
           </tr>
         ))}
       </tbody>
