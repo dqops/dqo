@@ -186,6 +186,7 @@ public final class FileNameSanitizer {
         for (int i = 0; i < pathElements.length; i++) {
             String rawName = decodeFileSystemName(pathElements[i]);
             urlEncodedPathElements[i] = URLEncoder.encode(rawName, StandardCharsets.UTF_8)
+                    .replace("%", "%25")
                     .replace("+", "%20"); // fixing spaces, because GCP storage bucket does not use '+' for a space
         }
 
