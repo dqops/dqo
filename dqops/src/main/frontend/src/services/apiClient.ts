@@ -42,7 +42,9 @@ import {
   DefaultsApiFactory,
   UsersApiFactory,
   SharedCredentialsApiFactory,
-  DictionariesApiFactory
+  DictionariesApiFactory,
+  DefaultTableCheckPatternsApiFactory,
+  DefaultColumnCheckPatternsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -143,3 +145,7 @@ export const UsersApi = UsersApiFactory(new Configuration(), '', axios);
 export const SharedCredentialsApi = SharedCredentialsApiFactory(new Configuration(), '', axios);
 
 export const DataDictionaryApiClient = DictionariesApiFactory(new Configuration(), '', axios);
+
+export const DefaultTableCheckPatternsApiClient = DefaultTableCheckPatternsApiFactory(new Configuration(), '', axios);
+
+export const DefaultColumnCheckPatternsApiClient = DefaultColumnCheckPatternsApiFactory(new Configuration(), '', axios);

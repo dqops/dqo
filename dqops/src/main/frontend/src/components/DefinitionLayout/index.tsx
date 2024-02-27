@@ -27,7 +27,7 @@ import DefaultCheckDetail from '../../pages/DefaultChecksDetail'
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
 import LeftView from './LeftView';
 import { useDefinition } from '../../contexts/definitionContext';
-import DefaultChecksPatterns from '../../pages/DefaultChecksPatterns/DefaultChecksPatterns';
+import DefaultCheckPatterns from '../../pages/DefaultCheckPatterns/DefaultCheckPatterns';
 
 interface LayoutProps {
   route: string
@@ -98,7 +98,7 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
       case ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL:
         return <DataDictionaryItemOverview />;
       case ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS:
-        return <DefaultChecksPatterns />;  
+        return <DefaultCheckPatterns />;  
       default:
         return null;
     }
