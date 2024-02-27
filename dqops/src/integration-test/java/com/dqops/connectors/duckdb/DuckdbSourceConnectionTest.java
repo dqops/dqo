@@ -214,7 +214,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     @Test
     void listTables_schemaWithNoTrailingSlash_returnsAllFourFiles() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided).toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
@@ -230,7 +230,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     @Test
     void listTables_schemaPointsToPathWithFolders_returnsAllThreeFolders() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);   // not really use it that the test checks listing folders
         this.sut.setConnectionSpec(spec);
         String pathPrefix = SampleDataFilesProvider.getFile("files/").toString();
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
@@ -245,7 +245,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     @Test
     void listTables_schemaPrefixHasTrailingSlash_returnsFiles() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided) + "/";
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);
@@ -261,7 +261,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
 
     @Test
     void listTables_schemaPrefixHasTrailingBackSlash_returnsFiles() {
-        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(null);
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
         String pathPrefix = SampleDataFilesProvider.getFile(SampleCsvFilesFolderNames.continuous_days_one_row_per_day_divided) + "\\";
         spec.getDuckdb().getDirectories().put(schemaName, pathPrefix);

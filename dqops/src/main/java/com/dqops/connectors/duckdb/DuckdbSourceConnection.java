@@ -324,6 +324,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         List<SourceTableModel> sourceTableModels = new ArrayList<>();
+        if(duckdb == null || duckdb.getSourceFilesType() == null){
+            return sourceTableModels;
+        }
 
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
         if(secretsType == null){
@@ -332,9 +335,15 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathString, "/"), "\\");
             Arrays.stream(files).forEach(file -> {
                 String fileName = file.toString().substring(folderPrefix.length() + 1);
-                sourceTableModels.add(
-                        new SourceTableModel(schemaName,
-                                new PhysicalTableName(schemaName, fileName)));
+                String sourceFilesTypeString = duckdb.getSourceFilesType().toString();
+                if(fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
+                        || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
+                        || file.isDirectory()) {
+
+                    sourceTableModels.add(
+                            new SourceTableModel(schemaName,
+                                    new PhysicalTableName(schemaName, fileName)));
+                }
             });
         } else {
             // todo: list from s3
