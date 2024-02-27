@@ -178,6 +178,7 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "mixed7", this.checkSpec, CheckTimeScale.daily, "date");
+        runParameters.getTable().getColumns().get("date").getTypeSnapshot().setColumnType("VARCHAR");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
