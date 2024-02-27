@@ -21,12 +21,20 @@
 {% endmacro %}
 
 {%- macro render_target_table() -%}
-   {{ table_from_files }}
+    {%- if connection.duckdb.read_mode == 'in_memory' -%}
+        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+    {%- else -%}
+       {{ table_from_files }}
+    {%- endif -%}
 {%- endmacro %}
 
 {%- macro render_referenced_table(referenced_table) -%}
-   {{ referenced_table }}
-{%- endmacro -%}
+    {%- if connection.duckdb.read_mode == 'in_memory' -%}
+        {{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(referenced_table) }}
+    {%- else -%}
+       {{ referenced_table }}
+    {%- endif -%}
+{%- endmacro %}
 
 {%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {%- if calculated_column_expression != '' -%}
