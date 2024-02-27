@@ -30,7 +30,8 @@ public class FileFormatSpecProvider {
 
         FileFormatSpec fileFormat = tableSpec.getFileFormat() == null ? new FileFormatSpec() : tableSpec.getFileFormat();
         if(fileFormat.getFilePaths().isEmpty()){
-            fileFormat.setFilePaths(guessFilePaths(duckdbParametersSpec, tableSpec));
+            FilePathListSpec filePathListSpec = guessFilePaths(duckdbParametersSpec, tableSpec);
+            fileFormat.setFilePaths(filePathListSpec);
         }
 
         if (fileFormat.isFormatSetForType(filesType)) {
