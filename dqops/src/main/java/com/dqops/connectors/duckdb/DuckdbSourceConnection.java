@@ -35,6 +35,7 @@ import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentia
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -328,9 +329,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         if(secretsType == null){
             String pathString = duckdb.getDirectories().get(schemaName);
             File[] files = Path.of(pathString).toFile().listFiles();
-
+            String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathString, "/"), "\\");
             Arrays.stream(files).forEach(file -> {
-                String fileName = file.toString().substring(pathString.length() + 1);
+                String fileName = file.toString().substring(folderPrefix.length() + 1);
                 sourceTableModels.add(
                         new SourceTableModel(schemaName,
                                 new PhysicalTableName(schemaName, fileName)));
