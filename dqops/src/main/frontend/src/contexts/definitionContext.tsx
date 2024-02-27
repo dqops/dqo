@@ -162,11 +162,17 @@ function DefinitionProvider(props: any) {
     );
   };
 
-  const openDefaultChecksPatternsFirstLevelTab = (pattern: string) => {
+  const openDefaultChecksPatternsFirstLevelTab = (
+    pattern: string,
+    type: 'table' | 'column'
+  ) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.DEFAULT_CHECKS_PATTERNS(pattern),
         value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(pattern),
+        state: {
+          type: type
+        },
         label: pattern
       })
     );
@@ -220,16 +226,16 @@ function DefinitionProvider(props: any) {
           if (arrayOfElemsToToggle) {
             toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
           }
-          // to do: fix expanding tree checks/default checks 
+          // to do: fix expanding tree checks/default checks
 
-        //   } else if (tabs[i]?.url?.includes('checks')) {
-        //   configuration[2].isOpen = true;
-        //   const arrayOfElemsToToggle = (
-        //     tabs[i].state.full_check_name as string
-        //   )?.split('/');
-        //   if (arrayOfElemsToToggle) {
-        //     toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-        //   }
+          //   } else if (tabs[i]?.url?.includes('checks')) {
+          //   configuration[2].isOpen = true;
+          //   const arrayOfElemsToToggle = (
+          //     tabs[i].state.full_check_name as string
+          //   )?.split('/');
+          //   if (arrayOfElemsToToggle) {
+          //     toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+          //   }
         } else if (tabs[i]?.url?.includes('rules')) {
           configuration[1].isOpen = true;
           const arrayOfElemsToToggle = (

@@ -64,3 +64,38 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'Mixed data type';
   }
 };
+
+export const sortPatterns = <T>(patterns: T[], key: keyof T) => {
+  const copiedPatterns = [...patterns];
+
+  copiedPatterns.sort((a, b) => {
+    const valueA = a[key] as Exclude<T[keyof T], null>;
+    const valueB = b[key] as Exclude<T[keyof T], null>;
+
+    if (valueA === null && valueB === null) {
+      return 0;
+    } else if (valueA === null) {
+      return -1;
+    } else if (valueB === null) {
+      return 1;
+    }
+
+    if (valueA === undefined && valueB === undefined) {
+      return 0;
+    } else if (valueA === undefined) {
+      return -1;
+    } else if (valueB === undefined) {
+      return 1;
+    }
+
+    if (valueA < valueB) {
+      return -1;
+    } else if (valueA > valueB) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
+  return copiedPatterns;
+};
