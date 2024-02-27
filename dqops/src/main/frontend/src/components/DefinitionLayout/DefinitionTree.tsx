@@ -495,7 +495,10 @@ export const DefinitionTree = () => {
                         // selected == check.check_name ? 'bg-gray-300' : ''
                       )}
                       onClick={() => {
-                        openDefaultChecksPatternsFirstLevelTab(x);
+                        openDefaultChecksPatternsFirstLevelTab(
+                          x,
+                          x.includes('Column') ? 'column' : 'table'
+                        );
                       }}
                     >
                       <SvgIcon
