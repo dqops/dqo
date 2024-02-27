@@ -59,7 +59,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
 
     @Test
     void runSensor_withUseOfLocalCsvFile_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1:LOCAL_DATE_TIME");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -67,7 +67,7 @@ public class FileDuckdbTableTimelinessDataFreshnessSensorParametersSpecIntegrati
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1:LOCAL_DATE_TIME").max(),ldt);
+        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
         double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
         double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
 
