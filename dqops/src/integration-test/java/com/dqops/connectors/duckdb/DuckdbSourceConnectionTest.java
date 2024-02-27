@@ -101,7 +101,7 @@ class DuckdbSourceConnectionTest extends BaseTest {
     }
 
     @Test
-    void retrieveTableMetadata_fromConnectionSpecWithCsvFilePathPrefixWithTrailingSlash_readColumnTypes() {
+    void retrieveTableMetadata_schemaHasPrefixWithTrailingSlash_readColumnTypes() {
         ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
         this.sut.setConnectionSpec(spec);
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile("");
@@ -109,6 +109,31 @@ class DuckdbSourceConnectionTest extends BaseTest {
         spec.getDuckdb().getDirectories().put(schemaName, schemaPrefix);
 
         List<String> tableNames = List.of(SampleCsvFileNames.continuous_days_one_row_per_day);
+
+        this.sut.open(secretValueLookupContext);
+        List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
+
+        ColumnSpecMap firstTableColumns = tableSpecs.get(0).getColumns();
+        ColumnSpec idColumn = firstTableColumns.get("id:INTEGER");
+        Assertions.assertEquals("BIGINT", idColumn.getTypeSnapshot().getColumnType());
+        Assertions.assertTrue(idColumn.getTypeSnapshot().getNullable());
+
+        ColumnSpec dateColumn = firstTableColumns.get("date:LOCAL_DATE");
+        Assertions.assertEquals("DATE", dateColumn.getTypeSnapshot().getColumnType());
+
+        ColumnSpec valueColumn = firstTableColumns.get("value:STRING");
+        Assertions.assertEquals("VARCHAR", valueColumn.getTypeSnapshot().getColumnType());
+    }
+
+    @Test
+    void retrieveTableMetadata_tableHasAbsolutePathToFile_readColumnTypes() {
+        ConnectionSpec spec = DuckdbConnectionSpecObjectMother.createForFiles(DuckdbSourceFilesType.csv);
+        this.sut.setConnectionSpec(spec);
+        FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForCsvFile("");
+        String schemaPrefix = fileFormatSpec.getFilePaths().get(0);
+        spec.getDuckdb().getDirectories().put(schemaName, schemaPrefix);
+
+        List<String> tableNames = List.of(SampleDataFilesProvider.getFile(SampleCsvFileNames.continuous_days_one_row_per_day).toString());
 
         this.sut.open(secretValueLookupContext);
         List<TableSpec> tableSpecs = sut.retrieveTableMetadata(schemaName, tableNames, null, secretValueLookupContext);
@@ -249,8 +274,5 @@ class DuckdbSourceConnectionTest extends BaseTest {
         Assertions.assertTrue(sourceTableModels.get(2).getTableName().getTableName().equals("continuous_days_one_row_per_day_3.csv"));
         Assertions.assertTrue(sourceTableModels.get(3).getTableName().getTableName().equals("header.csv"));
     }
-
-
-
 
 }
