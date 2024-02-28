@@ -221,10 +221,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-        fillSpecWithDefaultCredentials(connectionSpec, secretValueLookupContext);
+        fillSpecWithDefaultCredentials(connectionSpec.getDuckdb(), secretValueLookupContext);
 
         try {
-            // todo: use the below method with duckdb 0.10 when aws extension is fixed
+            // todo: can be used with duckdb 0.10 when aws extension is fixed,
+            //  then search for makeFilePathsAccessible which solves secrets for 0.9.2 version
 //             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
 
         } catch (Exception e) {
@@ -235,11 +236,10 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     /**
      * Fills DuckDB parameters spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
      *
-     * @param connectionSpec ConnectionSpec with filled the object type of DuckdbParametersSpec.
+     * @param duckdb DuckdbParametersSpec
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
-    private void fillSpecWithDefaultCredentials(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext){
-        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
+    private void fillSpecWithDefaultCredentials(DuckdbParametersSpec duckdb, SecretValueLookupContext secretValueLookupContext){
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
 
         switch (secretsType){
@@ -310,16 +310,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Lists tables inside a schema and userhome's dqotables for the connection. Views are also returned.
+     * Lists tables inside a schema.
      *
      * @param schemaName Schema name.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
         if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            List<SourceTableModel> sourceTableModels = super.listTables(schemaName);
+            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
             return sourceTableModels;
         }
 
@@ -329,8 +329,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
+        String pathString = duckdb.getDirectories().get(schemaName);
+
         if(secretsType == null){
-            String pathString = duckdb.getDirectories().get(schemaName);
             File[] files = Path.of(pathString).toFile().listFiles();
             String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathString, "/"), "\\");
             Arrays.stream(files).forEach(file -> {

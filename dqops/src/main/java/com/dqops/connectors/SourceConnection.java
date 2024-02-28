@@ -57,7 +57,7 @@ public interface SourceConnection extends Closeable {
      * @param schemaName Schema name.
      * @return List of tables in the given schema.
      */
-    List<SourceTableModel> listTables(String schemaName);
+    List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext);
 
     /**
      * Retrieves the metadata (column information) for a given list of tables from a given schema.
