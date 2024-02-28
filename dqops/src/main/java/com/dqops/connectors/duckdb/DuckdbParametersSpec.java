@@ -335,6 +335,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the AWS AccessKeyID which is placed in user field when configured.
+     * @return region.
+     */
+    public String getAwsAccessKeyId() {
+        return user;
+    }
+
+    /**
+     * Returns the AWS SecretAccessKey which is placed in user field when configured.
+     * @return region.
+     */
+    public String getAwsSecretAccessKey() {
+        return password;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
      * @param duckdbSourceFilesType Type of files.
      * @return State that whether the file format for the specific file type is set.

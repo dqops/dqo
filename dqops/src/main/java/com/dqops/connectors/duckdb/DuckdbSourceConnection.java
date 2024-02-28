@@ -17,6 +17,8 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.duckdb.fileslisting.AwsTablesLister;
+import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -32,30 +34,19 @@ import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSet
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
-import com.dqops.services.cloud.s3.AwsStorageOperator;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
-import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.profiles.Profile;
-import software.amazon.awssdk.regions.Region;
-import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.S3Uri;
-import software.amazon.awssdk.services.s3.S3Utilities;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
-import java.io.File;
-import java.net.URI;
-import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -252,16 +243,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
 
         switch (secretsType){
             case s3:
-                if(Strings.isNullOrEmpty(duckdb.getUser()) || Strings.isNullOrEmpty(duckdb.getPassword())){
+                if(Strings.isNullOrEmpty(duckdb.getAwsAccessKeyId()) || Strings.isNullOrEmpty(duckdb.getAwsSecretAccessKey())){
                     Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
                     if(credentialProfile.isPresent()){
                         Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
+                        if(!Strings.isNullOrEmpty(duckdb.getAwsAccessKeyId()) && accessKeyId.isPresent()){
                             String awsAccessKeyId = accessKeyId.get();
                             duckdb.setUser(awsAccessKeyId);
                         }
                         Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
+                        if(!Strings.isNullOrEmpty(duckdb.getAwsSecretAccessKey()) && secretAccessKey.isPresent()){
                             String awsSecretAccessKey = secretAccessKey.get();
                             duckdb.setPassword(awsSecretAccessKey);
                         }
@@ -330,88 +321,25 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
             return sourceTableModels;
         }
-
-        List<SourceTableModel> sourceTableModels = new ArrayList<>();
         if(duckdb == null || duckdb.getSourceFilesType() == null){
-            return sourceTableModels;
+            return new ArrayList<>();
         }
 
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
-        String pathString = duckdb.getDirectories().get(schemaName);
-
         if(secretsType == null){
-            File[] files = Path.of(pathString).toFile().listFiles();
-            String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathString, "/"), "\\");
-            Arrays.stream(files).forEach(file -> {
-                String fileName = file.toString().substring(folderPrefix.length() + 1);
-                String sourceFilesTypeString = duckdb.getSourceFilesType().toString();
-                if(fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                        || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
-                        || file.isDirectory()) {
-
-                    sourceTableModels.add(
-                            new SourceTableModel(schemaName,
-                                    new PhysicalTableName(schemaName, fileName)));
-                }
-            });
+            List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
+            return sourceTableModels;
         } else {
-
             DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
             fillSpecWithDefaultCredentials(duckdbCloned, secretValueLookupContext);
-
             switch (secretsType){
                 case s3:
-                    // todo: too long method
-
-                    String accessKeyId = duckdbCloned.getUser();
-                    String secretAccessKey = duckdbCloned.getPassword();
-
-                    AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
-                    StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
-
-                    Region region = Region.of(duckdbCloned.getRegion());
-                    S3Client s3Client = S3Client.builder()
-                            .credentialsProvider(staticCredentialsProvider)
-                            .region(region)
-                            .build();
-
-                    S3Utilities s3Utilities = s3Client.utilities();
-                    URI uri = URI.create(pathString);
-                    S3Uri s3Uri = s3Utilities.parseUri(uri);
-
-                    if(s3Uri.bucket().isEmpty()){
-                        return sourceTableModels;
-                    }
-
-                    String bucketName = s3Uri.bucket().get();
-                    String prefix = s3Uri.key().orElse("");
-                    if(!prefix.endsWith("/")){
-                        prefix += prefix + "/";
-                    }
-                    List<String> files = AwsStorageOperator.listBucketObjects(s3Client, bucketName, prefix);
-
-                    files.forEach(file -> {
-                        if(file.endsWith("/")){
-                            file = file.substring(0, file.length() - 1);
-                        }
-                        String fileName = file.substring(file.lastIndexOf("/") + 1);
-                        String sourceFilesTypeString = duckdb.getSourceFilesType().toString();
-                        if(fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                                || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
-                                || !fileName.contains(".")) {
-
-                            sourceTableModels.add(
-                                    new SourceTableModel(schemaName,
-                                            new PhysicalTableName(schemaName, fileName)));
-                        }
-                    });
-
-                    s3Client.close();
-                    break;
+                    List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
+                    return sourceTableModels;
+                default:
+                    throw new RuntimeException("This type of secretsType is not supported: " + secretsType);
             }
         }
-
-        return sourceTableModels;
     }
 
     /**
