@@ -42,6 +42,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.profiles.Profile;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -360,8 +362,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             switch (secretsType){
                 case s3:
                     // todo: too long method
+
+                    String accessKeyId = duckdbCloned.getUser();
+                    String secretAccessKey = duckdbCloned.getPassword();
+
+                    AwsBasicCredentials awsBasicCredentials = AwsBasicCredentials.create(accessKeyId, secretAccessKey);
+                    StaticCredentialsProvider staticCredentialsProvider = StaticCredentialsProvider.create(awsBasicCredentials);
+
                     Region region = Region.of(duckdbCloned.getRegion());
                     S3Client s3Client = S3Client.builder()
+                            .credentialsProvider(staticCredentialsProvider)
                             .region(region)
                             .build();
 
