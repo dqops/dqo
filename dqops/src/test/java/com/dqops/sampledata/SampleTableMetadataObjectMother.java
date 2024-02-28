@@ -265,7 +265,7 @@ public class SampleTableMetadataObjectMother {
 
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
-        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
     /**
@@ -311,7 +311,7 @@ public class SampleTableMetadataObjectMother {
 
         fillColumnSpecsInTableSpec(tableSpec, sampleTable, connectionSpec);
 
-        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, null);
+        return new SampleTableMetadata(connectionName, connectionSpec, tableSpec, sampleTable);
     }
 
     /**
