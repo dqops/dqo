@@ -32,6 +32,7 @@ import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSet
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
 import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
+import com.dqops.services.cloud.s3.AwsStorageOperator;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -42,11 +43,16 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.profiles.Profile;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Uri;
+import software.amazon.awssdk.services.s3.S3Utilities;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
 import java.io.File;
+import java.net.URI;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -347,12 +353,52 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 }
             });
         } else {
-            // todo: list from s3
-//            switch (secretsType){
-//            case s3:
-//
-//                break;
-//        }
+
+            DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+            fillSpecWithDefaultCredentials(duckdbCloned, secretValueLookupContext);
+
+            switch (secretsType){
+                case s3:
+                    // todo: too long method
+                    Region region = Region.of(duckdbCloned.getRegion());
+                    S3Client s3Client = S3Client.builder()
+                            .region(region)
+                            .build();
+
+                    S3Utilities s3Utilities = s3Client.utilities();
+                    URI uri = URI.create(pathString);
+                    S3Uri s3Uri = s3Utilities.parseUri(uri);
+
+                    if(s3Uri.bucket().isEmpty()){
+                        return sourceTableModels;
+                    }
+
+                    String bucketName = s3Uri.bucket().get();
+                    String prefix = s3Uri.key().orElse("");
+                    if(!prefix.endsWith("/")){
+                        prefix += prefix + "/";
+                    }
+                    List<String> files = AwsStorageOperator.listBucketObjects(s3Client, bucketName, prefix);
+
+                    files.forEach(file -> {
+                        if(file.endsWith("/")){
+                            file = file.substring(0, file.length() - 1);
+                        }
+                        String fileName = file.substring(file.lastIndexOf("/") + 1);
+                        String sourceFilesTypeString = duckdb.getSourceFilesType().toString();
+                        if(fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
+                                || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
+                                || !fileName.contains(".")) {
+
+                            sourceTableModels.add(
+                                    new SourceTableModel(schemaName,
+                                            new PhysicalTableName(schemaName, fileName)));
+                        }
+                    });
+
+                    s3Client.close();
+                    break;
+            }
         }
 
         return sourceTableModels;

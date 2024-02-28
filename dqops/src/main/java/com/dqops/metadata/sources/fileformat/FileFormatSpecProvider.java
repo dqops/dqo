@@ -68,12 +68,24 @@ public class FileFormatSpecProvider {
         if(pathPrefix == null){
             return filePathListSpec;
         }
-        String filePath = isPathAbsoluteSystemsWide(tableName) ? tableName : Path.of(pathPrefix, tableName).toString();
+
+        String filePath;
+        if(isPathAbsoluteSystemsWide(tableName)){
+            filePath = tableName;
+        } else {
+            if(duckdbParametersSpec.getSecretsType() == null){
+                filePath = Path.of(pathPrefix, tableName).toString();
+            } else {
+                filePath = (pathPrefix.endsWith("/") ? pathPrefix : pathPrefix + "/")
+                        + tableName;
+            }
+        }
 
         // todo: what if the file extension eg. json will not match the source file types e.g. csv on the parameter spec??
         String fileExtension = "." + duckdbParametersSpec.getSourceFilesType().toString();
+        String separator = duckdbParametersSpec.getSecretsType() == null ? File.separator : "/";
         if(!filePath.toLowerCase().endsWith(fileExtension)){
-            filePath = filePath + File.separator + "**" + fileExtension;
+            filePath = filePath + separator + "**" + fileExtension;
         }
         filePathListSpec.add(filePath);
         return filePathListSpec;

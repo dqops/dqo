@@ -68,11 +68,11 @@ const DuckdbConnection = ({
       label: 'Local',
       value: undefined
     },
+    {
+      label: 'AWS S3',
+      value: DuckdbParametersSpecSecretsTypeEnum.s3
+    },
     // todo: uncomment below when implemented
-//     {
-//       label: 'AWS S3',
-//       value: DuckdbParametersSpecSecretsTypeEnum.s3
-//     },
     // {
     //   label: 'Google Cloud Storage',
     //   value: DuckdbParametersSpecSecretsTypeEnum.gcs
