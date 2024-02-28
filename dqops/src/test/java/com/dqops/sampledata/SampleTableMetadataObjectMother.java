@@ -300,6 +300,7 @@ public class SampleTableMetadataObjectMother {
         TableSpec tableSpec = new TableSpec();
         FileFormatSpec fileFormatSpec = FileFormatSpecObjectMother.createForMultipleCsvFiles(
                 SampleDataFilesProvider.getCsvFiles(csvFilesFolder).stream()
+                        .filter(file -> file.getName().endsWith(".csv"))
                         .map(file -> file.toString()).collect(Collectors.toList())
         );
         tableSpec.setFileFormat(fileFormatSpec);
