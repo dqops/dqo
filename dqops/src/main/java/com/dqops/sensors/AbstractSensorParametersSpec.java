@@ -133,8 +133,8 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
     }
 
     /**
-     * Returns true if the sensor supports data streams. The default value is true.
-     * @return True when the sensor supports data streams.
+     * Returns true if the sensor supports data grouping. The default value is true.
+     * @return True when the sensor supports data grouping.
      */
     @JsonIgnore
     public boolean getSupportsDataGrouping() {
@@ -166,4 +166,22 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
      */
     @JsonIgnore
     public Double getDefaultValue() { return null;}
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an event timestamp column. The default value is false.
+     * @return True the sensor requires an event timestamp column.
+     */
+    @JsonIgnore
+    public boolean getRequiresEventTimestampColumn() {
+        return false;
+    }
+
+    /**
+     * Returns true if the sensor is a timeliness sensor that requires an ingestion timestamp column. The default value is false.
+     * @return True the sensor requires an ingestion timestamp column.
+     */
+    @JsonIgnore
+    public boolean getRequiresIngestionTimestampColumn() {
+        return false;
+    }
 }

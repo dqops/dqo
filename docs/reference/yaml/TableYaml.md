@@ -18,7 +18,7 @@ The structure of this object is described below
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |<span class="no-wrap-code ">`api_version`</span>|DQOps YAML schema version|*string*| |dqo/v1| |
-|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_notifications*<br/>|table| |
+|<span class="no-wrap-code ">`kind`</span>|File type|*enum*|*source*<br/>*table*<br/>*sensor*<br/>*provider_sensor*<br/>*rule*<br/>*check*<br/>*settings*<br/>*file_index*<br/>*dashboards*<br/>*default_schedules*<br/>*default_checks*<br/>*default_table_checks*<br/>*default_column_checks*<br/>*default_notifications*<br/>|table| |
 |<span class="no-wrap-code ">[`spec`](./TableYaml.md#tablespec)</span>|Table specification object with the table metadata and the configuration of data quality checks|*[TableSpec](./TableYaml.md#tablespec)*| | | |
 
 
@@ -59,8 +59,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">[`incident_grouping`](./TableYaml.md#tableincidentgroupingspec)</span>|Incident grouping configuration with the overridden configuration at a table level. The configured field value in this object will override the default configuration from the connection level. Incident grouping level can be changed or incident creation can be disabled.|*[TableIncidentGroupingSpec](./TableYaml.md#tableincidentgroupingspec)*| | | |
 |<span class="no-wrap-code ">[`owner`](./TableYaml.md#tableownerspec)</span>|Table owner information like the data steward name or the business application name.|*[TableOwnerSpec](./TableYaml.md#tableownerspec)*| | | |
 |<span class="no-wrap-code ">[`profiling_checks`](./profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[TableProfilingCheckCategoriesSpec](./profiling/table-profiling-checks.md#tableprofilingcheckcategoriesspec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#tablemonitoringchecksspec)</span>|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|*[TableMonitoringChecksSpec](./TableYaml.md#tablemonitoringchecksspec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_checks`](./TableYaml.md#tablepartitionedchecksrootspec)</span>|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[TablePartitionedChecksRootSpec](./TableYaml.md#tablepartitionedchecksrootspec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#tablemonitoringcheckcategoriesspec)</span>|Configuration of table level monitoring checks. Monitoring checks are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring check stores only the most recent data quality check result for each period of time.|*[TableMonitoringCheckCategoriesSpec](./TableYaml.md#tablemonitoringcheckcategoriesspec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_checks`](./TableYaml.md#tablepartitionedcheckcategoriesspec)</span>|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[TablePartitionedCheckCategoriesSpec](./TableYaml.md#tablepartitionedcheckcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`statistics`](./TableYaml.md#tablestatisticscollectorsrootcategoriesspec)</span>|Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.|*[TableStatisticsCollectorsRootCategoriesSpec](./TableYaml.md#tablestatisticscollectorsrootcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`schedules_override`](./ConnectionYaml.md#defaultschedulesspec)</span>|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|*[DefaultSchedulesSpec](./ConnectionYaml.md#defaultschedulesspec)*| | | |
 |<span class="no-wrap-code ">[`columns`](./TableYaml.md#columnspecmap)</span>|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|*[ColumnSpecMap](./TableYaml.md#columnspecmap)*| | | |
@@ -351,7 +351,7 @@ The structure of this object is described below
 ___
 
 
-## TableMonitoringChecksSpec
+## TableMonitoringCheckCategoriesSpec
 Container of table level monitoring, divided by the time window (daily, monthly, etc.)
 
 
@@ -380,7 +380,7 @@ The structure of this object is described below
 ___
 
 
-## TablePartitionedChecksRootSpec
+## TablePartitionedCheckCategoriesSpec
 Container of table level partitioned checks, divided by the time window (daily, monthly, etc.)
 
 
@@ -591,8 +591,8 @@ The structure of this object is described below
 |<span class="no-wrap-code ">`sql_expression`</span>|SQL expression used for calculated fields or when additional column value transformation is required before the column can be used for analysis with data quality checks (data type conversion, transformation). It should be an SQL expression that uses the SQL language of the analyzed database type. Use the replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of the table under analysis, or {column} to replace the content with the analyzed column name. An example of extracting a value from a string column storing JSON in PostgreSQL: &quot;{column}::json-&gt;&#x27;address&#x27;-&gt;&#x27;zip&#x27;&quot;.|*string*| | | |
 |<span class="no-wrap-code ">[`type_snapshot`](./TableYaml.md#columntypesnapshotspec)</span>|Column data type that was retrieved when the table metadata was imported.|*[ColumnTypeSnapshotSpec](./TableYaml.md#columntypesnapshotspec)*| | | |
 |<span class="no-wrap-code ">[`profiling_checks`](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)</span>|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|*[ColumnProfilingCheckCategoriesSpec](./profiling/column-profiling-checks.md#columnprofilingcheckcategoriesspec)*| | | |
-|<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#columnmonitoringchecksrootspec)</span>|Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.|*[ColumnMonitoringChecksRootSpec](./TableYaml.md#columnmonitoringchecksrootspec)*| | | |
-|<span class="no-wrap-code ">[`partitioned_checks`](./TableYaml.md#columnpartitionedchecksrootspec)</span>|Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[ColumnPartitionedChecksRootSpec](./TableYaml.md#columnpartitionedchecksrootspec)*| | | |
+|<span class="no-wrap-code ">[`monitoring_checks`](./TableYaml.md#columnmonitoringcheckcategoriesspec)</span>|Configuration of column level monitoring checks. Monitoring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A monitoring stores only the most recent data quality check result for each period of time.|*[ColumnMonitoringCheckCategoriesSpec](./TableYaml.md#columnmonitoringcheckcategoriesspec)*| | | |
+|<span class="no-wrap-code ">[`partitioned_checks`](./TableYaml.md#columnpartitionedcheckcategoriesspec)</span>|Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|*[ColumnPartitionedCheckCategoriesSpec](./TableYaml.md#columnpartitionedcheckcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`statistics`](./TableYaml.md#columnstatisticscollectorsrootcategoriesspec)</span>|Custom configuration of a column level statistics collector (a basic profiler). Enables customization of the statistics collector settings when the collector is analysing this column.|*[ColumnStatisticsCollectorsRootCategoriesSpec](./TableYaml.md#columnstatisticscollectorsrootcategoriesspec)*| | | |
 |<span class="no-wrap-code ">[`labels`](./ConnectionYaml.md#labelsetspec)</span>|Custom labels that were assigned to the column. Labels are used for searching for columns when filtered data quality checks are executed.|*[LabelSetSpec](./ConnectionYaml.md#labelsetspec)*| | | |
 |<span class="no-wrap-code ">[`comments`](./profiling/table-profiling-checks.md#commentslistspec)</span>|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|*[CommentsListSpec](./profiling/table-profiling-checks.md#commentslistspec)*| | | |
@@ -640,7 +640,7 @@ The structure of this object is described below
 ___
 
 
-## ColumnMonitoringChecksRootSpec
+## ColumnMonitoringCheckCategoriesSpec
 Container of column level monitoring, divided by the time window (daily, monthly, etc.)
 
 
@@ -669,7 +669,7 @@ The structure of this object is described below
 ___
 
 
-## ColumnPartitionedChecksRootSpec
+## ColumnPartitionedCheckCategoriesSpec
 Container of column level partitioned checks, divided by the time window (daily, monthly, etc.)
 
 

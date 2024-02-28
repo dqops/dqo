@@ -212,7 +212,7 @@ spec:
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -656,7 +656,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -1196,7 +1196,7 @@ spec:
                 ) AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1641,7 +1641,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."state" AS grouping_level_2,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -2181,7 +2181,7 @@ spec:
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2626,7 +2626,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -3176,7 +3176,7 @@ spec:
                 ) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -3635,7 +3635,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."state" AS grouping_level_2,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```
@@ -4183,7 +4183,7 @@ spec:
                 ) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -4642,7 +4642,7 @@ Expand the *Configure with data grouping* section to see additional examples for
                 analyzed_table."state" AS grouping_level_2,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ORDER BY grouping_level_1, grouping_level_2, time_period, time_period_utc
             ```

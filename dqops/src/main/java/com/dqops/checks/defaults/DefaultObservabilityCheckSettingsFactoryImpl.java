@@ -34,13 +34,21 @@ import com.dqops.checks.column.monitoring.schema.ColumnSchemaDailyMonitoringChec
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
 import com.dqops.checks.table.checkspecs.schema.*;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataFreshnessCheckSpec;
+import com.dqops.checks.table.checkspecs.timeliness.TableDataStalenessCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyDifferencingCheckSpec;
+import com.dqops.checks.table.checkspecs.volume.TableRowCountAnomalyStationaryPartitionCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountChangeCheckSpec;
 import com.dqops.checks.table.checkspecs.volume.TableRowCountCheckSpec;
 import com.dqops.checks.table.monitoring.TableDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.table.monitoring.TableMonitoringCheckCategoriesSpec;
+import com.dqops.checks.table.monitoring.timeliness.TableTimelinessDailyMonitoringChecksSpec;
+import com.dqops.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.TablePartitionedCheckCategoriesSpec;
+import com.dqops.checks.table.partitioned.volume.TableVolumeDailyPartitionedChecksSpec;
 import com.dqops.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import com.dqops.checks.table.profiling.TableSchemaProfilingChecksSpec;
+import com.dqops.checks.table.profiling.TableTimelinessProfilingChecksSpec;
 import com.dqops.checks.table.profiling.TableVolumeProfilingChecksSpec;
 import com.dqops.checks.table.monitoring.availability.TableAvailabilityDailyMonitoringChecksSpec;
 import com.dqops.checks.table.monitoring.schema.TableSchemaDailyMonitoringChecksSpec;
@@ -86,6 +94,9 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
         tableSchema.setProfileColumnCount(new TableSchemaColumnCountCheckSpec());
         profilingChecks.setSchema(tableSchema);
 
+        TableTimelinessProfilingChecksSpec timelinessProfiling = new TableTimelinessProfilingChecksSpec();
+        timelinessProfiling.setProfileDataFreshness(new TableDataFreshnessCheckSpec());
+        profilingChecks.setTimeliness(timelinessProfiling);
 
 
         TableMonitoringCheckCategoriesSpec monitoringChecks = new TableMonitoringCheckCategoriesSpec();
@@ -126,6 +137,32 @@ public class DefaultObservabilityCheckSettingsFactoryImpl implements DefaultObse
             setWarning(new ValueChangedRuleParametersSpec());
         }});
         dailyMonitoring.setSchema(tableSchemaDailyMonitoring);
+
+        TableTimelinessDailyMonitoringChecksSpec timelinessDailyMonitoring = new TableTimelinessDailyMonitoringChecksSpec();
+        timelinessDailyMonitoring.setDailyDataFreshness(new TableDataFreshnessCheckSpec() {{
+            setWarning(new MaxDaysRule1ParametersSpec(2.0));
+        }});
+        timelinessDailyMonitoring.setDailyDataStaleness(new TableDataStalenessCheckSpec() {{
+            setWarning(new MaxDaysRule1ParametersSpec(2.0));
+        }});
+        dailyMonitoring.setTimeliness(timelinessDailyMonitoring);
+
+
+        TablePartitionedCheckCategoriesSpec partitionedChecks = new TablePartitionedCheckCategoriesSpec();
+        defaultPattern.setPartitionedChecks(partitionedChecks);
+        TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = new TableDailyPartitionedCheckCategoriesSpec();
+        partitionedChecks.setDaily(dailyPartitioned);
+
+        TableVolumeDailyPartitionedChecksSpec volumeDailyPartitioned = new TableVolumeDailyPartitionedChecksSpec();
+        volumeDailyPartitioned.setDailyPartitionRowCount(new TableRowCountCheckSpec());
+        volumeDailyPartitioned.setDailyPartitionRowCountAnomaly(new TableRowCountAnomalyStationaryPartitionCheckSpec() {{
+            setWarning(new AnomalyStationaryPercentileMovingAverageRuleWarning1PctParametersSpec());
+        }});
+        volumeDailyPartitioned.setDailyPartitionRowCountChange(new TableRowCountChangeCheckSpec() {{
+            setWarning(new ChangePercentRule10ParametersSpec());
+        }});
+
+        dailyPartitioned.setVolume(volumeDailyPartitioned);
 
         return defaultPattern;
     }

@@ -225,7 +225,7 @@ spec:
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 SUM(analyzed_table."target_column") AS actual_value
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -770,7 +770,7 @@ spec:
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 SUM(analyzed_table."target_column") AS actual_value
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             ```
     ??? example "MySQL"
 
@@ -1315,7 +1315,7 @@ spec:
                 FROM landing_zone.customer_raw AS referenced_table
                 ) AS expected_value,
                 SUM(analyzed_table."target_column") AS actual_value
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             ```
     ??? example "MySQL"
 

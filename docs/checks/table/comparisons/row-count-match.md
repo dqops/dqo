@@ -217,7 +217,7 @@ spec:
                 COUNT(*) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -694,7 +694,7 @@ spec:
                 COUNT(*) AS actual_value,
                 CAST(LOCALTIMESTAMP AS date) AS time_period,
                 CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1171,7 +1171,7 @@ spec:
                 COUNT(*) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -1658,7 +1658,7 @@ spec:
                 COUNT(*) AS actual_value,
                 CAST(analyzed_table."date_column" AS date) AS time_period,
                 CAST((CAST(analyzed_table."date_column" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```
@@ -2149,7 +2149,7 @@ spec:
                 COUNT(*) AS actual_value,
                 DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date)) AS time_period,
                 CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."date_column" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "<target_schema>"."<target_table>" AS analyzed_table
+            FROM  AS analyzed_table
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc
             ```

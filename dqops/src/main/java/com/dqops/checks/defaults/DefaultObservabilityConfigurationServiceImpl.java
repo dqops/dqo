@@ -127,7 +127,7 @@ public class DefaultObservabilityConfigurationServiceImpl implements DefaultObse
                 continue;
             }
 
-            defaultChecksPattern.applyOnColumn(targetColumnSpec, providerDialectSettings);
+            defaultChecksPattern.applyOnColumn(targetTableSpec, targetColumnSpec, providerDialectSettings);
         }
     }
 }
