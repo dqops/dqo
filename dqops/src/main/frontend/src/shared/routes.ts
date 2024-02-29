@@ -55,7 +55,8 @@ export const ROUTES = {
   SHARED_CREDENTIALS_DETAIL: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
   DATA_DICTIONARY_LIST_DETAIL: () => '/definitions/data-dictionary',
   DATA_DICTIONARY_DETAIL: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
-  DEFAULT_CHECKS_PATTERNS: (pattern: string) => `/definitions/default-checks-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECKS_PATTERNS: (pattern: string) => `/definitions/default-check-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECK_PATTERN_DETAIL: (type: string, pattern: string) => `/definitions/default-check/${urlencodeDecoder(type)}/${urlencodeDecoder(pattern)}`,
 
   CONNECTION_LEVEL_VALUE: (checkTypes: string, connection: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}`,
   SCHEMA_LEVEL_VALUE: (checkTypes: string, connection: string, schema: string) => `/${checkTypes}/connection/${urlencodeDecoder(connection)}/schema/${urlencodeDecoder(schema)}`,
@@ -83,7 +84,9 @@ export const ROUTES = {
   SHARED_CREDENTIALS_DETAIL_VALUE: (credential: string) => `/definitions/shared-credential/${urlencodeDecoder(credential)}`,
   DATA_DICTIONARY_LIST_VALUE: () => '/definitions/data-dictionary',
   DATA_DICTIONARY_VALUE: (dictionary: string) => `/definitions/data-dictionary/${urlencodeDecoder(dictionary)}`,
-  DEFAULT_CHECKS_PATTERNS_VALUE: (pattern: string) => `/definitions/default-checks-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECKS_PATTERNS_VALUE: (pattern: string) => `/definitions/default-check-patterns/${urlencodeDecoder(pattern)}`,
+  DEFAULT_CHECK_PATTERN_VALUE: (type: string, pattern: string) => `/definitions/default-check/${urlencodeDecoder(type)}/${urlencodeDecoder(pattern)}`,
+
   
   PATTERNS: {
     INDEX: '/',
@@ -129,6 +132,7 @@ export const ROUTES = {
     SHARED_CREDENTIALS_DETAIL: '/definitions/shared-credential/:credential',
     DATA_DICTIONARY_LIST_DETAIL: '/definitions/data-dictionary',
     DATA_DICTIONARY_DETAIL: `/definitions/data-dictionary/:dictionary`,
-    DEFAULT_CHECKS_PATTERNS:`/definitions/default-checks-patterns/:pattern`,
+    DEFAULT_CHECKS_PATTERNS:`/definitions/default-check-patterns/:pattern`,
+    DEFAULT_CHECK_PATTERN_DETAIL:  `/definitions/default-check/:type/:pattern`,
   }
 };

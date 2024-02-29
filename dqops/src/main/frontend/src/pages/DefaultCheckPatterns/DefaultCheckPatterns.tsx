@@ -4,39 +4,18 @@ import Button from '../../components/Button';
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 import ColumnLevelPatterns from './ColumnLevelPatterns';
-import {
-  DefaultColumnCheckPatternsApiClient,
-  DefaultTableCheckPatternsApiClient
-} from '../../services/apiClient';
-import {
-  DefaultColumnChecksPatternModel,
-  DefaultTableChecksPatternModel
-} from '../../api';
+import { useDefinition } from '../../contexts/definitionContext';
 
 export default function DefaultCheckPatterns() {
   const { type }: { type: 'table' | 'column' } = useSelector(
     getFirstLevelSensorState
   );
 
-  const addTablePattern = async (
-    patternName: string,
-    body?: DefaultTableChecksPatternModel | undefined
-  ) => {
-    DefaultTableCheckPatternsApiClient.createDefaultTableChecksPattern(
-      patternName,
-      body
-    );
-  };
+  const { openDefaultCheckPatternFirstLevelTab } = useDefinition()
 
-  const addColumnPattern = async (
-    patternName: string,
-    body?: DefaultColumnChecksPatternModel | undefined
-  ) => {
-    DefaultColumnCheckPatternsApiClient.createDefaultColumnChecksPattern(
-      patternName,
-      body
-    );
-  };
+  const addPattern = () => {
+    openDefaultCheckPatternFirstLevelTab(type, 'new pattern', {create: true})
+  }
 
   return (
     <>
@@ -46,7 +25,7 @@ export default function DefaultCheckPatterns() {
             Defualt check patterns {type}
           </div>
         </div>
-        <Button label="Add pattern" color="primary" className="w-45" />
+        <Button label="Add pattern" color="primary" className="w-45" onClick={addPattern}/>
       </div>
       {type === 'table' ? <TableLevelPatterns /> : <ColumnLevelPatterns />}
     </>

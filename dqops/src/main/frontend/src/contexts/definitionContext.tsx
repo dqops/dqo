@@ -112,6 +112,20 @@ function DefinitionProvider(props: any) {
     );
   };
 
+  const openDefaultCheckPatternFirstLevelTab = (type: string, pattern: string, state?: any) => {
+    dispatch(
+      addFirstLevelTab({
+        url: ROUTES.DEFAULT_CHECK_PATTERN_DETAIL(type, pattern),
+        value: ROUTES.DEFAULT_CHECK_PATTERN_VALUE(type, pattern),
+        state: {
+          type, pattern, ...state
+        },
+        label: pattern
+      })
+    );
+  };
+
+
   const openAllUsersFirstLevelTab = () => {
     dispatch(
       addFirstLevelTab({
@@ -314,6 +328,7 @@ function DefinitionProvider(props: any) {
         openRuleFirstLevelTab,
         openSensorFirstLevelTab,
         openDefaultChecksPatternsFirstLevelTab,
+        openDefaultCheckPatternFirstLevelTab,
         toggleTree,
         toggleSensorFolder,
         toggleRuleFolder,

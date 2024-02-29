@@ -6,6 +6,7 @@ import {
 import Button from '../../components/Button';
 import { sortPatterns } from '../../utils';
 import SvgIcon from '../../components/SvgIcon';
+import { useDefinition } from '../../contexts/definitionContext';
 
 type TDefaultCheckPatternsTableProps = {
   patterns: (
@@ -37,7 +38,10 @@ export default function DefaultCheckPatternsTable({
   patterns,
   deletePattern
 }: TDefaultCheckPatternsTableProps) {
-  const editPattern = () => {};
+  const { openDefaultCheckPatternFirstLevelTab } = useDefinition()
+  const editPattern = (type: string, pattern: string) => {
+    openDefaultCheckPatternFirstLevelTab(type, pattern)
+  };
 
   return (
     <table>
@@ -75,7 +79,7 @@ export default function DefaultCheckPatternsTable({
                 variant="text"
                 label="edit"
                 color="primary"
-                onClick={editPattern}
+                onClick={()  => editPattern('table', pattern.pattern_name ?? '')}
               />
             </td>
             <td className="px-4">
@@ -85,22 +89,6 @@ export default function DefaultCheckPatternsTable({
                 color="primary"
                 onClick={() => deletePattern(pattern.pattern_name ?? '')}
               />
-            </td>
-            <td className="px-4">
-              <Button
-                variant="text"
-                label="download"
-                color="primary"
-                // onClick={downloadPattern}
-              />
-              {/* <a
-                href={`/api/dictionaries/${pattern.pattern_name}/download`}
-                rel="noreferrer"
-                target="_blank"
-                className="text-teal-500"
-              >
-                download
-              </a> */}
             </td>
           </tr>
         ))}

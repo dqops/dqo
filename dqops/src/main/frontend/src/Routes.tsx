@@ -38,6 +38,7 @@ const Routes = () => {
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_LIST_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DATA_DICTIONARY_DETAIL} />} />
       <Route exact path={ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFAULT_CHECKS_PATTERNS} />} />
+      <Route exact path={ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL} render={() => <DefinitionLayout route={ROUTES.PATTERNS.DEFAULT_CHECK_PATTERN_DETAIL} />} />
 
       {/* Create Connection (packed with MainLayout) */}
       <Route exact path={ROUTES.PATTERNS.CREATE} render={() => <CreateConnection/>} />
