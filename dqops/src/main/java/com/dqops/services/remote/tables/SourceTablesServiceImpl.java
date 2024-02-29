@@ -84,7 +84,7 @@ public class SourceTablesServiceImpl implements SourceTablesService {
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName);
+            List<SourceTableModel> sourceTableModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
             remoteTableListModels = sourceTableModels.stream()
                     .map(sourceTableModel -> new RemoteTableListModel(){{
                         setConnectionName(connectionName);

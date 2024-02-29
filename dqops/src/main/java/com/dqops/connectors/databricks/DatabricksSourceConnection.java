@@ -155,7 +155,7 @@ public class DatabricksSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
 
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SHOW tables FROM ");

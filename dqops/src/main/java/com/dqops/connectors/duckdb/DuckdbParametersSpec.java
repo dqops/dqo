@@ -24,6 +24,10 @@ import com.dqops.metadata.sources.BaseProviderParametersSpec;
 import com.dqops.metadata.sources.fileformat.CsvFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.JsonFileFormatSpec;
 import com.dqops.metadata.sources.fileformat.ParquetFileFormatSpec;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
+import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,12 +35,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.EqualsAndHashCode;
+import org.apache.parquet.Strings;
 import picocli.CommandLine;
+import software.amazon.awssdk.profiles.Profile;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * DuckDB connection parameters.
@@ -335,6 +338,22 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
+     * Returns the AWS AccessKeyID which is placed in user field when configured.
+     * @return region.
+     */
+    public String getAwsAccessKeyId() {
+        return user;
+    }
+
+    /**
+     * Returns the AWS SecretAccessKey which is placed in user field when configured.
+     * @return region.
+     */
+    public String getAwsSecretAccessKey() {
+        return password;
+    }
+
+    /**
      * Returns state that whether the file format for the specific file type is set.
      * @param duckdbSourceFilesType Type of files.
      * @return State that whether the file format for the specific file type is set.
@@ -389,6 +408,49 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
         cloned.region = secretValueProvider.expandValue(cloned.region, lookupContext);
 
         return cloned;
+    }
+
+    /**
+     * Fills the spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
+     *
+     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
+     */
+    public void fillSpecWithDefaultCredentials(SecretValueLookupContext secretValueLookupContext){
+        DuckdbSecretsType secretsType = this.getSecretsType();
+
+        switch (secretsType){
+            case s3:
+                if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
+                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
+                    if(credentialProfile.isPresent()){
+                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
+                        if(!Strings.isNullOrEmpty(this.getAwsAccessKeyId()) && accessKeyId.isPresent()){
+                            String awsAccessKeyId = accessKeyId.get();
+                            this.setUser(awsAccessKeyId);
+                        }
+                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
+                        if(!Strings.isNullOrEmpty(this.getAwsSecretAccessKey()) && secretAccessKey.isPresent()){
+                            String awsSecretAccessKey = secretAccessKey.get();
+                            this.setPassword(awsSecretAccessKey);
+                        }
+                    }
+                }
+
+                if(Strings.isNullOrEmpty(this.getUser())){
+                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
+                    if(configProfile.isPresent()){
+                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
+                        if(!Strings.isNullOrEmpty(this.getRegion()) && region.isPresent()){
+                            String awsRegion = region.get();
+                            this.setRegion(awsRegion);
+                        }
+                    }
+                }
+
+                break;
+            default:
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+        }
     }
 
 }

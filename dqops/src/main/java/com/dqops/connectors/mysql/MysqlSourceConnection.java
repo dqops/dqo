@@ -66,7 +66,7 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
 
         StringBuilder sqlBuilder = new StringBuilder();

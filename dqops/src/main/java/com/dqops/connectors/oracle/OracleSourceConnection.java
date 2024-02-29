@@ -109,9 +109,7 @@ public class OracleSourceConnection extends AbstractJdbcSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
-        ConnectionProviderSpecificParameters providerSpecificConfiguration = this.getConnectionSpec().getProviderSpecificConfiguration();
-
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         StringBuilder sqlBuilder = new StringBuilder();
         sqlBuilder.append("SELECT OWNER AS table_schema, TABLE_NAME AS table_name FROM ");
         sqlBuilder.append(getInformationSchemaName());
