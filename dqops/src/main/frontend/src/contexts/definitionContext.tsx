@@ -118,7 +118,9 @@ function DefinitionProvider(props: any) {
         url: ROUTES.DEFAULT_CHECK_PATTERN_DETAIL(type, pattern),
         value: ROUTES.DEFAULT_CHECK_PATTERN_VALUE(type, pattern),
         state: {
-          type, pattern, ...state
+          type, pattern, 
+          pattern_name: pattern,
+          ...state
         },
         label: pattern
       })
@@ -185,7 +187,8 @@ function DefinitionProvider(props: any) {
         url: ROUTES.DEFAULT_CHECKS_PATTERNS(pattern),
         value: ROUTES.DEFAULT_CHECKS_PATTERNS_VALUE(pattern),
         state: {
-          type: type
+          type: type,
+          pattern_name: pattern
         },
         label: pattern
       })

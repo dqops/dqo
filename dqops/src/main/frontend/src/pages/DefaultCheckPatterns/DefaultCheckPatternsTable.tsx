@@ -7,6 +7,8 @@ import Button from '../../components/Button';
 import { sortPatterns } from '../../utils';
 import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
+import { useSelector } from 'react-redux';
+import { getFirstLevelSensorState } from '../../redux/selectors';
 
 type TDefaultCheckPatternsTableProps = {
   patterns: (
@@ -38,11 +40,14 @@ export default function DefaultCheckPatternsTable({
   patterns,
   deletePattern
 }: TDefaultCheckPatternsTableProps) {
-  const { openDefaultCheckPatternFirstLevelTab } = useDefinition()
+  const { type }: { type: 'table' | 'column' } = useSelector(
+    getFirstLevelSensorState
+  );
+  const { openDefaultCheckPatternFirstLevelTab } = useDefinition();
   const editPattern = (type: string, pattern: string) => {
-    openDefaultCheckPatternFirstLevelTab(type, pattern)
+    openDefaultCheckPatternFirstLevelTab(type, pattern);
   };
-
+  console.log(type);
   return (
     <table>
       <thead>
@@ -79,7 +84,7 @@ export default function DefaultCheckPatternsTable({
                 variant="text"
                 label="edit"
                 color="primary"
-                onClick={()  => editPattern('table', pattern.pattern_name ?? '')}
+                onClick={() => editPattern(type, pattern.pattern_name ?? '')}
               />
             </td>
             <td className="px-4">
