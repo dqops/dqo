@@ -337,6 +337,9 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 }
 
                 FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+                if(fileFormatSpec == null){
+                    return tableSpecs;
+                }
                 Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
 
                 Column<?>[] columns = tableResult.columnArray();
@@ -357,6 +360,17 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                         tableSpec = new TableSpec();
                         tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                         tablesByTableName.put(physicalTableName, tableSpec);
+
+                        tableSpec.setFileFormat(
+                                tableSpecTemp.getFileFormat() == null
+                                        ? new FileFormatSpec()
+                                        : tableSpecTemp.getFileFormat().deepClone()
+                        );
+
+                        FileFormatSpec newFileFormat = tableSpec.getFileFormat();
+                        if(newFileFormat.getFilePaths().isEmpty()){
+                            tableSpec.getFileFormat().getFilePaths().addAll(fileFormatSpec.getFilePaths());
+                        }
                         tableSpecs.add(tableSpec);
                     }
 
