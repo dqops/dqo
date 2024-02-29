@@ -22,7 +22,7 @@ The data quality check is evaluated on a monitored table (or column) in three ph
 
 
 - The generated SQL query is executed on the data source, capturing the data quality measure.
-  At is expected that all data quality sensors in DQOps will return a result column named *actual_value* as a data measure,
+  It is expected that all data quality sensors in DQOps will return a result column named *actual_value* as a data measure,
   which will be evaluated with data quality rules.
 
 

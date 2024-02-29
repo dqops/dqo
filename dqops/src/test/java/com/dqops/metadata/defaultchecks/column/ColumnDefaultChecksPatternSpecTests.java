@@ -19,10 +19,13 @@ package com.dqops.metadata.defaultchecks.column;
 import com.dqops.BaseTest;
 import com.dqops.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import com.dqops.checks.column.checkspecs.text.ColumnTextLengthAboveMaxLengthCheckSpec;
+import com.dqops.checks.column.checkspecs.text.ColumnTextMaxLengthCheckSpec;
 import com.dqops.checks.column.monitoring.ColumnDailyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.ColumnMonthlyMonitoringCheckCategoriesSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsDailyMonitoringChecksSpec;
 import com.dqops.checks.column.monitoring.nulls.ColumnNullsMonthlyMonitoringChecksSpec;
+import com.dqops.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
+import com.dqops.checks.column.partitioned.text.ColumnTextDailyPartitionedChecksSpec;
 import com.dqops.checks.column.profiling.ColumnNullsProfilingChecksSpec;
 import com.dqops.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import com.dqops.checks.column.profiling.ColumnTextProfilingChecksSpec;
@@ -70,7 +73,7 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnNullsProfilingChecksSpec nullsDefaults = new ColumnNullsProfilingChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
         nullsDefaults.setProfileNullsCount(new ColumnNullsCountCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNotNull(targetColumn.getProfilingChecks().getNulls().getProfileNullsCount());
     }
@@ -82,7 +85,7 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnNullsDailyMonitoringChecksSpec nullsDefaults = new ColumnNullsDailyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
         nullsDefaults.setDailyNullsCount(new ColumnNullsCountCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNotNull(targetColumn.getMonitoringChecks().getDaily().getNulls().getDailyNullsCount());
     }
@@ -94,7 +97,7 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnNullsMonthlyMonitoringChecksSpec nullsDefaults = new ColumnNullsMonthlyMonitoringChecksSpec();
         columnDefaults.setNulls(nullsDefaults);
         nullsDefaults.setMonthlyNullsCount(new ColumnNullsCountCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNotNull(targetColumn.getMonitoringChecks().getMonthly().getNulls().getMonthlyNullsCount());
     }
@@ -108,7 +111,7 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);
         textDefault.setProfileTextLengthAboveMaxLength(new ColumnTextLengthAboveMaxLengthCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNotNull(targetColumn.getProfilingChecks().getText().getProfileTextLengthAboveMaxLength());
     }
@@ -122,7 +125,7 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);
         textDefault.setProfileTextLengthAboveMaxLength(new ColumnTextLengthAboveMaxLengthCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNull(targetColumn.getProfilingChecks().getText());
     }
@@ -136,8 +139,37 @@ public class ColumnDefaultChecksPatternSpecTests extends BaseTest {
         ColumnTextProfilingChecksSpec textDefault = new ColumnTextProfilingChecksSpec();
         columnDefaults.setText(textDefault);
         textDefault.setProfileTextLengthAboveMaxLength(new ColumnTextLengthAboveMaxLengthCheckSpec());
-        this.sut.applyOnColumn(targetColumn, this.dialectSettings);
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
 
         Assertions.assertNull(targetColumn.getProfilingChecks().getText());
+    }
+
+    @Test
+    public void applyOnColumn_whenDailyPartitionChecksSetOnColumnAndTableHasPartitionByColumnConfigured_thenConfiguresThemOnColumn() {
+        targetColumn.getTypeSnapshot().setColumnType("varchar");
+        targetTable.getTimestampColumns().setPartitionByColumn("date");
+
+        ColumnDailyPartitionedCheckCategoriesSpec columnDefaults = new ColumnDailyPartitionedCheckCategoriesSpec();
+        this.sut.setColumnCheckRootContainer(columnDefaults);
+        ColumnTextDailyPartitionedChecksSpec textDefault = new ColumnTextDailyPartitionedChecksSpec();
+        columnDefaults.setText(textDefault);
+        textDefault.setDailyPartitionTextMaxLength(new ColumnTextMaxLengthCheckSpec());
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
+
+        Assertions.assertNotNull(targetColumn.getPartitionedChecks().getDaily().getText().getDailyPartitionTextMaxLength());
+    }
+
+    @Test
+    public void applyOnColumn_whenDailyPartitionChecksSetOnColumnAndTableNotConfiguredForPartitionedChecks_thenCheckNotConfigured() {
+        targetColumn.getTypeSnapshot().setColumnType("varchar");
+
+        ColumnDailyPartitionedCheckCategoriesSpec columnDefaults = new ColumnDailyPartitionedCheckCategoriesSpec();
+        this.sut.setColumnCheckRootContainer(columnDefaults);
+        ColumnTextDailyPartitionedChecksSpec textDefault = new ColumnTextDailyPartitionedChecksSpec();
+        columnDefaults.setText(textDefault);
+        textDefault.setDailyPartitionTextMaxLength(new ColumnTextMaxLengthCheckSpec());
+        this.sut.applyOnColumn(this.targetTable, targetColumn, this.dialectSettings);
+
+        Assertions.assertNull(targetColumn.getPartitionedChecks());
     }
 }

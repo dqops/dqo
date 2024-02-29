@@ -60,10 +60,11 @@ $DQO_USER_HOME
 ├───.logs(7)
 ├───checks(8)
 ├───dictionaries(9)
-├───rules(10)                                                                 
-├───sensors(11)
-├───settings(12)
-└───sources(13)                                                                
+├───patterns(10)
+├───rules(11)                                                                 
+├───sensors(12)
+├───settings(13)
+└───sources(14)                                                                
 ```
 
 1.   A marker file that is created only to identify the `DQOps user home` root and confirm that the folder was fully initialized.
@@ -90,12 +91,14 @@ $DQO_USER_HOME
      the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging. 
 8.   The *checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).
 9.   The *dictionaries* folder stores custom data dictionaries (CSV files) that can be referenced in [accepted_values](../checks/column/accepted_values/index.md).
-10.  The *rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).
-11.  The *sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).
-12.  The *settings* folder stores shared settings that can be committed to Git. The shared settings include the list
+10.  The *pattern* folder stores the configuration of the default data quality checks (data observability checks) that DQOps runs
+     on all data sources and tables matching a pattern.
+11.  The *rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).
+12.  The *sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).
+13.  The *settings* folder stores shared settings that can be committed to Git. The shared settings include the list
      of custom data quality dashboards or the default configuration of data observability checks that are applied on
      all imported data sources.
-13.  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores
+14.  The *.sources* folder is the most important folder in the `DQOps user home`. It is the folder where DQOps stores
      the connection parameters to the data sources and the data quality checks configuration for all monitored tables.
 
 The files stored directly in the `DQOps user home` folder and all folders are described below.
@@ -111,6 +114,7 @@ The files stored directly in the `DQOps user home` folder and all folders are de
 | *.logs*                            | The *.logs* folder stores error logs locally. The files in the folder are rotated to save space. In case that an error is reported when running DQOps, the content of the folder should be sent to the DQOps support. Please review all the *--logging.\** and *--dqo.logging.\** parameters passed to DQOps as the [entry point parameters](../command-line-interface/dqo.md) to learn how to configure logging.                                   |                         |
 | *checks*                           | The *checks* folder stores the definition of custom data quality [checks](definition-of-data-quality-checks/index.md).                                                                                                                                                                                                                                                                                                                              |    :material-check:     |
 | *dictionaries*                     | The *dictionaries* folder stores custom data dictionaries that are CSV files with values. The dictionaries can be referenced in data quality checks in the [accepted_values](../checks/column/accepted_values/index.md) category using a `${dictionary://filename.csv}` token.                                                                                                                                                                      |    :material-check:     |
+| *pattern*                          | The *pattern* folder stores the configuration of the default data quality checks (data observability checks) that DQOps runs on all data sources and tables matching a pattern.                                                                                                                                                                                                                                                                     |    :material-check:     |
 | *rules*                            | The *rules* folder stores the definition of custom and overwritten data quality [rules](definition-of-data-quality-rules.md).                                                                                                                                                                                                                                                                                                                       |    :material-check:     |
 | *sensors*                          | The *sensors* folder stores the definition of custom and overwritten data quality [sensors](definition-of-data-quality-sensors.md).                                                                                                                                                                                                                                                                                                                 |    :material-check:     |
 | *settings*                         | The *settings* folder stores shared settings that can be committed to Git. The shared settings include the list of custom data quality dashboards or the default configuration of data observability checks that are applied on all imported data sources.                                                                                                                                                                                          |    :material-check:     |
@@ -440,6 +444,41 @@ Differently from the customization of sensors and rules, it is not possible to o
 a check with the same name in the *checks* folder.
 
 
+## Default check patterns
+DQOps does not require configuring all data quality checks in [*.dqotable.yaml*](../reference/yaml/TableYaml.md) files.
+Instead, DQOps can activate selected data quality checks on all tables and columns matching a search filter.
+
+The initial content of the DQOps user home folder contains two YAML configuration files.
+
+- [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+  file containing the default configuration of 
+  [data observability checks](data-observability.md) activated for all columns.
+
+- [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+  file containing the default configuration of 
+  [data observability checks](data-observability.md) activated for all columns.
+
+The data quality check pattern files are stored in the *patterns* folder, as shown in the following example of the folder structure.
+
+``` { .asc .annotate hl_lines="4-5" }
+$DQO_USER_HOME
+├───...
+├───patterns
+│   ├───default.dqocolumnpattern.yaml(1)
+│   ├───default.dqotablepattern.yaml(2)
+│   └───custom_table_pattern_name.dqocolumnpattern.yaml(3)
+└───...   
+```
+
+1.  The default configuration of column-level checks applied on all columns.
+2.  The default configuration of table-level checks applied on all tables.
+3.  An example of another check pattern file containing a custom configuration of additional column-level checks.
+
+You can create additional table-level or column-level check patterns to activate
+the data quality checks for a subset of tables or columns.
+Each check pattern file contains a list of filters to match the target tables and columns.
+
+
 ## Shared settings
 Some configuration files are safe to store to Git and should be shared between on-premise and cloud DQOps instances
 in a hybrid deployment model.
@@ -453,18 +492,15 @@ $DQO_USER_HOME
 ├───...
 ├───settings
 │   ├───dashboardslist.dqodashboards.yaml(1)
-│   ├───default.dqodefaultchecks.yaml(2)
-│   ├───defaultnotifications.dqonotifications.yaml(3)
-│   └───defaultschedules.dqoschedules.yaml(4)
+│   ├───defaultnotifications.dqonotifications.yaml(2)
+│   └───defaultschedules.dqoschedules.yaml(3)
 └───...   
 ```
 
 1.  A [list](../reference/yaml/DashboardYaml.md) (tree) of custom or overwritten data quality dashboards.
-2.  The configuration of the [default data quality checks](../reference/yaml/DefaultObservabilityChecksYaml.md)
-    that are activated on imported tables and columns to detect common issues and observe the data source.
-3.  The configuration of the default [incident notification](../integrations/webhooks/index.md)
+2.  The configuration of the default [incident notification](../integrations/webhooks/index.md)
     [webhooks](../reference/yaml/DefaultNotificationsYaml.md).
-4.  The configuration of the [default schedules](../reference/yaml/DefaultSchedulesYaml.md)
+3.  The configuration of the [default schedules](../reference/yaml/DefaultSchedulesYaml.md)
     for running data quality checks daily or monthly.
 
 The default configuration files are listed below.
@@ -472,7 +508,6 @@ The default configuration files are listed below.
 | File&nbsp;name                                                                                | Description                                                                                                                                                                                                                                                                                                                                                          |
 |-----------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | *[dashboardslist.dqodashboards.yaml](../reference/yaml/DashboardYaml.md)*                     | The configuration of custom data quality dashboards. Adding custom dashboards is documented in the [creating custom dashboards](../integrations/looker-studio/creating-custom-data-quality-dashboards.md) manual.                                                                                                                                                    |
-| *[default.dqodefaultchecks.yaml](../reference/yaml/DefaultObservabilityChecksYaml.md)*         | The configuration of the default checks that are activated on imported tables and columns to detect common issues and observe the data source.                                                                                                                                                                                                                       |
 | *[defaultnotifications.dqonotifications.yaml](../reference/yaml/DefaultNotificationsYaml.md)* | The configuration of the webhooks where the [notification of incidents](../integrations/webhooks/index.md) are POST'ed when data quality incidents are created or reassigned.                                                                                                                                                                                        |                                   
 | *[defaultschedules.dqoschedules.yaml](../reference/yaml/DefaultSchedulesYaml.md)*             | The default configuration of CRON schedules for running data quality checks in regular intervals. <br/> **NOTE: The CRON schedules defined in this file are copied to the *connection.dqoconnection.yaml* file when a new connection is imported in DQOps. Changes to this file will not change the schedules of running checks for already imported data sources.** |
 

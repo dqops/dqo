@@ -248,7 +248,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
             for (Blob blob : blogPage.iterateAll()) {
                 String blobFileName = blob.getName();
-                Path fullBlobFilePathInsideBucket = FileNameSanitizer.convertRawPathToEncodedPath(blobFileName);
+                Path fullBlobFilePathInsideBucket = Path.of(blobFileName.replace("%25", "%"));
                 Map<String, String> metadata = blob.getMetadata();
                 if (metadata != null && Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
                     // ignoring because it is a special empty file to ensure that the schema of an external table could be detected from a parquet file

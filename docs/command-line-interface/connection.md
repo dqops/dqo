@@ -91,9 +91,11 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--sqlserver-disable-encr
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-options=<options>] [--duckdb-password=<password>]
+                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
+                [--duckdb-secrets-type=<secretsType>]
                 [--duckdb-source-files-type=<sourceFilesType>]
-                [--mysql-database=<database>]
+                [--duckdb-user=<user>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -158,9 +160,11 @@ dqo> connection add [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                 [--databricks-options=<options>]
                 [--databricks-password=<password>] [--databricks-port=<port>]
                 [--databricks-user=<user>] [--duckdb-database=<database>]
-                [--duckdb-options=<options>] [--duckdb-read-mode=<readMode>]
+                [--duckdb-options=<options>] [--duckdb-password=<password>]
+                [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
+                [--duckdb-secrets-type=<secretsType>]
                 [--duckdb-source-files-type=<sourceFilesType>]
-                [--mysql-database=<database>]
+                [--duckdb-user=<user>] [--mysql-database=<database>]
                 [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                 [--mysql-options=<options>] [--mysql-password=<password>]
                 [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -233,8 +237,12 @@ All parameters supported by the command are listed below.
 |<div id="connection add--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection add--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection add--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection add--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection add--duckdb-secrets-type" class="no-wrap-code">`--duckdb-secrets-type`</div>|The secrets type. The value can be in the null format to use dynamic substitution.| |*s3*<br/>*gcs*<br/>*r2*<br/>*azure*<br/>|
 |<div id="connection add--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
+|<div id="connection add--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection add-fw" class="no-wrap-code">`-fw`</div><div id="connection add--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection add--headless" class="no-wrap-code">`--headless`</div><div id="connection add-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection add-h" class="no-wrap-code">`-h`</div><div id="connection add--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||
@@ -402,9 +410,11 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--sqlserver-disable-e
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-database=<database>] [--duckdb-options=<options>]
-                   [--duckdb-read-mode=<readMode>]
+                   [--duckdb-password=<password>]
+                   [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
+                   [--duckdb-secrets-type=<secretsType>]
                    [--duckdb-source-files-type=<sourceFilesType>]
-                   [--mysql-database=<database>]
+                   [--duckdb-user=<user>] [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -470,9 +480,11 @@ dqo> connection update [-h] [-fw] [-hl] [--sqlserver-disable-encryption]
                    [--databricks-password=<password>]
                    [--databricks-port=<port>] [--databricks-user=<user>]
                    [--duckdb-database=<database>] [--duckdb-options=<options>]
-                   [--duckdb-read-mode=<readMode>]
+                   [--duckdb-password=<password>]
+                   [--duckdb-read-mode=<readMode>] [--duckdb-region=<region>]
+                   [--duckdb-secrets-type=<secretsType>]
                    [--duckdb-source-files-type=<sourceFilesType>]
-                   [--mysql-database=<database>]
+                   [--duckdb-user=<user>] [--mysql-database=<database>]
                    [--mysql-engine=<mysqlEngineType>] [--mysql-host=<host>]
                    [--mysql-options=<options>] [--mysql-password=<password>]
                    [--mysql-port=<port>] [--mysql-sslmode=<sslmode>]
@@ -545,8 +557,12 @@ All parameters supported by the command are listed below.
 |<div id="connection update--databricks-user" class="no-wrap-code">`--databricks-user`</div>|Databricks user name.| ||
 |<div id="connection update--duckdb-database" class="no-wrap-code">`--duckdb-database`</div>|DuckDB database name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-options" class="no-wrap-code">`--duckdb-options`</div>|DuckDB connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|<div id="connection update--duckdb-password" class="no-wrap-code">`--duckdb-password`</div>|DuckDB database password. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update--duckdb-read-mode" class="no-wrap-code">`--duckdb-read-mode`</div>|DuckDB read mode. The value can be in the null format to use dynamic substitution.| |*in_memory*<br/>*files*<br/>|
+|<div id="connection update--duckdb-region" class="no-wrap-code">`--duckdb-region`</div>|The region for the storage credentials. The value can be in the null format to use dynamic substitution.| ||
+|<div id="connection update--duckdb-secrets-type" class="no-wrap-code">`--duckdb-secrets-type`</div>|The secrets type. The value can be in the null format to use dynamic substitution.| |*s3*<br/>*gcs*<br/>*r2*<br/>*azure*<br/>|
 |<div id="connection update--duckdb-source-files-type" class="no-wrap-code">`--duckdb-source-files-type`</div>|Type of source files for DuckDB. The value can be in the null format to use dynamic substitution.| |*csv*<br/>*json*<br/>*parquet*<br/>|
+|<div id="connection update--duckdb-user" class="no-wrap-code">`--duckdb-user`</div>|DuckDB user name. The value can be in the null format to use dynamic substitution.| ||
 |<div id="connection update-fw" class="no-wrap-code">`-fw`</div><div id="connection update--file-write" class="no-wrap-code">`--file-write`</div>|Write command response to a file| ||
 |<div id="connection update--headless" class="no-wrap-code">`--headless`</div><div id="connection update-hl" class="no-wrap-code">`-hl`</div>|Starts DQOps in a headless mode. When DQOps runs in a headless mode and the application cannot start because the DQOps Cloud API key is missing or the DQOps user home folder is not configured, DQOps will stop silently instead of asking the user to approve the setup of the DQOps user home folder structure and/or log into DQOps Cloud.| ||
 |<div id="connection update-h" class="no-wrap-code">`-h`</div><div id="connection update--help" class="no-wrap-code">`--help`</div>|Show the help for the command and parameters| ||

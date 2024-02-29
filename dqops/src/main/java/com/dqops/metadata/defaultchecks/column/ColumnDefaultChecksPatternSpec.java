@@ -35,6 +35,7 @@ import com.dqops.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.dqops.metadata.id.HierarchyId;
 import com.dqops.metadata.id.HierarchyNodeResultVisitor;
 import com.dqops.metadata.sources.ColumnSpec;
+import com.dqops.metadata.sources.TableSpec;
 import com.dqops.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.dqops.utils.serialization.InvalidYamlStatusHolder;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,6 +44,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -236,42 +238,44 @@ public class ColumnDefaultChecksPatternSpec extends AbstractSpec implements Inva
 
     /**
      * Applies the default checks on a target column.
+     * @param tableSpec Parent table specification.
      * @param targetColumn Target column.
      * @param dialectSettings Dialect settings, to decide if the checks are applicable.
      */
-    public void applyOnColumn(ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
+    public void applyOnColumn(TableSpec tableSpec, ColumnSpec targetColumn, ProviderDialectSettings dialectSettings) {
         DataTypeCategory dataTypeCategory = dialectSettings.detectColumnType(targetColumn.getTypeSnapshot());
 
         if (this.profilingChecks != null && !this.profilingChecks.isDefault()) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetColumn.getColumnCheckRootContainer(CheckType.profiling, null, true);
-            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, dataTypeCategory, dialectSettings);
+            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, tableSpec, dataTypeCategory, dialectSettings);
         }
 
         if (this.monitoringChecks != null) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.monitoringChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.monitoringChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
             }
         }
 
-        if (this.partitionedChecks != null) {
+        if (this.partitionedChecks != null && tableSpec.getTimestampColumns() != null &&
+                !Strings.isNullOrEmpty(tableSpec.getTimestampColumns().getPartitionByColumn())) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.partitionedChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.partitionedChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetColumn.getColumnCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, dataTypeCategory, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, tableSpec, dataTypeCategory, dialectSettings);
             }
         }
     }

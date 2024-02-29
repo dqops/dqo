@@ -37,6 +37,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
 import java.util.Map;
@@ -167,10 +168,12 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     /**
      * Copies all configured data quality checks from this root checks container (a container of default checks) to the target container.
      * @param targetChecksContainer Target root checks container to copy the definitions.
+     * @param parentTableSpec The specification of the parent table. Used to verify if the timestamp columns are correctly configured for timeliness checks.
      * @param columnDataTypeCategory Detected data type of a column, if we are applying it on a column.
      * @param dialectSettings Dialect settings.
      */
     public void copyChecksToContainer(AbstractRootChecksContainerSpec targetChecksContainer,
+                                      TableSpec parentTableSpec,
                                       DataTypeCategory columnDataTypeCategory,
                                       ProviderDialectSettings dialectSettings) {
         if (this.isDefault()) {
@@ -208,6 +211,16 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
 
                         Object alreadyConfiguredCheckSpec = defaultChecksEntry.getGetChildFunc().apply(targetCategoryContainer);
                         if (alreadyConfiguredCheckSpec != null) {
+                            continue;
+                        }
+
+                        if (defaultCheck.getParameters().getRequiresEventTimestampColumn() &&
+                                (parentTableSpec.getTimestampColumns() == null || Strings.isNullOrEmpty(parentTableSpec.getTimestampColumns().getEventTimestampColumn()))) {
+                            continue;
+                        }
+
+                        if (defaultCheck.getParameters().getRequiresIngestionTimestampColumn() &&
+                                (parentTableSpec.getTimestampColumns() == null || Strings.isNullOrEmpty(parentTableSpec.getTimestampColumns().getIngestionTimestampColumn()))) {
                             continue;
                         }
 

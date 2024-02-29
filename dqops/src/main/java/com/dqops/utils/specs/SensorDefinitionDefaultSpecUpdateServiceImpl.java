@@ -133,6 +133,8 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
             }
 
             SensorDefinitionSpec sensorDefinitionSpec = sensorDefinitionWrapper.getSpec();
+            sensorDefinitionSpec.setRequiresEventTimestamp(abstractSensorParametersSpec.getRequiresEventTimestampColumn());
+            sensorDefinitionSpec.setRequiresIngestionTimestamp(abstractSensorParametersSpec.getRequiresIngestionTimestampColumn());
 
             List<ParameterDefinitionSpec> fieldDefinitionList = this.specToModelCheckMappingService.createFieldsForSensorParameters(abstractSensorParametersSpec)
                     .stream()

@@ -36,6 +36,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -235,34 +236,35 @@ public class TableDefaultChecksPatternSpec extends AbstractSpec implements Inval
     public void applyOnTable(TableSpec targetTable, ProviderDialectSettings dialectSettings) {
         if (this.profilingChecks != null && !this.profilingChecks.isDefault()) {
             AbstractRootChecksContainerSpec tableProfilingContainer = targetTable.getTableCheckRootContainer(CheckType.profiling, null, true);
-            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, null, dialectSettings);
+            this.profilingChecks.copyChecksToContainer(tableProfilingContainer, targetTable, null, dialectSettings);
         }
 
         if (this.monitoringChecks != null) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.monitoringChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.monitoringChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.monitoring, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
             }
         }
 
-        if (this.partitionedChecks != null) {
+        if (this.partitionedChecks != null && targetTable.getTimestampColumns() != null &&
+                !Strings.isNullOrEmpty(targetTable.getTimestampColumns().getPartitionByColumn())) {
             AbstractRootChecksContainerSpec defaultChecksDaily = this.partitionedChecks.getDaily();
             if (defaultChecksDaily != null && !defaultChecksDaily.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.daily, true);
-                defaultChecksDaily.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksDaily.copyChecksToContainer(targetContainer, targetTable,null, dialectSettings);
             }
 
             AbstractRootChecksContainerSpec defaultChecksMonthly = this.partitionedChecks.getMonthly();
             if (defaultChecksMonthly != null && !defaultChecksMonthly.isDefault()) {
                 AbstractRootChecksContainerSpec targetContainer = targetTable.getTableCheckRootContainer(CheckType.partitioned, CheckTimeScale.monthly, true);
-                defaultChecksMonthly.copyChecksToContainer(targetContainer, null, dialectSettings);
+                defaultChecksMonthly.copyChecksToContainer(targetContainer, targetTable, null, dialectSettings);
             }
         }
     }

@@ -48,7 +48,7 @@ DQOps implements its principal idea by separating the platform into four core co
   The dashboards are accessing the **Data Quality Data Warehouse**.
 
 
-![Data quality platform components](https://dqops.com/docs/images/concepts/dqops_components_min.png)
+![Data quality platform components](https://dqops.com/docs/images/concepts/dqops_components_min2.png)
 
 
 ## DQOps local deployment as a Python package
