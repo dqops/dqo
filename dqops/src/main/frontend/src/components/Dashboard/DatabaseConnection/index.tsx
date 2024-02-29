@@ -105,7 +105,7 @@ const DatabaseConnection = ({
 
   const onSave = async () => {
     if (!database.connection_name) {
-      setNameError('Connection Name is required');
+      setNameError('Connection name is required');
       return;
     }
     if (nameError) {
@@ -349,7 +349,7 @@ const DatabaseConnection = ({
 
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
-          label="Connection Name"
+          label="Connection name"
           className={clsx(
             'mb-4',
             (database.connection_name?.length === 0 ||

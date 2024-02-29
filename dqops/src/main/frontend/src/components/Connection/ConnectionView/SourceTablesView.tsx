@@ -121,13 +121,13 @@ const SourceTablesView = () => {
       <div className="flex justify-end space-x-4 mb-4">
         <Button
           color="primary"
-          label="Select All"
+          label="Select all"
           onClick={selectAll}
           disabled={selectedTables.length === tables.length}
         />
         <Button
           color="primary"
-          label="Unselect All"
+          label="Unselect all"
           onClick={unselectAll}
           disabled={selectedTables.length === 0}
         />
@@ -152,7 +152,7 @@ const SourceTablesView = () => {
           <thead>
             <tr className="border-b border-gray-300">
               <th />
-              <th className="py-2 px-4 text-left">Source Table Name</th>
+              <th className="py-2 px-4 text-left">Source table name</th>
               <th className="py-2 px-4 text-left">Import status</th>
             </tr>
           </thead>

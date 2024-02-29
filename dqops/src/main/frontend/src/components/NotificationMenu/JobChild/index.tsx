@@ -118,13 +118,13 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {job?.parameters?.importSchemaParameters && (
               <>
                 <tr>
-                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">Connection name</td>
                   <td className="px-2">
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">Schema name</td>
                   <td className="px-2">
                     {job?.parameters?.importSchemaParameters?.schemaName}
                   </td>
@@ -173,13 +173,13 @@ const JobChild = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {job?.parameters?.importTableParameters && (
               <>
                 <tr>
-                  <td className="px-2">Connection Name</td>
+                  <td className="px-2">Connection name</td>
                   <td className="px-2">
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
                 <tr>
-                  <td className="px-2">Schema Name</td>
+                  <td className="px-2">Schema name</td>
                   <td className="px-2">
                     {job?.parameters?.importTableParameters?.schemaName}
                   </td>
