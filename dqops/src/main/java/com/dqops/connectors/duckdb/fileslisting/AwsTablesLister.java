@@ -111,7 +111,9 @@ public class AwsTablesLister {
 
             ListObjectsResponse response = s3.listObjects(listObjects);
             for (S3Object content : response.contents()) {
-                paths.add(content.key());
+                if(!content.key().equals(folderPrefix)){
+                    paths.add(content.key());
+                }
             }
             for (CommonPrefix commonPrefix : response.commonPrefixes()) {
                 paths.add(commonPrefix.prefix());
