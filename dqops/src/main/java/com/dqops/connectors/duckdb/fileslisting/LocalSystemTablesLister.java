@@ -59,7 +59,7 @@ public class LocalSystemTablesLister {
 
         String sourceFilesTypeString = filesType.toString();
         return fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
+                || fileName.toLowerCase().endsWith(".gz")
                 || !fileName.contains(".");
     }
 
