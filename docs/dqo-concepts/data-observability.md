@@ -45,6 +45,17 @@ The default data quality checks are automatically activated on all tables and co
 but they can be disabled or reconfigured in the DQOps table configuration files [*.dqotable.yaml*](../reference/yaml/TableYaml.md) 
 as described in the guide for [configuring data quality checks](configuring-data-quality-checks-and-rules.md).
 
+### Automatic activation of checks
+The [data quality check editor](dqops-user-interface-overview.md#check-editor) in DQOps
+shows automatically activated data quality checks as enabled but using a gray color.
+
+When a check is manually enabled on a table or column, DQOps uses the check's parameters from
+the [*.dqotable.yaml*](../reference/yaml/TableYaml.md) file instead of the default configuration from a default check pattern file.
+Disabling a check on the table or column is also possible to prevent it from running.
+
+![Default data observability checks activated on table in DQOps](https://dqops.com/docs/images/concepts/data-observability/default-data-quality-checks-activated-automatically-min.png){ loading=lazy }
+
+
 ### Data quality check patterns
 The default data quality checks are configured in YAML files in the [*patterns* folder](dqops-user-home-folder.md#default-check-patterns). 
 Every configuration is identified by a pattern name and has a set of filters for target tables
@@ -204,13 +215,15 @@ spec:
     connection: "dwh_*"
     schema: "public"
     table: "fact_*"
-    label: "prod"
+    label: "prod" #(1)!
     stage: "landing"
     table_priority: 3
     column: "*_id"
     data_type: "VARCHAR"
     data_type_category: string
 ```
+
+1.  The label fields supports labels defined on the data source, table or column.
 
 The target column parameters are listed in the following table.
 
@@ -221,9 +234,33 @@ The target column parameters are listed in the following table.
 | `data_type_category` | The category of the data type detected by DQOps. DQOps detects a database independent category of the data type.                                    |
 
 
-## Default profiling checks
+## Default table-level checks
+The default configuration of table-level checks that DQOps activates on
+all tables is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
 
-### Table-level
+The configuration can be changed by editing 
+the [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+file directly or using a check pattern editor screen in the Configuration section of 
+the [DQOps user interface](dqops-user-interface-overview.md#configuration-tree-view).
+
+The content of the default [*patterns/default.dqotablepattern.yaml*](../reference/yaml/TableDefaultChecksPatternYaml.md)
+file is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
+
+### Default profiling checks
+The default configuration of table-level [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md)
+focuses on capturing the most basic metrics of imported tables usable for [initial data profiling of new data sources](definition-of-data-quality-kpis.md#profile-tables).
+
+The default table-level profiling checks are described in the table below.
+
+| Category                                                                                            | Data quality check                                                                                                                 | Description                                                                                                                                                                                                                              | Data quality rule                                                  |
+|-----------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------|
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)      | <span class="no-wrap-code ">[`profile_row_count`](../checks/table/volume/row-count.md#profile-row-count)</span>                    | Captures the row count of the table and identifies empty tables.                                                                                                                                                                         | Raises a *warning* severity issue when an empty table is detected. |
+| [timeliness](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md) | <span class="no-wrap-code ">[`profile_data_freshness`](../checks/table/timeliness/data-freshness.md#profile-data-freshness)</span> | Measures the freshness of the table. The table must be properly configured to [support timeliness checks](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md#configure-dqops-for-timeliness-checks).  | _no rules_                                                         |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                | <span class="no-wrap-code ">[`profile_column_count`](../checks/table/schema/column-count.md#profile-column-count)</span>           | Captures the column count in the table.                                                                                                                                                                                                  | _no rules_                                                         |
+
+
+The following extract of the *patterns/default.dqotablepattern.yaml* file shows the configuration
+of the default table-level [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md).
 
 ``` { .yaml linenums="1" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
@@ -241,27 +278,30 @@ spec:
       profile_column_count: {}
 ```
 
-### Column-level
+### Default daily monitoring checks
+The default configuration of table-level [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md)
+focuses on anomaly detection, schema change detection, monitoring data freshness (timeliness),
+and detecting issues with table availability.
 
-``` { .yaml linenums="1" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
-apiVersion: dqo/v1
-kind: default_column_checks
-spec:
-  profiling_checks:
-    nulls:
-      profile_nulls_count:
-        warning:
-          max_count: 0
-      profile_nulls_percent: {}
-      profile_not_nulls_count:
-        warning:
-          min_count: 1
-```
+The default table-level monitoring checks are described in the table below.
 
-## Default daily monitoring checks
+| Category                                                                                               | Data quality check                                                                                                                                                   | Description                                                                                                                                                                                                                                                              | Data quality rule                                                                                                                        |
+|--------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------|
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_row_count`](../checks/table/volume/row-count.md#daily-row-count)</span>                                                          | Captures the daily row count of the table and identifies empty tables.                                                                                                                                                                                                   | Raises a *warning* severity issue when an empty table is detected.                                                                       |
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_row_count_anomaly`](../checks/table/volume/row-count-anomaly.md#daily-row-count-anomaly)</span>                                  | Detects anomalies in table volume (table's row count). Identifies the most significant volume increases or decreases since the previous day or the last known row count.                                                                                                 | Raises a *warning* severity issue when the increase or decrease in row count is in the top 1% of the biggest day-to-day changes.         |
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_row_count_change`](../checks/table/volume/row-count-change.md#daily-row-count-change)</span>                                     | Detects significant changes in the table volume measured as a percentage increase or decrease in the row count.                                                                                                                                                          | Raises a *warning* severity issue when the increase or decrease in row count since yesterday (or the last known row count) is above 10%. |
+| [timeliness](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)    | <span class="no-wrap-code ">[`daily_data_freshness`](../checks/table/timeliness/data-freshness.md#daily-data-freshness)</span>                                       | Measures the freshness of the table. The table must be properly configured to [support timeliness checks](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md#configure-dqops-for-timeliness-checks).                                  | Raises a *warning* severity issue when the data is outdated by two days.                                                                 |
+| [timeliness](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md)    | <span class="no-wrap-code ">[`daily_data_staleness`](../checks/table/timeliness/data-staleness.md#daily-data-staleness)</span>                                       | Measures the staleness (the time since the last update) of the table. The table must be properly configured to [support timeliness checks](../categories-of-data-quality-checks/how-to-detect-timeliness-and-freshness-issues.md#configure-dqops-for-timeliness-checks). | Raises a *warning* severity issue when the data has not been loaded or updated for two days.                                             |
+| [availability](../categories-of-data-quality-checks/how-to-table-availability-issues-and-downtimes.md) | <span class="no-wrap-code ">[`daily_table_availability`](../checks/table/availability/table-availability.md#daily-table-availability)</span>                         | Verifies the availability of the table by running a simple query. Detects when the table is missing or not accessible due to invalid credentials or missing permission issues                                                                                            | Raises a *warning* severity issue when the table is not available, the table is missing, or the credentials are outdated.                |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                   | <span class="no-wrap-code ">[`daily_column_count`](../checks/table/schema/column-count.md#daily-column-count)</span>                                                 | Captures the column count in the table and stores the value in the data quality data warehouse.                                                                                                                                                                          | _no rules_                                                                                                                               |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                   | <span class="no-wrap-code ">[`daily_column_count_changed`](../checks/table/schema/column-count-changed.md#daily-column-count-changed)</span>                         | Monitors the table's schema and detects when the column count has changed since the previous day or the last known column count.                                                                                                                                         | Raises a *warning* severity issue when the column count has changed since the last known column count value.                             |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                   | <span class="no-wrap-code ">[`daily_column_list_changed`](../checks/table/schema/column-list-changed.md#daily-column-list-changed)</span>                            | Monitors the table's schema and detects when the list of columns has changed. Detects that new columns were added or removed since the previous day or the last known column list but does not care about the order of columns.                                          | Raises a *warning* severity issue when any columns are added or removed.                                                                 |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                   | <span class="no-wrap-code ">[`daily_column_list_or_order_changed`](../checks/table/schema/column-list-or-order-changed.md#daily-column-list-or-order-changed)</span> | Monitors the table's schema and detects when the list or order of columns has changed. Detects that new columns were added, reordered or removed since the previous day or the last known column list.                                                                   | Raises a *warning* severity issue when any columns are added or removed or any column changes the position in the table.                 |
+| [schema](../categories-of-data-quality-checks/how-to-detect-table-schema-changes.md)                   | <span class="no-wrap-code ">[`daily_column_types_changed`](../checks/table/schema/column-types-changed.md#daily-column-types-changed)</span>                         | Monitors the table's schema and detects when the physical data types of columns have changed. It also detects whether columns were added or removed since the previous day or the last known column list. This check does not care about the order of columns.           | Raises a *warning* severity issue when any columns are added or removed or the physical data type of any column is changed.              |
 
-### Table-level
+
+The following extract of the *patterns/default.dqotablepattern.yaml* file shows the configuration
+of the default table-level [monitoring checks](definition-of-data-quality-checks/data-observability-monitoring-checks.md).
 
 ``` { .yaml linenums="1" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
@@ -303,8 +343,84 @@ spec:
           warning: {}
 ```
 
+### Default partition checks
+The default configuration of table-level [partition checks](definition-of-data-quality-checks/partition-checks.md)
+focuses on analyzing the volume of daily partitions, especially detecting anomalies such as too-big or too-small partitions.
 
-### Column-level
+The default table-level partition checks are described in the table below.
+
+| Category                                                                                               | Data quality check                                                                                                                                      | Description                                                                                                                                                                      | Data quality rule                                                                                                                                    |
+|--------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_partition_row_count`](../checks/table/volume/row-count.md#daily-partition-row-count)</span>                         | Captures the volume (row count) of daily partitions. The partition volume can be reviewed on the DQOps data quality dashboards.                                                  | _no rules_                                                                                                                                           |
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_partition_row_count_anomaly`](../checks/table/volume/row-count-anomaly.md#daily-partition-row-count-anomaly)</span> | Detects anomalies in partition volume (partition's row count). Identifies the most significant volume increases or decreases since the previous day or the last known row count. | Raises a *warning* severity issue when the increase or decrease in partition's row count is in the top 1% of the biggest day-to-day changes.         |
+| [volume](../categories-of-data-quality-checks/how-to-detect-data-volume-issues-and-changes.md)         | <span class="no-wrap-code ">[`daily_partition_row_count_change`](../checks/table/volume/row-count-change.md#daily-partition-row-count-change)</span>    | Detects significant changes in the partition volume measured as a percentage increase or decrease in the row count compared to the previous daily partition.                     | Raises a *warning* severity issue when the increase or decrease in partition's row count since yesterday (or the last known row count) is above 10%. |
+
+The following extract of the *patterns/default.dqotablepattern.yaml* file shows the configuration
+of the default table-level [partition checks](definition-of-data-quality-checks/partition-checks.md).
+
+``` { .yaml linenums="1" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_table_checks
+spec:
+  partitioned_checks:
+    daily:
+      volume:
+        daily_partition_row_count: {}
+        daily_partition_row_count_anomaly:
+          warning:
+            anomaly_percent: 1.0
+        daily_partition_row_count_change:
+          warning:
+            max_percent: 10.0
+```
+
+
+## Default column-level checks
+The default configuration of column-level checks that DQOps activates on
+all column is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
+
+The configuration can be changed by editing
+the [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+file directly or using a check pattern editor screen in the Configuration section of
+the [DQOps user interface](dqops-user-interface-overview.md#configuration-tree-view).
+
+The content of the default [*patterns/default.dqocolumnpattern.yaml*](../reference/yaml/ColumnDefaultChecksPatternYaml.md)
+file is described below for each [type of data quality check](definition-of-data-quality-checks/index.md#types-of-checks).
+
+
+### Default profiling checks
+The default configuration of column-level [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md)
+focuses on detecting empty or partially incomplete columns that is usable for [initial data profiling of new data sources](definition-of-data-quality-kpis.md#profile-tables).
+
+The default column-level profiling checks are described in the table below.
+
+| Category                                                                                              | Data quality check                                                                                                                | Description                                                                                                  | Data quality rule                                                                                |
+|-------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md) | <span class="no-wrap-code ">[`profile_nulls_count`](../checks/column/nulls/nulls-count.md#profile-nulls-count)</span>             | Counts null values in a monitored column. Detects partially incomplete columns that contain any null values. | Raises a *warning* severity issue when null values are detected in a column.                     |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md) | <span class="no-wrap-code ">[`profile_nulls_percent`](../checks/column/nulls/nulls-percent.md#profile-nulls-percent)</span>       | Measures the percentage of null values in a column.                                                          | _no rules_                                                                                       |
+| [nulls](../categories-of-data-quality-checks/how-to-detect-empty-or-incomplete-columns-with-nulls.md) | <span class="no-wrap-code ">[`profile_not_nulls_count`](../checks/column/nulls/not-nulls-count.md#profile-not-nulls-count)</span> | Detects empty columns by counting not null values.                                                           | Raises a *warning* severity issue when an empty column containing only null values is detected.  |
+
+The following extract of the *patterns/default.dqocolumnpattern.yaml* file shows the configuration
+of the default column-level [profiling checks](definition-of-data-quality-checks/data-profiling-checks.md).
+
+``` { .yaml linenums="1" }
+# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
+apiVersion: dqo/v1
+kind: default_column_checks
+spec:
+  profiling_checks:
+    nulls:
+      profile_nulls_count:
+        warning:
+          max_count: 0
+      profile_nulls_percent: {}
+      profile_not_nulls_count:
+        warning:
+          min_count: 1
+```
+
+### Default daily monitoring checks
 
 ``` { .yaml linenums="1" }
 # yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/ColumnDefaultChecksPatternYaml-schema.json
@@ -345,79 +461,6 @@ spec:
           warning: {} 
 ```
 
-
-## Default partition checks
-
-### Table-level
-
-``` { .yaml linenums="1" }
-# yaml-language-server: $schema=https://cloud.dqops.com/dqo-yaml-schema/TableDefaultChecksPatternYaml-schema.json
-apiVersion: dqo/v1
-kind: default_table_checks
-spec:
-  partitioned_checks:
-    daily:
-      volume:
-        daily_partition_row_count: {}
-        daily_partition_row_count_anomaly:
-          warning:
-            anomaly_percent: 1.0
-        daily_partition_row_count_change:
-          warning:
-            max_percent: 10.0
-```
-
-
-### Column-level
-The default configuration of partition checks do not activate any column-level checks.
-
-
-## List of default observability checks
-The following table shows a list of default data quality checks and describes their purpose.
-
-### **Profiling checks type**
-
-| Target | Check name                                                           | Description                                                                                                                                        |
-|--------|----------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [profile row count](../checks/table/volume/row-count.md)             | Counts the number of rows in a table.                                                                                                              |
-| table  | [profile column count](../checks/table/schema/column-count.md)       | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| column | [profile nulls count](../checks/column/nulls/nulls-count.md)         | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [profile nulls percent](../checks/column/nulls/nulls-percent.md)     | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
-| column | [profile_not_nulls_count](../checks/column/nulls/not-nulls-count.md) | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-
-### **Daily monitoring checks type**
-
-| Target | Check name                                                                                                | Description                                                                                                                                        |
-|--------|-----------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------|
-| table  | [daily row count](../checks/table/volume/row-count.md)                                                    | Counts the number of rows in a table.                                                                                                              |
-| table  | [daily row count anomaly](../checks/table/volume/row-count-anomaly.md)                                    | Ensures that the row count is within a two-tailed percentile from measurements made during the last 90 days.                                       |
-| table  | [daily row count change](../checks/table/volume/row-count-change.md)                                      | Ensures that the row count changed by a fixed rate since the last readout.                                                                         |
-| table  | [daily table availability](../checks/table/availability/table-availability.md)                            | Verifies that a table exists, can be accessed, and queried without errors.                                                                         |
-| table  | [daily column count](../checks/table/schema/column-count.md)                                              | Retrieves the metadata of the monitored table from the data source, counts the number of columns and compares it to an expected number of columns. |
-| table  | [daily column count changed](../checks/table/schema/column-count-changed.md)                              | Detects whether the number of columns in a table has changed since the last time the check (checkpoint) was run.                                   |
-| table  | [daily column list changed](../checks/table/schema/column-list-changed.md)                                | Detects if the list of columns has changed since the last time the check was run.                                                                  |
-| table  | [daily column list or order changed](../checks/table/schema/column-list-or-order-changed.md)              | Detects whether the list of columns and the order of columns have changed since the last time the check was run.                                   |
-| table  | [daily column types changed](../checks/table/schema/column-types-changed.md)                              | Detects if the column names or column types have changed since the last time the check was run.                                                    |
-| column | [daily nulls count](../checks/column/nulls/nulls-count.md)                                                | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [daily nulls percent](../checks/column/nulls/nulls-percent.md)                                            | Ensures that there are no more than a set percentage of null values in the monitored column.                                                       |
-| column | [daily not nulls count](../checks/column/nulls/not-nulls-count.md)                                        | Ensures that there are no more than a set number of null values in the monitored column.                                                           |
-| column | [daily not nulls percent](../checks/column/nulls/not-nulls-percent.md)                                    | Ensures that there are no more than a set percentage of not null values in the monitored column.                                                   |
-| column | [daily nulls percent anomaly](../checks/column/nulls/nulls-percent-anomaly.md)                            | Ensures that the null percent value in a monitored column is within a two-tailed percentile from measurements made during the last 90 days.        |
-| column | [daily nulls percent change 1 day](../checks/column/nulls/nulls-percent-change-1-day.md)                  | Ensures that the null percent in a monitored column has changed by a fixed rate since the last readout from yesterday.                             |
-| column | [daily_distinct_count_anomaly](../checks/column/uniqueness/distinct-count-anomaly.md)                     | Ensures that the distinct count in a monitored column is within a two-tailed percentile from measurements made during the last 90 days             |
-| column | [daily detected datatype in text changed](../checks/column/datatype/detected-datatype-in-text-changed.md) | Scans all values in a string column and detects the data type of all values in a column.                                                           |
-| column | [daily column exists](../checks/column/schema/column-exists.md)                                           | Reads the metadata of the monitored table and verifies that the column still exists in the data source.                                            |
-| column | [daily column type changed](../checks/column/schema/column-type-changed.md)                               | Detects if the data type of the column has changed since the last time it was retrieved.                                                           |
-
-### **Column type specific checks**
-DQOps uses the imported data type of the column to decide what type of type specific default checks are enabled.
-
-The following default checks are enabled only on text or numeric columns.
-
-| Numeric columns                                                | Text columns                                                                                              |
-|----------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| [daily mean anomaly](../checks/column/anomaly/mean-anomaly.md) | [daily detected datatype_in_text changed](../checks/column/datatype/detected-datatype-in-text-changed.md) |
-| [daily sum anomaly](../checks/column/anomaly/sum-anomaly.md)   |                                                                                                           |
 
 ## Modify configuration of default checks
 
