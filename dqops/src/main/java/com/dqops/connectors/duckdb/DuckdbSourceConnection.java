@@ -30,6 +30,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -331,7 +332,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         try {
             for (String tableName : tableNames) {
                 TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
-                if (physicalTableNameToTableSpec.get(tableName) == null){
+                if (tableSpecTemp == null){
                     tableSpecTemp = new TableSpec();
                     tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
                 }
@@ -342,39 +343,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                 }
                 Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
 
+                TableSpec tableSpec = prepareNewTableSpec(tableSpecTemp.deepClone(), fileFormatSpec.getFilePaths());
+                tableSpecs.add(tableSpec);
+
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
                     column.setName(column.name().toLowerCase(Locale.ROOT));
                 }
 
-
                 for (Row colRow : tableResult) {
-                    String physicalTableName = tableSpecTemp.getPhysicalTableName().getTableName();
                     String columnName = colRow.getString("column_name");
-                    boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
-
-                        tableSpec = new TableSpec();
-                        tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
-                        tablesByTableName.put(physicalTableName, tableSpec);
-
-                        tableSpec.setFileFormat(
-                                tableSpecTemp.getFileFormat() == null
-                                        ? new FileFormatSpec()
-                                        : tableSpecTemp.getFileFormat().deepClone()
-                        );
-
-                        FileFormatSpec newFileFormat = tableSpec.getFileFormat();
-                        if(newFileFormat.getFilePaths().isEmpty()){
-                            tableSpec.getFileFormat().getFilePaths().addAll(fileFormatSpec.getFilePaths());
-                        }
-                        tableSpecs.add(tableSpec);
-
-                    ColumnSpec columnSpec = new ColumnSpec();
-                    ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
-
-                    columnType.setNullable(isNullable);
-                    columnSpec.setTypeSnapshot(columnType);
+                    boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
+                    ColumnSpec columnSpec = prepareColumnSpec(dataType, isNullable);
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
 
@@ -384,6 +365,33 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             throw new RuntimeException(e);
         }
     }
+
+    // todo
+    private ColumnSpec prepareColumnSpec(String dataType, boolean isNullable){
+        ColumnSpec columnSpec = new ColumnSpec();
+        ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+        columnType.setNullable(isNullable);
+        columnSpec.setTypeSnapshot(columnType);
+        return columnSpec;
+    }
+
+    // todo
+    private TableSpec prepareNewTableSpec(TableSpec tableSpecTemp, FilePathListSpec filePaths){
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setPhysicalTableName(tableSpecTemp.getPhysicalTableName());
+        tableSpec.setFileFormat(
+                tableSpecTemp.getFileFormat() == null
+                        ? new FileFormatSpec()
+                        : tableSpecTemp.getFileFormat()
+        );
+
+        FileFormatSpec newFileFormat = tableSpec.getFileFormat();
+        if(newFileFormat.getFilePaths().isEmpty()){
+            tableSpec.getFileFormat().getFilePaths().addAll(filePaths);
+        }
+        return tableSpec;
+    }
+
 
     /**
      * Retrieves a table result depending on the source files type.
