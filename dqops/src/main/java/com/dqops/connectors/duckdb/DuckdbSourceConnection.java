@@ -30,10 +30,6 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +38,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
@@ -219,60 +214,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             return;
         }
 
-        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-        fillSpecWithDefaultCredentials(connectionSpec.getDuckdb(), secretValueLookupContext);
+        ConnectionSpec connectionSpecCloned = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        connectionSpecCloned.getDuckdb().fillSpecWithDefaultCredentials(secretValueLookupContext);
 
         try {
             // todo: can be used with duckdb 0.10 when aws extension is fixed,
             //  then search for makeFilePathsAccessible which solves secrets for 0.9.2 version
-//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
+//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpecCloned, this);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Fills DuckDB parameters spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
-     *
-     * @param duckdb DuckdbParametersSpec
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
-     */
-    private void fillSpecWithDefaultCredentials(DuckdbParametersSpec duckdb, SecretValueLookupContext secretValueLookupContext){
-        DuckdbSecretsType secretsType = duckdb.getSecretsType();
-
-        switch (secretsType){
-            case s3:
-                if(Strings.isNullOrEmpty(duckdb.getAwsAccessKeyId()) || Strings.isNullOrEmpty(duckdb.getAwsSecretAccessKey())){
-                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                    if(credentialProfile.isPresent()){
-                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(!Strings.isNullOrEmpty(duckdb.getAwsAccessKeyId()) && accessKeyId.isPresent()){
-                            String awsAccessKeyId = accessKeyId.get();
-                            duckdb.setUser(awsAccessKeyId);
-                        }
-                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(!Strings.isNullOrEmpty(duckdb.getAwsSecretAccessKey()) && secretAccessKey.isPresent()){
-                            String awsSecretAccessKey = secretAccessKey.get();
-                            duckdb.setPassword(awsSecretAccessKey);
-                        }
-                    }
-                }
-
-                if(Strings.isNullOrEmpty(duckdb.getUser())){
-                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
-                    if(configProfile.isPresent()){
-                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
-                        if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
-                            String awsRegion = region.get();
-                            duckdb.setRegion(awsRegion);
-                        }
-                    }
-                }
-
-                break;
-            default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
         }
     }
 
@@ -329,16 +280,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         if(secretsType == null){
             List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
             return sourceTableModels;
-        } else {
-            DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-            fillSpecWithDefaultCredentials(duckdbCloned, secretValueLookupContext);
-            switch (secretsType){
-                case s3:
-                    List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
-                    return sourceTableModels;
-                default:
-                    throw new RuntimeException("This type of secretsType is not supported: " + secretsType);
-            }
+        }
+
+        DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        duckdbCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
+        switch (secretsType){
+            case s3:
+                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
+                return sourceTableModels;
+            default:
+                throw new RuntimeException("This type of secretsType is not supported: " + secretsType);
         }
     }
 
