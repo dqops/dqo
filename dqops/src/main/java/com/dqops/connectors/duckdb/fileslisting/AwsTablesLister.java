@@ -19,7 +19,6 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -51,30 +50,27 @@ public class AwsTablesLister {
         List<String> files = listBucketObjects(s3Client, s3Uri);
         s3Client.close();
 
-        List<SourceTableModel> sourceTableModels = makeSourceTableModelsFromListOfFiles(duckdb, files, schemaName);
+        List<SourceTableModel> sourceTableModels = filterAndTransform(duckdb, files, schemaName);
         return sourceTableModels;
     }
 
     /**
-     * Transforms list of files available in s3 to list of SourceTableModel
+     * Transforms list of files available in s3 to list of SourceTableModel and filters to valid objects that can be directories or files with a specific extension.
      * @param duckdb DuckdbParametersSpec
      * @param files List of files from s3
      * @param schemaName Name of schema
      * @return The list of SourceTableModel
      */
-    private static List<SourceTableModel> makeSourceTableModelsFromListOfFiles(
-            DuckdbParametersSpec duckdb, List<String> files, String schemaName){
-
-        List<SourceTableModel> sourceTableModels = files.stream().map(file -> {
-            if(!isFolderOrFileOfValidExtension(file, duckdb.getSourceFilesType())) {
-                return null;
-            }
-            String cleanedFilePath = file.endsWith("/") ? file.substring(0, file.length() - 1) : file;
-            String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
-            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
-            SourceTableModel sourceTableModel = new SourceTableModel(schemaName, physicalTableName);
-            return sourceTableModel;
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+    public static List<SourceTableModel> filterAndTransform(DuckdbParametersSpec duckdb, List<String> files, String schemaName){
+        List<SourceTableModel> sourceTableModels = files.stream()
+                .filter(file -> isFolderOrFileOfValidExtension(file, duckdb.getSourceFilesType()))
+                .map(file -> {
+                        String cleanedFilePath = file.endsWith("/") ? file.substring(0, file.length() - 1) : file;
+                        String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
+                        PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
+                        SourceTableModel sourceTableModel = new SourceTableModel(schemaName, physicalTableName);
+                        return sourceTableModel;
+                }).collect(Collectors.toList());
         return sourceTableModels;
     }
 
