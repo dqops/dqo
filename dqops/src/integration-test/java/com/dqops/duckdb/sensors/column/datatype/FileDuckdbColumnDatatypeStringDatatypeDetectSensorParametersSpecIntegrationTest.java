@@ -56,7 +56,6 @@ public class FileDuckdbColumnDatatypeStringDatatypeDetectSensorParametersSpecInt
         this.checkSpec.setParameters(this.sut);
     }
 
-    // todo: tests invalidly generate table name, there is a missing table name
     @Test
     void runSensor_whenSensorExecutedProfilingAndCheckIntDataType_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
