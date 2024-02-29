@@ -11,10 +11,7 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Uri;
 import software.amazon.awssdk.services.s3.S3Utilities;
-import software.amazon.awssdk.services.s3.model.CommonPrefix;
-import software.amazon.awssdk.services.s3.model.ListObjectsRequest;
-import software.amazon.awssdk.services.s3.model.ListObjectsResponse;
-import software.amazon.awssdk.services.s3.model.S3Exception;
+import software.amazon.awssdk.services.s3.model.*;
 
 import java.net.URI;
 import java.util.ArrayList;
@@ -28,7 +25,7 @@ import java.util.stream.Collectors;
 public class AwsTablesLister {
 
     /**
-     * Returns list of SourceTableModel from remote storag - AWS s3
+     * Returns list of SourceTableModel from remote storage - AWS s3
      * @param duckdb DuckdbParametersSpec
      * @param schemaName The name of a virtual schema.
      * @return The list of SourceTableModel.
@@ -83,7 +80,7 @@ public class AwsTablesLister {
     private static boolean isFolderOrFileOfValidExtension(String storageObjectName, DuckdbSourceFilesType filesType){
         String sourceFilesTypeString = filesType.toString();
         return storageObjectName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                || storageObjectName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
+                || storageObjectName.toLowerCase().endsWith(".gz")
                 || storageObjectName.endsWith("/");
     }
 
@@ -94,15 +91,15 @@ public class AwsTablesLister {
      * @return The list of objects in S3
      */
     private static List<String> listBucketObjects(S3Client s3, S3Uri s3Uri) {
-        List<String> prefixes = new ArrayList<>();
+        List<String> paths = new ArrayList<>();
 
         if(s3Uri.bucket().isEmpty()){
-            return prefixes;
+            return paths;
         }
 
         String bucketName = s3Uri.bucket().get();
         String prefixRaw = s3Uri.key().orElse("");
-        String folderPrefix = prefixRaw + (prefixRaw.endsWith("/") ? "" : "/");
+        String folderPrefix = prefixRaw + (prefixRaw.equals("") || prefixRaw.endsWith("/") ? "" : "/");
 
         try {
             ListObjectsRequest listObjects = ListObjectsRequest
@@ -112,15 +109,17 @@ public class AwsTablesLister {
                     .prefix(folderPrefix)
                     .build();
 
-            ListObjectsResponse res = s3.listObjects(listObjects);
-            List<CommonPrefix> commonPrefixes = res.commonPrefixes();
-            for (CommonPrefix commonPrefix : commonPrefixes) {
-                prefixes.add(commonPrefix.prefix());
+            ListObjectsResponse response = s3.listObjects(listObjects);
+            for (S3Object content : response.contents()) {
+                paths.add(content.key());
+            }
+            for (CommonPrefix commonPrefix : response.commonPrefixes()) {
+                paths.add(commonPrefix.prefix());
             }
         } catch (S3Exception e) {
             log.error(e.awsErrorDetails().errorMessage());
         }
-        return prefixes;
+        return paths;
     }
 
 }
