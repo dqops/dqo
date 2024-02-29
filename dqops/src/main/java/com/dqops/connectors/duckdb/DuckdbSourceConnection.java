@@ -329,22 +329,23 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     ));
         }
 
-        try {
-            for (String tableName : tableNames) {
-                TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
-                if (tableSpecTemp == null){
-                    tableSpecTemp = new TableSpec();
-                    tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
-                }
+        for (String tableName : tableNames) {
+            TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
+            if (tableSpecTemp == null){
+                tableSpecTemp = new TableSpec();
+                tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+            }
 
-                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
-                if(fileFormatSpec == null){
-                    return tableSpecs;
-                }
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+            if(fileFormatSpec == null){
+                return tableSpecs;
+            }
+
+            TableSpec tableSpec = prepareNewTableSpec(tableSpecTemp.deepClone(), fileFormatSpec.getFilePaths());
+            tableSpecs.add(tableSpec);
+
+            try {
                 Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
-
-                TableSpec tableSpec = prepareNewTableSpec(tableSpecTemp.deepClone(), fileFormatSpec.getFilePaths());
-                tableSpecs.add(tableSpec);
 
                 Column<?>[] columns = tableResult.columnArray();
                 for (Column<?> column : columns) {
@@ -358,12 +359,14 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     ColumnSpec columnSpec = prepareColumnSpec(dataType, isNullable);
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
-
+            } catch (Exception e){
+                if(!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
+                    throw new RuntimeException(e);
+                }
             }
-            return tableSpecs;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
         }
+        return tableSpecs;
     }
 
     // todo
