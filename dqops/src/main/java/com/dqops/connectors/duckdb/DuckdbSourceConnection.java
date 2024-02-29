@@ -347,7 +347,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     column.setName(column.name().toLowerCase(Locale.ROOT));
                 }
 
-                HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
 
                 for (Row colRow : tableResult) {
                     String physicalTableName = tableSpecTemp.getPhysicalTableName().getTableName();
@@ -355,8 +354,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
 
-                    TableSpec tableSpec = tablesByTableName.get(physicalTableName);
-                    if (tableSpec == null) {
                         tableSpec = new TableSpec();
                         tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                         tablesByTableName.put(physicalTableName, tableSpec);
@@ -372,7 +369,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                             tableSpec.getFileFormat().getFilePaths().addAll(fileFormatSpec.getFilePaths());
                         }
                         tableSpecs.add(tableSpec);
-                    }
 
                     ColumnSpec columnSpec = new ColumnSpec();
                     ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
