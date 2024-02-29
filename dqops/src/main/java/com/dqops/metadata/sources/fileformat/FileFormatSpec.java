@@ -167,10 +167,9 @@ public class FileFormatSpec extends AbstractSpec {
                     newPath.append("?");
                     newPath.append("s3_access_key_id=").append(duckdb.getUser());
                     newPath.append("&");
-                    newPath.append("s3_secret_access_key=").append(duckdb.getPassword());
+                    newPath.append("s3_secret_access_key=").append(duckdb.getPassword().replace("/", "%2F"));   // todo: url encoding do not work since not only slash (/) char is replaced but also the plus (+). Replacing plus to %2B do not pass through duckdb due to HTTP GET error
                     newPath.append("&");
                     newPath.append("s3_region=").append(duckdb.getRegion());
-
                     accessibleFilePaths.add(newPath.toString());
                 });
                 break;

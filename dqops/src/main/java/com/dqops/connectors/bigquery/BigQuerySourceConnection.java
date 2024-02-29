@@ -159,7 +159,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         try {
             List<SourceTableModel> tables = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();

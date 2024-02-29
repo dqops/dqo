@@ -218,7 +218,7 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
         ProviderType providerType = expandedConnectionSpec.getProviderType();
         ConnectionProvider connectionProvider = this.connectionProviderRegistry.getConnectionProvider(providerType);
         try (SourceConnection sourceConnection = connectionProvider.createConnection(expandedConnectionSpec, true, secretValueLookupContext)) {
-            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName);
+            List<SourceTableModel> schemaModels = sourceConnection.listTables(schemaName, secretValueLookupContext);
             if (schemaModels.size() == 0) {
                 cliOperationStatus.setFailedMessage("No schemas found in the data source");
                 return cliOperationStatus;

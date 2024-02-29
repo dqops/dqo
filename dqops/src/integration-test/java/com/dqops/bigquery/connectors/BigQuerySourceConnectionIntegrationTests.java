@@ -103,7 +103,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void listTables_whenSchemaListed_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
 
         Assertions.assertTrue(tables.size() > 0);
     }
@@ -112,7 +112,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
         ArrayList<String> tableNames = new ArrayList<>();
         tableNames.add(tables.get(0).getTableName().getTableName());
 
@@ -127,7 +127,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
 		this.sut.open(this.secretValueLookupContext);
         String expectedSchema = SampleTableMetadataObjectMother.getSchemaForProvider(connectionSpec);
-        List<SourceTableModel> tables = this.sut.listTables(expectedSchema);
+        List<SourceTableModel> tables = this.sut.listTables(expectedSchema, secretValueLookupContext);
         List<String> tableNames = tables.stream()
                 .map(m -> m.getTableName().getTableName())
                 .collect(Collectors.toList());

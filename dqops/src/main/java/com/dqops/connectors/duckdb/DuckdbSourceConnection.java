@@ -17,6 +17,8 @@ package com.dqops.connectors.duckdb;
 
 import com.dqops.connectors.SourceSchemaModel;
 import com.dqops.connectors.SourceTableModel;
+import com.dqops.connectors.duckdb.fileslisting.AwsTablesLister;
+import com.dqops.connectors.duckdb.fileslisting.LocalSystemTablesLister;
 import com.dqops.connectors.jdbc.AbstractJdbcSourceConnection;
 import com.dqops.connectors.jdbc.JdbcConnectionPool;
 import com.dqops.connectors.jdbc.JdbcQueryFailedException;
@@ -28,26 +30,18 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsConfigProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsCredentialProfileSettingNames;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultConfigProfileProvider;
-import com.dqops.metadata.storage.localfiles.credentials.aws.AwsDefaultCredentialProfileProvider;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import software.amazon.awssdk.profiles.Profile;
 import tech.tablesaw.api.Row;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 
-import java.io.File;
-import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -220,60 +214,16 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             return;
         }
 
-        ConnectionSpec connectionSpec = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
-        fillSpecWithDefaultCredentials(connectionSpec, secretValueLookupContext);
+        ConnectionSpec connectionSpecCloned = getConnectionSpec().expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        connectionSpecCloned.getDuckdb().fillSpecWithDefaultCredentials(secretValueLookupContext);
 
         try {
-            // todo: use the below method with duckdb 0.10 when aws extension is fixed
-//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpec, this);
+            // todo: can be used with duckdb 0.10 when aws extension is fixed,
+            //  then search for makeFilePathsAccessible which solves secrets for 0.9.2 version
+//             DuckdbSecretManager.getInstance().ensureCreated(connectionSpecCloned, this);
 
         } catch (Exception e) {
             throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Fills DuckDB parameters spec with the default credentials (when not set) for a cloud storage when any cloud storage is used.
-     *
-     * @param connectionSpec ConnectionSpec with filled the object type of DuckdbParametersSpec.
-     * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
-     */
-    private void fillSpecWithDefaultCredentials(ConnectionSpec connectionSpec, SecretValueLookupContext secretValueLookupContext){
-        DuckdbParametersSpec duckdb = connectionSpec.getDuckdb();
-        DuckdbSecretsType secretsType = duckdb.getSecretsType();
-
-        switch (secretsType){
-            case s3:
-                if(Strings.isNullOrEmpty(duckdb.getUser()) || Strings.isNullOrEmpty(duckdb.getPassword())){
-                    Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
-                    if(credentialProfile.isPresent()){
-                        Optional<String> accessKeyId = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_ACCESS_KEY_ID);
-                        if(!Strings.isNullOrEmpty(duckdb.getUser()) && accessKeyId.isPresent()){
-                            String awsAccessKeyId = accessKeyId.get();
-                            duckdb.setUser(awsAccessKeyId);
-                        }
-                        Optional<String> secretAccessKey = credentialProfile.get().property(AwsCredentialProfileSettingNames.AWS_SECRET_ACCESS_KEY);
-                        if(!Strings.isNullOrEmpty(duckdb.getPassword()) && secretAccessKey.isPresent()){
-                            String awsSecretAccessKey = secretAccessKey.get();
-                            duckdb.setPassword(awsSecretAccessKey);
-                        }
-                    }
-                }
-
-                if(Strings.isNullOrEmpty(duckdb.getUser())){
-                    Optional<Profile> configProfile = AwsDefaultConfigProfileProvider.provideProfile(secretValueLookupContext);
-                    if(configProfile.isPresent()){
-                        Optional<String> region = configProfile.get().property(AwsConfigProfileSettingNames.REGION);
-                        if(!Strings.isNullOrEmpty(duckdb.getRegion()) && region.isPresent()){
-                            String awsRegion = region.get();
-                            duckdb.setRegion(awsRegion);
-                        }
-                    }
-                }
-
-                break;
-            default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
         }
     }
 
@@ -310,51 +260,37 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
     }
 
     /**
-     * Lists tables inside a schema and userhome's dqotables for the connection. Views are also returned.
+     * Lists tables inside a schema.
      *
      * @param schemaName Schema name.
      * @return List of tables in the given schema.
      */
     @Override
-    public List<SourceTableModel> listTables(String schemaName) {
+    public List<SourceTableModel> listTables(String schemaName, SecretValueLookupContext secretValueLookupContext) {
         DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
         if(duckdb.getReadMode().equals(DuckdbReadMode.in_memory)){
-            List<SourceTableModel> sourceTableModels = super.listTables(schemaName);
+            List<SourceTableModel> sourceTableModels = super.listTables(schemaName, secretValueLookupContext);
             return sourceTableModels;
         }
-
-        List<SourceTableModel> sourceTableModels = new ArrayList<>();
         if(duckdb == null || duckdb.getSourceFilesType() == null){
-            return sourceTableModels;
+            return new ArrayList<>();
         }
 
         DuckdbSecretsType secretsType = duckdb.getSecretsType();
         if(secretsType == null){
-            String pathString = duckdb.getDirectories().get(schemaName);
-            File[] files = Path.of(pathString).toFile().listFiles();
-            String folderPrefix = StringUtils.removeEnd(StringUtils.removeEnd(pathString, "/"), "\\");
-            Arrays.stream(files).forEach(file -> {
-                String fileName = file.toString().substring(folderPrefix.length() + 1);
-                String sourceFilesTypeString = duckdb.getSourceFilesType().toString();
-                if(fileName.toLowerCase().endsWith("." + sourceFilesTypeString)
-                        || fileName.toLowerCase().endsWith("." + sourceFilesTypeString + ".gz")
-                        || file.isDirectory()) {
-
-                    sourceTableModels.add(
-                            new SourceTableModel(schemaName,
-                                    new PhysicalTableName(schemaName, fileName)));
-                }
-            });
-        } else {
-            // todo: list from s3
-//            switch (secretsType){
-//            case s3:
-//
-//                break;
-//        }
+            List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
+            return sourceTableModels;
         }
 
-        return sourceTableModels;
+        DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
+        duckdbCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
+        switch (secretsType){
+            case s3:
+                List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
+                return sourceTableModels;
+            default:
+                throw new RuntimeException("This type of secretsType is not supported: " + secretsType);
+        }
     }
 
     /**
