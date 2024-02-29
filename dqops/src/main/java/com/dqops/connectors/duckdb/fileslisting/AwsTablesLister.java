@@ -19,6 +19,8 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Used to retrieve the list of files from AWS s3 that are used as tables by duckdb's listTables.
@@ -63,17 +65,16 @@ public class AwsTablesLister {
     private static List<SourceTableModel> makeSourceTableModelsFromListOfFiles(
             DuckdbParametersSpec duckdb, List<String> files, String schemaName){
 
-        List<SourceTableModel> sourceTableModels = new ArrayList<>();
-        files.forEach(file -> {
-            if(isFolderOrFileOfValidExtension(file, duckdb.getSourceFilesType())) { // todo: check if works after last changes of folder verification
-                String cleanedFilePath = file.endsWith("/") ? file : file.substring(0, file.length() - 1);
-                String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
-
-                PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
-                SourceTableModel sourceTableModel = new SourceTableModel(schemaName, physicalTableName);
-                sourceTableModels.add(sourceTableModel);
+        List<SourceTableModel> sourceTableModels = files.stream().map(file -> {
+            if(!isFolderOrFileOfValidExtension(file, duckdb.getSourceFilesType())) {
+                return null;
             }
-        });
+            String cleanedFilePath = file.endsWith("/") ? file.substring(0, file.length() - 1) : file;
+            String fileName = cleanedFilePath.substring(cleanedFilePath.lastIndexOf("/") + 1);
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, fileName);
+            SourceTableModel sourceTableModel = new SourceTableModel(schemaName, physicalTableName);
+            return sourceTableModel;
+        }).filter(Objects::nonNull).collect(Collectors.toList());
         return sourceTableModels;
     }
 
