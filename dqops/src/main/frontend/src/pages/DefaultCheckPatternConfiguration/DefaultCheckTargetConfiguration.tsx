@@ -34,7 +34,7 @@ export default function DefaultCheckTargetConfiguration({
 }: TDefaultCheckTargetConfigurationProps) {
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
 
-  const [additionalParams, setAdditionalParams] = useState(false);
+  const [additionalParams, setAdditionalParams] = useState(!!create);
 
   return (
     <div>

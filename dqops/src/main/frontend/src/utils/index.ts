@@ -68,7 +68,7 @@ export const getDetectedDatatype = (numberForFile: any) => {
 export const sortPatterns = <T>(
   patterns: T[],
   key: keyof T,
-  order: 'asc' | 'desc' = 'asc'
+  order: 'asc' | 'desc'
 ) => {
   const copiedPatterns = [...patterns];
 
@@ -102,6 +102,5 @@ export const sortPatterns = <T>(
       return 0;
     }
   });
-  console.log(patterns, copiedPatterns, order);
   return copiedPatterns;
 };

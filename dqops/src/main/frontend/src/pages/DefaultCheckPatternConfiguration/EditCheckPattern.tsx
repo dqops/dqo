@@ -4,7 +4,7 @@ import DataQualityChecks from '../../components/DataQualityChecks';
 import SvgIcon from '../../components/SvgIcon';
 import DefaultCheckTargetConfiguration from './DefaultCheckTargetConfiguration';
 import Tabs from '../../components/Tabs';
-import { AxiosResponse } from 'axios';
+import { AxiosPromise, AxiosResponse } from 'axios';
 import {
   CheckContainerModel,
   DefaultColumnChecksPatternListModel,
@@ -45,6 +45,17 @@ const tabs = [
   }
 ];
 
+type TCheckTypes =
+  | 'profiling'
+  | 'monitoring_daily'
+  | 'monitoring_monthly'
+  | 'partitioned_daily'
+  | 'partitioned_monthly';
+
+type TCheckContainerDiverse = {
+  [key in TCheckTypes]: CheckContainerModel | undefined;
+};
+
 type TTarget =
   | DefaultColumnChecksPatternListModel
   | DefaultTableChecksPatternListModel;
@@ -53,6 +64,13 @@ type TEditCheckPatternProps = {
   type: 'table' | 'column';
   pattern_name: string;
   create: boolean;
+};
+const initialState: TCheckContainerDiverse = {
+  profiling: undefined,
+  monitoring_daily: undefined,
+  monitoring_monthly: undefined,
+  partitioned_daily: undefined,
+  partitioned_monthly: undefined
 };
 
 export default function EditCheckPattern({
@@ -63,7 +81,8 @@ export default function EditCheckPattern({
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
 
   const [activeTab, setActiveTab] = useState('table-target');
-  const [checkContainer, setCheckContainer] = useState<CheckContainerModel>();
+  const [checkContainers, setCheckContainers] =
+    useState<TCheckContainerDiverse>(initialState);
   const [target, setTarget] = useState<TTarget>({});
   const [isUpdated, setIsUpdated] = useState(false);
   const onChangeTab = (tab: any) => {
@@ -92,7 +111,24 @@ export default function EditCheckPattern({
 
   const updateChecks = async () => {
     if (!pattern_name) return;
-    const apiClients = {
+    const apiClients: {
+      column: Record<
+        TCheckTypes,
+        (
+          patternName: string,
+          body?: CheckContainerModel | undefined,
+          options?: any
+        ) => AxiosPromise<object>
+      >;
+      table: Record<
+        TCheckTypes,
+        (
+          patternName: string,
+          body?: CheckContainerModel | undefined,
+          options?: any
+        ) => AxiosPromise<object>
+      >;
+    } = {
       column: {
         [CheckRunMonitoringScheduleGroup.profiling]:
           DefaultColumnCheckPatternsApiClient.updateDefaultProfilingColumnChecksPattern,
@@ -118,13 +154,16 @@ export default function EditCheckPattern({
           DefaultTableCheckPatternsApiClient.updateDefaultPartitionedMonthlyTableChecksPattern
       }
     };
+
     const apiClient = type === 'column' ? apiClients.column : apiClients.table;
 
-    const getChecksForExistingPattern =
-      apiClient[activeTab as CheckRunMonitoringScheduleGroup];
-    if (getChecksForExistingPattern) {
-      await getChecksForExistingPattern(pattern_name, checkContainer);
-    }
+    Object.keys(apiClient).forEach((key) => {
+      if (checkContainers?.[key as TCheckTypes]) {
+        const apiFunction = apiClient[key as TCheckTypes];
+        apiFunction(pattern_name, checkContainers[key as TCheckTypes]);
+      }
+    });
+
     if (type === 'column') {
       DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
         pattern_name,
@@ -138,8 +177,12 @@ export default function EditCheckPattern({
     }
     setIsUpdated(false);
   };
+
   const handleChange = (value: CheckContainerModel) => {
-    setCheckContainer(value);
+    setCheckContainers((prev) => ({
+      ...prev,
+      [activeTab as TCheckTypes]: value
+    }));
     setIsUpdated(true);
   };
 
@@ -160,7 +203,10 @@ export default function EditCheckPattern({
 
     const getChecks = async () => {
       const callBack = (value: AxiosResponse<CheckContainerModel, any>) => {
-        setCheckContainer(value.data);
+        setCheckContainers((prev) => ({
+          ...prev,
+          [activeTab as TCheckTypes]: value.data
+        }));
       };
 
       const apiClients = {
@@ -198,11 +244,9 @@ export default function EditCheckPattern({
         await apiCall(pattern_name).then(callBack);
       }
     };
-    if (activeTab === 'table-target') {
-      getTarget();
-    } else {
-      getChecks();
-    }
+
+    getTarget();
+    getChecks();
   }, [pattern_name, create, activeTab]);
 
   function getCheckOverview(): void {}
@@ -230,7 +274,7 @@ export default function EditCheckPattern({
         <div>
           {activeTab !== 'table-target' ? (
             <DataQualityChecks
-              checksUI={checkContainer}
+              checksUI={checkContainers?.[activeTab as TCheckTypes]}
               onUpdate={updateChecks}
               onChange={handleChange}
               checkResultsOverview={[]}

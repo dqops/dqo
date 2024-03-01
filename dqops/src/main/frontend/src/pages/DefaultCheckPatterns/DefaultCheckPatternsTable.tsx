@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import {
   DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel
+  DefaultTableChecksPatternListModel,
+  TargetTablePatternSpec
 } from '../../api';
 import Button from '../../components/Button';
 import { sortPatterns } from '../../utils';
@@ -22,21 +23,17 @@ type TDefaultCheckPatternsTableProps = {
 
 type THeaderElement = {
   label: string;
-  key:
-    | keyof Pick<
-        DefaultTableChecksPatternListModel,
-        'pattern_name' | 'priority' | 'can_edit' | 'yaml_parsing_error'
-      >
+  key: // | keyof Pick<
+  //     DefaultTableChecksPatternListModel,
+  | 'pattern_name'
+    | 'priority'
+    | 'can_edit'
+    | 'yaml_parsing_error'
+    | `${'target_table' | 'target_column'}.${'connection' | 'schema' | 'table'}`
+    //| `target_table?.${[keyof TargetTablePatternSpec]}`
+    // >
     | undefined;
 };
-
-const headerElement: THeaderElement[] = [
-  { label: 'Pattern name', key: 'pattern_name' },
-  { label: 'Priority', key: 'priority' },
-  { label: 'Connection', key: undefined },
-  { label: 'Schema', key: undefined },
-  { label: 'Table', key: undefined }
-];
 
 export default function DefaultCheckPatternsTable({
   patterns,
@@ -50,8 +47,16 @@ export default function DefaultCheckPatternsTable({
   const editPattern = (type: string, pattern: string) => {
     openDefaultCheckPatternFirstLevelTab(type, pattern);
   };
-  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  const [dir, setDir] = useState<'asc' | 'desc'>('desc');
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
+  const headerElement: THeaderElement[] = [
+    { label: 'Pattern name', key: 'pattern_name' },
+    { label: 'Priority', key: 'priority' },
+    { label: 'Connection', key: `${targetSpecKey}.connection` },
+    { label: 'Schema', key: `${targetSpecKey}.schema` },
+    { label: 'Table', key: `${targetSpecKey}.table` }
+  ];
+
   return (
     <table>
       <thead>
@@ -62,7 +67,9 @@ export default function DefaultCheckPatternsTable({
               key={elem.label}
               onClick={() =>
                 elem.key &&
-                (onChange(sortPatterns(patterns, elem.key, dir)),
+                (onChange(
+                  sortPatterns(patterns, elem.key as keyof TPattern, dir)
+                ),
                 setDir(dir === 'asc' ? 'desc' : 'asc'))
               }
             >
