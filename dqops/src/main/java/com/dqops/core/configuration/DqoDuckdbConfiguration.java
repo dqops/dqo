@@ -31,7 +31,7 @@ public class DqoDuckdbConfiguration implements Cloneable {
     private int threads = 1000;
 
     /**
-     * Memory limit string. // todo: description
+     * The maximum memory of the system (e.g., 1GB). When not set, DuckDB use the 80% of RAM
      * @return Memory limit.
      */
     public String getMemoryLimit() {
@@ -39,7 +39,7 @@ public class DqoDuckdbConfiguration implements Cloneable {
     }
 
     /**
-     * Sets memory limit string. // todo: description
+     * Sets the maximum memory of the system (e.g., 1GB). When not set, DuckDB use the 80% of RAM
      * @param memoryLimit Memory limit.
      */
     public void setMemoryLimit(String memoryLimit) {
@@ -47,7 +47,7 @@ public class DqoDuckdbConfiguration implements Cloneable {
     }
 
     /**
-     * Threads count. // todo: description
+     * The number of total threads used by the system.
      * @return Threads count.
      */
     public int getThreads() {
@@ -55,7 +55,7 @@ public class DqoDuckdbConfiguration implements Cloneable {
     }
 
     /**
-     * Sets the threads count.// todo: description
+     * Sets the number of total threads used by the system.
      * @param threads Threads count.
      */
     public void setThreads(int threads) {
