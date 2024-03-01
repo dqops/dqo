@@ -356,7 +356,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     String columnName = colRow.getString("column_name");
                     String dataType = colRow.getString("column_type");
                     boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
-                    ColumnSpec columnSpec = prepareColumnSpec(dataType, isNullable);
+                    ColumnSpec columnSpec = prepareNewColumnSpec(dataType, isNullable);
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
             } catch (Exception e){
@@ -369,8 +369,13 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         return tableSpecs;
     }
 
-    // todo
-    private ColumnSpec prepareColumnSpec(String dataType, boolean isNullable){
+    /**
+     * Creates a new column spec.
+     * @param dataType A data type of the column.
+     * @param isNullable Whether the column is nullable.
+     * @return The new column spec.
+     */
+    private ColumnSpec prepareNewColumnSpec(String dataType, boolean isNullable){
         ColumnSpec columnSpec = new ColumnSpec();
         ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
         columnType.setNullable(isNullable);
@@ -378,14 +383,19 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         return columnSpec;
     }
 
-    // todo
-    private TableSpec prepareNewTableSpec(TableSpec tableSpecTemp, FilePathListSpec filePaths){
+    /**
+     * Creates a new table spec with file format filled.
+     * @param clonedTableSpec A table spec.
+     * @param filePaths File path list spec.
+     * @return The new table spec.
+     */
+    private TableSpec prepareNewTableSpec(TableSpec clonedTableSpec, FilePathListSpec filePaths){
         TableSpec tableSpec = new TableSpec();
-        tableSpec.setPhysicalTableName(tableSpecTemp.getPhysicalTableName());
+        tableSpec.setPhysicalTableName(clonedTableSpec.getPhysicalTableName());
         tableSpec.setFileFormat(
-                tableSpecTemp.getFileFormat() == null
+                clonedTableSpec.getFileFormat() == null
                         ? new FileFormatSpec()
-                        : tableSpecTemp.getFileFormat()
+                        : clonedTableSpec.getFileFormat()
         );
 
         FileFormatSpec newFileFormat = tableSpec.getFileFormat();
