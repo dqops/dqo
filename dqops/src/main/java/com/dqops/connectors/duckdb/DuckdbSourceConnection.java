@@ -330,10 +330,11 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
         }
 
         for (String tableName : tableNames) {
-            TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(physicalTableName.toString());
             if (tableSpecTemp == null){
                 tableSpecTemp = new TableSpec();
-                tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
+                tableSpecTemp.setPhysicalTableName(physicalTableName);
             }
 
             FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
