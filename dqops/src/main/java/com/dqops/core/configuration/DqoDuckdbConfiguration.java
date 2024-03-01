@@ -35,7 +35,16 @@ public class DqoDuckdbConfiguration implements Cloneable {
      * @return Memory limit.
      */
     public String getMemoryLimit() {
-        return memoryLimit;
+        StringBuilder stringBuilder = new StringBuilder();
+        if(!memoryLimit.startsWith("'")){
+            stringBuilder.append("'");
+        }
+        stringBuilder.append(memoryLimit);
+        if(!memoryLimit.endsWith("'")){
+            stringBuilder.append("'");
+        }
+
+        return stringBuilder.toString();
     }
 
     /**
