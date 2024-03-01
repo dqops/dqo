@@ -17,7 +17,7 @@ class DuckdbQueriesProviderTest extends BaseTest {
         String createSecretQuery = DuckdbQueriesProvider.provideCreateSecretQuery(connectionSpec, hashCode);
 
         Assertions.assertEquals("""
-                        CREATE SECRET secret_bd95a74421bc7192 (
+                        CREATE SECRET secret_7201a7ed98e421a9 (
                             TYPE S3,
                             KEY_ID 'aws_example_key_id',
                             SECRET 'aws_example_secret',
