@@ -4,11 +4,12 @@ import {
   DefaultColumnChecksPatternListModel,
   DefaultTableChecksPatternListModel,
   TargetColumnPatternSpec,
+  TargetColumnPatternSpecDataTypeCategoryEnum,
   TargetTablePatternSpec
 } from '../../api';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import SvgIcon from '../../components/SvgIcon';
-import { sortBy } from 'lodash';
+import Select from '../../components/Select';
 
 type TTarget =
   | DefaultColumnChecksPatternListModel
@@ -54,7 +55,11 @@ export default function DefaultCheckTargetConfiguration({
           <Input
             value={target?.priority}
             onChange={(e) =>
-              onChangeTarget({ priority: Number(e.target.value) })
+              onChangeTarget({
+                priority: !isNaN(Number(e.target.value))
+                  ? Number(e.target.value)
+                  : undefined
+              })
             }
           />
         </div>
@@ -171,18 +176,27 @@ export default function DefaultCheckTargetConfiguration({
               <div className="flex justify-between  text-black  ">
                 <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
                   <span className="w-25"> Data type category</span>
-                  <Input
+                  <Select
+                    options={[
+                      { label: '', value: '' },
+                      ...Object.keys(
+                        TargetColumnPatternSpecDataTypeCategoryEnum
+                      ).map((x) => ({
+                        label: x,
+                        value: x
+                      }))
+                    ]}
                     value={
                       (target?.[targetSpecKey as keyof TTarget] as any)?.[
                         'data_type_category' as keyof TTargetSpec
                       ]
                     }
-                    onChange={(e) =>
+                    onChange={(value) =>
                       onChangeTarget({
-                        ['data_type_category' as keyof TTargetSpec]:
-                          e.target.value
+                        ['data_type_category' as keyof TTargetSpec]: value
                       })
                     }
+                    className="w-49"
                   />
                 </div>
               </div>

@@ -12,9 +12,9 @@ import {
   DefaultColumnCheckPatternsApiClient,
   DefaultTableCheckPatternsApiClient
 } from '../../services/apiClient';
+import { useDefinition } from '../../contexts/definitionContext';
 
 type TCreateCheckPatternProps = {
-  onChangeCreating: () => void;
   type: 'table' | 'column';
 };
 
@@ -24,10 +24,8 @@ type TTarget =
 
 type TTargetSpec = TargetColumnPatternSpec | TargetTablePatternSpec;
 
-export default function CreateCheckPattern({
-  onChangeCreating,
-  type
-}: TCreateCheckPatternProps) {
+export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
+  const { openDefaultCheckPatternFirstLevelTab } = useDefinition();
   const [target, setTarget] = useState<TTarget>({});
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
 
@@ -63,7 +61,8 @@ export default function CreateCheckPattern({
         target
       );
     }
-    onChangeCreating();
+    openDefaultCheckPatternFirstLevelTab(type, target.pattern_name);
+    // onChangeCreating();
   };
 
   return (

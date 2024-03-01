@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
@@ -12,18 +12,17 @@ export default function index() {
     create
   }: { type: 'table' | 'column'; pattern_name: string; create: boolean } =
     useSelector(getFirstLevelSensorState);
-  const [creating, setCreating] = useState(!!create);
-
-  const onChangeCreating = () => {
-    setCreating(false);
-  };
 
   return (
     <>
-      {creating === true ? (
-        <CreateCheckPattern onChangeCreating={onChangeCreating} type={type} />
+      {create === true ? (
+        <CreateCheckPattern type={type} />
       ) : (
-        <EditCheckPattern type={type} pattern_name={pattern_name} />
+        <EditCheckPattern
+          type={type}
+          pattern_name={pattern_name}
+          create={create}
+        />
       )}
     </>
   );
