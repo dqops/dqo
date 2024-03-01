@@ -141,7 +141,7 @@ spec:
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: profiling
-            - dashboard_name: Incomplete columns with null values - percents
+            - dashboard_name: Incomplete columns with null values - percent
               url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
               width: 1400
               height: 1800
@@ -569,7 +569,7 @@ spec:
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: monitoring
-            - dashboard_name: Incomplete columns with null values - percents
+            - dashboard_name: Incomplete columns with null values - percent
               url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
               width: 1400
               height: 1800
@@ -996,7 +996,7 @@ spec:
               parameters:
                 ds0.token: '%DQO_CLOUD_TOKEN%'
                 ds0.p_check_type: partitioned
-            - dashboard_name: Incomplete columns with null values - percents
+            - dashboard_name: Incomplete columns with null values - percent
               url: https://lookerstudio.google.com/embed/reporting/dd053c15-57dd-4b66-914d-6f8fa83da8a2/page/c5B8C
               width: 1400
               height: 1800
