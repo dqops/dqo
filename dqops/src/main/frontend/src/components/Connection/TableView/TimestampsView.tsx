@@ -61,111 +61,116 @@ const TimestampsView = () => {
   const isDisabled = !isUpdatedTablePartitioning;
 
   return (
-    <div className="py-6 px-8 flex flex-col">
-      <ActionGroup
-        onUpdate={onUpdate}
-        isUpdated={isUpdatedTablePartitioning}
-        isUpdating={updatingTablePartitioning}
-        isDisabled={isDisabled}
-      />
-
-      <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
-        <ColumnSelect
-          label="Event timestamp column name for timeliness freshness checks (most current data)"
-          value={tablePartitioning?.timestamp_columns?.event_timestamp_column}
-          onChange={(column) =>
-            handleChangeTimestamps({
-              event_timestamp_column: column
-            })
-          }
-          
+      <div className="py-6 px-8 flex flex-col">
+        <ActionGroup
+          onUpdate={onUpdate}
+          isUpdated={isUpdatedTablePartitioning}
+          isUpdating={updatingTablePartitioning}
+          isDisabled={isDisabled}
         />
-      </div>
 
-      <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
-        <ColumnSelect
-          label="Ingestion timestamp column name for timeliness staleness checks (last load timestamp)"
-          value={tablePartitioning?.timestamp_columns?.ingestion_timestamp_column}
-          onChange={(column) =>
-            handleChangeTimestamps({
-              ingestion_timestamp_column: column
-            })
-          }
-        />
-      </div>
+        <SectionWrapper title="Timeliness checks">
 
-      <div className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
-        <ColumnSelect
-          label="Date or datetime column name used for date/time partitioning used in partition checks"
-          value={tablePartitioning?.timestamp_columns?.partition_by_column}
-          onChange={(column) =>
-            handleChangeTimestamps({
-              partition_by_column: column
-            })
-          }
-          error={
-            !tablePartitioning?.timestamp_columns?.partition_by_column
-          }
-        />
-      </div>
+          <div className={clsx("mb-4", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
+            <ColumnSelect
+              label="Event timestamp column name for timeliness freshness checks (most current data)"
+              value={tablePartitioning?.timestamp_columns?.event_timestamp_column}
+              onChange={(column) =>
+                handleChangeTimestamps({
+                  event_timestamp_column: column
+                })
+              }
+              
+            />
+          </div>
 
-      <SectionWrapper className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental daily partitioned partitioned checks">
-        <div className="flex mb-4">
-          <span className="w-80 text-sm">Recent days</span>
+          <div className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
+            <ColumnSelect
+              label="Ingestion timestamp column name for timeliness staleness checks (last load timestamp)"
+              value={tablePartitioning?.timestamp_columns?.ingestion_timestamp_column}
+              onChange={(column) =>
+                handleChangeTimestamps({
+                  ingestion_timestamp_column: column
+                })
+              }
+            />
+          </div>
+        </SectionWrapper>
 
-          <NumberInput
-            className="!text-sm"
-            onChange={(value) =>
-              handleChangeIncremental({
-                daily_partitioning_recent_days: value
+      <SectionWrapper title="Partition checks" className='mt-8'>
+        <div className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")}>
+          <ColumnSelect
+            label="Date or datetime column name used for date/time partitioning used in partition checks"
+            value={tablePartitioning?.timestamp_columns?.partition_by_column}
+            onChange={(column) =>
+              handleChangeTimestamps({
+                partition_by_column: column
               })
             }
-            value={tablePartitioning?.incremental_time_window?.daily_partitioning_recent_days}
+            error={
+              !tablePartitioning?.timestamp_columns?.partition_by_column
+            }
           />
         </div>
 
-        <div className="flex">
-          <span className="w-80 text-sm">Run checks also for today</span>
+        <SectionWrapper className={clsx("mb-8", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental daily partition checks">
+          <div className="flex mb-4">
+            <span className="w-80 text-sm">Recent days</span>
 
-          <Checkbox
-            onChange={(checked) =>
-              handleChangeIncremental({
-                daily_partitioning_include_today: checked
-              })
-            }
-            checked={tablePartitioning?.incremental_time_window?.daily_partitioning_include_today}
-          />
-        </div>
-      </SectionWrapper>
+            <NumberInput
+              className="!text-sm"
+              onChange={(value) =>
+                handleChangeIncremental({
+                  daily_partitioning_recent_days: value
+                })
+              }
+              value={tablePartitioning?.incremental_time_window?.daily_partitioning_recent_days}
+            />
+          </div>
 
-      <SectionWrapper className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental monthly partitioned partitioned checks">
-        <div className="flex mb-4 text-sm">
-          <span className="w-80">Recent months</span>
+          <div className="flex">
+            <span className="w-80 text-sm">Run checks also for today</span>
 
-          <NumberInput
-            className="!text-sm"
-            onChange={(value) =>
-              handleChangeIncremental({
-                monthly_partitioning_recent_months: value
-              })
-            }
-            value={tablePartitioning?.incremental_time_window?.monthly_partitioning_recent_months}
-          />
-        </div>
+            <Checkbox
+              onChange={(checked) =>
+                handleChangeIncremental({
+                  daily_partitioning_include_today: checked
+                })
+              }
+              checked={tablePartitioning?.incremental_time_window?.daily_partitioning_include_today}
+            />
+          </div>
+        </SectionWrapper>
 
-        <div className="flex text-sm">
-          <span className="w-80">Run checks also for current month</span>
+        <SectionWrapper className={clsx("", userProfile.can_manage_data_sources ? "" : "cursor-not-allowed pointer-events-none")} title="Time window for incremental monthly partition checks">
+          <div className="flex mb-4 text-sm">
+            <span className="w-80">Recent months</span>
 
-          <Checkbox
-            className="!text-sm"
-            onChange={(checked) =>
-              handleChangeIncremental({
-                monthly_partitioning_include_current_month: checked
-              })
-            }
-            checked={tablePartitioning?.incremental_time_window?.monthly_partitioning_include_current_month}
-          />
-        </div>
+            <NumberInput
+              className="!text-sm"
+              onChange={(value) =>
+                handleChangeIncremental({
+                  monthly_partitioning_recent_months: value
+                })
+              }
+              value={tablePartitioning?.incremental_time_window?.monthly_partitioning_recent_months}
+            />
+          </div>
+
+          <div className="flex text-sm">
+            <span className="w-80">Run checks also for current month</span>
+
+            <Checkbox
+              className="!text-sm"
+              onChange={(checked) =>
+                handleChangeIncremental({
+                  monthly_partitioning_include_current_month: checked
+                })
+              }
+              checked={tablePartitioning?.incremental_time_window?.monthly_partitioning_include_current_month}
+            />
+          </div>
+        </SectionWrapper>
       </SectionWrapper>
     </div>
   );

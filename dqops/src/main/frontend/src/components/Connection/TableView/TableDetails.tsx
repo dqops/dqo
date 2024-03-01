@@ -19,9 +19,6 @@ import Select from '../../Select';
 import {
   ConnectionModel,
   ConnectionSpecProviderTypeEnum,
-  CsvFileFormatSpec,
-  JsonFileFormatSpec,
-  ParquetFileFormatSpec,
   FileFormatSpec,
   TableListModelProfilingChecksResultTruncationEnum,
   DuckdbParametersSpecSourceFilesTypeEnum
@@ -32,7 +29,6 @@ import { IRootState } from '../../../redux/reducers';
 import FileFormatConfiguration from '../../FileFormatConfiguration/FileFormatConfiguration';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { TConfiguration } from '../../../components/FileFormatConfiguration/TConfiguration';
-import SectionWrapper from '../../Dashboard/SectionWrapper';
 import FilePath from '../../FileFormatConfiguration/FilePath';
 
 const TableDetails = () => {
@@ -178,15 +174,15 @@ const TableDetails = () => {
       >
         <tbody>
           <tr>
-            <td className="px-4 py-2">Connection Name</td>
+            <td className="px-4 py-2">Connection name</td>
             <td className="px-4 py-2">{tableBasic?.connection_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Schema Name</td>
+            <td className="px-4 py-2">Schema name</td>
             <td className="px-4 py-2">{tableBasic?.target?.schema_name}</td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Table Name</td>
+            <td className="px-4 py-2">Table name</td>
             <td className="px-4 py-2">{tableBasic?.target?.table_name}</td>
           </tr>
           <tr>
@@ -262,7 +258,7 @@ const TableDetails = () => {
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">Table Hash</td>
+            <td className="px-4 py-2">Table hash</td>
             <td className="px-4 py-2">{tableBasic?.table_hash}</td>
           </tr>
         </tbody>

@@ -182,13 +182,13 @@ const JobItem = ({
             {job?.parameters?.importSchemaParameters && (
               <>
                 <tr className="flex justify-between w-108">
-                  <td>Connection Name</td>
+                  <td>Connection name</td>
                   <td>
                     {job?.parameters?.importSchemaParameters?.connectionName}
                   </td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td>Schema Name</td>
+                  <td>Schema name</td>
                   <td>{job?.parameters?.importSchemaParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">
@@ -241,13 +241,13 @@ const JobItem = ({
             {job?.parameters?.importTableParameters && (
               <>
                 <tr className="flex justify-between w-108">
-                  <td>Connection Name</td>
+                  <td>Connection name</td>
                   <td>
                     {job?.parameters?.importTableParameters?.connectionName}
                   </td>
                 </tr>
                 <tr className="flex justify-between w-108">
-                  <td>Schema Name</td>
+                  <td>Schema name</td>
                   <td>{job?.parameters?.importTableParameters?.schemaName}</td>
                 </tr>
                 <tr className="flex justify-between w-108">

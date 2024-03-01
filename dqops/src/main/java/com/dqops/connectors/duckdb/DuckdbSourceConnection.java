@@ -30,6 +30,7 @@ import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.sources.*;
 import com.dqops.metadata.sources.fileformat.FileFormatSpec;
 import com.dqops.metadata.sources.fileformat.FileFormatSpecProvider;
+import com.dqops.metadata.sources.fileformat.FilePathListSpec;
 import com.dqops.utils.exceptions.RunSilently;
 import com.zaxxer.hikari.HikariConfig;
 import lombok.extern.slf4j.Slf4j;
@@ -328,15 +329,23 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     ));
         }
 
-        try {
-            for (String tableName : tableNames) {
-                TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(tableName);
-                if (physicalTableNameToTableSpec.get(tableName) == null){
-                    tableSpecTemp = new TableSpec();
-                    tableSpecTemp.setPhysicalTableName(new PhysicalTableName(schemaName, tableName));
-                }
+        for (String tableName : tableNames) {
+            PhysicalTableName physicalTableName = new PhysicalTableName(schemaName, tableName);
+            TableSpec tableSpecTemp = physicalTableNameToTableSpec.get(physicalTableName.toString());
+            if (tableSpecTemp == null){
+                tableSpecTemp = new TableSpec();
+                tableSpecTemp.setPhysicalTableName(physicalTableName);
+            }
 
-                FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+            FileFormatSpec fileFormatSpec = FileFormatSpecProvider.resolveFileFormat(duckdbParametersSpec, tableSpecTemp);
+            if(fileFormatSpec == null){
+                return tableSpecs;
+            }
+
+            TableSpec tableSpec = prepareNewTableSpec(tableSpecTemp.deepClone(), fileFormatSpec.getFilePaths());
+            tableSpecs.add(tableSpec);
+
+            try {
                 Table tableResult = queryForTableResult(fileFormatSpec, tableSpecTemp, secretValueLookupContext);
 
                 Column<?>[] columns = tableResult.columnArray();
@@ -344,36 +353,59 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
                     column.setName(column.name().toLowerCase(Locale.ROOT));
                 }
 
-                HashMap<String, TableSpec> tablesByTableName = new LinkedHashMap<>();
-
                 for (Row colRow : tableResult) {
-                    String physicalTableName = tableSpecTemp.getPhysicalTableName().getTableName();
                     String columnName = colRow.getString("column_name");
-                    boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
                     String dataType = colRow.getString("column_type");
-
-                    TableSpec tableSpec = tablesByTableName.get(physicalTableName);
-                    if (tableSpec == null) {
-                        tableSpec = new TableSpec();
-                        tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
-                        tablesByTableName.put(physicalTableName, tableSpec);
-                        tableSpecs.add(tableSpec);
-                    }
-
-                    ColumnSpec columnSpec = new ColumnSpec();
-                    ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
-
-                    columnType.setNullable(isNullable);
-                    columnSpec.setTypeSnapshot(columnType);
+                    boolean isNullable = Objects.equals(colRow.getString("null"), "YES");
+                    ColumnSpec columnSpec = prepareNewColumnSpec(dataType, isNullable);
                     tableSpec.getColumns().put(columnName, columnSpec);
                 }
-
+            } catch (Exception e){
+                if(!e.getMessage().contains("SQL query failed: java.sql.SQLException: IO Error: No files found that match the pattern")){
+                    throw new RuntimeException(e);
+                }
             }
-            return tableSpecs;
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+
         }
+        return tableSpecs;
     }
+
+    /**
+     * Creates a new column spec.
+     * @param dataType A data type of the column.
+     * @param isNullable Whether the column is nullable.
+     * @return The new column spec.
+     */
+    private ColumnSpec prepareNewColumnSpec(String dataType, boolean isNullable){
+        ColumnSpec columnSpec = new ColumnSpec();
+        ColumnTypeSnapshotSpec columnType = ColumnTypeSnapshotSpec.fromType(dataType);
+        columnType.setNullable(isNullable);
+        columnSpec.setTypeSnapshot(columnType);
+        return columnSpec;
+    }
+
+    /**
+     * Creates a new table spec with file format filled.
+     * @param clonedTableSpec A table spec.
+     * @param filePaths File path list spec.
+     * @return The new table spec.
+     */
+    private TableSpec prepareNewTableSpec(TableSpec clonedTableSpec, FilePathListSpec filePaths){
+        TableSpec tableSpec = new TableSpec();
+        tableSpec.setPhysicalTableName(clonedTableSpec.getPhysicalTableName());
+        tableSpec.setFileFormat(
+                clonedTableSpec.getFileFormat() == null
+                        ? new FileFormatSpec()
+                        : clonedTableSpec.getFileFormat()
+        );
+
+        FileFormatSpec newFileFormat = tableSpec.getFileFormat();
+        if(newFileFormat.getFilePaths().isEmpty()){
+            tableSpec.getFileFormat().getFilePaths().addAll(filePaths);
+        }
+        return tableSpec;
+    }
+
 
     /**
      * Retrieves a table result depending on the source files type.
