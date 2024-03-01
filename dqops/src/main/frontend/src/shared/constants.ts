@@ -374,6 +374,12 @@ export const databaseOptions: IDatabaseOption[] = [
     displayName: 'CockroachDB'
   },
   {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'CSV',
+    iconName: 'duckdb',
+    displayName: 'CSV'
+  },
+  {
     type: ConnectionModelProviderTypeEnum.databricks,
     name: 'Databricks',
     iconName: 'databricks',
@@ -384,6 +390,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'DuckDB',
     iconName: 'duckdb',
     displayName: 'DuckDB'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'JSON',
+    iconName: 'duckdb',
+    displayName: 'JSON'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,
@@ -408,6 +420,12 @@ export const databaseOptions: IDatabaseOption[] = [
     name: 'Oracle',
     iconName: 'oracle',
     displayName: 'Oracle Database'
+  },
+  {
+    type: ConnectionModelProviderTypeEnum.duckdb,
+    name: 'Parquet',
+    iconName: 'duckdb',
+    displayName: 'Parquet'
   },
   {
     type: ConnectionModelProviderTypeEnum.mysql,

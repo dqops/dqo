@@ -114,11 +114,22 @@ const CreateConnection = () => {
         break;
       }
       case ConnectionModelProviderTypeEnum.duckdb: {
+        let fileFormat: DuckdbParametersSpecSourceFilesTypeEnum = DuckdbParametersSpecSourceFilesTypeEnum.csv;
+        switch(nameOfDatabase){
+          case "CSV":
+            fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.csv;
+            break;
+          case "JSON":
+            fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.json;
+            break;
+            case "Parquet":
+              fileFormat = DuckdbParametersSpecSourceFilesTypeEnum.parquet;
+              break;
+        }
         copiedDatabase.duckdb = {
           directories: { files: '' },
-          source_files_type: DuckdbParametersSpecSourceFilesTypeEnum.csv
+          source_files_type: fileFormat
         };
-        console.log(copiedDatabase);
       }
     }
     setDatabase(copiedDatabase);
