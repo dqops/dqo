@@ -65,37 +65,43 @@ export const getDetectedDatatype = (numberForFile: any) => {
   }
 };
 
-export const sortPatterns = <T>(patterns: T[], key: keyof T) => {
+export const sortPatterns = <T>(
+  patterns: T[],
+  key: keyof T,
+  order: 'asc' | 'desc' = 'asc'
+) => {
   const copiedPatterns = [...patterns];
 
   copiedPatterns.sort((a, b) => {
-    const valueA = a[key] as Exclude<T[keyof T], null>;
-    const valueB = b[key] as Exclude<T[keyof T], null>;
+    const valueA = a[key];
+    const valueB = b[key];
 
     if (valueA === null && valueB === null) {
       return 0;
     } else if (valueA === null) {
-      return -1;
+      return order === 'asc' ? -1 : 1;
     } else if (valueB === null) {
-      return 1;
+      return order === 'asc' ? 1 : -1;
     }
 
     if (valueA === undefined && valueB === undefined) {
       return 0;
     } else if (valueA === undefined) {
-      return -1;
+      return order === 'asc' ? -1 : 1;
     } else if (valueB === undefined) {
-      return 1;
+      return order === 'asc' ? 1 : -1;
     }
 
+    const comparison = order === 'asc' ? 1 : -1;
+
     if (valueA < valueB) {
-      return -1;
+      return -1 * comparison;
     } else if (valueA > valueB) {
-      return 1;
+      return 1 * comparison;
     } else {
       return 0;
     }
   });
-
+  console.log(patterns, copiedPatterns, order);
   return copiedPatterns;
 };

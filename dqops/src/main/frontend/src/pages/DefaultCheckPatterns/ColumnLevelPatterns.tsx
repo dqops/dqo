@@ -32,6 +32,7 @@ export default function ColumnLevelPatterns() {
         <DefaultCheckPatternsTable
           patterns={patterns}
           deletePattern={deletePattern}
+          onChange={setPatterns}
         />
       </div>
     </div>

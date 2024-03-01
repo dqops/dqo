@@ -112,13 +112,18 @@ function DefinitionProvider(props: any) {
     );
   };
 
-  const openDefaultCheckPatternFirstLevelTab = (type: string, pattern: string, state?: any) => {
+  const openDefaultCheckPatternFirstLevelTab = (
+    type: string,
+    pattern: string,
+    state?: any
+  ) => {
     dispatch(
       addFirstLevelTab({
         url: ROUTES.DEFAULT_CHECK_PATTERN_DETAIL(type, pattern),
         value: ROUTES.DEFAULT_CHECK_PATTERN_VALUE(type, pattern),
         state: {
-          type, pattern, 
+          type,
+          pattern,
           pattern_name: pattern,
           ...state
         },
@@ -126,7 +131,6 @@ function DefinitionProvider(props: any) {
       })
     );
   };
-
 
   const openAllUsersFirstLevelTab = () => {
     dispatch(
@@ -233,7 +237,7 @@ function DefinitionProvider(props: any) {
     ];
     if (tabs && tabs.length !== 0) {
       for (let i = 0; i < tabs.length; i++) {
-        if (tabs[i].url?.includes('default_checks')) {
+        if (tabs[i].url?.includes('patterns')) {
           configuration[3].isOpen = true;
         } else if (tabs[i]?.url?.includes('sensors')) {
           configuration[0].isOpen = true;
@@ -244,15 +248,14 @@ function DefinitionProvider(props: any) {
             toggleFolderRecursively(arrayOfElemsToToggle, 0, 'sensors');
           }
           // to do: fix expanding tree checks/default checks
-
-          //   } else if (tabs[i]?.url?.includes('checks')) {
-          //   configuration[2].isOpen = true;
-          //   const arrayOfElemsToToggle = (
-          //     tabs[i].state.full_check_name as string
-          //   )?.split('/');
-          //   if (arrayOfElemsToToggle) {
-          //     toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
-          //   }
+        } else if (tabs[i]?.url?.includes('checks')) {
+          configuration[2].isOpen = true;
+          const arrayOfElemsToToggle = (
+            tabs[i].state.full_check_name as string
+          )?.split('/');
+          if (arrayOfElemsToToggle) {
+            toggleFolderRecursively(arrayOfElemsToToggle, 0, 'checks');
+          }
         } else if (tabs[i]?.url?.includes('rules')) {
           configuration[1].isOpen = true;
           const arrayOfElemsToToggle = (

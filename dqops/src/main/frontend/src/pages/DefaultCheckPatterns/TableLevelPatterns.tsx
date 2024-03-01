@@ -11,7 +11,7 @@ export default function TableLevelPatterns() {
   >([]);
   const getPatterns = async () => {
     DefaultTableCheckPatternsApiClient.getAllDefaultTableChecksPatterns().then(
-      (res) => setPatterns(sortPatterns(res.data ?? [], 'priority'))
+      (res) => setPatterns(sortPatterns(res.data ?? [], 'priority', 'asc'))
     );
   };
   useEffect(() => {
@@ -30,6 +30,7 @@ export default function TableLevelPatterns() {
         <DefaultCheckPatternsTable
           patterns={patterns}
           deletePattern={deletePattern}
+          onChange={setPatterns}
         />
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   DefaultColumnChecksPatternListModel,
   DefaultTableChecksPatternListModel
@@ -10,12 +10,14 @@ import { useDefinition } from '../../contexts/definitionContext';
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
 
+type TPattern =
+  | DefaultTableChecksPatternListModel
+  | DefaultColumnChecksPatternListModel;
+
 type TDefaultCheckPatternsTableProps = {
-  patterns: (
-    | DefaultTableChecksPatternListModel
-    | DefaultColumnChecksPatternListModel
-  )[];
+  patterns: TPattern[];
   deletePattern: (patternName: string) => void;
+  onChange: (data: any) => void;
 };
 
 type THeaderElement = {
@@ -38,7 +40,8 @@ const headerElement: THeaderElement[] = [
 
 export default function DefaultCheckPatternsTable({
   patterns,
-  deletePattern
+  deletePattern,
+  onChange
 }: TDefaultCheckPatternsTableProps) {
   const { type }: { type: 'table' | 'column' } = useSelector(
     getFirstLevelSensorState
@@ -47,7 +50,8 @@ export default function DefaultCheckPatternsTable({
   const editPattern = (type: string, pattern: string) => {
     openDefaultCheckPatternFirstLevelTab(type, pattern);
   };
-  console.log(type);
+  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
   return (
     <table>
       <thead>
@@ -56,7 +60,11 @@ export default function DefaultCheckPatternsTable({
             <th
               className="px-4"
               key={elem.label}
-              onClick={() => elem.key && sortPatterns(patterns, elem.key)}
+              onClick={() =>
+                elem.key &&
+                (onChange(sortPatterns(patterns, elem.key, dir)),
+                setDir(dir === 'asc' ? 'desc' : 'asc'))
+              }
             >
               <div className="flex gap-x-1 items-center cursor-default">
                 <div>{elem.label}</div>
@@ -76,9 +84,15 @@ export default function DefaultCheckPatternsTable({
           <tr key={index}>
             <td className="px-4">{pattern.pattern_name}</td>
             <td className="px-4">{pattern.priority}</td>
-            <td className="px-4"></td>
-            <td className="px-4"></td>
-            <td className="px-4"></td>
+            <td className="px-4">
+              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.connection}
+            </td>
+            <td className="px-4">
+              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.schema}
+            </td>
+            <td className="px-4">
+              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.table}
+            </td>
             <td className="px-4">
               <Button
                 variant="text"

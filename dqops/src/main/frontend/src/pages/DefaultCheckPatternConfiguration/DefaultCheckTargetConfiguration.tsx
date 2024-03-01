@@ -8,6 +8,7 @@ import {
 } from '../../api';
 import SectionWrapper from '../../components/Dashboard/SectionWrapper';
 import SvgIcon from '../../components/SvgIcon';
+import { sortBy } from 'lodash';
 
 type TTarget =
   | DefaultColumnChecksPatternListModel
@@ -37,26 +38,24 @@ export default function DefaultCheckTargetConfiguration({
   return (
     <div>
       <div className="flex justify-between pb-6 text-black  ">
-        <div className="w-[45%] ml-2">
-          Pattern name
+        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <span className="w-30">Pattern name</span>
           {create === true ? (
             <Input
               value={target?.pattern_name}
               onChange={(e) => onChangeTarget({ pattern_name: e.target.value })}
-              className="mt-2"
             />
           ) : (
             <span className="font-bold">{target?.pattern_name}</span>
           )}
         </div>
-        <div className="w-[45%] ml-2">
-          Priority
+        <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+          <span className="w-25"> Priority</span>
           <Input
             value={target?.priority}
             onChange={(e) =>
               onChangeTarget({ priority: Number(e.target.value) })
             }
-            className="mt-2"
           />
         </div>
       </div>
@@ -76,48 +75,44 @@ export default function DefaultCheckTargetConfiguration({
           className="cursor-default"
         >
           <div className="flex justify-between  text-black  ">
-            <div className="w-[45%] ml-2">
-              Connection
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25">Connection</span>
               <Input
                 value={
                   (target?.[targetSpecKey as keyof TTarget] as any)?.connection
                 }
                 onChange={(e) => onChangeTarget({ connection: e.target.value })}
-                className="mt-2"
               />
             </div>
-            <div className="w-[45%] ml-2">
-              Schema
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Schema</span>
               <Input
                 value={
                   (target?.[targetSpecKey as keyof TTarget] as any)?.schema
                 }
                 onChange={(e) => onChangeTarget({ schema: e.target.value })}
-                className="mt-2"
               />
             </div>
           </div>
           <div className="flex justify-between  text-black  ">
-            <div className="w-[45%] ml-2">
-              Table
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Table</span>
               <Input
                 value={(target?.[targetSpecKey as keyof TTarget] as any)?.table}
                 onChange={(e) => onChangeTarget({ table: e.target.value })}
-                className="mt-2"
               />
             </div>
-            <div className="w-[45%] ml-2">
-              Stage
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25">Stage</span>
               <Input
                 value={(target?.[targetSpecKey as keyof TTarget] as any)?.stage}
                 onChange={(e) => onChangeTarget({ stage: e.target.value })}
-                className="mt-2"
               />
             </div>
           </div>
           <div className="flex justify-between  text-black  ">
-            <div className="w-[45%] ml-2">
-              Table priority
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Table priority</span>
               <Input
                 value={
                   (target?.[targetSpecKey as keyof TTarget] as any)
@@ -128,15 +123,13 @@ export default function DefaultCheckTargetConfiguration({
                     table_priority: Number(e.target.value)
                   })
                 }
-                className="mt-2"
               />
             </div>
-            <div className="w-[45%] ml-2">
-              Label
+            <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+              <span className="w-25"> Label</span>
               <Input
                 value={(target?.[targetSpecKey as keyof TTarget] as any)?.label}
                 onChange={(e) => onChangeTarget({ label: e.target.value })}
-                className="mt-2"
               />
             </div>
           </div>
@@ -144,8 +137,8 @@ export default function DefaultCheckTargetConfiguration({
           {type === 'column' && (
             <>
               <div className="flex justify-between  text-black  ">
-                <div className="w-[45%] ml-2">
-                  Column
+                <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+                  <span className="w-25"> Column</span>
                   <Input
                     value={
                       (target?.[targetSpecKey as keyof TTarget] as any)?.[
@@ -157,11 +150,10 @@ export default function DefaultCheckTargetConfiguration({
                         ['column' as keyof TTargetSpec]: e.target.value
                       })
                     }
-                    className="mt-2"
                   />
                 </div>
-                <div className="w-[45%] ml-2">
-                  Data type
+                <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+                  <span className="w-25"> Data type</span>
                   <Input
                     value={
                       (target?.[targetSpecKey as keyof TTarget] as any)?.[
@@ -173,13 +165,12 @@ export default function DefaultCheckTargetConfiguration({
                         ['data_type' as keyof TTargetSpec]: e.target.value
                       })
                     }
-                    className="mt-2"
                   />
                 </div>
               </div>
               <div className="flex justify-between  text-black  ">
-                <div className="w-[45%] ml-2">
-                  Data type category
+                <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
+                  <span className="w-25"> Data type category</span>
                   <Input
                     value={
                       (target?.[targetSpecKey as keyof TTarget] as any)?.[
@@ -192,7 +183,6 @@ export default function DefaultCheckTargetConfiguration({
                           e.target.value
                       })
                     }
-                    className="mt-2"
                   />
                 </div>
               </div>
