@@ -6,27 +6,27 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.table_daily_partitioned_check_categories_spec import (
-        TableDailyPartitionedCheckCategoriesSpec,
+    from ..models.table_daily_monitoring_check_categories_spec import (
+        TableDailyMonitoringCheckCategoriesSpec,
     )
-    from ..models.table_monthly_partitioned_check_categories_spec import (
-        TableMonthlyPartitionedCheckCategoriesSpec,
+    from ..models.table_monthly_monitoring_check_categories_spec import (
+        TableMonthlyMonitoringCheckCategoriesSpec,
     )
 
 
-T = TypeVar("T", bound="TablePartitionedChecksRootSpec")
+T = TypeVar("T", bound="TableMonitoringCheckCategoriesSpec")
 
 
 @_attrs_define
-class TablePartitionedChecksRootSpec:
+class TableMonitoringCheckCategoriesSpec:
     """
     Attributes:
-        daily (Union[Unset, TableDailyPartitionedCheckCategoriesSpec]):
-        monthly (Union[Unset, TableMonthlyPartitionedCheckCategoriesSpec]):
+        daily (Union[Unset, TableDailyMonitoringCheckCategoriesSpec]):
+        monthly (Union[Unset, TableMonthlyMonitoringCheckCategoriesSpec]):
     """
 
-    daily: Union[Unset, "TableDailyPartitionedCheckCategoriesSpec"] = UNSET
-    monthly: Union[Unset, "TableMonthlyPartitionedCheckCategoriesSpec"] = UNSET
+    daily: Union[Unset, "TableDailyMonitoringCheckCategoriesSpec"] = UNSET
+    monthly: Union[Unset, "TableMonthlyMonitoringCheckCategoriesSpec"] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -50,35 +50,35 @@ class TablePartitionedChecksRootSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.table_daily_partitioned_check_categories_spec import (
-            TableDailyPartitionedCheckCategoriesSpec,
+        from ..models.table_daily_monitoring_check_categories_spec import (
+            TableDailyMonitoringCheckCategoriesSpec,
         )
-        from ..models.table_monthly_partitioned_check_categories_spec import (
-            TableMonthlyPartitionedCheckCategoriesSpec,
+        from ..models.table_monthly_monitoring_check_categories_spec import (
+            TableMonthlyMonitoringCheckCategoriesSpec,
         )
 
         d = src_dict.copy()
         _daily = d.pop("daily", UNSET)
-        daily: Union[Unset, TableDailyPartitionedCheckCategoriesSpec]
+        daily: Union[Unset, TableDailyMonitoringCheckCategoriesSpec]
         if isinstance(_daily, Unset):
             daily = UNSET
         else:
-            daily = TableDailyPartitionedCheckCategoriesSpec.from_dict(_daily)
+            daily = TableDailyMonitoringCheckCategoriesSpec.from_dict(_daily)
 
         _monthly = d.pop("monthly", UNSET)
-        monthly: Union[Unset, TableMonthlyPartitionedCheckCategoriesSpec]
+        monthly: Union[Unset, TableMonthlyMonitoringCheckCategoriesSpec]
         if isinstance(_monthly, Unset):
             monthly = UNSET
         else:
-            monthly = TableMonthlyPartitionedCheckCategoriesSpec.from_dict(_monthly)
+            monthly = TableMonthlyMonitoringCheckCategoriesSpec.from_dict(_monthly)
 
-        table_partitioned_checks_root_spec = cls(
+        table_monitoring_check_categories_spec = cls(
             daily=daily,
             monthly=monthly,
         )
 
-        table_partitioned_checks_root_spec.additional_properties = d
-        return table_partitioned_checks_root_spec
+        table_monitoring_check_categories_spec.additional_properties = d
+        return table_monitoring_check_categories_spec
 
     @property
     def additional_keys(self) -> List[str]:

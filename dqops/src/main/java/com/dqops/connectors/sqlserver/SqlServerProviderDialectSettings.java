@@ -55,7 +55,7 @@ public class SqlServerProviderDialectSettings extends ProviderDialectSettings {
 
         String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "datetimeoffset")) {
-            return DataTypeCategory.datetime_instant;
+            return DataTypeCategory.datetime_timestamp;
         }
 
         return super.detectColumnType(columnTypeSnapshot);

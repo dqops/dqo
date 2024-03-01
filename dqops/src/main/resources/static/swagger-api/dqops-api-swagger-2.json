@@ -32893,10 +32893,10 @@
           "type" : "string",
           "description" : "The region for the storage credentials. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution."
         },
-        "aws_secret_access_key" : {
+        "aws_access_key_id" : {
           "type" : "string"
         },
-        "aws_access_key_id" : {
+        "aws_secret_access_key" : {
           "type" : "string"
         }
       }
@@ -38606,7 +38606,7 @@
         "data_type_category" : {
           "type" : "string",
           "description" : "The filter for a target data type category.",
-          "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_instant", "datetime_datetime", "datetime_date", "datetime_time", "string", "text", "json", "bool", "binary", "array", "other" ]
+          "enum" : [ "numeric_integer", "numeric_decimal", "numeric_float", "datetime_timestamp", "datetime_datetime", "datetime_date", "datetime_time", "text", "clob", "json", "bool", "binary", "array", "other" ]
         }
       }
     },

@@ -4,6 +4,7 @@ from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
 from ..models.duckdb_read_mode import DuckdbReadMode
+from ..models.duckdb_secrets_type import DuckdbSecretsType
 from ..models.duckdb_source_files_type import DuckdbSourceFilesType
 from ..types import UNSET, Unset
 
@@ -39,6 +40,15 @@ class DuckdbParametersSpec:
         json (Union[Unset, JsonFileFormatSpec]):
         parquet (Union[Unset, ParquetFileFormatSpec]):
         directories (Union[Unset, DuckdbParametersSpecDirectories]): Schema to directory mappings.
+        secrets_type (Union[Unset, DuckdbSecretsType]):
+        user (Union[Unset, str]): DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use
+            dynamic substitution.
+        password (Union[Unset, str]): DuckDB database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME}
+            format to use dynamic substitution.
+        region (Union[Unset, str]): The region for the storage credentials. The value can be in the
+            ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
+        aws_access_key_id (Union[Unset, str]):
+        aws_secret_access_key (Union[Unset, str]):
     """
 
     read_mode: Union[Unset, DuckdbReadMode] = UNSET
@@ -50,6 +60,12 @@ class DuckdbParametersSpec:
     json: Union[Unset, "JsonFileFormatSpec"] = UNSET
     parquet: Union[Unset, "ParquetFileFormatSpec"] = UNSET
     directories: Union[Unset, "DuckdbParametersSpecDirectories"] = UNSET
+    secrets_type: Union[Unset, DuckdbSecretsType] = UNSET
+    user: Union[Unset, str] = UNSET
+    password: Union[Unset, str] = UNSET
+    region: Union[Unset, str] = UNSET
+    aws_access_key_id: Union[Unset, str] = UNSET
+    aws_secret_access_key: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
 
     def to_dict(self) -> Dict[str, Any]:
@@ -83,6 +99,16 @@ class DuckdbParametersSpec:
         if not isinstance(self.directories, Unset):
             directories = self.directories.to_dict()
 
+        secrets_type: Union[Unset, str] = UNSET
+        if not isinstance(self.secrets_type, Unset):
+            secrets_type = self.secrets_type.value
+
+        user = self.user
+        password = self.password
+        region = self.region
+        aws_access_key_id = self.aws_access_key_id
+        aws_secret_access_key = self.aws_secret_access_key
+
         field_dict: Dict[str, Any] = {}
         field_dict.update(self.additional_properties)
         field_dict.update({})
@@ -104,6 +130,18 @@ class DuckdbParametersSpec:
             field_dict["parquet"] = parquet
         if directories is not UNSET:
             field_dict["directories"] = directories
+        if secrets_type is not UNSET:
+            field_dict["secrets_type"] = secrets_type
+        if user is not UNSET:
+            field_dict["user"] = user
+        if password is not UNSET:
+            field_dict["password"] = password
+        if region is not UNSET:
+            field_dict["region"] = region
+        if aws_access_key_id is not UNSET:
+            field_dict["aws_access_key_id"] = aws_access_key_id
+        if aws_secret_access_key is not UNSET:
+            field_dict["aws_secret_access_key"] = aws_secret_access_key
 
         return field_dict
 
@@ -173,6 +211,23 @@ class DuckdbParametersSpec:
         else:
             directories = DuckdbParametersSpecDirectories.from_dict(_directories)
 
+        _secrets_type = d.pop("secrets_type", UNSET)
+        secrets_type: Union[Unset, DuckdbSecretsType]
+        if isinstance(_secrets_type, Unset):
+            secrets_type = UNSET
+        else:
+            secrets_type = DuckdbSecretsType(_secrets_type)
+
+        user = d.pop("user", UNSET)
+
+        password = d.pop("password", UNSET)
+
+        region = d.pop("region", UNSET)
+
+        aws_access_key_id = d.pop("aws_access_key_id", UNSET)
+
+        aws_secret_access_key = d.pop("aws_secret_access_key", UNSET)
+
         duckdb_parameters_spec = cls(
             read_mode=read_mode,
             source_files_type=source_files_type,
@@ -183,6 +238,12 @@ class DuckdbParametersSpec:
             json=json,
             parquet=parquet,
             directories=directories,
+            secrets_type=secrets_type,
+            user=user,
+            password=password,
+            region=region,
+            aws_access_key_id=aws_access_key_id,
+            aws_secret_access_key=aws_secret_access_key,
         )
 
         duckdb_parameters_spec.additional_properties = d

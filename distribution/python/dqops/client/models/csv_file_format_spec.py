@@ -1,13 +1,10 @@
-from typing import TYPE_CHECKING, Any, Dict, List, Type, TypeVar, Union
+from typing import Any, Dict, List, Type, TypeVar, Union
 
 from attrs import define as _attrs_define
 from attrs import field as _attrs_field
 
+from ..models.compression_type import CompressionType
 from ..types import UNSET, Unset
-
-if TYPE_CHECKING:
-    from ..models.csv_file_format_spec_columns import CsvFileFormatSpecColumns
-
 
 T = TypeVar("T", bound="CsvFileFormatSpec")
 
@@ -20,12 +17,7 @@ class CsvFileFormatSpec:
             type VARCHAR.
         allow_quoted_nulls (Union[Unset, bool]): Option to allow the conversion of quoted values to NULL values.
         auto_detect (Union[Unset, bool]): Enables auto detection of CSV parameters.
-        columns (Union[Unset, CsvFileFormatSpecColumns]): A struct that specifies the column names and column types
-            contained within the CSV file (e.g., {'col1': 'INTEGER', 'col2': 'VARCHAR'}). Using this option implies that
-            auto detection is not used.
-        compression (Union[Unset, str]): The compression type for the file. By default this will be detected
-            automatically from the file extension (e.g., t.csv.gz will use gzip, t.csv will use none). Options are none,
-            gzip, zstd.
+        compression (Union[Unset, CompressionType]):
         dateformat (Union[Unset, str]): Specifies the date format to use when parsing dates.
         decimal_separator (Union[Unset, str]): The decimal separator of numbers.
         delim (Union[Unset, str]): Specifies the string that separates columns within each row (line) of the file.
@@ -39,6 +31,7 @@ class CsvFileFormatSpec:
             with errors.
         new_line (Union[Unset, str]): Set the new line character(s) in the file. Options are '\r','\n', or '\r\n'.
         quote (Union[Unset, str]): Specifies the quoting string to be used when a data value is quoted.
+        sample_size (Union[Unset, int]): The number of sample rows for auto detection of parameters.
         skip (Union[Unset, int]): The number of lines at the top of the file to skip.
         timestampformat (Union[Unset, str]): Specifies the date format to use when parsing timestamps.
     """
@@ -46,8 +39,7 @@ class CsvFileFormatSpec:
     all_varchar: Union[Unset, bool] = UNSET
     allow_quoted_nulls: Union[Unset, bool] = UNSET
     auto_detect: Union[Unset, bool] = UNSET
-    columns: Union[Unset, "CsvFileFormatSpecColumns"] = UNSET
-    compression: Union[Unset, str] = UNSET
+    compression: Union[Unset, CompressionType] = UNSET
     dateformat: Union[Unset, str] = UNSET
     decimal_separator: Union[Unset, str] = UNSET
     delim: Union[Unset, str] = UNSET
@@ -58,6 +50,7 @@ class CsvFileFormatSpec:
     ignore_errors: Union[Unset, bool] = UNSET
     new_line: Union[Unset, str] = UNSET
     quote: Union[Unset, str] = UNSET
+    sample_size: Union[Unset, int] = UNSET
     skip: Union[Unset, int] = UNSET
     timestampformat: Union[Unset, str] = UNSET
     additional_properties: Dict[str, Any] = _attrs_field(init=False, factory=dict)
@@ -66,11 +59,10 @@ class CsvFileFormatSpec:
         all_varchar = self.all_varchar
         allow_quoted_nulls = self.allow_quoted_nulls
         auto_detect = self.auto_detect
-        columns: Union[Unset, Dict[str, Any]] = UNSET
-        if not isinstance(self.columns, Unset):
-            columns = self.columns.to_dict()
+        compression: Union[Unset, str] = UNSET
+        if not isinstance(self.compression, Unset):
+            compression = self.compression.value
 
-        compression = self.compression
         dateformat = self.dateformat
         decimal_separator = self.decimal_separator
         delim = self.delim
@@ -81,6 +73,7 @@ class CsvFileFormatSpec:
         ignore_errors = self.ignore_errors
         new_line = self.new_line
         quote = self.quote
+        sample_size = self.sample_size
         skip = self.skip
         timestampformat = self.timestampformat
 
@@ -93,8 +86,6 @@ class CsvFileFormatSpec:
             field_dict["allow_quoted_nulls"] = allow_quoted_nulls
         if auto_detect is not UNSET:
             field_dict["auto_detect"] = auto_detect
-        if columns is not UNSET:
-            field_dict["columns"] = columns
         if compression is not UNSET:
             field_dict["compression"] = compression
         if dateformat is not UNSET:
@@ -117,6 +108,8 @@ class CsvFileFormatSpec:
             field_dict["new_line"] = new_line
         if quote is not UNSET:
             field_dict["quote"] = quote
+        if sample_size is not UNSET:
+            field_dict["sample_size"] = sample_size
         if skip is not UNSET:
             field_dict["skip"] = skip
         if timestampformat is not UNSET:
@@ -126,8 +119,6 @@ class CsvFileFormatSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.csv_file_format_spec_columns import CsvFileFormatSpecColumns
-
         d = src_dict.copy()
         all_varchar = d.pop("all_varchar", UNSET)
 
@@ -135,14 +126,12 @@ class CsvFileFormatSpec:
 
         auto_detect = d.pop("auto_detect", UNSET)
 
-        _columns = d.pop("columns", UNSET)
-        columns: Union[Unset, CsvFileFormatSpecColumns]
-        if isinstance(_columns, Unset):
-            columns = UNSET
+        _compression = d.pop("compression", UNSET)
+        compression: Union[Unset, CompressionType]
+        if isinstance(_compression, Unset):
+            compression = UNSET
         else:
-            columns = CsvFileFormatSpecColumns.from_dict(_columns)
-
-        compression = d.pop("compression", UNSET)
+            compression = CompressionType(_compression)
 
         dateformat = d.pop("dateformat", UNSET)
 
@@ -164,6 +153,8 @@ class CsvFileFormatSpec:
 
         quote = d.pop("quote", UNSET)
 
+        sample_size = d.pop("sample_size", UNSET)
+
         skip = d.pop("skip", UNSET)
 
         timestampformat = d.pop("timestampformat", UNSET)
@@ -172,7 +163,6 @@ class CsvFileFormatSpec:
             all_varchar=all_varchar,
             allow_quoted_nulls=allow_quoted_nulls,
             auto_detect=auto_detect,
-            columns=columns,
             compression=compression,
             dateformat=dateformat,
             decimal_separator=decimal_separator,
@@ -184,6 +174,7 @@ class CsvFileFormatSpec:
             ignore_errors=ignore_errors,
             new_line=new_line,
             quote=quote,
+            sample_size=sample_size,
             skip=skip,
             timestampformat=timestampformat,
         )

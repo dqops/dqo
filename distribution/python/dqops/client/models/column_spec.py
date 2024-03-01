@@ -6,11 +6,11 @@ from attrs import field as _attrs_field
 from ..types import UNSET, Unset
 
 if TYPE_CHECKING:
-    from ..models.column_monitoring_checks_root_spec import (
-        ColumnMonitoringChecksRootSpec,
+    from ..models.column_monitoring_check_categories_spec import (
+        ColumnMonitoringCheckCategoriesSpec,
     )
-    from ..models.column_partitioned_checks_root_spec import (
-        ColumnPartitionedChecksRootSpec,
+    from ..models.column_partitioned_check_categories_spec import (
+        ColumnPartitionedCheckCategoriesSpec,
     )
     from ..models.column_profiling_check_categories_spec import (
         ColumnProfilingCheckCategoriesSpec,
@@ -40,8 +40,8 @@ class ColumnSpec:
             "{column}::json->'address'->'zip'".
         type_snapshot (Union[Unset, ColumnTypeSnapshotSpec]):
         profiling_checks (Union[Unset, ColumnProfilingCheckCategoriesSpec]):
-        monitoring_checks (Union[Unset, ColumnMonitoringChecksRootSpec]):
-        partitioned_checks (Union[Unset, ColumnPartitionedChecksRootSpec]):
+        monitoring_checks (Union[Unset, ColumnMonitoringCheckCategoriesSpec]):
+        partitioned_checks (Union[Unset, ColumnPartitionedCheckCategoriesSpec]):
         statistics (Union[Unset, ColumnStatisticsCollectorsRootCategoriesSpec]):
         labels (Union[Unset, List[str]]): Custom labels that were assigned to the column. Labels are used for searching
             for columns when filtered data quality checks are executed.
@@ -54,8 +54,8 @@ class ColumnSpec:
     sql_expression: Union[Unset, str] = UNSET
     type_snapshot: Union[Unset, "ColumnTypeSnapshotSpec"] = UNSET
     profiling_checks: Union[Unset, "ColumnProfilingCheckCategoriesSpec"] = UNSET
-    monitoring_checks: Union[Unset, "ColumnMonitoringChecksRootSpec"] = UNSET
-    partitioned_checks: Union[Unset, "ColumnPartitionedChecksRootSpec"] = UNSET
+    monitoring_checks: Union[Unset, "ColumnMonitoringCheckCategoriesSpec"] = UNSET
+    partitioned_checks: Union[Unset, "ColumnPartitionedCheckCategoriesSpec"] = UNSET
     statistics: Union[Unset, "ColumnStatisticsCollectorsRootCategoriesSpec"] = UNSET
     labels: Union[Unset, List[str]] = UNSET
     comments: Union[Unset, List["CommentSpec"]] = UNSET
@@ -122,11 +122,11 @@ class ColumnSpec:
 
     @classmethod
     def from_dict(cls: Type[T], src_dict: Dict[str, Any]) -> T:
-        from ..models.column_monitoring_checks_root_spec import (
-            ColumnMonitoringChecksRootSpec,
+        from ..models.column_monitoring_check_categories_spec import (
+            ColumnMonitoringCheckCategoriesSpec,
         )
-        from ..models.column_partitioned_checks_root_spec import (
-            ColumnPartitionedChecksRootSpec,
+        from ..models.column_partitioned_check_categories_spec import (
+            ColumnPartitionedCheckCategoriesSpec,
         )
         from ..models.column_profiling_check_categories_spec import (
             ColumnProfilingCheckCategoriesSpec,
@@ -159,20 +159,20 @@ class ColumnSpec:
             )
 
         _monitoring_checks = d.pop("monitoring_checks", UNSET)
-        monitoring_checks: Union[Unset, ColumnMonitoringChecksRootSpec]
+        monitoring_checks: Union[Unset, ColumnMonitoringCheckCategoriesSpec]
         if isinstance(_monitoring_checks, Unset):
             monitoring_checks = UNSET
         else:
-            monitoring_checks = ColumnMonitoringChecksRootSpec.from_dict(
+            monitoring_checks = ColumnMonitoringCheckCategoriesSpec.from_dict(
                 _monitoring_checks
             )
 
         _partitioned_checks = d.pop("partitioned_checks", UNSET)
-        partitioned_checks: Union[Unset, ColumnPartitionedChecksRootSpec]
+        partitioned_checks: Union[Unset, ColumnPartitionedCheckCategoriesSpec]
         if isinstance(_partitioned_checks, Unset):
             partitioned_checks = UNSET
         else:
-            partitioned_checks = ColumnPartitionedChecksRootSpec.from_dict(
+            partitioned_checks = ColumnPartitionedCheckCategoriesSpec.from_dict(
                 _partitioned_checks
             )
 

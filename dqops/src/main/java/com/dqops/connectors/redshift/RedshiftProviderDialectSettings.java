@@ -55,7 +55,7 @@ public class RedshiftProviderDialectSettings extends ProviderDialectSettings {
 
         String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "timestamp with time zone", "timestamptz")) {
-            return DataTypeCategory.datetime_instant;
+            return DataTypeCategory.datetime_timestamp;
         }
 
         if (StringCheckUtility.containsAny(columnType, "timestamp without time zone", "timestamp")) {

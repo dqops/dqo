@@ -42,6 +42,8 @@ class CheckModel:
         standard (Union[Unset, bool]): This is a standard data quality check that is always shown on the data quality
             checks editor screen. Non-standard data quality checks (when the value is false) are advanced checks that are
             shown when the user decides to expand the list of checks.
+        default_check (Union[Unset, bool]): This is a check that was applied on-the-fly, because it is configured as a
+            default data observability check and can be run, but it is not configured in the table YAML.
         data_grouping_override (Union[Unset, DataGroupingConfigurationSpec]):
         schedule_override (Union[Unset, MonitoringScheduleSpec]):
         effective_schedule (Union[Unset, EffectiveScheduleModel]): Model of a configured schedule (enabled on connection
@@ -88,6 +90,7 @@ class CheckModel:
     rule: Union[Unset, "RuleThresholdsModel"] = UNSET
     supports_grouping: Union[Unset, bool] = UNSET
     standard: Union[Unset, bool] = UNSET
+    default_check: Union[Unset, bool] = UNSET
     data_grouping_override: Union[Unset, "DataGroupingConfigurationSpec"] = UNSET
     schedule_override: Union[Unset, "MonitoringScheduleSpec"] = UNSET
     effective_schedule: Union[Unset, "EffectiveScheduleModel"] = UNSET
@@ -129,6 +132,7 @@ class CheckModel:
 
         supports_grouping = self.supports_grouping
         standard = self.standard
+        default_check = self.default_check
         data_grouping_override: Union[Unset, Dict[str, Any]] = UNSET
         if not isinstance(self.data_grouping_override, Unset):
             data_grouping_override = self.data_grouping_override.to_dict()
@@ -207,6 +211,8 @@ class CheckModel:
             field_dict["supports_grouping"] = supports_grouping
         if standard is not UNSET:
             field_dict["standard"] = standard
+        if default_check is not UNSET:
+            field_dict["default_check"] = default_check
         if data_grouping_override is not UNSET:
             field_dict["data_grouping_override"] = data_grouping_override
         if schedule_override is not UNSET:
@@ -294,6 +300,8 @@ class CheckModel:
         supports_grouping = d.pop("supports_grouping", UNSET)
 
         standard = d.pop("standard", UNSET)
+
+        default_check = d.pop("default_check", UNSET)
 
         _data_grouping_override = d.pop("data_grouping_override", UNSET)
         data_grouping_override: Union[Unset, DataGroupingConfigurationSpec]
@@ -399,6 +407,7 @@ class CheckModel:
             rule=rule,
             supports_grouping=supports_grouping,
             standard=standard,
+            default_check=default_check,
             data_grouping_override=data_grouping_override,
             schedule_override=schedule_override,
             effective_schedule=effective_schedule,

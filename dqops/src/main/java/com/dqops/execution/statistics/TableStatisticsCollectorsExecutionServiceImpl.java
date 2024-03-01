@@ -386,7 +386,7 @@ public class TableStatisticsCollectorsExecutionServiceImpl implements TableStati
 
         ColumnTypeSnapshotSpec typeSnapshot = sensorRunParameters.getColumn().getTypeSnapshot();
         if (typeSnapshot == null || Strings.isNullOrEmpty(typeSnapshot.getColumnType())) {
-            targetColumnTypeCategory = DataTypeCategory.string; // we are assuming that all unknown types are text types, just to allow analyzing calculated columns
+            targetColumnTypeCategory = DataTypeCategory.text; // we are assuming that all unknown types are text types, just to allow analyzing calculated columns
         } else {
             targetColumnTypeCategory = dialectSettings.detectColumnType(typeSnapshot);
         }
