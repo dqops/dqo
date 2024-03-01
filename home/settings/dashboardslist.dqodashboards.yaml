@@ -285,7 +285,7 @@ spec:
         - folder_name: Table-level issues
           dashboards:
             - dashboard_name: Summary of changes in columns
-              url: https://lookerstudio.google.com/embed/reporting/56f157c0-1a5d-4336-a689-5bd63e4865f5/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
               width: 1400
               height: 1800
               parameters:
@@ -727,7 +727,7 @@ spec:
           dashboards:
             - dashboard_name: Summary of changes in columns
               standard: true
-              url: https://lookerstudio.google.com/embed/reporting/56f157c0-1a5d-4336-a689-5bd63e4865f5/page/c5B8C
+              url: https://lookerstudio.google.com/embed/reporting/1549a291-a238-481a-867d-1c3017a8a2e4/page/c5B8C
               width: 1400
               height: 1800
               parameters:
