@@ -264,8 +264,6 @@ export default function EditCheckPattern({
     getTarget();
   }, [create]);
 
-  console.log(checkContainers);
-
   function getCheckOverview(): void {}
 
   return (
