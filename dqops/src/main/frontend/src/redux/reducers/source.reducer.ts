@@ -106,7 +106,6 @@ const setActiveTabState = (
   };
 };
 const connectionReducer = (state = initialState, action: Action) => {
-  console.log(state, action);
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
       const existing = state[action.checkType]?.tabs.find(

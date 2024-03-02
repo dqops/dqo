@@ -64,3 +64,57 @@ export const getDetectedDatatype = (numberForFile: any) => {
     return 'Mixed data type';
   }
 };
+
+export const sortPatterns = <T>(
+  patterns: T[],
+  key: keyof T,
+  order: 'asc' | 'desc'
+) => {
+  const copiedPatterns = [...patterns];
+
+  copiedPatterns.sort((a, b) => {
+    const valueA = a[key];
+    const valueB = b[key];
+
+    if (valueA === null && valueB === null) {
+      return 0;
+    } else if (valueA === null) {
+      return order === 'asc' ? -1 : 1;
+    } else if (valueB === null) {
+      return order === 'asc' ? 1 : -1;
+    }
+
+    if (valueA === undefined && valueB === undefined) {
+      return 0;
+    } else if (valueA === undefined) {
+      return order === 'asc' ? -1 : 1;
+    } else if (valueB === undefined) {
+      return order === 'asc' ? 1 : -1;
+    }
+
+    const comparison = order === 'asc' ? 1 : -1;
+
+    if (valueA < valueB) {
+      return -1 * comparison;
+    } else if (valueA > valueB) {
+      return 1 * comparison;
+    } else {
+      return 0;
+    }
+  });
+  return copiedPatterns;
+};
+export function sortByKey(key: string) {
+  return function (a: any, b: any): number {
+    const aProp = key.split('.').reduce((obj, prop) => obj && obj[prop], a);
+    const bProp = key.split('.').reduce((obj, prop) => obj && obj[prop], b);
+
+    if (typeof aProp === 'string' && typeof bProp === 'string') {
+      return aProp.localeCompare(bProp);
+    } else if (typeof aProp === 'number' && typeof bProp === 'number') {
+      return aProp - bProp;
+    } else {
+      return 0;
+    }
+  };
+}
