@@ -104,3 +104,17 @@ export const sortPatterns = <T>(
   });
   return copiedPatterns;
 };
+export function sortByKey(key: string) {
+  return function (a: any, b: any): number {
+    const aProp = key.split('.').reduce((obj, prop) => obj && obj[prop], a);
+    const bProp = key.split('.').reduce((obj, prop) => obj && obj[prop], b);
+
+    if (typeof aProp === 'string' && typeof bProp === 'string') {
+      return aProp.localeCompare(bProp);
+    } else if (typeof aProp === 'number' && typeof bProp === 'number') {
+      return aProp - bProp;
+    } else {
+      return 0;
+    }
+  };
+}

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
   DefaultColumnChecksPatternListModel,
-  DefaultTableChecksPatternListModel,
-  TargetTablePatternSpec
+  DefaultTableChecksPatternListModel
 } from '../../api';
 import Button from '../../components/Button';
 import { sortPatterns } from '../../utils';
@@ -10,6 +9,7 @@ import SvgIcon from '../../components/SvgIcon';
 import { useDefinition } from '../../contexts/definitionContext';
 import { useSelector } from 'react-redux';
 import { getFirstLevelSensorState } from '../../redux/selectors';
+import ConfirmDialog from '../../components/CustomTree/ConfirmDialog';
 
 type TPattern =
   | DefaultTableChecksPatternListModel
@@ -23,17 +23,23 @@ type TDefaultCheckPatternsTableProps = {
 
 type THeaderElement = {
   label: string;
-  key: // | keyof Pick<
-  //     DefaultTableChecksPatternListModel,
-  | 'pattern_name'
+  key:
+    | 'pattern_name'
     | 'priority'
     | 'can_edit'
     | 'yaml_parsing_error'
-    | `${'target_table' | 'target_column'}.${'connection' | 'schema' | 'table'}`
-    //| `target_table?.${[keyof TargetTablePatternSpec]}`
-    // >
-    | undefined;
+    | 'connection'
+    | 'schema'
+    | 'table';
 };
+
+const headerElement: THeaderElement[] = [
+  { label: 'Pattern name', key: 'pattern_name' },
+  { label: 'Priority', key: 'priority' },
+  { label: 'Connection', key: 'connection' },
+  { label: 'Schema', key: 'schema' },
+  { label: 'Table', key: 'table' }
+];
 
 export default function DefaultCheckPatternsTable({
   patterns,
@@ -47,15 +53,28 @@ export default function DefaultCheckPatternsTable({
   const editPattern = (type: string, pattern: string) => {
     openDefaultCheckPatternFirstLevelTab(type, pattern);
   };
-  const [dir, setDir] = useState<'asc' | 'desc'>('desc');
+  const [dir, setDir] = useState<'asc' | 'desc'>('asc');
+  const [patternDelete, setPatternDelete] = useState('');
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
-  const headerElement: THeaderElement[] = [
-    { label: 'Pattern name', key: 'pattern_name' },
-    { label: 'Priority', key: 'priority' },
-    { label: 'Connection', key: `${targetSpecKey}.connection` },
-    { label: 'Schema', key: `${targetSpecKey}.schema` },
-    { label: 'Table', key: `${targetSpecKey}.table` }
-  ];
+
+  const getPreparedPatterns = () => {
+    const arr: any[] = [];
+
+    patterns.forEach((x) => {
+      const targetSpec: any = x[targetSpecKey as keyof TPattern];
+      if (
+        targetSpec &&
+        typeof targetSpec === 'object' &&
+        Object.keys(targetSpec).length !== 0
+      ) {
+        arr.push({ ...x, ...targetSpec });
+      } else {
+        arr.push(x);
+      }
+    });
+
+    return arr;
+  };
 
   return (
     <table>
@@ -68,7 +87,11 @@ export default function DefaultCheckPatternsTable({
               onClick={() =>
                 elem.key &&
                 (onChange(
-                  sortPatterns(patterns, elem.key as keyof TPattern, dir)
+                  sortPatterns(
+                    getPreparedPatterns(),
+                    elem.key as keyof TPattern,
+                    dir
+                  )
                 ),
                 setDir(dir === 'asc' ? 'desc' : 'asc'))
               }
@@ -87,19 +110,13 @@ export default function DefaultCheckPatternsTable({
         </tr>
       </thead>
       <tbody className=" border-t border-gray-100">
-        {patterns.map((pattern, index) => (
+        {getPreparedPatterns().map((pattern, index) => (
           <tr key={index}>
             <td className="px-4">{pattern.pattern_name}</td>
             <td className="px-4">{pattern.priority}</td>
-            <td className="px-4">
-              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.connection}
-            </td>
-            <td className="px-4">
-              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.schema}
-            </td>
-            <td className="px-4">
-              {(pattern?.[targetSpecKey as keyof TPattern] as any)?.table}
-            </td>
+            <td className="px-4">{pattern?.connection}</td>
+            <td className="px-4">{pattern?.schema}</td>
+            <td className="px-4">{pattern?.table}</td>
             <td className="px-4">
               <Button
                 variant="text"
@@ -113,11 +130,19 @@ export default function DefaultCheckPatternsTable({
                 variant="text"
                 label="delete"
                 color="primary"
-                onClick={() => deletePattern(pattern.pattern_name ?? '')}
+                onClick={() => setPatternDelete(pattern.pattern_name ?? '')}
               />
             </td>
           </tr>
         ))}
+        <ConfirmDialog
+          open={patternDelete.length > 0}
+          onConfirm={async () => {
+            deletePattern(patternDelete ?? ''), setPatternDelete('');
+          }}
+          onClose={() => setPatternDelete('')}
+          message={`Are you sure you want to delete the ${patternDelete} pattern ?`}
+        />
       </tbody>
     </table>
   );

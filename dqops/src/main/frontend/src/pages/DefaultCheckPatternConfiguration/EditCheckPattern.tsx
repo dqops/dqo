@@ -158,7 +158,11 @@ export default function EditCheckPattern({
     const apiClient = type === 'column' ? apiClients.column : apiClients.table;
 
     Object.keys(apiClient).forEach((key) => {
-      if (checkContainers?.[key as TCheckTypes]) {
+      if (
+        checkContainers?.[key as TCheckTypes] &&
+        Object.keys(checkContainers?.[activeTab as TCheckTypes] ?? {})
+          .length !== 0
+      ) {
         const apiFunction = apiClient[key as TCheckTypes];
         apiFunction(pattern_name, checkContainers[key as TCheckTypes]);
       }
@@ -186,20 +190,19 @@ export default function EditCheckPattern({
     setIsUpdated(true);
   };
 
+  const getTarget = () => {
+    if (type === 'column') {
+      DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
+        pattern_name
+      ).then((res) => setTarget(res?.data));
+    } else {
+      DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
+        pattern_name
+      ).then((res) => setTarget(res?.data));
+    }
+  };
   useEffect(() => {
     if (!pattern_name) return;
-
-    const getTarget = () => {
-      if (type === 'column') {
-        DefaultColumnCheckPatternsApiClient.getDefaultColumnChecksPatternTarget(
-          pattern_name
-        ).then((res) => setTarget(res?.data));
-      } else {
-        DefaultTableCheckPatternsApiClient.getDefaultTableChecksPatternTarget(
-          pattern_name
-        ).then((res) => setTarget(res?.data));
-      }
-    };
 
     const getChecks = async () => {
       const callBack = (value: AxiosResponse<CheckContainerModel, any>) => {
@@ -244,10 +247,24 @@ export default function EditCheckPattern({
         await apiCall(pattern_name).then(callBack);
       }
     };
-
-    getTarget();
-    getChecks();
+    if (
+      !checkContainers?.[activeTab as TCheckTypes] ||
+      Object.keys(checkContainers?.[activeTab as TCheckTypes] ?? {}).length ===
+        0
+    ) {
+      getChecks();
+    }
   }, [pattern_name, create, activeTab]);
+
+  useEffect(() => {
+    getTarget();
+  }, [pattern_name]);
+
+  useEffect(() => {
+    getTarget();
+  }, [create]);
+
+  console.log(checkContainers);
 
   function getCheckOverview(): void {}
 
@@ -258,7 +275,8 @@ export default function EditCheckPattern({
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">
-              Check pattern editor
+              {type.replace(/./, (c) => c.toUpperCase())} check pattern{' '}
+              {pattern_name}
             </div>
           </div>
           <Button
@@ -272,21 +290,30 @@ export default function EditCheckPattern({
           <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
         </div>
         <div>
-          {activeTab !== 'table-target' ? (
-            <DataQualityChecks
-              checksUI={checkContainers?.[activeTab as TCheckTypes]}
-              onUpdate={updateChecks}
-              onChange={handleChange}
-              checkResultsOverview={[]}
-              getCheckOverview={getCheckOverview}
-              isDefaultEditing={true}
-            />
-          ) : (
+          {activeTab === 'table-target' ? (
             <DefaultCheckTargetConfiguration
               type={type}
               target={target}
               onChangeTarget={onChangeTarget}
             />
+          ) : (
+            tabs.map((x, index) => {
+              if (index === 0) return <></>;
+
+              return x.value === activeTab ? (
+                <DataQualityChecks
+                  key={index}
+                  checksUI={checkContainers?.[x.value as TCheckTypes]}
+                  onUpdate={updateChecks}
+                  onChange={handleChange}
+                  checkResultsOverview={[]}
+                  getCheckOverview={getCheckOverview}
+                  isDefaultEditing={true}
+                />
+              ) : (
+                <></>
+              );
+            })
           )}
         </div>
       </div>

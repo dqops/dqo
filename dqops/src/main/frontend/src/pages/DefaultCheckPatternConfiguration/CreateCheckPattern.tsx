@@ -72,7 +72,7 @@ export default function CreateCheckPattern({ type }: TCreateCheckPatternProps) {
           <div className="flex items-center space-x-2 max-w-full">
             <SvgIcon name="grid" className="w-5 h-5 shrink-0" />
             <div className="text-xl font-semibold truncate">
-              Create check pattern
+              Create {type} check pattern
             </div>
           </div>
           <Button
