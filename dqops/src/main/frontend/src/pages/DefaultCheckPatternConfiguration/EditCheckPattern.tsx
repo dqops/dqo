@@ -157,6 +157,8 @@ export default function EditCheckPattern({
 
     const apiClient = type === 'column' ? apiClients.column : apiClients.table;
 
+    const promises: Promise<any>[] = [];
+
     Object.keys(apiClient).forEach((key) => {
       if (
         checkContainers?.[key as TCheckTypes] &&
@@ -164,17 +166,21 @@ export default function EditCheckPattern({
           .length !== 0
       ) {
         const apiFunction = apiClient[key as TCheckTypes];
-        apiFunction(pattern_name, checkContainers[key as TCheckTypes]);
+        promises.push(
+          apiFunction(pattern_name, checkContainers[key as TCheckTypes])
+        );
       }
     });
 
+    await Promise.all(promises);
+
     if (type === 'column') {
-      DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
+      await DefaultColumnCheckPatternsApiClient.updateDefaultColumnChecksPatternTarget(
         pattern_name,
         target
       );
     } else {
-      DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
+      await DefaultTableCheckPatternsApiClient.updateDefaultTableChecksPatternTarget(
         pattern_name,
         target
       );
