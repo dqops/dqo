@@ -331,12 +331,12 @@ const Tree = () => {
       node.level === TREE_LEVEL.CHECK ||
       (node.level === TREE_LEVEL.COLUMN && checkTypes === CheckTypes.SOURCES)
     ) {
-      return <div className="w-4 min-w-4 shrink-0" />;
+      return <div className="w-4 min-w-4 shrink-0 mr-1" />;
     }
     if (loadingNodes[node.id]) {
       return (
         <SvgIcon
-          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin"
+          className="w-4 min-w-4 cursor-pointer shrink-0 animate-spin mr-1"
           name="spinner"
         />
       );
