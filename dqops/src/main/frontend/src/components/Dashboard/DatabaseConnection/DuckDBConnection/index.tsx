@@ -71,7 +71,7 @@ const DuckdbConnection = ({
     {
       label: 'AWS S3',
       value: DuckdbParametersSpecSecretsTypeEnum.s3
-    },
+    }
     // todo: uncomment below when implemented
     // {
     //   label: 'Google Cloud Storage',
@@ -89,16 +89,17 @@ const DuckdbConnection = ({
 
   return (
     <SectionWrapper title="DuckDB connection parameters" className="mb-4">
-
       <Select
-          label="Storage type"
-          options={secretsTypeOptions}
-          className="mb-4"
-          value={ duckdb?.secrets_type }
-          onChange={(value) => { handleChange({ secrets_type: value })}}
-        />
+        label="Storage type"
+        options={secretsTypeOptions}
+        className="mb-4"
+        value={duckdb?.secrets_type}
+        onChange={(value) => {
+          handleChange({ secrets_type: value });
+        }}
+      />
 
-      { duckdb?.secrets_type === DuckdbParametersSpecSecretsTypeEnum.s3 &&
+      {duckdb?.secrets_type === DuckdbParametersSpecSecretsTypeEnum.s3 && (
         <>
           <FieldTypeInput
             data={sharedCredentials}
@@ -124,7 +125,7 @@ const DuckdbConnection = ({
             onChange={(value) => handleChange({ region: value })}
           />
         </>
-      }
+      )}
 
       <FileFormatConfiguration
         fileFormatType={fileFormatType}
