@@ -22,6 +22,7 @@ import {
 } from '../../api';
 import { ChecksApi, SensorsApi } from '../../services/apiClient';
 import Input from '../Input';
+import { urlencodeEncoder } from '../../utils';
 
 type DeleteOnlyDataDialogProps = {
   open: boolean;
@@ -160,16 +161,16 @@ const DeleteStoredDataExtendedPopUp = ({
         <div className="flex flex-col">
           <div className="flex justify-between border-b pb-4 border-gray-300 text-black font-semibold">
             {hierarchiArray?.[0] && (
-              <div> {'Connection: ' + hierarchiArray?.[0]} </div>
+              <div> {'Connection: ' + urlencodeEncoder(hierarchiArray?.[0])} </div>
             )}
             {hierarchiArray?.[1] && (
-              <div> {'Schema: ' + hierarchiArray?.[1]} </div>
+              <div> {'Schema: ' + urlencodeEncoder(hierarchiArray?.[1])} </div>
             )}
             {hierarchiArray?.[2] && (
-              <div> {'Table: ' + hierarchiArray?.[2]} </div>
+              <div> {'Table: ' + urlencodeEncoder(hierarchiArray?.[2])} </div>
             )}
             {hierarchiArray?.[4] && (
-              <div> {'Column: ' + hierarchiArray?.[4]} </div>
+              <div> {'Column: ' + urlencodeEncoder(hierarchiArray?.[4])} </div>
             )}
           </div>
           <div>

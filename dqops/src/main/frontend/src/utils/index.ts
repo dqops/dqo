@@ -33,12 +33,37 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
   return new Date(strDate).toLocaleString('en-US', options);
 };
 
-export const urlencodeDecoder = (url: string) => {
-  return url.replace(/\s/g, '%20') ?? url;
+export const urlencodeEncoder = (url: string | undefined) => {
+  if (!url) return ''; 
+  const decodedValue = url.replace(/%25|%20|%46|%47|%92/g, (match) => {
+    switch (match) {
+      // case '%25': return '%';
+      case '%20': return ' ';
+      case '%46': return '.';
+      case '%47': return '/';
+      case '%92': return '\\';
+      default: return match;
+    }
+  });
+
+  return decodedValue;
 };
 
-export const urlencodeEncoder = (url: string | undefined) => {
-  return url && url.replace(/%20/g, ' ');
+export const urlencodeDecoder = (url: string | undefined) => {
+  if (!url) return ''; 
+  console.log(url)
+  const encodedValue = url.replace(/[% ./\\]/g, (match) => {
+    switch (match) {
+      // case '%': return '%25';
+      case ' ': return '%20';
+      case '.': return '%46';
+      case '/': return '%47';
+      case '\\': return '%92';
+      default: return match;
+    }
+  });
+console.log(encodedValue)
+  return encodedValue;
 };
 
 export const getDetectedDatatype = (numberForFile: any) => {

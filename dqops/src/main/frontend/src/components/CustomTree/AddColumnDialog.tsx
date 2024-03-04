@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import TextArea from '../TextArea';
+import { urlencodeEncoder } from '../../utils';
 
 interface AddColumnDialogProps {
   open: boolean;
@@ -39,7 +40,7 @@ const AddColumnDialog = ({ open, onClose, node }: AddColumnDialogProps) => {
       setLoading(true);
       if (node) {
         const args = node.id.toString().split('.');
-        await ColumnApiClient.createColumn(args[0], args[1], args[2], name, {
+        await ColumnApiClient.createColumn(urlencodeEncoder(args[0]), urlencodeEncoder(args[1]), urlencodeEncoder(args[2]), name, {
           sql_expression: sqlExpression
         });
         refreshNode(node);
