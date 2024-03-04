@@ -70,7 +70,7 @@ public class DuckdbConnectionSpecObjectMother {
             {{
                 setReadMode(DuckdbReadMode.files);
                 setSourceFilesType(duckdbSourceFilesType);
-                setSecretsType(DuckdbSecretsType.s3);
+                setStorageType(DuckdbStorageType.s3);
                 setUser("aws_example_key_id");
                 setPassword("aws_example_secret");
                 setRegion("eu-central-1");

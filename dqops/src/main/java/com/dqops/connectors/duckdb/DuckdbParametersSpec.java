@@ -97,9 +97,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
 
-    @CommandLine.Option(names = {"--duckdb-secrets-type"}, description = "The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("The secrets type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    private DuckdbSecretsType secretsType;
+    @CommandLine.Option(names = {"--duckdb-storage-type"}, description = "The storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("The storage type. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    private DuckdbStorageType storageType;
 
     @CommandLine.Option(names = {"--duckdb-user"}, description = "DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     @JsonPropertyDescription("DuckDB user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
@@ -270,20 +270,20 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the secrets type.
-     * @return the secrets type.
+     * Returns the storage type.
+     * @return the storage type.
      */
-    public DuckdbSecretsType getSecretsType() {
-        return secretsType;
+    public DuckdbStorageType getStorageType() {
+        return storageType;
     }
 
     /**
-     * Sets the secrets type.
-     * @param secretsType the secrets type.
+     * Sets the storage type.
+     * @param storageType the storage type.
      */
-    public void setSecretsType(DuckdbSecretsType secretsType) {
-        setDirtyIf(!Objects.equals(this.secretsType, secretsType));
-        this.secretsType = secretsType;
+    public void setStorageType(DuckdbStorageType storageType) {
+        setDirtyIf(!Objects.equals(this.storageType, storageType));
+        this.storageType = storageType;
     }
 
     /**
@@ -416,9 +416,9 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     public void fillSpecWithDefaultCredentials(SecretValueLookupContext secretValueLookupContext){
-        DuckdbSecretsType secretsType = this.getSecretsType();
+        DuckdbStorageType storageType = this.getStorageType();
 
-        switch (secretsType){
+        switch (storageType){
             case s3:
                 if(Strings.isNullOrEmpty(this.getAwsAccessKeyId()) || Strings.isNullOrEmpty(this.getAwsSecretAccessKey())){
                     Optional<Profile> credentialProfile = AwsDefaultCredentialProfileProvider.provideProfile(secretValueLookupContext);
@@ -449,7 +449,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
 
                 break;
             default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }
     }
 

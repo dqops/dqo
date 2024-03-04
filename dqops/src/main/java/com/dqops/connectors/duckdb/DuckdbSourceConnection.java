@@ -211,7 +211,8 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
      * @param secretValueLookupContext Secret value lookup context used to find shared credentials that could be used in the connection names.
      */
     private void ensureSecretsLoaded(SecretValueLookupContext secretValueLookupContext){
-        if(getConnectionSpec().getDuckdb().getSecretsType() == null){
+        DuckdbParametersSpec duckdb = getConnectionSpec().getDuckdb();
+        if(duckdb.getStorageType() == null || duckdb.getStorageType().equals(DuckdbStorageType.local)){
             return;
         }
 
@@ -277,20 +278,20 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             return new ArrayList<>();
         }
 
-        DuckdbSecretsType secretsType = duckdb.getSecretsType();
-        if(secretsType == null){
+        DuckdbStorageType storageType = duckdb.getStorageType();
+        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
             List<SourceTableModel> sourceTableModels = LocalSystemTablesLister.listTables(duckdb, schemaName);
             return sourceTableModels;
         }
 
         DuckdbParametersSpec duckdbCloned = duckdb.expandAndTrim(getSecretValueProvider(), secretValueLookupContext);
         duckdbCloned.fillSpecWithDefaultCredentials(secretValueLookupContext);
-        switch (secretsType){
+        switch (storageType){
             case s3:
                 List<SourceTableModel> sourceTableModels = AwsTablesLister.listTables(duckdbCloned, schemaName);
                 return sourceTableModels;
             default:
-                throw new RuntimeException("This type of secretsType is not supported: " + secretsType);
+                throw new RuntimeException("This type of secretsType is not supported: " + storageType);
         }
     }
 

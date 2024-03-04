@@ -9,26 +9,26 @@ import com.google.common.hash.HashCode;
 public class DuckdbQueriesProvider {
 
     /**
-     * Provides a CREATE SECRET query for especial secret type given in duckdb parameters spec.
+     * Provides a CREATE SECRET query for an especial secret type given in duckdb parameters spec.
      * @param connectionSpec Connection spec with DuckDB parameters with credentials and setup.
      * @return Ready to execute create secrets query string.
      */
     public static String provideCreateSecretQuery(ConnectionSpec connectionSpec, HashCode secretHash){
         DuckdbParametersSpec duckdbParametersSpec = connectionSpec.getDuckdb();
-        DuckdbSecretsType secretsType = duckdbParametersSpec.getSecretsType();
+        DuckdbStorageType storageType = duckdbParametersSpec.getStorageType();
         String indent = "    ";
         StringBuilder loadSecretsString = new StringBuilder();
         String secretName = "secret_" + secretHash;
         loadSecretsString.append("CREATE SECRET ").append(secretName).append(" (\n");
-        switch (secretsType){
+        switch (storageType){
             case s3:
-                loadSecretsString.append(indent).append("TYPE ").append(secretsType.toString().toUpperCase()).append(",\n");
+                loadSecretsString.append(indent).append("TYPE ").append(storageType.toString().toUpperCase()).append(",\n");
                 loadSecretsString.append(indent).append("KEY_ID '").append(duckdbParametersSpec.getUser()).append("',\n");
                 loadSecretsString.append(indent).append("SECRET '").append(duckdbParametersSpec.getPassword()).append("',\n");
                 loadSecretsString.append(indent).append("REGION '").append(duckdbParametersSpec.getRegion()).append("'");
                 break;
             default:
-                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + secretsType);
+                throw new RuntimeException("This type of DuckdbSecretsType is not supported: " + storageType);
         }
         loadSecretsString.append("\n);");
         return loadSecretsString.toString();

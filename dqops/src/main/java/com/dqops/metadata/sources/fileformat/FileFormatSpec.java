@@ -2,6 +2,7 @@ package com.dqops.metadata.sources.fileformat;
 
 import com.dqops.connectors.duckdb.DuckdbParametersSpec;
 import com.dqops.connectors.duckdb.DuckdbSourceFilesType;
+import com.dqops.connectors.duckdb.DuckdbStorageType;
 import com.dqops.core.secrets.SecretValueLookupContext;
 import com.dqops.core.secrets.SecretValueProvider;
 import com.dqops.metadata.basespecs.AbstractSpec;
@@ -154,11 +155,12 @@ public class FileFormatSpec extends AbstractSpec {
      */
     private ArrayList<String> makeFilePathsAccessible(DuckdbParametersSpec duckdb){
         ArrayList<String> accessibleFilePaths = new ArrayList<>();
-        if(duckdb.getSecretsType() == null){
+        DuckdbStorageType storageType = duckdb.getStorageType();
+        if(storageType == null || storageType.equals(DuckdbStorageType.local)){
             return new ArrayList<>(filePaths);
         }
 
-        switch(duckdb.getSecretsType()){
+        switch(storageType){
             case s3:
                 filePaths.iterator().forEachRemaining(filePath -> {
 
@@ -174,7 +176,7 @@ public class FileFormatSpec extends AbstractSpec {
                 });
                 break;
             default:
-                throw new RuntimeException("Secrets type is not supported : " + duckdb.getSecretsType());
+                throw new RuntimeException("Secrets type is not supported : " + storageType);
         }
         return accessibleFilePaths;
     }

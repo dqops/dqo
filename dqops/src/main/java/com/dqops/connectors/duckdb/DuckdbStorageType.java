@@ -18,29 +18,35 @@ package com.dqops.connectors.duckdb;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Storage providers' credentials for DuckDB
+ * Storage providers' for DuckDB.
  */
-public enum DuckdbSecretsType {
+public enum DuckdbStorageType {
     /**
-     * Uses the AWS S3
+     * Uses the local file system.
+     */
+    @JsonProperty("local")
+    local,
+
+    /**
+     * Uses the AWS S3.
      */
     @JsonProperty("s3")
     s3,
 
     /**
-     * Uses the Google Cloud Storage
+     * Uses the Google Cloud Storage.
      */
     @JsonProperty("gcs")
     gcs,
 
     /**
-     * Uses the Cloudflare R2
+     * Uses the Cloudflare R2.
      */
     @JsonProperty("r2")
     r2,
 
     /**
-     * Uses the Azure Blob Storage
+     * Uses the Azure Blob Storage.
      */
     @JsonProperty("azure")
     azure
