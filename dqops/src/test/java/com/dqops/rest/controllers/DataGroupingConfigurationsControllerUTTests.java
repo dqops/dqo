@@ -34,6 +34,7 @@ import com.dqops.rest.models.metadata.DataGroupingConfigurationTrimmedModel;
 import com.dqops.sampledata.SampleCsvFileNames;
 import com.dqops.sampledata.SampleTableMetadata;
 import com.dqops.sampledata.SampleTableMetadataObjectMother;
+import com.dqops.services.locking.RestApiLockServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +61,7 @@ public class DataGroupingConfigurationsControllerUTTests extends BaseTest {
     @BeforeEach
     void setUp() {
         this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
-        this.sut = new DataGroupingConfigurationsController(this.userHomeContextFactory);
+        this.sut = new DataGroupingConfigurationsController(this.userHomeContextFactory, new RestApiLockServiceImpl());
         this.userDomainIdentity = UserDomainIdentityObjectMother.createAdminIdentity();
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome(this.userDomainIdentity);
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(
