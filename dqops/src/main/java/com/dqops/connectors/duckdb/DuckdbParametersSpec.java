@@ -89,6 +89,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ParquetFileFormatSpec parquet;
 
+    @CommandLine.Option(names = "--duckdb-directories", split = ",")
     @JsonPropertyDescription("Virtual schema name to directory mappings.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
