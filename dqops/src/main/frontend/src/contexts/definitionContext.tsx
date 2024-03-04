@@ -97,21 +97,6 @@ function DefinitionProvider(props: any) {
     );
   };
 
-  const openCheckDefaultFirstLevelTab = (defaultCheck: string) => {
-    dispatch(
-      addFirstLevelTab({
-        url: ROUTES.CHECK_DEFAULT_DETAIL(defaultCheck.replace(/\s/g, '_')),
-        value: ROUTES.CHECK_DEFAULT_DETAIL_VALUE(
-          defaultCheck.replace(/\s/g, '_')
-        ),
-        state: {
-          type: defaultCheck
-        },
-        label: defaultCheck
-      })
-    );
-  };
-
   const openDefaultCheckPatternFirstLevelTab = (
     type: string,
     pattern: string,
@@ -329,7 +314,6 @@ function DefinitionProvider(props: any) {
       value={{
         sidebarWidth,
         setSidebarWidth,
-        openCheckDefaultFirstLevelTab,
         openCheckFirstLevelTab,
         openRuleFirstLevelTab,
         openSensorFirstLevelTab,

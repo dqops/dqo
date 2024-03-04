@@ -23,7 +23,6 @@ import SharedCredentialsDetail from '../../pages/SharedCredentialsDetail';
 import SingleSharedCredential from '../../pages/SharedCredentialsDetail/SingleSharedCredential';
 import UserListDetail from '../../pages/UserListDetail';
 import UserDetail from '../../pages/UserListDetail/UserDetail';
-import DefaultCheckDetail from '../../pages/DefaultChecksDetail'
 import DefaultSchedules from '../../pages/DefaultSchedulesDetail'
 import LeftView from './LeftView';
 import { useDefinition } from '../../contexts/definitionContext';
@@ -76,8 +75,6 @@ const DefinitionLayout = ({ route }: LayoutProps) => {
         return <RuleDetail />;
       case ROUTES.PATTERNS.CHECK_DETAIL:
         return <CheckDetail />;
-      case ROUTES.PATTERNS.CHECK_DEFAULT_DETAIL:
-        return <DefaultCheckDetail />;
       case ROUTES.PATTERNS.DEFINITIONS:
         return <Definitions />;
       case ROUTES.PATTERNS.INCIDENT_CONNECTION:
