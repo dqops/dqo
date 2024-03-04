@@ -50,6 +50,7 @@ nav:
       - "data-sources/index.md"
       - Athena: "data-sources/athena.md"
       - BigQuery: "data-sources/bigquery.md"
+      - CSV: "data-sources/csv.md"
       - Databricks: "data-sources/databricks.md"
       - MySQL: "data-sources/mysql.md"
       - Oracle: "data-sources/oracle.md"
