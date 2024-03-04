@@ -59,10 +59,6 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Databricks access token the warehouse. Supports also a ${DATABRICKS_ACCESS_TOKEN} configuration with a custom environment variable.")
     private String accessToken;
 
-    @CommandLine.Option(names = {"--databricks-options"}, description = "Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("Databricks connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${DATABRICKS_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"-D"}, description = "Databricks additional properties that are added to the JDBC connection string")
     @JsonPropertyDescription("A dictionary of custom JDBC parameters that are added to the JDBC connection string, a key/value dictionary.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -155,23 +151,6 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
      * Returns the httpPath for warehouse.
      * @return HttpPath for warehouse.
      */
@@ -254,7 +233,6 @@ public class DatabricksParametersSpec extends BaseProviderParametersSpec
         cloned.catalog = secretValueProvider.expandValue(cloned.catalog, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.httpPath = secretValueProvider.expandValue(cloned.httpPath, lookupContext);
         cloned.accessToken = secretValueProvider.expandValue(cloned.accessToken, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);

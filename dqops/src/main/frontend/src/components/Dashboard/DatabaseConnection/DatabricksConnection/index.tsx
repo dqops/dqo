@@ -81,13 +81,6 @@ const DatabricksConnection = ({
         value={databricks?.access_token}
         onChange={(value) => handleChange({ access_token: value })}
       />
-      <FieldTypeInput
-        data={sharedCredentials}
-        label="Options"
-        className="mb-4"
-        value={databricks?.options}
-        onChange={(value) => handleChange({ options: value })}
-      />
       <JdbcPropertiesView
         properties={databricks?.properties}
         onChange={(properties) => handleChange({ properties })}

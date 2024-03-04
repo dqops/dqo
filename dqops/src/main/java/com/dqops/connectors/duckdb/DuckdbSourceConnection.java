@@ -110,11 +110,6 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             dataSourceProperties.putAll(duckdbSpec.getProperties());
         }
 
-        String options =  this.getSecretValueProvider().expandValue(duckdbSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

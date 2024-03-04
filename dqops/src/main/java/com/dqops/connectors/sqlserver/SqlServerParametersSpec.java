@@ -65,10 +65,6 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--sqlserver-options"}, description = "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"--sqlserver-disable-encryption"}, description = "Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.")
     @JsonPropertyDescription("Disable SSL encryption parameter. The default value is false. You may need to disable encryption when SQL Server is started in Docker.")
     private Boolean disableEncryption;
@@ -168,23 +164,6 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
      * Returns the flag to disable SSL encryption.
      * @return True - disable SSL encryption.
      */
@@ -268,7 +247,6 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;

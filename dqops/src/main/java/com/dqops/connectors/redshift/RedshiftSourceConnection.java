@@ -123,11 +123,6 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
         String password = this.getSecretValueProvider().expandValue(redshiftSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(redshiftSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }

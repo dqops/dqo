@@ -65,10 +65,6 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Oracle database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
-    @CommandLine.Option(names = {"--oracle-options"}, description = "Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
-    @JsonPropertyDescription("Oracle connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${ORACLE_OPTIONS} configuration with a custom environment variable.")
-    private String options;
-
     @CommandLine.Option(names = {"--oracle-initialization-sql"}, description = "Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
     @JsonPropertyDescription("Custom SQL that is executed after connecting to Oracle. This SQL script can configure the default language, for example: alter session set NLS_DATE_FORMAT='YYYY-DD-MM HH24:MI:SS'")
     private String initializationSql;
@@ -164,23 +160,6 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the custom connection initialization options.
-     * @return Connection initialization options.
-     */
-    public String getOptions() {
-        return options;
-    }
-
-    /**
-     * Sets the connection initialization options.
-     * @param options Connection initialization options.
-     */
-    public void setOptions(String options) {
-        setDirtyIf(!Objects.equals(this.options, options));
-        this.options = options;
-    }
-
-    /**
      * Returns an initialization SQL that is executed after opening the connection.
      * @return
      */
@@ -246,7 +225,6 @@ public class OracleParametersSpec extends BaseProviderParametersSpec
         cloned.database = secretValueProvider.expandValue(cloned.database, lookupContext);
         cloned.user = secretValueProvider.expandValue(cloned.user, lookupContext);
         cloned.password = secretValueProvider.expandValue(cloned.password, lookupContext);
-        cloned.options = secretValueProvider.expandValue(cloned.options, lookupContext);
         cloned.properties = secretValueProvider.expandProperties(cloned.properties, lookupContext);
 
         return cloned;

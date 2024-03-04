@@ -187,11 +187,6 @@ public class MysqlSourceConnection extends AbstractJdbcSourceConnection {
         String password = this.getSecretValueProvider().expandValue(mysqlParametersSpec.getPassword(), secretValueLookupContext);
         hikariConfig.setPassword(password);
 
-        String options =  this.getSecretValueProvider().expandValue(mysqlParametersSpec.getOptions(), secretValueLookupContext);
-        if (!Strings.isNullOrEmpty(options)) {
-            dataSourceProperties.put("options", options);
-        }
-
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
     }
