@@ -12,6 +12,7 @@ import { TConfiguration } from '../../../../components/FileFormatConfiguration/T
 import KeyValueProperties from '../../../FileFormatConfiguration/KeyValueProperties';
 import Select from '../../../Select';
 import FieldTypeInput from '../../../Connection/ConnectionView/FieldTypeInput';
+import JdbcPropertiesView from '../JdbcProperties';
 
 interface IDuckdbConnectionProps {
   duckdb?: DuckdbParametersSpec;
@@ -142,6 +143,11 @@ const DuckdbConnection = ({
           sharedCredentials={sharedCredentials}
         />
       </FileFormatConfiguration>
+      <JdbcPropertiesView
+        properties={duckdb?.properties}
+        onChange={(properties) => handleChange({ properties })}
+        sharedCredentials={sharedCredentials}
+      />
     </SectionWrapper>
   );
 };
