@@ -189,7 +189,7 @@ public class DuckdbSourceConnection extends AbstractJdbcSourceConnection {
             synchronized (settingsExecutionLock){
                 String memoryLimit = dqoDuckdbConfiguration.getMemoryLimit();
                 if(memoryLimit != null){
-                    String memoryLimitQuery = "SET GLOBAL memory_limit = " + memoryLimit;
+                    String memoryLimitQuery = "SET GLOBAL memory_limit = '" + memoryLimit + "'";
                     this.executeCommand(memoryLimitQuery, JobCancellationToken.createDummyJobCancellationToken());
                 }
 
