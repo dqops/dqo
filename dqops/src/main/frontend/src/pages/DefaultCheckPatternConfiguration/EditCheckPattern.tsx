@@ -18,9 +18,36 @@ import {
 } from '../../services/apiClient';
 import { CheckRunMonitoringScheduleGroup } from '../../shared/enums/scheduling.enum';
 
-const tabs = [
+const tabsTableChecks = [
   {
-    label: 'Table target',
+    label: 'Target table',
+    value: 'table-target'
+  },
+  {
+    label: 'Profiling',
+    value: CheckRunMonitoringScheduleGroup.profiling
+  },
+  {
+    label: 'Monitoring Daily',
+    value: CheckRunMonitoringScheduleGroup.monitoring_daily
+  },
+  {
+    label: 'Monitoring Monthly',
+    value: CheckRunMonitoringScheduleGroup.monitoring_monthly
+  },
+  {
+    label: 'Partition Daily',
+    value: CheckRunMonitoringScheduleGroup.partitioned_daily
+  },
+  {
+    label: 'Partition Monthly',
+    value: CheckRunMonitoringScheduleGroup.partitioned_monthly
+  }
+];
+
+const tabsColumnChecks = [
+  {
+    label: 'Target column',
     value: 'table-target'
   },
   {
@@ -79,6 +106,7 @@ export default function EditCheckPattern({
   create
 }: TEditCheckPatternProps) {
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
+  const tabs = type === 'column' ? tabsColumnChecks : tabsTableChecks;
 
   const [activeTab, setActiveTab] = useState('table-target');
   const [checkContainers, setCheckContainers] =

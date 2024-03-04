@@ -61,7 +61,7 @@ export default function DefaultCheckTargetConfiguration({
           />
         </div>
       </div>
-      <SectionWrapper title="Target parameters spec" className="cursor-default">
+      <SectionWrapper title="Target filters" className="cursor-default">
         <div className="flex justify-between  text-black  ">
           <div className="w-[45%] ml-2 flex items-center gap-x-4 py-2">
             <span className="w-25">Connection</span>
