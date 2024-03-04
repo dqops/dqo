@@ -5,7 +5,7 @@ import {
   DuckdbParametersSpec,
   SharedCredentialListModel,
   DuckdbParametersSpecSourceFilesTypeEnum,
-  DuckdbParametersSpecSecretsTypeEnum
+  DuckdbParametersSpecStorageTypeEnum
 } from '../../../../api';
 import FileFormatConfiguration from '../../../FileFormatConfiguration/FileFormatConfiguration';
 import { TConfiguration } from '../../../../components/FileFormatConfiguration/TConfiguration';
@@ -64,27 +64,27 @@ const DuckdbConnection = ({
     cleanConfiguration();
   };
 
-  const secretsTypeOptions = [
+  const storageTypeOptions = [
     {
       label: 'Local',
       value: undefined
     },
     {
       label: 'AWS S3',
-      value: DuckdbParametersSpecSecretsTypeEnum.s3
+      value: DuckdbParametersSpecStorageTypeEnum.s3
     },
     // todo: uncomment below when implemented
     // {
     //   label: 'Google Cloud Storage',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.gcs
+    //   value: DuckdbParametersSpecStorageTypeEnum.gcs
     // },
     // {
     //   label: 'Azure Blob Storage',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.azure
+    //   value: DuckdbParametersSpecStorageTypeEnum.azure
     // },
     // {
     //   label: 'Cloudflare R2',
-    //   value: DuckdbParametersSpecSecretsTypeEnum.r2
+    //   value: DuckdbParametersSpecStorageTypeEnum.r2
     // }
   ];
 
@@ -93,13 +93,13 @@ const DuckdbConnection = ({
 
       <Select
           label="Storage type"
-          options={secretsTypeOptions}
+          options={storageTypeOptions}
           className="mb-4"
-          value={ duckdb?.secrets_type }
-          onChange={(value) => { handleChange({ secrets_type: value })}}
+          value={ duckdb?.storage_type }
+          onChange={(value) => { handleChange({ storage_type: value })}}
         />
 
-      { duckdb?.secrets_type === DuckdbParametersSpecSecretsTypeEnum.s3 &&
+      { duckdb?.storage_type === DuckdbParametersSpecStorageTypeEnum.s3 &&
         <>
           <FieldTypeInput
             data={sharedCredentials}
