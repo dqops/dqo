@@ -30,15 +30,25 @@ type THeaderElement = {
     | 'yaml_parsing_error'
     | 'connection'
     | 'schema'
-    | 'table';
+    | 'table'
+    | 'column';
 };
 
-const headerElement: THeaderElement[] = [
+const headerElementTablePatterns: THeaderElement[] = [
   { label: 'Pattern name', key: 'pattern_name' },
   { label: 'Priority', key: 'priority' },
   { label: 'Connection', key: 'connection' },
   { label: 'Schema', key: 'schema' },
   { label: 'Table', key: 'table' }
+];
+
+const headerElementColumnPatterns: THeaderElement[] = [
+  { label: 'Pattern name', key: 'pattern_name' },
+  { label: 'Priority', key: 'priority' },
+  { label: 'Connection', key: 'connection' },
+  { label: 'Schema', key: 'schema' },
+  { label: 'Table', key: 'table' },
+  { label: 'Column', key: 'column' }
 ];
 
 export default function DefaultCheckPatternsTable({
@@ -56,6 +66,8 @@ export default function DefaultCheckPatternsTable({
   const [dir, setDir] = useState<'asc' | 'desc'>('asc');
   const [patternDelete, setPatternDelete] = useState('');
   const targetSpecKey = type === 'column' ? 'target_column' : 'target_table';
+  const headerElement = type === 'column' ? headerElementColumnPatterns : headerElementTablePatterns;
+
 
   const getPreparedPatterns = () => {
     const arr: any[] = [];
@@ -117,6 +129,9 @@ export default function DefaultCheckPatternsTable({
             <td className="px-4">{pattern?.connection}</td>
             <td className="px-4">{pattern?.schema}</td>
             <td className="px-4">{pattern?.table}</td>
+            {type === 'column' && 
+            <td className="px-4">{pattern?.column}</td>
+            }
             <td className="px-4">
               <Button
                 variant="text"
