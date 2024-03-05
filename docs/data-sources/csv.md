@@ -145,7 +145,7 @@ Type of source files for DuckDB:
  [ 2] json
  [ 3] parquet
 Please enter one of the [] values: 1
-Virtual schema names and paths (in a pattern schema=path): files=C:\\dev\\example_files
+Virtual schema names and paths (in a pattern schema=path): files=/usr/share/clients_data
 Connection connection1 was successfully added.
 Run 'table import -c=connection1' to import tables.
 ```
@@ -157,7 +157,7 @@ dqo> connection add --name=connection1
 --provider=duckdb
 --duckdb-storage-type=local
 --duckdb-source-files-type=csv
---duckdb-directories=files=C:\\dev\\example_files
+--duckdb-directories=files=/usr/share/clients_data
 ```
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
@@ -193,7 +193,7 @@ spec:
       read_mode: files
       source_files_type: csv
       directories:
-        files: C:\dev\example_files
+        files: /usr/share/clients_data
       storage_type: local
 ```
 
