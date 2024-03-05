@@ -73,7 +73,7 @@ public class FileNameSanitizerTests extends BaseTest {
     @Test
     void convertEncodedPathToFullyUrlEncodedPath_whenPathHasEqualsSign_thenEqualsSignsAreNotEncoded() {
         final String original = ".data/check_results/c=bigquery-public-data/t=austin_311.311_service_requests/m=2024-02-01/check_results.0.parquet";
-        String sanitized = FileNameSanitizer.convertEncodedPathToFullyUrlEncodedPath(Path.of(original)).toString()
+        String sanitized = FileNameSanitizer.convertEncodedLocalPathToFullyUrlEncodedBucketPath(Path.of(original)).toString()
                 .replace('\\', '/');
         Assertions.assertEquals(original, sanitized);
     }
