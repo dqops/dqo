@@ -463,7 +463,8 @@ function TreeProvider(props: any) {
     const schema = urlencodeEncoder(terms[1]);
     const connection = urlencodeEncoder(terms[0]);
     const column = urlencodeEncoder(terms[4]);
-
+    console.log(connection, schema, table, terms)
+    
     return { connection, schema, table, column };
   };
 
@@ -476,11 +477,12 @@ function TreeProvider(props: any) {
         schema ?? '',
         table ?? ''
       );
+      console.log(connection, schema, table)
     const items = res.data.map((column) => ({
-      id: `${urlencodeDecoder(String(node.id))}.${urlencodeDecoder(column.column_name ?? '')}`,
+      id: `${node.id}.${urlencodeDecoder(column.column_name ?? '')}`,
       label: column.column_name || '',
       level: TREE_LEVEL.COLUMN,
-      parentId: urlencodeDecoder(urlencodeDecoder(String(node.id))),
+      parentId: node.id,
       items: [],
       tooltip: `${connection}.${schema}.${table}.${column.column_name}`,
       hasCheck:
@@ -1203,6 +1205,7 @@ function TreeProvider(props: any) {
         node.label,
         tab
       );
+  
 
       if (firstLevelActiveTab === url) {
         return;
@@ -1221,6 +1224,18 @@ function TreeProvider(props: any) {
           label: node.label
         })
       );
+      console.log(url,   ROUTES.TABLE_LEVEL_PAGE(
+        checkType,
+        connectionNode?.label ?? '',
+        schemaNode?.label ?? '',
+        node.label,
+        tab
+      ), ROUTES.TABLE_LEVEL_VALUE(
+            checkType,
+            connectionNode?.label ?? '',
+            schemaNode?.label ?? '',
+            node.label
+          ))
       history.push(
         ROUTES.TABLE_LEVEL_PAGE(
           checkType,

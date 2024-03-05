@@ -33,38 +33,58 @@ export const getLocalDateInUserTimeZone = (date: Date): string => {
   return new Date(strDate).toLocaleString('en-US', options);
 };
 
-export const urlencodeEncoder = (url: string | undefined) => {
+export const urlencodeEncoder = (url : string | undefined) => {
   if (!url) return ''; 
-  const decodedValue = url.replace(/%25|%20|%46|%47|%92/g, (match) => {
-    switch (match) {
-      // case '%25': return '%';
-      case '%20': return ' ';
-      case '%46': return '.';
-      case '%47': return '/';
-      case '%92': return '\\';
-      default: return match;
+
+  let decodedValue = '';
+  for (let i = 0; i < url.length; i++) {
+    if (url[i] === '%' && i + 2 < url.length) {
+      const encodedChar = url.slice(i, i + 3);
+      switch (encodedChar) {
+        case '%20':
+          decodedValue += ' ';
+          break;
+        case '%2E':
+          decodedValue += '.';
+          break;
+        case '%2F':
+          decodedValue += '/';
+          break;
+        case '%5C':
+          decodedValue += '\\';
+          break;
+        default:
+          decodedValue += encodedChar;
+          break;
+      }
+      i += 2; 
+    } else {
+      decodedValue += url[i];
     }
-  });
+  }
 
   return decodedValue;
 };
 
-export const urlencodeDecoder = (url: string | undefined) => {
+
+export const urlencodeDecoder = (url : string | undefined) => {
   if (!url) return ''; 
-  console.log(url)
-  const encodedValue = url.replace(/[% ./\\]/g, (match) => {
-    switch (match) {
-      // case '%': return '%25';
-      case ' ': return '%20';
-      case '.': return '%46';
-      case '/': return '%47';
-      case '\\': return '%92';
-      default: return match;
+
+  let encodedValue = '';
+  for (let i = 0; i < url.length; i++) {
+    const char = url[i];
+    switch (char) {
+      // case '%': encodedValue += '%25'; break;
+      case ' ': encodedValue += '%20'; break;
+      case '.': encodedValue += '%2E'; break;
+      case '/': encodedValue += '%2F'; break;
+      case '\\': encodedValue += '%5C'; break;
+      default: encodedValue += char;
     }
-  });
-console.log(encodedValue)
+  }
   return encodedValue;
 };
+
 
 export const getDetectedDatatype = (numberForFile: any) => {
   if (Number(numberForFile) === 1) {
