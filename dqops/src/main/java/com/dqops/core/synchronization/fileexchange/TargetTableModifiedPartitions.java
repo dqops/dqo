@@ -126,25 +126,37 @@ public class TargetTableModifiedPartitions {
     public void addModifications(Collection<FileDifference> localChanges) {
         for (FileDifference fileDifference : localChanges) {
             Path relativePath = fileDifference.getRelativePath();
+            RefreshedPartitionModel affectedPartition = null;
+
             for (int nameIndex = 0; nameIndex < relativePath.getNameCount() - 1; nameIndex++) {
                 String folderName = relativePath.getName(nameIndex).toString();
-                RefreshedPartitionModel affectedPartition = new RefreshedPartitionModel();
 
                 if (HivePartitionPathUtility.validHivePartitionConnectionFolderName(folderName)) {
                     String connectionName = HivePartitionPathUtility.connectionFromHivePartitionFolderName(folderName);
                     this.affectedConnections.add(connectionName);
+                    if (affectedPartition == null) {
+                        affectedPartition = new RefreshedPartitionModel();
+                    }
                     affectedPartition.setConnection(connectionName);
                 }
                 else if (HivePartitionPathUtility.validHivePartitionTableFolderName(folderName)) {
                     String tableName = HivePartitionPathUtility.tableFromHivePartitionFolderName(folderName).toBaseFileName();
                     this.affectedTables.add(tableName);
+                    if (affectedPartition == null) {
+                        affectedPartition = new RefreshedPartitionModel();
+                    }
                     affectedPartition.setSchemaTableName(tableName);
                 } else if (HivePartitionPathUtility.validHivePartitionMonthFolderName(folderName)) {
                     LocalDate monthDate = HivePartitionPathUtility.monthFromHivePartitionFolderName(folderName);
                     this.affectedMonths.add(monthDate);
+                    if (affectedPartition == null) {
+                        affectedPartition = new RefreshedPartitionModel();
+                    }
                     affectedPartition.setMonth(monthDate);
                 }
+            }
 
+            if (affectedPartition != null) {
                 this.affectedPartitions.add(affectedPartition);
             }
         }

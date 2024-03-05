@@ -129,7 +129,8 @@ public class HivePartitionPathUtility {
             return null;
         }
         String connectionNameString = matcher.group(1);
-        return connectionNameString;
+        String decodedName = FileNameSanitizer.decodeFileSystemName(connectionNameString);
+        return decodedName;
     }
 
     /**
@@ -143,7 +144,8 @@ public class HivePartitionPathUtility {
             return null;
         }
         String tableNameString = matcher.group(1);
-        return PhysicalTableName.fromSchemaTableFilter(tableNameString);
+        String decodedName = FileNameSanitizer.decodeFileSystemName(tableNameString);
+        return PhysicalTableName.fromBaseFileName(decodedName);
     }
 
     /**
