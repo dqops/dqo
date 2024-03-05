@@ -33,7 +33,7 @@ public class HivePartitionPathUtility {
     private static final Pattern HIVE_PARTITION_CONNECTION_PATTERN =
             Pattern.compile(ParquetPartitioningKeys.CONNECTION + "=(.*)");
     private static final Pattern HIVE_PARTITION_TABLE_PATTERN =
-            Pattern.compile(ParquetPartitioningKeys.TARGET + "=(.*)");
+            Pattern.compile(ParquetPartitioningKeys.SCHEMA_TABLE + "=(.*)");
     private static final Pattern HIVE_PARTITION_MONTH_PATTERN =
             Pattern.compile(ParquetPartitioningKeys.MONTH + "=(\\d{4}-(0\\d|1[0-2])-([0-2]\\d|3[0-1]))");
 
@@ -70,7 +70,7 @@ public class HivePartitionPathUtility {
 
         PhysicalTableName tableName = partitionId.getTableName();
         if (tableName != null) {
-            stringBuilder.append(ParquetPartitioningKeys.TARGET);
+            stringBuilder.append(ParquetPartitioningKeys.SCHEMA_TABLE);
             stringBuilder.append('=');
             String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
             stringBuilder.append(encodedTable);
