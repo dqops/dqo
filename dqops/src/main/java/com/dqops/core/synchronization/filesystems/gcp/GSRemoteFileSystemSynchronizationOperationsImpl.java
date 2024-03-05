@@ -250,7 +250,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 String blobFileName = blob.getName();
 
                 if (blobFileName.indexOf(':') >= 0 || blobFileName.indexOf('\\') >= 0 ||
-                        (blobFileName.startsWith(".data/") && blobFileName.contains("/c3D"))) {
+                        (blobFileName.startsWith(".data/") && (blobFileName.contains("/c%3D") || blobFileName.contains("/c%253D")))) {
                     // invalid files
                     log.warn("Deleting invalid file '" + blobFileName + "' from the bucket" + gsFileSystemRoot.getBucketName());
                     storage.delete(BlobId.of(gsFileSystemRoot.getBucketName(), blobFileName));
