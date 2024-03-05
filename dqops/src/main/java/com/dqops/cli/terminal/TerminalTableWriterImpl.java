@@ -31,15 +31,24 @@ import tech.tablesaw.api.TextColumn;
  * File wrapper. Provides access to the file services.
  */
 @Component
-public class TerminalTableWritterImpl implements TerminalTableWritter {
+public class TerminalTableWriterImpl implements TerminalTableWritter {
 	private final FileWriter fileWriter;
-	private final TerminalFactory terminalFactory;
+	private final TerminalReader terminalReader;
+	private final TerminalWriter terminalWriter;
 
 	@Autowired
-	TerminalTableWritterImpl(TerminalFactory terminalFactory,
-							 FileWriter fileWriter) {
-		this.terminalFactory = terminalFactory;
+	TerminalTableWriterImpl(TerminalFactory terminalFactory,
+							FileWriter fileWriter) {
 		this.fileWriter = fileWriter;
+		this.terminalReader = terminalFactory.getReader();
+		this.terminalWriter = terminalFactory.getWriter();
+	}
+
+	TerminalTableWriterImpl(TerminalWriter terminalWriter,
+							FileWriter fileWriter) {
+		this.fileWriter = fileWriter;
+		this.terminalReader = null;
+		this.terminalWriter = terminalWriter;
 	}
 
 	/**
@@ -50,8 +59,6 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	public Integer pickTableRowWithPaging(String question, Table table) {
 		RowSelectionTableModel tableModel = new RowSelectionTableModel(table);
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
 		terminalWriter.writeLine(question);
 		this.writeTable(tableModel, false);
@@ -119,8 +126,6 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
 		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
 		if( height == 0) {
@@ -183,20 +188,18 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeTable(Table table, boolean addBorder) {
-		TerminalReader terminalReader = this.terminalFactory.getReader();
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 
 		int height = addBorder ? terminalWriter.getTerminalHeight() / 3 : terminalWriter.getTerminalHeight() - 2;
 		if( height == 0) {
 			height = 1;
 		}
-		int rowsLeft = table.rowCount();
+		int rowsLeft = table.rowCount() + 1;
 		int index = 0;
 
 		while (rowsLeft > 0) {
 			int start = index * height;
 			int maxEnd = table.rowCount();
-			if (start >= maxEnd) {
+			if (start > maxEnd) {
 				break;
 			}
 			int end = Math.min(start + height, maxEnd);
@@ -264,7 +267,8 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 		for(int y = 1; y < tableModel.getRowCount(); y++) {
 			Row row = resultTable.appendRow();
 			for (int x = 0; x < tableModel.getColumnCount(); x++) {
-				row.setString(x, tableModel.getValue(y, x).toString());
+				String rowString = tableModel.getValue(y, x).toString();
+				row.setString(x, rowString);
 			}
 		}
 		writeTable(resultTable, addBorder);
@@ -277,7 +281,6 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(FormattedTableDto<?> tableData, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TableModel model = new BeanListTableModel<>(tableData.getRows(), tableData.getHeaders());
 
 		TableBuilder tableBuilder = new TableBuilder(model);
@@ -296,7 +299,6 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(Table table, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TablesawDatasetTableModel tableModel = new TablesawDatasetTableModel(table);
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
@@ -314,7 +316,6 @@ public class TerminalTableWritterImpl implements TerminalTableWritter {
 	 */
 	@Override
 	public void writeWholeTable(TableModel tableModel, boolean addBorder) {
-		TerminalWriter terminalWriter = this.terminalFactory.getWriter();
 		TableBuilder tableBuilder = new TableBuilder(tableModel);
 		if (addBorder) {
 			tableBuilder.addInnerBorder(BorderStyle.oldschool);
