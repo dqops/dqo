@@ -192,6 +192,11 @@ DQOps supports the use of the asterisk character * as a wildcard when selecting 
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 
+// todo:
+## Storage settings - directory
+### Local file system
+### Remote cloud storage - AWS S3
+
 ## Connections configuration files
 
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
@@ -216,6 +221,10 @@ spec:
 The complete documentation of all connection parameters used in the `spec.duckdb` node is
 described in the reference of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML files format reference.
+
+// todo:
+### Working with multiple tables in a single schema
+### Working with partitioned files
 
 ## Next steps
 

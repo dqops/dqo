@@ -194,6 +194,69 @@ DQOps supports the use of the asterisk character * as a wildcard when selecting 
 any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
 character can be used at the beginning, in the middle or at the end of the name.
 
+## Storage settings - directory
+
+// todo: introduction for the section
+
+### Local file system
+
+``` { .asc .annotate }
+/usr/share
+    ├───...
+    └───clients_data(1)
+        ├───market_dictionary.csv
+        └───sales(2)
+            ├───dec_2023.csv
+            ├───jan_2024.csv
+            ├───feb_2024.csv
+            └───...
+```
+
+1.  Setting the path prefix to the /usr/share/clients_data allows to load its children: market_dictionary.csv or the sales folder with all files appearing directly in it (without subfolders of sales).
+    The path has to be an absolute path.
+2.  To load a single file from the sales folder the path prefix must be set to the parent folder of the file: /usr/share/clients_data/sales
+
+Setting the path prefix to the /usr/share/clients_data allows to load its children: market_dictionary.csv or sales folder with all files appearing directly in it (without subfolders of sales).
+The path has to be an absolute path.
+
+To load a single file from the sales folder the path prefix must be set to the parent folder of the file: /usr/share/clients_data/sales
+
+
+### Remote cloud storage - AWS S3
+
+``` { .asc .annotate }
+s3://project_bucket_a38cfb32
+    ├───...
+    └───clients_data(1)
+        ├───market_dictionary.csv
+        └───sales(2)
+            ├───dec_2023.csv
+            ├───jan_2024.csv
+            ├───feb_2024.csv
+            └───...
+```
+
+1.  Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows to load its children: market_dictionary.csv or the sales folder with all files appearing directly in it (without subfolders of sales).
+    The path has to be an absolute path.
+2.  To load a single file from the sales folder the path prefix must be set to the parent folder of the file: s3://project_bucket_a38cfb32/clients_data/sales
+
+Setting the path prefix to the s3://project_bucket_a38cfb3/clients_data allows to load its children: market_dictionary.csv or the sales folder with all files appearing directly in it (without subfolders of sales).
+The path has to be an absolute path.
+
+To load a single file from the sales folder the path prefix must be set to the parent folder of the file: s3://project_bucket_a38cfb32/clients_data/sales
+
+
+To work on files places in AWS S3 it is recommended to create a special user in IAM which will be used as a service account. 
+The user has to have access to the bucket with objects listing and reading permissions.
+
+
+!!! tip "The credentials of the service account can be passed in three ways"
+
+    - Through the default AWS credentials in your DQOps' userhome,
+    - through the User (AccessKeyID), Password (SecretAccessKey) and Region during adding the connection,
+    - by using environment variables and setting them through User (Access Key ID), Password (Secret Access Key) and Region fields [as explained here](./csv.md#Environment-variables-in-parameters).
+
+
 ## Connections configuration files
 
 Connection configurations are stored in the YAML files in the `./sources` folder. The name of the connection is also
@@ -218,6 +281,34 @@ spec:
 The complete documentation of all connection parameters used in the `spec.duckdb` node is
 described in the reference of the [DuckdbParametersSpec](../reference/yaml/ConnectionYaml.md#duckdbparametersspec)
 YAML files format reference.
+
+
+### Working with multiple tables in a single schema
+
+**Different CSV formats**
+
+When you would like to add a CSV file with a format that differs from the common CSV format used for other files in the schema, override the configuration on that new file (table) level.
+
+The loaded table will try to use the properties described in the table yaml if available. 
+If not, it will use the properties set up on the table's connection yaml.
+Finally, when both are not set explicitly the auto-detected CSV format properties are used.
+
+**No common prefix for files**
+
+When files are placed in different places that you can't specify the common prefix you can use an absolute file path to each of the files.
+
+You have to create a table manually in UI. Open Data Sources, expand your connection and select three dots on the schema you like to add a new table.
+
+Fill the "File path or file name pattern" with an absolute path to the file and add the new table by clicking the save button.
+
+!!! tip "Creation in user home"
+    The new table can also be added manually in the sources folder of your userhome by creation of a new table yaml in your connection folder.
+
+### Working with partitioned files // todo
+
+To enable efficient work on partitions set the `hive partition` parameter in CSV format settings. 
+
+// todo: describe that the path has to be modified on a table level when hive partition is set
 
 ## Next steps
 
