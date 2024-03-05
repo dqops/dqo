@@ -25,6 +25,7 @@ import { IRootState } from '../../redux/reducers';
 import CollectStatisticsDialog from './CollectStatisticsDialog';
 import RunChecksDialog from './RunChecksDialog';
 import RunChecksPartitionedMenu from './RunChecksPartitionedMenu';
+import { urlencodeEncoder } from '../../utils';
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -116,21 +117,21 @@ const ContextMenu = ({
     const [connection, schema] = node.id.toString().split('.');
     const url = ROUTES.SCHEMA_LEVEL_PAGE(
       CheckTypes.SOURCES,
-      connection,
-      schema ?? '',
+      urlencodeEncoder(connection),
+      urlencodeEncoder(schema) ?? '',
       'import-tables'
     );
     const value = ROUTES.SCHEMA_LEVEL_VALUE(
       CheckTypes.SOURCES,
-      connection,
-      schema ?? ''
+      urlencodeEncoder(connection),
+      urlencodeEncoder(schema) ?? ''
     );
     dispatch(
       addFirstLevelTab(CheckTypes.SOURCES, {
         url,
         value,
         state: {},
-        label: schema
+        label: urlencodeEncoder(schema)
       })
     );
     history.push(url);
