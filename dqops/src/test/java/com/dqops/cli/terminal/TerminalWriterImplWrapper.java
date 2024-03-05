@@ -15,6 +15,7 @@
  */
 package com.dqops.cli.terminal;
 
+import lombok.Setter;
 import org.springframework.shell.table.TableModel;
 import picocli.CommandLine;
 import tech.tablesaw.api.Table;
@@ -27,6 +28,12 @@ public class TerminalWriterImplWrapper implements TerminalWriter {
 
     private final TerminalWriter terminalWriter;
     private String writtenText;
+
+    @Setter
+    private Integer terminalHeight;
+
+    @Setter
+    private Integer terminalWidth;
 
     public TerminalWriterImplWrapper(TerminalWriter terminalWriter) {
         this.terminalWriter = terminalWriter;
@@ -74,10 +81,10 @@ public class TerminalWriterImplWrapper implements TerminalWriter {
      */
     @Override
     public Integer getTerminalWidth() {
-        int width = terminalWriter.getTerminalWidth();
-        if (width <= 0) {
-            return 80;
+        if(terminalWidth != null){
+            return terminalWidth;
         }
+        int width = terminalWriter.getTerminalWidth();
         return width;
     }
 
@@ -87,10 +94,10 @@ public class TerminalWriterImplWrapper implements TerminalWriter {
      */
     @Override
     public Integer getTerminalHeight() {
-        int height = terminalWriter.getTerminalHeight();
-        if (height <= 0) {
-            return 50;
+        if(terminalHeight != null){
+            return terminalHeight;
         }
+        int height = terminalWriter.getTerminalHeight();
         return height;
     }
 

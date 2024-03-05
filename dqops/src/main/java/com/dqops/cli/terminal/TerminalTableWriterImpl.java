@@ -45,9 +45,10 @@ public class TerminalTableWriterImpl implements TerminalTableWritter {
 	}
 
 	TerminalTableWriterImpl(TerminalWriter terminalWriter,
+							TerminalReader terminalReader,
 							FileWriter fileWriter) {
 		this.fileWriter = fileWriter;
-		this.terminalReader = null;
+		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
 	}
 
