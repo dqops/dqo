@@ -90,7 +90,7 @@ public class DuckdbParametersSpec extends BaseProviderParametersSpec
     private ParquetFileFormatSpec parquet;
 
     @CommandLine.Option(names = "--duckdb-directories", split = ",")
-    @JsonPropertyDescription("Virtual schema name to directory mappings.")
+    @JsonPropertyDescription("Virtual schema name to directory mappings. The path must be an absolute path.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> directories = new HashMap<>();
 
