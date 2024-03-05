@@ -20,20 +20,19 @@ The permissions acquired should enable the listing of files and directories, as 
 
 To navigate to the JSON connection settings:
 
-1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
-[//]: # (todo: screen)
+1. Go to Data Sources section and click **+ Add connection** button in the upper left corner. // todo: screen
+
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select JSON database type.
-[//]: # (todo: screen)
+2. Select JSON database type. // todo: screen
+
     ![Selecting JSON database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the JSON connection settings, you will need to fill in the connection details.
+After navigating to the JSON connection settings, you will need to fill in the connection details. // todo: screen
 
-[//]: # (todo: screen)
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
 | JSON connection settings    | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
@@ -61,6 +60,9 @@ After navigating to the JSON connection settings, you will need to fill in the c
 | Records                     | records                                  | Can be one of ['auto', 'true', 'false'].                                                                                                                                                                                                  | 
 | Sample size                 | sample-size                              | The number of lines at the top of the file to skip.                                                                                                                                                                                       | 
 | Timestamp format            | timestampformat                          | Specifies the date format to use when parsing timestamps.                                                                                                                                                                                 | 
+
+
+### Environment variables in parameters
 
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -116,6 +118,12 @@ dqo> connection add
 Fill in the data you will be asked for. 
 
 Select the **duckdb** provider, which provides support for the JSON file format.
+
+!!! info "Windows file system"
+
+    When using the file system of Windows remember to put double backslash in a path on the CLI prompt.
+    A single forward slash can also be used.
+
 
 ```
 Connection name (--name): connection1
@@ -186,12 +194,12 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: duckdb
-    duckdb:
-      read_mode: files
-      source_files_type: json
-      directories:
-        files: /usr/share/clients_data
-      storage_type: local
+  duckdb:
+    read_mode: files
+    source_files_type: csv
+    directories:
+      files: /usr/share/clients_data
+    storage_type: local
 ```
 
 ### **Reference of all connection parameters**

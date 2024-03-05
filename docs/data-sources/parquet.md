@@ -20,20 +20,19 @@ The permissions acquired should enable the listing of files and directories, as 
 
 To navigate to the Parquet connection settings:
 
-1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
-[//]: # (todo: screen)
+1. Go to Data Sources section and click **+ Add connection** button in the upper left corner. // todo: screen
+
     ![Adding connection](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection.png)
 
-2. Select Parquet database type.
-[//]: # (todo: screen)
+2. Select Parquet database type. // todo: screen
+
     ![Selecting Parquet database type](https://dqops.com/docs/images/working-with-dqo/adding-connections/adding-connection-spark.png)
 
 
 ### **Fill in the connection settings**
 
-After navigating to the Parquet connection settings, you will need to fill in the connection details.
+After navigating to the Parquet connection settings, you will need to fill in the connection details. // todo: screen
 
-[//]: # (todo: screen)
 ![Adding connection settings](https://dqops.com/docs/images/working-with-dqo/adding-connections/connection-settings-spark1.png)
 
 | Parquet connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                               | 
@@ -52,6 +51,9 @@ After navigating to the Parquet connection settings, you will need to fill in th
 | File row number             | file-row-number                          | Whether or not to include the file_row_number column.  | 
 | Hive partitioning           | hive-partitioning                        | Whether or not to interpret the path as a hive partitioned path.                                                                                                                                                                          | 
 | Union by name               | union-by-name                           | Whether the columns of multiple schemas should be unified by name, rather than by position.| 
+
+
+### Environment variables in parameters
 
 DQOps allows you to dynamically replace properties in connection settings with environment variables. To use it, simply
 change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
@@ -107,6 +109,12 @@ dqo> connection add
 Fill in the data you will be asked for. 
 
 Select the **duckdb** provider, which provides support for the Parquet file format.
+
+!!! info "Windows file system"
+
+    When using the file system of Windows remember to put double backslash in a path on the CLI prompt.
+    A single forward slash can also be used.
+
 
 ```
 Connection name (--name): connection1
@@ -177,12 +185,12 @@ apiVersion: dqo/v1
 kind: source
 spec:
   provider_type: duckdb
-    duckdb:
-      read_mode: files
-      source_files_type: parquet
-      directories:
-        files: /usr/share/clients_data
-      storage_type: local
+  duckdb:
+    read_mode: files
+    source_files_type: csv
+    directories:
+      files: /usr/share/clients_data
+    storage_type: local
 ```
 
 ### **Reference of all connection parameters**
