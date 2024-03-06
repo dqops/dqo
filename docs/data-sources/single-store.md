@@ -1,5 +1,5 @@
 # SingleStoreDB
-Read this guide to learn how to connect DQOps to SingleStoreDB from the UI, command-line, or directly in YAML files. All parameters are documented.
+Read this guide to learn how to connect DQOps to SingleStoreDB from the UI, command-line interface, or directly in YAML files. All parameters are documented.
 
 ## Overview
 

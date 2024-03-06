@@ -1,5 +1,5 @@
 # CSV
-Read this guide to learn how to configure DQOps to use CSV files from the UI, command-line, or directly in YAML files. All parameters are documented.
+Read this guide to learn how to configure DQOps to use CSV files from the UI, command-line interface, or directly in YAML files. All parameters are documented.
 
 ## Overview
 
