@@ -482,7 +482,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
             description = "The maximum memory of the system (e.g., 1GB). When not set, DuckDB use the 80%% of RAM.")
     private String dqoDuckdbMemoryLimit = "";
 
-    @CommandLine.Option(names = {"--dqo.duckdb.memory-limit"},
+    @CommandLine.Option(names = {"--dqo.duckdb.threads"},
             description = "The number of total threads used by the system. The default value is 1000",
             defaultValue = "1000")
     private long dqoDuckdbThreads = 1000;
