@@ -13,6 +13,9 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 
+/**
+ * Line reader wrapped that automatically responds to the prompts in terminal based on prepared queue of respond messages.
+ */
 public class LineReaderWrapper implements LineReader {
 
     private Queue<String> stringPromptPushQueue = new LinkedList<>();
